@@ -1,0 +1,65 @@
+/*#
+===================
+@explain: 门户-创建自定义页面
+@copyright: Copyright 2012,phpwind.com
+@author: longwenid@gmail.com
+$Id: create.css 18502 2012-09-18 09:01:07Z yanchixia $
+===================
+#*/
+
+/*
+===================
+
+===================
+*/
+.create_page{
+	padding:15px;
+	box-shadow:0 0 6px rgba(0,0,0,0.2);
+	background:#fff;
+}
+/*页面标题*/
+.create_page h1{
+	font-size:14px;
+	margin-bottom:15px;
+	padding:0 5px;
+}
+/*标题*/
+.create_page h2{
+	font-size:12px;
+	color:#666;
+	border-bottom:1px solid #cdcdcd;
+	padding:5px;
+	margin-bottom:10px;
+}
+/*块*/
+.create_page .box{
+	margin-bottom:30px;
+}
+/*内容*/
+.create_page dl{
+	padding:10px 0;
+}
+.create_page dt{
+	float:left;
+	width:150px;
+	font-size:14px;
+	line-height:26px;
+	text-align:right;
+	margin-right:10px;
+}
+.create_page dd{
+	float:left;
+	width:320px;
+}
+.create_page .dd_r{
+	float:left;
+	color:#999;
+	width:370px;
+	line-height:normal;
+}
+.create_page label{
+	line-height:26px;
+	font-size:14px;
+	color:#666;
+}
+

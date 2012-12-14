@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body>
+<div class="wrap">
+	<div class="nav">
+		<div class="return"><a href="{@url:app/verify/manage/run}">返回上一级</a></div>
+		<ul>
+			<li class="current"><a href="{@url:app/verify/manage/email}">电子邮箱设置</a></li>
+		</ul>
+	</div>
+	<div class="h_a">认证设置</div>
+	<form class="J_ajaxForm" data-role="list" action="{@url:app/verify/manage/doEmail}" method="post" >
+
+	<div class="table_full">
+		<table width="100%" class="J_radio_change_items" id="reg2" style="margin-bottom:0;">
+			<col class="th" />
+			<col width="400" />
+			<col />
+			<tbody>
+				
+				<tr>
+					<th>激活邮件标题</th>
+					<td>
+						<input type="text" class="input length_5 mr5" name="emailTitle" value="{$conf['verify.email.title']}">
+					</td>
+					<td><div class="fun_tips">支持参数，如下：<br>{sitename}：站点名称<br>{username}：用户名</div></td>
+				</tr>
+				<tr>
+					<th>激活邮件内容</th>
+					<td>
+						<textarea class="length_5" name="emailContent">{$conf['verify.email.content']}</textarea>
+					</td>
+					<td><div class="fun_tips">支持html代码，支持参数：<br>{username}：用户名<br>{sitename}：站点名称<br>{url}：激活地址<br>{time}：发送时间。</div></td>
+				</tr>
+			</tbody>
+		</table>
+		
+	</div>
+	<div class="btn_wrap">
+		<div class="btn_wrap_pd">
+			<button class="btn btn_submit J_ajax_submit_btn" type="submit">提交</button>
+		</div>
+	</div>
+	</form>
+</div>
+<template source='TPL:admin.common.footer' />
+
+</body>
+</html>

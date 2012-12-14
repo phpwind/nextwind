@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body>
+<div class="wrap">
+
+<!-- start -->
+	<div class="nav">
+		<ul class="cc">
+		<li><a href="{@WindUrlHelper::createUrl('/config/watermark/run')}">水印设置</a></li>
+		<li  class="current"><a href="{@WindUrlHelper::createUrl('/config/watermark/set')}">水印策略</a></li>
+		</ul>
+	</div>
+	
+	<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/config/watermark/doset')}" data-role="list">
+	<div class="h_a">水印策略</div>
+	<div class="table_purview mb10">
+		<table class="J_check_wrap" width="100%">
+			<col width="160">
+			<col width="120">
+			<tr class="hd">
+				<th>&nbsp;</th>
+				<td><label><input class="J_check_all" data-checklist="J_check_watermarkset" data-direction="y" name="" type="checkbox" value="">启用水印</label></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>论坛图片上传</th>
+				<td><input class="J_check" data-yid="J_check_watermarkset" name="markset[]" type="checkbox" value="bbs" {@Pw::ifcheck(in_array('bbs',$config['mark.markset']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>相册图片上传</th>
+				<td><input class="J_check" data-yid="J_check_watermarkset" name="markset[]" type="checkbox" value="album" {@Pw::ifcheck(in_array('album',$config['mark.markset']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<!-- <tr>
+				<th>日志图片上传</th>
+				<td><input class="J_check" data-yid="J_check_watermarkset" name="markset[]" type="checkbox" value="diary" {@Pw::ifcheck(in_array('diary',$config['mark.markset']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>文章图片上传</th>
+				<td><input class="J_check" data-yid="J_check_watermarkset" name="markset[]" type="checkbox" value="cms" {@Pw::ifcheck(in_array('cms',$config['mark.markset']))}></td>
+				<td>&nbsp;</td>
+			</tr> -->
+		</table>
+	</div>
+	<div class="btn_wrap">
+		<div class="btn_wrap_pd">
+			<button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
+		</div>
+	</div>
+	</form>
+	
+<!--=================结束=================-->
+</div>
+<template source='TPL:admin.common.footer' />
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body class="body_none">
+<div>
+
+<!--禁止-->
+	<div class="core_pop">
+		<form id="J_ban_form" action="{@WindUrlHelper::createUrl('admin/u/manage/doBan')}" method="post">
+		<input type="hidden" value="{$uid}" name="uid" />
+		<div style="width:400px;">
+			<div class="pop_cont">
+				<table width="100%" class="pop_table">
+					<col width="90">
+					<col>
+					<tr>
+						<th>用户名：</th>
+						<td><a href="" target="_blank" class="mr20">{$username}</a>(UID：{$uid})</td>
+					</tr>
+					<tr class="vt">
+						<th>禁止类型<br>及禁止期限：</th>
+						<td>
+							<ul class="single_list cc">
+								<li>
+									<select class="fr">
+										<option>永久禁止</option>
+										<option>禁止三天</option>
+										<option>禁止一周</option>
+										<option>禁止两周</option>
+										<option>禁止一月</option>
+										<option>禁止两月</option>
+										<option>禁止三月</option>
+										<option>禁止半年</option>
+										<option>禁止一年</option>
+									</select>
+									<label><input type="checkbox" value="">禁止签名</label>
+								</li>
+								<li><select class="fr"><option>永久禁止</option></select><label><input type="checkbox" value="">禁止头像</label></li>
+								<li><select class="fr"><option>永久禁止</option></select><label><input type="checkbox" value="">禁止发言</label></li>
+								<li><select class="fr"><option>永久禁止</option></select><label><input type="checkbox" value="">禁止登录</label></li>
+							</ul>
+						</td>
+					</tr>
+					<tr class="vt">
+						<th>同时禁止IP：</th>
+						<td>
+							<div class="mb5"><input name="" type="text" class="input"></div>
+							<div class="gray">可修改为IP段，如192.168.0.*</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="pop_bottom">
+				<button type="submit" class="btn btn_submit mr10">提交</button>
+				<button id="J_manage_ban_cancel" type="button" class="btn btn_cancel">取消</button>
+			</div>
+		</div>
+		</form>
+	</div>
+
+<!--结束-->
+
+</div>
+<template source='TPL:admin.common.footer' />
+<script>
+(function(){
+	Wind.use('dialog', 'ajaxForm', function () {
+		//提交
+		var submit_tips = $('#J_submit_tips');
+		$('#J_ban_form').ajaxForm( {
+			dataType	: 'json',
+			success		: function(data, statusText, xhr, $form) {
+				
+				if( data.state === 'success' ) {
+					submit_tips.attr('class', 'tips_success').text(data.message).slideDown('fast');
+					setTimeout(function(){
+						window.parent.Wind.dialog.closeAll();
+					}, 3000);
+				}else{
+					submit_tips.attr('class', 'tips_error').text(data.message).slideDown('fast');
+				}
+			}
+		});
+		
+		//取消
+		$('#J_manage_ban_cancel').click(function(e){
+			e.preventDefault();
+			window.parent.Wind.dialog.closeAll();
+		});
+	});
+})();
+</script>
+</body>
+</html>

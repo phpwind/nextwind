@@ -1,0 +1,18 @@
+<nav>
+<div class="content_nav">
+	<span class="fr"><a href="{@WindUrlHelper::createUrl('message/message/pop/')}" class="btn btn_submit J_send_msg_pop">写私信</a></span>
+	<a href="{@WindUrlHelper::createUrl('message/message/set')}" class="edit">设置</a>
+	<ul>
+		<li<!--#if($_controller == 'message' && !in_array($_action,array('set','add'))){#--> class="current"<!--#}#-->>
+			<a href="{@WindUrlHelper::createUrl('message/message/run')}">私信<!--# if ($loginUser->info['messages']) { #--><em class="core_num id="J_unread_count">{$loginUser->info['messages']}</em><!--# } #--></a></li>
+		<li<!--#if($_controller == 'notice' && !in_array($_action,array('set','add'))){#--> class="current"<!--#}#-->><a href="{@WindUrlHelper::createUrl('message/notice/run')}">通知<!--# if ($loginUser->info['notices']) { #--><em class="core_num">{$loginUser->info['notices']}</em><!--# } #--></a></li>
+	</ul>
+	<!--#if($_controller == 'message' && !in_array($_action,array('set','add'))){#-->
+	<div class="message_search">
+	<form id="J_msg_search_form" action="{@WindUrlHelper::createUrl('message/message/search')}" method="post" >
+	<input type="text" placeholder="输入用户名" name="keyword" id="J_msg_search_input"><button id="J_msg_search_btn"><img src="{@theme:images}/common/search_mini.png" alt="搜索" /></button>
+	</form>
+	</div>
+	<!--# } #-->
+</div>
+</nav>

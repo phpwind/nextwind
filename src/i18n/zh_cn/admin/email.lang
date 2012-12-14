@@ -1,0 +1,5 @@
+test.toemail.require=收件人地址不能为空
+test.error="测试邮件发送失败{error}"
+test.success=测试邮件发送成功
+
+close=邮件服务已关闭

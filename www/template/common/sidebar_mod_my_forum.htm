@@ -1,0 +1,28 @@
+<!--#
+	$forumdb = Wekit::load('forum.srv.PwForumService')->getCommonForumList();
+	$loginUserInfo = $loginUser->info;
+#-->
+<!--# if ($loginUser->info['join_forum']) { 
+	$_myJoinForums = explode(',', $loginUser->info['join_forum']);
+	$myJoinForum = array();
+	foreach ($forumdb[0] as $k => $cate) {
+	if (!$forumdb[$cate['fid']]) continue;
+		foreach ($forumdb[$cate['fid']] as $forums) {
+			if (!in_array($forums['fid'], $_myJoinForums)) {
+				continue;
+			}
+			$myJoinForum[] = $forums;
+		}
+	}
+	$myJoinForumCount = count($myJoinForum);
+#-->
+<div class="box_wrap my_forum_list"><!--切换样式 my_forum_list_cur -->
+	<h2 class="box_title J_sidebar_box_toggle">我的版块<span class="num">{$myJoinForumCount}</span></h2>
+	<ul>
+	<!--# foreach ($myJoinForum as $v) { #-->
+		<li><a href="{@url:bbs/thread/run?fid=$v['fid']}">{$v['name']|html}</a></li>
+	<!--# } #-->
+	</ul>
+</div>
+<!--# } #-->
+<!--advertisement id='Site.Sider.User' sys='1'/-->

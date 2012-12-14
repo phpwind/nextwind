@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<template source='simple_header' load='true' />
+</head>
+<body>
+<div class="header">
+	<a href="{@url:app/simple/index/run}" class="home_link">首页</a>
+	<a href="{@url:index/run}" target="_blank" class="intact">完整</a>
+	<h1>{@Wekit::C('site','info.name')}</h1>
+</div>
+<!--# if (!$loginUser->isExists()) { #-->
+	<div class="login" style="display:none;"><a href="{@url:u/login/run}" rel="nofollow">登录</a><a href="{@url:u/register/run}" rel="nofollow">注册</a></div>
+<!--#}#-->
+<!--# foreach ($forums[0] as $k => $cate) { #-->
+	<!--# if (!$forums[$cate['fid']]) continue;#-->
+	<h2 class="cate_title">{@$cate['name']|html}</h2>
+	<ul class="list">
+		<!--# foreach ($forums[$cate['fid']] as $forum) { #-->
+		<li><a href="{@url:app/simple/index/thread?fid=$forum['fid']}">{@$forum['name']|html}</a></li>
+			<!--# if (!$forums[$forum['fid']]) continue;#-->
+			<!--# foreach ($forums[$forum['fid']] as $subforum) { #-->
+			<li class="two"><a href="{@url:app/simple/index/thread?fid=$subforum['fid']}">{@$subforum['name']|html}</a></li>
+				<!--# if (!$forums[$subforum['fid']]) continue;#-->
+				<!--# foreach ($forums[$subforum['fid']] as $sub2forum) { #-->
+				<li class="three"><a href="{@url:app/simple/index/thread?fid=$sub2forum['fid']}">{@$sub2forum['name']|html}</a></li>
+				<!--# } #-->
+			<!--# } #-->
+		<!--# } #-->
+	</ul>
+<!--# } #-->
+
+<a href="{@url:app/simple/index/run}#" class="retop">top</a>
+<template source='simple_footer' load='true' />
+</body></html>

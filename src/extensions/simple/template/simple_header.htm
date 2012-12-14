@@ -1,0 +1,210 @@
+<meta charset="{@Wekit::app()->charset}">
+<title>{@G:seo.title} - Powered by phpwind</title>
+<meta name="generator" content="phpwind v{@NEXT_VERSION}" />
+<meta name="description" content="{@G:seo.description}" />
+<meta name="keywords" content="{@G:seo.keywords}" />
+<meta id="viewport" name="viewport" content="width=320; initial-scale=1.0;maximum-scale=1.0; user-scalable=no;"/>
+<meta name=”apple-mobile-web-app-capable” content=”yes” />
+<meta name=”apple-mobile-web-app-status-bar-style” content=black” />
+<meta content="telephone=no" name="format-detection" />
+<style type="text/css">
+/*初始化*/
+body {
+	font:12px/1.5 Arial;
+	margin:0;
+	padding:0;
+	color:#333;
+	background: #f3f3f3;
+}
+h1,h2{
+	margin:0;
+	padding:0;
+}
+img {
+	border:0;
+}
+textarea,input,select {
+	font-family: Arial;
+	font-size: 12px;
+	background-color: #ffffff;
+}
+a {
+	color:#105cb6;
+	text-decoration: none;
+}
+a:hover {
+	color:#ff6600;
+	text-decoration:none;
+}
+/*顶部*/
+.header{
+	background:#488fce;
+	box-shadow:0 1px 3px rgba(0,0,0,0.3);
+	color:#fff;
+	padding:0 15px;
+}
+/*标题*/
+.header h1{
+	font-size:20px;
+	margin:0 70px 0 70px;
+	text-align:center;
+	line-height:40px;
+	height:40px;
+	font-family:"Microsoft Yahei";
+	text-shadow:0 -1px 1px rgba(0,0,0,0.3);
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	-ms-text-overflow:ellipsis;
+}
+.header a{
+	border:1px solid #1f6fb6;
+	color:#fff;
+	line-height:26px;
+	height:26px;
+	padding:0 10px;
+	margin-top:6px;
+	background:#3f88ca;
+	background-repeat: no-repeat;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5198d6), color-stop(50%, #488fce), to(#307dc2));
+	background-image: -webkit-linear-gradient(#5198d6, #488fce 50%, #307dc2);
+	background-image: -moz-linear-gradient(top, #5198d6, #488fce 50%, #307dc2);
+	background-image: -ms-linear-gradient(#5198d6, #488fce 50%, #307dc2);
+	background-image: -o-linear-gradient(#5198d6, #488fce 50%, #307dc2);
+	background-image: linear-gradient(#5198d6, #488fce 50%, #307dc2);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5198d6', endColorstr='#307dc2', GradientType=0);
+	border-radius:3px;
+	box-shadow:0 0 1px rgba(255,255,255,0.8) inset;
+}
+/*完整*/
+.header .intact{
+	float:right;
+}
+/*首页*/
+.header .home_link{
+	float:left;
+}
+/*分类版块*/
+.cate_title{
+	background:#e4e4e4;
+	border-bottom:1px solid #ccc;
+	padding:7px 15px 5px;
+	font-size:14px;
+}
+/*通用列表*/
+.list{
+	padding:0;
+	margin:0;
+}
+.list li{
+	list-style:none;
+	border-bottom:1px solid #ccc;
+	border-top:1px solid #fff;
+	margin:0;
+}
+.list li a{
+	font-size:16px;
+	display:block;
+	padding:10px 15px;
+}
+.list li a:hover{
+	background:#e8e8e8;
+}
+.list li a:active{
+	background:#e8e8e8;
+}
+.list li.two,
+.list li.three{
+	border-bottom:0 none;
+	border-top:0 none;
+}
+.list li.two a{
+	color:#555;
+	padding:5px 15px 5px 30px;
+}
+.list li.three a{
+	color:#555;
+	padding:5px 15px 5px 50px;
+}
+/*列表数值*/
+.list li a .num{
+	float:right;
+	background:#ddd;
+	font-size:12px;
+	line-height:24px;
+	padding:0 10px;
+	color:#666;
+	border-radius:10px;
+}
+/*返回顶部*/
+.retop{
+	display:block;
+	padding:10px;
+	text-align:center;
+	font-size:16px;
+	color:#666;
+	background:#e4e4e4;
+	border-top:1px solid #fff;
+	border-bottom:1px solid #ccc;
+}
+/*标题*/
+.subject{
+	background:#e4e4e4;
+	border-top:1px solid #fff;
+	border-bottom:1px solid #ccc;
+	padding:10px 15px;
+	font-size:14px;
+}
+.subject h2{
+	font-size:14px;
+}
+.subject .info{
+	font-size:12px;
+	color:#666;
+}
+/*内容*/
+.editor_content{
+	font-size:14px;
+	padding:5px 15px 15px;
+	border-bottom:1px solid #ccc;
+}
+/*图片简介*/
+.img_info{
+	display:none;
+}
+/*底部*/
+.footer{
+	color:#ccc;
+	text-align:center;
+	padding:10px;
+	background:#333;
+	border-top:1px solid #fff;
+}
+.footer a{
+	color:#ccc;
+}
+/*分页*/
+.pages{
+	border-top:1px solid #fff;
+	border-bottom:1px solid #ccc;
+	height:30px;
+}
+.pages a,
+.pages strong{
+	display:inline-block;
+	line-height:30px;
+	padding:0 15px;
+	border-right:1px solid #ccc;
+	border-left:1px solid #fff;
+	float:left;
+	color:#333;
+}
+.pages a:hover{
+	background:#e4e4e4;
+}
+.pages strong{
+	background:#488fce;
+	color:#fff;
+}
+
+</style>

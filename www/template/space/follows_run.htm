@@ -1,0 +1,353 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:common.head' load='true' />
+<link href="{@theme:css}/style.css?v={@G:version}" rel="stylesheet" />
+</head>
+<body {@$space->space['backbround']|html}>
+<div class="wrap">
+<template source='TPL:common.header' load='true' />
+<div class="space_page">
+	<template source='TPL:space.common.nav' load='true' />
+	<div class="cc">
+		<div class="space_content">
+			<div class="box">
+				<div class="my_article">
+					<div class="hd">
+							<h2><a href="{@url:space/follows/run?uid=$space->spaceUid}"  class="{$classCurrent[0]}">{$host}的关注</a></h2>
+					</div>
+				</div>
+				<div class="space_fans">
+				<!--# if ($follows) { #-->
+				<!--# foreach ($follows as $key => $value) { #-->
+				<dl class="cc">
+					<dt><a href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['touid'])}" data-uid="{$value['touid']}" class="J_user_card_show"><img class="J_avatar" src="{@Pw::getAvatar($value['touid'], 'small')}" data-type="small" width="50" height="50" /></a><a rel="nofollow" href="{@WindUrlHelper::createUrl('message/message/pop/?username=' . $value['username'])}" data-name="{$value['username']}" class="called J_send_msg_pop J_qlogin_trigger">打招呼</a></dt>
+					<dd>
+						<div class="title">
+							<a href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['touid'])}" data-uid="{$value['touid']}" class="name J_user_card_show">{$value['username']}</a>
+						<!--# $status = Pw::checkOnline($value['lastvisit']) ? '' : 'un';
+							if($value['gender']){ #-->
+							<span class="women_{$status}ol"></span>
+						<!--# }else{ #-->
+							<span class="man_{$status}ol"></span>
+						<!--# } #-->
+						</div>
+						<div class="num">
+							关注<a href="{@WindUrlHelper::createUrl('space/follows/run/?uid=' . $value['uid'])}">{$value['follows']}</a><span>|</span>粉丝<a href="{@WindUrlHelper::createUrl('space/fans/run/?uid=' . $value['uid'])}">{$value['fans']}</a><span>|</span>帖子<a href="{@WindUrlHelper::createUrl('space/thread/run/?uid=' . $value['uid'])}">{$value['postnum']}</a>
+						</div>
+						<!-- <div class="action">回复了帖子<a href="">那些年，我们一起游过的海南（完整版）</a><span class="time">（{@Pw::time2str($value['created_time'], 'auto')}）</span></div> -->
+
+						<div class="attribute">
+							<!--# if (isset($myfollows[$value['uid']])) { #-->
+								<!--# if (isset($fans[$value['uid']])) {#-->
+								<span class="mnfollow" title="互相关注">互相关注</span>
+								<!--#} else {#-->
+								<span class="core_unfollow">已关注</span>
+								<!--# } #-->
+							<!--# } elseif ($loginUser->isExists() && $loginUser->uid != $value['uid']) {
+								$isfan = isset($fans[$value['uid']]) ? 'true' : 'false';
+							#-->
+							<a href="{@WindUrlHelper::createUrl('my/follow/add/?uid=' . $value['touid'])}" class="core_follow J_space_follow J_qlogin_trigger" data-followed="{$isfan}">加关注</a>
+							<!--# } #-->
+						</div>
+					</dd>
+				</dl>
+				<!--# } #-->
+					<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" url="space/follows/run" args="$args" />
+				<!--# } else { #-->
+				<form action="{@url:my/follow/batchadd}" method="post" id="J_nofollow_form">
+					<!--无关注人时-->
+					
+					<!--#if ($space->tome == 2) {#-->
+					
+						<!--#if($recommend){#-->
+							<div class="nofollow_list J_check_wrap">
+								<div class="hd">啊哦，你还没有关注任何人，赶紧先关注些人！</div>
+								<ul class="cc">
+									<!--# foreach ($recommend as $value) { #-->
+									<li><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run/?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'middle')}" data-type="middle" width="90" height="90" alt="{$value['username']}" /></a><label><input class="J_check" type="checkbox" name="uids[]" value="{$value['uid']}">{$value['username']}</label></li>
+									<!--# } #-->
+								</ul>
+								<div class="ft">
+									<button type="submit" class="btn btn_big btn_submit disabled" disabled="true" id="J_nofollow_btn"><span class="add"></span>关注</button>
+									<label><input class="J_check_all" type="checkbox">全选</label>
+								</div>
+							</div>
+						<!--#} else {#-->
+							<div class="not_content">啊哦，你还没有关注任何人，赶紧先关注些人！</div>
+						<!--#}#-->
+						
+					<!--#} else {#-->
+						<div class="not_content">啊哦，Ta还没有关注任何人！</div>
+					<!--#}#-->
+					
+					
+					<!--无关注人时结束-->	
+				</form>
+				<!--# } #-->	
+				</div>
+			</div>
+
+		</div>
+		<div class="space_sidebar">
+			<template source='TPL:space.common.sidebar' load='true' />
+		</div>
+	</div>
+</div>
+<template source='TPL:common.footer' load='true' />
+</div>
+<script>
+var URL_UNFOLLOW = "{@WindUrlHelper::createUrl('my/follow/delete/')|url}",
+		URL_FOLLOW = "{@WindUrlHelper::createUrl('my/follow/add/')|url}";
+//引入js组件
+Wind.use('jquery', 'global', 'dialog', 'ajaxForm', 'tabs', 'draggable', 'uploadPreview', function(){
+	Wind.js(GV.JS_ROOT +'pages/space/space_index.js?v='+ GV.JS_VERSION);
+
+	//分组管理
+	var lock = true,		//锁定
+		_id_arr = [];				//默认的id数组，用于比较
+		
+	$('a.J_follow_group_set').on('click', function(e){
+		//点击分组
+		e.preventDefault();
+		var $this = $(this),
+			list = $('#J_follow_group_list_'+ $this.data('uid'));
+		
+		
+		
+		list.toggle();
+		
+		//列表显示
+		if(!list.filter(':hidden').length) {
+			lock = false;
+			//写入默认id
+			_id_arr = []
+			$.each(list.find('input:checked'), function(i, o){
+				_id_arr.push($(this).data('id'));
+			});
+		}
+
+	}).on('blur', function(e){
+		//分组按钮失焦
+		var $this = $(this);
+		
+		//未锁定，隐藏下拉
+		if(!lock) {
+			var list = $('#J_follow_group_list_'+ $(this).data('uid'));
+			list.hide();
+			
+			//隐藏创建
+			list.find('a.J_creat_group_show').show();
+			$('#J_group_creat_wrap').remove();
+			
+		
+			var id_arr = [];
+			//获取分组
+			$.each(list.find('input:checked'), function(){
+				id_arr.push($(this).data('id'));
+			});
+
+			//判断分组是否修改
+			if(id_arr.join(',') === _id_arr.join(',')) {
+				return false;
+			}
+			
+			//提交分组
+			$.post("{@WindUrlHelper::createUrl('my/follow/savetype')|html}", {
+				uid : $this.data('uid'),
+				id : id_arr
+			}, function(data){
+				if(data.state === 'success') {
+					Wind.Util.resultTip({
+						elem : $this,
+						follow: true,
+						msg : '操作成功'
+					});
+				}else if(data.state === 'fail') {
+					Wind.Util.resultTip({
+						error : true,
+						elem : $this,
+						follow: true,
+						msg : data.message
+					});
+				}
+			}, 'json');
+		
+		}
+
+	});
+	
+	//下拉区域操作
+	$('.J_follow_group_list').on('mouseenter', function(e){
+		//鼠标移入下拉，锁定
+		lock = true;
+	}).on('mouseleave', function(){
+		//鼠标离开下拉，按钮聚焦，解除锁定
+		$('#J_follow_group_set_'+ $(this).data('uid')).focus();
+		lock = false;
+	}).on('click', 'input.J_group_name', function(){
+		//选择分组
+		var $this = $(this),
+			wrap = $this.parents('.J_follow_group_list'),
+			checked = wrap.find('input:checked'),				//选中分组
+			text_arr = [],
+			insert_v= '';
+		
+		if(checked.length) {
+			$.each(checked, function(i, o){
+				text_arr.push($(this).data('value'));
+			});
+			
+			var str = String(text_arr.join(''));
+			if(str.length > 5) {
+				//选项的文字数已超过5个字
+				
+				if(String(text_arr[0]).length >= 5) {
+					//第一项已经超过5个字
+					var s_v = String(text_arr[0]);
+					
+					insert_v = s_v.match(/\S{5}/)[0] +'…';
+				}else{
+					//第一项不足5个字
+					
+					var k = 0, n_arr = [];
+					//循环所有选中项
+					$.each(text_arr, function(i, o){
+						k = k + String(o).length;
+						if(k <= 5) {
+							//截取相加小于等于5个字的项写入新数组
+							n_arr.push(String(o));
+						}
+					});
+
+					var n_length = n_arr.join('').length;
+					if(n_length < 5) {
+						//截取小于5个字
+					
+						//循环含第5个字的项
+						var s_arr = [];
+						$.each(String(text_arr[n_arr.length]), function(i, o){
+							if(i <= (4 - n_length)) {
+								s_arr.push(o);
+							}
+						});
+
+						insert_v = n_arr.join(',') +','+ s_arr.join('') + '…';
+					
+					}else{
+						//刚好截取5个字
+						insert_v = n_arr.join(',');
+					}
+				}
+
+			}else{
+				//选取的小于等于5个字
+				insert_v = text_arr.join(',');
+			}
+		}else{
+			//未选择
+			insert_v = '未分组';
+		}
+		
+		$('#J_follow_group_set_'+ wrap.data('uid')).children('.J_group_text').text(insert_v).attr('title', text_arr.join(','));
+	});
+	
+	//创建新分组
+	var group_list = $('#J_group_list');
+	var temp_creat = '<li id="J_group_creat_wrap" style="padding:3px 0 5px 5px;">\
+								<input id="J_creat_group_input" type="text" class="input" placeholder="最多10个汉字">\
+								<button type="button" class="btn btn_submit J_creat_sub">保存</button><button type="button" class="btn J_creat_cancl">取消</button>\
+							</li>';
+							
+	//显示创建区
+	$('a.J_creat_group_show').on('click', function(e){
+		e.preventDefault();
+		var $this = $(this);
+		
+		$this.hide().before(temp_creat);
+		
+		var creat_wrap = $('#J_group_creat_wrap');
+		//取消创建
+		creat_wrap.find('button.J_creat_cancl').on('click', function(e){
+			e.preventDefault();
+			creat_wrap.remove();
+			$this.show();
+			
+			//取消后收缩，鼠标移除列表
+			$('#J_follow_group_set_'+ $this.data('uid')).focus();
+			lock = false;
+		});
+		
+		//提交创建
+		creat_wrap.find('button.J_creat_sub').on('click', function(e){
+			e.preventDefault();
+			var btn = $(this);
+
+			$.getJSON("{@WindUrlHelper::createUrl('my/follow/addtype')|html}", { name : $('#J_creat_group_input').val() }, function(data){
+				if(data.state === 'success') {
+					var _data = data.data;
+					creat_wrap.siblings('a.J_creat_group_show').show();
+					creat_wrap.remove();
+					
+					//所有列表写入新创建分组
+					$('div.J_follow_group_list > ul').append('<li><label><input type="checkbox" data-id="'+ _data.id +'" data-value="'+ _data.name +'" class="J_group_name">'+ _data.name +'</label></li>');
+
+
+					
+				}else if(data.state === 'fail'){
+					Wind.Util.resultTip({
+						error : true,
+						elem : btn,
+						follow: true,
+						msg : data.message
+					});
+				}
+			});
+		});
+		
+	});
+<!--# if (!$follows) { #-->
+	/*
+	 * 无关注
+	*/
+	var nofollow_btn = $('#J_nofollow_btn');
+	$('input:checkbox').prop('checked', false);
+	//复选框
+	$('input.J_check_all').on('change', function(){
+		if(this.checked) {
+			nofollow_btn.prop('disabled', false).removeClass('disabled');
+		}else{
+			nofollow_btn.prop('disabled', true).addClass('disabled');
+		}
+	});
+
+	var checks = $('input.J_check');
+
+	checks.on('change', function(){
+		if (checks.filter(':checked').length > 0) {
+			nofollow_btn.prop('disabled', false).removeClass('disabled');
+		}else{
+			nofollow_btn.prop('disabled', true).addClass('disabled');
+		}
+	});
+
+	$('#J_nofollow_form').ajaxForm({
+		dataType : 'json',
+		beforeSubmit : function(){
+			//global.js
+			Wind.Util.ajaxBtnDisable(nofollow_btn);
+		},
+		success : function(data){
+			if(data.state == 'success') {
+				location.reload();
+			}else{
+				//global.js
+				Wind.Util.ajaxBtnEnable(nofollow_btn);
+			}
+		}
+	});
+<!--# } #-->
+});
+</script>
+</body>
+</html>

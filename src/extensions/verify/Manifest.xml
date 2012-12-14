@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+	<application>
+		<name>实名认证</name>
+		<alias>verify</alias>
+		<version>1.0</version>
+		<pw-version>9.0</pw-version>
+		<type>app</type>
+		<description>实名认证</description>
+		<charset>utf-8</charset>
+		<author-name>信天</author-name>
+		<author-email>leven.pan@gmail.com</author-email>
+	</application>
+	
+	<res>res</res>
+	<install>EXT:verify.service.srv.do.AppVerify_VerifyUninstall</install>
+	<inject-services>
+		<hook-name name="s_admin_menu">
+			<alias name="verify">
+				<class>EXT:verify.service.srv.do.AppVerify_VerifyConfigDo</class>
+				<loadway>load</loadway>
+				<method>getAdminMenu</method>
+				<description>实名认证后台菜单扩展</description>
+			</alias>
+		</hook-name>
+		<hook-name name="m_PwMessageService">
+			<alias name="verify">
+				<class>EXT:verify.service.srv.do.AppVerify_VerifyMessageDo</class>
+				<loadway>load</loadway>
+				<expression>config:appVerify.verify.isopen==1</expression>
+				<description>实名认证发消息权限扩展</description>
+			</alias>
+		</hook-name>
+		<hook-name name="m_PwTopicPost">
+			<alias name="verify">
+				<class>EXT:verify.service.srv.do.AppVerify_VerifyPostTopicDo</class>
+				<expression>config:appVerify.verify.isopen==1</expression>
+				<description>实名认证发帖权限扩展</description>
+			</alias>
+		</hook-name>
+		<hook-name name="m_PwReplyPost">
+			<alias name="verify">
+				<class>EXT:verify.service.srv.do.AppVerify_VerifyPostReplyDo</class>
+				<expression>config:appVerify.verify.isopen==1</expression>
+				<description>实名认证回帖权限扩展</description>
+			</alias>
+		</hook-name>
+		<hook-name name="s_profile_menus">
+			<alias name="verify">
+				<class>EXT:verify.service.srv.do.AppVerify_VerifyConfigDo</class>
+				<loadway>load</loadway>
+				<method>getProfileMenu</method>
+				<expression>config:appVerify.verify.isopen==1</expression>
+				<description>个人设置实名认证菜单扩展</description>
+			</alias>
+		</hook-name>
+		<hook-name name="s_update_avatar">
+			<alias name="verify">
+				<class>EXT:verify.service.srv.do.AppVerify_VerifyDo</class>
+				<loadway>load</loadway>
+				<method>uploadAvatar</method>
+				<expression>config:appVerify.verify.isopen==1</expression>
+				<description>个人设置实名认证更新头像扩展</description>
+			</alias>
+		</hook-name>
+		<hook-name name="c_profile_extends_run">
+			<alias name="verify">
+				<class>EXT:verify.service.srv.injector.AppVerify_VerifyProfileInjector</class>
+				<method>createHtml</method>
+				<expression>config:appVerify.verify.isopen==1</expression>
+				<description>用户菜单功能扩展-展示</description>
+			</alias>
+		</hook-name>
+		<hook-name name="c_profile_foot_run">
+			<alias name="verify">
+				<class>EXT:verify.service.srv.injector.AppVerify_VerifyProfileInjector</class>
+				<method>displayFootHtml</method>
+				<expression>config:appVerify.verify.isopen==1</expression>
+				<description>用户菜单功能底部扩展-展示</description>
+			</alias>
+		</hook-name>
+	</inject-services>
+</manifest>

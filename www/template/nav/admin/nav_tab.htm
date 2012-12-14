@@ -1,0 +1,11 @@
+<div class="nav">
+	<ul class="cc">
+	<!--{foreach ($navTypeList as  $key=>$value) { }-->
+		<!--{if($navType == $key){ }-->
+			<li class="current"><a href="{@WindUrlHelper::createUrl('/nav/nav/run',array('type'=>$key))}">{$value}</a></li>
+		<!--{ }else{}-->
+			<li><a href="{@WindUrlHelper::createUrl('/nav/nav/run',array('type'=>$key))}">{$value}</a></li>
+		<!--{}}-->
+	<!--{}}-->
+	</ul>
+</div>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<application>
+	<name>帖子加密</name>
+	<alias>encryptposts</alias>
+	<version>1.0</version>
+	<pw-version>9.0</pw-version>
+	<description>访问加密帖子，需要token</description>
+	<logo>images/logo.png</logo>
+	<type>app</type>
+	<charset>utf-8</charset>
+	<website>www.phpwind.net</website>
+	<author-name>fengxiao</author-name>
+	<author-email>xiao.fengx@alibaba-inc.com</author-email>
+	<author-icon>your icon</author-icon>
+	</application>
+	<res>res</res>
+	<installation-service>
+	</installation-service>
+
+
+<inject-services>
+<!-- add by 1 -->    
+<hook-name name="s_permissionConfig">                                       <!-- 钩子名称 -->     
+    <alias name="app_encryptposts">                                 <!-- 扩展别名 -->   
+        <class>EXT:encryptposts.service.srv.App_EncryptPosts_ConfigDo</class>      
+        <method>getPermissionConfig</method>                 
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>用户组权限 - 帖子加密</description>             
+    </alias>        
+</hook-name>
+
+
+<!-- add by 2 -->    
+<hook-name name="c_post_run">                                       <!-- 钩子名称 -->     
+    <alias name="app_encryptposts">                                 <!-- 扩展别名 -->   
+        <class>EXT:encryptposts.service.srv.injector.App_EncryptPosts_Injector</class>  
+        <method>run</method>                 
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>发帖展示页 - 帖子加密</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 3-->    
+<hook-name name="c_post_doadd">                                     <!-- 钩子名称 -->           
+    <alias name="app_encryptposts">                                 <!-- 扩展别名 -->   
+        <class>EXT:encryptposts.service.srv.injector.App_EncryptPosts_Injector</class> 
+        <method>doadd</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>发帖 - 帖子加密</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 4-->    
+<hook-name name="c_read_run">                                     <!-- 钩子名称 -->           
+    <alias name="app_encryptposts">                                 <!-- 扩展别名 -->   
+        <class>EXT:encryptposts.service.srv.injector.App_EncryptPosts_Injector</class> 
+        <method>read</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>帖子阅读页 - 帖子加密</description>             
+    </alias>  
+</hook-name>
+
+
+<!-- add by 5 --> 
+<hook-name name="c_post_modify">                          <!-- 钩子名称 -->  
+    <alias name="app_encryptposts">                                 <!-- 扩展别名 -->   
+        <class>EXT:encryptposts.service.srv.injector.App_EncryptPosts_Injector</class>  
+        <method>updateHtml</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>编辑帖子展示页 - 帖子加密</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 6 --> 
+<hook-name name="c_post_domodify">                          <!-- 钩子名称 -->  
+    <alias name="app_encryptposts">                                 <!-- 扩展别名 -->   
+        <class>EXT:encryptposts.service.srv.injector.App_EncryptPosts_Injector</class>  
+        <method>domodify</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>编辑帖子发布 - 帖子加密</description>             
+    </alias>        
+</hook-name>
+
+
+
+</inject-services>
+</manifest>

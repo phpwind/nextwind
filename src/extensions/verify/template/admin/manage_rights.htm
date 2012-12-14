@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body>
+<div class="wrap J_check_wrap">
+	<div class="nav">
+		<ul>
+			<li><a href="{@url:app/verify/manage/run}">认证设置</a></li>
+			<li class="current"><a href="{@url:app/verify/manage/rights}">认证权限</a></li>
+			<li><a href="{@url:app/verify/manage/users}">认证会员</a></li>
+			<li><a href="{@url:app/verify/manage/check}">认证审核</a></li>
+		</ul>
+	</div>
+	<div class="h_a">功能说明</div>
+	<div class="prompt_text">
+		<ol>
+			<li>获得以下操作权限需要通过的认证类型。</li>
+			<li>未勾选则对应操作权限则不受控制。</li>
+		</ol>
+	</div>
+	<form class="J_ajaxForm" action="{@url:app/verify/manage/doRights}" method="post">
+	<div class="table_list J_check_wrap">
+		<table width="100%">
+			<thead>
+				<tr>
+					<td width="150">认证权限设置</td>
+					<td width="150"></td>
+					<td width="150"></td>
+					<td width="150"></td>
+					<td width="150"></td>
+					<td width="150"></td>
+					<td></td>
+				</tr>
+			</thead>
+			<tr>
+				<td></td>
+				<!--# foreach ($openTypes as $tk => $type) { #-->
+				<td><input type="checkbox" class="J_check_all" data-checklist="J_check_{$tk}" data-direction="y">{$type}</td>
+				<!--# } #-->	
+			</tr>
+			<!--# foreach ($rightType as $rk => $rt) { #-->
+			<tr>
+				<td>{$rt}</td>
+				<!--# foreach ($openTypes as $tk => $type) { 
+					$status = Pw::getstatus($conf['verify.rights'][$rk], $tk) ? 'success' : 'error';
+				#-->
+				<td><input data-yid="J_check_{$tk}" class="J_check" type="checkbox" name="rights[{$rk}][{$tk}]" value="1" {@Pw::ifcheck(Pw::getstatus($conf['verify.rights'][$rk], $tk))}></td>
+				<!--# } #-->	
+			</tr>
+			<!--# } #-->	
+			
+		</table>
+	</div>
+	
+	<div class="btn_wrap">
+		<div class="btn_wrap_pd">
+			<button class="btn btn_submit J_ajax_submit_btn" type="submit">提交</button>
+		</div>
+	</div>
+	</form>
+	
+</div>
+<template source='TPL:admin.common.footer' />
+</body>
+</html>

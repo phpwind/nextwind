@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+	<application>
+		<name>回帖奖励</name>
+		<!--这里的alias需要改成你真实应用文件夹名,更改此处后，需搜索包里的代码把这个值替换为更改后的值-->
+		<alias>replyreward</alias>
+		<version>1.0</version>
+		<pw-version>9.0</pw-version>
+		<type>app</type>
+		
+		<description>回帖奖励</description>
+		<charset>UTF-8</charset>
+		<logo>images/logo.png</logo>
+		<website>http://www.phpwind.net</website>
+		<author-name>fengxiao</author-name>
+		<author-email>xiao.fengx@alibaba-inc.com</author-email>
+		<author-icon>http://www.phpwind.net</author-icon>
+	</application>
+        <res>res</res>
+
+
+<inject-services>
+<!-- add by 1 -->    
+<hook-name name="s_permissionConfig">                                       <!-- 钩子名称 -->           
+    <alias name="app_reply_reward">                                 <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.App_ReplyReward_ReplyRewardConfigService</class>      
+        <method>getPermissionConfig</method>                 
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>回帖奖励 - 后台设置</description>             
+    </alias>        
+</hook-name>
+
+
+<!-- add by 2 -->    
+<hook-name name="s_permissionCategoryConfig">                                       <!-- 钩子名称 -->       
+    <alias name="app_reply_reward">                                 <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.App_ReplyReward_ReplyRewardConfigService</class>         
+        <method>getPermissionCategoryConfig</method>                 
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>回帖奖励 - 后台根设置</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 3 -->   
+<hook-name name="c_post_run">                                       <!-- 钩子名称 -->     
+    <alias name="app_reply_reward">                                 <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.injector.App_ReplyReward_ReplyRewardInjector</class>              
+        <!-- 必填 扩展实现类的绝对路径地址， 路径别名方式 -->        
+        <method>run</method>                    
+        <!-- 根据钩子类型不同 可选 自定义扩展执行方法 -->
+        <loadway>load</loadway>                 
+        <!-- 可选 默认 load加载方式 -->
+        <expression></expression>
+        <!-- 可选 填写钩子执行表达式，当表达式成立时执行该挂载，在Controller 类型的钩子位置可用 -->    
+        <description>发帖展示--回帖奖励</description>               
+        <!-- 扩展定义描述信息，接收一串字描述字符串， 表述扩展定义的功能作用 -->           
+    </alias>        
+</hook-name>
+
+<!-- add by 4 --> 
+<hook-name name="c_post_doadd">                                     <!-- 钩子名称 -->           
+    <alias name="app_reply_reward">                                 <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.injector.App_ReplyReward_ReplyRewardInjector</class>              
+        <method>doadd</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>发帖--回帖奖励</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 5 --> 
+<hook-name name="s_PwCreditOperationConfig">                                     <!-- 钩子名称 -->  
+    <alias name="app_reply_reward">                                 <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.App_ReplyReward_ReplyRewardLogService</class>           
+        <method>getCreditOperationConfig</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>积分日志--回帖奖励</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 6 --> 
+<hook-name name="c_post_modify">                          <!-- 钩子名称 -->  
+    <alias name="app_reply_reward">                                 <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.injector.App_ReplyReward_ReplyRewardInjector</class>           
+        <method>getUpdateHtmlContent</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>编辑帖子展示页--回帖奖励</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 7 --> 
+<hook-name name="c_thread_run">                          <!-- 钩子名称 -->  
+    <alias name="app_reply_reward">                          <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.injector.App_ReplyReward_ReplyRewardInjector</class>           
+        <method>getThreadListHtmlContent</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>帖子列表页--回帖奖励</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 8 --> 
+<hook-name name="c_read_run">                          <!-- 钩子名称 -->  
+    <alias name="app_reply_reward">                          <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.injector.App_ReplyReward_ReplyRewardInjector</class>           
+        <method>getThreadReadFloorHtmlContent</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>帖子阅读页楼主--回帖奖励</description>             
+    </alias>        
+</hook-name>
+
+<!-- add by 9 --> 
+<hook-name name="c_post_doreply">                                       <!-- 钩子名称 -->           
+    <alias name="app_reply_reward">                                 <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.injector.App_ReplyReward_ReplyRewardInjector</class> 
+        <method>reward</method>                 
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>回复中奖 - 回帖奖励</description>             
+    </alias>        
+</hook-name>
+<!-- add by 10 --> 
+<hook-name name="m_PwDeleteTopic">                 <!-- 钩子名称 -->         
+    <alias name="app_reply_reward">                                 <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.App_ReplyReward_ReplyRewardDeleteThreadService</class> 
+        <description>删除帖子 - 回帖奖励</description>             
+    </alias>        
+</hook-name>
+<!-- add by 11 --> 
+<hook-name name="c_post_replyread">                          <!-- 钩子名称 -->  
+    <alias name="app_reply_reward">                          <!-- 扩展别名 -->   
+        <class>EXT:replyreward.service.srv.injector.App_ReplyReward_ReplyRewardInjector</class>           
+        <method>getThreadReadFloorHtmlContent</method>                  
+        <loadway>load</loadway>                 
+        <expression></expression>
+        <description>帖子阅读页 快速回复--回帖奖励</description>             
+    </alias>        
+</hook-name>
+
+
+
+</inject-services>
+
+</manifest>						

@@ -1,0 +1,37 @@
+/*
+===================
+@explain: 404错误页面
+@copyright: Copyright 2012,phpwind.com
+@author: longwenid@gmail.com
+$Id: 404.css 3689 2012-01-01 09:20:57Z yanchixia $
+===================
+*/
+html,
+body{
+	background:#f7f7f7 url(../images/404/bg.jpg);
+	font:16px/2 Tahoma,'Microsoft Yahei','Simsun';
+	color:#333;
+	padding:0;
+	margin:0;
+}
+.error_wrap{
+	width:380px;
+	padding-left:260px;
+	margin:130px auto 0;
+	padding-top:35px;
+	height:350px;
+	background:url(../../images/404/404_tips.png) no-repeat;
+}
+.error_wrap p{
+	padding:0;
+	margin:0;
+}
+.error_wrap h1{
+	padding:0;
+	margin:0 0 10px;
+	width:224px;
+	height:40px;
+	overflow:hidden;
+	text-indent:-2000em;
+	background:url(../../images/404/404_h1.png) no-repeat;
+}

@@ -1,0 +1,64 @@
+<?php
+Wind::import('LIB:base.PwBaseController');
+/**
+ * the last known user to change this file in the repository  <$LastChangedBy: long.shi $>
+ * @author $Author: long.shi $ Foxsee@aliyun.com
+ * @copyright ?2003-2103 phpwind.com
+ * @license http://www.phpwind.com
+ * @version $Id: IndexController.php 21071 2012-11-27 06:34:14Z long.shi $ 
+ * @package 
+ */
+
+class IndexController extends PwBaseController {
+	
+	public function run() {
+		$id = (int)$this->getInput('id', 'get');
+		$portal = $this->_getPortalDs()->getPortal($id);
+		if (!$portal) $this->showError("page.status.404");
+		if (!$portal['isopen']) {
+			$permissions = $this->_getPermissionsService()->getPermissionsForUserGroup($this->loginUser->uid);
+			if ($permissions < 1) $this->showError("page.status.404");
+		}
+		
+		$this->setOutput($portal, 'portal');
+		if($portal['navigate']) {
+			$this->setOutput($this->headguide($portal['title']), 'headguide');
+		}
+		if ($portal['template']) {
+			$url =  WindUrlHelper::checkUrl(PUBLIC_THEMES . '/portal/local/' . $portal['template'], PUBLIC_URL);
+			$design['url']['css'] = $url . '/css';
+			$design['url']['images'] = $url . '/images';
+			$design['url']['js'] = $url . '/js';
+			Wekit::setGlobal($design, 'design');
+			$this->setTemplate("THEMES:portal.local.".$portal['template'].".template.index");
+		} else {
+			$this->setTemplate("TPL:special.index_run");
+		}
+		//$this->getForward()->getWindView()->compileDir = 'DATA:design.default.' . $id;
+		$this->setTheme($portal['template'], 'THEMES:portal.local');
+		Wind::import('SRV:seo.bo.PwSeoBo');
+		PwSeoBo::init('area', 'custom', $id);
+		PwSeoBo::set('{pagename}', $portal['title']);
+	}
+	
+	protected function headguide($protalname) {
+		$bbsname = Wekit::C('site', 'info.name');
+		$headguide = '<a href="' . WindUrlHelper::createUrl('') . '" title="' . $bbsname . '" class="home">' . $bbsname . '</a>';
+		return $headguide . '<em>&gt;</em>' . WindSecurity::escapeHTML($protalname);
+	}
+	
+	
+	private function _getPortalDs() {
+		return Wekit::load('design.PwDesignPortal');
+	}
+	
+	protected function _getPermissionsService() {
+		return Wekit::load('design.srv.PwDesignPermissionsService');
+	}
+	
+	protected function setTheme($theme, $themePack) {
+		$this->getForward()->getWindView()->setTheme($theme, $themePack);
+	}
+
+}
+?>

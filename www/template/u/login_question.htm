@@ -1,0 +1,93 @@
+<style>
+.pop_cont dt{
+	width:75px;
+}
+</style>
+	<div id="J_login_question_wrap" class="core_pop_wrap">
+		<div class="core_pop">
+			<div class="pop_login">
+				<div class="pop_top">
+					<a id="J_login_question_close" href="" class="pop_close">关闭</a>
+					<strong>登录保护</strong>
+				</div>
+				<form id="J_head_question_form" action="{@WindUrlHelper::createUrl('u/login/doshowquestion')}" method="post" >
+				<input type="hidden" name="_statu" value="{$_statu}">
+				<div class="pop_cont">
+					<div id="J_login_question_tips" style="display:none;" class="tips"></div>
+<!--#if ($hasQuestion) {#-->
+					<dl class="cc">
+						<dt>安全问题：</dt>
+						<dd><select id="J_qustion_select" class="select_4" name="question">
+<!--#foreach ($safeCheckList as $key => $value) {#-->
+						<option value='{$key}'>{$value}</option>
+<!--#}#-->
+						<!--<option value="-2">自定义安全问题</option> -->
+						</select></dd>
+					</dl>
+					<dl id="J_myqustion_dl" class="cc" style="display:none">
+						<dt>自定义问题：</dt>
+						<dd><input type="text" name="myquestion" value="" class="input length_4"></dd>
+					</dl>
+					<dl class="cc">
+						<dt>你的答案：</dt>
+						<dd><input type="text" class="input length_4" name="answer"></dd>
+					</dl>
+<!--#}#-->
+<!--#if ($verify) {#-->
+					<dl class="cc dl_cd">
+						<dt>验证码：</dt>
+						<dd>
+							<input id="J_head_login_code" type="text" class="input length_4 mb5" name="code">
+							<div id="J_verify_code"></div>
+						</dd>
+					</dl>
+<!--#}#-->
+				</div>
+				<div class="pop_bottom">
+					<button type="submit" class="btn btn_submit">登录</button>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+$(function(){
+	
+	var login_question_wrap = $('#J_login_question_wrap'),
+		login_question_tips = $('#J_login_question_tips');
+	
+	//拖动组件
+	login_question_wrap.draggable( { handle : '.pop_top'} );
+	
+	//关闭
+	$('#J_login_question_close').on('click', function(e){
+		e.preventDefault();
+		login_question_wrap.remove();
+		$('#J_sidebar_login').focus();
+	});
+
+	//自定义问题
+	var myqustion_dl = $('#J_myqustion_dl');
+	$('#J_qustion_select').on('change', function(){
+		if($(this).val() == '-4') {
+			myqustion_dl.show();
+		}else{
+			myqustion_dl.hide();
+		}
+	});
+	
+	//提交
+	$('#J_head_question_form').ajaxForm({
+		dataType : 'json',
+		//beforeSubmit : function (arr, $form, options) {},
+		success : function (data, statusText, xhr, $form) {
+			if(data.state === 'success') {
+				window.location.href = data.referer;
+			}else{
+				login_question_tips.html('<div class="tips_icon_error">'+ data.message +'</div>').show();
+			}
+		}
+	});
+	
+});
+</script>

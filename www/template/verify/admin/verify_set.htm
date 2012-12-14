@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body>
+<div class="wrap">
+
+<!-- start -->
+	<div class="nav">
+		<ul class="cc">
+		<li><a href="{@WindUrlHelper::createUrl('/verify/verify/run')}">验证码</a></li>
+		<li class="current"><a href="{@WindUrlHelper::createUrl('/verify/verify/set')}">验证策略</a></li>
+		</ul>
+	</div>
+	<div class="h_a">验证策略</div>
+	<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/verify/verify/doset')}" data-role="list">
+	<div class="table_purview mb10">
+		<table width="100%" class="J_check_wrap">
+			<col width="160">
+			<col width="120">
+			<tr class="hd">
+				<th>&nbsp;</th>
+				<td><label><input name="" class="J_check_all" data-checklist="J_check_verifyset" data-direction="y" type="checkbox" value="">启用验证码</label></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>注册</th>
+				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="register" {@Pw::ifcheck(in_array('register',$config['showverify']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>登录</th>
+				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="userlogin" {@Pw::ifcheck(in_array('userlogin',$config['showverify']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>找回密码</th>
+				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="resetpwd" {@Pw::ifcheck(in_array('resetpwd',$config['showverify']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>发消息</th>
+				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="sendmsg" {@Pw::ifcheck(in_array('sendmsg',$config['showverify']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>发主题帖</th>
+				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="postthread" {@Pw::ifcheck(in_array('postthread',$config['showverify']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<!-- <tr>
+				<th>发布日志</th>
+				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="postnote" {@Pw::ifcheck(in_array('postnote',$config['showverify']))}></td>
+				<td>&nbsp;</td>
+			<tr> -->
+				<th>上传照片</th>
+				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="uploadpic" {@Pw::ifcheck(in_array('uploadpic',$config['showverify']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>后台登录</th>
+				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="adminlogin" {@Pw::ifcheck(in_array('adminlogin',$config['showverify']))}></td>
+				<td>&nbsp;</td>
+			</tr>
+			</tr>
+		</table>
+	</div>
+	<div class="btn_wrap">
+		<div class="btn_wrap_pd">
+			<button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
+		</div>
+	</div>
+	</form>
+</div>
+<template source='TPL:admin.common.footer' />
+</body>
+</html>

@@ -1,0 +1,7 @@
+type.error = չʾ���ʹ���
+position.error = ���λID����
+add.fail = ��ӹ��λʧ�ܣ�
+position.exists = ���λ�Ѿ����ڣ���Ҫ�ظ���ӣ�
+position.not.exists = ���λ�����ڣ����ܱ༭!
+position.status.error = ���λ״ֵ̬����
+position.exists = 广告位已存在

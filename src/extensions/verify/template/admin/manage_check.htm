@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body>
+<div class="wrap J_check_wrap">
+	<div class="nav">
+		<ul>
+			<li><a href="{@url:app/verify/manage/run}">认证设置</a></li>
+			<li><a href="{@url:app/verify/manage/rights}">认证权限</a></li>
+			<li><a href="{@url:app/verify/manage/users}">认证会员</a></li>
+			<li class="current"><a href="{@url:app/verify/manage/check}">认证审核</a></li>
+		</ul>
+	</div>
+
+	<div class="h_a">搜索</div>
+	<div class="search_type cc mb10">
+		<form action="{@url:app/verify/manage/check}" method="post" >
+			<label>认证类型：</label>
+			<select name="type" class="select_3 mr10">
+				<option value="">全部</option>
+				<!--# foreach ($verifyTypes as $tk => $type) { #-->
+				<option value="{$tk}" {@Pw::isSelected($tk == $args['type'])}>{$type}</option>
+				<!--# } #-->
+			</select>
+			<button class="btn">搜索</button>
+		</form>
+	</div>
+	<div class="h_a">认证列表</div>
+	<form class="J_ajaxForm" action="{@url:app/verify/manage/doCheck}" method="post" >
+	
+	<div class="table_list J_check_wrap">
+		
+		<table width="100%" id="J_subcheck">
+			<colgroup>
+				<col width="80">
+				<col width="100">
+				<col width="100">
+				<col width="200">
+				<col width="200">
+			</colgroup>
+			<thead>
+				<tr>
+					<td><label><input type="checkbox" class="J_check_all" data-checklist="J_check_y" data-direction="y">全选</label></td>
+					<td>用户名</td>
+					<td>认证类型</td>
+					<td>认证信息</td>
+					<td>操作</td>			
+				</tr>
+			</thead>
+			<!--# foreach ($list as $value) { #-->
+			<tr>
+				<td><label><input type="checkbox" data-yid="J_check_y" class="J_check" name="ids[]" value="{$value['id']}"></label></td>
+				<td>{$value['username']}</td>
+				<td>{$verifyTypes[$value['type']]}</td>
+				<td>{$value['data']}</td>
+				<td><a class="J_ajax_refresh" href="{@url:app/verify/manage/doCheck?action=pass&ids=$value['id']}">[通过]</a> <a href="{@url:app/verify/manage/doCheck?action=del&ids=$value['id']}">[拒绝]</a></td>
+			</tr>
+			<!--# } #-->
+		</table>
+		<div class="p10">
+			<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='app/verify/manage/check' args='$args'/>
+		</div>
+		<div class="btn_wrap">
+
+			<div class="btn_wrap_pd">
+				<button class="btn btn_submit J_ajax_submit_btn" type="submit" data-subcheck="true" data-action="{@url:app/verify/manage/doCheck?action=pass&ids=$value['id']}">通过</button>
+				<button class="btn" type="submit" data-action="{@url:app/verify/manage/doCheck?action=del&ids=$value['id']}">拒绝</button>
+			</div>
+
+		</div>
+	</div>
+	</form>
+</div>
+<template source='TPL:admin.common.footer' />
+</body>
+</html>

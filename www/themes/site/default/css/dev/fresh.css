@@ -1,0 +1,318 @@
+/*#
+===================
+@explain: 新鲜事
+@copyright: Copyright 2012,phpwind.com
+@author: longwenid@gmail.com
+$Id: fresh.css 20678 2012-11-02 07:43:49Z yanchixia $
+===================
+#*/
+
+/*
+===================
+快速发帖
+===================
+*/
+.fresh_post{
+	padding:10px 15px 15px;
+}
+.fresh_post .textarea,
+.fresh_post .textarea:focus{
+	border:1px solid #d1d1d1;
+	box-shadow: 1px 1px 1px #e5e4e4 inset;
+	outline:0 none;
+	width:628px;
+	padding:4px;
+	margin-bottom:7px;
+	height:80px;
+	background:#fff;
+	overflow-x:hidden;
+	overflow-y:auto;
+	resize:none;
+}
+.fresh_post .hd{
+	margin-bottom:5px;
+	height:24px;
+}
+.fresh_post .hd h2{
+	display:inline;
+	color:#0d5080;
+	font-size:16px;
+	font-family:"Microsoft Yahei";
+	font-weight:100;
+	margin-right:5px;
+	float:left;
+}
+.fresh_post .hd span{
+	color:#999;
+	padding-top:5px;
+	float:left;
+}
+.fresh_post .posting{
+	float:right;
+}
+
+/*
+===================
+发布按钮
+===================
+*/
+.fresh_post .posting .btn{
+	padding-top:5px;
+	padding-bottom:5px;
+	width:80px;
+	padding-left:0;
+	padding-right:0;
+	position:relative;
+}
+
+/*
+===================
+发布图片表情
+===================
+*/
+.fresh_post .operate .a_face,
+.fresh_post .operate .a_photo{
+	float:left;
+	margin-right:20px;
+	padding-left:22px;
+	line-height:20px;
+	color:#999;
+	background:url(../../images/fresh/post_icon.png) 0 3px no-repeat;
+}
+.fresh_post .operate object{
+	cursor:pointer;
+}
+.fresh_post .operate a:hover{
+	text-decoration:none;
+	color:#666;
+}
+.fresh_post .operate .a_photo{
+	background-position:0 -27px;
+}
+.fresh_post .operate .a_face:hover{
+	background-position:0 -57px;
+}
+.fresh_post .operate .a_photo:hover{
+	background-position:0 -87px;
+}
+.fresh_post .operate .a_photo_flash{
+	position:absolute;
+	margin-left:-48px;
+	height:22px;
+	overflow:hidden;
+	cursor:pointer;
+}
+
+/*
+===================
+选择版块
+===================
+*/
+.fresh_select_forum{
+	padding-right:30px;
+	font-size:14px;
+	color:#487ba0;
+	position:relative;
+	z-index:2;
+	cursor:pointer;
+	display:inline-block;
+	height:21px;
+}
+.fresh_select_forum em{
+	border-top:5px #487ba0 solid;
+	top:7px;
+	margin:0px;
+	position:absolute;
+}
+
+/*
+===================
+选择版块-下拉
+===================
+*/
+.down_select_forum{
+	background:#fff;
+	border:1px solid #d9d9d9;
+	position:absolute;
+	width:130px;
+	margin-top:-3px;
+	margin-left:-10px;
+	z-index:2;
+}
+.down_select_forum ul{
+	padding:30px 5px 5px;
+}
+.down_select_forum li a{
+	line-height:25px;
+	height:25px;
+	overflow:hidden;
+	text-indent:5px;
+	font-size:14px;
+	color:#666;
+	cursor:pointer;
+	display:block;
+}
+.down_select_forum li a:hover{
+	background:url(../../images/fresh/select.png) 0 -38px no-repeat;
+	color:#fff;
+	text-decoration:none;
+}
+.fresh_post .pop_select_forum{
+	position:absolute;
+	z-index:3;
+}
+
+/*
+===================
+上传照片内容
+===================
+*/
+.fresh_upload_pictures{
+	padding:5px;
+	background:#fff;
+	border:1px solid #d9d9d9;
+	margin-top:7px;
+	position:relative;
+	height:130px;
+	overflow-y:auto;
+}
+.fresh_upload_pictures .pop_close{
+	position:absolute;
+	right:10px;
+	*right:25px;
+}
+.fresh_upload_pictures .arrow{
+	position:absolute;
+	top:-24px;
+	left:65px;
+}
+.fresh_upload_pictures .arrow span,
+.fresh_upload_pictures .arrow em{
+	position:absolute;
+	width:0;
+	height:0;
+	padding:0;
+	margin:9px 0 0 2px;
+	border-top:8px transparent dashed;
+	border-right:8px transparent dashed;
+	border-left:8px transparent dashed;
+	overflow:hidden;
+}
+.fresh_upload_pictures .arrow span{
+	border-bottom:8px #ffffff solid;
+}
+.fresh_upload_pictures .arrow em{
+	border-bottom:8px #d9d9d9 solid;
+	margin-top:8px;
+}
+.fresh_upload_pictures ul{
+	width:600px;
+	overflow:hidden;
+}
+.fresh_upload_pictures li{
+	float:left;
+	width:100px;
+	height:100px;
+	overflow:hidden;
+	margin:14px 4px 14px 14px;
+	position:relative;
+	text-align:center;
+	line-height:100px;
+	display:inline;
+	border:1px solid #e4e4e4;
+	background:#f8f8f8;
+	display:block;
+	color:#eeeeee;
+	font:36px/90px Arial;
+}
+.fresh_upload_pictures li .del{
+	position:absolute;
+	width:16px;
+	height:16px;
+	background:url(../../images/fresh/close_white.png) right 0 no-repeat;
+	overflow:hidden;
+	text-indent:-2000em;
+	right:5px;
+	top:5px;
+	z-index:1;
+}
+.fresh_upload_pictures li.goon{
+	padding:0;
+	width:auto;
+	padding-top:0px;
+	height:16px;
+	line-height:16px;
+	white-space:nowrap;
+	border:0 none;
+	background:none;
+	font-size:12px;
+	color:#333;
+}
+
+/*
+===================
+筛选
+===================
+*/
+.fresh_nav{
+	border-bottom:1px solid #e9e9e9;
+	margin-bottom:15px;
+}
+.fresh_nav ul{
+	padding:8px 15px;
+}
+.fresh_nav li{
+	float:left;
+	line-height:23px;
+	height:23px;
+	white-space:nowrap;
+}
+.fresh_nav li a{
+	padding:0 10px;
+}
+.fresh_nav li.current a{
+	background:#3584bd;
+	border-radius:3px;
+	font-weight:700;
+	color:#fff;
+	display:block;
+}
+
+/*
+===================
+新鲜事包裹
+===================
+*/
+.fresh_page .feed_lists{
+	padding:0 15px 15px;
+	min-height:400px;
+}
+
+/*
+===================
+新的新鲜事提示
+===================
+*/
+.fresh_page .feed_lists .tips{
+	text-align:center;
+	color:#e78b5c;
+	margin-bottom:15px;
+}
+
+/*
+===================
+新鲜事隐藏的内容
+===================
+*/
+.content_hidden{
+	border:1px dashed #95c376;
+	padding:15px 20px;
+	margin:5px 0;
+	background:#f8fff3;
+}
+.content_hidden h6{
+	font-size:12px;
+	color:#669933;
+	margin:0 0 5px;
+	padding:0;
+}

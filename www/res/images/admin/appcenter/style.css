@@ -1,0 +1,299 @@
+/*#
+===================
+@explain: app应用平台首页
+@copyright: Copyright 2012,phpwind.com
+@author: longwenid@gmail.com
+===================
+#*/
+
+/*
+===================
+初始化【请勿修改】
+===================
+*/
+html,body, 
+div, dl, dt, dd, ul, p, th, td,
+h1, h2, h3, h4, h5, h6, 
+pre, code, form, 
+fieldset, legend{
+	margin: 0;
+	padding: 0;
+}
+cite, 
+em, 
+strong, 
+th {
+	font-style: normal;
+}
+td, 
+th, 
+div {
+	word-break:break-all;
+	word-wrap:break-word;
+}
+form{
+	display:inline;
+}
+table {
+	border-collapse: collapse;
+	border-spacing:0;
+}
+th {
+	text-align: left;
+	font-weight:100;
+}
+ol li {
+	list-style: decimal outside;
+}
+ol{
+	padding:0 0 0 18px;
+	margin:0;
+}
+li {
+	list-style:none;
+}
+img {
+	border: 0;
+}
+html {
+	-webkit-text-size-adjust:none;
+}
+
+/*
+===================
+清除浮动【请勿修改】
+>>	cc	作用于父模型
+>>	c		作用于浮动模型后，父模型区域里
+===================
+*/
+.cc{
+	zoom:1;
+}
+.cc:after{
+	content:'\20';
+	display:block;
+	height:0;
+	clear:both;
+	visibility: hidden;
+}
+
+/*
+===================
+结构
+===================
+*/
+body{
+	background:#f4f3f3;
+	font:12px/1.5 Arial, "Microsoft Yahei";
+}
+a{
+	color:#333;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+
+.wrap{
+	
+}
+
+/*
+===================
+头部
+===================
+*/
+.header_wrap{
+	height:95px;
+	background:#fff;
+	border-bottom:1px solid #bbbbbb;
+	box-shadow:0 5px 5px #e9e9e9;
+}
+.header{
+	width:1000px;
+	margin:0 auto;
+}
+/*
+===================
+登录
+===================
+*/
+.login{
+	float:right;
+	padding:10px 0;
+}
+.login a{
+	color:#666;
+	margin-right:10px;
+}
+/*
+===================
+logo
+===================
+*/
+.logo{
+	float:left;
+	padding-top:20px;
+	margin-right:40px;
+}
+.logo a{
+	float:left;
+	display:block;
+	width:230px;
+	height:60px;
+	background:url(logo.png) no-repeat;
+	text-indent:-2000em;
+	overflow:hidden;
+}
+/*
+===================
+导航
+===================
+*/
+.nav{
+	float:left;
+	font-size:16px;
+	padding-top:37px;
+}
+.nav li{
+	float:left;
+}
+.nav li a{
+	padding:0 20px;
+	float:left;
+	line-height:35px;
+	border-bottom:3px solid #fff;
+}
+.nav li a:hover{
+	text-decoration:none;
+	border-color:#ddd;
+}
+.nav li.current a{
+	color:#005cb5;
+	border-color:#005cb5;
+}
+/*
+===================
+搜索
+===================
+*/
+.search_wrap{
+	clear:right;
+	float:right;
+	background:#f5f5f5;
+	padding:5px;
+	border-radius:4px;
+}
+.search{
+	border:1px solid #dcdcdc;
+	background:#fff;
+}
+.search input{
+	border:0;
+	padding:3px;
+	margin:3px 4px;
+	background:#fff;
+	width:140px;
+	float:left;
+	outline:0 none;
+}
+.search button{
+	float:left;	
+	border:0 none;
+	padding:0 5px 0 0;
+	margin:0;
+	overflow:visible;
+	line-height:28px;
+	height:28px;
+	width:28px;
+	background:#fff;
+}
+.search button img{
+	display:block;
+	border:0;
+	margin:auto;
+}
+
+
+/*
+===================
+主体
+===================
+*/
+.main{
+	width:1000px;
+	margin:0 auto;
+	min-height:400px;
+}
+
+
+
+/*
+===================
+页脚，底部
+===================
+*/
+.footer{
+	width:1000px;
+	margin:0 auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

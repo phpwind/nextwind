@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body>
+<div class="wrap J_check_wrap">	
+	<div class="nav">
+		<ul class="cc">
+			<li><a href="{@WindUrlHelper::createUrl('design/push/run')}">显示中数据</a></li>
+			<li><a href="{@WindUrlHelper::createUrl('design/push/status?status=1')}">待审核数据</a></li>
+			<li><a href="{@WindUrlHelper::createUrl('design/push/status?status=2')}">推送数据</a></li>	
+			<li  class="current"><a href="{@WindUrlHelper::createUrl('design/push/shield')}">屏蔽数据</a></li>	
+		</ul>
+	</div>
+	<div class="h_a">功能说明</div>
+	<div class="prompt_text">
+		<ul>
+			<li>前台各模块自动调用的数据，被屏蔽后，进入此列表。</li>
+		</ul>
+	</div>
+	<form class="J_ajaxForm" method="post"  action="{@WindUrlHelper::createUrl('design/push/doshielddeletes')}" >
+	<div class="table_list">
+		<table width="100%">
+			<colgroup>
+				<col width="70">
+				<col width="350">
+			</colgroup>
+			<thead>
+				<tr>
+					<td><label><input type="checkbox" data-checklist="J_check_y" data-direction="y" class="J_check_all" name="checkAll">全选</label></td>
+					<td>标题</td>
+					<td>操作</td>
+				</tr>
+			</thead>
+			<!--# foreach ($list as $v): #-->
+			<tr>
+				<td><input data-yid="J_check_y" data-xid="J_check_x" class="J_check" type="checkbox" name="shieldids[]" value="{$v['shield_id']}"></td>
+				<td><a href="{$v['shield_url']}" target="_blank">{$v['shield_title']}</a></td>
+				<td><a href="{@WindUrlHelper::createUrl('design/push/doshielddelete?shieldid='.$v['shield_id'])}" class="mr10 J_ajax_refresh">[取消屏蔽]</a></td>
+			</tr>
+		<!--# endforeach; #-->
+		</table>
+		<page tpl='TPL:common.page'  total="$totalpage" page="$page" per="$perpage" count="$count" url="design/push/shield"/>
+	</div>
+
+
+	
+	<div class="btn_wrap">
+	<div class="btn_wrap_pd">
+		<label class="mr20"><input type="checkbox" data-checklist="J_check_x" data-direction="x" class="J_check_all" name="checkAll">全选</label><button data-subcheck="true" class="btn btn_submit J_ajax_submit_btn" type="submit">取消屏蔽</button>
+	</div>
+	</div>
+	</form>	
+</div>
+<template source='TPL:admin.common.footer' />
+<script>
+$(function(){
+	//select联动
+	var flag_passive = $('#J_flag_passive');
+	$('#J_flag_initiative').on('change', function(){
+		var pageid = this.value;
+		if(pageid) {
+			$.post('{@WindUrlHelper::createUrl('design/page/getModuleOption')|url}', {pageid : pageid}, function(data){
+				if(data.state == 'success') {
+					flag_passive.html(data.data);
+				}else if(data.state == 'fail'){
+					//common.js
+					resultTip({
+						error : true,
+						msg : data.message
+					});
+				}
+			}, 'json');
+		}else{
+			flag_passive.html('<option>不限制</option>');
+		}
+		
+	});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<dl class="cc">
+	<dt>电子邮箱：</dt>
+	<dd>
+	{$loginUser->info['email']} <a href="{@url:app/verify/index/passwd?type=email}" data-tit="密码验证" data-type="checkpwd" data-name="电子邮箱认证,email" class="f12 J_auth_items"><!--# if ($isVerify) { #-->修改<!--# } else { #-->认证<!--# } #--></a>
+	</dd>
+</dl>

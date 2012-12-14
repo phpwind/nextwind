@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<template source='simple_header' load='true' />
+</head>
+<body>
+<div class="header">
+	<a href="{@url:app/simple/index/run}" class="home_link">返回</a>
+	<a href="{@url:bbs/thread/run?fid=$fid}" target="_blank" class="intact">完整</a>
+	<h1>{$pwforum->foruminfo['name']}</h1>
+</div>
+<div style="display:none;">
+<!--# if (!$loginUser->isExists()) { #-->
+	<a href="{@url:u/login/run}" target="_blank" rel="nofollow" class="intact">登录</a><a href="{@url:u/register/run}" target="_blank" class="intact">注册</a>
+<!--#} else { #-->
+	<a href="{@url:bbs/post/run?fid=$fid}" target="_blank"  class="intact">发表主题</a>
+<!--#}#-->
+</div>
+<ul class="list">
+<!--#if (!$threadList) {#-->
+<li><div style="padding:30px; text-align:center; font-size:16px;">啊哦，该版块暂无帖子信息</div></li>
+<!--#} else foreach($threadList as $thread){#-->
+<li><a href="{@url:app/simple/index/read?fid=$fid&tid=$thread['tid']}"><span class="num">{$thread['replies']} 回复</span>{$thread['subject']}</a></li>
+<!--#}#-->
+</ul>
+<page tpl="simple_page" page="$page" per="$perpage" count="$count" total="$totalpage" url="simple/index/thread?fid=$fid"/>
+<a href="{@url:app/simple/index/thread?fid=$fid}#" class="retop">top</a>
+<template source='simple_footer' load='true' />
+</body></html>

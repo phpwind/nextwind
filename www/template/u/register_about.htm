@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:common.head' suffix='htm' />
+<link href="{@theme:css}/register.css?v={@G:version}" rel="stylesheet" />
+</head>
+<body>
+<div class="wrap">
+<template source='TPL:common.header' suffix='htm'/>
+	<div class="main_wrap">
+		<div class="main">
+		<!--#if ($type == 'activeEmail') {#-->
+			<meta http-equiv="refresh" content="3; url={@G:url.base}" />
+			<div class="box_wrap register cc">
+				<div class="reg_activation">
+					<h1>您好，您的账号已激活，请直接登录网站！</h1>
+					<div class="reg_activation_tip">
+						<p>3秒后页面自动跳转回 <a href="{@G:url.base}" class="s4">首页</a></p>
+					</div>
+				</div>
+			</div>
+		<!--#} elseif ($type == 'activeEmailSuccess') {#-->
+			<div class="box_wrap register cc">
+				<div class="reg_activation">
+					<h1>恭喜，您的帐户已激活成功！</h1>
+					<div class="reg_activation_tip">
+						<p>
+						<!--#if ($goGuide) {#-->
+						进入<a href="{@url:u/register/guide}">新手导航</a>
+						<!--#}else{#-->
+						<meta http-equiv="refresh" content="3; url={@G:url.base}" />
+						返回 <a href="{@G:url.base}" class="s4">首页</a>
+						<!--#}#-->
+						</p>
+					</div>
+				</div>
+			</div>
+		<!--#} elseif ($type == 'success') {#-->
+			<div class="box_wrap register cc">
+				<div class="reg_activation">
+					<h1>{$username}，恭喜您注册成为{@Wekit::C('site', 'info.name')}会员！</h1>
+					<div class="reg_activation_tip">
+						<p><!--#if ($check) {#--><span class="mr20">网站已开通注册审核，您的帐户通过审核后，即可正常发帖。</span><!--#}#--><a href="{@G:url.base}" class="s4">返回首页</a></p>
+					</div>
+				</div>
+			</div>
+		<!--#}#-->
+			<div class="box_wrap register cc" style="display:none">
+				<div class="reg_activation">
+					<h1>{$username}，恭喜您注册成为{@Wekit::C('site', 'info.name')}会员！</h1>
+				</div>
+				<div class="reg_push">
+					<h2 class="f14 mb10">请选择你感兴趣的版块和人：</h2>
+					<div class="reg_push_forum">
+						<a href="#" class="btn btn_submit fr">关注全部版块</a>
+						<h3>可能感兴趣的版块</h3>
+						<div class="ct">
+							<ul class="cc">
+								<li><a href="#" class="core_follow fr" title="加关注"></a><h4><a href="#">phpwind程序发布</a></h4><p>一朵梨花压海棠，人见人爱，花见花开，貌似潘安小白龙是也。</p></li>
+								<li><a href="#" class="core_follow fr" title="加关注"></a><h4><a href="#">phpwind程序发布</a></h4><p>一朵梨花压海棠，人见人爱，花见花开，貌似潘安小白龙是也。</p></li>
+								<li><a href="#" class="core_follow fr" title="加关注"></a><h4><a href="#">phpwind程序发布</a></h4><p>一朵梨花压海棠，人见人爱，花见花开，貌似潘安小白龙是也。</p></li>
+								<li><a href="#" class="core_follow fr" title="加关注"></a><h4><a href="#">phpwind程序发布</a></h4><p>一朵梨花压海棠，人见人爱，花见花开，貌似潘安小白龙是也。</p></li>
+								<li><a href="#" class="core_follow fr" title="加关注"></a><h4><a href="#">phpwind程序发布</a></h4><p>一朵梨花压海棠，人见人爱，花见花开，貌似潘安小白龙是也。</p></li>
+								<li><a href="#" class="core_follow fr" title="加关注"></a><h4><a href="#">phpwind程序发布</a></h4><p>一朵梨花压海棠，人见人爱，花见花开，貌似潘安小白龙是也。</p></li>
+							</ul>
+						</div>
+					</div>
+					<div class="reg_push_user">
+						<a href="#" class="btn btn_submit fr">关注全部</a>
+						<h3>可能感兴趣的会员</h3>
+						<div class="ct">
+							<ul class="cc">
+								<li>
+									<a href="#"><img src="{@G:url.images}/face/face.jpg" width="50" height="50" /></a>
+									<div class="text">
+										<h4 class="fn"><a href="#">王力宏</a></h4>
+										<p class="s6 mb5">天堂电影院不在天堂</p>
+										<a href="#" class="core_follow" title="加关注"></a>
+									</div>
+								</li>
+								<li>
+									<a href="#"><img src="{@G:url.images}/face/face.jpg" width="50" height="50" /></a>
+									<div class="text">
+										<h4 class="fn"><a href="#">王力宏</a></h4>
+										<p class="s6 mb5">天堂电影院不在天堂</p>
+										<a href="#" class="core_follow" title="加关注"></a>
+									</div>
+								</li>
+								<li>
+									<a href="#"><img src="{@G:url.images}/face/face.jpg" width="50" height="50" /></a>
+									<div class="text">
+										<h4 class="fn"><a href="#">王力宏</a></h4>
+										<p class="s6 mb5">天堂电影院不在天堂</p>
+										<a href="#" class="core_follow" title="加关注"></a>
+									</div>
+								</li>
+								<li>
+									<a href="#"><img src="{@G:url.images}/face/face.jpg" width="50" height="50" /></a>
+									<div class="text">
+										<h4 class="fn"><a href="#">王力宏</a></h4>
+										<p class="s6 mb5">天堂电影院不在天堂</p>
+										<a href="#" class="core_follow" title="加关注"></a>
+									</div>
+								</li>
+								<li>
+									<a href="#"><img src="{@G:url.images}/face/face.jpg" width="50" height="50" /></a>
+									<div class="text">
+										<h4 class="fn"><a href="#">王力宏</a></h4>
+										<p class="s6 mb5">天堂电影院不在天堂</p>
+										<a href="#" class="core_follow" title="加关注"></a>
+									</div>
+								</li>
+								<li>
+									<a href="#"><img src="{@G:url.images}/face/face.jpg" width="50" height="50" /></a>
+									<div class="text">
+										<h4 class="fn"><a href="#">王力宏</a></h4>
+										<p class="s6 mb5">天堂电影院不在天堂</p>
+										<a href="#" class="core_follow" title="加关注"></a>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="tac"><a href="" class="btn btn_big btn_submit">访问首页</a></div>
+				</div>
+			</div>
+		</div>
+	</div>
+<template source='TPL:common.footer' suffix='htm'/>
+{$synLogin|html}
+<script>
+Wind.use('jquery', 'global');
+</script>
+</div>
+</body>
+</html>
