@@ -17,18 +17,18 @@
 </style>
 </head>
 <body>
-<design role="start"/>
+<pw-start/>
 <div class="wrap">
 	<template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<div class="bread_crumb">
 			<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/read/run?tid=$tid&fid=$fid" args="$urlargs"/>
 			{@$headguide|html}
 		</div>
 		<div class="main cc"><input type="hidden" id="js-tid" value="$tid" />
 			<div class="read_page" id="J_posts_list">
-				<design role="segment" id="first_segment"/>
+				<pw-drag id="first_segment"/>
 				<div id="app_test"></div>
 				<div id="cloudwind_read_top"></div>
 				<!--# $designPermission = $loginUser->getPermission('design_allow_manage.push');
@@ -98,7 +98,7 @@
 						<!--# } #-->
 					</ul>
 				</div>
-				<design role="segment" id="read_bottom"/>
+				<pw-drag id="read_bottom"/>
 				<div id="cloudwind_read_bottom"></div>
 			</div>
 			<!--# if ($operateReply) { #-->
@@ -269,6 +269,7 @@ Wind.use('jquery', 'global', 'dialog', function(){
 });
 </script>
 <!--# } #-->
-<design role="end"/>
+<hook class='$threadDisplay' method="runJs" />
+<pw-end/>
 </body>
 </html>

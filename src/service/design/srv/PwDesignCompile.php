@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignCompile.php 21897 2012-12-14 12:45:12Z gao.wanggao $ 
+ * @version $Id: PwDesignCompile.php 21901 2012-12-17 02:22:27Z gao.wanggao $ 
  * @package 
  */
 class PwDesignCompile {
@@ -50,6 +50,11 @@ class PwDesignCompile {
     	return $this->pageid;
     }
     
+    public function setPermission() {
+    	Wekit::load('design.PwDesignPermissions');
+		$this->_permission = Wekit::load('design.srv.PwDesignPermissionsService')->getPermissionsForPage($this->_loginUid, $this->pageid);
+    }
+    
     public function beforeDesign($router, $pageName = '', $uniqueId = 0) {
     	if ($router == 'bbs/read/run') {
 			$thread = Wekit::load('forum.PwThread')->getThread($uniqueId);
@@ -61,7 +66,22 @@ class PwDesignCompile {
 		$this->pageBo->setPageInfo($pageid);
 		$this->pageid = (int)$this->pageBo->pageid;
     }
-
+    
+    
+    /**
+     * 判断是否需进行门户编辑
+     * Enter description here ...
+     */
+    public function isPortalCompile() {
+    	if ($this->_permission < PwDesignPermissions::IS_DESIGN ) {
+    		return false;
+    	}
+    	$pageInfo = $this->pageBo->getPage();
+    	if ($pageInfo['page_type'] != PwDesignPage::PORTAL) {
+    		return false;
+    	}
+    	return true;
+    }
     
     public function startDesign($uniqueId = 0, $uri = '') {
     	$data = $this->pageBo->getPageCss();
@@ -75,9 +95,6 @@ class PwDesignCompile {
 	    		$data .= '<input id="J_uri" name="uri" type="hidden" value="'.$uri.'">';
 	    		$data .= '</div>';
     		} else {
-    			//页面权限控制
-    			Wekit::load('design.PwDesignPermissions');
-				$this->_permission = Wekit::load('design.srv.PwDesignPermissionsService')->getPermissionsForPage($this->_loginUid, $this->pageid);
 				$page = $this->pageBo->getPage();
 				if ($this->_permission == PwDesignPermissions::IS_DESIGN ) {
 					$data .= '<?php $toolbar = "toolbar";?>';
@@ -117,9 +134,7 @@ class PwDesignCompile {
 	 * 刷新当前页面数据
 	 */
 	public function refreshPage() {
-		$srv = Wekit::load('design.srv.PwDesignPermissionsService');
-		$permissions = $srv->getPermissionsForPage($this->_loginUid, $this->pageid);
-		if ($permissions < PwDesignPermissions::IS_DESIGN) return false;
+		if ($this->_permission < PwDesignPermissions::IS_DESIGN) return false;
 		$pageBo = new PwDesignPageBo($this->pageid);
 		if ($pageBo->getLock()) return false;
 		$pageInfo = $pageBo->getPage();

@@ -56,18 +56,16 @@
 				<!--# } #-->
 				<!--# } #-->
 				</ul>
-				<!--# if ($read['created_userid']) { 
-					$messageUsername = urlencode($read['created_username']);
-				#-->
+				<!--# if ($read['created_userid']) { #-->
 				<!--发私信加关注-->
 				<div class="operate cc">
 					<a rel="nofollow" href="{@url:my/follow/add/?uid=$read['created_userid']}" data-uid="{$read['created_userid']}" class="follow J_read_follow J_qlogin_trigger">加关注</a>
-					<a rel="nofollow" href="{@url:message/message/pop/?username=$messageUsername}" class="message J_send_msg_pop J_qlogin_trigger" data-name="{$read['created_username']}">写私信</a>
+					<a rel="nofollow" href="{@url:message/message/pop/?username=$read['created_username']}" class="message J_send_msg_pop J_qlogin_trigger" data-name="{$read['created_username']}">写私信</a>
 				</div>
 				<!--# } #-->
 				<hook class='$threadDisplay' method='displayHtmlFromAfterUserInfo' args="array($users[$read['created_userid']], $read)" />
 				<!--# if ($read['lou'] == 0) { #-->
-				<design role="segment" id="readSide_segment"/>
+				<pw-drag id="readSide_segment"/>
 				<!--# } #-->
 				<!--广告位-->
 				<advertisement id='Read.Layer.User' sys='1'/>
@@ -155,7 +153,7 @@
 				</div>
 				<!--# } #-->
 				<!--# if ($read['lou'] == 0) { #-->
-				<design role="segment" id="readFloorTop_segment"/>
+				<pw-drag id="readFloorTop_segment"/>
 				<!--# } #-->
 				<hook class='$threadDisplay' method='displayHtmlFromBeforeContent' args="array($read)" />
 				<!--# //$threadDisplay->displayHtmlFromBeforeContent($read) #-->
@@ -262,7 +260,7 @@
 			<!--# } #-->
 			<advertisement id='Read.Layer.TidDown' sys='1'/>
 			<!--# if ($read['lou'] == 0) { #-->
-				<design role="segment" id="readFloorbot_segment"/>
+				<pw-drag id="readFloorbot_segment"/>
 			<!--# } #-->
 			<!--# if ($read['lou'] == 0 && $showReply) { #-->
 			<!--快速回复-->
@@ -318,5 +316,5 @@
 </table>
 </div>
 <!--# if ($read['lou'] == 0) { #-->
-<design role="segment" id="readFloor_segment"/>
+<pw-drag id="readFloor_segment"/>
 <!--# } #-->

@@ -25,10 +25,11 @@ class ConfigController extends AdminBaseController {
 		$groupTypes = $userGroup->getTypeNames();
 		$service = $this->_loadConfigService();
 		$config = $service->getValues('site');
+
 		$this->setOutput($config, 'config');
 		$this->setOutput($groups, 'groups');
 		$this->setOutput($groupTypes, 'groupTypes');
-	
+
 	}
 
 	/**

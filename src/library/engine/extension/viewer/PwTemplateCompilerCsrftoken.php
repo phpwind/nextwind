@@ -17,7 +17,7 @@ class PwTemplateCompilerCsrftoken extends AbstractWindTemplateCompiler {
 	 * @see AbstractWindTemplateCompiler::compile()
 	*/
 	public function compile($key, $content) {
-		$_content = '<input type=\'hidden\' name=\'csrf_token\' value=\'<?php echo WindSecurity::escapeHTML(Wind::getComponent(\'windToken\')->saveToken(\'csrf_token\')); ?>\'/></form>';
+		$_content = '<input type="hidden" name="csrf_token" value="<?php echo WindSecurity::escapeHTML(Wind::getComponent(\'windToken\')->saveToken(\'csrf_token\')); ?>"/></form>';
 		return $_content;
 	}
 }

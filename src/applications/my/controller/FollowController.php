@@ -7,7 +7,7 @@ Wind::import('SRV:attention.PwAttentionType');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: FollowController.php 20078 2012-10-23 07:02:29Z jinlong.panjl $
+ * @version $Id: FollowController.php 21930 2012-12-17 06:40:34Z jinlong.panjl $
  * @package forum
  */
 
@@ -188,7 +188,10 @@ class FollowController extends PwBaseController {
 			$this->showError('USER:attention.type.repeat');
 		}
 
-		$this->_getTypeDs()->editType($id, $name);
+		$result = $this->_getTypeDs()->editType($id, $name);
+		if ($result instanceof PwError) {
+			$this->showError($result->getError());
+		}
 		$this->setOutput(array('id' => $id, 'name' => $name), 'data');
 		$this->showMessage('success');
 	}

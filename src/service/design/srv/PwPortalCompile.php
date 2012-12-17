@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPortalCompile.php 21893 2012-12-14 12:03:44Z gao.wanggao $ 
+ * @version $Id: PwPortalCompile.php 21918 2012-12-17 03:58:49Z gao.wanggao $ 
  * @package 
  */
 class PwPortalCompile {
@@ -117,7 +117,7 @@ class PwPortalCompile {
     	if (preg_match_all('/\<pw-list[>|\/>](.+)<\/pw-list>/isU',$section, $matches)) {
     		foreach ($matches[1] AS $k=>$v) {
     			$v = str_replace("	",'', trim($v));
-	    		$name = 'section_' . WindUtility::generateRandStr(6);
+	    		$name = 'section_' . $this->getRand(6);
 	    		$dm = new PwDesignModuleDm();
 	    		$dm->setPageId($this->pageid)
 	    			->setFlag('thread')
@@ -141,7 +141,7 @@ class PwPortalCompile {
     	if (preg_match_all('/\<pw-title[>|\/>](.+)<\/pw-title>/isU',$section, $matches)) {
     		foreach ($matches[1] AS $k=>$v) {
     			$v = trim($v);
-	    		$name = 'T_'.WindUtility::generateRandStr(6);
+	    		$name = 'T_'.$this->getRand(6);
 	    		$dm = new PwDesignStructureDm();
 	    		$dm->setStructTitle($v)
 	    			->setStructName($name);
@@ -159,11 +159,21 @@ class PwPortalCompile {
 	protected function compileDrag($section) {
 		if (preg_match_all('/\<pw-drag\/>/isU',$section, $matches)) {
     		foreach ($matches[0] AS $k=>$v) {
-    			$_html = '<design role="segment" id="'.WindUtility::generateRandStr(8).'"/>';
+    			$_html = '<pw-drag id="'.$this->getRand(8).'"/>';
     			$section = preg_replace('/\<pw-drag\/>/isU', $_html, $section, 1);
     		}
+    		$this->isCompile = true;
 		}
 		return $section;
+	}
+	
+	protected function getRand($length) {
+		$mt_string = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
+		$randstr = '';
+		for ($i = 0; $i < $length; $i++) {
+			$randstr .= $mt_string[mt_rand(0, 52)];
+		}
+		return $randstr;
 	}
 	
 	protected function write($content) {

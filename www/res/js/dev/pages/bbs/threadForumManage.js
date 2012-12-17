@@ -4,7 +4,7 @@
  * @Descript: 前台-帖子列表操作
  * @Author	: linhao87@gmail.com
  * @Depend	: jquery.js(1.7 or later), jquery.form, TID
- * $Id: threadForumManage.js 20042 2012-10-23 02:27:04Z hao.lin $
+ * $Id: threadForumManage.js 21917 2012-12-17 03:53:35Z hao.lin $
  */
 
 Wind.use('dialog', function(){
@@ -165,6 +165,7 @@ Wind.use('dialog', function(){
 				id : 'J_posts_manage_pop',
 				isMask		: false,	//无遮罩
 				isDrag : true,
+				resize : false,
 				callback	: function(){
 					Wind.use('ajaxForm', function(){
 						post_manage_main.hide();

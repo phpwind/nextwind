@@ -5,18 +5,19 @@ define('WINDID_VERSION', '0.0.2');
 define('NEXT_VERSION', '9.0RC');
 define('NEXT_RELEASE', '20121108');
 defined('WIND_DEBUG') || define('WIND_DEBUG', 0);
+
 require WEKIT_PATH . '../wind/Wind.php';
-// require WEKIT_PATH . '../../windframework/wind/Wind.php';
 
 
 /**
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: wekit.php 21891 2012-12-14 12:02:44Z gao.wanggao $
+ * @version $Id: wekit.php 21909 2012-12-17 03:13:40Z jieyin $
  * @package wekit
  */
 class Wekit {
+
 	protected static $_config;
 	protected static $_cache;
 	protected static $_var = array();

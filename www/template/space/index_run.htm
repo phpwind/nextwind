@@ -77,12 +77,12 @@
 									</div>
 									
 									<!--# if ($value['quote']['subject']) { #-->
-									<div class="title"><a href="{@url:u/index/run/?uid=$value['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
+									<div class="title"><a href="{@url:space/index/run/?uid=$value['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
 									<a href="{@url:bbs/read/run/?tid=$value['quote']['tid']}" class="subject" target="_blank">{$value['quote']['subject']}</a>
 									</div>
 									<div class="descrip">{$value['quote']['content']|html}</div>
 									<!--# } else { #-->
-									<div class="title"><a href="{@url:u/index/run/?uid=$value['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
+									<div class="title"><a href="{@url:space/index/run/?uid=$value['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
 										<span class="descrip">{$value['quote']['content']|html}</span>
 									</div>
 									<!--# } #-->

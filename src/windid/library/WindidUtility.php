@@ -4,7 +4,7 @@
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidUtility.php 21555 2012-12-11 07:12:32Z gao.wanggao $
+ * @version $Id: WindidUtility.php 21931 2012-12-17 06:43:35Z gao.wanggao $
  * @package Windid.library
  */
 class WindidUtility {
@@ -33,7 +33,7 @@ class WindidUtility {
 	}
 	
 	public static function appKey($apiId, $time, $secretkey) {
-		return md5(md5($apiId.'||'.$time).$secretkey);
+		return md5(md5($apiId.'||'.$secretkey).$time);
 	}
 	
 	public static function buildRequest($url, $params = array(), $isreturn = true, $timeout = 10, $method = 'post') {

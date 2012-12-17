@@ -67,6 +67,7 @@ class PwTemplateCompilerDesign extends AbstractWindTemplateCompiler {
 			$this->service->setIsDesign($this->getRequest()->getPost('design'));
 			$this->pk = $unique ? $this->getRequest()->getGet($unique) : '';
 			$this->service->beforeDesign($this->_router, $pageName, $this->pk);
+			$this->service->setPermission();
 		}
 		return true;
 	}

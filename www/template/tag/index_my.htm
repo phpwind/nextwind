@@ -5,20 +5,20 @@
 <link href="{@theme:css}/tag.css?v={@G:version}" rel="stylesheet" />
 </head>
 <body>
-<design role="start"/>
+<pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<div class="bread_crumb">
 			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:tag/index/run}">话题</a><em>&gt;</em><a href="{@url:tag/index/my}">我的话题</a>
 		</div>
-		<design role="segment" id="myTagPage_segment"/>
+		<pw-drag id="myTagPage_segment"/>
 		<div class="main cc">
 			<advertisement id='Common.Topic.Top' sys='1'/>
 			<div class="main_body">
 				<div class="main_content">
-					<design role="segment" id="first_segment"/>
+					<pw-drag id="first_segment"/>
 					<nav>
 						<div class="tag_nav">
 							<ul class="cc">
@@ -129,6 +129,6 @@ Wind.use('jquery', 'global', function(){
 	Wind.use(GV.JS_ROOT +'pages/tag/tag_index.js?v=' + GV.JS_VERSION);
 });
 </script>
-<design role="end"/>
+<pw-end/>
 </body>
 </html>

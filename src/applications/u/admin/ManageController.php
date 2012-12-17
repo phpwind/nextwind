@@ -9,7 +9,7 @@ Wind::import('SRV:user.srv.PwClearUserService');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ManageController.php 19884 2012-10-19 06:27:22Z xiaoxia.xuxx $
+ * @version $Id: ManageController.php 21920 2012-12-17 04:03:17Z xiaoxia.xuxx $
  * @package 
  */
 class ManageController extends AdminBaseController {
@@ -128,7 +128,7 @@ class ManageController extends AdminBaseController {
 		$this->setOutput($birMin . '-01-01', 'bmin');
 		$this->setOutput($birMax . '-12-31', 'bmax');
 		$this->setOutput($_info, 'info');
-		$this->setOutput($_info['online'] / 3600, 'online');
+		$this->setOutput($_info['onlinetime'] / 3600, 'online');
 		
 		//可能的扩展点
 		$work = Wekit::load('SRV:work.PwWork')->getByUid($info['uid']);

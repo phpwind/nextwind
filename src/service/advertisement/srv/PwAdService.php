@@ -167,6 +167,12 @@ class PwAdService {
 		}
 		return $mode;
 	}
+	
+	public function getInstalledPosition() {
+		$ads = $this->_getAdDs()->getAllAd();
+		return $ads;
+	}
+	
 	private function _updateAdcache(){
 		$ads = $this->_getAdDs()->getAllAd();
 		Wekit::cache()->set('advertisement',$ads);

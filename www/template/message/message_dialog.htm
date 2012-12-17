@@ -29,7 +29,7 @@
 									 #-->
 									<span class="fr">
 									<!--# if (!$isBlack) { #-->
-									<a href="{@WindUrlHelper::createUrl('message/message/addBlack?uid='.$dialogUserid)}" data-user="{$dialogUsername}" data-referer="{@WindUrlHelper::createUrl("profile/secret/black", array("_left" => "secret"))}" class="J_addblack">加入黑名单</a>
+									<a href="{@WindUrlHelper::createUrl('message/message/addBlack?uid='.$dialogUserid)}" data-msg="确定把{$dialogUsername}加入黑名单吗？" id="J_dialog_delall">加入黑名单</a>
 									<!--# } else { #-->
 									<a href="{@WindUrlHelper::createUrl('profile/secret/black?_left=secret')}" target="_blank">查看黑名单</a>
 									<!--# } #-->

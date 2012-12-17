@@ -5,16 +5,16 @@
 <link href="{@theme:css}/forum.css?v={@G:version}" rel="stylesheet" />
 </head>
 <body>
-<design role="start"/>
+<pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<!--div class="bread_crumb">
 			{@$headguide|html}
 		</div-->
 		<div class="main cc">
-			<design role="segment" id="first_segment"/>
+			<pw-drag id="first_segment"/>
 			<div class="forum_page">
 				<div class="bbs_info_box">
 					<span>今日：{$todayposts}</span><i></i><span>昨日：{$bbsinfo['yposts']}</span><i></i><span>最高日：{$bbsinfo['hposts']}</span><i></i><span>帖子：{$article}</span><i></i><span>会员：{$bbsinfo['totalmember']}</span><i></i><span>新会员：<a href="{@url:space/index/run?username=$bbsinfo['newmember']}" target="_blank">{$bbsinfo['newmember']}</a></span>
@@ -40,7 +40,7 @@
 				</div>
 				<!--# } #-->
 			</div>
-			<design role="segment" id="forumlist_bottom"/>
+			<pw-drag id="forumlist_bottom"/>
 		</div>
 	</div>
 
@@ -49,6 +49,6 @@
 <script>
 Wind.use('jquery', 'global');
 </script>
-<design role="end" />
+<pw-end/>
 </body>
 </html>

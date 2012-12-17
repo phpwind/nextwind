@@ -5,18 +5,18 @@
 <link href="{@theme:css}/like.css?v={@G:version}" rel="stylesheet" />
 </head>
 <body>
-<design role="start"/>
+<pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<div class="bread_crumb">
 			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:like/like/run}">喜欢</a><em>&gt;</em><a href="{@url:like/mylike/run}">我的喜欢</a>
 		</div>
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content">
-					<design role="segment" id="first_segment"/>
+					<pw-drag id="first_segment"/>
 					<div class="like_nav">
 						<ul class="cc">
 							<li><a href="{@url:like/like/run}">热门喜欢</a></li>
@@ -314,6 +314,6 @@ Wind.use('jquery', 'global', 'dialog', 'draggable', 'ajaxForm', function(){
 	
 });
 </script>
-<design role="end"/>
+<pw-end/>
 </body>
 </html>

@@ -244,22 +244,7 @@ class MessageController extends PwBaseController {
 		if (!$dialog) $this->showError(array('MESSAGE:dialog.notfound',array('{fromUser}' => $keyword)));
 		$this->showMessage('success',WindUrlHelper::createUrl('message/message/dialog?dialogid='.$dialog['dialog_id']));
 	}
-	
-	/**
-	 * 查看前后内容
-	 *
-	 * @return void
-	
-	public function searchdialogAction() {
-		list($from_uid, $mes_id) = $this->getInput(array('from_uid', 'mes_id'));
-		$dialogs = $this->_getMessageService()->getDialogByNum($this->loginUser->uid, $from_uid, $mes_id, 1);
-		$this->setOutput($from_uid, 'from_uid');
-		$this->setOutput($dialogs, 'dialogs');
-		$this->setOutput($dialogs[0]['from_username'], 'from_username');
-		$this->setOutput(array('from_uid'=>$from_uid,'mes_id'=>$mes_id), 'args');
-	}
-	 */
-	
+
 	/**
 	 * 设置
 	 *
@@ -354,7 +339,7 @@ class MessageController extends PwBaseController {
 			$uid = $user['uid'];
 		}
 		$uid or $this->showError('MESSAGE:id.empty');
-		$this->_getWindidUser()->addBlack($this->loginUser->uid,$uid);
+		Wekit::load('user.PwUserBlack')->setBlacklist($this->loginUser->uid,$uid);
 		$this->showMessage('success');
 	} 
 

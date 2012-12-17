@@ -8,11 +8,11 @@
 <!--# } #-->
 </head>
 <body>
-<design role="start"/>
+<pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<div class="bread_crumb" id="bread_crumb">
 			{@$headguide|html}<!--# if ($tab == 'digest') { #--><em>&gt;</em><a href="{@url:bbs/thread/run?fid=$fid&tab=digest}">精华</a><!--# } #-->
 			<!--# if ($type) { #--><em>&gt;</em>
@@ -23,16 +23,16 @@
 			<a href="{@url:bbs/thread/run?fid=$fid&type=$type}{$_urladd_}">{$topictypes['all_types'][$type]['name']}</a>
 			<!--# } #-->
 		</div>
-		<design role="segment" id="threadTop_segment"/>
+		<pw-drag id="threadTop_segment"/>
 		<div class="main cc">
 			<div id="cloudwind_thread_top"></div>
 			<div class="main_body">
 				<div class="main_content">
-					<design role="segment" id="first_segment"/>
+					<pw-drag id="first_segment"/>
 					<template source='widget_forum' load='true' />
 					<div id="cloudwind_threadleft_content"></div>
 					<advertisement id='Thread.Top' sys='1'/>
-					<design role="segment" id="thread_middle"/>
+					<pw-drag id="thread_middle"/>
 					<div class="mb10 cc">
 						<a href="{@url:bbs/post/run?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_1">发帖</a>
 						<template source="widget_thread_page" />
@@ -152,7 +152,7 @@
 							<!--# } #-->
 						</ul>
 					</div>
-					<design role="segment" id="thread_bottom"/>
+					<pw-drag id="thread_bottom"/>
 					<advertisement id='Thread.Btm' sys='1'/>
 				</div>
 			</div>
@@ -302,6 +302,6 @@ Wind.use('jquery', 'global', function(){
 });
 </script>
 <!--# } #-->
-<design role="end"/>
+<pw-end/>
 </body>
 </html>

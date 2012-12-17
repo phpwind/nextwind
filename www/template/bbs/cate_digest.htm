@@ -8,20 +8,20 @@
 <!--#}#-->
 </head>
 <body>
-<design role="start"/>
+<pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<div class="bread_crumb">
 			{@$headguide|html}
 		</div>
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content">
-					<design role="segment" id="first_segment"/>
+					<pw-drag id="first_segment"/>
 					<template source='widget_forum' load='true' />
-					<design role="segment" id="cate_digest_middle"/>
+					<pw-drag id="cate_digest_middle"/>
 					<div class="box_wrap thread_page">
 						<nav>
 						<div class="content_nav">
@@ -78,7 +78,7 @@
 					</div>
 					<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/cate/digest" args="$urlargs" />
 				</div>
-				<design role="segment" id="cate_digest_bottom"/>
+				<pw-drag id="cate_digest_bottom"/>
 			</div>
 			<div class="main_sidebar">
 				<template source='TPL:common.sidebar_2' load='true' />
@@ -138,6 +138,6 @@ Wind.use('jquery', 'global', 'dialog', 'draggable', function(){
 	Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v=' + GV.JS_VERSION);
 });
 </script>
-<design role="end"/>
+<pw-end/>
 </body>
 </html>

@@ -38,17 +38,17 @@
 									<span>◆</span>
 								</div>
 								<!--# if ($fresh['quote']['subject']) { #-->
-								<div class="title"><a href="{@WindUrlHelper::createUrl('u/index/run/?uid=' . $fresh['quote']['created_userid'])}" class="name" target="_blank">{$fresh['quote']['created_username']}</a>：
-								<a href="{@WindUrlHelper::createUrl('bbs/read/run/?tid=' . $fresh['quote']['tid'])}" class="subject" target="_blank">{$fresh['quote']['subject']}</a>
+								<div class="title"><a href="{@url:space/index/run/?uid=$fresh['quote']['created_userid']}" class="name" target="_blank">{$fresh['quote']['created_username']}</a>：
+								<a href="{@url:bbs/read/run/?tid=$fresh['quote']['tid']}" class="subject" target="_blank">{$fresh['quote']['subject']}</a>
 								</div>
 								<div class="descrip">{$fresh['quote']['content']|html}</div>
 								<!--# } else { #-->
-								<div class="title"><a href="{@WindUrlHelper::createUrl('u/index/run/?uid=' . $fresh['quote']['created_userid'])}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
+								<div class="title"><a href="{@url:u/index/run/?uid=$fresh['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
 									<span class="descrip">{$fresh['quote']['content']|html}</span>
 								</div>
 								<!--# } #-->
 								<div class="info">
-									<span class="right"><!-- <a href="#">喜欢(135)</a><i>|</i> --><a href="{@WindUrlHelper::createUrl('bbs/read/run/?tid=' . $fresh['quote']['tid'])}">回复({$fresh['quote']['replies']})</a></span>
+									<span class="right"><!-- <a href="#">喜欢(135)</a><i>|</i> --><a href="{@url:bbs/read/run/?tid=$fresh['quote']['tid']}">回复({$fresh['quote']['replies']})</a></span>
 									<span class="time">{@Pw::time2str($fresh['quote']['created_time'], 'auto')}</span>&nbsp;来自{@$fresh['quote']['from']|html}
 								</div>
 							</div>
@@ -59,7 +59,7 @@
 						</dd>
 					</dl>
 					<div class="info_alone">
-						<span class="right"><a data-id="{$fresh['id']}" class="J_fresh_reply" href="{@WindUrlHelper::createUrl('space/index/reply/?id=' . $fresh['id'])}">回复<span style="<!--# if (!$fresh['replies']) { #-->display:none;<!--# } #-->">(<em id="J_reply_count">{$fresh['replies']}</em>)</span></a></span>
+						<span class="right"><a data-id="{$fresh['id']}" class="J_fresh_reply" href="{@url:space/index/reply/?id=$fresh['id']}">回复<span style="<!--# if (!$fresh['replies']) { #-->display:none;<!--# } #-->">(<em id="J_reply_count">{$fresh['replies']}</em>)</span></a></span>
 						<span class="time">{@Pw::time2str($fresh['created_time'], 'auto')}</span>&nbsp;来自{@$fresh['from']|html}
 					</div>
 					<div class="feed_repeat_alone J_feed_list" id="J_feed_list_185">
@@ -67,7 +67,7 @@
 							<em>◆</em>
 							<span>◆</span>
 						</div>
-						<form id="J_reply_form" method="post" action="{@WindUrlHelper::createUrl('space/myspace/doreply')}">
+						<form id="J_reply_form" method="post" action="{@url:space/myspace/doreply}">
 							<input type="hidden" value="{$id}" name="id"><div class="feed_repeat_textarea">
 							<div class="input_area">
 								<textarea id="J_reply_textarea" name="content"></textarea>
@@ -82,9 +82,9 @@
 						<!--# if ($replies) { #-->
 							<!--# foreach ($replies as $key => $value) { #-->
 							<dl class="cc">
-								<dt><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['created_userid'])}"><img class="J_avatar" height="30" width="30" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small"></a></dt>
+								<dt><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run/?uid=$value['created_userid']}"><img class="J_avatar" height="30" width="30" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small"></a></dt>
 								<dd>
-									<div class="content"><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['created_userid'])}">{$value['created_username']}</a>：<em>{@$value['content']|html}</em><span>({@Pw::time2str($value['created_time'], 'auto')})</span></div>
+									<div class="content"><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run/?uid=$value['created_userid']}">{$value['created_username']}</a>：<em>{@$value['content']|html}</em><span>({@Pw::time2str($value['created_time'], 'auto')})</span></div>
 									<div class="repeat_btn"><a class="J_reply_single" href="" data-user="{$value['created_username']}">回复</a></div>
 								</dd>
 							</dl>

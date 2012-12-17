@@ -4,7 +4,7 @@
  * @Descript	: windeditor
  * @Author		: chaoren1641@gmail.com
  * @Depend		: jquery.js(1.7 or later)
- * $Id: windeditor.js 21880 2012-12-14 09:52:08Z hao.lin $			:
+ * $Id: windeditor.js 21905 2012-12-17 03:04:54Z hao.lin $			:
  */
 ;(function ( $, window, undefined ) {
 
@@ -331,7 +331,7 @@
 								_self.execCommand(control.command,null,color);
 								element.find('.edit_acolorlump').css('backgroundColor',color);
 							}else if(e.target.className === 'color_initialize') {
-								var color = 'none'; //默认颜色设置为空
+								var color = 'none'; //默认颜色
 								_self.execCommand(control.command, null, color);
 								element.find('.edit_acolorlump').css('backgroundColor',color);
 							}
@@ -369,10 +369,10 @@
 								_self.execCommand(control.command,null,color);
 								element.find('.edit_acolorlump').css('backgroundColor',color);
 							}else if(e.target.className === 'color_initialize') {
-								var color = 'none'; //默认颜色设置为空
-								if(webkit) { //webkit下execCommand无法设置rgba
+								var color = '#fff'; //默认颜色
+								/*if(webkit) { //webkit下execCommand无法设置rgba
 									color = '#ffffff';
-								}
+								}*/
 								_self.execCommand(control.command, false, color);
 								element.find('.edit_acolorlump').css('backgroundColor',color);
 							}

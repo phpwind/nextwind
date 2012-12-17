@@ -19,7 +19,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadDisplay.php 21616 2012-12-12 01:49:06Z jieyin $
+ * @version $Id: PwThreadDisplay.php 21909 2012-12-17 03:13:40Z jieyin $
  * @package forum
  */
 
@@ -196,6 +196,10 @@ class PwThreadDisplay extends PwBaseHookService {
 
 	public function displayHtmlFromAfterUserInfo($user, $read) {
 		$this->runDo('createHtmlAfterUserInfo', $user, $read);
+	}
+
+	public function runJs() {
+		$this->runDo('runJs');
 	}
 	
 	/**

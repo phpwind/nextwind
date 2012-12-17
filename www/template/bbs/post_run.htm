@@ -225,9 +225,9 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function() {
 				content = windeditor ? windeditor.getValue() : content_editor.val();
 			if(!$.trim(title_v) || !$.trim(content)) {
 				Wind.Util.resultTip({
-					elem : $this,
+					follow : $this,
 					error : true,
-					msg : '标题或内容不能为空'
+					msg : '帖子标题或内容不能为空'
 				});
 				return false;
 			}
@@ -266,44 +266,35 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function() {
 			e.preventDefault();
 			var $this = $(this);
 
-			//if(!draft_list.data('show')) {
-				//未显示
 			draft_list.toggleClass('dn');
 			draft_list_btn.toggleClass('up_current');
 
-				if(!draft_loaded && draft_list_btn.hasClass('up_current')) {
-					draft_loaded = true;
-					//未请求数据
-					var li_arr= [];
-					$.getJSON($this.attr('href'), function(data){
-						if(data.state === 'success') {
-							$.each(data.data, function(i, o){
-								li_arr.push('<li><a href="{@url:bbs/draft/doDelete}&id='+ o.id +'" class="pop_close J_draft_del" title="删除草稿">[删除]</a><a href="" data-id="'+ o.id +'" class="insert J_draft_insert" title="载入草稿">[载入]</a><span class="J_draft_title">'+ o.title +'</span><span>'+ o.created_time +'</span></li>');
+			if(!draft_loaded && draft_list_btn.hasClass('up_current')) {
+				draft_loaded = true;
+				//未请求数据
+				var li_arr= [];
+				$.getJSON($this.attr('href'), function(data){
+					if(data.state === 'success') {
+						$.each(data.data, function(i, o){
+							li_arr.push('<li><a href="{@url:bbs/draft/doDelete}&id='+ o.id +'" class="pop_close J_draft_del" title="删除草稿">[删除]</a><a href="" data-id="'+ o.id +'" class="insert J_draft_insert" title="载入草稿">[载入]</a><span class="J_draft_title">'+ o.title +'</span><span>'+ o.created_time +'</span></li>');
 
-								//存入内容
-								content_cache[o.id] = o.content;
-								draft_list_btn.addClass('up_current');
-							});
+							//存入内容
+							content_cache[o.id] = o.content;
+							draft_list_btn.addClass('up_current');
+						});
 
-							draft_wrap.html('<ul>'+ li_arr.join('')+ '</ul>');
+						draft_wrap.html('<ul>'+ li_arr.join('')+ '</ul>');
 
-						}else if(data.state === 'fail'){
-							Wind.Util.resultTip({
-								error : true,
-								msg : data.message
-							});
-							draft_loaded = false;
-						}
-					});
+					}else if(data.state === 'fail'){
+						Wind.Util.resultTip({
+							error : true,
+							msg : data.message
+						});
+						draft_loaded = false;
+					}
+				});
 
-				}
-				//draft_list.show().data('show', 'show');
-				//draft_list_btn.addClass('up_current');
-			//}else{
-				//隐藏直接显示
-				//draft_list.hide().removeData('show');
-				//draft_list_btn.removeClass('up_current');
-			//}
+			}
 		}).on('blur', function(){
 			//失焦隐藏
 			if(!h_lock) {
@@ -415,32 +406,27 @@ var forceTopic = '{$forceTopic}';//是否强制主题分类，1强制
 	//点击发布
 	$('#mainForm').on('submit', function(e){
 		e.preventDefault();
-		var titleInput = $("#J_atc_title");
-		var contentTextarea = $("#J_wind_editor");
+		var titleInput = $("#J_atc_title"),
+			rx_tit = titleInput.val().replace(/\s*/g, '');
+		var contentTextarea = $("#J_wind_editor"),
+			editor = contentTextarea.data('windeditor');
 		//校验标题和内容是否为空,发新帖时才校验
-		if(POST_TYPE === Post_Type_Enum.NEW_POST && titleInput.val().replace(/\s*/g, '') === ''){
+		if(POST_TYPE === Post_Type_Enum.NEW_POST && (rx_tit === ''|| contentTextarea.val().replace(/\s*/g, '') === '')){
 			Wind.Util.resultTip({
 				error : true,
-				msg : '帖子标题不能为空',
+				msg : '帖子标题或内容不能为空',
 				follow : post_btn,
 				callback: function(){
-					titleInput.focus();
+					if(!rx_tit) {
+						titleInput.focus();
+					}else{
+						//editor.setFocus($(editor.editorDoc.body));
+					}
 				}
 			});
 			return;
 		}
-		var editor = contentTextarea.data('windeditor');
-		if(contentTextarea.val().replace(/\s*/g, '') === ''){
-			Wind.Util.resultTip({
-				error : true,
-				msg : '帖子内容不能为空',
-				follow  : post_btn,
-				callback: function(){
-					editor.setFocus($(editor.editorDoc.body));
-				}
-			});
-			return;
-		}
+
 		//针对不支持placeholder的浏览器优化处理
 		if(document.createElement('input').placeholder !== '' && POST_TYPE === Post_Type_Enum.NEW_POST){
 			if(titleInput.val() === titleInput.attr("placeholder")){

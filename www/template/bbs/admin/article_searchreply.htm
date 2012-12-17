@@ -49,7 +49,7 @@
 				</tr>
 			</thead>
 			<!--# foreach ($posts as $v) { 
-			$v['created_time'] = Pw::time2str($v['created_time'],'auto');
+			$v['created_time'] = Pw::time2str($v['created_time']);
 			$v['content'] = Pw::substrs($v['content'], 20);
 			$_forumSubject = strip_tags($forumList[$v['fid']]['name']);
 			#-->

@@ -8,10 +8,11 @@
 <!--# } #-->
 </head>
 <body>
+<pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<div class="bread_crumb">
 			{@$headguide|html}<em>&gt;</em><a href="{@url:bbs/user/run?fid=$fid}">会员</a>
 		</div>
@@ -195,5 +196,6 @@ Wind.use('jquery', 'global', function(){
 
 });
 </script>
+<pw-end/>
 </body>
 </html>

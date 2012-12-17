@@ -792,6 +792,7 @@ CREATE TABLE `pw_design_component` (
   `model_flag` varchar(20) NOT NULL DEFAULT '' COMMENT '元件类型标识',
   `comp_name` varchar(50) NOT NULL DEFAULT '' COMMENT '模版元件名称',
   `comp_tpl` text COMMENT '模版代码',
+  `sys_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '系统编号',
   PRIMARY KEY (`comp_id`),
   KEY `idx_modelflag` (`model_flag`(10))
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='模版元件表';

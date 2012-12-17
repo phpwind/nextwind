@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadDisplayDoBase.php 21409 2012-12-06 11:30:15Z jieyin $
+ * @version $Id: PwThreadDisplayDoBase.php 21909 2012-12-17 03:13:40Z jieyin $
  * @package forum
  */
 
@@ -44,5 +44,9 @@ abstract class PwThreadDisplayDoBase {
 	 */
 	public function createHtmlAfterUserInfo($user, $read) {
 		
+	}
+
+	public function runJs() {
+
 	}
 }

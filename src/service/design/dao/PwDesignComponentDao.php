@@ -5,13 +5,13 @@ Wind::import('SRC:library.base.PwBaseDao');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignComponentDao.php 13751 2012-07-11 11:00:17Z gao.wanggao $ 
+ * @version $Id: PwDesignComponentDao.php 21926 2012-12-17 06:08:05Z gao.wanggao $ 
  * @package 
  */
 class PwDesignComponentDao extends PwBaseDao {
 	protected $_pk = 'comp_id';
 	protected $_table = 'design_component';
-	protected $_dataStruct = array('comp_id', 'model_flag', 'comp_name', 'comp_tpl');
+	protected $_dataStruct = array('comp_id', 'model_flag', 'comp_name', 'comp_tpl', 'sys_id');
 	
 	public function getComponent($id) {
 		return $this->_get($id);
@@ -21,6 +21,12 @@ class PwDesignComponentDao extends PwBaseDao {
 		$sql = $this->_bindTable('SELECT * FROM %s WHERE model_flag = ? ORDER BY comp_id ASC');
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->queryAll(array($flag));
+	}
+	
+	public function getMaxSysid(){
+		$sql = $this->_bindTable("SELECT MAX(sys_id) AS max FROM %s");
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->getValue(array());
 	}
 	
 	public function countComponent($data) {

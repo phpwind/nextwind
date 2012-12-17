@@ -149,6 +149,9 @@
     	reg_mobile.prop('disabled', false).removeClass('disabled').val('').focus();
         mcode_tip.hide();
         clearInterval(count_timer);
+
+		//重置对比值
+		_v = undefined;
     });
 
     //重新发送

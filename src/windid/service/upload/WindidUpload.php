@@ -10,7 +10,7 @@ Wind::import('WINDID:library.image.WindidImage');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUpload.php 21642 2012-12-12 04:56:39Z gao.wanggao $
+ * @version $Id: WindidUpload.php 21931 2012-12-17 06:43:35Z gao.wanggao $
  * @package upload
  */
 
@@ -54,13 +54,13 @@ class WindidUpload {
 	 */
 	public function checkFile($file) {
 		if (!$file->ext || !isset($this->bhv->ftype[$file->ext])) {
-			return new WindidError(array('upload.ext.error', array('{ext}' => '.' . $file->ext)));
+			return new WindidError(WindidError::UPLOAD_EXT_ERROR);
 		}
 		if ($file->size < 1) {
-			return new WindidError('upload.size.less');
+			return new WindidError(WindidError::UPLOAD_SIZE_LESS);
 		}
 		if ($file->size > $this->bhv->ftype[$file->ext] * 1024) {
-			return new WindidError(array('upload.size.over', array('{size}' => $this->bhv->ftype[$file->ext])));
+			return new WindidError(WindidError::UPLOAD_SIZE_OVER);
 		}
 		return true;
 	}
@@ -108,7 +108,7 @@ class WindidUpload {
 			$file->savedir = $this->bhv->getSaveDir($file);
 			$file->source = $this->store->getAbsolutePath($file->filename, $file->savedir);
 			if (!self::moveUploadedFile($value['tmp_name'], $file->source)) {
-				return new WindidError('upload.fail');
+				return new WindidError(WindidError::UPLOAD_FAIL);
 			}
 			if (($result = $file->operate($this->bhv, $this->store)) !== true) {
 				return $result;
@@ -332,11 +332,11 @@ class WindidUploadFile {
 	public function operateImage($bhv, $store) {
 		$image = new WindidImage($this->source);
 		if (!$image->isImage()) {
-			return new WindidError('upload.content.error');
+			return new WindidError(WindidError::UPLOAD_CONTENT_ERROR);
 		}
 		if ($image->ext != 'swf') {
 			if (!$image->getSource() && $image->ext != 'bmp') {
-				return new WindidError('upload.content.error');
+				return new WindidError(WindidError::UPLOAD_CONTENT_ERROR);
 			}
 			if ($bhv->allowThumb()/* && $upload['ext'] != 'gif'*/) {
 				$this->makeThumb($image, $bhv->getThumbInfo($this->filename, $this->savedir), $store);

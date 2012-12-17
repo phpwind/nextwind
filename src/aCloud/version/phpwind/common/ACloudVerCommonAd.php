@@ -43,6 +43,13 @@ class ACloudVerCommonAd extends ACloudVerCommonBase {
 		return $this->buildResponse ( 0, $result );
 	}
 	
+	public function getInstalledPosition() {
+		$result = $this->getAdService ()->getInstalledPosition ();
+		if ($result instanceof PwError)
+			return $this->buildResponse ( - 1, $result->getError () );
+		return $this->buildResponse ( 0, $result );
+	}
+	
 	public function getPages() {
 		$result = $this->getAdDs ()->getPages ();
 		if ($result instanceof PwError)

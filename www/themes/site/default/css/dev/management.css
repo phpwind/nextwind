@@ -3,7 +3,7 @@
 @explain: 帖子管理
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: management.css 21291 2012-12-04 06:31:36Z yanchixia $
+$Id: management.css 21932 2012-12-17 06:44:17Z yanchixia $
 ===================
 */
 
@@ -132,24 +132,6 @@ $Id: management.css 21291 2012-12-04 06:31:36Z yanchixia $
 }
 .sub_high_light .color_pick{
 	margin-right:15px;
-}
-.sub_high_light .color_pick{
-	border:1px solid #ccc;
-	padding:2px 13px 2px 3px;
-	background:#fff url(../../images/common/arrow_down.png) 40px center no-repeat;
-	display:inline-block;
-	cursor:pointer;
-	height:20px;
-	overflow:hidden;
-	vertical-align:middle;
-}
-.sub_high_light .color_pick:hover{
-	background-color:#fffbde;
-}
-.sub_high_light .color_pick em{
-	height:20px;
-	width:34px;
-	display:inline-block;
 }
 
 /*

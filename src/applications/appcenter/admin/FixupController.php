@@ -1,6 +1,7 @@
 <?php
 Wind::import('ADMIN:library.AdminBaseController');
-
+Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
+Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
 Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
 /**
  * 安全补丁
@@ -8,7 +9,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: FixupController.php 21631 2012-12-12 03:08:45Z long.shi $
+ * @version $Id: FixupController.php 21939 2012-12-17 07:13:16Z long.shi $
  * @package appcenter.admin
  */
 class FixupController extends AdminBaseController {
@@ -54,10 +55,8 @@ class FixupController extends AdminBaseController {
 	
 	public function doFtpAction() {
 		try {
-			Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
-			//TODO sftp
-			$config = $this->getInput(array('server', 'port', 'user', 'pwd', 'dir'), 'post', true);
-			$ftp = new PwFtpSave($config);
+			$config = $this->getInput(array('server', 'port', 'user', 'pwd', 'dir', 'sftp'), 'post', true);
+			$ftp = $config['sftp'] ? new PwSftpSave($config) : new PwFtpSave($config);
 		} catch (WindFtpException $e) {
 			$this->showError(array('APPCENTER:upgrade.ftp.fail', array($e->getMessage())));
 		}

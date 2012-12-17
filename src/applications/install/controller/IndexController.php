@@ -304,7 +304,7 @@ class IndexController extends WindController {
 		Wekit::createapp('phpwind');
 		//更新HOOK配置数据
 
-		//Wekit::load('hook.srv.PwHookRefresh')->refresh();
+		Wekit::load('hook.srv.PwHookRefresh')->refresh();
 
 		//初始化站点config
 		$site_hash = WindUtility::generateRandStr(8);

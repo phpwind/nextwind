@@ -2,13 +2,14 @@
 Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
 Wind::import('ADMIN:library.AdminBaseController');
 Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
+Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
 /**
  * 在线升级
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: UpgradeController.php 21843 2012-12-14 02:50:41Z long.shi $
+ * @version $Id: UpgradeController.php 21939 2012-12-17 07:13:16Z long.shi $
  * @package appcenter
  */
 class UpgradeController extends AdminBaseController {
@@ -167,9 +168,8 @@ class UpgradeController extends AdminBaseController {
 			}
 		} else {
 			try {
-				//TODO sftp
-				$config = $this->getInput(array('server', 'port', 'user', 'pwd', 'dir'), 'post', true);
-				$ftp = new PwFtpSave($config);
+				$config = $this->getInput(array('server', 'port', 'user', 'pwd', 'dir', 'sftp'), 'post', true);
+				$ftp = $config['sftp'] ? new PwSftpSave($config) : new PwFtpSave($config);
 			} catch (WindFtpException $e) {
 				$this->showError(array('APPCENTER:upgrade.ftp.fail', array($e->getMessage())), 'appcenter/upgrade/file', true);
 			}
@@ -274,7 +274,7 @@ class UpgradeController extends AdminBaseController {
 			$updateFile = str_replace(Wind::getRootPath('ROOT'), '', $updateFile);
 			$updateSql = str_replace(Wind::getRootPath('ROOT'), '', $updateSql);
 			try {
-				$ftp = new PwFtpSave($useFtp);
+				$ftp = $useFtp['sftp'] ? new PwSftpSave($useFtp) : new PwFtpSave($useFtp);
 				foreach (array($updateFile, $updataSql) as $v) {
 					$ftp->delete($v);
 				}

@@ -35,6 +35,10 @@ class ACloudApiCommonAd {
 		return $this->getVersionCommonAd ()->getPortals ();
 	}
 	
+	public function getInstalledPosition() {
+		return $this->getVersionCommonAd ()->getInstalledPosition ();
+	}
+	
 	private function getVersionCommonAd() {
 		return ACloudVerCommonFactory::getInstance ()->getVersionCommonAd ();
 	}

@@ -1,12 +1,14 @@
 <?php
 Wind::import('APPS:appcenter.service.srv.PwInstallApplication');
+Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
+Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
 /**
  * 系统升级服务
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSystemInstallation.php 21843 2012-12-14 02:50:41Z long.shi $
+ * @version $Id: PwSystemInstallation.php 21939 2012-12-17 07:13:16Z long.shi $
  * @package wind
  */
 class PwSystemInstallation extends PwInstallApplication {
@@ -169,10 +171,9 @@ class PwSystemInstallation extends PwInstallApplication {
 	public function doUpgrade($fileList, $useFtp = 0) {
 		$root = Wind::getRealDir('ROOT:', true);
 		$source = Wind::getRealDir('DATA:upgrade') . DIRECTORY_SEPARATOR . $this->target;
-		Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
 		if ($useFtp) {
 			try {
-				$ftp = new PwFtpSave($useFtp);
+				$ftp = $useFtp['sftp'] ? new PwSftpSave($useFtp) : new PwFtpSave($useFtp);
 			} catch (WindFtpException $e) {
 				return new PwError(array('APPCENTER:upgrade.ftp.fail', array($e->getMessage())));
 			}
@@ -184,7 +185,8 @@ class PwSystemInstallation extends PwInstallApplication {
 			}
 			if ($useFtp) {
 				try {
-					$ftp->upload($source . DIRECTORY_SEPARATOR . $v, $v);
+					$r = $ftp->upload($source . DIRECTORY_SEPARATOR . $v, $v);
+					if (!$r) return new PwError('APPCENTER:upgrade.upload.fail', array($v));
 				} catch (WindFtpException $e) {
 					return new PwError('APPCENTER:upgrade.upload.fail', array($v));
 				}

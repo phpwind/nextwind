@@ -72,7 +72,7 @@
 			</tr>
 			<!--# endforeach; #-->
 			<tr>
-				<td><input data-xid="J_check_x" data-yid="J_check_y" class="J_check" type="checkbox" name="del_ids[]" value=""></td>
+				<td></td>
 				<td><input type="text" class="input length_3" name="new_username[tmp_1]"></td>
 				<td><input class="J_radio_type_modle" type="radio" name="new_permissions[tmp_1]" value="3" ></td>
 				<td><input class="J_radio_type_content" type="radio" name="new_permissions[tmp_1]" value="2"></td>
@@ -86,7 +86,7 @@
 		<div class="btn_wrap_pd">
 			<label class="mr20"><input type="checkbox" data-checklist="J_check_x" data-direction="x" class="J_check_all">全选</label>
 			<button class="btn btn_submit J_ajax_submit_btn" type="submit">提交</button>
-			<button class="btn J_ajax_submit_btn" data-action="{@WindUrlHelper::createUrl('design/permissions/batchdelete')}" type="button">删除</button>
+			<button class="btn J_ajax_submit_btn" data-subcheck="true" data-msg="确定删除选中的项？" data-action="{@WindUrlHelper::createUrl('design/permissions/batchdelete')}" type="button">删除</button>
 			<input type="hidden" name="design_type" value="{$pType}">
 			<input type="hidden" name="design_id" value="{$designId}">
 		</div>

@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwPatchUpdate.php 21636 2012-12-12 03:41:00Z long.shi $
+ * @version $Id: PwPatchUpdate.php 21939 2012-12-17 07:13:16Z long.shi $
  * @package wind
  */
 class PwPatchUpdate {
@@ -95,7 +95,7 @@ class PwPatchUpdate {
 			WindFile::write($tmpfile, $replacestr);
 			if ($this->ftp) {
 				try {
-					$this->ftp = new PwFtpSave($this->ftp);
+					$this->ftp = $this->ftp['sftp'] ? new PwSftpSave($this->ftp) : new PwFtpSave($this->ftp);
 				} catch (WindFtpException $e) {
 					return false;
 				}

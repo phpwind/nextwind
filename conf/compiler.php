@@ -24,8 +24,6 @@ return array(
 			'compiler' => 'LIB:engine.extension.viewer.PwTemplateCompilerPortal',
 			//'pattern' => '/\<pw-start\/>/i'
 			'pattern' => '/\<pw-start\/>(.+)<pw-end\/>/isU'
-			
-			
 		),
 		'component'	=> array(
 			'tag' => 'component',

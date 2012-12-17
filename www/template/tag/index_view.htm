@@ -5,14 +5,15 @@
 <link href="{@theme:css}/tag.css?v={@G:version}" rel="stylesheet" />
 </head>
 <body>
+<pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<div class="bread_crumb">
 			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:tag/index/run}">话题</a><em>&gt;</em><a href="{@url:tag/index/view?name=$tag['tag_name']}">{$tag['tag_name']}</a>
 		</div>
-		<design role="segment" id="myTagPage_segment"/>
+		<pw-drag id="myTagPage_segment"/>
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content">
@@ -269,5 +270,6 @@ Wind.use('jquery', 'global', function(){
 	
 });
 </script>
+<pw-end/>
 </body>
 </html>

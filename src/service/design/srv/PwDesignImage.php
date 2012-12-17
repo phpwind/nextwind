@@ -5,7 +5,7 @@ Wind::import('LIB:image.PwCutImage');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImage.php 21150 2012-11-29 08:36:22Z gao.wanggao $ 
+ * @version $Id: PwDesignImage.php 21923 2012-12-17 05:31:20Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImage {
@@ -35,7 +35,7 @@ class PwDesignImage {
 		$outDir = $this->getSaveDir($this->moduleid);
 		$cut = new PwCutImage();
 		$cut->image = $this->getRealPath($outFile);
-		$cut->outImage = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . $outDir.$outFile;
+		$cut->outImage = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' .$outDir.$outFile;
 		$cut->cutWidth = $this->thumbW;
 		$cut->cutHeight = $this->thumbH;
 		$cut->quality = 90;
@@ -44,11 +44,15 @@ class PwDesignImage {
 
 		if ($cut->cut() !== false) {
 			if (!$this->store instanceof PwStorageLocal) {
-				$this->store->upload($outDir.$outFile);
+				$localFile = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' . $outDir. $outFile;
+				$this->store->save($localFile, $outDir. $outFile);
+				$attachUrl = $this->store->get('', 0);
 				WindFile::del(Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/_tmp/' . $outFile);
-				WindFile::del(Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' . $outDir. $outFile);
+				WindFile::del($localFile);
+			} else {
+				$attachUrl = Wekit::app()->attach . '/';
 			}
-			return array($outDir,$outFile);
+			return array($outDir,$outFile, $attachUrl );
 		}
 		return array();
 	}
@@ -56,8 +60,13 @@ class PwDesignImage {
 	public function clearFolder($moduleid) {
 		if (!$moduleid) return false;
 		$dir = $this->getSaveDir($moduleid);
-		$dir = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . $dir;
-		//WindFolder::clear($dir);
+		$store = Wind::getComponent('storage');
+		if (!$store instanceof PwStorageLocal ) { 
+			$store->delete($dir, 0);
+		} else {
+			$dir = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' . $dir;
+		}
+		
 		WindFolder::rm($dir, true);
 		return true;
 	}
@@ -65,9 +74,16 @@ class PwDesignImage {
 	public function clearFiles($moduleid, $images) {
 		if (!$images || !is_array($images)) return false;
 		$dir = $this->getSaveDir($moduleid);
-		$dir = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . $dir;
-		foreach ($images AS $image) {
-			is_file($dir. $image) && WindFile::del($dir. $image);
+		$store = Wind::getComponent('storage');
+		if (!$store instanceof PwStorageLocal ) { 
+			foreach ($images AS $image) {
+				$store->delete($dir. $image, 0);
+			}
+		} else {
+			$dir = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' . $dir;
+			foreach ($images AS $image) {
+				is_file($dir. $image) && WindFile::del($dir. $image);
+			}
 		}
 	}
 	
@@ -95,12 +111,12 @@ class PwDesignImage {
 	}
 	
 	protected  function getSaveDir($moduleid) {
-		return '/module/'.$moduleid.'/';
+		return 'module/'.$moduleid.'/';
 	}
 	
 	protected function getImage($url, $path, $filename = "") {  
 		if($url == "" || $path == "") return false;
-		if (!$this->createFolder($path ='')) return false;
+		if (!$this->createFolder($path)) return false;
 		$ext = strrchr($url,".");
 		if($ext != ".gif" && $ext!= ".jpg" && $ext != ".bmp" && $ext != ".png") return false;
 		$filename = $filename ? $filename : mt_rand(1, 999999).'.'.$ext; 
@@ -127,6 +143,7 @@ class PwDesignImage {
 	}
 	
 	private function createFolder($path ='') {
+		if (!$path) return false;
 		if (!is_dir($path)) {
            $this->createFolder(dirname($path));
            if (!@mkdir($path,0777)) return false;

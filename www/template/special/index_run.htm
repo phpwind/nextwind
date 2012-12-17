@@ -4,7 +4,7 @@
 <template source='TPL:common.head' load='true' />
 </head>
 <body>
-<design role="start"/>
+<pw-start/>
 	<!--# 
 	$wrapall = !$portal['header'] ? 'custom_wrap' : 'wrap';
 	#-->
@@ -18,7 +18,7 @@
 	<!--# endif; #-->
 		<div class="main cc">
 			<design role="tips" id="nodesign"/>
-			<design role="segment" id="segment1"/>
+			<pw-drag id="segment1"/>
 		</div>
 	</div>
 	<!--# if($portal['footer']): #-->
@@ -28,6 +28,6 @@
 <script>
 Wind.use('jquery', 'global');
 </script>
-<design role="end"/>
+<pw-end/>
 </body>
 </html>

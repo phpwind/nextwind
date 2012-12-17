@@ -4,7 +4,7 @@
  * @Descript	: dialog 对话框组件
  * @Author		: chaoren1641@gmail.com
  * @Depend		: core.js、jquery.js(1.7 or later)
- * $Id: dialog.js 21854 2012-12-14 06:09:40Z hao.lin $			:
+ * $Id: dialog.js 21916 2012-12-17 03:53:22Z hao.lin $			:
  */
 ;(function ( $, window, undefined ) {
     var pluginName = 'dialog';
@@ -36,7 +36,8 @@
             isMask			: 1,							// 是否显示背景遮罩
             opacity			: 0.6,							// 遮罩的透明度
             backgroundColor	: '#fff',						// 遮罩的背景色
-            url				: ''							// 弹出来的iframe url
+            url				: '',							// 弹出来的iframe url
+            resize			: true							// 监听窗口变化
     };
     var template = '\
 				<div class="core_pop">\
@@ -290,6 +291,9 @@
         }else{//非confirm监听窗口变化，重新定位窗口位置
             var resizeTimer;
             $(window).on('resize scroll',function() {
+            	if(!options.resize) {
+            		return;
+            	}
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function() {
                     if(elem.is(':visible')) {

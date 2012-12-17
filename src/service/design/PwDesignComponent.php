@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignComponent.php 11821 2012-06-13 09:39:47Z gao.wanggao $ 
+ * @version $Id: PwDesignComponent.php 21926 2012-12-17 06:08:05Z gao.wanggao $ 
  * @package 
  */
 class PwDesignComponent {
@@ -28,11 +28,15 @@ class PwDesignComponent {
 		return $this->_getDao()->searchComponent($vo->getData(), $offset, $limit);
 	}
 	
-	public function addComponent($flag, $name, $tpl) {
+	public function addComponent($flag, $name, $tpl, $issys = false) {
 		if (!$flag || !$tpl ||!$name) return false;
 		$data['model_flag'] = $flag;
 		$data['comp_name'] = $name;
 		$data['comp_tpl']  = $tpl;
+		if ($issys) {
+			$sysId = $this->_getDao()->getMaxSysid();
+			$data['sys_id']  = (int) + 1;
+		}
 		return $this->_getDao()->addComponent($data);
 	}
 	

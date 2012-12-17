@@ -17,7 +17,7 @@ return array(
 	'ftp' => array(
 		'name' => 'FTP 远程附件存储', 
 		'alias' => 'ftp', 
-		'managelink' => 'server/index/ftp/',
+		'managelink' => 'windid/index/ftp/',
 		'description' => 'FTP 远程附件存储', 
 		'components' => array('path' => 'WINDID:library.storage.WindidStorageFtp')
 	)

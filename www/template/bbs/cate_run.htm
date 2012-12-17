@@ -8,21 +8,21 @@
 <!--#}#-->
 </head>
 <body>
-<design role="start"/>
+<pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<design role="segment" id="main_segment"/>
+		<pw-drag id="main_segment"/>
 		<div class="bread_crumb">
 			{@$headguide|html}<!--# if ($tab == 'digest') { #--><em>&gt;</em><a href="{@url:bbs/cate/run?fid=$fid&tab=digest}">精华</a><!--#}#-->
 		</div>
-		<design role="segment" id="cateTop_segment"/>
+		<pw-drag id="cateTop_segment"/>
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content">
-					<design role="segment" id="first_segment"/>
+					<pw-drag id="first_segment"/>
 					<template source='widget_forum' load='true' />
-					<design role="segment" id="cate_middle"/>
+					<pw-drag id="cate_middle"/>
 					<div class="box_wrap thread_page J_check_wrap">
 						<nav>
 						<div class="content_nav" id="hashpos_ttype">
@@ -92,7 +92,7 @@
 					<div class="mb20 cc">
 					<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/cate/run?fid=$fid" args="$urlargs"/>
 					</div>
-					<design role="segment" id="cate_bottom"/>
+					<pw-drag id="cate_bottom"/>
 					<section class="face_list" style="display:none;">
 						<h2 class="hd"><a href="#" class="fr fn">查看更多&gt;&gt;</a>当前在线</h2>
 						<article class="ct">
@@ -148,6 +148,6 @@ Wind.use('jquery', 'global', function(){
 });
 </script>
 <!--# } #-->
-<design role="end"/>
+<pw-end/>
 </body>
 </html>

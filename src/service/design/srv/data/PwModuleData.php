@@ -5,7 +5,7 @@ Wind::import('SRV:design.bo.PwDesignModuleBo');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwModuleData.php 20414 2012-10-29 07:44:52Z gao.wanggao $ 
+ * @version $Id: PwModuleData.php 21923 2012-12-17 05:31:20Z gao.wanggao $ 
  * @package 
  */
 class PwModuleData {
@@ -170,8 +170,8 @@ class PwModuleData {
 				$srv->setInfo($this->bo->moduleid, $data[$k], $thumbW, $thumbH);
 				$array = $srv->cut();
 				if ($array) {
-					list($dir, $filename) = $array;
-					$data[$k] = Wekit::app()->attach . $dir . $filename;
+					list($dir, $filename, $url) = $array;
+					$data[$k] = $url . $dir . $filename;
 					$data['standard_image'] .= $filename . "|||" ;
 				} else {
 					$data[$k] = Wekit::app()->attach . '/' .$data[$k];

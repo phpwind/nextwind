@@ -5,7 +5,7 @@ Wind::import('APPS:windid.api.OpenBaseController');
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AvatarController.php 21774 2012-12-13 07:10:19Z gao.wanggao $
+ * @version $Id: AvatarController.php 21931 2012-12-17 06:43:35Z gao.wanggao $
  * @package windid.service.avatar
  */
 class AvatarController  extends OpenBaseController{
@@ -101,23 +101,13 @@ class AvatarController  extends OpenBaseController{
 		if (($result = $upload->check()) === true) {
 			$result = $upload->execute();
 		}
-		if ($result !== true) {
-			$array = array(
-				"isSuccess" => false, 
-				"msg" => WindConvert::convert('上传失败', 'utf8', Wekit::app()->charset), 
-				"erCode" => "000");
-			//$this->showMessage($result->getMessage());
+		if ($result instanceof WindidError) {
+			$this->output($result->getCode());
 		} else {
 			//用户上传头像之后的钩子
 			PwSimpleHook::getInstance('update_avatar')->runDo($uid);
-			$array = array(
-				"isSuccess" => true, 
-				"msg" => WindConvert::convert('上传成功', 'utf8', Wekit::app()->charset), 
-				"erCode" => "000");
+			$this->output(1);
 		}
-		echo WindJson::encode($array, Windid::client()->clientCharser);
-		exit;
-
 	}
 	
 }

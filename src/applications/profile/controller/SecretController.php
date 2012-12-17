@@ -7,7 +7,7 @@ Wind::import('APPS:.profile.controller.BaseProfileController');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: SecretController.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: SecretController.php 21925 2012-12-17 05:57:43Z jinlong.panjl $
  * @package src.products.u.controller.profile
  */
 class SecretController extends BaseProfileController {
@@ -84,15 +84,13 @@ class SecretController extends BaseProfileController {
 			$userids = array_keys($users);
 		}
 		($blacklist && !$userids) && $this->showError('USER:profile.secret.username.error');
+		if (count($userids) > 50) $this->showError('USER:profile.secret.username.num.error');
 		//只能一个一个存
 		$ds = Wekit::load('user.PwUserBlack');
 		foreach ($userids AS $uid) {
 			$ds->setBlacklist($this->loginUser->uid, $uid);
 		}
-		
-		// 设置完黑名单取消互相关注  有点纠结 限制个50个
 		$attentionService = Wekit::load('attention.srv.PwAttentionService');
-		$userids = array_slice($userids, 0, 50);
 		foreach ($userids as $uid) {
 			$attentionService->deleteFollow($this->loginUser->uid, $uid);
 			$attentionService->deleteFollow($uid, $this->loginUser->uid);

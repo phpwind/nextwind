@@ -12,5 +12,6 @@ constellation.sagittarius = "射手座"
 constellation.capricorn = "摩羯座"
 constellation.no = "未知星座"
 secret.username.error = "您输入的用户名都不存在"
+secret.username.num.error="黑名单数量不能超过50个"
 
 extends.noexists="未知的扩展"
