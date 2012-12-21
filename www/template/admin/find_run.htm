@@ -11,7 +11,7 @@
 	<div class="search_list">
 		<!--# if($result){ #-->
 			<!--# foreach($result as $k=>$v) { #-->
-			<h2><a class="J_search_items" href="{$v['url']|html}" data-id="{$k|html}" data-parent="{$v['parent']|html}" data-level="{$v['level']}">{$v['name']|html}</a></h2>
+			<h2><a class="J_search_items" href="{$v['url']|html}&searchword={$keyword}" data-id="{$k|html}" data-parent="{$v['parent']|html}" data-level="{$v['level']}">{$v['name']|html}</a></h2>
 			<!--# if($v['items']){
 				foreach($v['items'] as $v2){
 			#-->
@@ -24,7 +24,7 @@
 			 #-->
 			<dl>
 				<!--# foreach($v['sub'] as $v2){ #-->
-				<dt><a class="J_search_items" href="{$v2['url']|html}" data-id="{$k|html}" data-parent="{$v['parent']|html}" data-level="{$v['level']}">{$v2['name']|html}</a></dt>
+				<dt><a class="J_search_items" href="{$v2['url']|html}&searchword={$keyword}" data-id="{$k|html}" data-parent="{$v['parent']|html}" data-level="{$v['level']}">{$v2['name']|html}</a></dt>
 					<!--# foreach($v2['items'] as $v3){ #-->
 				<dd>{$v3|html}</dd>
 					<!--# } #-->

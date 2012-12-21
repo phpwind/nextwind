@@ -44,9 +44,9 @@
 											<!--#if ($value['locked']%3==1) {#--><i class="icon_lock" title="锁定"></i><!--#}#-->
 											</span>
 											<!--#if($value['topic_type']){#-->
-											<em class="s4">[<a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$value['topic_type']}" class="s4">{$topictypes[$value['topic_type']]['name']}</a>]</em>
+											<em class="s4">[<a href="{@url:bbs/thread/run/?fid=$value['fid']&type=$value['topic_type']}" class="s4">{$topictypes[$value['topic_type']]['name']|html}</a>]</em>
 											<!--#}#-->
-											<a href="{@url:bbs/read/run/?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}" target="_blank">{$value['subject']}</a>
+											<a href="{@url:bbs/read/run/?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}" target="_blank">{$value['subject']}</a><!--# if ($value['disabled']) { #--><span class="red">(审核中)</span><!--# } #-->
 										</p>
 										<p class="info">
 											<span>{$value['created_time']}</span>

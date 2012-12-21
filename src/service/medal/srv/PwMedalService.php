@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
- * @author $Author: jieyin $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
+ * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwMedalService.php 20973 2012-11-22 10:33:45Z jieyin $ 
+ * @version $Id: PwMedalService.php 22364 2012-12-21 12:32:59Z xiaoxia.xuxx $ 
  * @package 
  */
 class PwMedalService {
@@ -50,13 +50,13 @@ class PwMedalService {
 		}
 		$_allMedalId = array_unique($_allMedalId);
 		$medals = $this->_getMedalDs()->fetchMedalInfo($_allMedalId);
-		$attachUrl = Wekit::getGlobal('url', 'attach'). '/medal/';
+		$attachUrl =Pw::getPath(''). 'medal/';
 		$localUrl = WindUrlHelper::checkUrl(PUBLIC_RES . '/images/medal/', PUBLIC_URL) . '/' ;
 		foreach ($_userMedalIds AS $uid=>$medalIds) {
 			$_medalInfo = array();
 			foreach ($medalIds AS $medalId) {
 				if (!$medals[$medalId]) continue;
-				$path = $medals[$id]['path'] ?  $attachUrl : $localUrl;
+				$path = $medals[$medalId]['path'] ?  $attachUrl : $localUrl;
 				$_tmp = $medals[$medalId];
 				$_tmp['image'] = $path .  $_tmp['image'];
 				$_tmp['icon'] = $path .  $_tmp['icon'];
@@ -300,7 +300,7 @@ class PwMedalService {
 	
  	public function getMedalImage($path = '', $filename = '') {
  		if ($path) {
- 			return Wekit::getGlobal('url', 'attach') . '/' .$path .  $filename;
+ 			return Pw::getPath($path .  $filename);
  		} else {
  			return WindUrlHelper::checkUrl(PUBLIC_RES . '/images/medal/', PUBLIC_URL) . '/' .  $filename;
  		}

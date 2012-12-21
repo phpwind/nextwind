@@ -36,7 +36,7 @@
 										<i class="icon_topic"></i>
 										<!--#}#-->
 										</span>
-										<a href="{@url:bbs/read/jump?tid=$value['tid']&pid=$value['pid']}" target="_blank" class="st">{$value['threadSubject']}</a>
+										<a href="{@url:bbs/read/jump?tid=$value['tid']&pid=$value['pid']}" target="_blank" class="st">{$value['threadSubject']}</a><!--# if ($value['disabled']) { #--><span class="red">(审核中)</span><!--# } #-->
 									</td>
 									<td class="tar" width="120">
 										<span class="gray">{$value['created_time']}</span>

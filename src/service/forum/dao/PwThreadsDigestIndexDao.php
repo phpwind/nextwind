@@ -6,13 +6,15 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwThreadsDigestIndexDao.php 15975 2012-08-16 09:40:09Z xiaoxia.xuxx $
+ * @version $Id: PwThreadsDigestIndexDao.php 22320 2012-12-21 08:14:25Z xiaoxia.xuxx $
  * @package src.service.forum.dao
  */
 class PwThreadsDigestIndexDao extends PwBaseDao {
+
 	protected $_table = 'bbs_threads_digest_index';
 	protected $_pk = 'tid';
-	protected $_dataStruct = array('tid', 'cid', 'fid', 'topic_type', 'created_time', 'lastpost_time', 'operator', 'operator_userid', 'operator_time');
+	protected $_dataStruct = array('tid', 'cid', 'fid', 'disabled', 'topic_type', 'created_time', 'lastpost_time', 'operator', 'operator_userid', 'operator_time');
+	protected $_threadTable = 'bbs_threads';
 	
 	/**
 	 * 根据版块分类ID获取精华帖子
@@ -25,7 +27,7 @@ class PwThreadsDigestIndexDao extends PwBaseDao {
 	 */
 	public function getThreadsByCid($cid, $limit, $offset, $order) {
 		list($field, $idx) = $this->_getOrderFieldAndIndex($order);
-		$sql = $this->_bindSql('SELECT * FROM %s FORCE INDEX(%s) WHERE cid=? ORDER BY %s DESC %s', $this->getTable(), $idx, $field, $this->sqlLimit($limit, $offset));
+		$sql = $this->_bindSql('SELECT * FROM %s FORCE INDEX(%s) WHERE cid=? AND disabled=0 ORDER BY %s DESC %s', $this->getTable(), $idx, $field, $this->sqlLimit($limit, $offset));
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->queryAll(array($cid), 'tid');
 	}
@@ -37,7 +39,7 @@ class PwThreadsDigestIndexDao extends PwBaseDao {
 	 * @return int
 	 */
 	public function countByCid($cid) {
-		$sql = $this->_bindTable('SELECT COUNT(*) as count FROM %s WHERE cid=?');
+		$sql = $this->_bindTable('SELECT COUNT(*) as count FROM %s WHERE cid=? AND disabled=0');
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->getValue(array($cid));
 	}
@@ -54,7 +56,7 @@ class PwThreadsDigestIndexDao extends PwBaseDao {
 	 */
 	public function getThreadsByFid($fid, $typeid, $limit, $offset, $order) {
 		list($field, $idx) = $this->_getOrderFieldAndIndex($order, true);
-		$sql = $this->_bindSql('SELECT * FROM %s FORCE INDEX(%s) WHERE fid=? %s ORDER BY %s DESC %s', $this->getTable(), $idx, $typeid ? ' AND topic_type = ' . intval($typeid) : '', $field, $this->sqlLimit($limit, $offset));
+		$sql = $this->_bindSql('SELECT * FROM %s FORCE INDEX(%s) WHERE fid=? AND disabled=0 %s ORDER BY %s DESC %s', $this->getTable(), $idx, $typeid ? ' AND topic_type = ' . intval($typeid) : '', $field, $this->sqlLimit($limit, $offset));
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->queryAll(array($fid), 'tid');
 	}
@@ -67,7 +69,7 @@ class PwThreadsDigestIndexDao extends PwBaseDao {
 	 * @return int
 	 */
 	public function countByFid($fid, $typeid) {
-		$sql = $this->_bindSql('SELECT COUNT(*) as count FROM %s WHERE fid=? %s', $this->getTable(), $typeid ? ' AND topic_type = ' . intval($typeid) : '');
+		$sql = $this->_bindSql('SELECT COUNT(*) as count FROM %s WHERE fid=? AND disabled=0 %s', $this->getTable(), $typeid ? ' AND topic_type = ' . intval($typeid) : '');
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->getValue(array($fid));
 	}
@@ -88,17 +90,17 @@ class PwThreadsDigestIndexDao extends PwBaseDao {
 	
 	/**
 	 * 批量加精
-	 *tem
+	 *
 	 * @param array $data
 	 * @return int
 	 */
 	public function batchAddDigest($data) {
 		$clear = array();
 		foreach ($data as $_tmp) {
-			$clear[] = array($_tmp['tid'], $_tmp['cid'], $_tmp['fid'], $_tmp['topic_type'], $_tmp['created_time'], 
+			$clear[] = array($_tmp['tid'], $_tmp['cid'], $_tmp['fid'], $_tmp['disabled'], $_tmp['topic_type'], $_tmp['created_time'], 
 					$_tmp['lastpost_time'], $_tmp['operator'], $_tmp['operator_userid'], $_tmp['operator_time']);
 		}
-		$sql = $this->_bindSql('REPLACE INTO %s (`tid`, `cid`, `fid`, `topic_type`, `created_time`, `lastpost_time`, `operator`, `operator_userid`, `operator_time`) VALUES	%s', $this->getTable(), $this->sqlMulti($clear));
+		$sql = $this->_bindSql('REPLACE INTO %s (`tid`, `cid`, `fid`, `disabled`, `topic_type`, `created_time`, `lastpost_time`, `operator`, `operator_userid`, `operator_time`) VALUES	%s', $this->getTable(), $this->sqlMulti($clear));
 		return $this->getConnection()->execute($sql);
 	}
 
@@ -126,6 +128,17 @@ class PwThreadsDigestIndexDao extends PwBaseDao {
 	public function batchUpdateThread($tids, $fields, $increaseFields = array()) {
 		$fields = $this->_processField($fields);
 		return $this->_batchUpdate($tids, $fields, $increaseFields);
+	}
+
+	/**
+	 * 还原帖子的时候，还原精华设置
+	 *
+	 * @param array $tids
+	 * @return boolean
+	 */
+	public function revertTopic($tids) {
+		/* $sql = $this->_bindSql('UPDATE %s a LEFT JOIN %s b ON a.tid=b.tid SET a.disabled=b.disabled WHERE a.tid IN %s', $this->getTable(), $this->getTable($this->_threadTable), $this->sqlImplode($tids));
+		return $this->getConnection()->execute($sql); */
 	}
 	
 	/**

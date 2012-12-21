@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignStructureDm.php 20204 2012-10-24 09:14:08Z gao.wanggao $ 
+ * @version $Id: PwDesignStructureDm.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class PwDesignStructureDm extends PwBaseDm {
@@ -12,6 +12,11 @@ class PwDesignStructureDm extends PwBaseDm {
 	
 	public function setStructName($name) {
 		$this->_data['struct_name'] = $name;
+		return $this;
+	}
+	
+	public function setSegment($segment) {
+		$this->_data['segment'] = $segment;
 		return $this;
 	}
 	

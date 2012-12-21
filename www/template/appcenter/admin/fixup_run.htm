@@ -14,6 +14,11 @@
 	<form action="{@url:appcenter/fixup/doRun}" method="post">
 		<div class="table_list">
 			<table width="100%">
+				<!--# if($connect_fail){ #-->
+				<tbody>
+					<tr><td class="tac">无法连接云平台，请尝试申请云服务。</td></tr>
+				</tbody>
+				<!--# }else{ #-->
 				<!--# if ($patches) { #-->
 				<colgroup>
 					<col width="60">
@@ -35,7 +40,7 @@
 					<td><input {$disabled} type="checkbox" class="J_check" data-yid="J_check_y" data-xid="J_check_x" name="patches[]" value="{$v['id']}"></td>
 					<td>{$v['id']}</td>
 					<td>{$v['name']}</td>
-					<td>{$v['description']}</td>
+					<td>{$v['desc']}</td>
 					<td>{@Pw::time2str($v['time'])}</td>
 				</tr>
 				<!--# } #-->
@@ -43,7 +48,7 @@
 					<tbody>
 						<tr><td class="tac">啊哦，暂时没有更新补丁！</td></tr>
 					</tbody>
-				<!--# } #-->
+				<!--# } } #-->
 			</table>
 		</div>
 		<!--# if ($patches) { #-->

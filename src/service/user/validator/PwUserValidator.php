@@ -5,7 +5,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserValidator.php 21495 2012-12-10 08:39:05Z jinlong.panjl $
+ * @version $Id: PwUserValidator.php 22007 2012-12-18 06:23:13Z gao.wanggao $
  * @package  src.service.user.validator
  */
 class PwUserValidator {
@@ -143,7 +143,7 @@ class PwUserValidator {
 		if ($result < 1) {
 			$windid = WindidApi::api('config');
 			$config = $windid->getConfig('reg');
-			$var = array('{min}' => $config['passwordlength.min'], '{max}' => $config['passwordlength.max']);
+			$var = array('{min}' => $config['security.password.min'], '{max}' => $config['security.password.max']);
 			return new PwError('WINDID:code.'. $result, $var);
 		}
 		$config = Wekit::C('register');

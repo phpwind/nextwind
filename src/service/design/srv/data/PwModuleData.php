@@ -5,7 +5,7 @@ Wind::import('SRV:design.bo.PwDesignModuleBo');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwModuleData.php 21923 2012-12-17 05:31:20Z gao.wanggao $ 
+ * @version $Id: PwModuleData.php 22257 2012-12-20 09:50:37Z gao.wanggao $ 
  * @package 
  */
 class PwModuleData {
@@ -78,6 +78,7 @@ class PwModuleData {
 	protected function setDesignData() {
 		$usedDataid = $delDataIds = $_data = array();
 		$delImages = '';
+		$delImgIds = array();
 		$ds = Wekit::load('design.PwDesignData');
 		$data = $ds->getDataByModuleid($this->bo->moduleid);
 		$limit = $this->getLimit();
@@ -92,6 +93,7 @@ class PwModuleData {
 				if ($v['from_type'] != PwDesignData::FROM_PUSH ){
 					$extend = unserialize($v['extend_info']);
 					$delImages .= $extend['standard_image'];
+					isset($extend['__asyn']) && $delImgIds[] = $extend['__asyn'];
 				}
 				continue;
 			} 
@@ -101,6 +103,7 @@ class PwModuleData {
 				if ($v['from_type'] != PwDesignData::FROM_PUSH ){
 					$extend = unserialize($v['extend_info']);
 					$delImages .= $extend['standard_image'];
+					isset($extend['__asyn']) && $delImgIds[] = $extend['__asyn'];
 				}
 				continue;
 			}
@@ -124,7 +127,8 @@ class PwModuleData {
 			if ($v['data_id'] && !in_array($v['data_id'], $usedDataid)) $delDataIds[] = $v['data_id'];
 		}
 		$ds->batchDelete($delDataIds);
-		Wekit::load('design.srv.PwDesignImage')->clearFiles($this->bo->moduleid, explode('|||', $delImages));
+		if ($delImages) Wekit::load('design.srv.PwDesignImage')->clearFiles($this->bo->moduleid, explode('|||', $delImages));
+		if ($delImgIds) Wekit::load('design.PwDesignAsynImage')->batchDelete($delImgIds);
 	}
 
 	protected function getLimit() {
@@ -141,13 +145,18 @@ class PwModuleData {
 		$_data = array();
 		$params = $this->getComponentValue($this->bo->getTemplate(), implode('', $this->bo->getStandardSign()));
 		if ($data['from_type'] == 'auto' && $data['data_type'] == PwDesignData::AUTO  && !$data['is_edited']) {
-			$data = $this->cutImg($data);
+			if ($this->bo->getLimit() > 10) {
+				$data = $this->asynCutImg($data);
+			} else {
+				$data = $this->cutImg($data);
+			}
 		}
 		foreach($params AS $param) {
 			if (isset($data[$param])){
 				$_data[$param] = isset($this->_substrSign[$param]) ? $this->substr($data[$param], $this->_substrSign[$param]) : $data[$param];
 			}
 			$_data['standard_image'] = $data['standard_image'];
+			isset($data['__asyn']) && $_data['__asyn'] = $data['__asyn'];
 		}		
 		return $_data;
 	}
@@ -165,7 +174,7 @@ class PwModuleData {
 			if (!$data[$k]) continue;
 			list($thumbW, $thumbH) = $v;
 			if ($thumbW < 1 && $thumbH < 1) {
-				$data[$k] = Wekit::app()->attach . '/' .$data[$k];
+				$data[$k] = Pw::getPath($data[$k]);
 			} else {
 				$srv->setInfo($this->bo->moduleid, $data[$k], $thumbW, $thumbH);
 				$array = $srv->cut();
@@ -174,8 +183,39 @@ class PwModuleData {
 					$data[$k] = $url . $dir . $filename;
 					$data['standard_image'] .= $filename . "|||" ;
 				} else {
-					$data[$k] = Wekit::app()->attach . '/' .$data[$k];
+					$data[$k] = Pw::getPath($data[$k]);
 				}
+			}
+		}
+		return $data;
+	}
+	
+	/**
+	 * 图片异步缩略
+	 * Enter description here ...
+	 * @param unknown_type $data
+	 */
+	protected function asynCutImg($data) {
+		if (!$this->multiSign['img']) return $data;
+		$ds = Wekit::load('design.PwDesignAsynImage');
+		Wind::import('SRV:design.dm.PwDesignAsynImageDm');
+		foreach ((array)$this->multiSign['img'] AS $k=>$v) {
+			$data['standard_image'] = '';
+			if (!$data[$k]) continue;
+			list($thumbW, $thumbH) = $v;
+			if ($thumbW < 1 && $thumbH < 1) {
+				$data[$k] = Pw::getPath($data[$k]);
+			} else {
+				$dm = new PwDesignAsynImageDm();
+				$dm->setHeight($thumbH)->setWidth($thumbW)->setPath($data[$k])->setModuleid($this->bo->moduleid);
+				$result = $ds->addImage($dm);
+				if ($result instanceof PwError) {
+					$data[$k] = Pw::getPath($data[$k]);
+				} else {
+					$data[$k] = WindUrlHelper::createUrl('design/image/run?id='.(int)$result, array(),'','pw');
+					$data['__asyn'] = (int)$result;
+				}
+				$data['standard_image'] = '';
 			}
 		}
 		return $data;

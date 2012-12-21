@@ -11,6 +11,12 @@
 			<li><a href="{@WindUrlHelper::createUrl('design/portal/run')}">自定义页面</a></li>
 		</ul>
 	</div>
+	<div class="h_a">功能说明</div>
+	<div class="prompt_text">
+		<ul>
+			<li>"页面ID" 指的是此页面在门户体系里的ID，并不是自定义页面的ID，对应 themes/portal/local/目录里的模版文件夹</li>
+		</ul>
+	</div>
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -18,12 +24,14 @@
 			</colgroup>
 			<thead>
 				<tr>
+					<td>页面ID</td>
 					<td>页面名称</td>
 					<td>操作</td>
 				</tr>
 			</thead>
 			<!--# foreach ($list as $v): #-->
 			<tr>
+				<td><a href="{$v['url']}" target="_blank">{$v['page_id']}</a></td>
 				<td><a href="{$v['url']}" target="_blank">{$v['page_name']}</a></td>
 				<td>
 					<a href="{$v['url']}" class="mr5" target="_blank">[查看]</a>

@@ -95,10 +95,10 @@
 				
 				
 				var urlRequest:URLRequest = new URLRequest(avatar);
-				//disabled flash cache
-				urlRequest.requestHeaders.push(new URLRequestHeader("pragma", "no-cache"));
-				urlRequest.requestHeaders.push(new URLRequestHeader("Expires", "Thu, 01 Jan 1970 00:00:00 GMT, -1"));
-				urlRequest.requestHeaders.push(new URLRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate"));
+				//disabled flash cache 跨子域图片不显示
+				//urlRequest.requestHeaders.push(new URLRequestHeader("pragma", "no-cache"));
+				//urlRequest.requestHeaders.push(new URLRequestHeader("Expires", "Thu, 01 Jan 1970 00:00:00 GMT, -1"));
+				//urlRequest.requestHeaders.push(new URLRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate"));
 				imageLoader1.load(urlRequest); 
 				imageLoader2.load(urlRequest); 
 				imageLoader3.load(urlRequest); 
@@ -404,7 +404,7 @@
 		protected function onIOError(event_:IOErrorEvent):void
         {
             dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, "图片保存失败12，网络连接错误！"));
-			ExternalInterface.call("Wind.Util.resultTip({error : true,msg : '图片保存失败,网络连接错误!'});");
+			ExternalInterface.call("Wind.Util.resultTip({error : true,msg : '图片保存失败,网络连接错误!'})");
         }
         
         protected function onUploadComplete(event_:Event):void

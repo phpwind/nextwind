@@ -187,51 +187,6 @@ Wind.use('jquery', 'global', 'dialog', function() {
 			}
 		}, 'json');
 	});
-
-
-		
-	if( $('a.J_ajax_confirm').length ) {
-	
-		Wind.use('dialog', function() {
-		
-			$('a.J_ajax_confirm').on('click',function(e) {
-				e.preventDefault();
-				
-				var $this = $(this),
-					text = $this.text(),
-					id = $this.data('id');
-					
-				if(text === '忽略') {
-				
-					Wind.Util.ajaxConfirm({
-						elem : $this,
-						href : URL_IGNORE + '&id=' +id,
-						msg : '确定不再接收此类通知？',
-						callback : function(){
-							$this.text('取消忽略');
-							Wind.Util.resultTip({
-								msg : '操作成功'
-							});
-						}
-					});
-					
-				}else{
-				
-					$.getJSON(URL_UNIGNORE + '&id=' +id).done(function(data) {
-						if(data.state === 'success') {
-							$this.text('忽略');
-						}else{
-							Wind.dialog.alert(data.message);
-						}
-					});
-				
-				}
-				
-			});
-			
-		});
-		
-	}
 	
 	//选择后提交
 	$('a.J_check_op_sub').on('click', function(e){

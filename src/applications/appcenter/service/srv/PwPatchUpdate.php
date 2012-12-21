@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwPatchUpdate.php 21939 2012-12-17 07:13:16Z long.shi $
+ * @version $Id: PwPatchUpdate.php 22354 2012-12-21 10:32:56Z long.shi $
  * @package wind
  */
 class PwPatchUpdate {
@@ -29,16 +29,15 @@ class PwPatchUpdate {
 		$url = PwApplicationHelper::acloudUrl(
 			array('a' => 'forward', 'do' => 'getSecurityPatch', 'pwversion' => NEXT_VERSION));
 		$r = PwApplicationHelper::requestAcloudData($url);
-		$result = $r['code'] === '0' ? $r['info'] : array();
-		$result = array(
+		if ($r['code'] !== '0') return false;
+		/* $r['info'] = array(
 			array('id' => '9000001', 'name' => '更新', 'desc' => 'blabla', 'time' => '1323333', 'rule' => array(
 				array('filename' => 'src/wekit.php', 'search' => base64_encode('Jianmin Chen'), 'replace' => base64_encode('Shi Long'), 'count' => '1', 'nums' => array('1'))))
-		);
+		); */
 		$temp = array();
-		if ($result) {
-			foreach ($result as $v) {
-				$temp[$v['id']] = $v;
-			}
+		foreach ($r['info'] as $v) {
+			$v['id'] = $v['name'];
+			$temp[$v['id']] = $v;
 		}
 		return $temp;
 	}
@@ -50,7 +49,7 @@ class PwPatchUpdate {
 	 */
 	public function checkUpgrade() {
 		$patches = $this->getOnlinePatchList();
-		
+		if ($patches === false) return false;
 		if ($patches) {
 			$currentPatchId = 0;
 			$patch = end($patches);
@@ -72,7 +71,13 @@ class PwPatchUpdate {
 	public function install($patch) {
 		$tmpfiles = $this->bakFiles = array();
 		WindFolder::mkRecur($this->tmpPath);
-		
+		if ($this->ftp && !is_object($this->ftp)) {
+			try {
+				$this->ftp = $this->ftp['sftp'] ? new PwSftpSave($this->ftp) : new PwFtpSave($this->ftp);
+			} catch (WindFtpException $e) {
+				return false;
+			}
+		}
 		foreach ($patch['rule'] as $rule) {
 			$rule['filename'] = $this->sortFile($rule['filename']);
 			$filename = ROOT_PATH . $rule['filename'];
@@ -93,13 +98,6 @@ class PwPatchUpdate {
 			$replacestr = PwSystemHelper::replaceStr($str, $search, $replace, $count, $nums);
 			
 			WindFile::write($tmpfile, $replacestr);
-			if ($this->ftp) {
-				try {
-					$this->ftp = $this->ftp['sftp'] ? new PwSftpSave($this->ftp) : new PwFtpSave($this->ftp);
-				} catch (WindFtpException $e) {
-					return false;
-				}
-			}
 			if ($this->ftp) {
 				try {
 					$this->ftp->upload($filename, $bakfile);
@@ -123,6 +121,7 @@ class PwPatchUpdate {
 	}
 	
 	public function clear() {
+		if ($this->ftp) $this->ftp->close();
 		WindFolder::clearRecur($this->tmpPath, true);
 		Wekit::cache()->delete('system_patch_ftp');
 	}

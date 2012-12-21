@@ -245,7 +245,7 @@
 						update_num();
 						return;
 					}
-					$.getJSON(ATTACH_CONFIG.deleteUrl,{aid:aid},function(data) {
+					$.post(ATTACH_CONFIG.deleteUrl,{aid:aid},function(data) {
 						if(data.state === 'success') {
 							delete file_list[serverData.aid];
 							dd.remove();
@@ -254,7 +254,7 @@
 						}else {
 							alert(data.message);
 						}
-					});
+					}, 'json');
 				}else if(type === 'sell') {
 					var dd = $(this).parent().parent();
 					dd.find('.span_4').show();

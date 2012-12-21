@@ -1,11 +1,11 @@
 <?php
 Wind::import('LIB:base.PwBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: yishuo $>
- * @author $Author: yishuo $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ExportController.php 20274 2012-10-25 07:49:56Z yishuo $ 
+ * @version $Id: ExportController.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class ExportController  extends PwBaseController {
@@ -34,7 +34,8 @@ class ExportController  extends PwBaseController {
 				$this->doTxt($pageInfo);
 			}
 		} else {
-			$this->doTxt($pageInfo);
+			$this->doZip($pageInfo);	
+			//$this->doTxt($pageInfo);
 		}
 		$this->_getDesignService()->clearCompile();
 		$this->showMessage("operate.success");
@@ -42,13 +43,13 @@ class ExportController  extends PwBaseController {
 	
 	protected function doZip($pageInfo) {
 		Wind::import('SRV:design.srv.PwDesignExportZip');
-		$srv = new PwDesignExportZip($pageInfo['page_id']);
+		$srv = new PwDesignExportZip($pageInfo['page_id'], $pageInfo['page_router']);
 		$content = $srv->zip();
 		$this->forceDownload($content, $pageInfo['page_name'], 'zip');
 	}
 	
 	/**
-	 * 导出当前页设计数据
+	 * 导出当前页设计数据  已无用
 	 * Enter description here ...
 	 */
 	protected function doTxt($pageInfo) {	

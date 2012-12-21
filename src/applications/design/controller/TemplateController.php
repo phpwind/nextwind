@@ -5,7 +5,7 @@ Wind::import('APPS:design.controller.DesignBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: TemplateController.php 21891 2012-12-14 12:02:44Z gao.wanggao $ 
+ * @version $Id: TemplateController.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class TemplateController extends DesignBaseController{
@@ -60,10 +60,23 @@ class TemplateController extends DesignBaseController{
  			->setCompid($compid);
  		$resource = $this->_getModuleDs()->updateModule($dm);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
+		
 		//更新模版
-		Wind::import('SRV:design.srv.PwPortalCompile');
-		$compile = new PwPortalCompile($this->pageid);
-		$compile->replaceList($this->bo->moduleid, $tpl);
+		$module = $this->bo->getModule();
+		if ($module['module_type'] == PwDesignModule::TYPE_IMPORT) {
+			Wind::import('SRV:design.bo.PwDesignPageBo');
+			$pageBo = new PwDesignPageBo($this->pageid);
+			$pageInfo = $pageBo->getPage();
+			Wind::import('SRV:design.srv.PwPortalCompile');
+			$compile = new PwPortalCompile($this->pageid);
+			if ($pageInfo['page_type'] == PwDesignPage::PORTAL) {
+				$compile->replaceList($this->bo->moduleid, $tpl);
+			} elseif ($pageInfo['page_type'] == PwDesignPage::SYSTEM) {
+				!$module['segment'] && $module['segment'] = '';
+				$compile->replaceList($this->bo->moduleid, $tpl, $module['segment']);
+			}
+		}
+		
 		//更机数据
 		Wind::import('SRV:design.srv.data.PwAutoData');
 		$srv = new PwAutoData($this->bo->moduleid);

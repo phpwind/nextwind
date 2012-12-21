@@ -1,16 +1,17 @@
 <?php
 Wind::import('APPS:appcenter.service.srv.iPwInstall');
 Wind::import('APPS:appcenter.service.dm.PwApplicationDm');
+Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
 /**
  *
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwInstall.php 21699 2012-12-12 08:23:16Z long.shi $
+ * @version $Id: PwInstall.php 22322 2012-12-21 08:32:15Z long.shi $
  * @package wind
  */
 class PwInstall implements iPwInstall {
-	const TARGET = 'SRC:extensions';
+	const TARGET = 'EXT:';
 	const DB_TABLE = 'conf/data.sql';
 	const CONTROLLER = 'controller/IndexController.php';
 	const ADMIN = 'admin/ManageController.php';
@@ -56,7 +57,7 @@ class PwInstall implements iPwInstall {
 			array('{{error}}' => $appId));
 		$alias = $manifest->getApplication('alias');
 		if (!$alias) return new PwError('APPCENTER:install.fail.alias.empty');
-		if (!preg_match('/^[a-z][a-z0-9]+$/i', $alias)) return new PwError('APPCENTER:illegal.alias');
+		/* if (!preg_match('/^[a-z][a-z0-9]+$/i', $alias)) return new PwError('APPCENTER:illegal.alias'); */
 		$result = $this->_load()->findByAlias($alias);
 		if ($result instanceof PwError) return $result;
 		if ($result) return new PwError('APPCENTER:install.exist.fail', 
@@ -189,7 +190,11 @@ class PwInstall implements iPwInstall {
 			$r = $this->registeResource($install);
 			if ($r instanceof PwError) return $r;
 			$name = $install->getManifest()->getApplication('alias');
-			$targetPath = Wind::getRealPath(self::TARGET . '.' . $name, false);
+			$writable = PwSystemHelper::checkWriteAble(EXT_PATH . $name . '/');
+			if (!$writable) return new PwError('APPCENTER:install.mv.fail',
+				array('{{error}}' => 'EXT:' . $name));
+			
+			$targetPath = EXT_PATH . $name;
 			PwApplicationHelper::mvSourcePack($install->getTmpPackage(), $targetPath);
 			$install->addInstallLog('packs', $targetPath);
 		}
@@ -285,6 +290,7 @@ class PwInstall implements iPwInstall {
 		$alias = $hookName = array();
 		foreach ($inject as $key => &$value) {
 			$value['app_id'] = $install->getAppId();
+			$value['app_alias'] = $install->getManifest()->getApplication('alias');
 			$value['app_name'] = $install->getManifest()->getApplication('name');
 			$alias[] = $value['alias'];
 			$hookName[] = $value['hook_name'];
@@ -353,7 +359,6 @@ class PwInstall implements iPwInstall {
 		$source = $install->getTmpPackage() . '/' . str_replace('.', '/', $manifest['res']);
 		$targetPath = Wind::getRealDir('THEMES:extres', true);
 		if (!is_dir($source)) return true;
-		Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
 		$writable = PwSystemHelper::checkWriteAble($targetPath . '/');
 		if (!$writable) return new PwError('APPCENTER:install.mv.fail', 
 					array('{{error}}' => 'THEMES:extres.' . $name));

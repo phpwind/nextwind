@@ -85,7 +85,7 @@
 				if(_data) {
 					var record_arr = [];
 					for(i=0,len=_data.length; i<len; i++) {
-						record_arr.push('<tr><td><a target="_blank" href="'+ GV.U_CENTER + _data[i]['uid'] +'">'+ _data[i]['username'] +'</a></td><td>'+ _data[i]['cost'] + _data[i]['ctype'] +'</td><td>'+ _data[i]['created_time'] +'</td></tr>');
+						record_arr.push('<tr><td><a target="_blank" href="'+ GV.U_CENTER + '&uid=' + _data[i]['uid'] +'">'+ _data[i]['username'] +'</a></td><td>'+ _data[i]['cost'] + _data[i]['ctype'] +'</td><td>'+ _data[i]['created_time'] +'</td></tr>');
 					}
 					$('#J_records_list').html(record_arr.join(''));
 					buyPopPos($this, records_pop);
@@ -151,7 +151,7 @@
 					if(_data) {
 						var record_arr = [];
 						for(i=0,len=_data.length; i<len; i++) {
-							record_arr.push('<tr><td><a target="_blank" href="'+ GV.U_CENTER + _data[i]['uid'] +'">'+ _data[i]['username'] +'</a></td><td>'+ _data[i]['cost'] + _data[i]['ctype'] +'</td><td>'+ _data[i]['created_time'] +'</td></tr>')
+							record_arr.push('<tr><td><a target="_blank" href="'+ GV.U_CENTER + '&uid=' + _data[i]['uid'] +'">'+ _data[i]['username'] +'</a></td><td>'+ _data[i]['cost'] + _data[i]['ctype'] +'</td><td>'+ _data[i]['created_time'] +'</td></tr>')
 						}
 						records_list.html(record_arr.join(''));
 					}

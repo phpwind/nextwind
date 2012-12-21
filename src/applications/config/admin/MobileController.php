@@ -18,7 +18,18 @@ class MobileController extends AdminBaseController {
 	public function run() {
 		$registerConfig = $this->_getConfig()->getValues('register');
 		$loginConfig = $this->_getConfig()->getValues('login');
+		$mobileConfig = $this->_getConfig()->getValues('mobile');
+		if (!$mobileConfig['plat.type']) {
+			$this->showError('USER:mobile.plat.choose.error', 'config/mobile/plat', true);
+		}
 		$restMessage = Wekit::load('SRV:mobile.srv.PwMobileService')->getRestMobileMessage();
+		if ($restMessage instanceof PwError) {
+			$this->showError($restMessage->getError());
+		}
+		$filePath = Wind::getRealPath('APPS:admin.conf.openplatformurl.php', true);
+		$openPlatformUrl = Wind::getComponent('configParser')->parse($filePath);
+		$appMobileUrl = $openPlatformUrl.'index.php?m=appcenter&c=SmsManage';
+		$this->setOutput($appMobileUrl, 'appMobileUrl');
 		$this->setOutput($restMessage, 'restMessage');
 		$this->setOutput($registerConfig, 'registerConfig');
 		$this->setOutput($loginConfig, 'loginConfig');

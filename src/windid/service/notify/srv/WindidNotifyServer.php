@@ -5,7 +5,7 @@ Wind::import('WINDID:service.notify.dm.WindidNotifyLogDm');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidNotifyServer.php 21767 2012-12-13 06:34:25Z gao.wanggao $ 
+ * @version $Id: WindidNotifyServer.php 22131 2012-12-19 08:39:22Z gao.wanggao $ 
  * @package 
  */
 class WindidNotifyServer {
@@ -52,7 +52,7 @@ class WindidNotifyServer {
 		$result = WindidUtility::buildRequest($url);
 		$dm = new WindidNotifyLogDm($logid);
 		if ($result == 'seccess') {
-			$dm->setComplete(1);
+			$dm->setComplete(1)->setIncreaseSendNum(1);
 			$logDs->updateLog($dm);
 			return true;
 		} else {
@@ -109,7 +109,7 @@ class WindidNotifyServer {
 		foreach ($this->logId AS $k=>$v){
 			$dm = new WindidNotifyLogDm($k);
 			if ($v == 'seccess'){
-				$dm->setComplete(1);
+				$dm->setComplete(1)->setIncreaseSendNum(1);
 			} else {
 				$dm->setComplete(0)->setIncreaseSendNum(1)->setReason('fail');
 			}

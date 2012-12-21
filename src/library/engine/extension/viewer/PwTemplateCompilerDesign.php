@@ -60,7 +60,8 @@ class PwTemplateCompilerDesign extends AbstractWindTemplateCompiler {
 	
 	private function _beforeDesign() {
 		$this->service = Wekit::load('design.srv.PwDesignCompile');
-		if (!isset($this->_router)) {
+		//纠结的template标签
+		if (!isset($this->_router)) { 
 			$this->_router();
 			list($pageName, $unique) = $this->_pageName();
 			if (!$pageName && !$unique) return false;

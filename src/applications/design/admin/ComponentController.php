@@ -5,7 +5,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ComponentController.php 18695 2012-09-26 08:17:36Z gao.wanggao $
+ * @version $Id: ComponentController.php 22041 2012-12-18 10:31:33Z gao.wanggao $
  * @package
  */
 
@@ -14,8 +14,8 @@ class ComponentController extends AdminBaseController {
 	public function run() {
 		$page = (int)$this->getInput('page','get');
 		$flag = $this->getInput('flag');
-		$compid = (int)$this->getInput('compid','post');
-		$compname = $this->getInput('compname','post');
+		$compid = (int)$this->getInput('compid');
+		$compname = $this->getInput('compname');
 		$perpage = 10;
 		$args = array();
 		$page =  $page > 1 ? $page : 1;

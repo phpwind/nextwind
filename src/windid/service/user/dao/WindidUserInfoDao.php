@@ -6,14 +6,14 @@ Wind::import('WINDID:service.user.dao.WindidUserInterface');
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidUserInfoDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidUserInfoDao.php 22297 2012-12-21 05:41:45Z gao.wanggao $
  * @package windid.service.user.dao
  */
 class WindidUserInfoDao extends WindidBaseDao implements WindidUserInterface {
 	
 	protected $_table = 'windid_user_info';
 	protected $_pk = 'uid';
-	protected $_dataStruct = array('uid', 'realname','gender', 'byear', 'bmonth', 'bday', 'hometown', 'location', 'homepage', 'qq', 'msn', 'aliww', 'mobile', 'alipay', 'profile', 'lastvisit');
+	protected $_dataStruct = array('uid', 'realname','gender', 'byear', 'bmonth', 'bday', 'hometown', 'location', 'homepage', 'qq', 'msn', 'aliww', 'mobile', 'alipay', 'profile');
 	protected $_defaultbaseInstance = 'user.dao.WindidUserDefaultDao';
 
 	/* (non-PHPdoc)

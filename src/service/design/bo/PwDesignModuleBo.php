@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignModuleBo.php 18394 2012-09-17 05:35:21Z gao.wanggao $ 
+ * @version $Id: PwDesignModuleBo.php 22190 2012-12-19 14:24:20Z gao.wanggao $ 
  * @package 
  */
 class PwDesignModuleBo {
@@ -150,9 +150,10 @@ class PwDesignModuleBo {
 		$expired = $this->getCache();
 		if ($expired['expired'] < 1) return array($time, 0, 0);
 		list($y, $m, $d) = explode('-',Pw::time2str($time,'Y-m-d'));
-		$start = Pw::str2time($y.'-'.$m.'-'.$d.' '.$expired['start_hour'].':'.$expired['start_minute'].':0');
+		$start =  strtotime($y.'-'.$m.'-'.$d.' '.$expired['start_hour'].':'.$expired['start_minute'].':0');
 		if ($expired['end_hour'] <= $expired['start_hour']) $d++;
-		$end = Pw::str2time($y.'-'.$m.'-'.$d.' '.$expired['end_hour'].':'.$expired['end_minute'].':0');
+		$end =  strtotime($y.'-'.$m.'-'.$d.' '.$expired['end_hour'].':'.$expired['end_minute'].':0');
+		
 		if ($time < $start) {
 			$refreshTime = $start;
 		} elseif($time > $start && $time < $end ) {

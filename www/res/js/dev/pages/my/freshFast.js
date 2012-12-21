@@ -32,11 +32,13 @@
 		
 		if(!cateforum_json) {
 			//获取分类版块json
-			$.getJSON(FORUM_LIST+'&withMyforum=1', function(data){
+			$.post(FORUM_LIST, {
+				'withMyforum' : 1
+			}, function(data){
 				if(data.state == 'success') {
 					cateforum_json = $.parseJSON(data.data);
 				}
-			});
+			}, 'json');
 		}
 		
 	});
@@ -142,7 +144,7 @@
 				if(data.indexOf("请选择主题分类") > 0){
 					Wind.Util.ajaxBtnEnable(fresh_post_sub);
 					//加载主题分类
-					Wind.js(GV.JS_ROOT + 'util_libs/topicType.js?v=' + GV.JS_VERSION, function(){
+					Wind.js(GV.JS_ROOT + 'pages/bbs/topicType.js?v=' + GV.JS_VERSION, function(){
 						var url = GV.URL.TOPIC_TYPIC;
 						var topic = new ShowTopicPop({url: url, fid: fid, callback: function(data){
 								if(data){

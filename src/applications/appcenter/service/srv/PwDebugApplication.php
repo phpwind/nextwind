@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwDebugApplication.php 21853 2012-12-14 05:47:28Z long.shi $
+ * @version $Id: PwDebugApplication.php 22322 2012-12-21 08:32:15Z long.shi $
  * @package wind
  */
 class PwDebugApplication {
@@ -95,6 +95,7 @@ class PwDebugApplication {
 			$inject_ids = array();
 			foreach ($inject as $key => &$value) {
 				$value['app_id'] = $this->app_id;
+				$value['app_alias'] = $alias;
 				$value['app_name'] = $this->app['app_name'];
 			}
 			$this->_loadPwHookInject()->batchAdd($inject);

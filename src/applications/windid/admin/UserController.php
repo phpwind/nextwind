@@ -6,7 +6,7 @@ Wind::import('APPS:windid.admin.WindidBaseController');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: UserController.php 21729 2012-12-12 10:49:15Z gao.wanggao $
+ * @version $Id: UserController.php 22142 2012-12-19 09:06:10Z gao.wanggao $
  * @package 
  */
 class UserController extends WindidBaseController {
@@ -39,7 +39,6 @@ class UserController extends WindidBaseController {
 			$result = $searchDs->searchUser($vo, $limit, $start);
 		}
 		$data = $vo->getData();
-		
 		$this->setOutput($data, 'args');
 		$this->setOutput($page, 'page');
 		$this->setOutput($this->pageNumber, 'perPage');

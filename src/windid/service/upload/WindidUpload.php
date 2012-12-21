@@ -10,7 +10,7 @@ Wind::import('WINDID:library.image.WindidImage');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUpload.php 21931 2012-12-17 06:43:35Z gao.wanggao $
+ * @version $Id: WindidUpload.php 22166 2012-12-19 11:19:11Z gao.wanggao $
  * @package upload
  */
 
@@ -69,11 +69,13 @@ class WindidUpload {
 	 * 设置附件存储对象
 	 */
 	public function setStore() {
-		$stores = include Wind::getRealPath('WINDID:service.config.storage.storages.php', true);
-		$config = Windid::load('config.WindidConfig')->getValues('attachment');
+		$ds = Windid::load('config.WindidConfig');
+		$stores = $ds->getValues('storage');
+		$config = $ds->getValues('attachment');
 		$config = $config['storage.type'];
 		if (!$config || !isset($stores[$config])) $config = 'local';
-		$cls = $stores[$config]['components']['path'];
+		$store = unserialize($stores[$config]);
+		$cls = $store['components']['path'];
 		$srv = Wind::import($cls);
 		$this->store = new $srv();
 		//$this->store = Wind::getComponent($this->bhv->isLocal ? 'windidLocalStorage' : 'windidStorage');
@@ -107,6 +109,7 @@ class WindidUpload {
 			$file->filename = $this->filterFileName($this->bhv->getSaveName($file));
 			$file->savedir = $this->bhv->getSaveDir($file);
 			$file->source = $this->store->getAbsolutePath($file->filename, $file->savedir);
+			
 			if (!self::moveUploadedFile($value['tmp_name'], $file->source)) {
 				return new WindidError(WindidError::UPLOAD_FAIL);
 			}

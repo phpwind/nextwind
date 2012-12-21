@@ -7,7 +7,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwFindPassword.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: PwFindPassword.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwFindPassword {
@@ -328,8 +328,8 @@ class PwFindPassword {
 		}
 		/* @var $userDs PwUser */
 		$userDs = Wekit::load('user.PwUser');
-		$userdm = new PwUserInfoDm();
-		$userdm->setUid($this->info['uid'])->setFindpwd(implode('|', $recodes));
+		$userdm = new PwUserInfoDm($this->info['uid']);
+		$userdm->setFindpwd(implode('|', $recodes));
 		return $userDs->editUser($userdm, PwUser::FETCH_DATA);
 	}
 	

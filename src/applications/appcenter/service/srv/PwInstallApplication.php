@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwInstallApplication.php 21853 2012-12-14 05:47:28Z long.shi $
+ * @version $Id: PwInstallApplication.php 22256 2012-12-20 09:22:22Z long.shi $
  * @package products
  * @subpackage appcenter.service.srv
  */
@@ -307,7 +307,7 @@ class PwInstallApplication {
 	 * @return PwError
 	 */
 	public function downloadFiles() {
-		return new PwError('unsupport download by file now!');
+		return new PwError('APPCENTER:unsupport.zip');
 	}
 
 	/**

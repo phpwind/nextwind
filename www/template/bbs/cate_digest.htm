@@ -12,16 +12,16 @@
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<pw-drag id="main_segment"/>
+		<pw-tpl id="main_segment"/>
 		<div class="bread_crumb">
 			{@$headguide|html}
 		</div>
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content">
-					<pw-drag id="first_segment"/>
+					<pw-tpl id="first_segment"/>
 					<template source='widget_forum' load='true' />
-					<pw-drag id="cate_digest_middle"/>
+					<pw-tpl id="cate_digest_middle"/>
 					<div class="box_wrap thread_page">
 						<nav>
 						<div class="content_nav">
@@ -78,7 +78,7 @@
 					</div>
 					<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/cate/digest" args="$urlargs" />
 				</div>
-				<pw-drag id="cate_digest_bottom"/>
+				<pw-tpl id="cate_digest_bottom"/>
 			</div>
 			<div class="main_sidebar">
 				<template source='TPL:common.sidebar_2' load='true' />

@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignModuleDm.php 20204 2012-10-24 09:14:08Z gao.wanggao $ 
+ * @version $Id: PwDesignModuleDm.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class PwDesignModuleDm extends PwBaseDm {
@@ -17,6 +17,11 @@ class PwDesignModuleDm extends PwBaseDm {
 	
 	public function setPageId($pageid) {
 		$this->_data['page_id'] = (int)$pageid;
+		return $this;
+	}
+	
+	public function setSegment($segment) {
+		$this->_data['segment'] = $segment;
 		return $this;
 	}
 	

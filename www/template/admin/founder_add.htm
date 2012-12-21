@@ -10,7 +10,11 @@
 			<tbody>
 			<tr>
 				<th width="80">用户名</th>
+				<!--# if($uid) { #-->
+				<td><input type="text" class="input length_5" name="username" value="{$username}" readonly="readonly"></td>
+				<!--# }else{ #-->
 				<td><input type="text" class="input length_5" name="username" value="{$username}"></td>
+				<!--# } #-->
 			</tr>
 			<tr>
 				<th>密码</th>
@@ -19,14 +23,7 @@
 			<tr>
 				<th>电子邮箱</th>
 				<td>
-			<!--#if($exist) {#-->
-					<input type="hidden" name="uid" value="{$uid}" />
 					<input name="email" type="email" class="input length_5" value="{$email}">
-			
-			<!--#} else {#--> 
-					<input name="email" type="email" class="input length_5" value="">
-			<!--#}#-->
-					<input type="hidden" name="exist" value="{$exist}" />
 				</td>
 			</tr>
 			</tbody>

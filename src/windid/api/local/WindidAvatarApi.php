@@ -4,7 +4,7 @@
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidAvatarApi.php 21774 2012-12-13 07:10:19Z gao.wanggao $
+ * @version $Id: WindidAvatarApi.php 22343 2012-12-21 09:59:29Z gao.wanggao $
  * @package windid.service.avatar
  */
 class WindidAvatarApi {
@@ -23,7 +23,7 @@ class WindidAvatarApi {
 	 */
 	public function getAvatar($uid, $size = 'middle') {
 		$file = $uid . (in_array($size, array('middle', 'small')) ? '_' . $size : '') . '.jpg';
-		return $this->attachUrl . 'avatar/' . Windid::getUserDir($uid) . '/' . $file;
+		return $this->attachUrl . '/avatar/' .Windid::getUserDir($uid) . '/' . $file;
 	}
 	
 	
@@ -50,7 +50,7 @@ class WindidAvatarApi {
 		$client = Windid::client();
 		$time = Windid::getTime();
 		$key = WindidUtility::appKey($client->clientId,$time,$client->clientKey);
-		$postUrl = "postAction=ra_postAction&redirectURL=/&requestURL=".urlencode($client->serverUrl . "windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=flash').'&avatar=' .urlencode($this->getAvatar($uid, 'big').'?r='.rand(1,99999));
+		$postUrl = "postAction=ra_postAction&redirectURL=/&requestURL=".urlencode($client->serverUrl . "/windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=flash').'&avatar=' .urlencode($this->getAvatar($uid, 'big').'?r='.rand(1,99999));
 		return $getHtml ? '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="700" height="430" id="rainbow" align="middle">
 							<param name="movie" value="'.Windid::resUrl().'swf/avatar/avatar.swf?'.rand(0,9999).'" />
 							<param name="quality" value="high" />
@@ -73,7 +73,7 @@ class WindidAvatarApi {
 		                    'name' => 'uploadAvatar',
 		                    'src' => Windid::resUrl().'swf/avatar/avatar.swf',
 		                    'wmode' => 'transparent',
-		                    'postUrl'=> $client->serverUrl . "windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=normal',
+		                    'postUrl'=> $client->serverUrl . "/windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=normal',
 		               		'token' => $key,
 		                );
 	}

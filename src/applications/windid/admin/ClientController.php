@@ -6,7 +6,7 @@ Wind::import('APPS:windid.admin.WindidBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ClientController.php 21765 2012-12-13 06:18:25Z gao.wanggao $ 
+ * @version $Id: ClientController.php 22377 2012-12-21 14:28:48Z gao.wanggao $ 
  * @package 
  */
 class ClientController extends WindidBaseController { 
@@ -15,17 +15,6 @@ class ClientController extends WindidBaseController {
 		$list = $this->_getAppDs()->getList();
 		$data = $urls = array();
 		$time = Pw::getTime();
-		foreach ($list AS $k=>$v) {
-			$urls[$k] = $v['siteurl'].$v['apifile'];
-			$windidkey = WindidUtility::appKey($v['id'], $time, $v['secretkey']);
-			$urls[$k] = $v['siteurl'].$v['apifile'] . '?windidkey='.$windidkey.'&clentid=' . $v['id'].'&time='.$time;
-			$data[$k]['operation'] = '999';
-			$data[$k]['params'] =  serialize(array('test'=>$time));
-		}
-		/*$result = WindidUtility::buildMultiRequest($urls, $data);
-		foreach ($list AS $k=>$v) {
-			$list[$k]['iscomm'] = ($result[$k] === 'seccess') ? true : false;
-		}*/
 		$this->setOutput($list, 'list');
 	}
 	
@@ -44,8 +33,8 @@ class ClientController extends WindidBaseController {
 		
 		$url = WindidUtility::buildClientUrl($client['siteurl'], $client['apifile']) . http_build_query($array);
 		$result = WindidUtility::buildRequest($url);
-		if ($result === 'seccess')$this->showMessage('ADMIN:success');
-		$this->showError('ADMIN:fail');
+		if ($result === 'seccess')$this->showMessage('WINDID:success');
+		$this->showError('WINDID:fail');
 	}
 	
 	public function addAction() {
@@ -65,15 +54,16 @@ class ClientController extends WindidBaseController {
 			->setAppName($this->getInput('appname', 'post'))
 			->setSecretkey($this->getInput('appkey', 'post'))
 			->setAppUrl($this->getInput('appurl', 'post'))
-			->setAppIp($this->getInput('appip', 'post'));
+			->setAppIp($this->getInput('appip', 'post'))
+			->setCharset($this->getInput('charset', 'post'));
 		$result = $this->_getAppDs()->addApp($dm);
-		if ($result instanceof WindidError) $this->showError('ADMIN:fail');
-		$this->showMessage('ADMIN:success');
+		if ($result instanceof WindidError) $this->showError('WINDID:fail');
+		$this->showMessage('WINDID:success');
 	}
 	
 	public function editAction() {
 		$app = $this->_getAppDs()->getApp(intval($this->getInput('id', 'get')));
-		if (!$app) $this->showMessage('ADMIN:fail');
+		if (!$app) $this->showMessage('WINDID:fail');
 		$this->setOutput($app, 'app');
 	}
 	
@@ -86,16 +76,17 @@ class ClientController extends WindidBaseController {
 			->setAppName($this->getInput('appname', 'post'))
 			->setSecretkey($this->getInput('appkey', 'post'))
 			->setAppUrl($this->getInput('appurl', 'post'))
-			->setAppIp($this->getInput('appip', 'post'));
+			->setAppIp($this->getInput('appip', 'post'))
+			->setCharset($this->getInput('charset', 'post'));
 		$result = $this->_getAppDs()->editApp($dm);
 		if ($result instanceof WindidError) $this->showError('ADMIN:fail');
-		$this->showMessage('ADMIN:success');
+		$this->showMessage('WINDID:success');
 	}
 	
 	public function deleteAction() {
 		$result = $this->_getAppDs()->delApp(intval($this->getInput('id', 'get')));
-		if ($result instanceof WindidError) $this->showError('ADMIN:fail');
-		$this->showMessage('ADMIN:success');
+		if ($result instanceof WindidError) $this->showError('WINDID:fail');
+		$this->showMessage('WINDID:success');
 	}
 	
 	private function _getAppDs() {

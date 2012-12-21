@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwCache.php 21360 2012-12-05 08:05:40Z jieyin $
+ * @version $Id: PwCache.php 22179 2012-12-19 13:04:01Z jieyin $
  * @package forum
  */
 
@@ -22,7 +22,7 @@ class PwCache {
 	const USE_DBCACHE = 3;
 	
 	public $keys = array(
-		'config' => array('config', array(), self::USE_FILE, 'default', 0),
+		'config' => array('config', array(), self::USE_FILE, 'default', 0, array('cache.srv.PwCacheUpdateService', 'getConfigCacheValue')),
 		'level' => array('level', array(), self::USE_ALL, 'default', 0, array('usergroup.srv.PwUserGroupsService', 'getLevelCacheValue')),
 		'group' => array('group_%s', array('gid'), self::USE_ALL, 'default', 0, array('usergroup.srv.PwUserGroupsService', 'getGroupCacheValueByGid')),
 		'group_right' => array('group_right', array(), self::USE_ALL, 'default', 0, array('usergroup.srv.PwUserGroupsService', 'getGroupRightCacheValue')),
@@ -43,6 +43,10 @@ class PwCache {
 		$this->_cacheOpen |= self::USE_FILE;
 		if (Wekit::V('mem.isopen') && class_exists(Wekit::V('mem.server'))) $this->_cacheOpen |= self::USE_MEN;
 		if (Wekit::V('redis.isopen') && class_exists('Redis')) $this->_cacheOpen |= self::USE_REDIS;
+		if (Wekit::V('distributed')) {
+			$dbcache = $this->isDbCache();
+			$this->keys['config'][2] |= ($dbcache ? $dbcache : self::USE_DB);
+		}
 	}
 
 	public function isDbCache() {
@@ -281,6 +285,7 @@ class PwCache {
 				$servers = Wekit::V('mem.servers');
 				!isset($servers[$mod]) && $mod = 'default';
 				$config = array(
+					'key-prefix' => Wekit::V('mem.key.prefix'),
 					'servers' => $servers[$mod],
 				);
 				break;
@@ -288,6 +293,7 @@ class PwCache {
 				$servers = Wekit::V('redis.servers');
 				!isset($servers[$mod]) && $mod = 'default';
 				$config = array(
+					'key-prefix' => Wekit::V('redis.key.prefix'),
 					'servers' => $servers[$mod],
 				);
 				break;

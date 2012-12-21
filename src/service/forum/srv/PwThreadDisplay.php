@@ -3,7 +3,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 Wind::import('SRV:forum.bo.PwThreadBo');
 Wind::import('SRV:forum.bo.PwForumBo');
-Wind::import('SRV:forum.srv.threadDisplay.PwAttachDisplay');
+Wind::import('SRV:attach.srv.PwAttachDisplay');
 Wind::import('LIB:ubb.PwUbbCode');
 Wind::import('LIB:ubb.config.PwUbbCodeConvertThread');
 Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
@@ -19,7 +19,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadDisplay.php 21909 2012-12-17 03:13:40Z jieyin $
+ * @version $Id: PwThreadDisplay.php 22336 2012-12-21 09:36:17Z jieyin $
  * @package forum
  */
 
@@ -89,7 +89,7 @@ class PwThreadDisplay extends PwBaseHookService {
 			$permission = $this->user->getPermission('panel_bbs_manage', false, array());
 			if (!$permission['thread_check']) return new PwError('BBS:forum.thread.ischeck');
 		}
-		if ($this->thread->info['tpcstatus'] && Pw::getstatus($this->thread->info['tpcstatus'], PwThread::STATUS_CLOSED)) {
+		if ($this->thread->info['tpcstatus'] && Pw::getstatus($this->thread->info['tpcstatus'], PwThread::STATUS_CLOSED) && !$this->user->getPermission('operate_thread.lock', $this->isBM)) {
 			return new PwError('BBS:forum.thread.closed');
 		}
 		return $this->runWithVerified('check');
@@ -99,6 +99,11 @@ class PwThreadDisplay extends PwBaseHookService {
 	 * 逻辑处理，数据准备
 	 */
 	public function execute(PwReadDataSource $ds) {
+		PwHook::registerHook('s_PwUbbCode_convert', array(
+			'class' => 'SRV:forum.srv.PwThreadDisplay',
+			'method' => 'escapeSpace',
+			'loadway' => 'static'
+		));
 		$this->_ds = $ds;
 		$ds->execute();
 		$this->total = $ds->total;
@@ -110,11 +115,6 @@ class PwThreadDisplay extends PwBaseHookService {
 		$this->bulidUsers($ds->getUser());
 		$this->readdb =& $ds->getData();
 		
-		PwHook::registerHook('s_PwUbbCode_convert', array(
-			'class' => 'SRV:forum.srv.PwThreadDisplay',
-			'method' => 'escapeSpace',
-			'loadway' => 'static'
-		));
 		foreach ($this->readdb as $key => $read) {
 			$this->readdb[$key] = $this->bulidRead($read, $start++);
 		}
@@ -130,8 +130,9 @@ class PwThreadDisplay extends PwBaseHookService {
 	 */
 	public function bulidRead($read, $lou) {
 		$read['lou'] = $lou;
-		$read['content'] = WindSecurity::escapeHTML($read['content']);
-
+		if (!$read['usehtml']) {
+			$read['content'] = WindSecurity::escapeHTML($read['content']);
+		}
 		if ($read['ifshield']) {
 			$read['content'] = '<div class="shield">此帖已被屏蔽</div>';
 		} elseif ($read['useubb']) {

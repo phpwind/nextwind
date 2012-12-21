@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserBo.php 20555 2012-10-31 03:42:10Z jieyin $
+ * @version $Id: PwUserBo.php 22378 2012-12-21 14:40:58Z xiaoxia.xuxx $
  * @package src.service.user.bo
  */
 class PwUserBo {

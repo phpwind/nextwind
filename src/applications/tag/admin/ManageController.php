@@ -485,7 +485,7 @@ class ManageController extends AdminBaseController {
 			$result = $upload->execute();
 		}
 		if ($result !== true) {
-			$this->showMessage($result->getError());
+			$this->showError($result->getError());
 		}
 		return $tagUpload->getPath();
 	}

@@ -5,14 +5,12 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: phpwindBoot.php 21644 2012-12-12 05:12:46Z jieyin $
+ * @version $Id: phpwindBoot.php 22371 2012-12-21 13:10:32Z yishuo $
  * @package wekit
  */
 class phpwindBoot {
-
 	public $charset; //程序编码
 	public $version = '9.0RC';
-
 	public $baseUrl; //网站地址
 	public $res; //res
 	public $css;
@@ -35,7 +33,7 @@ class phpwindBoot {
 		$this->clientIp = Wind::getComponent('request')->getClientIp();
 		$this->requestUri = Wind::getComponent('request')->getRequestUri();
 	}
-	
+
 	/**
 	 * 获取全局配置
 	 *
@@ -44,7 +42,7 @@ class phpwindBoot {
 	public function getConfig() {
 		return new PwConfigBo(Wekit::cache()->get('config'));
 	}
-	
+
 	/**
 	 * 获取当前时间戳
 	 *
@@ -58,22 +56,28 @@ class phpwindBoot {
 
 	/**
 	 * 初始化应用信息
+	 * @param AbstractWindFrontController $front
 	 */
-	public function init() {
+	public function init($front = null) {
 		$this->_initUrl();
 		$this->_initUser();
-		$this->runApps();
+		$this->runApps($front);
 	}
 
 	/**
 	 * 执行acloud的相关
+	 * 
+	 * @param AbstractWindFrontController $front
 	 */
-	public function runApps() {
+	public function runApps($front = null) {
+		Wind::import('LIB:compile.acloud.PwAcloudFilter');
+		$front->registeFilter(new PwAcloudFilter());
+		
 		$controller = Wind::getComponent('router')->getController();
 		require_once Wind::getRealPath('ACLOUD:aCloud');
 		ACloudAppGuiding::runApps($controller);
 	}
-	
+
 	/** 
 	 * 获得登录用户信息
 	 *
@@ -88,6 +92,13 @@ class phpwindBoot {
 		}
 		return PwUserBo::getInstance($this->_loginUser);
 	}
+
+	/**
+	 * 在frontBoot的onResponse时被调用
+	 * 
+	 * @return void
+	 */
+	public function beforeResponse() {}
 
 	/**
 	 * 获得大概年前登录用户对象
@@ -146,20 +157,24 @@ class phpwindBoot {
 			$this->lastvisit = WEKIT_TIMESTAMP;
 			$this->lastRequestUri = '';
 		} else {
-			list($this->onlinetime, $this->lastvisit, $this->lastRequestUri) = explode("\t", $lastvisit);
+			list($this->onlinetime, $this->lastvisit, $this->lastRequestUri) = explode("\t", 
+				$lastvisit);
 			($onlinetime = WEKIT_TIMESTAMP - $this->lastvisit) < $_cOnlinetime && $this->onlinetime += $onlinetime;
 		}
 		$user = $this->getLoginUser();
-		if ($user->isExists() && (WEKIT_TIMESTAMP - $user->info['lastvisit'] > min(1800, $_cOnlinetime))) {
+		if ($user->isExists() && (WEKIT_TIMESTAMP - $user->info['lastvisit'] > min(1800, 
+			$_cOnlinetime))) {
 			Wind::import('SRV:user.dm.PwUserInfoDm');
 			$dm = new PwUserInfoDm($user->uid);
 			$dm->setLastvisit(WEKIT_TIMESTAMP)->setLastActiveTime(WEKIT_TIMESTAMP);
 			if ($this->onlinetime > 0) {
-				$dm->addOnline($this->onlinetime > $_cOnlinetime * 1.2 ? $_cOnlinetime : $this->onlinetime);
+				$dm->addOnline(
+					$this->onlinetime > $_cOnlinetime * 1.2 ? $_cOnlinetime : $this->onlinetime);
 			}
 			Wekit::load('user.PwUser')->editUser($dm, PwUser::FETCH_DATA);
 			$this->onlinetime = 0;
 		}
-		Pw::setCookie('lastvisit', $this->onlinetime . "\t" . WEKIT_TIMESTAMP . "\t" . $this->requestUri, 31536000);
+		Pw::setCookie('lastvisit', 
+			$this->onlinetime . "\t" . WEKIT_TIMESTAMP . "\t" . $this->requestUri, 31536000);
 	}
 }

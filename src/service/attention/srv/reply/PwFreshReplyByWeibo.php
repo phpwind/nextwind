@@ -9,7 +9,7 @@ Wind::import('SRV:weibo.dm.PwWeiboCommnetDm');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwFreshReplyByWeibo.php 20581 2012-10-31 08:46:10Z jieyin $
+ * @version $Id: PwFreshReplyByWeibo.php 22374 2012-12-21 14:18:27Z jinlong.panjl $
  * @package src.service.user.srv
  */
 
@@ -42,6 +42,9 @@ class PwFreshReplyByWeibo {
 	public function execute() {
 		$this->dm->setCreatedUser($this->user->uid, $this->user->username);
 		$this->dm->setCreatedTime(Pw::getTime());
+		if (($result = $this->_getHook()->runWithVerified('check', $this->dm)) instanceof PwError) {
+			return $result;
+		}
 		$result = Wekit::load('weibo.srv.PwWeiboService')->addComment($this->dm, $this->user);
 		if ($result instanceof PwError) {
 			return $result;
@@ -53,6 +56,9 @@ class PwFreshReplyByWeibo {
 			$dm2->setSrcId($this->dm->getField('weibo_id'));
 			$sendweibo = new PwSendWeibo($this->user);
 			$this->newId = $sendweibo->send($dm2);
+		}
+		if (($result = $this->_getHook()->runWithVerified('addWeibo', $this->dm)) instanceof PwError) {
+			return $result;
 		}
 		return true;
 	}
@@ -72,4 +78,12 @@ class PwFreshReplyByWeibo {
 	public function getNewFreshSrcId() {
 		return $this->newId;
 	}
+	
+	/**
+	 * 
+	 * @return PwHookService
+	 */
+ 	private function _getHook() {
+ 		return new PwHookService('PwFreshReplyByWeibo', 'PwWeiboDoBase');
+ 	}
 }

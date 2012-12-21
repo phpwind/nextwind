@@ -1,11 +1,11 @@
 <?php
 Wind::import('LIB:base.PwBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: long.shi $>
- * @author $Author: long.shi $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PortalController.php 21071 2012-11-27 06:34:14Z long.shi $ 
+ * @version $Id: PortalController.php 22261 2012-12-21 02:23:02Z gao.wanggao $ 
  * @package 
  */
 class PortalController extends PwBaseController {
@@ -40,7 +40,7 @@ class PortalController extends PwBaseController {
 		if ($domain && !$this->_validator($domain))  $this->showError("DESIGN:domain.validator.fail");
 		if ($coverfrom == 2) {
 			$upload = $this->_upload();
-			$cover = Wekit::getGlobal('url', 'attach') . '/' .$upload['path'].$upload['filename'];
+			$cover = Pw::getPath($upload['path'].$upload['filename']);
 		} else {
 			$cover = $this->getInput('webcover', 'post');
 			$cover =  (preg_match("/^http:\/\/(.*)$/", $cover)) ? $cover : ''; 
@@ -169,7 +169,7 @@ class PortalController extends PwBaseController {
 			$cover = '';
 			$upload = $this->_upload();
 			if ($upload['filename']) {
-				$cover = Wekit::getGlobal('url', 'attach') . '/' .$upload['path'].$upload['filename'];
+				$cover = Pw::getPath($upload['path'].$upload['filename']);
 			}
 		} else {
 			$cover = $this->getInput('webcover', 'post');

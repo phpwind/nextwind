@@ -3,7 +3,7 @@
 @explain: 全局样式表（头尾效果、全局背景、右侧个人信息等）
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: style.css 21291 2012-12-04 06:31:36Z yanchixia $
+$Id: style.css 22231 2012-12-19 21:45:31Z yanchixia $
 ===================
 #*/
 
@@ -84,6 +84,38 @@ a:hover{
 	color:#999;
 	padding:0 4px;
 	border-radius:3px;
+}
+
+/*
+===================
+整体背景
+===================
+*/
+.header_login_btn,
+.header_login_btn .inside/*头部消息和发帖*/,
+.pop_select_forum .ct li.current/*快速发帖选择*/,
+.punch_widget/*打卡*/{
+	background:url(../../images/common/style_bg.png);
+}
+/*
+===================
+整体图标
+===================
+*/
+.header_post/*头部发帖图标*/,
+.header_message,
+.header_message_down/*头部消息图标*/,
+.bread_crumb .home/*面包屑home图标*/,
+.content_type a.drop/*版块分类下拉*/,
+.user_info .name a i/*用户名后房子图*/,
+.my_app_list li a span/*右侧我的应用图标*/,
+.my_forum_list .box_title/*我的版块*/,
+.my_forum_list li a/*我的版块列表*/,
+.forum_menu dt/*右侧版块列表*/,
+.forum_menu dd p a/*版块小点*/,
+.icon_face/*表情*/,
+.feed_lists_del/*删除关注信息*/{
+	background:url(../../images/common/style_icon.png) no-repeat;
 }
 
 /*
@@ -212,12 +244,16 @@ a:hover{
 	overflow:hidden;
 }
 /*页脚、底部*/
-.footer{
+.footer_wrap{
 	width:960px;
 	margin:0 auto;
+	border-top:1px solid #ccc;
+	border-top:1px solid rgba(0,0,0,0.15);
+}
+.footer{
 	padding:15px 0;
-	background:url(../../images/common/hr.png) 0 top repeat-x;
-	_background:url(../../images/common/hr_ie6.png) 0 top repeat-x;
+	border-top:1px solid #fff;
+	border-top:1px solid rgba(255,255,255,0.7);
 }
 .footer p{
 	text-align:center;
@@ -365,10 +401,6 @@ a:hover{
 	_margin-top:5px;
 }
 /*登录后按钮--消息、发帖*/
-.header_login_btn,
-.header_login_btn .inside{
-	background:url(../../images/common/header_login_btn.png) 0 0 no-repeat;
-}
 .header_login_btn{
 	float:right;
 	background-position:right 0;
@@ -402,8 +434,10 @@ a:hover{
 /*发帖*/
 .header_post{
 	font-weight:700;
+	display:inline-block;
 	padding:0 5px 0 25px;
-	background:url(../../images/common/header_post.png) 5px center no-repeat;
+	height:22px;
+	background-position:5px -32px;
 	color:#fff;
 	font-size:12px;
 }
@@ -415,7 +449,7 @@ a:hover{
 	width:15px;
 	height:10px;
 	text-indent:-2000em;
-	background:url(../../images/common/header_message.png) no-repeat;
+	background-position:0 0;
 	margin:10px 5px 0;
 }
 /*消息数值*/
@@ -500,11 +534,11 @@ a:hover{
 	overflow:hidden;
 }
 .pop_select_forum .ct li.current{
-	background:url(../../images/common/pop_select_forum.png) 0 1px no-repeat;
 	color:#fff;
+	background-position:0 -98px;
 }
 .pop_select_forum .ct .target_forum  li.current{
-	background-position:0 -38px;
+	background-position:0 -138px;
 }
 .pop_select_forum .associate{
 	background:#ecf3f8;
@@ -1126,12 +1160,11 @@ a:hover{
 	position:relative;
 }
 .bread_crumb .home{
-	width:16px;
+	padding-left:20px;
 	height:16px;
-	background:url(../../images/common/home.png) 0 center no-repeat;
+	background-position:0 -58px;
 	display:block;
 	overflow:hidden;
-	text-indent:-2000em;
 	float:left;
 }
 .bread_crumb em{
@@ -1271,7 +1304,7 @@ a:hover{
 }
 .content_type a.drop{
 	padding-right:8px;
-	background:url(../../images/common/arrow_down.png) right 8px no-repeat;
+	background-position:right -82px;
 }
 .content_type li.line{
 	width:1px;
@@ -1400,7 +1433,7 @@ a:hover{
 	color:#333;
 }
 .user_info .name a i{
-	background:url(../../images/common/my_space.png) no-repeat;
+	background-position:0 -107px;
 	display:inline-block;
 	width:16px;
 	height:16px;
@@ -1408,43 +1441,15 @@ a:hover{
 	margin-left:5px;
 }
 .user_info .name a:hover i{
-	background-position:0 -20px;
+	background-position:0 -127px;
 }
 /*级别*/
 .user_info .level{
 	color:#666;
 	margin-bottom:5px;
 }
-.user_info .level a,
-.user_info .level_img a{
+.user_info .level a{
 	color:#666;
-}
-.user_info .level_img a:hover {
-	text-decoration:none;
-}
-.user_info .level_img a:hover .tips{
-	display:block;
-}
-.user_info .level_img .tips{
-	position:absolute;
-	display:none;
-	z-index:1;
-	line-height:1.5;
-	color:#666;
-	padding:3px 25px 3px 7px;
-	border-color:#f4d1a5;
-	background-color:#fffbe7;
-	cursor:default;
-	margin-top:25px;
-}
-.user_info .core_arrow_top{
-	left:-13px;
-}
-.user_info .core_arrow_top span{
-	border-bottom:8px #fffbe7 solid;
-}
-.user_info .core_arrow_top em{
-	border-bottom:8px #f4d1a5 solid;
 }
 
 /*数值  粉丝 关注 等*/
@@ -1501,7 +1506,6 @@ a:hover{
 	float:left;
 	width:16px;
 	height:16px;
-	background:url(../../images/common/sidebar_icon.png) no-repeat;
 	overflow:hidden;
 	margin:2px 5px 0 0;
 }
@@ -1509,25 +1513,25 @@ a:hover{
 	text-decoration:none;
 }
 .my_app_list a span.icon_forum{
-	background-position:0 0;
+	background-position:0 -160px;
 }
 .my_app_list a span.icon_mefollow{
-	background-position:0 -20px;
+	background-position:0 -180px;
 }
 .my_app_list a span.icon_vote{
-	background-position:0 -40px;
+	background-position:0 -200px;
 }
 .my_app_list a span.icon_like{
-	background-position:0 -60px;
+	background-position:0 -220px;
 }
 .my_app_list a span.icon_album{
-	background-position:0 -80px;
+	background-position:0 -240px;
 }
 .my_app_list a span.icon_medal{
-	background-position:0 -100px
+	background-position:0 -259px
 }
 .my_app_list a span.icon_task{
-	background-position:2px -121px;
+	background-position:2px -281px;
 }
 .my_app_list .core_num{
 	margin:0 0 0 5px;
@@ -1633,7 +1637,7 @@ a:hover{
 .punch_widget{
 	width:240px;
 	height:43px;
-	background:url(../../images/common/punch.png) no-repeat;
+	background-position:0 -180px;
 	position:relative;
 	text-align:center;
 }
@@ -1663,7 +1667,7 @@ a:hover{
 }
 .punch_widget_disabled{
 	cursor:default;
-	background-position:0 -50px;
+	background-position:0 -230px;
 }
 .punch_widget_disabled .cont a,
 .punch_widget_disabled .cont a:hover{
@@ -1707,7 +1711,7 @@ a:hover{
 ===================
 */
 .my_forum_list .box_title{
-	background:url(../../images/common/open_fold.png) 240px -20px no-repeat;
+	background-position:240px -350px;
 }
 .my_forum_list ul{
 	padding:10px;
@@ -1720,10 +1724,11 @@ a:hover{
 	display:block;
 	line-height:27px;
 	height:27px;
+	overflow:hidden;
 	color:#666;
 	text-indent:8px;
 	padding-left:10px;
-	background:url(../../images/common/light.png) 8px center no-repeat;
+	background-position:8px -389px;
 	border-radius: 3px;
 }
 .my_forum_list li a:hover{
@@ -1733,7 +1738,7 @@ a:hover{
 	text-decoration:none;
 }
 .my_forum_list_cur .box_title{
-	background-position:240px 12px;
+	background-position:240px -316px;
 }
 .my_forum_list_cur ul{
 	display:none;
@@ -1751,9 +1756,8 @@ a:hover{
 	font-size:14px;
 	margin-bottom:10px;
 }
-
 .forum_menu dt{
-	background:url(../../images/common/open_fold.png) 230px 10px no-repeat;
+	background-position:230px -318px;
 	border-radius: 3px;
 	line-height:27px;
 	height:27px;
@@ -1780,7 +1784,7 @@ a:hover{
 	overflow:hidden;
 }
 .forum_menu dl.current dt{
-	background-position:230px -23px;
+	background-position:230px -351px;
 }
 .forum_menu dl.current dd{
 	display:block;
@@ -1788,7 +1792,7 @@ a:hover{
 .forum_menu dd p a{
 	color:#666;
 	padding-left:10px;
-	background:url(../../images/common/light.png) 8px center no-repeat;
+	background-position:8px -389px;
 	border-radius: 3px;
 }
 .forum_menu dd p a:hover{
@@ -2083,12 +2087,12 @@ a:hover{
 	overflow:hidden;
 	text-indent:-2000em;
 	color:#999;
-	background:url(../../images/common/post_icon.png) 0 1px no-repeat;
+	background-position:0 -429px;
 	position:relative;
 	z-index:1;
 }
 .icon_face:hover{
-	background-position:0 -59px;
+	background-position:0 -489px;
 }
 /*回复_列表*/
 .feed_repeat_list dl{
@@ -2164,11 +2168,11 @@ a:hover{
 	height:8px;
 	margin-left:10px;
 	text-indent:-2000em;
-	background:url(../../images/common/close.png) no-repeat;;
+	background-position:0 -560px;
 	overflow:hidden;
 }
 .feed_lists_del:hover{
-	background-position:0 -20px;
+	background-position:0 -580px;
 }
 .feed_lists dl:hover .feed_lists_del,
 .feed_lists dl.current .feed_lists_del{

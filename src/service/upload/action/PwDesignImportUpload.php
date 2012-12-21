@@ -9,7 +9,7 @@ Wind::import('COM:utility.WindUtility');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImportUpload.php 19854 2012-10-19 02:11:42Z gao.wanggao $ 
+ * @version $Id: PwDesignImportUpload.php 21973 2012-12-17 12:17:13Z gao.wanggao $ 
  * @package 
  */
 
@@ -17,7 +17,7 @@ class PwDesignImportUpload extends PwUploadAction {
 
 	public function __construct() {
 		$this->ftype = array('zip' => 2000, 'txt' => 2000);
-		$this->ifftp = 0;
+		$this->isLocal = true;
 	}
 	
 	/**

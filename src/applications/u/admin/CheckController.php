@@ -8,7 +8,7 @@ Wind::import('SRV:user.PwUserStatus');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: CheckController.php 21138 2012-11-29 03:07:29Z xiaoxia.xuxx $
+ * @version $Id: CheckController.php 22361 2012-12-21 11:50:28Z xiaoxia.xuxx $
  * @package products.u.admin
  */
 class CheckController extends AdminBaseController {
@@ -36,7 +36,6 @@ class CheckController extends AdminBaseController {
 		$this->setOutput($count, 'count');
 		$this->setOutput($page, 'page');
 		$this->setOutput($perpage, 'perpage');
-		$this->setOutput(array('perpage' => $perpage), 'args');
 		$this->setOutput($list, 'list');
 	}
 	
@@ -61,7 +60,6 @@ class CheckController extends AdminBaseController {
 		$this->setOutput($count, 'count');
 		$this->setOutput($page, 'page');
 		$this->setOutput($perpage, 'perpage');
-		$this->setOutput(array('perpage' => $perpage), 'args');
 		$this->setOutput($list, 'list');
 	}
 	
@@ -82,9 +80,9 @@ class CheckController extends AdminBaseController {
 		foreach ($infos as $_temp) {
 			$clearUid[] = $_temp['uid'];
 			if (Pw::getstatus($_temp['status'], PwUser::STATUS_UNCHECK)) {
-				$userDm = new PwUserInfoDm();
-				$userDm->setUid($_temp['uid'])->setUncheck(false);
-				if (0 === Pw::getstatus($_temp['status'], PwUser::STATUS_UNACTIVE)) {
+				$userDm = new PwUserInfoDm($_temp['uid']);
+				$userDm->setUncheck(false);
+				if (!Pw::getstatus($_temp['status'], PwUser::STATUS_UNACTIVE)) {
 					$userDm->setGroupid(0);
 					$_credit = $userDs->getUserByUid($_temp['uid'], PwUser::FETCH_DATA);
 					$credit = $groupService->calculateCredit($strategy, $_credit);
@@ -116,9 +114,9 @@ class CheckController extends AdminBaseController {
 		foreach ($infos as $_temp) {
 			$clearUid[] = $_temp['uid'];
 			if (Pw::getstatus($_temp['status'], PwUser::STATUS_UNACTIVE)) {
-				$userDm = new PwUserInfoDm();
-				$userDm->setUid($_temp['uid'])->setUnactive(false);
-				if (0 === Pw::getstatus($_temp['status'], PwUser::STATUS_UNCHECK)) {
+				$userDm = new PwUserInfoDm($_temp['uid']);
+				$userDm->setUnactive(false);
+				if (!Pw::getstatus($_temp['status'], PwUser::STATUS_UNCHECK)) {
 					$userDm->setGroupid(0);
 					$_credit = $userDs->getUserByUid($_temp['uid'], PwUser::FETCH_DATA);
 					$credit = $groupService->calculateCredit($strategy, $_credit);

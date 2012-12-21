@@ -10,7 +10,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadManage.php 15652 2012-08-09 10:32:10Z jieyin $
+ * @version $Id: PwThreadManage.php 22328 2012-12-21 08:46:57Z xiaoxia.xuxx $
  * @package forum
  */
 
@@ -57,7 +57,7 @@ class PwThreadManage extends PwBaseHookService {
 	public function getPermission() {
 		if (!is_null($this->permission)) return $this->permission;
 		if (!$this->permission = $this->user->getPermission('operate_thread', false, array())) {
-			if (($fids = $this->getFids()) && $this->_isBM($fids)) {
+			if (($fids = $this->getFids()) && $this->isBM($fids)) {
 				$this->permission = $this->user->getPermission('operate_thread', true, array());
 			}
 		}
@@ -79,7 +79,7 @@ class PwThreadManage extends PwBaseHookService {
 		return $this->_fids;
 	}
 	
-	protected function _isBM($fids) {
+	public function isBM($fids) {
 		$forums = Wekit::load('forum.PwForum')->fetchForum($fids);
 		foreach ($forums as $key => $value) {
 			if (!$this->_checkBM($this->user->username, $value['manager'], $value['uppermanager'])) {

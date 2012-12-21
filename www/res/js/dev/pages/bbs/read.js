@@ -68,7 +68,7 @@
 						temp_top;
 
 					$.each(data, function(i, o){
-						li_arr.push('<li><a href="'+ GV.U_CENTER +'&uid='+ o.uid +'"><img class="J_avatar" data-type="small" src="'+ o.avatar +'" width="30" height="30" />'+ o.username +'</a></li>');
+						li_arr.push('<li><a href="'+ GV.U_CENTER + o.uid +'"><img class="J_avatar" data-type="small" src="'+ o.avatar +'" width="30" height="30" />'+ o.username +'</a></li>');
 					});
 
 					template.appendTo('body').attr('id', 'J_like_user_pop_'+ pid).find('ul.J_like_user_list').html(li_arr.join(''));
@@ -240,7 +240,8 @@
 
 //大小图切换
 ;(function() {
-	var attach_pics_list = $('div.read_attach_pic');
+	var attach_pics_list = $('div.read_attach_pic'),
+		$doc = $(document);
 	if( attach_pics_list.length ) {
 		attach_pics_list.each(function() {
 			var container = $(this);
@@ -257,6 +258,7 @@
 				container.find('a.J_small_images').addClass('current');
 				container.find('ul.small_img').hide();
 				container.find('ul.big_img').show();
+				$doc.scrollTop($doc.scrollTop()+1);
 			});
 		});
 	}

@@ -40,8 +40,8 @@
 		<tr>
 			<td>{$group['gid']}</td>
 			<td><input type="text" class="input length_3" name="groupname[{$group['gid']}]" value="{$group['name']}"></td>
-			<td>
-				<a href="#" class="J_set_icon"><img src="{@G:url.images}/level/{$group['image']}"></a>
+			<td class="cp J_set_icon">
+				<img src="{@G:url.images}/level/{$group['image']}">
 				<input type="hidden" name="groupimage[{$group['gid']}]" value="{$group['image']}" />
 			</td>
 			<!--# if ($groupType == 'member') { 
@@ -68,7 +68,7 @@
 			<tr>
 				<td></td>
 				<td><input id="J_new_group_name" type="text" class="input length_3" name="newgroupname[]"></td>
-				<td><a href="#" class="J_set_icon"><img id="J_new_group_icon" data-org="{@G:url.images}/level/0.gif" src="{@G:url.images}/level/0.gif"></a><input id="J_new_group_icon_input" type="hidden" name="newgroupimage[]" value="0.gif" /></td>
+				<td class="cp J_set_icon"><img id="J_new_group_icon" data-org="{@G:url.images}/level/0.gif" src="{@G:url.images}/level/0.gif"><input id="J_new_group_icon_input" type="hidden" name="newgroupimage[]" value="0.gif" /></td>
 				<!--# if ($groupType == 'member') { #-->
 				<td><input id="J_new_group_points" type="number" class="input length_2" name="newgrouppoints[]"></td>
 				<!--# } #-->
@@ -126,7 +126,7 @@ Wind.use('draggable', function(){
 		new_group_html = '<tr class="ct">\
 			<td></td>\
 			<td><input type="text" value="'+ new_group_name.val() +'" name="newgroupname[]" class="input length_3"></td>\
-			<td><a class="J_set_icon" href="#"><img src="'+ new_group_icon.attr('src') +'"></a><input type="hidden" value="'+ new_group_icon_input.val() +'" name="newgroupimage[]"></td>'+ ( new_group_points.length ? '<td><input type="number" value="'+ new_group_points.val() +'" name="newgrouppoints[]" class="input length_2"></td>' : '' ) +'<td>\
+			<td class="cp J_set_icon"><img src="'+ new_group_icon.attr('src') +'"><input type="hidden" value="'+ new_group_icon_input.val() +'" name="newgroupimage[]"></td>'+ ( new_group_points.length ? '<td><input type="number" value="'+ new_group_points.val() +'" name="newgrouppoints[]" class="input length_2"></td>' : '' ) +'<td>\
 				<a class="mr10 J_new_group_del" href="">[删除]</a>\
 			</td>\
 		</tr>';
@@ -152,10 +152,10 @@ Wind.use('draggable', function(){
 
 	//设置等级图标
 	var icon_pop = $('#J_icon_pop');
-	$('#J_group_table').on('click', 'a.J_set_icon', function(e){
+	$('#J_group_table').on('click', '.J_set_icon', function(e){
 		e.preventDefault();
 		var $this = $(this),
-				icon = $this.children();
+				icon = $this.children('img');
 		//common.js
 		popPos(icon_pop);
 
@@ -164,7 +164,7 @@ Wind.use('draggable', function(){
 		$('a.J_insert_icon').off('click').on('click', function(e){
 			e.preventDefault();
 			icon.attr('src', $(this).children().attr('src'));
-			$this.next('input').val($(this).data('name'));
+			$this.find('input:hidden').val($(this).data('name'));
 			icon_pop.hide();
 		});
 	});

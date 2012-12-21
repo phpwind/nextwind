@@ -3,7 +3,7 @@
 @explain: 设置/前台管理
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: profile.css 21333 2012-12-05 03:31:43Z hao.lin $
+$Id: profile.css 21993 2012-12-18 02:56:39Z yanchixia $
 ===================
 #*/
 
@@ -1016,10 +1016,18 @@ tab导航
 	width:220px;
 }
 
-
-
-
-
+/*
+===================
+密码修改
+依赖profile_ct
+===================
+*/
+.password_list dt{
+	width:100px;
+}
+.password_list dd{
+	width:620px;
+}
 
 
 

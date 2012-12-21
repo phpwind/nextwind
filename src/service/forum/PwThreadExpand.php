@@ -9,7 +9,7 @@ Wind::import('SRV:forum.PwThread');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadExpand.php 15112 2012-07-31 08:10:19Z jieyin $
+ * @version $Id: PwThreadExpand.php 22254 2012-12-20 08:03:33Z jinlong.panjl $
  * @package forum
  */
 
@@ -25,6 +25,8 @@ class PwThreadExpand {
 	 * @return array
 	 */
 	public function getThreadByFidOverTime($fid, $lastpostTime, $limit = 10, $offset = 0) {
+		$fid = intval($fid);
+		if (empty($fid)) return array();
 		return $this->_getThreadDao()->getThreadByFidOverTime($fid, $lastpostTime, $limit, $offset);
 	}
 
@@ -38,6 +40,8 @@ class PwThreadExpand {
 	 * @return array
 	 */
 	public function getThreadByFidUnderTime($fid, $lastpostTime, $limit = 10, $offset = 0) {
+		$fid = intval($fid);
+		if (empty($fid)) return array();
 		return $this->_getThreadDao()->getThreadByFidUnderTime($fid, $lastpostTime, $limit, $offset);
 	}
 
@@ -61,6 +65,7 @@ class PwThreadExpand {
 	 * @return array
 	 */
 	public function countUserThreadByFidAndTime($fid, $time, $num) {
+		$fid = intval($fid);
 		if (empty($fid)) return array();
 		return $this->_getThreadDao()->countUserThreadByFidAndTime($fid, $time, $num);
 	}
@@ -74,6 +79,7 @@ class PwThreadExpand {
 	 * @return array
 	 */
 	public function countUserPostByFidAndTime($fid, $time, $num) {
+		$fid = intval($fid);
 		if (empty($fid)) return array();
 		return $this->_getPostDao()->countUserPostByFidAndTime($fid, $time, $num);
 	}

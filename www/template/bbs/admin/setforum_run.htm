@@ -174,20 +174,6 @@ $(function(){
 			tr.remove();
 		}
 		
-		//循环当前tr之后的tr，一并删除子版
-		/*$.each(tr.nextAll(), function(){
-			var $this = $(this);
-			
-			//跟当前行比较"del-level"的值，比当前行大的则删除（均为子版），小的则中止（同级或上级版块）
-			if($this.data('del_level') > tr.data('del_level')) {
-				$this.remove();
-			}else{
-				return false;
-			}
-			
-		});*/
-			
-		
 	});
 	
 

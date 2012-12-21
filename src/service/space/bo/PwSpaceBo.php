@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: long.shi $>
- * @author $Author: long.shi $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSpaceBo.php 19984 2012-10-22 08:32:02Z long.shi $ 
+ * @version $Id: PwSpaceBo.php 22363 2012-12-21 12:16:44Z gao.wanggao $ 
  * @package 
  */
  class PwSpaceBo {
@@ -92,7 +92,7 @@
 		$this->space['back_image'] = array($image, $repeat, $fixed, $align);
 		$this->space['backbround'] = '';
 		if (empty($image)) return;
-		$image = Wekit::getGlobal('url', 'attach') .'/'. $image;
+		$image = Pw::getPath(''). $image;
 		$this->space['backbround'] = 'style="';
 		$this->space['backbround'] .= 'background-image: url( ' . $image . ');';
 		$this->space['backbround'] .= 'background-repeat:' . $repeat . ';' ;

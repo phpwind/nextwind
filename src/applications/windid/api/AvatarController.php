@@ -5,7 +5,7 @@ Wind::import('APPS:windid.api.OpenBaseController');
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AvatarController.php 21931 2012-12-17 06:43:35Z gao.wanggao $
+ * @version $Id: AvatarController.php 22343 2012-12-21 09:59:29Z gao.wanggao $
  * @package windid.service.avatar
  */
 class AvatarController  extends OpenBaseController{
@@ -27,7 +27,7 @@ class AvatarController  extends OpenBaseController{
 		$size = $this->getInput('size', 'get');
 		!$size && $size = 'middle';
  		$file = $uid . (in_array($size, array('middle', 'small')) ? '_' . $size : '') . '.jpg';
-		$result = $this->attachUrl . 'avatar/' . Windid::getUserDir($uid) . '/' . $file;
+		$result = $this->attachUrl . '/avatar/' . Windid::getUserDir($uid) . '/' . $file;
 		$this->output($result);
 	}
 	
@@ -62,7 +62,7 @@ class AvatarController  extends OpenBaseController{
 		$client = Windid::client();
 		$time = Windid::getTime();
 		$key = WindidUtility::appKey($client->clientId,$time,$client->clientKey);
-		$postUrl = "postAction=ra_postAction&redirectURL=/&requestURL=".urlencode($client->serverUrl . "windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=flash').'&avatar=' .urlencode($this->getAvatar($uid, 'big').'?r='.rand(1,99999));
+		$postUrl = "postAction=ra_postAction&redirectURL=/&requestURL=".urlencode($client->serverUrl . "/windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=flash').'&avatar=' .urlencode($this->getAvatar($uid, 'big').'?r='.rand(1,99999));
 		$result = $getHtml ? '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="700" height="430" id="rainbow" align="middle">
 							<param name="movie" value="'.Windid::resUrl().'swf/avatar/avatar.swf?'.rand(0,9999).'" />
 							<param name="quality" value="high" />
@@ -85,7 +85,7 @@ class AvatarController  extends OpenBaseController{
 		                    'name' => 'uploadAvatar',
 		                    'src' => Windid::resUrl().'swf/avatar/avatar.swf',
 		                    'wmode' => 'transparent',
-		                    'postUrl'=> $client->serverUrl . "windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=normal',
+		                    'postUrl'=> $client->serverUrl . "/windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=normal',
 		               		'token' => $key,
 		                );
 		$this->output($result);
@@ -96,7 +96,6 @@ class AvatarController  extends OpenBaseController{
 		Wind::import('WINDID:service.upload.action.WindidAvatarUpload');
 		Wind::import('WINDID:service.upload.WindidUpload');
 		$bhv = new WindidAvatarUpload($uid);
-		
 		$upload = new WindidUpload($bhv);
 		if (($result = $upload->check()) === true) {
 			$result = $upload->execute();

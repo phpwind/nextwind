@@ -58,6 +58,7 @@ img {
 }
 html {
 	-webkit-text-size-adjust:none;
+	overflow-y:scroll;
 }
 /*
 ===================
@@ -203,6 +204,13 @@ body{
 	color:#333;
 	background:url(../images/install/bg.png);
 }
+a{
+	color:#246EA5;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
 /*
 ===================
 包裹
@@ -244,7 +252,7 @@ body{
 */
 .footer{
 	text-align:center;
-	padding:15px 0;
+	padding:15px 0 50px;
 	color:#999999;
 }
 .footer a{
@@ -440,7 +448,7 @@ LOGO
 	border:1px solid #0e85d5;
 	outline:none;
 }
-.server .gray{
+.gray{
 	color:#bbb;
 }
 .server tr:hover .gray{
@@ -510,7 +518,7 @@ LOGO
 }
 .error_tip{
 	background:url(../images/install/ignore.png) 130px 45px no-repeat;
-	padding:50px 130px 60px 230px;
+	padding:50px 80px 60px 230px;
 }
 
 /*founder login*/
@@ -588,3 +596,124 @@ loading
 	background:url(../images/install/pop_loading.gif) 0 center no-repeat;
 	padding-left:24px;
 }
+
+/*
+===================
+升级类型选择
+===================
+*/
+.updata_type{
+	padding:20px 30px 40px;
+}
+.updata_type .hd{
+	font-size:16px;
+}
+/*切换选择*/
+.updata_type .tab{
+	padding-top:10px;
+}
+.updata_type .tab li{
+	float:left;
+	width:50%;
+	display:inline;
+}
+.updata_type .tab li a{
+	display:block;
+	text-decoration:none;
+	border:1px solid #ccc;
+	text-align:center;
+	height:60px;
+	line-height:60px;
+	font-weight:700;
+	background:#fff url(../images/install/tab.png);
+	color:#246EA5;
+	font-size:22px;
+	font-weight:100;
+}
+.updata_type .tab li a.fen{
+	line-height:50px;
+	border-right:0;
+}
+.updata_type .tab li a span{
+	display:block;
+	font-size:12px;
+	color:#999;
+	line-height:18px;
+	margin-top:-12px;
+	font-weight:100;
+}
+.updata_type .tab li.current a{
+	background:#fdfdfd;
+	color:#6F7885;
+	border-bottom:1px solid #fdfdfd;
+}
+.updata_type .tab_cont{
+	border:1px solid #ccc;
+	border-top:0 none;
+	padding:30px;
+	background:#fdfdfd;
+	box-shadow:1px 1px 1px #fff inset,-1px -1px 1px #fff inset;
+}
+.updata_type .tab_cont h3{
+	font-size:16px;
+	margin-bottom:15px;
+}
+.updata_type .tab_cont h3 span{
+	font-size:12px;
+	font-weight:100;
+	color:#666;
+}
+.updata_type .tab_cont h4{
+	font-size:14px;
+}
+.updata_type .tab_cont h4 span{
+	padding-left:10px;
+	font-size:12px;
+	font-weight:100;
+	color:#f60;
+}
+.updata_type .tab_cont ol li{
+	margin-bottom:10px;
+}
+.updata_type .tab_cont div{
+	color:#666;
+	padding-left:20px;
+}
+.updata_type .tab_cont ul li{
+	margin:0;
+	padding-left:50px;
+	list-style:none;
+	color:#666;
+}
+/*立即升级*/
+.once_updata{
+	text-align:center;
+	padding:100px 0;
+}
+.once_updata button{
+	font-size:32px;
+	font-weight:700;
+	background:#186196 url(../images/install/header.png) repeat-x;
+	color:#fff;
+	padding:30px 80px;
+	font-weight:100;
+	font-family:"Microsoft Yahei";
+	border:1px solid #186196;
+	cursor:pointer;
+	letter-spacing:2px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

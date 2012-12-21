@@ -7,7 +7,7 @@ Wind::import('WINDID:api.local.WindidUserApi');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: UserController.php 21835 2012-12-13 11:12:32Z gao.wanggao $ 
+ * @version $Id: UserController.php 22061 2012-12-19 03:09:07Z gao.wanggao $ 
  * @package 
  */
 class UserController extends OpenBaseController {
@@ -216,6 +216,13 @@ class UserController extends OpenBaseController {
 		$this->output($result);
 	}
 	
+	public function replaceBlackAction() {
+		$uid = $this->getInput('uid', 'post');
+		$blackList = $this->getInput('blackList', 'post');
+		$result = $this->getApi()->replaceBlack($uid, $blackList);
+		$this->output($result);
+	}
+	
 	/**
 	 * 删除某的黑名单 $blackUid为空删除所有
 	 * Enter description here ...
@@ -229,6 +236,14 @@ class UserController extends OpenBaseController {
 	
 	protected function getApi() {
 		return new WindidUserApi();
+	}
+	
+	protected function getUserDs() {
+		return Windid::load('user.WindidUser');
+	}
+	
+	protected function getBlackDs() {
+		return Windid::load('user.WindidUserBlack');
 	}
 	
 }

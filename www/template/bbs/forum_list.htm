@@ -3,51 +3,172 @@
 <head>
 <template source='TPL:common.head' load='true' />
 <link href="{@theme:css}/forum.css?v={@G:version}" rel="stylesheet" />
+<style>
+/*焦点图*/
+.home_push_slide {
+	height: 240px;
+	overflow: hidden;
+	position: relative;
+	width: 360px;
+	background:#f5f5f5;
+}
+.home_push_slide img{
+	display: block;
+}
+.home_push_slide .num {
+	bottom:5px;
+	right: 5px;
+	position: absolute;
+	z-index:6;
+}
+.home_push_slide .num li {
+	float: left;
+	margin-left: 5px;
+}
+.home_push_slide .num li a {
+	background:#fff;
+	color: #000;
+	padding:0 5px;
+}
+.home_push_slide .num li a:hover,
+.home_push_slide .num li.current a {
+	background: #f60;
+	color: #fff;
+	text-decoration: none;
+}
+.home_push_slide .caption {
+	background:#000;
+	background:rgba(0,0,0,.5);
+	bottom:0px;
+	height:30px;
+	/*opacity: 0.6;*/
+	position: absolute;
+	width: 100%;
+	z-index: 6;
+}
+.home_push_slide .caption p {
+	color: #fff;
+	height: 30px;
+	line-height: 30px;
+	text-indent: 10px;
+	width: 100%;
+}
+.home_push_slide .caption .h2 {
+	height: 30px;
+	line-height: 30px;
+	overflow:hidden;
+	text-indent: 10px;
+}
+.home_push_slide .caption .h2 a {
+	color: #fff;
+	font-size: 12px;
+}
+/*热门推荐*/
+.home_push_hot{
+	padding-left:10px;
+}
+.home_push_hot dl{
+	padding:15px 0 0 0;
+}
+.home_push_hot dt{
+	line-height:1.2;
+	font-weight:700;
+	font-size:16px;
+}
+.home_push_hot dd{
+	padding:8px 0 10px;
+	width:460px;
+}
+.home_push_hot li{
+	font-family:Simsun;
+	float:left;
+	width:47.5%;
+	padding-right:2%;
+	display:inline;
+	line-height:24px;
+	height:24px;
+	overflow:hidden;
+}
+.home_push_hot li em a{
+	color:#ff5500;
+	margin-right:5px;
+}
+</style>
 </head>
 <body>
 <pw-start/>
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<pw-drag id="main_segment"/>
+		<pw-tpl id="main_segment"/>
 		<!--div class="bread_crumb">
 			{@$headguide|html}
 		</div-->
 		<div class="main cc">
-			<pw-drag id="first_segment"/>
 			<div class="forum_page">
 				<div class="bbs_info_box">
 					<span>今日：{$todayposts}</span><i></i><span>昨日：{$bbsinfo['yposts']}</span><i></i><span>最高日：{$bbsinfo['hposts']}</span><i></i><span>帖子：{$article}</span><i></i><span>会员：{$bbsinfo['totalmember']}</span><i></i><span>新会员：<a href="{@url:space/index/run?username=$bbsinfo['newmember']}" target="_blank">{$bbsinfo['newmember']}</a></span>
 				</div>
-				<!--# foreach ($cateList as $_cateId => $_cate) { #-->
-				<div class="box_wrap forum_group">
-					<div class="box_title">
-						<div class="fr">
-							<!--#if ($_cate['manager']) {#-->
-								分栏版主：
-							<!--#foreach ($_cate['manager'] as $_name) {#-->
-								<a class="J_user_card_show" data-username="{$_name}" href="{@url:space/index/run?username=$_name}">{$_name} </a>
-							<!--#}#-->
-							<!--#}#-->
+				<div class="box_wrap">
+					<pw-tpl id="first_segment"/>
+					<!--# foreach ($cateList as $_cateId => $_cate) { #-->
+					<div class="forum_group">
+						<div class="box_title">
+							<div class="fr">
+								<!--#if ($_cate['manager']) {#-->
+									分栏版主：
+								<!--#foreach ($_cate['manager'] as $_name) {#-->
+									<a class="J_user_card_show" data-username="{$_name}" href="{@url:space/index/run?username=$_name}">{$_name} </a>
+								<!--#}#-->
+								<!--#}#-->
+							</div>
+							<h2 class="cname"><a href="{@url:bbs/cate/run?fid=$_cateId}">{$_cate['name']|html}</a></h2>
 						</div>
-						<h2 class="cname"><a href="{@url:bbs/cate/run?fid=$_cateId}">{$_cate['name']|html}</a></h2>
+						<!--#if ($_cate['across'] > 1) {#-->
+						<segment tpl="forum_list_table" name="more_across" args="$_cate,$forumList[$_cateId]" />
+						<!--#} else {#-->
+						<segment tpl="forum_list_table" name="one_across" args="$_cate,$forumList[$_cateId]" />
+						<!--#}#-->
 					</div>
-					<!--#if ($_cate['across'] > 1) {#-->
-					<segment tpl="forum_list_table" name="more_across" args="$_cate,$forumList[$_cateId]" />
-					<!--#} else {#-->
-					<segment tpl="forum_list_table" name="one_across" args="$_cate,$forumList[$_cateId]" />
-					<!--#}#-->
+					<!--# } #-->
 				</div>
-				<!--# } #-->
 			</div>
-			<pw-drag id="forumlist_bottom"/>
+			<pw-tpl id="forumlist_bottom"/>
 		</div>
 	</div>
 
 <template source='TPL:common.footer' load='true' />
 </div>
 <script>
-Wind.use('jquery', 'global');
+Wind.use('jquery', 'global','slides', function(){
+	$('#J_slides').slides({
+		preload: false,
+		preloadImage: '{@theme:images}/common/loading.gif',
+		play: 5000,
+		pause: 100,
+		hoverPause: true,
+		effect : 'slide', //渐隐切换fade, 默认为'slide'滚动
+		crossfade : true, //消去渐隐间隙空白
+		paginationClass : 'J_slides_num',
+		generatePagination : false,
+		animationStart: function(current){
+			$('.caption').animate({
+				bottom:-55
+			},100);
+		},
+		animationComplete: function(current){
+			$('.caption').animate({
+				bottom:0
+			},200);
+		},
+		slidesLoaded: function() {
+			$('.caption').animate({
+				bottom:0
+			},200);
+		}
+	});
+});
+
 </script>
 <pw-end/>
 </body>

@@ -21,14 +21,14 @@
 <div class="wrap">
 	<template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<pw-drag id="main_segment"/>
+		<pw-tpl id="main_segment"/>
 		<div class="bread_crumb">
 			<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/read/run?tid=$tid&fid=$fid" args="$urlargs"/>
 			{@$headguide|html}
 		</div>
 		<div class="main cc"><input type="hidden" id="js-tid" value="$tid" />
 			<div class="read_page" id="J_posts_list">
-				<pw-drag id="first_segment"/>
+				<pw-tpl id="first_segment"/>
 				<div id="app_test"></div>
 				<div id="cloudwind_read_top"></div>
 				<!--# $designPermission = $loginUser->getPermission('design_allow_manage.push');
@@ -57,7 +57,7 @@
 						if ($designPermission > 0) {
 					#-->
 					<!--# if ($hasFirstPart || $hasSecondPart || $hasThirdPart){ #--><i>|</i><!--# } #-->
-					<a data-type="norefresh" href="{@WindUrlHelper::createUrl('design/push/add?fromtype=thread&fromid=' .$tid)}" class="" title="推送">推送</a><!--这玩意交互改下class="mr10 J_manage_single" id="J_push_trigger"  以前的推送class="J_read_push" -->
+					<a data-type="norefresh" href="{@url:design/push/add?fromtype=thread&fromid=$tid}" class="" title="推送">推送</a><!--这玩意交互改下class="mr10 J_manage_single" id="J_push_trigger"  以前的推送class="J_read_push" -->
 					<!--# } #-->
 				</div>
 				<!--# } #-->
@@ -67,24 +67,25 @@
 				<advertisement id='Read.Layer.TidAmong' sys='1'/>
 				<!--# } #-->
 				<!--上一主题下一主题-->
-				<div class="floor_page">
+				<!--div class="floor_page">
 					<a rel="nofollow" href="{@url:bbs/read/next?tid=$tid}" class="next" title="下一主题">下一主题</a>
 					<a rel="nofollow" href="{@url:bbs/read/pre?tid=$tid}" class="pre" title="上一主题">上一主题</a>
-				</div>
+				</div-->
+				<page tpl="TPL:common.page_vertical" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/read/run?tid=$tid&fid=$fid" args="$urlargs"/>
 				<div class="floor">
 					<table width="100%" style="table-layout:fixed;">
 						<tr>
 							<td class="floor_left_none">
 							</td>
 							<td>
-								<a rel="nofollow" href="{@url:bbs/post/run?fid=$pwforum->fid}" id="J_read_post_btn" class="btn_post mr10{$postNeedLogin}">发帖</a>
+								<a rel="nofollow" href="{@url:bbs/post/run?fid=$pwforum->fid}" id="J_read_post_btn" class="btn_post{$postNeedLogin}">发帖</a>
 								<!-- 锁定时间 -->
 								<!--# if($showReply){ #-->
 								<a rel="nofollow" href="{@url:bbs/post/reply/?tid=$tid}" data-referer="true" class="btn_replay{$replyNeedLogin}">回复</a>
 								<!--# } #-->
 								<div class="J_page_wrap" data-key="true">
 								<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/read/run?tid=$tid&fid=$fid" args="$urlargs"/>
-								<div class="pages" style="margin-right:3px;"><a href="{@url:bbs/thread/run?fid=$pwforum->fid}" class="pages_pre">&laquo; 返回列表</a></div>
+								<div class="pages" style="margin-right:3px;"><a href="{@url:bbs/thread/run?fid=$pwforum->fid&page=$fpage}" class="pages_pre" rel="nofollow">&laquo; 返回列表</a></div>
 								</div>
 							</td>
 						</tr>
@@ -98,11 +99,11 @@
 						<!--# } #-->
 					</ul>
 				</div>
-				<pw-drag id="read_bottom"/>
+				<pw-tpl id="read_bottom"/>
 				<div id="cloudwind_read_bottom"></div>
 			</div>
 			<!--# if ($operateReply) { #-->
-			<div id="J_post_manage_main" class="core_pop_wrap J_post_manage_pop" style="display:none;">
+			<div id="J_post_manage_main" class="core_pop_wrap J_post_manage_pop" style="display:none;position:fixed;_position:absolute;">
 				<div class="core_pop">
 					<div style="width:415px;">
 						<div class="pop_top"><a href="#" id="J_post_manage_close" class="pop_close">关闭</a><strong>帖子操作</strong>(已选中&nbsp;<span class="red" id="J_post_checked_count">1</span>&nbsp;篇&nbsp;&nbsp;<a href="" class="s4" id="J_post_manage_checkall" data-type="check">全选</a>)</div>

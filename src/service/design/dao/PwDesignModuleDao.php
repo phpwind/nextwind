@@ -5,13 +5,13 @@ Wind::import('SRC:library.base.PwBaseDao');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignModuleDao.php 17555 2012-09-06 09:43:13Z gao.wanggao $ 
+ * @version $Id: PwDesignModuleDao.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class PwDesignModuleDao extends PwBaseDao {
 	protected $_pk = 'module_id';
 	protected $_table = 'design_module';
-	protected $_dataStruct = array('module_id', 'page_id', 'module_struct', 'model_flag','module_name', 'module_property', 'module_title', 'module_style', 'module_compid', 'module_tpl', 'module_cache', 'isused',  'module_type');
+	protected $_dataStruct = array('module_id', 'page_id', 'segment', 'module_struct', 'model_flag','module_name', 'module_property', 'module_title', 'module_style', 'module_compid', 'module_tpl', 'module_cache', 'isused',  'module_type');
 	
 	public function getModule($id) {
 		return $this->_get($id);

@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignPageBo.php 21891 2012-12-14 12:02:44Z gao.wanggao $ 
+ * @version $Id: PwDesignPageBo.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class PwDesignPageBo {
@@ -100,6 +100,7 @@ class PwDesignPageBo {
 	}
     
     public function getDataByModules($moduleids = array()) {
+    	
     	foreach ($moduleids AS &$_moduleid) $_moduleid = (int)$_moduleid;
     	$ds = $this->_getDataDs();
     	$time = Pw::getTime();

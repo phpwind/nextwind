@@ -1,5 +1,17 @@
 <?php
 Wind::import('SRC:bootstrap.adminBoot');
+Wind::import('APPS:pwadmin.service.srv.userSource.AdminUserSourceDb');
+Wind::import('APPS:pwadmin.service.srv.userSource.AdminUserSourceFounder');
+Wind::import('APPS:pwadmin.service.bo.AdminUserBo');
+/**
+ * pwadmin后台应用引导脚本
+ *
+ * @author Qiong Wu <papa0924@gmail.com>
+ * @copyright ©2003-2103 phpwind.com
+ * @license http://www.windframework.com
+ * @version $Id$
+ * @package wind
+ */
 class pwadminBoot extends adminBoot {
 	/**
 	 * 后台菜单访问路径，
@@ -23,7 +35,13 @@ class pwadminBoot extends adminBoot {
 	 *
 	 * @var string
 	 */
-	public $searchFile = '';
+	public $searchFile = 'search';
+	/**
+	 * 后台log记录
+	 *
+	 * @var string
+	 */
+	public $logFile = 'DATA:log.admin_log.php';
 	/**
 	 * 数据表标识，
 	 * 默认为空，为空时将不对数据表进行额外标识，所建立的数据表将为原始数据表
@@ -39,17 +57,50 @@ class pwadminBoot extends adminBoot {
 	 * @var string
 	 */
 	public $dbComponentName = '';
+	/**
+	 * 设置应用依赖服务配置
+	 *
+	 * @var array
+	 */
+	protected $dependenceServiceDefinitions = array(
+		'adminUserService' => array(
+			'path' => 'APPS:pwadmin.service.srv.do.AdminUserDependenceService'));
 	
 	/* (non-PHPdoc)
 	 * @see phpwindBoot::init()
 	 */
 	public function init() {
 		parent::init();
-		
 		Wind::getComponent('router')->getRoute('pw') || Wind::getComponent('router')->addRoute('pw', 
 			WindFactory::createInstance(Wind::import('LIB:route.PwRoute')));
 		Wind::getComponent('router')->addRoute('admin', 
 			WindFactory::createInstance(Wind::import('LIB:route.AdminRoute')), true);
+	}
+	
+	/* (non-PHPdoc)
+	 * @see phpwindBoot::_getLoginUser()
+	*/
+	protected function _getLoginUser() {
+		if (!($userCookie = Pw::getCookie('AdminUser'))) {
+			$password = '';
+			$us = new AdminUserSourceDb(0);
+		} else {
+			list($type, $uid, $password) = explode("\t", Pw::decrypt($userCookie));
+			if ($type == AdminUserService::FOUNDER) {
+				$us = new AdminUserSourceFounder($uid);
+			} else {
+				$us = new AdminUserSourceDb($uid);
+			}
+		}
+		Pw::setCookie('AdminUser', $userCookie, 1800);
+		
+		$user = new AdminUserBo($us);
+		if (!$user->isExists() || Pw::getPwdCode($user->info['password']) != $password) {
+			$user->reset();
+		} else {
+			unset($user->info['password']);
+		}
+		return $user;
 	}
 }
 

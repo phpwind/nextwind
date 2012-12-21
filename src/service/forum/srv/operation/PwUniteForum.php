@@ -12,7 +12,7 @@ Wind::import('HOOK:PwUniteForum.PwUniteForumDoMoveAttach');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUniteForum.php 21318 2012-12-04 09:24:09Z jieyin $
+ * @version $Id: PwUniteForum.php 22211 2012-12-19 17:45:08Z jieyin $
  * @package forum
  */
 
@@ -37,9 +37,6 @@ class PwUniteForum extends PwDoProcess {
 	}
 
 	protected function run() {
-		if ($this->fid == $this->tofid) {
-			return new PwError('BBS:forum.unite.error.same');
-		}
 		$forum = new PwForumBo($this->fid, true);
 		if (!$forum->isForum(true)) {
 			return new PwError('BBS:forum.unite.error.fid.exists.not');
@@ -57,6 +54,9 @@ class PwUniteForum extends PwDoProcess {
 		}
 		if ($toforum->foruminfo['type'] == 'category') {
 			return new PwError('BBS:forum.unite.error.tofid.category');
+		}
+		if ($this->fid == $this->tofid) {
+			return new PwError('BBS:forum.unite.error.same');
 		}
 
 		Wekit::load('forum.PwForum')->deleteForum($this->fid);

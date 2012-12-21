@@ -47,7 +47,7 @@
 			<td>
 				<input name="onlinetime" type="number" class="input length_5 mr5" value="{$config['onlinetime']}">分钟
 			</td>
-			<td class="td_tips"><div>在设定时间范围内，如果会员没有对站点进行任何操作，则会员会自动退出登录</div></td>
+			<td class="td_tips"><div>在设定时间范围内，如果会员没有对站点进行任何操作，则会员的在线状态会变为离线状态</div></td>
 		</tr>
 		<tr>
 			<th>DEBUG 模式运行站点</th>
@@ -86,7 +86,7 @@
 			<td>
 				<input name="cookiePre" type="text" class="input length_5" value="{$config['cookie.pre']}">
 			</td>
-			<td><div class="fun_tips">默认为空。如果您的站点有两个不同的网址，如“phpwind.net”、“bbs.phpwind.net”，需要分别设置各个的前缀，防止cookie混乱。<br /></div></td>
+			<td><div class="fun_tips">如果您的站点有两个不同的网址，如“phpwind.net”、“bbs.phpwind.net”，需要分别设置各个的前缀，防止cookie混乱。<br /></div></td>
 		</tr>
 	</table>
 </div>

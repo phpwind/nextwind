@@ -37,7 +37,7 @@ Wind.use('region', function(){
 				eachSchoolData(GV.SCHOOL_CONFIG[areaid]);
 			}else{
 				school_list.html('<tr><td colspan="2"><span class="tips_loading">正在查询</span></td></tr>');
-				$.getJSON(GV.URL.SCHOOL, {typeid : typeid, areaid : areaid}, function(data){
+				$.post(GV.URL.SCHOOL, {typeid : typeid, areaid : areaid}, function(data){
 					if(!data) {
 						school_list.html('');
 					}else{
@@ -45,7 +45,7 @@ Wind.use('region', function(){
 						eachSchoolData(data[areaid]);
 					}
 					school_add.show();
-				});
+				}, 'json');
 			}
 
 			yarnball_province.show().children('a.J_yarnball').text(p_current.text());

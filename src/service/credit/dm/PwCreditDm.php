@@ -5,7 +5,7 @@
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: PwCreditDm.php 21722 2012-12-12 09:28:56Z gao.wanggao $
+ * @version $Id: PwCreditDm.php 22114 2012-12-19 08:18:05Z gao.wanggao $
  * @package windid.service.user.dm
  */
 class PwCreditDm {
@@ -31,17 +31,12 @@ class PwCreditDm {
 	}
 	
 	public function addCredit($cType, $value) {
-		//if (!$this->_isLegal($cType) || $value == 0) return;
-		//$this->_increaseData['credit' . $cType] = $value;
 		$this->getDm()->addCredit($cType, $value);
 		return $this;
 	}
 
 	public function setCredit($cType, $value) {
 		$this->getDm()->setCredit($cType, $value);
-		//if (!$this->_isLegal($cType)) return;
-		//$this->_data['field'] =  $cType;
-		//$this->_data['credit'] = $value;
 		return $this;
 	}
 	

@@ -34,7 +34,9 @@
 			</thead>
 			<tbody id="J_link_tr">
 			<!--# if ($announceInfos) { #-->
-			<!--# foreach ($announceInfos as $value) { 
+			<!--#
+			  $now = Pw::str2time(Pw::time2str(Pw::getTime(), 'Y-m-d'));
+			 foreach ($announceInfos as $value) { 
 			    $status = null;
 			    $subject = $value['subject'] ? Pw::substrs($value['subject'], 30) : null;
 			    #-->
@@ -42,9 +44,16 @@
 				<td><input class="J_check" data-xid="J_check_x" data-yid="J_check_y" type="checkbox" name="aid[]" value="{$value['aid']}"></td>
 				<td><input class="input length_0" type="text" name="vieworder[{$value['aid']}]" value="{$value['vieworder']}"></td>
 				<td>{$subject}</td>
-				<!--# if(Pw::str2time(Pw::time2str(Pw::getTime(), 'Y-m-d')) < $value['start_date']){$status = '未发布';$statusColor = 'red';}
-			    if((Pw::str2time(Pw::time2str(Pw::getTime(), 'Y-m-d')) >= $value['start_date']) && (Pw::str2time(Pw::time2str(Pw::getTime(), 'Y-m-d')) <= $value['end_date'])){$status = '发布中';$statusColor = 'green';}
-			    if(Pw::str2time(Pw::time2str(Pw::getTime(), 'Y-m-d')) > $value['end_date']){$status = '已过期';$statusColor = 'gray';} 
+				<!--# 
+				if($now < $value['start_date']) {
+				 	$status = '未发布';$statusColor = 'red';
+				}
+			    if ($now >= $value['start_date'] && (0 == $value['end_date'] || $now <= $value['end_date']))	{
+			    	$status = '发布中';$statusColor = 'green';
+			    }
+			    if ($value['end_date'] && $now > $value['end_date']) {
+			  	  	$status = '已过期';$statusColor = 'gray';
+			  	} 
 			    $start_date = $value['start_date'] ? Pw::time2str($value['start_date'], 'Y-m-d') : null;
 			    $end_date = $value['end_date'] ? Pw::time2str($value['end_date'], 'Y-m-d') : null;
 			    #-->

@@ -17,7 +17,9 @@
 
 	if(!forum_data.data) {
 		//请求版块数据
-		$.getJSON(GV.URL.FORUM_LIST+'&withMyforum=1', function(data){
+		$.post(GV.URL.FORUM_LIST, {
+				'withMyforum' : 1
+			}, function(data){
 			if(data.state == 'success') {
 				forum_data.data = $.parseJSON(data.data);
 
@@ -30,7 +32,7 @@
 				head_forum_ct[0].innerHTML = '<div class="source_forum" tabindex="0" role="combobox" aria-owns="J_forum_list" aria-label="选择要发帖版块的分类，按回车键选定，按tab键盘进行切换"><h4>选择分类</h4><ul id="J_forum_list">'+ cate_arr.join('') +'</ul></div><div class="target_forum" tabindex="0" role="combobox" aria-owns="J_forum_ul" aria-label="选择要发帖的版块，按回车键选定，按tab键盘进行切换"><h4>选择版块</h4><ul id="J_forum_ul"></ul></div>'
 				forum_ul = document.getElementById('J_forum_ul');
 			}
-		});
+		}, 'json');
 	}
 
 

@@ -42,7 +42,11 @@ return array(
 			),
 			'remind' => array(
 				'class' => 'SRV:forum.srv.post.do.PwPostDoRemind',
-			)
+			),
+			'word' => array(
+				'class' => 'SRV:forum.srv.post.do.PwReplyDoWord',
+				'description' => '回复-敏感词'
+			),
 		)
 	),
 	'm_PwReplyPost' => array(
@@ -71,6 +75,10 @@ return array(
 			'notice' => array(
 				'class' => 'SRV:forum.srv.post.do.PwReplyDoNotice',
 				'description' => '回复-通知'
+			),
+			'word' => array(
+				'class' => 'SRV:forum.srv.post.do.PwReplyDoWord',
+				'description' => '回复-敏感词'
 			),
 		)
 	),
@@ -125,11 +133,6 @@ return array(
 				'method' => 'run', 
 				'expression' => 'from_type.post==like',
 				'description' => '回复发布 - 最后喜欢的回复'
-			),
-			'word' => array(
-				'class' => 'SRV:forum.srv.post.injector.PwPostDoWordInjector', 
-				'method' => 'doadd',
-				'description' => '帖子发布 - 敏感词'
 			)
 		)
 	), 
@@ -292,6 +295,28 @@ return array(
 			'threadsDigestIndex' => array(
 				'class' => 'SRV:forum.dao.PwThreadsDigestIndexDao',
 				'method' => 'batchUpdateThread',
+				'loadway' => 'loadDao'
+			),
+		)
+	),
+	's_PwThreadsDao_revertTopic' => array(
+		'description' => '还原帖子时，调用',
+		'param' => array('@param array $tids 帖子tid序列', '@return void'),
+		'interface' => '',
+		'list' => array(
+			'threadsIndex' => array(
+				'class' => 'SRV:forum.dao.PwThreadsIndexDao',
+				'method' => 'revertTopic',
+				'loadway' => 'loadDao'
+			),
+			'threadsCateIndex' => array(
+				'class' => 'SRV:forum.dao.PwThreadsCateIndexDao',
+				'method' => 'revertTopic',
+				'loadway' => 'loadDao'
+			),
+			'threadsDigestIndex' => array(
+				'class' => 'SRV:forum.dao.PwThreadsDigestIndexDao',
+				'method' => 'revertTopic',
 				'loadway' => 'loadDao'
 			),
 		)
@@ -832,11 +857,6 @@ return array(
 				'class' => 'SRV:forum.srv.post.injector.PwPostDoAttInjector', 
 				'method' => 'run', 
 				'expression' => 'flashatt.post!=0'
-			),
-			'word' => array(
-				'class' => 'SRV:forum.srv.post.injector.PwPostDoWordInjector', 
-				'method' => 'doadd',
-				'description' => '帖子发布 - 敏感词'
 			)
 		)
 	), 
@@ -982,6 +1002,18 @@ return array(
 		'interface' => 'SRV:mobile.srv.do.PwVerifyMobileBase',
 		'list' => array(
 			
+		)
+	),
+	
+	'm_PwFreshReplyByWeibo' => array(
+		'description' => '微博',
+		'param' => array(),
+		'interface' => 'SRV:attention.srv.reply.weibo.PwWeiboDoBase',
+		'list' => array(
+			'word' => array(
+				'class' => 'SRV:attention.srv.reply.weibo.PwWeiboDoWord',
+				'description' => '微博-敏感词'
+			),
 		)
 	),
 );

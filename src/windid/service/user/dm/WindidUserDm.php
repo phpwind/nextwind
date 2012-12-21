@@ -6,7 +6,7 @@ Wind::import('WINDID:library.base.WindidBaseDm');
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidUserDm.php 21835 2012-12-13 11:12:32Z gao.wanggao $
+ * @version $Id: WindidUserDm.php 22295 2012-12-21 05:39:44Z gao.wanggao $
  * @package windid.service.user.dm
  */
 class WindidUserDm extends WindidBaseDm {
@@ -235,11 +235,6 @@ class WindidUserDm extends WindidBaseDm {
 	 */
 	public function setMessageCount($messages){
 		$this->_data['messages'] = intval($messages);
-	}
-	
-
-	public function setLastvisit($time){
-		$this->_data['lastvisit'] = intval($time);
 	}
 	
 	/* (non-PHPdoc)

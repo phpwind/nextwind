@@ -6,7 +6,7 @@ Wind::import('WINDID:library.http.AbstractWindidHttp');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidHttpSocket.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidHttpSocket.php 22172 2012-12-19 12:27:19Z gao.wanggao $
  * @package http
  * @subpackage transfer
  */
@@ -52,7 +52,7 @@ class WindidHttpSocket extends AbstractWindidHttp {
 		if (isset($matches[1])) {
 			$response = substr($response, strlen($response) - intval($matches[1]));
 		} else {
-			$response = file_get_contents($this->url);
+			$response = @file_get_contents($this->url);
 		}
 		return $response;
 	}

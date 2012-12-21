@@ -4,7 +4,7 @@
  * @Descript: 前台-帖子列表操作
  * @Author	: linhao87@gmail.com
  * @Depend	: jquery.js(1.7 or later), jquery.form, TID
- * $Id: threadForumManage.js 21917 2012-12-17 03:53:35Z hao.lin $
+ * $Id: threadForumManage.js 22305 2012-12-21 07:02:27Z hao.lin $
  */
 
 Wind.use('dialog', function(){
@@ -49,8 +49,14 @@ Wind.use('dialog', function(){
 				return;
 			}
 
-			//global.js
-			Wind.Util.popPos(post_manage_main);
+			if(is_ie6) {
+				Wind.Util.popPos(post_manage_main);
+			}else{
+				post_manage_main.css({
+					top : ($(window).height() - post_manage_main.height())/2,
+					left : ($(window).width() - post_manage_main.width())/2
+				}).show();
+			}
 			
 			//窗口拖动
 			Wind.use('draggable', function(){

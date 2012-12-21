@@ -6,7 +6,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadsDao.php 15910 2012-08-15 08:47:51Z jinlong.panjl $
+ * @version $Id: PwThreadsDao.php 22309 2012-12-21 07:58:00Z jieyin $
  * @package forum
  */
 
@@ -88,7 +88,9 @@ class PwThreadsDao extends PwBaseDao {
 
 	public function revertTopic($tids) {
 		$sql = $this->_bindSql('UPDATE %s SET disabled=ischeck^1 WHERE tid IN %s', $this->getTable(), $this->sqlImplode($tids));
-		return $this->getConnection()->execute($sql);
+		$result = $this->getConnection()->execute($sql);
+		PwSimpleHook::getInstance('PwThreadsDao_revertTopic')->runDo($tids);
+		return $result;
 	}
 	
 	public function deleteThread($tid) {

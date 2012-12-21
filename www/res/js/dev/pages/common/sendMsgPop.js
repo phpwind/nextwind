@@ -134,14 +134,16 @@
 			users_pop.toggle();
 			
 			if(!follows_load) {
-				$.getJSON(users_url+'&type=follows', function(data){
+				$.post(users_url, {
+					'type' : 'follows'
+				}, function(data){
 					users_wrap.html('<div class="follow_list" id="J_list_follows">我的关注为空</div><div class="follow_list" id="J_list_fans" style="display:none;"><div class="pop_loading"></div></div>');
 					var list_follows = $('#J_list_follows');
 
 					if(data.state == 'success') {
 						var li_arr = [];
 						$.each(data['data'], function(i, o){
-							li_arr.push('<li><label><input type="checkbox" value="'+ o.username +'">'+ o.username +'</label></li>');
+							li_arr.push('<li title="'+ o.username +'"><label><input type="checkbox" value="'+ o.username +'">'+ o.username +'</label></li>');
 						});
 						
 						list_follows.html('<ul class="">'+ li_arr.join('') +'</ul>');
@@ -151,7 +153,7 @@
 					}
 
 					follows_load = true;		//关注已获取
-				});
+				}, 'json');
 			}
 		});
 		
@@ -163,11 +165,13 @@
 			if(v == 'fans') {
 				if(!fans_load){
 					//粉丝未获取则发请求
-					$.getJSON(users_url+'&type=fans', function(data){
+					$.post(users_url, {
+						'type':'fans'
+					}, function(data){
 						var li_arr = [], list_fans = $('#J_list_fans');
 						if(data.state == 'success') {
 							$.each(data['data'], function(i, o){
-								li_arr.push('<li><label><input type="checkbox" value="'+ o.username +'">'+ o.username +'</label></li>');
+								li_arr.push('<li title="'+ o.username +'"><label><input type="checkbox" value="'+ o.username +'">'+ o.username +'</label></li>');
 							});
 							
 							if(li_arr.length) {
@@ -180,7 +184,7 @@
 						}else if(data.state == 'fail'){
 							list_fans.html('<div style="padding:40px 0 20px 80px;"><div class="not_content_mini">我的粉丝为空</div></div>');
 						}
-					});
+					}, 'json');
 				}
 				
 			}

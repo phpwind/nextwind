@@ -21,7 +21,7 @@ topictype.error=非法的主题分类
 perday.max = "今日发帖数已达到最高值{max}"
 
 topic.ischeck = "您发布的主题需要审核后才能显示"
-reply.ischeck = "您发布的回复需要审核后才能显示"
+reply.ischeck = "您发布的回复需内容要审核后才能显示"
 
 modify.error.self = "您没有权限编辑其他人的帖子"
 modify.timelimit = "本版帖子超过{minute}分钟，不允许编辑"

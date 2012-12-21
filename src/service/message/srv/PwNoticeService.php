@@ -153,9 +153,8 @@ class PwNoticeService {
 		if ($messageInfos) {
 			foreach ($messageInfos as $v) {
 				$noticeKey = array_search($v['from_uid'], $messageFromUids);
-				$lastMessage = @unserialize($v['last_message']);
 				$extend = array(
-					'title' => $lastMessage['content'],
+					'title' => $this->_parseUrl($v['last_message']['content']),
 					'unread_count' => $v['unread_count'],
 					'message_count' => $v['message_count'],
 				);
@@ -291,6 +290,15 @@ class PwNoticeService {
 		} else {
 			return $this->$actionMethod();
 		}
+	}
+	
+	private function _parseUrl($message) {
+		$searcharray = array(
+			"/\[url=((https?|ftp|gopher|news|telnet|mms|rtsp|thunder|ed2k)?[^\[\s]+?)(\,(1)\/?)?\](.+?)\[\/url\]/eis",
+			"/\[url\]((https?|ftp|gopher|news|telnet|mms|rtsp|thunder|ed2k)?[^\[\s]+?)\[\/url\]/eis"
+		);
+		preg_match("/\[url\]((https?|ftp|gopher|news|telnet|mms|rtsp|thunder|ed2k)?[^\[\s]+?)\[\/url\]/eis", $message, $match);
+		return $match[1] ? $match[1] : $message;
 	}
 	
 	/**

@@ -6,7 +6,7 @@
  * @author peihong.zhang
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidMessageDao.php 22040 2012-12-18 10:14:51Z jinlong.panjl $
  * @package forum
  */
 
@@ -115,7 +115,7 @@ class WindidMessageDao extends WindidBaseDao {
 					break;
 				case 'keyword':
 					$where .= ' AND `content` LIKE ?';
-					$array[] = $value;
+					$array[] = '%' . $value . '%';
 					break;
 				case 'starttime':
 					$where .= ' AND `created_time` >=?';

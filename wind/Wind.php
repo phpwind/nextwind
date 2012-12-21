@@ -12,7 +12,7 @@ define('WIND_PATH', dirname(__FILE__));
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-9
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: Wind.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: Wind.php 3859 2012-12-18 09:25:51Z yishuo $
  */
 class Wind {
 	public static $_imports = array();
@@ -86,11 +86,13 @@ class Wind {
 	 * @return boolean
 	 */
 	public static function registeComponent($componentInstance, $componentName, $scope = 'application') {
-		if (is_array($componentInstance))
-			WindFactory::_getInstance()->addClassDefinitions($componentName, $componentInstance);
-		elseif (is_object($componentInstance))
+		if (is_array($componentInstance)) {
+			isset($componentInstance['scope']) || $componentInstance['scope'] = $scope;
+			WindFactory::_getInstance()->loadClassDefinitions(
+				array($componentName => $componentInstance));
+		} elseif (is_object($componentInstance)) {
 			WindFactory::_getInstance()->registInstance($componentInstance, $componentName, $scope);
-		else
+		} else
 			throw new WindException('registe component fail, array or object is required', 
 				WindException::ERROR_PARAMETER_TYPE_ERROR);
 	}
@@ -166,15 +168,18 @@ class Wind {
 		if (!$path) return;
 		if (!empty($alias)) {
 			$alias = strtolower($alias);
-			if (!isset(self::$_namespace[$alias]) || $reset) self::$_namespace[$alias] = rtrim($path, '\\/') . DIRECTORY_SEPARATOR;
+			if (!isset(self::$_namespace[$alias]) || $reset) self::$_namespace[$alias] = rtrim(
+				$path, '\\/') . DIRECTORY_SEPARATOR;
 		}
 		if ($includePath) {
 			if (empty(self::$_includePaths)) {
 				self::$_includePaths = array_unique(explode(PATH_SEPARATOR, get_include_path()));
-				if (($pos = array_search('.', self::$_includePaths, true)) !== false) unset(self::$_includePaths[$pos]);
+				if (($pos = array_search('.', self::$_includePaths, true)) !== false) unset(
+					self::$_includePaths[$pos]);
 			}
 			array_unshift(self::$_includePaths, $path);
-			if (set_include_path('.' . PATH_SEPARATOR . implode(PATH_SEPARATOR, self::$_includePaths)) === false) {
+			if (set_include_path(
+				'.' . PATH_SEPARATOR . implode(PATH_SEPARATOR, self::$_includePaths)) === false) {
 				throw new Exception('[wind.register] set include path error.');
 			}
 		}
@@ -292,7 +297,8 @@ class Wind {
 		self::$_classes = array(
 			'AbstractWindBootstrap' => 'base/AbstractWindBootstrap', 
 			'AbstractWindFrontController' => 'base/AbstractWindFrontController', 
-			'IWindApplication' => 'base/IWindApplication', 
+			'AbstractWindApplication' => 'base/AbstractWindApplication', 
+			'IWindController' => 'base/IWindController', 
 			'IWindRequest' => 'base/IWindRequest', 
 			'IWindResponse' => 'base/IWindResponse', 
 			'WindActionException' => 'base/WindActionException', 
@@ -308,8 +314,8 @@ class Wind {
 			'WindHandlerInterceptor' => 'filter/WindHandlerInterceptor', 
 			'WindHandlerInterceptorChain' => 'filter/WindHandlerInterceptorChain', 
 			'WindLogger' => 'log/WindLogger', 
-			'WindLangResource' => 'i18n/WindLangResource',
-			'WindConfigParser' => 'parser/WindConfigParser',
+			'WindLangResource' => 'i18n/WindLangResource', 
+			'WindConfigParser' => 'parser/WindConfigParser', 
 			'WindArray' => 'utility/WindArray', 
 			'WindConvert' => 'utility/WindConvert', 
 			'WindCookie' => 'utility/WindCookie', 

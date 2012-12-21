@@ -9,16 +9,16 @@
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<pw-drag id="main_segment"/>
+		<pw-tpl id="main_segment"/>
 		<div class="bread_crumb">
 			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:tag/index/run}">话题</a><em>&gt;</em><a href="{@url:tag/index/view?name=$tag['tag_name']}">{$tag['tag_name']}</a>
 		</div>
-		<pw-drag id="myTagPage_segment"/>
+		<pw-tpl id="myTagPage_segment"/>
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content">
 					<div class="box_wrap tag_info_box cc">
-						<div class="banner"><img src="{@G:url.attach}/{$tag['tag_logo']}" width="110" alt="{$tag['tag_name']}" onerror="this.onerror=null;this.src='{@theme:images}/tags/default.png'"/></div>
+						<div class="banner"><img src="{@Pw::getPath($tag['tag_logo'])}" width="110" alt="{$tag['tag_name']}" onerror="this.onerror=null;this.src='{@theme:images}/tags/default.png'"/></div>
 						<div class="name"><h3>{$tag['tag_name']}</h3>
 						<!--# if (!$tag['attention']) { #-->
 						<a rel="nofollow" id="J_follow_btn" data-type="add" data-id="{$tag['tag_id']}" href="{@WindUrlHelper::createUrl('tag/index/attention?id='.$tag['tag_id'].'&type=add')}" class="core_follow J_qlogin_trigger">关注该话题</a>
@@ -78,7 +78,9 @@
 						<!--# if ($contents) { #-->
 						<div class="tag_view_list">
 							<div class="feed_lists" id="J_tag_feed_lists">
-								<!--# foreach ($contents as $key => $value) { #-->
+								<!--# foreach ($contents as $key => $value) { 
+									if (!$value['content']) continue;
+								#-->
 								<dl class="cc">
 									<dt class="feed_face"><a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $value['created_userid'])}" class="J_user_card_show" data-uid="{$value['created_userid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['created_username']}" /></a></dt>
 									<dd class="feed_content">

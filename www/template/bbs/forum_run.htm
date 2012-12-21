@@ -12,7 +12,7 @@
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<pw-drag id="main_segment"/>
+		<pw-tpl id="main_segment"/>
 		<div class="bread_crumb" id="bread_crumb">
 			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:bbs/forum/run}">本站新帖</a>
 		</div>
@@ -20,7 +20,7 @@
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content cc">
-					<pw-drag id="first_segment"/>
+					<pw-tpl id="first_segment"/>
 					<advertisement id='Thread.Top' sys='1'/>
 					<div class="box_wrap thread_page J_check_wrap">
 						<nav>
@@ -93,7 +93,7 @@
 						<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/forum/run" args="$urlargs"/>
 						</div>
 					</div>
-					<pw-drag id="forum_bottom"/>
+					<pw-tpl id="forum_bottom"/>
 					<!--# if ($operateThread){ #-->
 					<div id="J_post_manage_main" class="core_pop_wrap J_post_manage_pop" style="display:none;">
 						<div class="core_pop">

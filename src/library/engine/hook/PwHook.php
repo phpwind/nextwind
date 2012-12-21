@@ -7,23 +7,22 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author JianMin Chen <sky_hold@163.com> 2011-12-19
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwHook.php 20816 2012-11-12 06:47:39Z jieyin $
+ * @version $Id: PwHook.php 22215 2012-12-19 18:28:49Z jieyin $
  * @package wekit
  * @subpackage engine
  */
 class PwHook {
-
+	
 	/**
 	 * @var WindNormalViewerResolver
 	 */
 	private static $viewer = null;
 	private static $__alias = '';
 	private static $methods = array();
-
 	private static $hooks = array();
 	private static $prekeys = array();
 	private static $prehooks = array();
-	
+
 	/**
 	 * 预设查询键值，批量查询缓存(性能优化设置)
 	 *
@@ -35,7 +34,7 @@ class PwHook {
 			self::$prekeys[] = $key;
 		}
 	}
-	
+
 	/**
 	 * 初始化注册列表
 	 *
@@ -48,7 +47,7 @@ class PwHook {
 		}
 		self::$prekeys = array();
 	}
-	
+
 	/**
 	 * 获得指定扩展点的全部扩展调用
 	 *
@@ -66,7 +65,7 @@ class PwHook {
 		}
 		return self::$hooks[$registerKey];
 	}
-	
+
 	/**
 	 * 手动注册钩子
 	 *
@@ -156,11 +155,13 @@ class PwHook {
 		if ($viewer instanceof WindViewerResolver) self::$viewer = $viewer;
 		$_prefix = str_replace(array(':', "."), '_', $template);
 		$alias = '__segment_' . strtolower($alias ? $alias : $_prefix);
-		list($templateFile, $cacheCompileFile) = self::$viewer->getWindView()->getViewTemplate($template);
+		list($templateFile, $cacheCompileFile) = self::$viewer->getWindView()->getViewTemplate(
+			$template);
 		$pathinfo = pathinfo($cacheCompileFile);
 		$cacheCompileFile = $pathinfo['dirname'] . '/' . $alias . '.' . $pathinfo['extension'];
 		$_method = strtoupper($func ? $_prefix . '_' . $func : $_prefix);
 		if (WIND_DEBUG) {
+			WindFolder::mkRecur(dirname($cacheCompileFile));
 			WindFile::write($cacheCompileFile, '', WindFile::READWRITE);
 		} else {
 			if (!function_exists($_method) && is_file($cacheCompileFile)) {
@@ -180,11 +181,13 @@ class PwHook {
 				$_tmpArgs .= '$' . trim($_k) . ',';
 			}
 			$windTemplate = Wind::getComponent('template');
-			$_content[] = '<?php if (!function_exists("' . $method . '")) {function ' . $method . '(' . trim($_tmpArgs, 
-				',') . '){?>';
+			$_content[] = '<?php if (!function_exists("' . $method . '")) {function ' . $method . '(' . trim(
+				$_tmpArgs, ',') . '){?>';
 			$_content[] = $windTemplate->compileStream($_item[0], self::$viewer);
 			$_content[] = '<?php }}?>';
 		}
+		
+		WindFolder::mkRecur(dirname($cacheCompileFile));
 		WindFile::write($cacheCompileFile, implode("\r\n", $_content), WindFile::APPEND_WRITE);
 		include $cacheCompileFile;
 		call_user_func_array($_method, $args);
@@ -248,7 +251,7 @@ class PwHook {
 				return Wind::getApp()->getRequest()->getRequest($key);
 		}
 	}
-	
+
 	/**
 	 * 获取配置条件约束
 	 */
@@ -285,11 +288,13 @@ class PwHook {
 	 * @return array
 	 */
 	private static function _resolveTemplate($template, $_prefix) {
-		if (false === ($content = WindFile::read($template))) throw new PwException('template.path.fail', 
+		if (false === ($content = WindFile::read($template))) throw new PwException(
+			'template.path.fail', 
 			array('{parm1}' => 'wekit.engine.hook.PwHook._resolveTemplate', '{parm2}' => $template));
 		
 		self::$methods = array();
-		$content = preg_replace_callback('/<(\/)?hook-action[=,\w\s\'\"]*>(\n)*/i', 'PwHook::_pregContent', $content);
+		$content = preg_replace_callback('/<(\/)?hook-action[=,\w\s\'\"]*>(\n)*/i', 
+			'PwHook::_pregContent', $content);
 		$content = explode("</hook-action>", $content);
 		$_content = array();
 		$_i = 0;

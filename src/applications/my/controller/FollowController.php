@@ -7,7 +7,7 @@ Wind::import('SRV:attention.PwAttentionType');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: FollowController.php 21930 2012-12-17 06:40:34Z jinlong.panjl $
+ * @version $Id: FollowController.php 22068 2012-12-19 03:45:50Z jinlong.panjl $
  * @package forum
  */
 
@@ -213,6 +213,7 @@ class FollowController extends PwBaseController {
 		$uid = (int)$this->getInput('uid');
 		$result = $this->_getRecommendFriendsDs()->getSameUser($this->loginUser->uid, $uid);
 		$sameUser = $result['recommend_user'] ? unserialize($result['recommend_user']) : array();
+		$sameUser['sameUser'] = $sameUser['sameUser'] ? array_slice($sameUser['sameUser'], 0, 3) : array();
 		$this->setOutput($sameUser, 'sameUser');
 		$this->setTemplate('TPL:my.recommend_same_user');
 	}

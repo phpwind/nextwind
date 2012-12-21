@@ -45,7 +45,7 @@
 						<select id="J_sort_1" class="mr10" name="topictype">
 							<option value="0">请选择分类</option>
 							<!--# foreach($topictypes['topic_types'] as $v) { #-->
-							<option value="{$v['id']}">{$v['name']}</option>
+							<option value="{$v['id']}">{@strip_tags($v['name'])}</option>
 							<!--# } #-->
 						</select>
 						<select id="J_sort_2" class="mr10" style="display:none;" name="sub_topictype">
@@ -276,7 +276,7 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function() {
 				$.getJSON($this.attr('href'), function(data){
 					if(data.state === 'success') {
 						$.each(data.data, function(i, o){
-							li_arr.push('<li><a href="{@url:bbs/draft/doDelete}&id='+ o.id +'" class="pop_close J_draft_del" title="删除草稿">[删除]</a><a href="" data-id="'+ o.id +'" class="insert J_draft_insert" title="载入草稿">[载入]</a><span class="J_draft_title">'+ o.title +'</span><span>'+ o.created_time +'</span></li>');
+							li_arr.push('<li><a href="{@url:bbs/draft/doDelete?id=}'+o.id+'" class="pop_close J_draft_del" title="删除草稿">[删除]</a><a href="" data-id="'+ o.id +'" class="insert J_draft_insert" title="载入草稿">[载入]</a><span class="J_draft_title">'+ o.title +'</span><span>'+ o.created_time +'</span></li>');
 
 							//存入内容
 							content_cache[o.id] = o.content;
@@ -451,7 +451,7 @@ var forceTopic = '{$forceTopic}';//是否强制主题分类，1强制
 			});
 			if(needPop === true){
 				//如果满足条件，调用弹窗显示分类
-				Wind.js(GV.JS_ROOT + 'util_libs/topicType.js?v=' + GV.JS_VERSION, function(){
+				Wind.js(GV.JS_ROOT + 'pages/bbs/topicType.js?v=' + GV.JS_VERSION, function(){
 					var url = GV.URL.TOPIC_TYPIC;
 					var fid = '{$fid}';
 					var topic = new ShowTopicPop({url: url, fid: fid, callback: function(data){

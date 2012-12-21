@@ -1,7 +1,8 @@
 <!doctype html>
 <html>
 <head>
-<title><?php echo $message; ?></title>
+<title><?php echo WindSecurity::escapeHTML($title); ?></title>
+<meta name="robots" content="noindex,nofollow">
 <style>
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,p,blockquote,th,td {
 	margin: 0;

@@ -72,7 +72,7 @@
 						<td>
 							<input type="hidden" value="{$task['icon']}" name="oldicon" />
 							<div class="single_image_up"><a href="">重新选择</a><input name="icon" type="file" class="J_upload_preview" value="{$task['icon']}"></div>
-							<!--#if ($task['icon']) {#--><img src="{@G:url.attach}/{$task['icon']}" /><!--#}#-->
+							<!--#if ($task['icon']) {#--><img src="{@Pw::getPath($task['icon'])}" /><!--#}#-->
 						</td>
 						<td><div class="fun_tips">留空则使用默认图标。</div></td>
 					</tr>

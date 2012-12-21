@@ -192,9 +192,9 @@ $combined2 = array('down','lock');
 		<div class="pop_operat_management">
 			<dl class="cc">
 				<dt>禁止对象：</dt><dd>
-<!--#foreach ($userNames as $_uid => $_name) {#-->
-				{$_name}<span class="s1" style="display:none">(管理员权限点判断)</span>,
-				<input type="hidden" value="{$_uid}" name="uids[]" />
+<!--#foreach ($userNames as $_item) {#-->
+				{$_item['username']}<span class="s1" style="display:none">(管理员权限点判断)</span>,
+				<input type="hidden" value="{$_item['uid']}" name="uids[]" />
 <!--#}#-->
 			</dl>
 			<dl class="cc">
@@ -237,13 +237,12 @@ $combined2 = array('down','lock');
 		<span class="fl">
 			<label class="mr10"><input name="sendnotice" type="checkbox" value="1" />发送通知</label>
 			<!--#if ($action == 'ban') {#-->
-				<!--#if ($deleteCurrent) {#-->
+				<!--#if (1 === $right['delCurrentThread']) {#-->
 				<label class="mr10"><input type="checkbox" name="delete[current]" value="1" />删除当前主题</label>
-				<!--#}#-->
-				<!--#if ($right != 1) {#-->
+				<!--#}if (1 === $right['delForumThread']) {#-->
 				<label class="mr10"><input type="checkbox" name="delete[forum]" value="1" />删除本版主题</label>
-				<!--#}else {#-->
-				<label class="mr10"><input type="checkbox" name="delete[all]" value="1" />删除全站主题</label>
+				<!--#}if(1 === $right['delSiteThread']) {#-->
+				<label class="mr10"><input type="checkbox" name="delete[site]" value="1" />删除全站主题</label>
 				<!--#}#-->
 			<!--# } elseif ($action == 'delete') { #-->
 			<label><input name="deductCredit" type="checkbox" value="1" checked />扣除积分</label>

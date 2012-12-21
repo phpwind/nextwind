@@ -1,5 +1,6 @@
 <?php
 !defined('WINDID') && define('WINDID', dirname(__FILE__));
+!defined('WINDID_PATH') && define('WINDID_PATH', WINDID);
 if (!defined('WEKIT_VERSION')) {
 	require_once (WINDID.'/../../wind/Wind.php');
 	$database =  include WINDID.'/conf/database.php';
@@ -42,7 +43,7 @@ class WindidApi {
 			'clientid'=>$client->clientId,
 			'time'=>$time,
 		);
-		$url = $client->serverUrl  . 'windid/index.php?' . http_build_query($query) .'&' . http_build_query($getData);
+		$url = $client->serverUrl  . '/windid/index.php?' . http_build_query($query) .'&' . http_build_query($getData);
 		$result = WindidUtility::buildRequest($url, $postData);
 		if ($result === false) return WindidError::SERVER_ERROR;
 		return WindJson::decode($result, true, $client->clientCharser);

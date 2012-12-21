@@ -13,22 +13,22 @@ class AdminLogService {
 	private $logfile = '';
 
 	public function __construct() {
-		$this->logfile = DATA_PATH . 'log/admin_log.php';
+		$this->logfile = Wind::getRealPath(Wekit::app()->logFile, true);
 		if (!WindFile::isFile($this->logfile)) WindFile::write($this->logfile, "<?php die;?>\n");
 	}
 
 	public function log($request, $adminUser, $m, $c, $a) {
 		$this->addLog($request, $adminUser, "$m/$c/$a");
 	}
-	
+
 	public function loginLogFailed($request, $adminUser) {
 		$this->addLog($request, $adminUser, 'Login Failed');
 	}
-	
+
 	public function loginLog($request, $adminUser) {
 		$this->addLog($request, $adminUser, 'Login Successful');
 	}
-	
+
 	public function clear() {
 		$num = 500;
 		$logs = $this->readLog();
@@ -78,7 +78,7 @@ class AdminLogService {
 		$logs[0] = count($logs) - 1;
 		return $logs;
 	}
-	
+
 	private function addLog($request, $adminUser, $router_info) {
 		$admin_name = str_replace('|', '&#124;', $adminUser);
 		$router_info = str_replace('|', '&#124;', $router_info);
@@ -89,7 +89,7 @@ class AdminLogService {
 		$record = "|$admin_name|$router_info|$online_ip|$timestamp|$request_uri|$post_data|\n";
 		WindFile::write($this->logfile, $record, "ab");
 	}
-	
+
 	private function arr2str($log) {
 		$log = (array) $log;
 		$data = '';

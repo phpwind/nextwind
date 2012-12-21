@@ -719,7 +719,7 @@ class IndexController extends WindController {
 	}
 	
 	private function _writeWindid() {
-		$baseUrl = Wind::getApp()->getRequest()->getBaseUrl(true) . '/';
+		$baseUrl = Wind::getApp()->getRequest()->getBaseUrl(true);
 		$key = md5(WindUtility::generateRandStr(10));
 		$charset = Wind::getApp()->getResponse()->getCharset();
 		$charset = str_replace('-', '', strtolower($charset));
@@ -782,7 +782,7 @@ class IndexController extends WindController {
 	}
 	
 	private function _getWindidFile() {
-		return Wind::getRealPath('ROOT:conf.windidConfig.php', true);
+		return Wind::getRealPath('ROOT:conf.windidconfig.php', true);
 	}
 
 	private function _getFounderFile() {

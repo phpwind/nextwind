@@ -133,6 +133,8 @@ class WindError extends WindModule {
 						$arg = "false";
 					else if ($arg === null)
 						$arg = "null";
+					else if (is_array($arg))
+						$arg = WindString::varToString($arg);
 					else
 						$arg = strval($arg);
 					$call_signature .= $arg . ',';

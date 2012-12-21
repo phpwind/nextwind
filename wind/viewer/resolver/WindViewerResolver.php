@@ -22,7 +22,7 @@ Wind::import('WIND:viewer.exception.WindViewException');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindViewerResolver.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindViewerResolver.php 3863 2012-12-19 02:58:43Z yishuo $
  * @package viewer
  */
 class WindViewerResolver extends WindNormalViewerResolver implements IWindViewerResolver {
@@ -34,10 +34,8 @@ class WindViewerResolver extends WindNormalViewerResolver implements IWindViewer
 	public function windFetch($template = '') {
 		$template || $template = $this->windView->templateName;
 		if (!$template) return '';
-		ob_start();
 		list($compileFilePath) = $this->compile($template);
 		WindRender::render($compileFilePath, $this->vars, $this);
-		return ob_get_clean();
 	}
 
 	/**
@@ -57,19 +55,26 @@ class WindViewerResolver extends WindNormalViewerResolver implements IWindViewer
 	 *         为false时将content写入compileFile</pre>
 	 */
 	public function compile($template, $suffix = '', $readOnly = false, $forceOutput = false) {
-		list($templateFile, $compileFile, $this->currentThemeKey) = $this->windView->getViewTemplate($template, $suffix);
+		list($templateFile, $compileFile, $this->currentThemeKey) = $this->windView->getViewTemplate(
+			$template, $suffix);
 		if (!is_file($templateFile)) {
-			throw new WindViewException('[component.viewer.WindViewerResolver.compile] ' . $templateFile, 
+			throw new WindViewException(
+				'[component.viewer.WindViewerResolver.compile] ' . $templateFile, 
 				WindViewException::VIEW_NOT_EXIST);
 		}
 		
 		if (!$this->checkReCompile($templateFile, $compileFile)) {
-			return array($compileFile, ($forceOutput || $readOnly ? WindFile::read($compileFile) : ''));
+			return array(
+				$compileFile, 
+				($forceOutput || $readOnly ? WindFile::read($compileFile) : ''));
 		}
 		/* @var $_windTemplate WindViewTemplate */
 		$_windTemplate = Wind::getComponent('template');
 		$_output = $_windTemplate->compile($templateFile, $this);
-		$readOnly === false && WindFile::write($compileFile, $_output);
+		if (false === $readOnly) {
+			WindFolder::mkRecur(dirname($compileFile));
+			WindFile::write($compileFile, $_output);
+		}
 		return array($compileFile, $_output);
 	}
 

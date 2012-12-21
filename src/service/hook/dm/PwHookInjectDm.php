@@ -33,6 +33,11 @@ class PwHookInjectDm extends PwBaseDm {
 		$this->_data['app_name'] = $v;
 		return $this;
 	}
+	
+	public function setAppAlias($v) {
+		$this->_data['app_alias'] = $v;
+		return $this;
+	}
 
 	public function setAlias($v) {
 		$this->_data['alias'] = $v;

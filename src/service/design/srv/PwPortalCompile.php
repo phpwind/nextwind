@@ -4,42 +4,95 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPortalCompile.php 21918 2012-12-17 03:58:49Z gao.wanggao $ 
+ * @version $Id: PwPortalCompile.php 22377 2012-12-21 14:28:48Z gao.wanggao $ 
  * @package 
  */
 class PwPortalCompile {
 		
-	private $tpl = '';
+	private $dir = '';
 	private $pageid = 0;
 	private $isCompile = false;
 	
 	public function __construct($pageid) {
 		$this->pageid = $pageid;
-		$this->tpl = Wind::getRealDir('THEMES:portal.local.'.$this->pageid . '.template.') . 'index.htm';
+		$this->dir = Wind::getRealDir('THEMES:portal.local.'.$this->pageid . '.template.');
 	}
 	
-	public function compilePortal() {
-		$content = $this->read();
+	/**
+	 * 生成门户模版
+	 * Enter description here ...
+	 * @param $compileStr
+	 */
+	public function compilePortal($compileStr) {
+		$file = $this->dir . 'index.htm';
+		$content = $this->read($file);
+		if ($content === false) {
+			return true;
+		}
+		$content = preg_replace('/\<pw-start\/>(.+)<pw-end\/>/isU', $compileStr, $content);
+		if ($this->isCompile) $this->write($content, $file);
+		return true;
+	}
+	
+	/**
+	 * 对标签进行编译
+	 * Enter description here ...
+	 * @param unknown_type $content
+	 */
+	public function compileDesign($content, $segment = '') {
+		$this->isCompile = false;
 		$content = $this->compilePw($content);
 		$content = $this->updateTitle($content);
 		$content = $this->updateList($content);
 		$content = $this->compileDrag($content);
-		$content = $this->compileList($content);
-		$content = $this->compileTitle($content);
-		if ($this->isCompile) $this->write($content);
+		$content = $this->compileList($content, $segment);
+		return $this->compileTitle($content, $segment);
 	}
 	
-	public function compileDesign($content) {
-		$content = $this->compilePw($content);
-		$content = $this->updateTitle($content);
-		$content = $this->updateList($content);
-		$content = $this->compileDrag($content);
-		$content = $this->compileList($content);
-		return $this->compileTitle($content);
+	/**
+	 * 对pw-tpl标签进行编译
+	 * Enter description here ...
+	 * @param unknown_type $tplId
+	 */
+	public function compileTpl($section) {
+		if (preg_match_all('/\<pw-tpl\s*id=\"(\w+)\"\s*\/>/isU',$section, $matches)) {
+			$ds = Wekit::load('design.PwDesignSegment');
+			foreach ($matches[1] AS $k=>$v) {
+				if (!$v) continue;
+				$file = $this->dir . $v. '.htm';
+				if (!WindFile::isFile($file)) {
+					WindFolder::mkRecur($this->dir);
+					WindFolder::mkRecur(dirname($this->dir) . '/images/');
+					WindFolder::mkRecur(dirname($this->dir) . '/css/');
+					$this->write('<pw-drag id="'.$v.'"/>', $file);
+				}
+				
+				$xmlFile = dirname($this->dir) . '/Manifest.xml';
+				if (!WindFile::isFile($xmlFile)) {
+					$fromFile = Wind::getRealDir('TPL:special.default.') . 'Manifest.xml';
+					@copy($fromFile, $xmlFile);
+					@chmod($xmlFile, 0777);
+				}
+    			$content = $this->read($file);
+			   	$content = $this->compileDesign($content, $v);
+			    $ds->replaceSegment($v. '__tpl', $this->pageid,'', $content);
+				if ($this->isCompile) $this->write($content, $file);
+				$section = str_replace($matches[0][$k], $content, $section);
+    		}
+		}
+		return $section;
 	}
-	
-	public function replaceList($id, $repace) {
-		$content = $this->read();
+    
+	/**
+	 * 修改模块
+	 * Enter description here ...
+	 * @param int $id
+	 * @param string $repace
+	 */
+	public function replaceList($id, $repace, $file = 'index') {
+		if (!$file) return false;
+		$file = $this->dir . $file . '.htm';
+		$content = $this->read($file);
 		if (preg_match_all('/\<pw-list\s*id=\"(\d+)\"\s*[>|\/>](.+)<\/pw-list>/isU',$content, $matches)) {
     		foreach ($matches[1] AS $k=>$v) {
     			if ($v != $id) continue;
@@ -47,11 +100,19 @@ class PwPortalCompile {
 	    		$content = str_replace($matches[0][$k], $_html, $content);
     		}
     	}
-		$this->write($content);
+		$this->write($content, $file);
 	}
-	
-	public function replaceTitle($name, $repace) {
-		$content = $this->read();
+
+	/**
+	 * 修改主标题
+	 * Enter description here ...
+	 * @param string $name
+	 * @param string $repace
+	 */
+	public function replaceTitle($name, $repace, $file = 'index') {
+		if (!$file) return false;
+		$file = $this->dir . $file . '.htm';
+		$content = $this->read($file);
 		if (preg_match_all('/\<pw-title\s*id=\"(\w+)\"\s*[>|\/>](.+)<\/pw-title>/isU',$content, $matches)) {
     		foreach ($matches[1] AS $k=>$v) {
     			if ($v != $name) continue;
@@ -59,7 +120,12 @@ class PwPortalCompile {
 	    		$content = str_replace($matches[0][$k], $_html, $content);
     		}
     	}
-		$this->write($content);
+		$this->write($content, $file);
+	}
+	
+	public function restoreTpl($file, $content) {
+		$file = $this->dir . $file . '.htm';
+		return $this->write($content, $file);
 	}
 	
 	protected function compilePw($section) {
@@ -88,9 +154,9 @@ class PwPortalCompile {
 			$ds = Wekit::load('design.PwDesignStructure');
 			foreach ($matches[1] AS $k=>$v) {
 	    		$dm = new PwDesignStructureDm();
-	    		$dm->setStructTitle($matches[2][0])
+	    		$dm->setStructTitle($matches[2][$k])
 	    			->setStructName($v);
-	    		$ds->replaceStruct($dm);
+	    		$ds->editStruct($dm);
     		}
 		}
 		return $section;
@@ -102,7 +168,7 @@ class PwPortalCompile {
 			$ds = Wekit::load('design.PwDesignModule');
 			foreach ($matches[1] AS $k=>$v) {
 	    		$dm = new PwDesignModuleDm($v);
-	    		$dm->setModuleTpl($matches[2][0]);
+	    		$dm->setModuleTpl($matches[2][$k]);
 	    		$ds->updateModule($dm);
     		}
 		}
@@ -111,7 +177,7 @@ class PwPortalCompile {
 	
 	
 	
-	protected function compileList($section) {
+	protected function compileList($section, $segment = '') {
 		Wind::import('SRV:design.dm.PwDesignModuleDm');
 		$ds = Wekit::load('design.PwDesignModule');
     	if (preg_match_all('/\<pw-list[>|\/>](.+)<\/pw-list>/isU',$section, $matches)) {
@@ -120,6 +186,7 @@ class PwPortalCompile {
 	    		$name = 'section_' . $this->getRand(6);
 	    		$dm = new PwDesignModuleDm();
 	    		$dm->setPageId($this->pageid)
+	    			->setSegment($segment)
 	    			->setFlag('thread')
 	    			->setName($name)
 	    			->setModuleTpl($v)
@@ -135,7 +202,7 @@ class PwPortalCompile {
 	    return $section;
 	}
 	
-	protected function compileTitle($section) {
+	protected function compileTitle($section, $segment = '') {
 		Wind::import('SRV:design.dm.PwDesignStructureDm');
 		$ds = Wekit::load('design.PwDesignStructure');
     	if (preg_match_all('/\<pw-title[>|\/>](.+)<\/pw-title>/isU',$section, $matches)) {
@@ -144,7 +211,8 @@ class PwPortalCompile {
 	    		$name = 'T_'.$this->getRand(6);
 	    		$dm = new PwDesignStructureDm();
 	    		$dm->setStructTitle($v)
-	    			->setStructName($name);
+	    			->setStructName($name)
+	    			->setSegment($segment);
 	    		$resource = $ds->replaceStruct($dm);
 	    		if ($resource instanceof PwError)  continue;
 	    		$_html = '<pw-title id="'.$name.'">\\1</pw-title>';
@@ -176,12 +244,14 @@ class PwPortalCompile {
 		return $randstr;
 	}
 	
-	protected function write($content) {
-		return WindFile::write($this->tpl, $content);
+	protected function write($content, $file) {
+		return WindFile::write($file, $content);
 	}
 	
-	protected function read() {
-		return WindFile::read($this->tpl);
+	protected function read($file) {
+		return WindFile::read($file);
 	}
+	
+	
 }
 ?>

@@ -5,11 +5,11 @@
 </head>
 <body>
 <div class="wrap">
-	<div class="nav">
+	<!-- <div class="nav">
 		<ul class="cc">
 			<li class="current"><a href="{@WindUrlHelper::createUrl('admin/windid/user/run')}">用户管理</a></li>
 		</ul>
-	</div>
+	</div> -->
 	<div class="h_a">提示信息</div>
 	<div class="mb10 prompt_text">
 		<ol>
@@ -21,7 +21,6 @@
 	<div class="search_type cc mb10">
 		<form action="{@WindUrlHelper::createUrl('admin/windid/user/run')}" method="post">
 		<input type="hidden" name="page" value="{$page}">
-		<label>用户组：</label>
 		<label>用户名包含：</label><input name="username" type="text" class="input length_2 mr10" value="{$args['username']}">
 		<label>UID：</label><input name="uid" type="number" class="input length_1 mr10" value="{$args['uid']}">
 		<label>电子邮箱：</label><input name="email" type="text" class="input mr10" value="{$args['email']}">

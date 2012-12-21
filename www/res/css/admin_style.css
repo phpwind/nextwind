@@ -3,7 +3,7 @@
 @explain: 系统后台内容区域
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: admin_style.css 21761 2012-12-13 05:53:19Z yanchixia $
+$Id: admin_style.css 22304 2012-12-21 06:59:18Z yanchixia $
 ===================
 */
 html,body, 
@@ -787,7 +787,7 @@ select[size]{
 	padding:10px 15px;
 	border-top:1px solid #e9e9e9;
 	height:30px;
-	white-space:nowrap;
+	/*white-space:nowrap;*/
 }
 .pop_bottom label{
 	display:inline-block;
@@ -2985,4 +2985,28 @@ seo弹窗
 	border-radius:10px;
 	box-shadow:0 0 3px rgba(0,0,0,0.3);
 	background:#fff;
+}
+
+/*
+===================
+系统更新提示
+===================
+*/
+.system_update{
+	border:1px solid #d3d3c8;
+	background:#ffffee;
+	padding:8px 20px;
+	position:absolute;
+	width:500px;
+	text-align:center;
+	left:50%;
+	margin-left:-250px;
+	top:10px;
+}
+.system_update a{
+	color:#266AAE;
+	margin:0 0 0 20px;
+}
+.system_update a:hover{
+	text-decoration:underline;
 }

@@ -7,7 +7,7 @@ Wind::import('WIND:utility.WindConvert');
  * @author Long.shi <long.shi@adlibaba-inc.com> 2011-10-19
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindJson.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: WindJson.php 3859 2012-12-18 09:25:51Z yishuo $
  * @package utility
  */
 class WindJson {
@@ -73,13 +73,12 @@ class WindJson {
 			return null;
 		} elseif (is_numeric($str)) {
 			return $str;
-		} elseif (preg_match('/^("|\').+(\1)$/s', $_str, $matche) && $matche[1] == $matche[2]) {
+		} elseif (preg_match('/^("|\').*(\1)$/s', $_str, $matche) && $matche[1] == $matche[2]) {
 			$str = self::jsonToString($str);
 		} elseif (preg_match('/^\[.*\]$/s', $_str) || preg_match('/^\{.*\}$/s', $_str)) {
 			$str = self::complexConvert($str, $toArray);
 		}
-		WindConvert::convert($str, $charset, 'utf8');
-		return $str;
+		return WindConvert::convert($str, $charset, 'utf8');
 	}
 
 	/**

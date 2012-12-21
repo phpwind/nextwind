@@ -19,7 +19,7 @@ return array(
 	'global' => array('全局', '', '', true),
 	'register' => array('注册', 'global', '注册;积分变化【{$cname}:{$affect}】', true, true),
 	'login' => array('登录', 'global', '登录;积分变化【{$cname}:{$affect}】', true),
-	'sendmsg' => array('发消息', 'global', '', true),
+	'sendmsg' => array('发消息', 'global', '发消息;积分变化【{$cname}:{$affect}】', true),
 	'punch' => array('每日打卡', 'global', '每日打卡;积分变化【{$cname}:{$affect}】', false),
 
 	'bbs' => array('论坛', '', '', true),

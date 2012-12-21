@@ -8,6 +8,7 @@
 			$username = $v['extend_params']['from_username'];
 			$from_uid = $v['extend_params']['from_uid'];
 		}
+		$v['title'] = Pw::substrs($v['message_extend_params']['title'], 32);
 		$v['title'] = PwUbbCode::parseEmotion($v['title']);
 	#-->
 		<div class="fe"><img src="{@Pw::getAvatar($from_uid, 'small')}" data-type="small" width="50" height="50" onerror="this.onerror=null;this.src='{@G:url.images}/face/face_small.jpg'" alt="{$username}" /></div>
@@ -54,6 +55,7 @@
 		$username = $v['from_uid'] == $loginUser->uid ? '我' : $v['from_username'];
 		$bubbles = $v['from_uid'] == $loginUser->uid ? 'my cc' : 'cc';
 		$v['content'] = PwUbbCode::parseEmotion($v['content']);
+		$v['content'] = PwUbbCode::parseUrl($v['content']);
 	#-->
 		<div class="{$bubbles}">
 			<div class="face"><a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $v['from_uid'])}"><img class="J_avatar" src="{@Pw::getAvatar($v['from_uid'], 'small')}" data-type="small" width="25" height="25" onerror="this.onerror=null;this.src='{@G:url.images}/face/face_small.jpg'" alt="{$username}" /></a></div>

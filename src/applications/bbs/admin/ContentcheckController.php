@@ -9,7 +9,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ContentcheckController.php 21335 2012-12-05 03:39:26Z jieyin $
+ * @version $Id: ContentcheckController.php 22112 2012-12-19 08:09:21Z jinlong.panjl $
  * @package forum
  */
 
@@ -27,36 +27,46 @@ class ContentcheckController extends AdminBaseController {
 		Wind::import('SRV:forum.vo.PwThreadSo');
 		$so = new PwThreadSo();
 		$so->setDisabled(1)->orderbyCreatedTime(0);
-		$url = array();
 		
 		if ($author) {
 			$so->setAuthor($author);
-			$url['author'] = $author;
 		}
 		if ($fid) {
-			$so->setFid($fid);
-			$url['fid'] = $fid;
+			$forum = Wekit::load('forum.PwForum')->getForum($fid);
+			if ($forum['type'] != 'category') {
+				$so->setFid($fid);
+			} else {
+				$srv = Wekit::load('forum.srv.PwForumService');
+				$fids = array(0);
+				$forums = $srv->getForumsByLevel($fid, $srv->getForumMap());
+				foreach ($forums as $value) {
+					$fids[] = $value['fid'];
+				}
+				$so->setFid($fids);
+			}
 		}
 		if ($createdTimeStart) {
 			$so->setCreateTimeStart(Pw::str2time($createdTimeStart));
-			$url['created_time_start'] = $createdTimeStart;
 		}
 		if ($createdTimeEnd) {
 			$so->setCreateTimeEnd(Pw::str2time($createdTimeEnd));
-			$url['created_time_end'] = $createdTimeEnd;
 		}
 
 		$count = Wekit::load('forum.PwThread')->countSearchThread($so);
 		$threaddb = Wekit::load('forum.PwThread')->searchThread($so, $limit, $start, PwThread::FETCH_ALL);
 
 		$this->setOutput($threaddb, 'threadb');
-		$this->setOutput(Wekit::load('forum.srv.PwForumService')->getForumList(), 'forumlist');
-		$this->setOutput(Wekit::load('forum.srv.PwForumService')->getForumOption(), 'option_html');
-
+		$this->setOutput(Wekit::load('forum.srv.PwForumService')->getForumList($fid), 'forumlist');
+		$this->setOutput(Wekit::load('forum.srv.PwForumService')->getForumOption($fid), 'option_html');
+		$this->setOutput(array(
+			'author' => $author, 
+			'created_time_start' => $createdTimeStart, 
+			'created_time_end' => $createdTimeEnd, 
+			'fid' => $fid, 
+		), 'args');
 		$this->setOutput($page, 'page');
 		$this->setOutput($perpage, 'perpage');
 		$this->setOutput($count, 'count');
-		$this->setOutput($url, 'url');
 	}
 	
 	public function doPassThreadAction() {
@@ -104,36 +114,46 @@ class ContentcheckController extends AdminBaseController {
 		Wind::import('SRV:forum.vo.PwPostSo');
 		$so = new PwPostSo();
 		$so->setDisabled(1)->orderbyCreatedTime(0);
-		$url = array();
+		$args = array();
 		
 		if ($author) {
 			$so->setAuthor($author);
-			$url['author'] = $author;
+			$args['author'] = $author;
 		}
 		if ($fid) {
-			$so->setFid($fid);
-			$url['fid'] = $fid;
+			$forum = Wekit::load('forum.PwForum')->getForum($fid);
+			if ($forum['type'] != 'category') {
+				$so->setFid($fid);
+			} else {
+				$srv = Wekit::load('forum.srv.PwForumService');
+				$fids = array(0);
+				$forums = $srv->getForumsByLevel($fid, $srv->getForumMap());
+				foreach ($forums as $value) {
+					$fids[] = $value['fid'];
+				}
+				$so->setFid($fids);
+			}
 		}
 		if ($createdTimeStart) {
 			$so->setCreateTimeStart(Pw::str2time($createdTimeStart));
-			$url['created_time_start'] = $createdTimeStart;
+			$args['created_time_start'] = $createdTimeStart;
 		}
 		if ($createdTimeEnd) {
 			$so->setCreateTimeEnd(Pw::str2time($createdTimeEnd));
-			$url['created_time_end'] = $createdTimeEnd;
+			$args['created_time_end'] = $createdTimeEnd;
 		}
 
 		$count = Wekit::load('forum.PwThread')->countSearchPost($so);
 		$postdb = Wekit::load('forum.PwThread')->searchPost($so, $limit, $start);
 
 		$this->setOutput($postdb, 'postdb');
-		$this->setOutput(Wekit::load('forum.srv.PwForumService')->getForumList(), 'forumlist');
-		$this->setOutput(Wekit::load('forum.srv.PwForumService')->getForumOption(), 'option_html');
+		$this->setOutput(Wekit::load('forum.srv.PwForumService')->getForumList($fid), 'forumlist');
+		$this->setOutput(Wekit::load('forum.srv.PwForumService')->getForumOption($fid), 'option_html');
 
 		$this->setOutput($page, 'page');
 		$this->setOutput($perpage, 'perpage');
 		$this->setOutput($count, 'count');
-		$this->setOutput($url, 'url');
+		$this->setOutput($args, 'args');
 	}
 
 	public function doPassPostAction() {

@@ -6,7 +6,7 @@
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUserBlack.php 21924 2012-12-17 05:45:16Z gao.wanggao $
+ * @version $Id: WindidUserBlack.php 22061 2012-12-19 03:09:07Z gao.wanggao $
  * @package wind
  */
 class WindidUserBlack {
@@ -60,6 +60,7 @@ class WindidUserBlack {
 	}
 	
 	public function setBlacklist($uid, $blackList) {
+		if (!is_array($blackList)) return false;
 		$data['uid'] = $uid;
 		$data['blacklist'] = serialize($blackList);
 		return $this->_getBlacklistDao()->replaceBlacklist($data);

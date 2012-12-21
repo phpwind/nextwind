@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ThreadController.php 21241 2012-12-03 07:34:32Z jieyin $
+ * @version $Id: ThreadController.php 22294 2012-12-21 05:34:55Z jieyin $
  * @package forum
  */
 
@@ -121,6 +121,7 @@ class ThreadController extends PwBaseController {
 			'{classification}' => $this->_getSubTopictypeName($type),
 			'{page}' => $threadList->page
 		));
+		Pw::setCookie('visit_referer', 'fid_' . $fid . '_page_' . $threadList->page, 300);
 	}
 
 	private function _initTopictypes($fid, &$type) {

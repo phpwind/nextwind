@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
  * @author MingXing Sun <mingxing.sun@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostDoPoll.php 19609 2012-10-16 08:20:01Z hejin $
+ * @version $Id: PwPostDoPoll.php 22319 2012-12-21 08:14:13Z jieyin $
  * @package forum
  */
 
@@ -56,16 +56,14 @@ class PwPostDoPoll extends PwPostDoBase {
 		if ($this->action == 'add' && !$this->user->getPermission('allow_add_vote')) {
 			return new PwError('VOTE:group.permission.add', array('{grouptitle}' => $this->user->getGroupInfo('name')));
 		}
-		
-		if ( ($result = $this->_checkPoll()) !== true) {
+		if (($result = $this->_checkPoll()) !== true) {
 			return $result;
 		}
-		
 		return true;
 	}
 		
 	public function addPoll($tid) {
-		if ( ($attachInfo = $this->uploadOptionImage()) instanceof PwError) return $attachInfo;
+		if (($attachInfo = $this->uploadOptionImage()) instanceof PwError) return $attachInfo;
 				
 		$pollData = $this->poll['poll'];
 		$optionData = $this->poll['option'];
@@ -87,7 +85,7 @@ class PwPostDoPoll extends PwPostDoBase {
 		
 		Wind::import('SRV:poll.dm.PwPollOptionDm');
 	
-		foreach ($optionData as $key=>$value) {
+		foreach ($optionData as $key => $value) {
 			if (!$value) continue;
 			$dm = new PwPollOptionDm(); /* @var $pwPollDm PwPollDm */
 			$image = isset($attachInfo['optionpic'][$key]) ? $attachInfo['optionpic'][$key]['path'] : '';
@@ -109,8 +107,7 @@ class PwPostDoPoll extends PwPostDoBase {
 	public function updatePoll($tid) {
 		$this->info = $this->getThreadPollBo()->info;
 		if ($this->info['poll']['voter_num']) return true;
-		
-		if ( ($attachInfo = $this->uploadOptionImage()) instanceof PwError) return $attachInfo;
+		if (($attachInfo = $this->uploadOptionImage()) instanceof PwError) return $attachInfo;
 	
 		$pollData = $this->poll['poll'];
 		
@@ -208,11 +205,9 @@ class PwPostDoPoll extends PwPostDoBase {
 		if (($result = $upload->check()) === true) {
 			$result = $upload->execute();
 		}
-
 		if ($result !== true) {
 			return $result == false ? new PwError('operate.fail') : $result;
 		}
-
 		return $bhv->getAttachInfo();
 	}
 	
@@ -230,7 +225,6 @@ class PwPostDoPoll extends PwPostDoBase {
 				return $this->_checkInAdd();
 				break;
 		}
-		
 		return true;
 	}
 	
@@ -240,7 +234,6 @@ class PwPostDoPoll extends PwPostDoBase {
 		if ($this->info['poll']['voter_num']) return true;
 				
 		$option = array_merge($this->poll['option'], $this->poll['newoption']);
-
 		$reulst = array();
 		foreach ($option as $value) {
 			$value = trim($value);
@@ -251,17 +244,14 @@ class PwPostDoPoll extends PwPostDoBase {
 		$optionNum = count($reulst);
 		
 		if ($optionNum < 2) return new PwError('VOTE:options.illegal');
-		
 		if ($optionNum != count(array_unique($reulst))) {
 			return new PwError('VOTE:options.repeat');
 		}
-		
 		return true;
 	}
 		
 	private function _checkInAdd() {			
 		$option = $this->poll['option'];
-
 		$reulst = array();
 		foreach ($option as $value) {
 			$value = trim($value);
@@ -270,13 +260,10 @@ class PwPostDoPoll extends PwPostDoBase {
 		}
 		
 		$optionNum = count($reulst);
-		
 		if ($optionNum < 2) return new PwError('VOTE:options.illegal');
-
 		if ($optionNum != count(array_unique($reulst))) {
 			return new PwError('VOTE:options.repeat');
 		}
-		
 		return true;
 	}
 	
@@ -301,7 +288,6 @@ class PwPostDoPoll extends PwPostDoBase {
 			Wind::import('SRV:poll.bo.PwThreadPollBo');
 			$_instance = new PwThreadPollBo($this->tid);
 		}
-
 		return $_instance;
 	}
 

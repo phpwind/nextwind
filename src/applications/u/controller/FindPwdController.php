@@ -9,7 +9,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: FindPwdController.php 21753 2012-12-13 04:00:48Z jinlong.panjl $
+ * @version $Id: FindPwdController.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package src.products.user.controller
  */
 class FindPwdController extends PwBaseController {
@@ -238,8 +238,7 @@ class FindPwdController extends PwBaseController {
 			list($userInfo, $value, $type) = $this->checkState();
 			list($password, $repassword) = $this->getInput(array('password', 'repassword'), 'post');
 			if ($password != $repassword) $this->showError('USER:user.error.-20');
-			$userDm = new PwUserInfoDm();
-			$userDm->setUid($userInfo['uid']);//必须地一个被设置
+			$userDm = new PwUserInfoDm($userInfo['uid']);
 			$userDm->setUsername($userInfo['username']);
 			$userDm->setPassword($password);
 			$userDm->setQuestion('', '');

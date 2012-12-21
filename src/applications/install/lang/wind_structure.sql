@@ -91,6 +91,16 @@ CREATE TABLE `pw_admin_auth` (
   KEY `idx_uid` (`uid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户权限角色表';
 
+DROP TABLE IF EXISTS `pw_admin_config`;
+CREATE TABLE `pw_admin_config` (
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '配置名称',
+  `namespace` varchar(15) NOT NULL DEFAULT 'global' COMMENT '配置命名空间',
+  `value` text COMMENT '缓存值',
+  `vtype` enum('string','array','object') NOT NULL DEFAULT 'string' COMMENT '配置值类型',
+  `description` text COMMENT '配置介绍',
+  PRIMARY KEY (`namespace`,`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='网站配置表';
+
 DROP TABLE IF EXISTS `pw_admin_custom`;
 CREATE TABLE `pw_admin_custom` (
   `username` varchar(15) NOT NULL,
@@ -458,6 +468,7 @@ CREATE TABLE `pw_bbs_posts` (
   `ifshield` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `replies` int(10) unsigned NOT NULL DEFAULT '0',
   `useubb` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `usehtml` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `aids` smallint(5) unsigned NOT NULL DEFAULT '0',
   `rpid` int(10) unsigned NOT NULL DEFAULT '0',
   `subject` varchar(100) NOT NULL DEFAULT '',
@@ -480,7 +491,8 @@ CREATE TABLE `pw_bbs_posts` (
   `topped` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`pid`),
   KEY `idx_tid_disabled_createdtime` (`tid`,`disabled`,`created_time`),
-  KEY `idx_disabled_createdtime` (`disabled`,`created_time`)
+  KEY `idx_disabled_createdtime` (`disabled`,`created_time`),
+  KEY `idx_createduserid_createdtime` ( `created_userid` , `created_time` )
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='帖子回复表';
 
 DROP TABLE IF EXISTS `pw_bbs_posts_reply`;
@@ -550,7 +562,8 @@ CREATE TABLE `pw_bbs_threads` (
   `thread_status` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`tid`),
   KEY `idx_fid_disabled_lastposttime` (`fid`,`disabled`,`lastpost_time`),
-  KEY `idx_disabled_createdtime` (`disabled`,`created_time`)
+  KEY `idx_disabled_createdtime` (`disabled`,`created_time`),
+  KEY `idx_createduserid_createdtime` ( `created_userid` , `created_time` )
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='帖子基本信息表';
 
 DROP TABLE IF EXISTS `pw_bbs_threads_buy`;
@@ -580,6 +593,7 @@ DROP TABLE IF EXISTS `pw_bbs_threads_content`;
 CREATE TABLE `pw_bbs_threads_content` (
   `tid` int(10) unsigned NOT NULL DEFAULT '0',
   `useubb` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `usehtml` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `aids` smallint(5) unsigned NOT NULL DEFAULT '0',
   `content` text,
   `sell_count` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -595,6 +609,7 @@ DROP TABLE IF EXISTS `pw_bbs_threads_digest_index`;
 CREATE TABLE `pw_bbs_threads_digest_index` (
   `tid` int(10) unsigned NOT NULL DEFAULT '0',
   `fid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `disabled` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `cid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `topic_type` int(10) unsigned NOT NULL DEFAULT '0',
   `created_time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -786,6 +801,19 @@ CREATE TABLE `pw_design_bak` (
   PRIMARY KEY (`page_id`,`bak_type`,`is_snapshot`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='门户备份表';
 
+DROP TABLE IF EXISTS `pw_design_image`;
+CREATE TABLE `pw_design_image` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '附件ID',
+  `path` varchar(80) NOT NULL DEFAULT '' COMMENT '原图片路径',
+  `thumb` varchar(80) NOT NULL DEFAULT '' COMMENT '缩略图路径',
+  `width` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缩略图宽',
+  `height` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缩略图高',
+  `moduleid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属模块',
+  `data_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '门户数据ID',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '原图片状态1正常0不正常',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='门户异步缩略图片表';
+
 DROP TABLE IF EXISTS `pw_design_component`;
 CREATE TABLE `pw_design_component` (
   `comp_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '元件ID',
@@ -830,6 +858,7 @@ DROP TABLE IF EXISTS `pw_design_module`;
 CREATE TABLE `pw_design_module` (
   `module_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '模块ID',
   `page_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属页面ID',
+  `segment` varchar(50) NOT NULL DEFAULT '' COMMENT '模块所属片段',
   `module_struct` varchar(20) NOT NULL DEFAULT '' COMMENT '模块结构',
   `model_flag` varchar(20) NOT NULL DEFAULT '' COMMENT '所属模块分类',
   `module_name` varchar(50) NOT NULL DEFAULT '' COMMENT '模块名称',
@@ -929,7 +958,7 @@ CREATE TABLE `pw_design_script` (
 
 DROP TABLE IF EXISTS `pw_design_segment`;
 CREATE TABLE `pw_design_segment` (
-  `segment` varchar(20) NOT NULL DEFAULT '' COMMENT '片段名称',
+  `segment` varchar(50) NOT NULL DEFAULT '' COMMENT '片段名称',
   `page_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '所属页面ID',
   `segment_tpl` text COMMENT '片段代码',
   `segment_struct` text COMMENT '片段结构代码',
@@ -950,9 +979,10 @@ CREATE TABLE `pw_design_shield` (
 
 DROP TABLE IF EXISTS `pw_design_structure`;
 CREATE TABLE `pw_design_structure` (
-  `struct_name` varchar(20) NOT NULL DEFAULT '' COMMENT '结构名称',
+  `struct_name` varchar(50) NOT NULL DEFAULT '' COMMENT '结构名称',
   `struct_title` text COMMENT '结构标题',
   `struct_style` text COMMENT '结构样式',
+ `segment` varchar(50) NOT NULL DEFAULT '' COMMENT '结构所属片段',
   PRIMARY KEY (`struct_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='结构数据表';
 
@@ -1004,6 +1034,7 @@ CREATE TABLE `pw_hook_inject` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` char(20) NOT NULL DEFAULT '',
   `app_name` varchar(100) NOT NULL DEFAULT '',
+  `app_alias` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '应用标识',
   `hook_name` varchar(100) NOT NULL DEFAULT '' COMMENT '钩子名',
   `alias` varchar(100) NOT NULL DEFAULT '' COMMENT '挂载别名',
   `class` varchar(100) NOT NULL DEFAULT '' COMMENT '挂载类',
@@ -1822,7 +1853,7 @@ CREATE TABLE `pw_windid_message` (
   `content` text COMMENT '内容',
   `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '时间',
   PRIMARY KEY (`message_id`),
-  KEY `idx_fromuid` (`from_uid`)
+  KEY `idx_fromuid_touid` (`from_uid`,`to_uid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='消息内容表';
 
 DROP TABLE IF EXISTS `pw_windid_message_dialog`;
@@ -1938,7 +1969,6 @@ CREATE TABLE `pw_windid_user_info` (
   `alipay` varchar(80) NOT NULL DEFAULT '' COMMENT '支付宝',
   `msn` varchar(80) NOT NULL DEFAULT '' COMMENT 'MSN',
   `profile` varchar(250) NOT NULL DEFAULT '',
-  `lastvisit` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
   KEY `idx_bday` (`bday`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='windid用户扩展基本信息表二';

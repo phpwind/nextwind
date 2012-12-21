@@ -6,6 +6,7 @@ success="操作成功"
 fail="操作失败"
 update.error="更新失败"
 update.success="更新成功"
+founder.update.success = "当前编辑用户为创始人，仅对前台用户生效。要更改创始人密码请到创始人菜单编辑"
 add.error="添加失败"
 add.success="添加成功"
 check.open="网站已开通注册审核服务，您的账号通过审核后，即可正常发帖。"
@@ -127,11 +128,11 @@ findpwd.error.sendemail="重置密码邮件发送不成功，请联系管理员�
 findpwd.success="恭喜您，新密码已设置成功！"
 findpwd.email.code.expired=链接已失效，请重新再试！
 
-mobile.error.formate="非法的手机号码"
-
 secret.option.open = "所有人可见"
 secret.option.myself = "仅自已可见"
 secret.option.attention = "我关注的人可见"
 
 user.forumadmin.delete.error = "取消版主操作请到版块管理"
 user.forumadmin.add.error = "添加版主操作请到版块管理"
+user.syn.error = "用户信息同步错误"
+founder.edit = "创始人只能通过后台来修改密码"

@@ -7,7 +7,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwTaskGroupRewardDo.php 18510 2012-09-19 01:55:21Z jieyin $
+ * @version $Id: PwTaskGroupRewardDo.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package src.service.srv.reward
  */
 class PwTaskGroupRewardDo extends PwTaskRewardDoBase {
@@ -30,9 +30,8 @@ class PwTaskGroupRewardDo extends PwTaskRewardDoBase {
 		/* @var $userService PwUserService */
 		$userService = Wekit::load('user.srv.PwUserService');
 		list($gid, $groups) = $userService->caculateUserGroupid($userBo->gid, $_groups);
-		$dm = new PwUserInfoDm();
-		$dm->setUid($uid)
-			->setGroupid($gid)
+		$dm = new PwUserInfoDm($uid);
+		$dm->setGroupid($gid)
 			->setGroups($groups);
 		/* @var $userDs PwUser */
 		$userDs = Wekit::load('user.PwUser');

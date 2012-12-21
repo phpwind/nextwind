@@ -6,7 +6,7 @@ Wind::import('SRV:design.srv.PwPortalCompile');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwTemplateCompilerPortal.php 21918 2012-12-17 03:58:49Z gao.wanggao $ 
+ * @version $Id: PwTemplateCompilerPortal.php 22358 2012-12-21 11:06:31Z gao.wanggao $ 
  * @package 
  */
 class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
@@ -32,13 +32,15 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 		$this->srv->setPermission();
 		//对模版进行编译
 		$portalSrv = new PwPortalCompile($pageid);
-		if ($this->srv->isPortalCompile()) {
-			$portalSrv->compilePortal();
-		}
+		
+		$content = $portalSrv->compileTpl($content);
 		
 		//对新模版进行编译
 		$content = $portalSrv->compileDesign($content);
-		
+		$isCompile = $this->srv->isPortalCompile();
+		if ($isCompile == 3) {
+			$portalSrv->compilePortal($content);
+		}
 		//转换Pw标签
 		$content = $this->compileStart($content, $_pk, $this->_url);
 		$content = $this->compileSign($content);
@@ -47,15 +49,13 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 		$content = $this->compileList($content);
 		$content = $this->compileEnd($content);
 		$content =  $viewTemplate->compileStream($content, $this->windViewerResolver);
-		$this->srv->refreshPage();
+		$this->srv->refreshPage();//srv 里判断刷新权限
 		return $content;
 	}
 	
 	protected function compileStart($content, $pk, $url) {
-		//$viewTemplate = Wind::getComponent('template');
 		$start = $this->srv->startDesign($pk, $url);
 		return str_replace('<pw-start/>', $start, $content);
-		//return $viewTemplate->compileStream($content, $this->windViewerResolver);
 	}
 	
 	protected function compileSign($content) {
@@ -70,50 +70,40 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 			'<!--# if($portal[\'footer\']): #--><template source=\'TPL:common.footer\' load=\'true\' /><!--# endif; #-->',
 		);
 		return str_replace($in, $out, $content);
-		//$viewTemplate = Wind::getComponent('template');
-		//return $viewTemplate->compileStream($content, $this->windViewerResolver);
 	}
 	
 	protected function compileTitle($content) {
 		if (preg_match_all('/\<pw-title\s*id=\"(\w+)\"\s*[>|\/>](.+)<\/pw-title>/isU',$content, $matches)) {
-			//$viewTemplate = Wind::getComponent('template');
 			foreach ($matches[1] AS $k=>$v) {
 				if (!$v) continue;
     			$title = $this->srv->compileTitle($v);
 	    		$content = str_replace($matches[0][$k], $title, $content);
     		}
-    		//$content = $viewTemplate->compileStream($content, $this->windViewerResolver);
 		}
 		return $content;
 	}
 	
 	protected function compileList($content) {
 		if (preg_match_all('/\<pw-list\s*id=\"(\d+)\"\s*[>|\/>](.+)<\/pw-list>/isU',$content, $matches)) {
-			//$viewTemplate = Wind::getComponent('template');
 			foreach ($matches[1] AS $k=>$v) {
 				if (!$v) continue;
     			$list = $this->srv->compileList($v);
 	    		$content = str_replace($matches[0][$k], $list, $content);
     		}
-    		//$content = $viewTemplate->compileStream($content, $this->windViewerResolver);
 		}
 		return $content;
 	}
 	
 	protected function compileDrag($content) {
 		if (preg_match_all('/\<pw-drag\s*id=\"(\w+)\"\s*\/>/isU',$content, $matches)) {
-			//$viewTemplate = Wind::getComponent('template');
 			foreach ($matches[1] AS $k=>$v) {
 				if (!$v) continue;
     			$segment = $this->srv->compileSegment($v);
 	    		$content = str_replace($matches[0][$k], $segment, $content);
     		}
-    		//$content = $viewTemplate->compileStream($content, $this->windViewerResolver);
 		}
 		return $content;
 	}
-	
-	
 	
 	/**
 	 * 必须放在转换的最后一步

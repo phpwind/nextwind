@@ -19,12 +19,14 @@
 			<p class="cool_has_tags" id="J_my_tags" style="display:none;"></p>
 			<p id="J_my_tags_none" class="not_content_mini" style="margin:20px 0 20px -40px;">您还没有添加个人标签！</p>
 <!--#}#-->
+<!--#if ($hotTags) {#-->
 			<h3><!--#if($total > 1){#--><a href="{@WindUrlHelper::createUrl('profile/tag/hot/')}" class="more J_change_tags" data-rel="J_hot_tags" data-add="{@WindUrlHelper::createUrl('profile/tag/doAddByid')}">换一组</a><!--#}#--><strong>热门标签：</strong></h3>
 			<p class="cool_hot_tags" id="J_hot_tags">
 <!--#foreach ($hotTags as $key => $tag) {#-->
 				<a class="J_tag_hot_add" data-tagid="{$tag['tag_id']}" href="{@WindUrlHelper::createUrl('profile/tag/doAddByid?tagid='.$tag['tag_id'])}">{$tag['name']}</a>
 <!--#}#-->
 			</p>
+<!--#}#-->
 			<div style="display:none">
 			<h3><a href="" class="more J_change_tags" data-rel="J_like_tags">换一组</a><strong>猜你喜欢：</strong></h3>
 			<ul class="cc cool_like_tags" id="J_like_tags">

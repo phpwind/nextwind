@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUserApi.php 21805 2012-12-13 09:38:36Z gao.wanggao $ 
+ * @version $Id: WindidUserApi.php 22377 2012-12-21 14:28:48Z gao.wanggao $ 
  * @package 
  */
 class WindidUserApi {
@@ -24,7 +24,7 @@ class WindidUserApi {
 	public function register($username, $email, $password, $question = '', $answer = '', $regip = '') {
 		Wind::import('WINDID:service.user.dm.WindidUserDm');
 		$dm = new WindidUserDm();
-		$dm->setUsername($username)->setEmail($email)->setPassword($password)->setQuestion($question)->setAnswer($answer)->setRegip($regip);
+		$dm->setUsername($username)->setEmail($email)->setPassword($password)->setQuestion($question)->setAnswer($answer)->setRegip($regip)->setLastvisit(Windid::getTime());
 		$result = $this->_getUserDs()->addUser($dm);
 		if ($result instanceof WindidError) return $result->getCode();
 		$this->_getNotifyClient()->send('register', (int)$result);
@@ -147,7 +147,6 @@ class WindidUserApi {
 	 * Enter description here ...
 	 * @param multi $userid
 	 * @param int $type 1-uid ,2-username 3-email
-	 * @param int $issafe 0获取密码等安全信息，1去除密码等安全信息
 	 * @return array
 	 */
 	public function getUser($userid, $type = 1) {
@@ -164,7 +163,7 @@ class WindidUserApi {
 				$user = $ds->getUserByEmail($userid, WindidUser::FETCH_MAIN);
 				break;
 		}
-		unset($user['password'], $user['salt'], $user['safecv']);
+		unset($user['salt']);//TODO 需要提供一个判断是否设置了安全问题的方法或是怎么兼容  xiaoxia, $user['safecv']);
 		return $user;
 	}
 	
@@ -315,6 +314,7 @@ class WindidUserApi {
 		if (!$dm instanceof WindidUserDm) return WindidError::CLASS_ERROR;
 		$result = $this->_getUserDs()->editUser($dm);
 		$_data = $dm->getData();
+		
 		$_baseInfo = false;
 		$userBase = array('username', 'password', 'email', 'question', 'answer');
 		foreach ($_data AS $k=>$v) {
@@ -418,6 +418,19 @@ class WindidUserApi {
 		if ($result instanceof WindidError) return $result->getCode();
 		return (int)$result;
 	}
+	
+	/**
+	 * 批量替换黑名单
+	 * Enter description here ...
+	 * @param $uid
+	 * @param $blackList array
+	 */
+	public function replaceBlack($uid, $blackList) {
+		$result = $this->_getUserBlackDs()->setBlacklist($uid,$blackList);
+		if ($result instanceof WindidError) return $result->getCode();
+		return (int)$result;
+	}
+	
 	
 	/**
 	 * 删除某的黑名单 $blackUid为空删除所有

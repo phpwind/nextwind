@@ -1,13 +1,13 @@
 <?php
 defined('WINDID_VERSION') || exit('Forbidden');
-!defined('ATTACH_PATH') && define('ATTACH_PATH', WINDID.'/../../attachment/');
+!defined('ATTACH_PATH') && define('ATTACH_PATH', WINDID_PATH.'/../../attachment/');
 /**
  * 上传组件
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidStorageLocal.php 21823 2012-12-13 10:40:29Z gao.wanggao $
+ * @version $Id: WindidStorageLocal.php 22308 2012-12-21 07:28:18Z gao.wanggao $
  * @package upload
  */
 

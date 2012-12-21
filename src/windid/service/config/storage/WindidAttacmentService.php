@@ -5,7 +5,7 @@
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidAttacmentService.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidAttacmentService.php 22058 2012-12-19 02:27:25Z gao.wanggao $
  * @package config.service.srv
  */
 class WindidAttacmentService {
@@ -26,7 +26,7 @@ class WindidAttacmentService {
 	 */
 	public function getStorages() {
 		$conf = Wind::getRealPath('WINDID:service.config.storage.storages.php', true);
-		$tmp = array('name' => '', 'alias' => '', 'managelink' => '', 'description' => '', 'components' => array());
+		$tmp = array('name' => '', 'alias' => '', 'avatarmanagelink' => '', 'description' => '', 'components' => array());
 		$storages = @include $conf;
 		$storages = $this->hook->runWithFilters($storages);
 		foreach ($storages as $key => $value) {
@@ -42,6 +42,7 @@ class WindidAttacmentService {
 	 * @return true|pwError
 	 */
 	public function setStoragesComponents($storageType) {
+		return true;
 		$storages = $this->getStorages();
 		if (!array_key_exists($storageType, $storages)) return new PwError('ADMIN:att.storage.type.not.exit');
 		$storage = $storages[$storageType];

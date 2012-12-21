@@ -25,10 +25,13 @@ class PwPostDoWord extends PwPostDoBase {
 	public function check($postDm) {
 		$data = $postDm->getData();
 		$content = $data['subject'].$data['content'];
-		if ($this->_tagnames) {
-			$content = $content . implode(' ', $this->_tagnames);
-		}
 		$wordFilter = Wekit::load('SRV:word.srv.PwWordFilter');
+		if ($this->_tagnames) {
+			$tagname = implode(' ', $this->_tagnames);
+			if (($result = $wordFilter->filter($tagname)) === true) {
+				return new PwError('WORD:tag.content.error');
+			}
+		}
 		list($type, $words) = $wordFilter->filterWord($content);
 		$words = $words ? $words : '';
 		if (!$type) return true; 

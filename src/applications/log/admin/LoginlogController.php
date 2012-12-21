@@ -8,7 +8,7 @@ Wind::import('SRV:log.so.PwLogSo');
  * @author xiaoxia.xu<xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: LoginlogController.php 21763 2012-12-13 05:57:33Z xiaoxia.xuxx $
+ * @version $Id: LoginlogController.php 22264 2012-12-21 02:33:07Z xiaoxia.xuxx $
  * @package src.applications.log.admin
  */
 class LoginlogController extends AdminBaseController {
@@ -41,7 +41,7 @@ class LoginlogController extends AdminBaseController {
 		$this->setOutput($count, 'count');
 		$this->setOutput($page, 'page');
 		$this->setOutput($logSo->getSearchData(), 'searchData');
-		$this->setOutput($this->isFound($this->adminUser->getUsername()), 'canClear');
+		$this->setOutput($this->isFounder($this->adminUser->getUsername()), 'canClear');
 		$this->setOutput($this->_getLoginType(), 'types');
 		$this->setTemplate('manage_login');
 	}
@@ -50,7 +50,7 @@ class LoginlogController extends AdminBaseController {
 	 * 清除三个月前操作
 	 */
 	public function clearAction() {
-		if (!$this->isFound($this->adminUser->getUsername())) $this->showError('fail');
+		if (!$this->isFounder($this->adminUser->getUsername())) $this->showError('fail');
 		$step = $this->getInput('step', 'post');
 		if ($step != 2) $this->showError('fail');
 		list($year, $month) = explode('-', Pw::time2str(Pw::getTime(), 'Y-n'));

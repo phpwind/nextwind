@@ -5,7 +5,7 @@ Wind::import('SRV:design.srv.data.PwModuleData');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwAutoData.php 20578 2012-10-31 08:07:33Z gao.wanggao $ 
+ * @version $Id: PwAutoData.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 
@@ -19,7 +19,7 @@ class PwAutoData extends PwModuleData {
 	 */
 	public function addAutoData() {
 		$this->_getData();
-		$this->setDesignData();
+		$this->setDesignData();		
 		$this->_addData();
 	}
 	
@@ -39,8 +39,10 @@ class PwAutoData extends PwModuleData {
 	private function _addData() {
 		$delDataIds = $newOrderIds = array();
 		$delImages = '';
+		$delImgIds = array();
 		$ds = Wekit::load('design.PwDesignData');
 		$pushDs = Wekit::load('design.PwDesignPush');
+		$imageDs = Wekit::load('design.PwDesignAsynImage');
 		Wind::import('SRV:design.dm.PwDesignDataDm');
 		list($start, $end, $refresh) = $this->bo->refreshTime($this->time);
 		foreach ($this->designData AS $k=>$v) {
@@ -79,6 +81,7 @@ class PwAutoData extends PwModuleData {
 					$this->_newAutoIds[$v['from_id']] = $data;
 					$delDataIds[] = $v['data_id'];
 					$delImages .= $data['standard_image'];
+					isset($data['__asyn']) && $delImgIds[] = $data['__asyn'];
 					unset($v);	
 				}
 			}
@@ -91,13 +94,15 @@ class PwAutoData extends PwModuleData {
 				if ($v['from_type'] != PwDesignData::FROM_PUSH){
 					$extend = unserialize($v['extend_info']);
 					$delImages .= $extend['standard_image'];
+					isset($data['__asyn']) && $delImgIds[] = $data['__asyn'];
 				}
 			}
 			
 			$newOrderIds[] = $k;
 		}
 		$ds->batchDelete($delDataIds);
-		Wekit::load('design.srv.PwDesignImage')->clearFiles($this->bo->moduleid, explode('|||', $delImages));
+		if ($delImages) Wekit::load('design.srv.PwDesignImage')->clearFiles($this->bo->moduleid, explode('|||', $delImages));
+		if ($delImgIds) Wekit::load('design.PwDesignAsynImage')->batchDelete($delImgIds);
 		//添加新显示数据
 		$limit = count($delDataIds);
 		$i = 1;
@@ -128,8 +133,12 @@ class PwAutoData extends PwModuleData {
 	 		}
 	 		if ($newData['data_type']) $dm->setDatatype($newData['data_type']);
 	 		if ($newData['vieworder']) $dm->setDatatype(PwDesignData::ISFIXED);
-	 		$dm->setExtend($this->getExtend($newData));
+	 		$extend = $this->getExtend($newData);
+	 		$dm->setExtend($extend);
 	 		$resource = $ds->addData($dm);
+	 		if (isset($extend['__asyn'])) {
+	 			$imageDs->updateDataId($extend['__asyn'], $resource);
+	 		}
 	 		unset($this->_newPushIds[$key]);
 	 		$i++;
 		}
@@ -162,9 +171,12 @@ class PwAutoData extends PwModuleData {
 	 		}
 	 		if ($newData['data_type']) $dm->setDatatype($newData['data_type']);
 	 		if ($newData['vieworder']) $dm->setDatatype(PwDesignData::ISFIXED);
-	 		
-	 		$dm->setExtend($this->getExtend($newData));
+			$extend = $this->getExtend($newData);
+	 		$dm->setExtend($extend);
 	 		$resource = $ds->addData($dm);
+	 		if (isset($extend['__asyn'])) {
+	 			$imageDs->updateDataId($extend['__asyn'], $resource);
+	 		}
 		}
 		
 		//添加预定数据
@@ -187,8 +199,13 @@ class PwAutoData extends PwModuleData {
 	 		}
 	 		
 	 		if ($newData['vieworder']) $dm->setDatatype(PwDesignData::ISFIXED);
-	 		$dm->setExtend($this->getExtend($newData));
+	 		
+			$extend = $this->getExtend($newData);
+	 		$dm->setExtend($extend);
 	 		$resource = $ds->addData($dm);
+	 		if (isset($extend['__asyn'])) {
+	 			$imageDs->updateDataId($extend['__asyn'], $resource);
+	 		}
 		}
 	}
 	

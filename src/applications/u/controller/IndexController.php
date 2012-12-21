@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 18548 2012-09-19 07:59:26Z xiaoxia.xuxx $
+ * @version $Id: IndexController.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package 
  */
 class IndexController extends PwBaseController {
@@ -30,8 +30,8 @@ class IndexController extends PwBaseController {
 		$log = $this->loginUser->info['last_credit_affect_log'];
 		if ($log) {
 			Wind::import('SRV:user.dm.PwUserInfoDm');
-			$dm = new PwUserInfoDm();
-			$dm->setUid($this->loginUser->uid)->setLastCreditAffectLog('');
+			$dm = new PwUserInfoDm($this->loginUser->uid);
+			$dm->setLastCreditAffectLog('');
 			/* @var $userDs PwUser */
 			$userDs = Wekit::load('user.PwUser');
 			$userDs->editUser($dm, PwUser::FETCH_DATA);

@@ -11,6 +11,16 @@
  */
 class WindWebFrontController extends AbstractWindFrontController {
 	
+	/* (non-PHPdoc)
+	 * @see AbstractWindFrontController::run()
+	 */
+	public function run() {
+		$_compress = $this->_config['web-apps'][$this->_appName]['compress'];
+		if (!$_compress || !ob_start('ob_gzhandler')) ob_start();
+		parent::run();
+		ob_end_flush();
+	}
+	
 	/*
 	 * (non-PHPdoc) @see AbstractWindFrontController::createApplication()
 	 */
@@ -78,8 +88,8 @@ class WindWebFrontController extends AbstractWindFrontController {
 			'WIND:db.WindConnection' => 'WindConnection', 
 			'WIND:viewer.compiler.WindViewTemplate' => 'WindViewTemplate', 
 			'WIND:viewer.WindView' => 'WindView', 
-			'WIND:router.WindRouter' => 'WindRouter',
-			 
+			'WIND:router.WindRouter' => 'WindRouter', 
+			
 			'WIND:web.WindController' => 'WindController', 
 			'WIND:web.WindDispatcher' => 'WindDispatcher', 
 			'WIND:web.WindErrorHandler' => 'WindErrorHandler', 

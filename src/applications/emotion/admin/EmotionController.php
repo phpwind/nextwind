@@ -102,9 +102,9 @@ class EmotionController extends AdminBaseController {
 		$orderIds = $this->getInput('orderid','post');
 		$catId = (int)$this->getInput('catid','post');
 		$category = $this->_getEmotionCategoryDs()->getCategory($catId);
-		if (!$folder = $category['emotion_folder'])  $this->showError('ADMIN:fail');
+		if (!$folder = $category['emotion_folder']) $this->showError('ADMIN:fail');
 		Wind::import('SRV:emotion.dm.PwEmotionDm');
-		foreach ($emotionIds AS $v) {
+		foreach ($emotionIds AS $v => $vv) {
 			if (!$icons[$v]) continue;
 			$dm = new PwEmotionDm();
 			$dm->setCategoryId($catId)

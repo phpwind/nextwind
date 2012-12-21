@@ -44,8 +44,9 @@
 			<dl class="cc">
 				<dt>{$allSign[$v['sign']]}：</dt>
 				<dd>
-					<div class="single_image_up"><a href="javascript:;">上传图片</a><input data-preview="#J_preview_{$v['sign']}" name="{$v['sign']}" type="file" class="J_upload_preview"></div><span>大小：宽:{$v['width']}px 高:{$v['height']}px; 0为无限制</span>
-					<img id="J_preview_{$v['sign']}"  src="" width="80" height="80" style="display:none;" />
+					<div class="single_image_up"><a href="javascript:;">上传图片</a><input data-preview="#J_preview_{$v['sign']}" name="{$v['sign']}" type="file" class="J_upload_preview"></div>
+					<div><img id="J_preview_{$v['sign']}"  src="" width="80" height="80" style="display:none;" /></div>
+					<span>大小：宽:{$v['width']}px 高:{$v['height']}px<!--0为无限制--></span>
 					<input type="hidden"  name="images[{$v['sign']}]" value="">
 				</dd>
 			</dl>

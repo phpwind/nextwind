@@ -4,9 +4,9 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 /**
  * 缩略图生成方式
  *
- * the last known user to change this file in the repository  <$LastChangedBy: yanchixia $>
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
  * @author Jianmin Chen <sky_hold@163.com>
- * @version $Id: PwImageThumb.php 21501 2012-12-10 09:16:19Z yanchixia $
+ * @version $Id: PwImageThumb.php 22380 2012-12-21 14:54:07Z jieyin $
  * @package lib.image
  */
 
@@ -24,6 +24,9 @@ class PwImageThumb {
 	protected $type;
 	protected $quality = 90;
 	protected $forcemode = 0;
+
+	protected $thumbWidth;
+	protected $thumbHeight;
 	
 	protected $imageCreateFunc;
 	protected $imageCopyFunc;
@@ -91,6 +94,9 @@ class PwImageThumb {
 		if (($compute = $this->compute()) === false) {
 			return -4;
 		}
+		$this->thumbWidth = $compute->canvasW;
+		$this->thumbHeight = $compute->canvasH;
+
 		$thumb = call_user_func($this->imageCreateFunc, $compute->canvasW, $compute->canvasH);
 		if (function_exists('ImageColorAllocate')) {
 			$black = ImageColorAllocate($thumb,255,255,255);
@@ -163,6 +169,14 @@ class PwImageThumb {
 			return false;
 		}
 		return true;
+	}
+
+	public function getThumbWidth() {
+		return $this->thumbWidth;
+	}
+
+	public function getThumbHeight() {
+		return $this->thumbHeight;
 	}
 }
 

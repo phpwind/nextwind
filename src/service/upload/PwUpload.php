@@ -10,7 +10,7 @@ Wind::import('LIB:image.PwImage');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUpload.php 20297 2012-10-25 09:09:58Z jieyin $
+ * @version $Id: PwUpload.php 22380 2012-12-21 14:54:07Z jieyin $
  * @package upload
  */
 
@@ -274,7 +274,8 @@ class PwUploadFile {
 			'type' => $this->type,
 			'ifthumb' => $this->ifthumb,
 			'fileuploadurl' => $this->fileuploadurl,
-			'ext' => $this->ext
+			'ext' => $this->ext,
+			'thumb' => $this->_thumb
 		);
 	}
 	
@@ -376,8 +377,9 @@ class PwUploadFile {
 			PwUpload::createFolder(dirname($thumburl));
 			$result = $image->makeThumb($thumburl, $value[2], $value[3], $quality, $value[4], $value[5]);
 			if ($result === true && $image->filename != $thumburl) {
+				$ts = $image->getThumb();
 				$this->ifthumb |= (1 << $key);
-				$this->_thumb[] = array($thumburl, $value[1] . $value[0]);
+				$this->_thumb[$key] = array($thumburl, $value[1] . $value[0], $ts->getThumbWidth(), $ts->getThumbHeight());
 			}
 		}
 	}

@@ -743,7 +743,7 @@ INSERT INTO `pw_user_permission_groups` (`gid`, `rkey`, `rtype`, `rvalue`, `vtyp
 (16, 'allow_post', 'basic', '1', 'string'),
 (16, 'allow_reply', 'basic', '1', 'string'),
 (16, 'reply_locked_threads', 'basic', '1', 'string'),
-(16, 'post_check', 'basic', '0', 'string'),
+(16, 'post_check', 'basic', '1', 'string'),
 (16, 'threads_perday', 'basic', '0', 'string'),
 (16, 'thread_edit_time', 'basic', '0', 'string'),
 (16, 'post_pertime', 'basic', '3', 'string'),

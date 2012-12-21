@@ -9,7 +9,7 @@ Wind::import('LIB:base.PwBaseMapDbCache');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadDbCache.php 20973 2012-11-22 10:33:45Z jieyin $
+ * @version $Id: PwThreadDbCache.php 22201 2012-12-19 15:38:16Z jieyin $
  * @package src.service.user
  */
 class PwThreadDbCache extends PwBaseMapDbCache {
@@ -104,6 +104,12 @@ class PwThreadDbCache extends PwBaseMapDbCache {
 		$this->batchUpdateThreadList($tids);
 		Wekit::cache()->batchDelete($this->fetchKeysByTid($tids));
 		return $this->_getDao()->batchDeleteThread($tids);
+	}
+
+	public function revertTopic($tids) {
+		$this->batchUpdateThreadList($tids);
+		Wekit::cache()->batchDelete($this->fetchKeysByTid($tids));
+		return $this->_getDao()->revertTopic($tids);
 	}
 	
 	/**

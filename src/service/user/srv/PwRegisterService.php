@@ -10,7 +10,7 @@ Wind::import('SRV:user.PwUser');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRegisterService.php 21328 2012-12-04 11:32:35Z jieyin $
+ * @version $Id: PwRegisterService.php 22361 2012-12-21 11:50:28Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwRegisterService extends PwBaseHookService {
@@ -198,8 +198,8 @@ class PwRegisterService extends PwBaseHookService {
 		
 		$info = $this->_getUserDs()->getUserByUid($uid, PwUser::FETCH_MAIN);
 		if (Pw::getstatus($info['status'], PwUser::STATUS_UNACTIVE)) {
-			$userDm = new PwUserInfoDm();
-			$userDm->setUid($info['uid'])->setUnactive(false);
+			$userDm = new PwUserInfoDm($info['uid']);
+			$userDm->setUnactive(false);
 			(!Pw::getstatus($info['status'], PwUser::STATUS_UNCHECK)) && $userDm->setGroupid(0);
 			$this->_getUserDs()->editUser($userDm, PwUser::FETCH_MAIN);
 		}
@@ -307,6 +307,11 @@ class PwRegisterService extends PwBaseHookService {
 		return true;
 	}
 
+	/**
+	 * 更新论坛信息
+	 *
+	 * @param stirng $username
+	 */
 	private function updateBbsinfo($username) {
 		Wind::import('SRV:site.dm.PwBbsinfoDm');
 		$dm = new PwBbsinfoDm();

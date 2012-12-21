@@ -130,7 +130,7 @@ class IndexController extends PwBaseController {
 		list($id,$page,$perpage,$type,$tagName) = $this->getInput(array('id', 'page', 'perpage', 'type', 'name'));
 		$page = $page ? $page : 1;
 		if (!$id && $tagName) {
-			$tagName = urldecode($tagName);
+			$tagName = rawurldecode($tagName);
 			$tag = $this->_getTagDs()->getTagByName($tagName);
 			$id = $tag['tag_id'];
 		} else {
@@ -149,7 +149,6 @@ class IndexController extends PwBaseController {
 		$myTags['step'] = $myTagsCount > $this->attentionTagList ? 2 : '';
 		//热门话题
 		$this->_setHotTagList($this->_getTagService()->getHotTags(0,20));
-		
 		if ($type == 'users') {
 			$perpage = 50;
 			list($start, $limit) = Pw::page2limit($page, $perpage);
@@ -162,7 +161,7 @@ class IndexController extends PwBaseController {
 			$ifcheck = !$this->_checkAllowManage() ? 1 : '';
 			$typeId = $this->_getTagService()->getTypeIdByTypeName($this->defaultType);
 			$count = $this->_getTagDs()->countRelationsByTagId($id,$typeId,$ifcheck);
-			$tag['content_count'] = $count;
+		//	$tag['content_count'] = $count;
 			if ($count > 0) {
 				$tmpTags = $this->_getTagService()->getContentsByTypeName($id,$this->defaultType,$ifcheck,$start,$limit);
 				foreach ($tmpTags as $k=>$v) {
@@ -218,10 +217,13 @@ class IndexController extends PwBaseController {
 			$this->showError('TAG:right.tag_allow_manage.error');
 		}
 		list($id,$typeId,$paramId,$ifcheck) = $this->getInput(array('id','type_id','param_id','ifcheck'));
+		$increseCount = $ifcheck ? 1 : -1;
 		Wind::import('SRV:tag.dm.PwTagDm');
 		$dm = new PwTagDm($id);
-		$dm->setIfCheck($ifcheck);
+		$dm->setIfCheck($ifcheck)
+			->addContentCount($increseCount);
 		$result = $this->_getTagDs()->updateRelation($typeId,$paramId,$id,$dm);
+		$this->_getTagDs()->updateTag($dm);
 		Wind::import('SRV:log.srv.operator.PwAddTagShieldLog');
 		$log = new PwAddTagShieldLog($id, $typeId, $paramId, $this->loginUser);
 		$log->setIfShield($ifcheck)
@@ -287,6 +289,9 @@ class IndexController extends PwBaseController {
 				continue;
 			}
 			$dm = new PwTagDm();
+			if (($result = $dm->checkTagName($value)) instanceof PwError) {
+				$this->showError($result->getError());
+			}
 			$dmArray[$value] =
 				$dm->setName($value)
 					->setTypeId($typeId)

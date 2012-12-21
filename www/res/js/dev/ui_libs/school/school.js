@@ -163,6 +163,7 @@ var setSchool = {};
 					school_list.hide();
 					$.ajax({
 						url : GV.URL.SCHOOL,
+						type : 'post',
 						data : {typeid : 3, areaid : pid},
 						dataType : 'json',
 						success : function(data){
@@ -200,7 +201,7 @@ var setSchool = {};
 					school_list.hide();
 
 					//请求数据
-					$.getJSON(GV.URL.SCHOOL, {typeid : typeid, areaid : did}, function(data){
+					$.post(GV.URL.SCHOOL, {typeid : typeid, areaid : did}, function(data){
 						school_list_loading.hide();
 						school_list.show();
 
@@ -210,7 +211,7 @@ var setSchool = {};
 							_data[did] = data[did];
 							_this.eachSchoolData(data[did], sid);
 						}
-					});
+					}, 'json');
 
 				}
 

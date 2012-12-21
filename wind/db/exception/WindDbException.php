@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-22
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindDbException.php 3113 2011-11-11 07:28:09Z yishuo $
+ * @version $Id: WindDbException.php 3867 2012-12-21 15:23:37Z yishuo $
  * @package db
  * @subpackage exception
  */
@@ -13,52 +13,52 @@ class WindDbException extends WindException {
 	/**
 	 * 连接相关的异常
 	 */
-	const DB_CONN_EMPTY = 200;
+	const DB_CONN_EMPTY = 1200;
 	
-	const DB_CONN_FORMAT = 201;
+	const DB_CONN_FORMAT = 1201;
 	
-	const DB_CONN_NOT_EXIST = 202;
+	const DB_CONN_NOT_EXIST = 1202;
 	
-	const DB_CONN_EXIST = 203;
+	const DB_CONN_EXIST = 1203;
 	
-	const DB_CONNECT_NOT_EXIST = 204;
+	const DB_CONNECT_NOT_EXIST = 1204;
 	
 	/**
 	 * 查讯 相关的异常
 	 */
-	const DB_QUERY_EMPTY = 210;
+	const DB_QUERY_EMPTY = 1210;
 	
-	const DB_QUERY_LINK_EMPTY = 211;
+	const DB_QUERY_LINK_EMPTY = 1211;
 	
-	const DB_QUERY_FIELD_EMPTY = 212;
+	const DB_QUERY_FIELD_EMPTY = 1212;
 	
-	const DB_QUERY_FIELD_EXIST = 213;
+	const DB_QUERY_FIELD_EXIST = 1213;
 	
-	const DB_QUERY_FIELD_FORMAT = 214;
+	const DB_QUERY_FIELD_FORMAT = 1214;
 	
-	const DB_QUERY_INSERT_DATA = 215;
+	const DB_QUERY_INSERT_DATA = 1215;
 	
-	const DB_QUERY_UPDATE_DATA = 216;
+	const DB_QUERY_UPDATE_DATA = 1216;
 	
-	const DB_QUERY_CONDTTION_FORMAT = 217;
+	const DB_QUERY_CONDTTION_FORMAT = 1217;
 	
-	const DB_QUERY_GROUP_MATCH = 218;
+	const DB_QUERY_GROUP_MATCH = 1218;
 	
-	const DB_QUERY_LOGIC_MATCH = 219;
+	const DB_QUERY_LOGIC_MATCH = 1219;
 	
-	const DB_QUERY_FETCH_ERROR = 220;
+	const DB_QUERY_FETCH_ERROR = 1220;
 	
-	const DB_QUERY_TRAN_BEGIN = 221;
+	const DB_QUERY_TRAN_BEGIN = 1221;
 	
-	const DB_QUERY_COMPARESS_ERROR = 222;
+	const DB_QUERY_COMPARESS_ERROR = 1222;
 	
-	const DB_QUERY_COMPARESS_EXIST = 223;
+	const DB_QUERY_COMPARESS_EXIST = 1223;
 	
-	const DB_QUERY_WHERE_ERROR = 224;
+	const DB_QUERY_WHERE_ERROR = 1224;
 	
-	const DB_QUERY_JOIN_TYPE_ERROR = 225;
+	const DB_QUERY_JOIN_TYPE_ERROR = 1225;
 	
-	const DB_QUERY_ERROR = 226;
+	const DB_QUERY_ERROR = 1226;
 	
 	/**
 	 * 字段异常

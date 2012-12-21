@@ -38,6 +38,7 @@ abstract class AbstractWindFrontController {
 		'web-apps' => array(
 			'default' => array(
 				'error-dir' => 'WIND:web.view', 
+				'compress' => true, 
 				'root-path' => '', 
 				'charset' => 'utf-8', 
 				'modules' => array(
@@ -155,13 +156,14 @@ abstract class AbstractWindFrontController {
 			$factory->loadClassDefinitions($this->_config['components']);
 		}
 		$rootPath = empty($this->_config['web-apps'][$this->_appName]['root-path']) ? dirname(
-			$_SERVER['SCRIPT_FILENAME']) : Wind::getRealPath($this->_config['web-apps'][$this->_appName]['root-path'], 
-			false);
+			$_SERVER['SCRIPT_FILENAME']) : Wind::getRealPath(
+			$this->_config['web-apps'][$this->_appName]['root-path'], false);
 		Wind::register($rootPath, $this->_appName, true);
 		
-		if ($this->_appName === 'default') {} elseif (isset($this->_config['web-apps'][$this->_appName])) {
-			$this->_config['web-apps'][$this->_appName] = WindUtility::mergeArray($this->_config['web-apps']['default'], 
-				$this->_config['web-apps'][$this->_appName]);
+		if ($this->_appName === 'default') {} elseif (isset(
+			$this->_config['web-apps'][$this->_appName])) {
+			$this->_config['web-apps'][$this->_appName] = WindUtility::mergeArray(
+				$this->_config['web-apps']['default'], $this->_config['web-apps'][$this->_appName]);
 		} else
 			throw new WindException(
 				'Your requested application \'' . $this->_appName . '\' was not found on this server, please check your application configuration.', 
@@ -186,13 +188,14 @@ abstract class AbstractWindFrontController {
 	 * 创建并执行当前应用,单应用访问入口
 	 */
 	public function run() {
+		$this->_app = $this->createApplication($this->_config['web-apps'][$this->_appName], 
+			WindFactory::_getInstance());
+		
 		set_error_handler(array($this, '_errorHandle'), error_reporting());
 		set_exception_handler(array($this, '_exceptionHandle'));
 		if ($this->_config['isclosed']) {
 			throw new Exception('Sorry, Site has been closed!');
 		}
-		
-		$this->_app = $this->createApplication($this->_config['web-apps'][$this->_appName], WindFactory::_getInstance());
 		if ($this->_chain !== null) $this->_chain->getHandler()->handle('onCreate');
 		/* @var $router WindRouter */
 		$router = $this->_app->getFactory()->getInstance('router');
@@ -236,7 +239,9 @@ abstract class AbstractWindFrontController {
 		restore_error_handler();
 		/* @var $error WindError */
 		$error = $this->_app->getFactory()->getInstance('error', 
-			array($this->_config['web-apps'][$this->_appName]['error-dir'], $this->_config['isclosed']));
+			array(
+				$this->_config['web-apps'][$this->_appName]['error-dir'], 
+				$this->_config['isclosed']));
 		$error->errorHandle($errno, $errstr, $errfile, $errline);
 	}
 
@@ -249,7 +254,9 @@ abstract class AbstractWindFrontController {
 		restore_exception_handler();
 		/* @var $error WindError */
 		$error = $this->_app->getFactory()->getInstance('error', 
-			array($this->_config['web-apps'][$this->_appName]['error-dir'], $this->_config['isclosed']));
+			array(
+				$this->_config['web-apps'][$this->_appName]['error-dir'], 
+				$this->_config['isclosed']));
 		$error->exceptionHandle($exception);
 	}
 

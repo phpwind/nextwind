@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignStyle.php 18929 2012-10-08 10:04:10Z gao.wanggao $ 
+ * @version $Id: PwDesignStyle.php 22041 2012-12-18 10:31:33Z gao.wanggao $ 
  * @package 
  */
 class PwDesignStyle {
@@ -135,7 +135,7 @@ class PwDesignStyle {
 		$style = '';
 		
 		if ($backimage){
-			$style .= 'background-image: url(\''.$backimage.'\');';
+			$style .= 'background: url(\''.$backimage.'\');';
 		} /*elseif (isset($backimage)) {
 			$style .= 'background-image:none;';
 		}*/

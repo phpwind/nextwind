@@ -3,7 +3,7 @@
 @explain: 初始化/全局的公用控件
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: core.css 21932 2012-12-17 06:44:17Z yanchixia $
+$Id: core.css 22178 2012-12-19 12:55:42Z yanchixia $
 ===================
 #*/
 
@@ -311,6 +311,16 @@ html{
 核心背景整合
 ===================
 */
+.btn/*按钮背景*/,
+.core_follow/*全局关注按钮*/,
+.pop_deep .ct dt.reward/*打卡奖励金币图*/,
+.pages a/*分页样式*/,
+.pages strong,
+.design_mode_edit/*模块管理按钮*/,
+#back_top/*返回顶部*/,
+.pop_showmsg/*无操作提示*/{
+	background:url(../../images/common/core_bg.png);
+}
 
 /*
 ===================
@@ -336,8 +346,11 @@ html{
 .icon_edit,
 .icon_del/*编辑和删除小图标*/,
 .color_pick/*颜色选择*/,
-.user_select_input .input_down/*私信用户选择*/{
-	background:url(../../images/common/icon.png) no-repeat;
+.user_select_input .input_down/*私信用户选择*/,
+.pop_help_punch .select_box dd,
+.pop_help_punch .select_box dt/*打卡弹窗*/,
+.tmode_waterfall .num span/*瀑布流小图标*/{
+	background:url(../../images/common/core_icon.png) no-repeat;
 }
 
 /*
@@ -367,8 +380,9 @@ input::-moz-focus-inner {
   padding: 0;
 }
 .btn {
-	color: #333;
-	background:#f3f3f3 url(../../images/common/btn.png);
+	color: #333 !important;
+	background-color:#f3f3f3;
+	background-position:0 0;
 	border: 1px solid #b1aeae;
 	border-radius: 2px;
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
@@ -456,7 +470,7 @@ button.btn_big{
 .btn_success:hover,
 .btn_submit,
 .btn_submit:hover{
-  color: #ffffff;
+  color: #ffffff !important;
 }
 /*提交按钮*/
 .btn_submit{
@@ -505,7 +519,8 @@ input.disabled,
 textarea.disabled,
 select.disabled,
 button.disabled,
-.disabled{
+.disabled,
+.disabled:hover{
 	border-color: #b1aeae !important;
 	background: #e9e9e9 !important;
 	box-shadow: none !important;
@@ -542,13 +557,7 @@ select {
 .input:focus,textarea:focus{
 	outline:2px solid #99d8f5;
 	border-color:#7bbff2;
-	/*background-color:#fffbde;*/
 }
-/*
-.input_hd,.textarea_hd{
-	background:#fff url(../../images/common/input_hd.png) 0 bottom repeat-x;
-}
-*/
 .input{
 	height:18px;
 }
@@ -580,6 +589,7 @@ select,
 input[type="file"] {
 	height: 28px;
 	line-height: 28px;
+	padding:0 0 0 4px;
 }
 select[size]{
 	height:auto;
@@ -851,15 +861,10 @@ loading加载
 	display:inline-block;
 	padding-top:3px;
 }
-.pop_bottom button.btn{
+.pop_bottom .btn{
 	padding-left:20px;
 	padding-right:20px;
 	margin:0 5px;
-}
-.pop_bottom a.btn{
-	width:50px;
-	margin:0 5px;
-	color:#333;
 }
 /*提示*/
 .pop_tips{
@@ -962,7 +967,7 @@ loading加载
 .pop_deep .ct dt.reward{
 	width:160px;
 	height:120px;
-	background:url(../../images/common/reward.png) no-repeat;
+	background-position:0 -600px;
 	float:left;
 	margin-right:0;
 	padding-left:0;
@@ -1015,11 +1020,11 @@ loading加载
 .pop_showmsg{
 	display:block;
 	height:55px;
-	height:55px;
 	box-shadow:0 1px 6px rgba(0,0,0,0.3);
 	border:1px solid #d6d6d6;
 	border-radius:3px;
-	background:#fff url(../../images/common/pop_showmsg.png);
+	background-color:#fff;
+	background-position:0 -900px;
 }
 .pop_showmsg span{
 	font-size:14px;
@@ -1875,7 +1880,7 @@ div.pop_show_mini{
 	margin-right:0;
 }
 .color_pick_dom .color_pick{
-	background-position:151px center;
+	background-position:151px -320px;
 }
 .color_pick_dom .color_pick em{
 	width:145px;
@@ -1904,7 +1909,7 @@ div.pop_show_mini{
 	padding:6px 10px !important;
 	border:1px solid;
 	border-color:#c9c9c9 #bdbdbd #b0b0b0 #bdbdbd;
-	background:#f8f8f8 url(../../images/common/btn.png);
+	background-color:#f8f8f8;
 	text-decoration:none;
 	color:#666666;
 	margin-right:3px;
@@ -1936,7 +1941,8 @@ div.pop_show_mini{
 */
 .core_follow{
 	overflow:hidden;
-	background:#88c436 url(../../images/common/core_follow.png) 0 0 no-repeat;
+	background-color:#88c436;
+	background-position:0 -500px;
 	border:1px solid #6ebf3f;
 	padding:0 10px 0 20px;
 	line-height:20px;
@@ -1947,11 +1953,11 @@ div.pop_show_mini{
 	border-radius: 3px;
 }
 .core_follow:hover{
-	background-position:0 -30px;
+	background-position:0 -530px;
 	text-decoration:none;
 }
 .core_follow:active{
-	background-position:0 -60px;
+	background-position:0 -560px;
 }
 /*取消关注*/
 .core_unfollow{
@@ -1985,7 +1991,8 @@ div.pop_show_mini{
 .design_mode_edit{
 	width:51px;
 	height:51px;
-	background:#595e62 url(../../images/common/design_mode_edit.png) 0 0 no-repeat;
+	background-color:#595e62;
+	background-position:0 -740px;
 	border:0 none;
 	position:fixed;
 	_position:absolute;
@@ -1996,7 +2003,7 @@ div.pop_show_mini{
 	z-index:999999;
 }
 .design_mode_edit:hover{
-	background-position:0 -51px;
+	background-position:0 -791px;
 	text-decoration:none;
 }
 
@@ -2035,6 +2042,8 @@ div.pop_show_mini{
 >>	1:3			design_layout_1_3
 >>	2:1			design_layout_2_1
 >>	3:1			design_layout_3_1
+>>	3:2			design_layout_3_2
+>>	2:3			design_layout_2_3
 >>	1:1:1			design_layout_3_1
 >>	1:1:1:1			design_layout_1111
 >>	2:3:3			design_layout_233
@@ -2099,6 +2108,28 @@ div.pop_show_mini{
 .design_layout_3_1 .design_layout_3_1_right{
 	float:right;
 	width:24.9%;
+	min-height:40px;
+}
+/*2:3*/
+.design_layout_2_3 .design_layout_2_3_left{
+	float:left;
+	width:39.5%;
+	min-height:40px;
+}
+.design_layout_2_3 .design_layout_2_3_right{
+	float:right;
+	width:60%;
+	min-height:40px;
+}
+/*3:2*/
+.design_layout_3_2 .design_layout_3_2_left{
+	float:left;
+	width:60%;
+	min-height:40px;
+}
+.design_layout_3_2 .design_layout_3_2_right{
+	float:right;
+	width:39.5%;
 	min-height:40px;
 }
 /*1:1:1*/
@@ -2234,7 +2265,7 @@ div.pop_show_mini{
 ===================
 */
 .box_wrap .design_layout_hd{
-	padding:5px;
+	padding:7px 10px;
 	border-bottom:1px solid #e4e4e4;
 }
 .box_wrap .design_layout_hd ul{
@@ -2263,7 +2294,7 @@ div.pop_show_mini{
 	color:#333;
 	border-bottom:1px solid #e0e0e0;
 	background-color:#eeeeee;
-	background-position:0 -50px;
+	background-position:0 -60px;
 	padding-bottom:5px;
 }
 .layout_boxA .design_layout_hd ul{
@@ -2282,7 +2313,7 @@ div.pop_show_mini{
 }
 .mod_boxB .design_tmode_h2,
 .layout_boxB .design_layout_hd{
-	background-position:0 -100px;
+	background-position:0 -120px;
 	color:#4c9dd1;
 	padding-top:9px;
 	padding-bottom:2px;
@@ -2308,7 +2339,7 @@ div.pop_show_mini{
 	color:#fff;
 	border-bottom:1px solid #c22929;
 	background-color:#c53131;
-	background-position:0 -150px;
+	background-position:0 -180px;
 	padding-bottom:5px;
 }
 /*橙色*/
@@ -2323,7 +2354,7 @@ div.pop_show_mini{
 	color:#fff;
 	border-bottom:1px solid #cb7d09;
 	background-color:#ec7601;
-	background-position:0 -200px;
+	background-position:0 -240px;
 	padding-bottom:5px;
 }
 /*黄色*/
@@ -2338,7 +2369,7 @@ div.pop_show_mini{
 	color:#fff;
 	border-bottom:1px solid #a39c00;
 	background-color:#aaa300;
-	background-position:0 -250px;
+	background-position:0 -300px;
 	padding-bottom:5px;
 }
 /*绿色*/
@@ -2353,7 +2384,7 @@ div.pop_show_mini{
 	color:#fff;
 	border-bottom:1px solid #6bad01;
 	background-color:#7bac00;
-	background-position:0 -300px;
+	background-position:0 -360px;
 	padding-bottom:5px;
 }
 /*青色*/
@@ -2368,7 +2399,7 @@ div.pop_show_mini{
 	color:#fff;
 	border-bottom:1px solid #2cb7ae;
 	background-color:#39bdb4;
-	background-position:0 -350px;
+	background-position:0 -420px;
 	padding-bottom:5px;
 }
 /*蓝色*/
@@ -2383,7 +2414,7 @@ div.pop_show_mini{
 	color:#fff;
 	border-bottom:1px solid #0c497c;
 	background-color:#3776bf;
-	background-position:0 -400px;
+	background-position:0 -480px;
 	padding-bottom:5px;
 }
 /*紫色*/
@@ -2398,7 +2429,7 @@ div.pop_show_mini{
 	color:#fff;
 	border-bottom:1px solid #4d5e96;
 	background-color:#58689e;
-	background-position:0 -450px;
+	background-position:0 -540px;
 	padding-bottom:5px;
 }
 
@@ -2735,12 +2766,12 @@ div.pop_show_mini{
 	text-align:right;
 }
 .tmode_waterfall .num span{
-	background:url(../../images/design/tmode_waterfall.png) 0 2px no-repeat;
+	background-position:0 -478px;
 	display:inline-block;
 	padding:0 15px 0 18px;
 }
 .tmode_waterfall .num span.icon_like{
-	background-position:0 -28px;
+	background-position:0 -499px;
 	padding-left:20px;
 }
 
@@ -2783,15 +2814,13 @@ div.pop_show_mini{
 	cursor:pointer;
 }
 
-
-
 /*
 ===================
 返回顶部
 ===================
 */
 #back_top{
-	background:url(../../images/common/back_top.png) no-repeat;
+	background-position:-60px -740px;
 	width:51px;
 	height:51px;
 	overflow:hidden;
@@ -2803,7 +2832,7 @@ div.pop_show_mini{
 	display:none;
 }
 #back_top:hover{
-	background-position:0 -51px;
+	background-position:-60px -791px;
 }
 
 /*
@@ -3080,11 +3109,11 @@ ul.at_user_list{
 	line-height:25px;
 	font-weight:700;
 	color:#333;
-	background:url(../../images/common/arrow_right.png) 9px 10px no-repeat;
+	background-position:9px -390px;
 	cursor:pointer;
 }
 .pop_help_punch .select_box dl.current dt{
-	background:url(../../images/common/arrow_down.png) 7px 11px no-repeat;
+	background-position:7px -320px;
 }
 .pop_help_punch .select_box dd{
 	padding:0 20px 0 15px;
@@ -3093,16 +3122,16 @@ ul.at_user_list{
 	line-height:20px;
 	height:20px;
 	overflow:hidden;
-	background:url(../../images/common/add_gray.png) 120px 6px no-repeat;
+	background-position:120px -414px;
 	cursor:pointer;
 }
 .pop_help_punch .select_box dd.disabled{
-	background:url(../../images/common/right_gray_mini.png) 120px 6px no-repeat;
+	background-position:120px -434px;
 	cursor:default;
 	color:#ccc;
 }
 .pop_help_punch .select_box dd.in{
-	background:url(../../images/common/right_green_mini.png) 120px 6px no-repeat;
+	background-position:120px -454px;
 	color:#ccc;
 }
 .pop_help_punch .select_box dd:hover{

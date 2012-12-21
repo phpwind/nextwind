@@ -1,0 +1,176 @@
+/*
+===================
+@explain: 帖子管理
+@copyright: Copyright 2012,phpwind.com
+@author: longwenid@gmail.com
+$Id: management.css 22183 2012-12-19 13:49:41Z yanchixia $
+===================
+*/
+
+/*===================管理操作{===================*/
+
+/*
+===================
+管理操作选项
+===================
+*/
+.pop_operat_list{
+	overflow:hidden;
+}
+.pop_operat_list ul{
+	margin-left:-10px;
+	_padding-bottom:10px;
+}
+.pop_operat_list li{
+	float:left;
+	margin:0 0 10px 10px;
+}
+.pop_operat_list a{
+	display:inline;
+	border:1px solid #ccc;
+	background:#fff;
+	padding:3px 10px;
+	float:left;
+	color:#333;
+	white-space:nowrap;
+}
+.pop_operat_list a:hover{
+	text-decoration:none;
+	border-color:#1377a9;
+}
+
+/*
+===================
+管理操作
+===================
+*/
+.pop_operat_reason{
+	border-top:1px dotted #ccc;
+}
+.pop_operat_reason dt,
+.pop_operat_management dt{
+	float:left;
+	width:85px;
+	line-height:26px;
+}
+.pop_operat_reason dd,
+.pop_operat_management dd{
+	overflow:hidden;
+	line-height:26px;
+}
+.pop_operat_management dl{
+	padding:0 0 10px 0;
+}
+.pop_operat_management ul{
+	padding-bottom:5px;
+}
+.pop_operat_management li{
+	margin-bottom:3px;
+	float:left;
+	width:100%;
+	border:0 none;
+	background:#f7f7f7;
+	padding:3px 0;
+	border-radius: 3px;
+}
+.pop_operat_management li .ct{
+	display:none;
+	padding:5px 10px 10px;
+}
+.pop_operat_management li .hd{
+	padding:0 5px;
+}
+.pop_operat_management li .hd label{
+	display:inline-block;
+	background:url(../../images/forum/arrow_down_black.png) right center no-repeat;
+	padding:0 5px;
+	width:365px;
+}
+.pop_operat_management li.current .hd label{
+	background:url(../../images/forum/arrow_up_black.png) right center no-repeat;
+}
+.pop_operat_management li.current{
+	background:#f1f1f1;
+}
+.pop_operat_management li.current .ct{
+	display:block;
+}
+.pop_operat_management .title{
+	padding:0 0 15px 15px;
+}
+.pop_operat_management .merger{
+	padding:0 0 10px 15px;
+}
+.pop_operat_del{
+	font-size:14px;
+	padding:10px 15px 20px;
+}
+
+/*
+===================
+高亮
+===================
+*/
+.sub_high_light{
+}
+.sub_high_light a{
+	display:inline-block;
+	padding:3px 5px;
+	border:1px solid #ccc;
+	background:#fff;
+	margin-right:4px;
+	vertical-align:middle;
+}
+.sub_high_light a:hover{
+	text-decoration:none;
+	border-color:#1377a9;
+}
+.sub_high_light a.current{
+	background-color:#2298d3;
+	border-color:#1377a9 #2298d3 #2298d3;
+	color:#fff;
+}
+.sub_high_light .color_pick{
+	margin-right:15px;
+}
+
+/*
+===================
+列表下管理
+===================
+*/
+.management{
+	margin:0 15px;
+	padding:0 10px 0 0;
+	color:#666;
+}
+.management a{
+	margin:0 5px;
+	color:#333;
+}
+.management i{
+	color:#ccc;
+	font-style:normal;
+	margin:0 5px;
+}
+
+/*
+===================
+帖子管理
+===================
+*/
+.read_management{
+	border-top:1px solid #e9e9e9;
+	padding:10px 0;
+}
+.read_management a{
+	margin:0 5px;
+	color:#666;
+}
+.read_management i{
+	color:#ccc;
+	font-style:normal;
+	margin:0 5px;
+}
+
+

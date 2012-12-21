@@ -7,10 +7,9 @@
 				<!--头像-->
 				<div class="face">
 					<a href="{@url:space/index/run/?uid=$read['created_userid']}" class="J_user_card_show" data-uid="{$read['created_userid']}" target="_blank"><img src="{@Pw::getAvatar($read['created_userid'])}" class="J_avatar" data-type="middle" width="100" height="100" alt="{$read['created_username']}"></a>
-					<!--禁止及编辑入口-->
+					<!--禁止入口:去掉编辑入口-->
 					<!--#if ($operateReply['ban']) {#-->
 						<div class="edit">
-							<a href="{@Wind::getComponent('router')->getRoute('pw')->checkUrl('admin.php')}" target="_blank">编辑</a>
 							<span class="J_post_manage_col" data-role="readbar"><a href="{@url:bbs/manage/ban?tid=$tid&uid=$read['created_userid']}" data-uid="{$read['created_userid']}" class="J_dialog_post">禁止</a></span>
 						</div>
 					<!--#}#-->
@@ -65,7 +64,7 @@
 				<!--# } #-->
 				<hook class='$threadDisplay' method='displayHtmlFromAfterUserInfo' args="array($users[$read['created_userid']], $read)" />
 				<!--# if ($read['lou'] == 0) { #-->
-				<pw-drag id="readSide_segment"/>
+				<pw-tpl id="readSide_segment"/>
 				<!--# } #-->
 				<!--广告位-->
 				<advertisement id='Read.Layer.User' sys='1'/>
@@ -82,17 +81,18 @@
 						<li>回复：<em id="topicRepliesNum">{$threadInfo['replies']}</em></li>
 					</ul>
 				</div>
-				<h1 id="J_post_title"><!--# if ($threadInfo['topic_type'] && ($topicTypename = $threadDisplay->getTopicTypeName($threadInfo['topic_type']))) { #--><a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$threadInfo['topic_type']}">[{@$topicTypename}]</a><!--# } #-->{$threadInfo['subject']}</h1>
-				<span class="floor_honor">
-					<!--#if ($threadInfo['topped']) {#--><span>顶</span><!--#}#-->
-					<!--#if ($threadInfo['digest']) {#--><span class="s_jing">精</span><!--#}#-->
-					<!--#if ($threadInfo['replies'] > $hotIcon) {#--><span class="s_hot">热</span><!--#}#-->
-					<!--#if ($threadInfo['highlight']) {#--><span class="s_liang">亮</span><!--#}#-->
+				<h1 id="J_post_title"><!--# if ($threadInfo['topic_type'] && ($topicTypename = $threadDisplay->getTopicTypeName($threadInfo['topic_type']))) { #--><a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$threadInfo['topic_type']}">[{@$topicTypename|html}]</a><!--# } #-->{$threadInfo['subject']}</h1>
+				<span class="floor_honor posts_icon">
+					<!--#if ($threadInfo['topped']) {#--><i class="icon_headtopic_1" title="置顶"></i><!--#}#-->
+					<!--#if ($threadInfo['digest']) {#--><i class="icon_digest" title="精华"></i><!--#}#-->
+					<!--#if ($threadInfo['replies'] > $hotIcon) {#--><i class="icon_topichot" title="热门"></i><!--#}#-->
+					<!--#if ($threadInfo['highlight']) {#--><i class="icon_highlight" title="加亮"></i><!--#}#-->
 				</span>
 			</div>
 			<!--# } #-->
+			<div class="c"></div>
 			<div class="floor_top_tips cc">
-				<span class="lou J_floor_copy" title="复制此楼地址" <!--# if($read['lou'] == 0) {#--> data-type="main"<!--# } #--> data-hash="read_{$read['pid']}">{@$threadDisplay->getFloorName($read['lou'])}<sup>#</sup></span>
+				<div style="position:relative;"><span class="lou J_floor_copy" title="复制此楼地址" <!--# if($read['lou'] == 0) {#--> data-type="main"<!--# } #--> data-hash="read_{$read['pid']}">{@$threadDisplay->getFloorName($read['lou'])}<sup>#</sup></span></div>
 				<!--# if (!empty($read['istopped'])) { #-->
 				<div class="inside_digs_icon" title="帖内置顶"></div>
 				<!--# } #-->
@@ -108,7 +108,7 @@
 				</div>
 				<!--# } #-->
 				<span class="fl">发布于：{@Pw::time2str($read['created_time'])}<!--# if ($loginUser->getPermission('view_ip_address')) { #-->，<span title="IP: {$read['created_ip']}">来自：{$read['ipfrom']}</span> <!--#}#-->
-				<!--# if ($read['created_userid'] == $loginUser->uid || $threadPermission['edit']) { #-->
+				<!--# if ($loginUser->uid && ($read['created_userid'] == $loginUser->uid || $threadPermission['edit'])) { #-->
 				 <a href="{@url:bbs/post/modify/?tid=$tid&pid=$read['pid']}">[编辑]</a>
 				<!--# } #-->
 				</span>
@@ -131,10 +131,8 @@
 					$read['tags'] && $reaTags = explode(',', $read['tags']);
 				#-->
 				<div id="J_read_tag_wrap" class="read_tag_list">
-					<!--# foreach ((array)$reaTags as $tag) { 
-						$tagEncode = urlencode($tag);
-					#-->
-					<a data-url="{@url:tag/index/card?name=$tagEncode}" class="J_read_tag_item tag_item" href="{@url:tag/index/view?name=$tagEncode}">{$tag}</a>
+					<!--# foreach ((array)$reaTags as $tag) { #-->
+					<a data-url="{@url:tag/index/card?name=$tag}" class="J_read_tag_item tag_item" href="{@url:tag/index/view?name=$tag}">{$tag}</a>
 					<div class="tag_card J_tag_card" style="display:none;"><div class="pop_loading"></div></div>
 					<!--# } #-->
 					<!--# if (($read['created_userid'] === $loginUser->uid && $loginUser->getPermission('tag_allow_add')) || $loginUser->getPermission('tag_allow_edit')) { #-->
@@ -153,7 +151,7 @@
 				</div>
 				<!--# } #-->
 				<!--# if ($read['lou'] == 0) { #-->
-				<pw-drag id="readFloorTop_segment"/>
+				<pw-tpl id="readFloorTop_segment"/>
 				<!--# } #-->
 				<hook class='$threadDisplay' method='displayHtmlFromBeforeContent' args="array($read)" />
 				<!--# //$threadDisplay->displayHtmlFromBeforeContent($read) #-->
@@ -256,11 +254,11 @@
 				<!--#
 				$_signheight = (isset($groupRight[$users[$read['created_userid']]['groupid']]['sign_max_height']) && $groupRight[$users[$read['created_userid']]['groupid']]['sign_max_height']) ? $groupRight[$users[$read['created_userid']]['groupid']]['sign_max_height'] : 200;
 				#-->
-				<div class="signature" style="max-height:{$_signheight}px;maxHeight:{$_signheight}px;">{$users[$read['created_userid']]['bbs_sign']|html}</div>
+				<div class="signature" style="max-height:{$_signheight}px;maxHeight:{$_signheight}px;"><table width="100%"><tr><td>{$users[$read['created_userid']]['bbs_sign']|html}</td></tr></table></div>
 			<!--# } #-->
 			<advertisement id='Read.Layer.TidDown' sys='1'/>
 			<!--# if ($read['lou'] == 0) { #-->
-				<pw-drag id="readFloorbot_segment"/>
+				<pw-tpl id="readFloorbot_segment"/>
 			<!--# } #-->
 			<!--# if ($read['lou'] == 0 && $showReply) { #-->
 			<!--快速回复-->
@@ -316,5 +314,5 @@
 </table>
 </div>
 <!--# if ($read['lou'] == 0) { #-->
-<pw-drag id="readFloor_segment"/>
+<pw-tpl id="readFloor_segment"/>
 <!--# } #-->

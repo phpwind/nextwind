@@ -5,7 +5,7 @@
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidError.php 21931 2012-12-17 06:43:35Z gao.wanggao $
+ * @version $Id: WindidError.php 21973 2012-12-17 12:17:13Z gao.wanggao $
  * @package Windid.library
  */
 
@@ -41,7 +41,8 @@ class WindidError {
 	const UPLOAD_FAIL = -80;
 	const UPLOAD_EXT_ERROR = -81;
 	const UPLOAD_SIZE_LESS = -82;
-	const UPLOAD_SIZE_OVER = -82;
+	const UPLOAD_SIZE_OVER = -83;
+	const UPLOAD_CONTENT_ERROR = -84;
 	
 	public $errorCode;
 

@@ -14,8 +14,8 @@
 	<div class="h_a">功能说明</div>
 	<div class="prompt_text mb10">
 		<ol>
-			<li>手机验证方案支持app扩展，可以到[云平台-应用中心]下载更多的方案。</li>
-			<li>为确保手机验证服务生效，需要先开通云平台帐号[云平台-平台首页]，并保证足够短信剩余条数，否则会导致认证短信下发失败。进入短信平台。</li>
+			<li>手机验证方案支持app扩展，可以到<a href="{@url:/appcenter/app/run}">应用中心</a>下载更多的方案。</li>
+			<li>为确保手机验证服务生效，需要先开通云平台帐号<a href="{@url:/appcenter/server/run}">[云平台-平台首页]</a>，并保证足够短信剩余条数，否则会导致认证短信下发失败。进入短信平台。</li>
 		</ol>
 	</div>
 	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('admin/config/mobile/dorun')}" method="post">
@@ -28,7 +28,7 @@
 			<tr>
 				<th>短信剩余条数</th>
 				<td>
-					<font class="bold">{$restMessage}</font>条
+					<font class="bold">{$restMessage}</font>条 <a href="{$appMobileUrl}" target="_blank">查看详细</a>
 				</td>
 				<td><div class="fun_tips"></div></td>
 			</tr>

@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignExportTxt.php 19747 2012-10-17 10:43:57Z gao.wanggao $ 
+ * @version $Id: PwDesignExportTxt.php 21973 2012-12-17 12:17:13Z gao.wanggao $ 
  * @package 
  */
 class PwDesignExportTxt {
@@ -24,8 +24,9 @@ class PwDesignExportTxt {
 		foreach ($modules AS &$module) {
 			unset($module['isused'], $module['module_id']);
 		}
-		$structures = $this->_getStructureDs()->fetchStruct($names);
 
+		$structures = $this->_getStructureDs()->fetchStruct($names);
+		$txtSegment = array();
 		$segments = $this->_getSegmentDs()->getSegmentByPageid($pageInfo['page_id']);
 		foreach ($segments AS $k=>$v) {
 			if (!$v['segment_tpl']) continue;
@@ -33,7 +34,6 @@ class PwDesignExportTxt {
 		}
 		$txtPage['module_ids'] = $pageInfo['module_ids'];
 		$txtPage['struct_names'] = $pageInfo['struct_names'];
-		
 		$_nr = "\n";
 		$_time = Pw::getTime();
 		$_title = $_nr;

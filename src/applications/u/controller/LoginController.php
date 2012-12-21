@@ -9,7 +9,7 @@ Wind::import('APPS:u.service.helper.PwUserHelper');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: LoginController.php 21663 2012-12-12 07:04:05Z jinlong.panjl $
+ * @version $Id: LoginController.php 22361 2012-12-21 11:50:28Z xiaoxia.xuxx $
  * @package products.u.controller
  */
 class LoginController extends PwBaseController {
@@ -94,6 +94,12 @@ class LoginController extends PwBaseController {
 		if ($isSuccess instanceof PwError) {
 			$this->showError($isSuccess->getError());
 		}
+		$config = Wekit::C('site');
+		if ($config['windid'] != 'local') {
+			$localUser = $this->_getUserDs()->getUserByUid($isSuccess['uid'], PwUser::FETCH_MAIN); 
+			if ($userForm['username'] != $localUser['username']) $this->showError('USER:user.syn.error');
+		}
+	
 		$info = $login->sysUser($isSuccess['uid']);
 		$identity = PwLoginService::createLoginIdentify($info);
 		$identity = base64_encode($identity . '|' . $this->getInput('backurl'));
@@ -119,6 +125,11 @@ class LoginController extends PwBaseController {
 		if ($result instanceof PwError) {
 			$this->showError($result->getError());
 		} else {
+			$config = Wekit::C('site');
+			if ($config['windid'] != 'local') {
+				$localUser = $this->_getUserDs()->getUserByUid($result['uid'], PwUser::FETCH_MAIN); 
+				if ($userForm['username'] != $localUser['username']) $this->showError('USER:user.syn.error');
+			}
 			$info = $login->sysUser($result['uid']);
 			$identity = PwLoginService::createLoginIdentify($info);
 			$backUrl = $this->getInput('backurl');
@@ -143,8 +154,9 @@ class LoginController extends PwBaseController {
 	public function showquestionAction() {
 		$statu = $this->checkUserInfo();
 		$verify = $this->_showVerify();
-		$login = new PwLoginService();
-		$hasQuestion = $login->isSetSafecv($this->loginUser->uid);
+		/* @var $userSrv PwUserService */
+		$userSrv = Wekit::load('SRV:user.srv.PwUserService');
+		$hasQuestion = $userSrv->isSetSafecv($this->loginUser->uid);
 		if (!$hasQuestion && !$verify) {
 			$this->forwardRedirect(WindUrlHelper::createUrl('u/login/welcome', array('_statu' => $statu)));
 		}
@@ -165,13 +177,15 @@ class LoginController extends PwBaseController {
 			$veryfy = $this->_getVerifyService();
 			if (false === $veryfy->checkVerify($code)) $this->showError('USER:verifycode.error');
 		}
-		$login = new PwLoginService();
-		$hasQuestion = $login->isSetSafecv($this->loginUser->uid);
+		/* @var $userSrv PwUserService */
+		$userSrv = Wekit::load('SRV:user.srv.PwUserService');
+		$hasQuestion = $userSrv->isSetSafecv($this->loginUser->uid);
 		if ($hasQuestion) {
 			list($question, $answer) = $this->getInput(array('question', 'answer'), 'post');
 			if ($question == -4) {
 				$question = $this->getInput('myquestion', 'post');
 			}
+			$login = new PwLoginService();
 			$result = $login->checkQuestion($this->loginUser->uid, $question, $answer, $this->getRequest()->getClientIp());
 			if ($result instanceof PwError) {
 				$this->showError($result->getError());
@@ -248,8 +262,8 @@ class LoginController extends PwBaseController {
 		
 		/* @var $userDs PwUser */
 		$userDs = Wekit::load('user.PwUser');
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($this->loginUser->uid)->setQuestion($question, $answer);
+		$userDm = new PwUserInfoDm($this->loginUser->uid);
+		$userDm->setQuestion($question, $answer);
 		if (($result = $userDs->editUser($userDm, PwUser::FETCH_MAIN)) instanceof PwError) {
 			$this->showError($result->getError());
 		}
@@ -261,7 +275,7 @@ class LoginController extends PwBaseController {
 	 */
 	public function welcomeAction() {
 		$identify = $this->checkUserInfo();
-		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE) == PwUser::STATUS_UNACTIVE) {
+		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE)) {
 			Wind::import('SRV:user.srv.PwRegisterService');
 			$identify = PwRegisterService::createRegistIdentify($this->loginUser->uid, 
 				$this->loginUser->info['password']);
@@ -270,11 +284,11 @@ class LoginController extends PwBaseController {
 		$login = new PwLoginService();
 		$login->welcome($this->loginUser, $this->getRequest()->getClientIp());
 		list(, $refUrl) = explode('|', base64_decode($identify));
-		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNCHECK) == PwUser::STATUS_UNCHECK) {
+		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNCHECK)) {
 			$this->forwardRedirect(WindUrlHelper::createUrl('u/login/show?backurl=' . $refUrl));
 		}
 		if (!$refUrl) $refUrl = Wekit::app()->baseUrl;
-		$config = Wekit::C('windid');
+		$config = Wekit::C('site');
 		if ($config['windid'] == 'local') {
 			$this->forwardRedirect($refUrl);
 		} else {
@@ -289,7 +303,7 @@ class LoginController extends PwBaseController {
 	 * 提示信息
 	 */
 	public function showAction() {
-		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNCHECK) == PwUser::STATUS_UNCHECK) {
+		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNCHECK)) {
 			$this->showError('USER:login.active.check');
 		}
 		$this->forwardRedirect($this->_filterUrl());
@@ -325,7 +339,7 @@ class LoginController extends PwBaseController {
 		$url = $this->getInput('backurl');
 		if (!$url) $url = $this->getRequest()->getServer('HTTP_REFERER');
 		if (!$url) $url = WindUrlHelper::createUrl('u/login/run');
-		$config = Wekit::C('windid');
+		$config = Wekit::C('site');
 		if ($config['windid'] == 'local') {
 			$this->forwardRedirect($url);
 		} else {

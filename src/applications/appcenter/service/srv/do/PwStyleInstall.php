@@ -1,13 +1,14 @@
 <?php
 Wind::import('APPS:appcenter.service.srv.do.PwInstall');
 Wind::import('APPS:appcenter.service.dm.PwStyleDm');
+Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
 /**
  * 风格安装流程bp
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwStyleInstall.php 21520 2012-12-11 02:14:30Z long.shi $
+ * @version $Id: PwStyleInstall.php 22284 2012-12-21 03:47:30Z long.shi $
  * @package service.style.srv
  */
 class PwStyleInstall extends PwInstall {
@@ -38,7 +39,7 @@ class PwStyleInstall extends PwInstall {
 		if ($result) return new PwError('APPCENTER:install.exist.fail');
 		$alias = $manifest->getApplication('alias');
 		if (!$alias) return new PwError('APPCENTER:install.fail.alias.empty');
-		if (!preg_match('/^[a-z][a-z0-9]+$/i', $alias)) return new PwError('APPCENTER:illegal.alias');
+		/* if (!preg_match('/^[a-z][a-z0-9]+$/i', $alias)) return new PwError('APPCENTER:illegal.alias'); */
 		list($type) = $this->getStyleType($install);
 		$result = $this->_load()->fetchStyleByAliasAndType($alias, $type);
 		if ($result instanceof PwError) return $result;
@@ -109,8 +110,12 @@ class PwStyleInstall extends PwInstall {
 	public function afterInstall($install) {
 		list(, $pack) = $this->getStyleType($install);
 		$alias = $install->getManifest()->getApplication('alias');
-		$targetDir = 'THEMES:' . $pack;
-		$target = Wind::getRealDir($targetDir . '.' . $alias);
+		$targetDir = THEMES_PATH . $pack;
+		if (!PwSystemHelper::checkWriteAble($targetDir . '/')) {
+			return new PwError('APPCENTER:install.mv.fail',
+				array('{{error}}' => 'THEMES:' . str_replace('/', '.', $pack)));
+		}
+		$target = $targetDir . '/' . $alias;
 		PwApplicationHelper::mvSourcePack($install->getTmpPackage(), $target);
 		$install->addInstallLog('packs', $target);
 		return true;

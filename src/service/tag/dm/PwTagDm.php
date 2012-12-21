@@ -1,5 +1,6 @@
 <?php
 Wind::import('LIB:base.PwBaseDm');
+Wind::import('SRV:user.validator.PwUserValidator');
 
 /**
  * 话题DM
@@ -299,20 +300,32 @@ class PwTagDm extends PwBaseDm {
 	}
 	
 	protected function _beforeUpdate() {
-		return $this->_checkTagName();
+		return $this->checkTagName();
 	 }
 	
 	protected function _beforeAdd() {
 		$this->_data['created_time'] = Pw::getTime();	
-		return $this->_checkTagName();
+		return $this->checkTagName();
 	}
 	
-	public function _checkTagName(){
+	public function checkTagName($tagName = ''){
+		$tagName = $tagName ? $tagName : $this->_data['tag_name'];
+		if (!$tagName) return true;
 		$maxLength = 15;
-		if (Pw::strlen($this->_data['tag_name']) > $maxLength) {
+		if (($result = $this->isNameHasIllegalChar($tagName)) !== false) {
+			return $result;
+		}
+		if (Pw::strlen($tagName) > $maxLength) {
 			return new PwError('TAG:tagname.length.error',array('{maxlength}'=>$maxLength));
 		}
 		return true;
+	}
+	
+	private function isNameHasIllegalChar($tagName) {
+		if (0 >= preg_match('/^[\x7f-\xff\dA-Za-z\.\_]+$/', $tagName)) {
+			return new PwError('TAG:error.tagname');
+		}
+		return false;
 	}
 }
 ?>

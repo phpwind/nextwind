@@ -5,7 +5,7 @@ Wind::import('SRV:design.srv.data.PwModuleData');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwShieldData.php 17912 2012-09-10 08:21:56Z gao.wanggao $ 
+ * @version $Id: PwShieldData.php 22257 2012-12-20 09:50:37Z gao.wanggao $ 
  * @package 
  */
 
@@ -78,8 +78,12 @@ class PwShieldData extends PwModuleData {
 	 				->setVieworder($v['vieworder']);
 	 		}
 	 		if (isset($v['bold'])) $dm->setStyle($v['bold'],$v['underline'], $v['italic'], $v['color']);
-	 		$dm->setExtend($this->getExtend($v));
+			$extend = $this->getExtend($newData);
+	 		$dm->setExtend($extend);
 	 		$resource = $ds->addData($dm);
+	 		if (isset($extend['__asyn'])) {
+	 			$imageDs->updateDataId($extend['__asyn'], $resource);
+	 		}
 		}
 	}
 	

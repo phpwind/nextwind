@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignStructure.php 11328 2012-06-06 07:37:29Z gao.wanggao $ 
+ * @version $Id: PwDesignStructure.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class PwDesignStructure {
@@ -19,6 +19,11 @@ class PwDesignStructure {
 		return $this->_getDao()->fetch($names);
 	}
 	
+	public function editStruct(PwDesignStructureDm $dm) {
+		$resource = $dm->beforeUpdate();
+		if ($resource instanceof PwError) return $resource;
+		return $this->_getDao()->editStruct($dm->getData());
+	}
 	
 	public function replaceStruct(PwDesignStructureDm $dm) {
 		$resource = $dm->beforeAdd();

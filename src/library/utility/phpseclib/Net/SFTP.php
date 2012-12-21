@@ -48,7 +48,7 @@
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMIX Jim Wigginton
  * @license    http://www.gnu.org/licenses/lgpl.txt
- * @version    $Id: SFTP.php 21939 2012-12-17 07:13:16Z long.shi $
+ * @version    $Id: SFTP.php 21967 2012-12-17 11:38:24Z long.shi $
  * @link       http://phpseclib.sourceforge.net
  */
 
@@ -1163,7 +1163,7 @@ class Net_SFTP extends Net_SSH2 {
             return false;
         }
 
-        $remote_file = $this->_realpath($path);
+        $path = $this->_realpath($path);
         if ($path === false) {
             return false;
         }

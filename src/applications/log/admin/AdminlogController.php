@@ -54,7 +54,7 @@ class AdminlogController extends AdminBaseController {
 			}
 		}
 		
-		$this->setOutput($this->isFound($this->adminUser->username), 'isFound');
+		$this->setOutput($this->isFounder($this->adminUser->username), 'isFound');
 		$this->setOutput($keyword, 'keyword');
 		$this->setOutput($result, 'logs');
 		$this->setOutput(array('keyword' => $keyword), 'searchData');
@@ -66,7 +66,7 @@ class AdminlogController extends AdminBaseController {
 	}
 
 	public function clearAction() {
-		if (!$this->isFound($this->adminUser->username)) $this->showError('fail');
+		if (!$this->isFounder($this->adminUser->username)) $this->showError('fail');
 		
 		/* @var $logService AdminLogService */
 		$logService = Wekit::load('ADMIN:service.srv.AdminLogService');

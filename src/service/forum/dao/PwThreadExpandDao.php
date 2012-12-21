@@ -6,7 +6,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadExpandDao.php 15112 2012-07-31 08:10:19Z jieyin $
+ * @version $Id: PwThreadExpandDao.php 22350 2012-12-21 10:06:31Z jieyin $
  * @package forum
  */
 
@@ -35,9 +35,9 @@ class PwThreadExpandDao extends PwBaseDao {
 	}
 
 	public function countUserThreadByFidAndTime($fid, $time, $limit) {
-		$sql = $this->_bindSql('SELECT created_userid,COUNT(*) AS count FROM %s WHERE fid=? AND created_time>? GROUP BY created_userid ORDER BY count DESC %s', $this->getTable(), $this->sqlLimit($limit));
+		$sql = $this->_bindSql('SELECT created_userid,COUNT(*) AS count FROM %s WHERE disabled=0 AND created_time>? AND fid=? GROUP BY created_userid ORDER BY count DESC %s', $this->getTable(), $this->sqlLimit($limit));
 		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->queryAll(array($fid, $time), 'created_userid');
+		return $smt->queryAll(array($time, $fid), 'created_userid');
 	}
 
 	public function countThreadsByFid() {

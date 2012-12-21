@@ -4,7 +4,7 @@
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidUtility.php 21931 2012-12-17 06:43:35Z gao.wanggao $
+ * @version $Id: WindidUtility.php 22349 2012-12-21 10:05:46Z gao.wanggao $
  * @package Windid.library
  */
 class WindidUtility {
@@ -75,7 +75,7 @@ class WindidUtility {
 	}
 	
 	public static function buildClientUrl($url, $notiFile) {
-		$url = $url . $notiFile;
+		$url = $url . '/' .$notiFile;
 		$_url  = parse_url($url);
 		$query = isset($_url['query']) ? '&' : '?';
 		return $url. $query;

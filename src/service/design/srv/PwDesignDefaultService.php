@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignDefaultService.php 21411 2012-12-06 11:35:48Z gao.wanggao $ 
+ * @version $Id: PwDesignDefaultService.php 22290 2012-12-21 04:12:36Z gao.wanggao $ 
  * @package 
  */
 class PwDesignDefaultService {
@@ -76,9 +76,10 @@ class PwDesignDefaultService {
 </div>
 TPL;
  		Wekit::load('design.PwDesignSegment')->replaceSegment('likedemo', $pageid, $tpl);
- 		Wind::import('SRV:design.srv.data.PwAutoData');
+ 		/*Wind::import('SRV:design.srv.data.PwAutoData');
 		$srv = new PwAutoData($moduleid);
-		$srv->addAutoData();
+		$srv->addAutoData();*/
+		$this->_getBakService()->doBak($pageid);
  		return true;
 	}
 	
@@ -129,13 +130,17 @@ TPL;
 </div>
 TPL;
  		Wekit::load('design.PwDesignSegment')->replaceSegment('huatidemo', $pageid, $tpl);
- 		Wind::import('SRV:design.srv.data.PwAutoData');
+ 		/*Wind::import('SRV:design.srv.data.PwAutoData');
 		$srv = new PwAutoData($moduleid);
-		$srv->addAutoData();
+		$srv->addAutoData();*/
+		$this->_getBakService()->doBak($pageid);
  		return true;
 	}
 	
 	
+	private function _getBakService() {
+		return Wekit::load('design.srv.PwPageBakService');
+	}
 	
 	
 	private function _getPageDs() {

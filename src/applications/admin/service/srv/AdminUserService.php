@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 后台用户服务类
  *
@@ -12,15 +11,13 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-17
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminUserService.php 21768 2012-12-13 06:39:43Z long.shi $
+ * @version $Id: AdminUserService.php 22327 2012-12-21 08:46:56Z yishuo $
  * @package admin
  * @subpackage library.service
  */
 class AdminUserService {
-
 	const FOUNDER = 'founder';
 	const USER = 'user';
-
 	protected $cookieName = 'AdminUser';
 	private $_founder = null;
 
@@ -30,22 +27,23 @@ class AdminUserService {
 	 * 合法用户返回true，非法用户返回false
 	 *
 	 * @param string $username        	
-	 * @return boolean
+	 * @return array
 	 */
 	public function verifyUserByUsername($username) {
-		return $this->loadUser()->getUserByName($username);
+		if (empty($username)) return array();
+		return $this->loadUserService()->getUserByName($username);
 	}
 
 	/**
 	 * 验证用户是否有访问菜单的权限
 	 *
-	 * @param PwUserBo $user 用户ID
+	 * @param AdminUserBo $user 用户ID
 	 * @param string $m 路由信息Module
 	 * @param string $c 路由信息Controller
 	 * @param string $a 路由信息Action
 	 * @return true Error
 	 */
-	public function verifyUserMenuAuth(PwUserBo $user, $m, $c, $a) {
+	public function verifyUserMenuAuth($user, $m, $c, $a) {
 		$_menus = $this->getAuths($user);
 		if ($_menus === '-1') return true;
 		if (empty($_menus) || !is_array($_menus)) return new PwError('ADMIN:menu.fail.allow');
@@ -72,9 +70,9 @@ class AdminUserService {
 	 * @param AdminUserBo $user        	
 	 * @return array PwError -1
 	 */
-	public function getAuths(PwUserBo $user) {
+	public function getAuths($user) {
 		list($uid, $username) = array($user->uid, $user->username);
-		if ($this->isFounder($username)) return '-1';
+		if ($this->loadFounderService()->isFounder($username)) return '-1';
 		
 		/* @var $authDS AdminAuth */
 		$authService = Wekit::load('ADMIN:service.AdminAuth');
@@ -106,22 +104,24 @@ class AdminUserService {
 	 * @return boolean
 	 */
 	public function login($username, $password) {
-		$conf = $this->getFounders();
+		$conf = $this->loadFounderService()->getFounders();
 		if (isset($conf[$username])) {
-			list($md5pwd, $salt) = explode('|', $conf[$username], 2);
-			if (md5($password . $salt) != $md5pwd) return new PwError('ADMIN:login.fail.user.illegal');
-			$cookie = Pw::encrypt(self::FOUNDER . "\t" . $username . "\t" . Pw::getPwdCode($md5pwd));
+			$r = $this->loadFounderService()->checkPwd($conf[$username], $password);
+			if (!$r) return new PwError('ADMIN:login.fail.user.illegal');
+			$cookie = Pw::encrypt(self::FOUNDER . "\t" . $username . "\t" . Pw::getPwdCode($r));
 		} else {
-			// [后台登录ip限制]
-			if (!$this->ipLegal(Wekit::app()->clientIp)) return new PwError('ADMIN:login.fail.ip');
-			$user = $this->loadUserService()->verifyUser($username, $password, 2);
+			if (!$this->loadSafeService()->ipLegal(Wekit::app()->clientIp)) {
+				return new PwError('ADMIN:login.fail.ip');
+			}
+			$user = $this->loadUserService()->verifyUser($username, $password);
 			if ($user instanceof PwError) return new PwError('ADMIN:login.fail.user.illegal');
 			/* @var $auth AdminAuth */
 			$auth = Wekit::load('ADMIN:service.AdminAuth');
 			if (!$auth->findByUid($user['uid'])) return new PwError('ADMIN:login.fail.allow');
-	
-			$u = Wekit::load('user.PwUser')->getUserByUid($user['uid']);
-			$cookie = Pw::encrypt(self::USER . "\t" . $user['uid'] . "\t" . Pw::getPwdCode($u['password']));
+			
+			$u = $this->loadUserService()->getUserByUid($user['uid']);
+			$cookie = Pw::encrypt(
+				self::USER . "\t" . $user['uid'] . "\t" . Pw::getPwdCode($u['password']));
 		}
 		Pw::setCookie($this->cookieName, $cookie, 1800);
 		return true;
@@ -137,78 +137,27 @@ class AdminUserService {
 	}
 
 	/**
-	 *
-	 * @return PwUserService
+	 * @return IAdminUserDependenceService
 	 */
-	private function loadUserService() {
-		try {
-			return Wekit::load('user.srv.PwUserService');
-		} catch (Exception $e) {
-			throw new PwDependanceException('EXCEPTION:admin.userservice', 
-				array(
-					'{service}' => __CLASS__, 
-					'{userservice}' => Wind::getRealPath('user.srv.PwUserService')));
-		}
+	public function loadUserService() {
+		$userService = Wind::getComponent('adminUserService');
+		if ($userService instanceof IAdminUserDependenceService) return $userService;
+		throw new PwDependanceException('admin.userservice', 
+			array('{service}' => __CLASS__, '{userservice}' => 'IAdminUserDependenceService'));
 	}
 
 	/**
-	 *
-	 * @return PwUser
+	 * @return AdminFounderService
 	 */
-	private function loadUser() {
-		try {
-			return Wekit::load('user.PwUser');
-		} catch (Exception $e) {
-			throw new PwDependanceException('admin.userservice', 
-				array(
-					'{service}' => __CLASS__, 
-					'{userservice}' => Wind::getRealPath('SRV:user.PwUser')));
-		}
+	private function loadFounderService() {
+		return Wekit::load('ADMIN:service.srv.AdminFounderService');
 	}
 
 	/**
-	 * 读取创始人配置文件
-	 *
-	 * @return PwError array
+	 * @return AdminSafeService
 	 */
-	public function getFounders() {
-		if ($this->_founder === null) {
-			$this->_founder = include Wind::getRealPath('CONF:founder.php', true);
-			is_array($this->_founder) || $this->_founder = array();
-		}
-		return $this->_founder;
-	}
-
-	/**
-	 * 根据配置文件，查看是否管理员
-	 *
-	 * @param string $username        	
-	 */
-	public function isFounder($username) {
-		$founders = $this->getFounders();
-		return isset($founders[$username]);
-	}
-
-	/**
-	 * 验证后台登录ip
-	 *
-	 * @param string $ip        	
-	 * @return boolean
-	 */
-	public function ipLegal($ip) {
-		$ips = Wekit::C('admin', 'ip.allow');
-		if (empty($ips)) return true;
-		$ipArray = explode(',', $ips);
-		$result = false;
-		$ip = trim($ip);
-		foreach ($ipArray as $v) {
-			$v = trim($v);
-			if ($v && strpos(",$ip.", ",$v.") !== false) {
-				$result = true;
-				break;
-			}
-		}
-		return $result;
+	private function loadSafeService() {
+		return Wekit::load('ADMIN:service.srv.AdminSafeService');
 	}
 }
 ?>

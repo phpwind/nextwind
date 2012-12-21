@@ -6,7 +6,7 @@ Wind::import('WIND:router.route.AbstractWindRoute');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwRoute.php 21867 2012-12-14 07:56:32Z long.shi $
+ * @version $Id: PwRoute.php 22366 2012-12-21 12:40:59Z long.shi $
  * @package library
  */
 class PwRoute extends AbstractWindRoute {
@@ -296,6 +296,11 @@ class PwRoute extends AbstractWindRoute {
 								$format['{fname}'] = $domain[$_args['fid']];
 							}
 						}
+						if ($pos = strpos($v['format'], '{page}')) {
+							if (!isset($_args['page'])) {
+								$v['format'] = str_replace($v['format'][$pos - 1] . '{page}', '', $v['format']);
+							}
+						}
 						foreach ($matches[1] as $code) {
 							if ($code != 'fname') {
 								$format['{' . $code . '}'] = isset($_args[$code]) ? $_args[$code] : '';
@@ -343,9 +348,14 @@ class PwRoute extends AbstractWindRoute {
 			/* 解析特殊伪静态 */
 			$rule = $this->_getRule();
 			if (!empty($rule)) {
-				list($rewritePath, $queryPath) = explode('?', $path . '?', 2);
+				if (false !== strpos($path, '?')) {
+					list($rewritePath, $queryPath) = explode('?', $path . '?', 2);
+				} else {
+					list($rewritePath, $queryPath) = explode('&', $path . '&', 2);
+				}
 				foreach ($rule as $k => $v) {
 					if ($k == 'default') continue;
+					$rewritePath = rawurldecode($rewritePath);
 					if (preg_match($v['pattern'], $rewritePath, $matches)) {
 						$matches = array_diff_key($matches, range(0, intval(count($matches) / 2)));
 						$args = WindUrlHelper::urlToArgs(trim($queryPath, '?'), true);

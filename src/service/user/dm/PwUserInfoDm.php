@@ -10,7 +10,7 @@ Wind::import('SRV:user.PwUser');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserInfoDm.php 21755 2012-12-13 05:06:06Z gao.wanggao $
+ * @version $Id: PwUserInfoDm.php 22233 2012-12-19 22:02:08Z xiaoxia.xuxx $
  * @package src.service.user.dm
  */
 class PwUserInfoDm extends PwBaseDm {
@@ -109,7 +109,8 @@ class PwUserInfoDm extends PwBaseDm {
 	 * @return PwUserInfo
 	 */
 	public function setQuestion($question, $answer) {
-		$this->getDm()->setQuestion($question, $answer);
+		$this->getDm()->setQuestion($question);
+		$this->getDm()->setAnswer($answer);
 		return $this;
 	}
 

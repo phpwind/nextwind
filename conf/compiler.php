@@ -10,6 +10,11 @@ defined('WEKIT_VERSION') or exit(403);
  */
 return array(
 	'support-tags' => array(
+		'portal' => array(
+			'tag' => 'pw',
+			'compiler' => 'LIB:engine.extension.viewer.PwTemplateCompilerPortal',
+			'pattern' => '/\<pw-start\/>(.+)<pw-end\/>/isU'
+		),
 		'page' => array(
 			'tag' => 'page',
 			'compiler' => 'LIB:engine.extension.viewer.PwTemplateCompilerPage'
@@ -17,13 +22,6 @@ return array(
 		'design' => array(
 			'tag' => 'design',
 			'compiler' => 'LIB:engine.extension.viewer.PwTemplateCompilerDesign',
-		),
-		
-		'portal' => array(
-			'tag' => 'pw',
-			'compiler' => 'LIB:engine.extension.viewer.PwTemplateCompilerPortal',
-			//'pattern' => '/\<pw-start\/>/i'
-			'pattern' => '/\<pw-start\/>(.+)<pw-end\/>/isU'
 		),
 		'component'	=> array(
 			'tag' => 'component',

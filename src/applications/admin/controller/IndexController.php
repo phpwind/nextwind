@@ -11,7 +11,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-13
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: IndexController.php 21823 2012-12-13 10:40:29Z gao.wanggao $
+ * @version $Id: IndexController.php 21989 2012-12-18 02:19:08Z long.shi $
  * @package admin
  * @subpackage controller
  */
@@ -30,27 +30,14 @@ class IndexController extends AdminBaseController {
 		if (isset($menus['custom']['items']) && is_array($menus['custom']['items'])) {
 			$menus['custom']['items'] += $menuService->getCustomMenus($this->adminUser);
 		}
-		$notice = 0;
-		if (Wekit::load('ADMIN:service.srv.AdminUserService')->isFounder($this->adminUser->username)) {
-			$ck = Pw::getCookie('checkupgrade');
-			if (!$ck) {
-				$upgradeInfo = Wekit::load('APPS:appcenter.service.srv.PwSystemInstallation')->checkUpgrade();
-				$upgradeInfo && $notice |= 1;
-				Pw::setCookie('checkupgrade', $upgradeInfo ? 1 : -1, 7200);
-			} else {
-				$ck === '1' && $notice |= 1;
-			}
-			$ck = Pw::getCookie('checkpatch');
-			if (!$ck) {
-				$patchInfo = Wekit::load('APPS:appcenter.service.srv.PwPatchUpdate')->checkUpgrade();
-				$patchInfo && $notice |= 2;
-			} else {
-				$ck === '1' && $notice |= 2;
-			}
-		}
-		$this->setOutput($notice, 'notice');
 		
 		$this->setOutput($menus, 'menus');
+	}
+	
+	public function noticeAction() {
+		$notice = Wekit::load('APPS:appcenter.service.srv.PwSystemInstallation')->getNotice($this->adminUser);
+		$this->setOutput($notice, 'data');
+		$this->showMessage('success');
 	}
 
 	/**

@@ -32,16 +32,24 @@ return array(
 	'data' => array('工具', array()),
 	'appcenter' => array('应用', array()),
 	'platform' => array('云平台', array()),
-	'windid' => array('WINDID', array()),
 
 	'custom_set' => array('常用菜单', 'custom/*', '', '', 'custom'),
 	'admin_founder' => array('创始人管理', 'founder/*', '', '', 'admin'),
 	'admin_auth' => array('后台权限', 'auth,role/*', '', '', 'admin'),
 	'admin_safe' => array('后台安全', 'safe/*', '', '', 'admin'),
 	
-	'admin_windid' => array('windid设置', 'pwadmin/windid/*', '', '', 'admin'),
-	'admin_client' => array('客户端管理', 'pwadmin/client/*', '', '', 'admin'),
-	'admin_notify' => array('通知队列管理', 'pwadmin/notify/*', '', '', 'admin'),
+	'windid_windid' => array('WindID设置', 'windid/windid/*', '', '', 'admin'),
+	'windid_client' => array('客户端管理', 'windid/client/*', '', '', 'admin'),
+
+	'windid_notify' => array('通知队列', 'windid/notify/*', '', '', 'admin'),
+	/*'windid_regist' => array('注册设置', 'windid/regist/*', '', '', 'admin'),
+	'windid_storage' => array('头像存储设置', 'windid/storage/*', '', '', 'admin'),
+	'windid_credit' => array('积分设置', 'windid/credit/*', '', '', 'admin'),
+	'windid_time' => array('时区设置', 'windid/time/*', '', '', 'admin'),
+	'windid_user' => array('用户管理', 'windid/user/*', '', '', 'admin'),
+	'windid_messages' => array('私信管理', 'windid/messages/*', '', '', 'admin'),
+	'windid_area' => array('地区库', 'windid/areadata/*', '', '', 'admin'),
+	'windid_school' => array('学校库', 'windid/schooldata/*', '', '', 'admin'),*/
 
 	'config_site' => array('站点设置', 'config/config/*', '', '', 'config'),
 	'config_nav' => array('导航设置', 'nav/nav/*', '', '', 'config'),
@@ -50,7 +58,7 @@ return array(
 	'config_credit' => array('积分设置', 'credit/credit/*', '', '', 'config'),
 	'config_editor' => array('编辑器', 'config/editor/*', '', '', 'config'),
 	'config_emotion' => array('表情管理', 'emotion/emotion/*', '', '', 'config'),
-	'config_attachment' => array('附件相关', 'config/attachment/*', '', '', 'config'),
+	'config_attachment' => array('附件相关', 'config/attachment,stroage/*', '', '', 'config'),
 	'config_watermark' => array('水印设置', 'config/watermark/*', '', '', 'config'),
 	'config_verifycode' => array('验证码', 'verify/verify/*', '', '', 'config'),
 	'config_seo' => array('SEO优化', 'seo,app/manage/*', '', '', 'config'),
@@ -58,6 +66,8 @@ return array(
 	'config_domain' => array('二级域名', 'rewrite/domain/*', '', '', 'config'),
 	'config_email' => array('电子邮件', 'config/email/*', '', '', 'config'),
 	'config_pay' => array('网上支付', 'config/pay/*', '', '', 'config'),
+	'config_area' => array('地区库', 'windid/areadata/*', '', '', 'config'),
+	'config_school' => array('学校库', 'windid/schooldata/*', '', '', 'config'),
 
 	'u_groups' => array('用户组权限', 'u/groups/*', '', '', 'u'),
 	'u_upgrade'=> array('用户组提升','u/upgrade/*','','','u'),
@@ -108,13 +118,6 @@ return array(
 	'platform_siteStyle'  => array('模板管理','appcenter/style/*','','','platform'),
 	'platform_upgrade'  => array('在线升级','appcenter/upgrade,fixup/*','','','platform'),
 
-	'windid_set' => array('基本设置', 'windid/index/*', '', '', 'windid'),
-	'windid_client' => array('客户端管理', 'windid/client/*', '', '', 'windid'),
-	'windid_user' => array('用户管理', 'windid/user/*', '', '', 'windid'),
-	'windid_messages' => array('私信管理', 'windid/messages/*', '', '', 'windid'),
-	'windid_area' => array('地区库', 'windid/areadata/*', '', '', 'windid'),
-	'windid_school' => array('学校库', 'windid/schooldata/*', '', '', 'windid'),
-	'windid_notify' => array('通知队列', 'windid/notify/*', '', '', 'windid'),	
 
 
 	//混乱的配置，先统一，后续再系统规划整理

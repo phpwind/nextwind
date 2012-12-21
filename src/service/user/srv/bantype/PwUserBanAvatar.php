@@ -8,7 +8,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUserBanAvatar.php 21138 2012-11-29 03:07:29Z xiaoxia.xuxx $
+ * @version $Id: PwUserBanAvatar.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package src.service.user.srv.bantype
  */
 class PwUserBanAvatar implements PwUserBanTypeInterface {
@@ -21,8 +21,8 @@ class PwUserBanAvatar implements PwUserBanTypeInterface {
 		$userDs = Wekit::load('SRV:user.PwUser');
 		$info = $userDs->getUserByUid($dm->getField('uid'), PwUser::FETCH_MAIN);
 		if (Pw::getstatus($info['status'], PwUser::STATUS_BAN_AVATAR)) return $info['status'];//已经禁止不需要再次更改
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($dm->getField('uid'))->setBanAvatar(true);
+		$userDm = new PwUserInfoDm($dm->getField('uid'));
+		$userDm->setBanAvatar(true);
 		$userDs->editUser($userDm, PwUser::FETCH_MAIN);
 		/* @var $userSrv PwUserService */
 		$userSrv = Wekit::load('SRV:user.srv.PwUserService');
@@ -40,8 +40,8 @@ class PwUserBanAvatar implements PwUserBanTypeInterface {
 		$info = $userDs->getUserByUid($uid, PwUser::FETCH_MAIN);
 		if (!Pw::getstatus($info['status'], PwUser::STATUS_BAN_AVATAR)) return $info['status'];//已经解禁不需要再次更改
 		
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($uid)->setBanAvatar(false);
+		$userDm = new PwUserInfoDm($uid);
+		$userDm->setBanAvatar(false);
 		/* @var $userDs PwUser */
 		$userDs = Wekit::load('SRV:user.PwUser');
 		$userDs->editUser($userDm, PwUser::FETCH_MAIN);

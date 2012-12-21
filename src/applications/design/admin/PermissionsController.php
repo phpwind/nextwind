@@ -5,7 +5,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PermissionsController.php 20523 2012-10-30 10:32:39Z gao.wanggao $ 
+ * @version $Id: PermissionsController.php 22107 2012-12-19 08:04:08Z gao.wanggao $ 
  * @package 
  */
 class PermissionsController extends AdminBaseController {
@@ -180,7 +180,7 @@ class PermissionsController extends AdminBaseController {
 	}
 	
 	public function batchdeleteAction() {
-		$deleteIds = (int)$this->getInput('del_ids', 'get');
+		$deleteIds = $this->getInput('del_ids', 'post');
 		$resource = $this->_getPermissionsDs()->batchDelete($deleteIds);
 		$this->showMessage("operate.success");
 	}

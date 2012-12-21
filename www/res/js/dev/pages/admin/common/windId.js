@@ -22,16 +22,25 @@
 		status = tr.find('.J_status'),
 		id = status.data('id');
 
-		$.post(CLIENT_URL, {
-			clientid : id
-		}, function(data){
-			if(data.state == 'success') {
-				status.text('正常');
-			}else if(data.state == 'fail'){
-				status.html('<span style="color:#ff0000">失败</span>');
-			}
+		$.ajax({
+			url : CLIENT_URL,
+			type : 'post',
+			data : {
+				clientid : id
+			},
+			dataType : 'json',
+			success : function(data){
+				if(data.state == 'success') {
+					status.text('正常');
+				}else if(data.state == 'fail'){
+					status.html('<span style="color:#ff0000">失败</span>');
+				}
 
-			clientLoop(tr.next());
-		}, 'json');
+				clientLoop(tr.next());
+			},
+			error : function(){
+				
+			}
+		});
 	}
 })();

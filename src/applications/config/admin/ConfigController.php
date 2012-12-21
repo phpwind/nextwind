@@ -92,10 +92,13 @@ class ConfigController extends AdminBaseController {
 			->flush();
 		Wekit::load('domain.srv.PwDomainService')->refreshTplCache();
 		
-		$windid = $this->_getWindid();
-		$windid->setConfig('site', 'timezone', $this->getInput('timeTimezone', 'post'));
-		$windid->setConfig('site', 'timecv', (int)$this->getInput('timeCv', 'post'));
-		
+		$service = $this->_loadConfigService();
+		$config = $service->getValues('site');
+		if ($config['windid'] != 'client') {
+			$windid = $this->_getWindid();
+			$windid->setConfig('site', 'timezone', $this->getInput('timeTimezone', 'post'));
+			$windid->setConfig('site', 'timecv', (int)$this->getInput('timeCv', 'post'));
+		}
 		$this->showMessage('ADMIN:success');
 	
 	}

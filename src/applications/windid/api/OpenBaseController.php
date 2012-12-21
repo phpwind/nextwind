@@ -7,7 +7,7 @@ Wind::import('WINDID:service.client.bo.WindidClientBo');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: OpenBaseController.php 21823 2012-12-13 10:40:29Z gao.wanggao $ 
+ * @version $Id: OpenBaseController.php 22343 2012-12-21 09:59:29Z gao.wanggao $ 
  * @package 
  */
 class OpenBaseController extends PwBaseController {
@@ -28,7 +28,7 @@ class OpenBaseController extends PwBaseController {
 		$time = Windid::getTime();
 		if ($time - $_time > 120) $this->output(WindidError::TIMEOUT);
 		$charset = ($clent['charset'] == 1) ? 'utf8' : 'gbk';
-		$baseUrl = Wind::getApp()->getRequest()->getBaseUrl(true) . '/';
+		$baseUrl = Wind::getApp()->getRequest()->getBaseUrl(true);
 		$config = array(
 			'windid' => 'client',
 			'serverUrl' =>  $baseUrl,
@@ -50,9 +50,14 @@ class OpenBaseController extends PwBaseController {
 	}
 	
 	protected function output($message = '') {
-		header('Content-type: application/json');
-		echo WindJson::encode($message, Windid::client()->clientCharser);
-		exit();
+		if (is_int($message)) {
+			echo $message; 
+			exit;
+		} else {
+			header('Content-type: application/json; charset='.Windid::client()->clientCharser);
+			echo WindJson::encode($message, Windid::client()->clientCharser);
+			exit();
+		}
 	}
 	
 	private function _getAppDs() {

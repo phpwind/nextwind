@@ -52,10 +52,28 @@ $openPlatformUrl = Wind::getComponent('configParser')->parse($filePath);
 	<h2 class="h_a">开发团队</h2>
 	<div class="home_info" id="home_devteam"></div>
 </div>
+<!--升级提示-->
+<div id="J_system_update" style="display:none" class="system_update">
+	您正在使用旧版本的phpwind，为了获得更好的体验，请升级至最新版本。<a href="">立即升级</a>
+</div>
 <template source='TPL:admin.common.footer' />
 <script>
 $("#btn_submit").click(function(){
 	$("#tips_success").fadeTo(500,1);
+});
+//获取升级信息通知
+$.ajax({
+    url: "{@url:pwadmin/home/notice}",
+    dataType: "json",
+    success: function (data) {
+    	var r = data.data;
+    	if (r.notice) {
+    		$('#J_system_update').show();
+    		$('#J_system_update').html(r.notice + "<a href='" + r.url +"'>立即升级</a>");
+    	}
+    },
+    error: function () {
+    }
 });
 </script>
 <!--# 

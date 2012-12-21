@@ -70,6 +70,12 @@
 		'3_1' : '<div role="structure__ID" data-lcm="3_1" class="box_wrap design_layout_style J_mod_layout design_layout_3_1" style="display:none;">\
 			<h2 role="titlebar" class="design_layout_hd cc J_layout_hd"><span>3:1</span></h2>\
 			<div class="design_layout_ct"><div class="design_layout_3_1_left J_layout_item"></div><div class="design_layout_3_1_right J_layout_item"></div></div></div>',
+		'2_3' : '<div role="structure__ID" data-lcm="2_3" class="box_wrap design_layout_style J_mod_layout design_layout_2_3" style="display:none;">\
+			<h2 role="titlebar" class="design_layout_hd cc J_layout_hd"><span>2:3</span></h2>\
+			<div class="design_layout_ct"><div class="design_layout_2_3_left J_layout_item"></div><div class="design_layout_2_3_right J_layout_item"></div></div></div>',
+		'3_2' : '<div role="structure__ID" data-lcm="3_2" class="box_wrap design_layout_style J_mod_layout design_layout_3_2" style="display:none;">\
+			<h2 role="titlebar" class="design_layout_hd cc J_layout_hd"><span>3:2</span></h2>\
+			<div class="design_layout_ct"><div class="design_layout_3_2_left J_layout_item"></div><div class="design_layout_3_2_right J_layout_item"></div></div></div>',
 		'1_1_1' : '<div role="structure__ID" data-lcm="1_1_1" class="box_wrap design_layout_style J_mod_layout design_layout_1_1_1" style="display:none;">\
 			<h2 role="titlebar" class="design_layout_hd cc J_layout_hd"><span>1:1:1</span></h2>\
 			<div class="design_layout_ct"><div class="design_layout_1_1_1_left J_layout_item"></div><div class="design_layout_1_1_1_cont J_layout_item"></div><div class="design_layout_1_1_1_right J_layout_item"></div></div></div>',
@@ -104,6 +110,8 @@
 		'2_1' : 'design_layout_style J_mod_layout design_layout_2_1',
 		'1_3' : 'design_layout_style J_mod_layout design_layout_1_3',
 		'3_1' : 'design_layout_style J_mod_layout design_layout_3_1',
+		'2_3' : 'design_layout_style J_mod_layout design_layout_2_3',
+		'3_2' : 'design_layout_style J_mod_layout design_layout_3_2',
 		'1_1_1' : 'design_layout_style J_mod_layout design_layout_1_1_1',
 		'1_1_1_1' : 'design_layout_style J_mod_layout design_layout_1111',
 		'2_3_3' : 'design_layout_style J_mod_layout design_layout_233',
@@ -1311,7 +1319,7 @@
 		Wind.Util.ajaxMaskShow(design_zindex);
 		
 		try{
-			$.post(this.href, {name : id}, function(data){
+			$.post(this.href, {name : id, pageid : pageid}, function(data){
 				Wind.Util.ajaxMaskRemove();
 				if(Wind.Util.ajaxTempError(data)) {
 					designUtil.popHide();

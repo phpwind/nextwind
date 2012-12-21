@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwMedalCache.php 20628 2012-11-01 03:59:33Z gao.wanggao $ 
+ * @version $Id: PwMedalCache.php 22363 2012-12-21 12:16:44Z gao.wanggao $ 
  * @package 
  */
 
@@ -21,7 +21,7 @@ class PwMedalCache {
 		$_medals = array();
 		$cacheDs = Wekit::cache();
 		$medals = $cacheDs->get('medal_all');
-		$attachUrl = Wekit::getGlobal('url', 'attach'). '/medal/';
+		$attachUrl = Pw::getPath(''). 'medal/';
 		$localUrl = WindUrlHelper::checkUrl(PUBLIC_RES . '/images/medal/', PUBLIC_URL) . '/' ;
 		foreach ($medalIds AS $id) {
 			if (!isset($medals[$id])) continue;
@@ -48,7 +48,7 @@ class PwMedalCache {
 		$_allMedalId = array_unique($_allMedalId);
 		$cacheDs = Wekit::cache();
 		$medals = $cacheDs->get('medal_all');
-		$attachUrl = Wekit::getGlobal('url', 'attach'). '/medal/';
+		$attachUrl = Pw::getPath(''). 'medal/';
 		$localUrl = WindUrlHelper::checkUrl(PUBLIC_RES . '/images/medal/', PUBLIC_URL) . '/' ;
 		foreach ($_userMedalIds AS $uid=>$medalIds) {
 			$_medalInfo = array();
@@ -84,7 +84,7 @@ class PwMedalCache {
 		$cacheDs = Wekit::cache();
 		$autoMedalIds = $cacheDs->get('medal_auto');
 		$medals = $cacheDs->get('medal_all');
-		$attachUrl = Wekit::getGlobal('url', 'attach'). '/medal/';
+		$attachUrl = Pw::getPath(''). 'medal/';
 		$localUrl = WindUrlHelper::checkUrl(PUBLIC_RES . '/images/medal/', PUBLIC_URL) . '/' ;
 		$medalIds = array_merge($myMedalIds,$autoMedalIds);
 		$medalIds = array_unique($medalIds);

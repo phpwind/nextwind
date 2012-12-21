@@ -12,17 +12,17 @@
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<pw-drag id="main_segment"/>
+		<pw-tpl id="main_segment"/>
 		<div class="bread_crumb">
 			{@$headguide|html}<!--# if ($tab == 'digest') { #--><em>&gt;</em><a href="{@url:bbs/cate/run?fid=$fid&tab=digest}">精华</a><!--#}#-->
 		</div>
-		<pw-drag id="cateTop_segment"/>
+		<pw-tpl id="cateTop_segment"/>
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content">
-					<pw-drag id="first_segment"/>
+					<pw-tpl id="first_segment"/>
 					<template source='widget_forum' load='true' />
-					<pw-drag id="cate_middle"/>
+					<pw-tpl id="cate_middle"/>
 					<div class="box_wrap thread_page J_check_wrap">
 						<nav>
 						<div class="content_nav" id="hashpos_ttype">
@@ -92,7 +92,7 @@
 					<div class="mb20 cc">
 					<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/cate/run?fid=$fid" args="$urlargs"/>
 					</div>
-					<pw-drag id="cate_bottom"/>
+					<pw-tpl id="cate_bottom"/>
 					<section class="face_list" style="display:none;">
 						<h2 class="hd"><a href="#" class="fr fn">查看更多&gt;&gt;</a>当前在线</h2>
 						<article class="ct">
@@ -112,7 +112,7 @@
 			</div>
 		</div>
 		<!--# if ($operateThread) { #-->
-		<div id="J_post_manage_main" class="core_pop_wrap J_post_manage_pop" style="display:none;left:50%;margin-left:-208px;top:10%;">
+		<div id="J_post_manage_main" class="core_pop_wrap J_post_manage_pop" style="display:none;position:fixed;_position:absolute;">
 			<div class="core_pop">
 				<div style="width:415px;">
 					<div class="pop_top"><a href="#" id="J_post_manage_close" class="pop_close">关闭</a><strong class="mr5">帖子操作</strong>(已选中&nbsp;<span class="red" id="J_post_checked_count">1</span>&nbsp;篇&nbsp;&nbsp;<a href="" class="s4" id="J_post_manage_checkall" data-type="check">全选</a>)</div>

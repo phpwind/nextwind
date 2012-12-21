@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ImportController.php 19784 2012-10-18 03:29:57Z gao.wanggao $ 
+ * @version $Id: ImportController.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class ImportController extends PwBaseController {
@@ -34,7 +34,7 @@ class ImportController extends PwBaseController {
 		$ext = strtolower(substr(strrchr($_FILES['file']['name'], '.'), 1));
 		if (!$ext || !in_array($ext, array('txt', 'zip'))) $this->showMessage("DESIGN::upload.fail");
 		
-		if ($pageInfo['page_type'] == PwDesignPage::PORTAL && $ext == 'zip'){//$this->showError("DESIGN:page.emport.fail");
+		if ($ext == 'zip'){//$this->showError("DESIGN:page.emport.fail");
 			$this->clearPage($pageInfo);
 			$this->doZip($pageInfo);
 		} else {
@@ -54,6 +54,7 @@ class ImportController extends PwBaseController {
 		$filename = Wind::getRealDir('PUBLIC:attachment.'.$file['path']).$file['filename'];
 		$resource = $srv->checkZip($filename);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
+		/*
 		Wind::import('SRV:design.dm.PwDesignPortalDm');
 		$dm = new PwDesignPortalDm($portal['id']);
 	    $dm->setTemplate($pageInfo['page_id'])//以pageid命名的文件夹
@@ -61,6 +62,7 @@ class ImportController extends PwBaseController {
 	    	->setTitle($portal['title']);
 		$resource = $this->_getPortalDs()->updatePortal($dm);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
+		*/
 		//更新数据
 		Wind::import('SRV:design.srv.data.PwAutoData');
 		foreach ($srv->newIds AS $id) {

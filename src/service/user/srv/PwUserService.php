@@ -6,7 +6,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserService.php 21573 2012-12-11 08:05:42Z xiaoxia.xuxx $
+ * @version $Id: PwUserService.php 22235 2012-12-19 22:15:51Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwUserService {
@@ -126,9 +126,20 @@ class PwUserService {
 	 */
 	public function updateLastLoginData($uid, $ip) {
 		/* 更新用户登录信息 */
-		$dm = new PwUserInfoDm();
-		$dm->setUid($uid)->setLastvisit(Pw::getTime())->setLastloginip($ip);
+		$dm = new PwUserInfoDm($uid);
+		$dm->setLastvisit(Pw::getTime())->setLastloginip($ip);
 		return $this->_getUserDs()->editUser($dm, PwUser::FETCH_DATA);
+	}
+	
+	/**
+	 * 判断该用户是否有设置安全问题
+	 *
+	 * @param int $uid
+	 * @return boolean
+	 */
+	public function isSetSafecv($uid) {
+		$info = WindidApi::api('user')->getUser($uid, 1);
+		return !empty($info['safecv']);
 	}
 	
 	/** 

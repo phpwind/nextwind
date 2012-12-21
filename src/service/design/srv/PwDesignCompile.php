@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignCompile.php 21901 2012-12-17 02:22:27Z gao.wanggao $ 
+ * @version $Id: PwDesignCompile.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class PwDesignCompile {
@@ -73,9 +73,10 @@ class PwDesignCompile {
      * Enter description here ...
      */
     public function isPortalCompile() {
-    	if ($this->_permission < PwDesignPermissions::IS_DESIGN ) {
+    	if ($this->_permission < PwDesignPermissions::IS_ADMIN ) {
     		return false;
     	}
+    	if (!$this->isDesign) return false;
     	$pageInfo = $this->pageBo->getPage();
     	if ($pageInfo['page_type'] != PwDesignPage::PORTAL) {
     		return false;
@@ -136,7 +137,6 @@ class PwDesignCompile {
 	public function refreshPage() {
 		if ($this->_permission < PwDesignPermissions::IS_DESIGN) return false;
 		$pageBo = new PwDesignPageBo($this->pageid);
-		if ($pageBo->getLock()) return false;
 		$pageInfo = $pageBo->getPage();
 		$ids = explode(',', $pageInfo['module_ids']);
 		Wind::import('SRV:design.srv.data.PwAutoData');
@@ -203,11 +203,12 @@ class PwDesignCompile {
      * @param $moduleId
      */
     public function compileModule($module = '') {
+    	Wind::import('SRV:design.bo.PwDesignModuleBo');
     	$module && list($data,$mod,$moduleId) = explode('_', $module);
     	!$moduleId && $moduleId = PwDesignModuleBo::$stdId;
     	$moduleId = (int)$moduleId;
   		if (!$moduleId) return '';
-    	Wind::import('SRV:design.bo.PwDesignModuleBo');
+    	
     	$bo = new PwDesignModuleBo($moduleId);
     	$html = $bo->getTemplate();
 	    $caption = $bo->getTitleHtml();
@@ -295,8 +296,6 @@ class PwDesignCompile {
 	    
     	return $this->_compileSign($tpl, $bo->moduleid, $standard['sTitle'], $standard['sUrl'], $view['isblank']);
     }
-    
-    
 	
     public function compileTips($id = '') {
     	$pageInfo = $this->pageBo->getPage();

@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwCacheUpdateService.php 19909 2012-10-19 08:48:18Z jieyin $
+ * @version $Id: PwCacheUpdateService.php 22170 2012-12-19 12:19:22Z jieyin $
  * @package forum
  */
 
@@ -26,6 +26,15 @@ class PwCacheUpdateService {
 	 * 更新全局配置 config
 	 */
 	public function updateConfig() {
+		Wekit::cache()->set('config', $this->getConfigCacheValue());
+	}
+	
+	/**
+	 * 获取全局缓存数据
+	 *
+	 * @return array
+	 */
+	public function getConfigCacheValue() {
 		$vkeys = array('site', 'credit', 'bbs', 'attachment', 'components', 'seo', 'nav');
 		$array = Wekit::load('config.PwConfig')->fetchConfig($vkeys);
 		$config = array();
@@ -35,7 +44,7 @@ class PwCacheUpdateService {
 		foreach ($array as $key => $value) {
 			$config[$value['namespace']][$value['name']] = $value['vtype'] != 'string' ? unserialize($value['value']) : $value['value'];
 		}
-		Wekit::cache()->set('config', $config);
+		return $config;
 	}
 	
 	/**

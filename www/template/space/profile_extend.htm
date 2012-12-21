@@ -26,9 +26,10 @@
 					</h3>
 			<!--# foreach($space->spaceUser['work'] AS $work): #-->
 					<dl class="cc">
-						<dt style="width:auto;">{$work['company']}</dt>
-						<dd>{$work['starty']}年{$work['startm']}月&nbsp;至&nbsp;
-				<!--#if (!$work['endy']) {#-->今<!--#}else{#-->{$work['endy']}年{$work['endm']}月<!--#}#--></dd>
+						<dt style="width:auto;" class="mr20">{$work['company']}</dt>
+						<dd style="width:auto;padding-top:3px;" class="f12 gray w">
+							于{$work['starty']}年{$work['startm']}月入职&nbsp;至&nbsp;<!--#if (!$work['endy']) {#-->今<!--#}else{#-->{$work['endy']}年{$work['endm']}月<!--#}#-->
+						</dd>
 					</dl>
 			<!--# endforeach; #-->
 				</div>

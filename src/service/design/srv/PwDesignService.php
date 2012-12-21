@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignService.php 21897 2012-12-14 12:45:12Z gao.wanggao $ 
+ * @version $Id: PwDesignService.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class PwDesignService {
@@ -208,13 +208,14 @@ class PwDesignService {
 	private function _copyRecur($fromFolder, $toFolder) {
 	    $dir = @opendir($fromFolder);
 	    if (!$dir) return false;
-	    @mkdir($toFolder);
+	    WindFolder::mk($toFolder);
 	    while(false !== ( $file = readdir($dir)) ) {
 	        if (( $file != '.' ) && ( $file != '..' )) {
 	            if ( is_dir($fromFolder . '/' . $file) ) {
 	               $this->_copyRecur($fromFolder . '/' . $file, $toFolder . '/' . $file);
 	            }else {
-	                copy($fromFolder . '/' . $file, $toFolder . '/' . $file);
+	                @copy($fromFolder . '/' . $file, $toFolder . '/' . $file);
+	                @chmod($toFolder . '/' . $file, 0777);
 	            }
 	        }
 	    }

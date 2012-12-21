@@ -8,7 +8,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: RightController.php 19964 2012-10-22 05:55:31Z yishuo $
+ * @version $Id: RightController.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package src.products.u.controller.profile
  */
 class RightController extends BaseProfileController {
@@ -82,8 +82,8 @@ class RightController extends BaseProfileController {
 			list($gid, $_groups) = $userService->caculateUserGroupid($gid, $_groups);
 		}
 		
-		$dm = new PwUserInfoDm();
-		$dm->setUid($this->loginUser->uid)->setGroupid($gid)->setGroups($_groups);
+		$dm = new PwUserInfoDm($this->loginUser->uid);
+		$dm->setGroupid($gid)->setGroups($_groups);
 		
 		/* @var $userDs PwUser */
 		$userDs = Wekit::load('user.PwUser');

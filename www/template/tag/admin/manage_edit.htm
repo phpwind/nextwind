@@ -19,7 +19,7 @@
 				<td>
 					<div class="single_image_up"><a href="">重新选择</a><input name="icon" type="file" class="J_upload_preview"></div>
 					<!--# if ($tag['tag_logo']) { #-->
-					<img class="J_previewImg" style="max-width: 300px; " src="{@G:url.attach}/{$tag['tag_logo']}">
+					<img class="J_previewImg" style="max-width: 300px; " src="{@Pw::getPath($tag['tag_logo'])}">
 					<!--# } #-->
 				</td>
 			</tr>

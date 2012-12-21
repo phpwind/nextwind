@@ -3,7 +3,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-11-12
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminAuth.php 3219 2011-12-14 06:43:45Z yishuo $
+ * @version $Id: AdminAuth.php 22288 2012-12-21 04:09:39Z yishuo $
  * @package admin
  * @subpackage service
  */
@@ -76,6 +76,7 @@ class AdminAuth {
 	 */
 	public function edit($id, $roles) {
 		if (!$id) return new PwError('ADMIN:auth.edit.fail.id.illegal');
+		if (!$roles) return new PwError('ADMIN:auth.add.fail.role.empty');
 		$fields['roles'] = implode(',', (array) $roles);
 		$fields['modified_time'] = time();
 		$this->getAdminAuthDao()->updateById($id, $fields);
@@ -92,6 +93,7 @@ class AdminAuth {
 	public function add($username, $uid, $roles) {
 		if (empty($username)) return new PwError('ADMIN:auth.add.fail');
 		if (empty($uid)) return new PwError('ADMIN:auth.add.fail');
+		if (empty($roles)) return new PwError('ADMIN:auth.add.fail.role.empty');
 		if ($this->getAdminAuthDao()->findByUsername($username)) {
 			return new PwError('ADMIN:auth.add.fail.username.duplicate');
 		}

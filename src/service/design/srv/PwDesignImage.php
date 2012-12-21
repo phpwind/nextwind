@@ -5,7 +5,7 @@ Wind::import('LIB:image.PwCutImage');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImage.php 21923 2012-12-17 05:31:20Z gao.wanggao $ 
+ * @version $Id: PwDesignImage.php 22257 2012-12-20 09:50:37Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImage {
@@ -34,19 +34,21 @@ class PwDesignImage {
 		$outFile = $this->getFileName();
 		$outDir = $this->getSaveDir($this->moduleid);
 		$cut = new PwCutImage();
-		$cut->image = $this->getRealPath($outFile);
+		$image = $this->getRealPath($outFile);
+		if (!$image) return array();
+		$cut->image = $image;
 		$cut->outImage = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' .$outDir.$outFile;
 		$cut->cutWidth = $this->thumbW;
 		$cut->cutHeight = $this->thumbH;
 		$cut->quality = 90;
 		$cut->forceThumb = true;
 		$cut->forceScale = true;
-
 		if ($cut->cut() !== false) {
 			if (!$this->store instanceof PwStorageLocal) {
 				$localFile = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' . $outDir. $outFile;
 				$this->store->save($localFile, $outDir. $outFile);
 				$attachUrl = $this->store->get('', 0);
+						
 				WindFile::del(Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/_tmp/' . $outFile);
 				WindFile::del($localFile);
 			} else {
@@ -118,7 +120,7 @@ class PwDesignImage {
 		if($url == "" || $path == "") return false;
 		if (!$this->createFolder($path)) return false;
 		$ext = strrchr($url,".");
-		if($ext != ".gif" && $ext!= ".jpg" && $ext != ".bmp" && $ext != ".png") return false;
+		if($ext != ".gif" && $ext!= ".jpg" &&  $ext != ".png") return false;
 		$filename = $filename ? $filename : mt_rand(1, 999999).'.'.$ext; 
 		$filename = $path.$filename;
 		ob_start(); 
@@ -135,10 +137,10 @@ class PwDesignImage {
 		$opts = array(  
 			'http'=>array(  
 				'method'=>"GET",  
-				'timeout'=>10,  
+				'timeout'=>30,  
 			)  
 		);  
-		return file_get_contents($url, false, stream_context_create($opts));  
+		return @file_get_contents($url, false, stream_context_create($opts));  
 
 	}
 	

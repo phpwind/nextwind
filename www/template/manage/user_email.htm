@@ -11,19 +11,17 @@
 		<table width="100%" class="J_check_wrap">
 			<thead>
 				<tr>
-					<td><label><input type="checkbox" class="J_check_all">全选</label></td>
-					<td>UID</td>
-					<td>用户名</td>
-					<td>注册时间</td>
+					<td width="55"><label><input type="checkbox" class="J_check_all">全选</label></td>
+					<td width="60">UID</td>
+					<td width="120">用户名</td>
+					<td width="120">注册时间</td>
 					<td>电子邮箱</td>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<td><label><input type="checkbox" class="J_check_all">全选</label></td>
-					<td colspan=""><button type="submit" class="btn btn_submit J_form_sub_check">通过</button><button type="submit" class="btn J_form_sub_check" data-action="{@WindUrlHelper::createUrl('manage/user/delete')}">拒绝</button></td>
-					<td></td>
-					<td></td>
+					<td colspan="4"><button type="submit" class="btn btn_submit J_form_sub_check">通过</button><button type="submit" class="btn J_form_sub_check" data-action="{@WindUrlHelper::createUrl('manage/user/delete')}">拒绝</button></td>
 				</tr>
 			</tfoot>
 			<!--# foreach ($list as $key => $item) { #-->

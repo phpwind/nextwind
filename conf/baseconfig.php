@@ -7,10 +7,13 @@ return array(
 
 /**=====配置开始于此=====**/
 
+'dbcache' => '0',				//开启数据库数据缓存，当开启mem(或redis)时，开启此项，将使用mem(或redis)缓存数据库数据
+'distributed' => '0',			//是否使用分布式架构，当开启此项时，将仅使用支持分布式的缓存策略
+
 /*-----通用缓存开启-----*/
 
 'mem.isopen' => 0,		//开启memcache缓存，请确保服务器上已安装 memcache 服务，并已作好相应配置
-'mem.server' => 'Memcache', //memcache服务名，有Memcache和Memcached两种，看当前php扩展安装的是哪个
+'mem.server' => 'MemCache', //memcache服务名，有Memcache和Memcached两种，看当前php扩展安装的是哪个
 'mem.servers' => array(
 	'default' => array(
 		array(
@@ -25,20 +28,23 @@ return array(
 		),
 	),
 ),
+'mem.key.prefix' => 'pw',
 
 
-'redis.isopen' => 0,	//开启redis缓存，请确保服务器上已安装 redis 服务，并已作好相应配置
+'redis.isopen' => 0,			//开启redis缓存，请确保服务器上已安装 redis 服务，并已作好相应配置
 'redis.servers' => array(
 	'default' => array(
 		array(
-			'host' => '127.0.0.1',
+			'host' => '10.12.83.10',
 			'port' => 6379,
 			'pconn' => false,
 			'timeout' => 0,
 		),
 	),
 ),
-'apc.isopen' => 0,		//开启apc缓存，请确保服务器上已安装 apc 服务
+'redis.key.prefix' => 'pw',
+
+'apc.isopen' => 0,				//开启apc缓存，请确保服务器上已安装 apc 服务
 
 
 /*-----预设缓存键值-----*/

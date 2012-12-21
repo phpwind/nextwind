@@ -4,7 +4,7 @@
  * @Descript	: dialog 对话框组件
  * @Author		: chaoren1641@gmail.com
  * @Depend		: core.js、jquery.js(1.7 or later)
- * $Id: dialog.js 21916 2012-12-17 03:53:22Z hao.lin $			:
+ * $Id: dialog.js 21988 2012-12-18 02:18:26Z hao.lin $			:
  */
 ;(function ( $, window, undefined ) {
     var pluginName = 'dialog';
@@ -265,7 +265,7 @@
         			top = follow_elem_offset.top + follow_elem_height;
         		}
         		if((follow_elem_offset.left + follow_elem_width + pop_width) > win_width) {
-					left = win_width - pop_width;
+					left = win_width - pop_width - 1; //多减1px IE保险
         		} else {
         			left = follow_elem_offset.left + follow_elem_width;
         		}

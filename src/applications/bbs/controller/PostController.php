@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PostController.php 21910 2012-12-17 03:14:06Z jieyin $
+ * @version $Id: PostController.php 22374 2012-12-21 14:18:27Z jinlong.panjl $
  * @package forum
  */
 
@@ -141,7 +141,7 @@ class PostController extends PwBaseController {
 		if ($rpid) {
 			$post = Wekit::load('thread.PwThread')->getPost($rpid);
 			if ($post && $post['tid'] == $tid && $post['ischeck']) {
-				$post['content'] = $post['ifshield'] ? '此帖已被屏蔽' : Pw::stripWindCode($post['content']);
+				$post['content'] = $post['ifshield'] ? '此帖已被屏蔽' : Pw::stripWindCode(preg_replace('/\[quote(=.+?\,\d+)?\].*?\[\/quote\]/is', '', $post['content']));
 				$content = '[quote=' . $post['created_username'] . ',' . $rpid . ']' . Pw::substrs($post['content'], 120) . '[/quote]' . $content;
 			} else {
 				$rpid = 0;
@@ -161,9 +161,7 @@ class PostController extends PwBaseController {
 		}
 		$pid = $pwPost->getNewId();
 		
-		if (!$postDm->getField('ischeck')) {
-			$this->showMessage('BBS:post.reply.ischeck', 'bbs/read/run/?tid=' . $tid . '&fid=' . $pwPost->forum->fid . '&page=e#' . $pid, true);
-		} elseif ($_getHtml == 1) {
+		if ($_getHtml == 1) {
 			Wind::import('SRV:forum.srv.threadDisplay.PwReplyRead');
 			Wind::import('SRV:forum.srv.PwThreadDisplay');
 			$threadDisplay = new PwThreadDisplay($tid, $this->loginUser);
@@ -192,6 +190,7 @@ class PostController extends PwBaseController {
 			$this->setTemplate('read_floor');
 		} elseif ($_getHtml == 2) {
 			$content = Wekit::load('forum.srv.PwThreadService')->displayContent($content, $postDm->getField('useubb'), $postDm->getField('reminds'));
+			$this->setOutput($postDm->getField('ischeck'), 'ischeck');
 			$this->setOutput($content, 'content');
 			$this->setOutput($this->loginUser->uid, 'uid');
 			$this->setOutput($this->loginUser->username, 'username');
@@ -340,7 +339,7 @@ class PostController extends PwBaseController {
 		);
 		!$enhideConfig['credit'] && $enhideConfig['credit'] = array_slice($creditBo->cType, 0, 1, true);
 
-		$allowUpload = ($this->post->forum->allowUpload($this->post->user) && ($this->post->user->getPermission('allow_upload') || $this->post->forum->foruminfo['allow_upload'])) ? 1 : 0;
+		$allowUpload = ($this->post->user->isExists() && $this->post->forum->allowUpload($this->post->user) && ($this->post->user->getPermission('allow_upload') || $this->post->forum->foruminfo['allow_upload'])) ? 1 : 0;
 		$attachnum = intval(Wekit::C('attachment', 'attachnum'));
 		if ($perday = $this->post->user->getPermission('uploads_perday')) {
 			$count = $this->post->user->info['lastpost'] < Pw::getTdtime() ? 0 : $this->post->user->info['todayupload'];
@@ -389,7 +388,7 @@ class PostController extends PwBaseController {
 				if (!is_array($value)) continue;
 // 				if (!$forceTopicType && $value) $jsonArray[$key][$key] = '无分类';
 				foreach ($value as $k => $v) {
-					$jsonArray[$key][$k] = $v['name'];
+					$jsonArray[$key][$k] = strip_tags($v['name']);
 				}
 			}
 		}

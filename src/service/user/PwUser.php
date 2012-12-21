@@ -9,7 +9,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUser.php 21891 2012-12-14 12:02:44Z gao.wanggao $
+ * @version $Id: PwUser.php 22131 2012-12-19 08:39:22Z gao.wanggao $
  * @package src.service.user
  */
 class PwUser {
@@ -122,7 +122,8 @@ class PwUser {
 	 * @return bool
 	 */
 	public function updateCredit(PwCreditDm $dm) {
-		$this->_getWindid()->editDmCredit($dm->dm);
+		$result = $this->_getWindid()->editDmCredit($dm->dm);
+		if ($result < 1) return new PwError('WINDID:code.' . $result);
 		return $this->_getDao(self::FETCH_DATA)->editUser($dm->uid, $this->_getWindid()->getUserCredit($dm->uid));
 	}
 

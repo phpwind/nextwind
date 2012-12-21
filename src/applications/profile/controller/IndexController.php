@@ -11,7 +11,7 @@ Wind::import('APPS:profile.service.PwUserProfileExtends');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 21826 2012-12-13 10:45:50Z jinlong.panjl $
+ * @version $Id: IndexController.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package src.products.u.controller.profile
  */
 class IndexController extends BaseProfileController {
@@ -76,8 +76,7 @@ class IndexController extends BaseProfileController {
 	 * 编辑用户信息
 	 */
 	public function dorunAction() {
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($this->loginUser->uid);
+		$userDm = new PwUserInfoDm($this->loginUser->uid);
 		$userDm->setRealname($this->getInput('realname', 'post'));
 		$userDm->setByear($this->getInput('byear', 'post'));
 		$userDm->setBmonth($this->getInput('bmonth', 'post'));
@@ -133,8 +132,7 @@ class IndexController extends BaseProfileController {
 	 * 编辑联系方式
 	 */
 	public function docontactAction() {
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($this->loginUser->uid);
+		$userDm = new PwUserInfoDm($this->loginUser->uid);
 		$userDm->setTelphone($this->getInput('telphone', 'post'));
 		$userDm->setAddress($this->getInput('address', 'post'));
 		$userDm->setZipcode($this->getInput('zipcode', 'post'));

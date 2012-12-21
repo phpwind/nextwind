@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindUtility.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindUtility.php 3859 2012-12-18 09:25:51Z yishuo $
  * @package utility
  */
 class WindUtility {
@@ -81,9 +81,7 @@ class WindUtility {
 	 */
 	public static function mergeArray($array1, $array2) {
 		foreach ($array2 as $key => $value) {
-			if (empty($value)) {
-				$array1[$key] = $value;
-			} else if (!isset($array1[$key])) {
+			if (!isset($array1[$key])) {
 				$array1[$key] = $value;
 			} elseif (is_array($array1[$key]) && is_array($value)) {
 				$array1[$key] = self::mergeArray($array1[$key], $array2[$key]);

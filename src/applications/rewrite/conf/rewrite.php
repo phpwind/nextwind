@@ -12,5 +12,5 @@ return array(
 	'read' => array('论坛帖子阅读页', '{tid}{page}{fid}{fname}', 'bbs/read/run', 'read-{tid}-{page}'), 
 	'special' => array('门户页面', '{id}', 'special/index/run', 'special-{id}'),
 	'space' => array('个人空间', '{uid}', 'space/index/run', 'u-{uid}'),
-	'tag' => array('话题浏览页', '{name}', 'tag/index/view', 'tag/{name}'),
+	'tag' => array('话题浏览页', '{name}', 'tag/index/view', 'tag-{name}'),
 );

@@ -3,7 +3,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-25
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminBaseController.php 21575 2012-12-11 08:18:17Z jieyin $
+ * @version $Id: AdminBaseController.php 22264 2012-12-21 02:33:07Z xiaoxia.xuxx $
  * @package admin
  * @subpackage library
  */
@@ -65,8 +65,8 @@ class AdminBaseController extends WindController {
 	 * @param string $username
 	 * @return boolean
 	 */
-	protected function isFound($username) {
-		return Wekit::load('APPS:admin.service.srv.AdminUserService')->isFounder($username);
+	protected function isFounder($username) {
+		return Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($username);
 	}
 
 }

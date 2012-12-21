@@ -7,7 +7,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ForumController.php 21214 2012-12-03 01:42:26Z jieyin $
+ * @version $Id: ForumController.php 22379 2012-12-21 14:47:22Z peihong.zhangph $
  * @package forum
  */
 
@@ -117,7 +117,7 @@ class ForumController extends PwBaseController {
 	 * 版块列表 弹窗
 	 */
 	public function listAction() {
-		$withMyforum = $this->getInput('withMyforum', 'get');
+		$withMyforum = $this->getInput('withMyforum');
 		$service = Wekit::load('forum.srv.PwForumService');
 		$forums = $service->getForumList();
 		$map = $service->getForumMap();
@@ -200,11 +200,11 @@ class ForumController extends PwBaseController {
 		$topictypes = Wekit::load('forum.PwTopicType')->getTopicTypesByFid($fid, !$this->loginUser->getPermission('operate_thread.type'));
 		$data = array();
 		foreach ($topictypes['topic_types'] as $key => $value) {
-			$tmp = array('title' => $value['name'], 'val' => $value['id']);
+			$tmp = array('title' => strip_tags($value['name']), 'val' => $value['id']);
 			if (isset($topictypes['sub_topic_types'][$value['id']])) {
 				$sub = array();
 				foreach ($topictypes['sub_topic_types'][$value['id']] as $k => $v) {
-					$sub[] = array('title' => $v['name'], 'val' => $v['id']);
+					$sub[] = array('title' => strip_tags($v['name']), 'val' => $v['id']);
 				}
 				$tmp['items'] = $sub;
 			}

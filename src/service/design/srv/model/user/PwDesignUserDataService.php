@@ -12,7 +12,7 @@ Wind::import('SRV:education.srv.helper.PwEducationHelper');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwDesignUserDataService.php 19026 2012-10-10 02:58:37Z xiaoxia.xuxx $
+ * @version $Id: PwDesignUserDataService.php 22057 2012-12-19 02:08:40Z gao.wanggao $
  * @package src.service.design.srv.model.user
  */
 class PwDesignUserDataService extends PwDesignModelBase {
@@ -34,6 +34,7 @@ class PwDesignUserDataService extends PwDesignModelBase {
 	public function decorateEditProperty($moduleBo) {
 		$property = $moduleBo->getProperty();
 		$data = array();
+		!isset($property['gid']) && $property['gid'] = -1;
 		$data['gidOptions'] = $this->_buildGids($property['gid']);
 		return $data;
 	}

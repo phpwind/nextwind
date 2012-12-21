@@ -99,12 +99,16 @@ class Windid {
 	}
 	
 	public static function resUrl() {
-		return self::client()->serverUrl.'res/';
+		return self::client()->serverUrl.'/res/';
 	}
 	
 	public static function attachUrl(){
-		$url = self::C('attachment:avatarurl');
-		if (!$url) $url = self::client()->serverUrl .'attachment/';
+		$config = self::C('attachment');
+		if (!$config['storage.type'] || $config['storage.type'] == 'local') {
+			$url = self::client()->serverUrl .'/attachment/';	
+		} else {
+			$url = $config['avatarurl'];
+		}
 		return $url;
 	}
 	

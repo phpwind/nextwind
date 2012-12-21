@@ -9,7 +9,7 @@ Wind::import('WIND:viewer.AbstractWindTemplateCompiler');
  * @author xiaoxiao <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwTemplateCompilerComponent.php 20274 2012-10-25 07:49:56Z yishuo $
+ * @version $Id: PwTemplateCompilerComponent.php 22295 2012-12-21 05:39:44Z gao.wanggao $
  * @package wekit
  * @subpackage engine.extension.viewer
  */
@@ -42,7 +42,6 @@ class PwTemplateCompilerComponent extends AbstractWindTemplateCompiler {
 		if (strpos($this->args, '$') === false && strpos(strtolower($this->args), 'array') === false) {
 			$this->args = '\'' . $this->args . '\'';
 		}
-		
 		$content = '<?php ';
 		
 		if ($this->action) {
@@ -65,7 +64,6 @@ class PwTemplateCompilerComponent extends AbstractWindTemplateCompiler {
 				$content .= ' ?>' . $_content . '<?php ';
 			}
 		}
-		
 		return $content . ' ?>';
 	}
 

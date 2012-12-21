@@ -9,7 +9,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: FixupController.php 21939 2012-12-17 07:13:16Z long.shi $
+ * @version $Id: FixupController.php 22011 2012-12-18 06:29:28Z long.shi $
  * @package appcenter.admin
  */
 class FixupController extends AdminBaseController {
@@ -19,6 +19,7 @@ class FixupController extends AdminBaseController {
 	 */
 	public function run() {
 		$result = $this->_service()->checkUpgrade();
+		$this->setOutput($result === false, 'connect_fail');
 		$this->setOutput($result, 'patches');
 	}
 

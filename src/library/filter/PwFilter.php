@@ -6,7 +6,7 @@ Wind::import('WIND:filter.WindActionFilter');
  * @author Qiong Wu <papa0924@gmail.com> 2011-12-2
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwFilter.php 21071 2012-11-27 06:34:14Z long.shi $
+ * @version $Id: PwFilter.php 22208 2012-12-19 17:22:25Z jieyin $
  * @package src
  * @subpackage library.filter
  */
@@ -48,7 +48,7 @@ class PwFilter extends WindActionFilter {
 		Wind::import('SRV:seo.bo.PwSeoBo');
 		$sitename = Wekit::C('site', 'info.name');
 		PwSeoBo::set('{sitename}', $sitename);
-		Wekit::setGlobal(WEKIT_VERSION, 'version');
+		Wekit::setGlobal(NEXT_VERSION . ' ' . NEXT_RELEASE, 'version');
 		Wekit::setGlobal(PwSeoBo::getData(), 'seo');
 		
 		$this->setOutput($this->getRequest()->getIsAjaxRequest() ? '1' : '0', '_ajax_');

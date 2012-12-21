@@ -6,7 +6,7 @@ Wind::import('SRV:design.bo.PwDesignStructureBo');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: StructureController.php 21891 2012-12-14 12:02:44Z gao.wanggao $ 
+ * @version $Id: StructureController.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class StructureController extends PwBaseController{
@@ -158,15 +158,28 @@ class StructureController extends PwBaseController{
 	public function doeditAction() {
 		$pageid = (int)$this->getInput('pageid', 'post');
 		$title = $this->getInput('title','post');
+		$struct = $this->bo->getStructure();
+		if (!$struct) $this->showMessage("operate.fail");
 		Wind::import('SRV:design.dm.PwDesignStructureDm');
  		$dm = new PwDesignStructureDm();
  		$dm->setStructTitle($title)
  			->setStructname($this->bo->name);
 		$resource = $this->_getStructureDs()->replaceStruct($dm);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
+		
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+		$pageBo = new PwDesignPageBo($pageid);
+		$pageInfo = $pageBo->getPage();
+		
 		Wind::import('SRV:design.srv.PwPortalCompile');
 		$compile = new PwPortalCompile($pageid);
-		$compile->replaceTitle($this->bo->name, $title);
+		if ($pageInfo['page_type'] == PwDesignPage::PORTAL) {
+			$compile->replaceTitle($this->bo->name, $title);
+		} elseif ($pageInfo['page_type'] == PwDesignPage::SYSTEM) {
+			!$struct['segment'] && $struct['segment'] = '';
+			$compile->replaceTitle($this->bo->name, $title, $struct['segment']);
+		}
+		
 		$this->setOutput($title, 'data');
 		$this->showMessage("operate.success");
 	}

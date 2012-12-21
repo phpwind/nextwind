@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-11-12
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: RoleController.php 16763 2012-08-28 07:28:53Z xiaoxia.xuxx $
+ * @version $Id: RoleController.php 22163 2012-12-19 11:01:58Z yishuo $
  * @package admin
  * @subpackage controller
  */
@@ -48,7 +48,7 @@ class RoleController extends AdminBaseController {
 		list($rolename, $auths) = $this->getInput(array('rolename', 'auths'), 'post');
 		$result = $this->_loadRoleService()->addRole($rolename, $auths);
 		if ($result instanceof PwError) $this->showError($result->getError());
-		$this->showMessage('AdMIN:role.add.success');
+		$this->showMessage('AdMIN:role.add.success', 'role/run');
 	}
 
 	/**
@@ -65,7 +65,7 @@ class RoleController extends AdminBaseController {
 		$auths = AdminMenuHelper::resetMenuStruts($auths);
 		//remove the admin right setting
 		unset($auths['admin']);
-
+		
 		$roles = $this->_loadRoleService()->findRoles();
 		$_tmp = array();
 		foreach ($roles as $value)

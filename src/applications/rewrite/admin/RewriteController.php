@@ -6,7 +6,7 @@ Wind::import('APPS:admin.library.AdminBaseController');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: RewriteController.php 21304 2012-12-04 07:44:37Z long.shi $
+ * @version $Id: RewriteController.php 22366 2012-12-21 12:40:59Z long.shi $
  * @package rewrite.admin
  */
 class RewriteController extends AdminBaseController {
@@ -41,9 +41,6 @@ class RewriteController extends AdminBaseController {
 				if (in_array($format_i, $unique)) {
 					$this->showError(array('REWRITE:format.conflict', array($format[$k1])));
 				}
-				if (false !== strpos($format[$k1], '{name}') && $isopen['default'] && false !== strpos($format[$k1], '-')) {
-					$this->showError(array('REWRITE:format.conflict', array($format[$k1])));
-				}
 				$unique[] = $format_i;
 				if ($k1 == 'thread') {
 					$rewriteData['cate'] = array(
@@ -70,7 +67,7 @@ class RewriteController extends AdminBaseController {
 		}
 		$format = preg_quote($format, '/');
 		$format = str_replace('\{fname\}', '(?P<fname>([a-z0-9]+)?)', $format);
-		$format = str_replace('\{name\}', '(?P<name>.*?)', $format);
+		$format = str_replace('\{name\}', '(?P<name>[\x7f-\xff\da-z\.\_]+?)', $format);
 		$format = str_replace('\{page\}', preg_quote($split, '/') . '?(?P<page>([0-9]+|e)?)', $format);
 		$format = preg_replace('/\\\{(\w+)\\\}/', '(?P<\\1>(\d+)?)', $format);
 		return '/^' . $format . '$/i';

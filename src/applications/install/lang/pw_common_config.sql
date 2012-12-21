@@ -82,6 +82,7 @@ INSERT INTO `pw_common_config` (`name`, `namespace`, `value`, `vtype`, `descript
 ('welcome.content', 'register', '尊敬的{username}，\n<br/>欢迎你注册成为{sitename}的会员！\n<br/>\n<br/>本站全体管理人员向您问好！\n<br/>{sitename}', 'string', ''),
 ('welcome.title', 'register', '欢迎你注册成为{sitename}的会员', 'string', ''),
 ('welcome.type', 'register', 'a:1:{i:0;s:1:"1";}', 'array', ''),
+('mobile.message.content', 'register', '您的验证码是：{mobilecode}，请在页面填写验证码完成验证。（如非本人操作，可不予理会）【{sitename}】', 'string', ''),
 ('cookie.domain', 'site', '', 'string', ''),
 ('cookie.path', 'site', '', 'string', ''),
 ('debug', 'site', '0', 'string', ''),
@@ -123,5 +124,6 @@ INSERT INTO `pw_common_config` (`name`, `namespace`, `value`, `vtype`, `descript
 ('width', 'verify', '240', 'string', ''),
 ('height', 'verify', '60', 'string', ''),
 ('homeUrl', 'site', 'index.php?m=bbs', 'string', ''),
+('windid', 'site', 'local', 'string', ''),
 ('homeRouter', 'site', 'a:3:{s:1:"m";s:3:"bbs";s:1:"c";s:5:"index";s:1:"a";s:3:"run";}', 'array', '');
 			

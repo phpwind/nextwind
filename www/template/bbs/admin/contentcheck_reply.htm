@@ -21,7 +21,7 @@
 	<div class="h_a">搜索</div>
 	<form method="post" action="{@WindUrlHelper::createUrl('bbs/contentcheck/reply')}">
 	<div class="search_type cc mb10">
-		<label>作者：</label><input name="author" type="text" class="input length_2 mr10">
+		<label>作者：</label><input name="author" value="{$args['author']}" type="text" class="input length_2 mr10">
 		<label>所属版块：</label><select name="fid" class="select_3 mr10"><option value="0">所有版块</option>{@$option_html|html}</select>
 		<label>回复时间：</label><input name="created_time_start" type="text" class="input length_2 mr5 J_date"><span class="mr5">至</span><input name="created_time_end" type="text" class="input length_2 J_date mr10">
 		<button class="btn">搜索</button>

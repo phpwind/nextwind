@@ -169,8 +169,8 @@ class ACloudVerCommonUser extends ACloudVerCommonBase {
 			return $this->buildResponse ( USER_INVALID_PARAMS );
 		
 		Wind::import ( 'SRC:service.user.dm.PwUserInfoDm' );
-		$userDm = new PwUserInfoDm ();
-		$userDm->setUid ( $uid )->setEmail ( $email );
+		$userDm = new PwUserInfoDm ($uid);
+		$userDm->setEmail ( $email );
 		$result = $this->getUser ()->editUser ( $userDm, PwUser::FETCH_MAIN );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );

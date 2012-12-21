@@ -43,8 +43,6 @@ foreach ($_profileBread as $key => $_item) {
 									<div class="tips_icon">由于“{$banInfo['reason']|html}”被{$banInfo['operator']}禁止至{$endTime}</div>
 								</div>
 							<!--#} elseif ($type != 'nomal') {#-->
-								<!--#  $__tpl_token = Wind::getComponent('windToken');$__tpl_token_value = $__tpl_token->saveToken('token');#-->
-								<!--# $postUrl = "postAction=ra_postAction&redirectURL=/&requestURL=".urlencode(WindUrlHelper::createUrl('windid/uploadAvatar/run/?uid=' . $loginUser->uid)).'&avatar=' .urlencode(Pw::getAvatar($loginUser->uid, 'big'))."&token={ $__tpl_token_value}&r=".rand(0,9999);#-->
 								<div class="profile_ct">
 										{$avatarFlash|html}
 										<div class="other_upload">如果无法上传头像，请尝试使用<a href="{@url:profile/avatar/run?type=nomal}">普通上传模式</a></div>

@@ -3,7 +3,7 @@
 @explain: 版块页面（包含列表和阅读页）
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
+$Id: forum.css 22324 2012-12-21 08:35:00Z yanchixia $
 ===================
 #*/
 
@@ -93,8 +93,15 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 版块列表展示页
 ===================
 */
-.forum_group a,
-.forum_group .cname{
+.forum_group{
+	border-top:1px solid #e5e5e5;
+	margin-top:-1px;
+}
+.forum_group .box_title{
+	background:#f7f7f7;
+	border-top:1px solid #fff;
+}
+.forum_group table a{
 	color:#333;
 }
 /*分类版块名*/
@@ -174,6 +181,7 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 }
 .forum_child .box_title{
 	border-bottom:1px solid #fbfbfb;
+	background:#fbfbfb;
 	overflow:hidden;
 	position:relative;
 	padding-bottom:0;
@@ -194,6 +202,10 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 	text-decoration:none;
 	float:left;
 	position:relative;
+}
+.btn_post{
+	background-position:0 0;
+	margin-right:10px;
 }
 .btn_post:hover{
 	background-position:0 -30px;
@@ -245,7 +257,7 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 ===================
 */
 .forum_info_box{
-	padding:15px;
+	padding:10px 15px 13px;
 }
 /*logo*/
 .forum_info_box .banner{
@@ -257,7 +269,6 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 }
 /*名称*/
 .forum_info_box .name{
-	margin-bottom:5px;
 	overflow:hidden;
 }
 .forum_info_box .name h3{
@@ -349,13 +360,17 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 }
 .thread_posts_list .author{
 	width:55px;
-
 }
 .thread_posts_list .author a{
 	display:block;
 	width:45px;
 	height:45px;
 	overflow:hidden;
+}
+.thread_posts_list .ordinary{
+	background:#f7f7f7;
+	padding:3px 0;
+	color:#666;
 }
 .thread_posts_list .num{
 	width:130px;
@@ -413,6 +428,7 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 	vertical-align:middle;
 	background-position:-80px -40px;
 	margin-top:1px;
+	font:0/0 Arial;
 }
 .posts_icon i.icon_headtopic_1{
 	background-position:-80px 0;
@@ -444,7 +460,7 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 .posts_icon i.icon_lock{
 	background-position:-80px -60px;
 }
-.posts_icon i.icon_active{
+.posts_icon i.icon_highlight{
 	background-position:-100px -60px;
 }
 .posts_icon i.icon_like{
@@ -610,23 +626,10 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 
 /*帖子荣誉*/
 .floor_honor{
-	padding-left:10px;
-}
-.floor_honor span{
-	background:#f00;
-	color:#fff;
-	padding:2px 5px;
+	padding:0 0 0 10px;
 	display:inline-block;
 	vertical-align:top;
-}
-.floor_honor span.s_jing{
-	background:#f50;
-}
-.floor_honor span.s_hot{
-	background:#f80;
-}
-.floor_honor span.s_liang{
-	background:#fb0;
+	padding-top:2px;
 }
 
 /*
@@ -796,13 +799,13 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 	text-indent:-2000em;
 	background-position:0 -200px;
 }
-.floor_page .pre{
+.floor_page .next{
 	background-position:0 -248px;
 }
-.floor_page .next:hover{
+.floor_page a.pre:hover{
 	background-position:-30px -200px;
 }
-.floor_page .pre:hover{
+.floor_page a.next:hover{
 	background-position:-30px -248px;
 }
 
@@ -815,7 +818,6 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 	padding:0 0 10px;
 	margin-bottom:5px;
 	color:#666;
-	position:relative;
 }
 /*楼层*/
 .floor_top_tips .lou{
@@ -1265,7 +1267,8 @@ $Id: forum.css 21336 2012-12-05 03:40:18Z hao.lin $
 */
 .signature{
 	background:url(../../images/forum/signature.png) 0 0 no-repeat;
-	padding:25px 0 20px;
+	margin-top:10px;
+	padding:25px 0 0;
 	overflow:hidden;
 	_height:expression(this.scrollHeight>parseInt(this.currentStyle.maxHeight)?this.currentStyle.maxHeight:"auto");
 }

@@ -1,7 +1,7 @@
 <meta charset="{@Wekit::app()->charset}" />
 <title>{@G:seo.title} - Powered by phpwind</title>
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
-<meta name="generator" content="phpwind v{@G:seo.version}" />
+<meta name="generator" content="phpwind v{@G:version}" />
 <meta name="description" content="{@G:seo.description}" />
 <meta name="keywords" content="{@G:seo.keywords}" />
 <link rel="stylesheet" href="{@theme:site.css}/core.css?v={@G:version}" />
@@ -15,13 +15,13 @@ var GV = {
 	JS_VERSION : '{@G:version}',											//js版本号
 	JS_EXTRES : '{@G:url.extres}',
 	TOKEN : '{@Wind::getComponent('windToken')->saveToken('csrf_token')}',	//token $.ajaxSetup data
+	U_CENTER : '{@url:space/index/run}',		//用户空间(参数 : uid)
 <!--#
 $loginUser = Wekit::getLoginUser();
 if ($loginUser->isExists()) {
 #-->
 	//登录后
 	U_NAME : '{$loginUser->username}',										//登录用户名
-	U_CENTER : '{@url:space/index/run?uid=$value["created_userid"]}',		//用户空间(参数 : uid)
 	U_AVATAR : '{@Pw::getAvatar($loginUser->uid)}',							//登录用户头像
 <!--#
 }

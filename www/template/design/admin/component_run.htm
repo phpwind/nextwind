@@ -15,7 +15,7 @@
 	<form method="post"  action="{@WindUrlHelper::createUrl('design/component/run')}" >
 	<div class="search_type cc mb10">
 		<span class="mr20">ID：<input type="text" class="input length_2" name="compid"></span>
-		<span class="mr20">模块名称：<input type="text" class="input length_2"  name="compname"></span>
+		<span class="mr20">模块名称：<input type="text" class="input length_2" value="{$args['compname']}" name="compname"></span>
 		<span class="mr20">模块分类：
 			<select class="select_2" name="flag">
 				<option value="">模块分类</option>

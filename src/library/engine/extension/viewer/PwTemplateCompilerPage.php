@@ -60,7 +60,7 @@ class PwTemplateCompilerPage extends AbstractWindTemplateCompiler {
 	 * @var array
 	 * @deprecated
 	 */
-	protected $args = array();
+	protected $args = 'array()';
 	
 	/* (non-PHPdoc)
 	 * @see AbstractWindTemplateCompiler::compile()
@@ -100,7 +100,7 @@ class PwTemplateCompilerPage extends AbstractWindTemplateCompiler {
 		}
 		$content = WindFile::read($pageFile);
 		strpos($this->url, '?') !== false || $this->url .= '?';
-		$url = '{@url:' . $this->url . '&page=$_page_i' . (!empty($this->args) ? '}&{@http_build_query(' . $this->args . ')' : '');
+		$url = '{@url:' . $this->url . '&page=$_page_i}{@' . $this->args . ' ? \'&\' . http_build_query(' . $this->args . ') : \'\'';
 		$content = str_ireplace(array('{@$url', '{$url'), $url, $content);
 		$_windTemplate = Wind::getComponent('template');
 		$content = $_windTemplate->compileStream($content, $this->windViewerResolver);

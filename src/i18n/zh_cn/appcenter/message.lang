@@ -62,3 +62,5 @@ generate.style.unsupport = 暂不支持这个风格类型的生成
 xml.fail = xml解析失败，请检查xml内容
 
 get.app.url.fail = "获得应用地址失败 {{error}}"
+develop.success = "已成功生成应用#0, 应用代码在ext下的#1的目录"
+unsupport.zip = "服务器不支持解压缩，无法完成安装过程"

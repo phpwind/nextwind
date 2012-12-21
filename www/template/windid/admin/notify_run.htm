@@ -5,11 +5,11 @@
 </head>
 <body>
 <div class="wrap">
-	<div class="nav">
+	<!-- <div class="nav">
 		<ul class="cc">
 			<li class="current"><a href="{@WindUrlHelper::createUrl('admin/windid/notify/run')}">通知管理</a></li>
 		</ul>
-	</div>
+	</div> -->
 	<div class="h_a">提示信息</div>
 	<div class="mb10 prompt_text">
 		<ol>
@@ -44,7 +44,7 @@
 			<thead>
 				<tr>
 					<td width="60">通知ID</td>
-					<td>客户端名称</td>
+					<td>通知对象</td>
 					<td>通知内容</td>
 					<td>通知时间</td>
 					<td>执行次数</td>
@@ -55,12 +55,12 @@
 		<!--#foreach ($list as $key => $v) {#-->
 			<tr>
 				<td>{$v['logid']}</td>
-				<td>{$v['client']}</td>
+				<td>{$v['fromclient']} -> {$v['client']}</td>
 				<td>{$v['operation']}</td>
 				<td>{@Pw::time2str($v['time'], 'Y-m-d H:i:s')}</td>
 				<td>{$v['send_num']}</td>
 				<td><!--# if($v['complete']){#-->成功<!--# }else{ #--><span style="color:#ff0000">失败</span><!--#}#--></td>
-				<td><a href="{@WindUrlHelper::createUrl('windid/notify/resend?logid=' . $v['logid'])}" class="mr10" title="重新发送">[重新发送]</a>
+				<td><!--# if($v['complete']){#-->-<!--# }else{ #--><a href="{@WindUrlHelper::createUrl('windid/notify/resend?logid=' . $v['logid'])}" class="mr10" title="重新发送">[重新发送]<!--#}#--></a>
 			</tr>
 		<!--#}#-->
 		</table>

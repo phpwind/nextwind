@@ -41,7 +41,7 @@ Wind::import('WIND:viewer.IWindView');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license {@link http://www.windframework.com}
- * @version $Id: WindView.php 3850 2012-12-04 07:30:02Z yishuo $
+ * @version $Id: WindView.php 3863 2012-12-19 02:58:43Z yishuo $
  * @package viewer
  */
 class WindView extends WindModule implements IWindView {
@@ -140,12 +140,11 @@ class WindView extends WindModule implements IWindView {
 			if ($this->layout) {
 				/* @var $layout WindLayout */
 				$layout = $this->_getWindLayout();
-				$content = $layout->parser($this->layout, $viewResolver);
+				$layout->parser($this->layout, $viewResolver);
 			} else
-				$content = $viewResolver->windFetch();
-			Wind::getApp()->getResponse()->setBody($content, $this->templateName);
+				$viewResolver->windFetch();
 		} else {
-			echo $viewResolver->windFetch();
+			$viewResolver->windFetch();
 		}
 	}
 	
@@ -161,8 +160,10 @@ class WindView extends WindModule implements IWindView {
 			$this->compileExt = $this->getConfig('compile-ext', '', $this->compileExt);
 			$this->isCompile = $this->getConfig('is-compile', '', $this->isCompile);
 			$this->layout = $this->getConfig('layout', '', $this->layout);
-			$this->themePackPattern = $this->getConfig('themePackPattern', '', $this->themePackPattern);
-			$this->htmlspecialchars = $this->getConfig('htmlspecialchars', '', $this->htmlspecialchars);
+			$this->themePackPattern = $this->getConfig('themePackPattern', '', 
+				$this->themePackPattern);
+			$this->htmlspecialchars = $this->getConfig('htmlspecialchars', '', 
+				$this->htmlspecialchars);
 			$this->setThemePackage($this->getConfig('theme-package'));
 		}
 	}
@@ -177,6 +178,7 @@ class WindView extends WindModule implements IWindView {
 	 * <note><b>注意:</b>$template为空则返回当前的模板的路径信息.模板文件后缀名可以通过修改配置进行修改.</note>
 	 * @param string $template 模板名称, 默认值为空 , 为空则返回当前模板的绝对地址
 	 * @param string $ext 模板后缀, 默认值为空, 为空则返回使用默认的后缀
+	 * @param boolean $createCompileDir true
 	 * @return array(templatePath, compilePath, currentThemeKey)
 	 */
 	public function getViewTemplate($template = '', $ext = '') {
@@ -189,7 +191,8 @@ class WindView extends WindModule implements IWindView {
 		$_template = false !== ($pos = strpos($template, ':')) ? substr($template, $pos + 1) : $template;
 		$currentThemeKey = null;
 		foreach ($this->theme as $currentThemeKey => $theme) {
-			$templatePath = strtr($this->themePackPattern, array('{pack}' => $theme[1], '{theme}' => $theme[0])) . '.' . $_template;
+			$templatePath = strtr($this->themePackPattern, 
+				array('{pack}' => $theme[1], '{theme}' => $theme[0])) . '.' . $_template;
 			$templatePath = Wind::getRealPath($templatePath, $ext, true);
 			if (!is_file($templatePath)) continue;
 			$compilePath = $this->compileDir . '.' . $theme[0] . '.' . $_template;
@@ -200,7 +203,7 @@ class WindView extends WindModule implements IWindView {
 			$compilePath = $this->compileDir . '.' . $_template;
 		}
 		$compilePath = Wind::getRealPath($compilePath, $this->compileExt, true);
-		WindFolder::mkRecur(dirname($compilePath));
+		//WindFolder::mkRecur(dirname($compilePath));
 		return array($templatePath, $compilePath, $currentThemeKey);
 	}
 

@@ -5,7 +5,7 @@ Wind::import('APPS:design.admin.DesignBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: DataController.php 20102 2012-10-23 08:44:41Z gao.wanggao $ 
+ * @version $Id: DataController.php 22012 2012-12-18 06:32:48Z gao.wanggao $ 
  * @package 
  */
 class DataController extends DesignBaseController {	
@@ -284,7 +284,7 @@ class DataController extends DesignBaseController {
 		if (($result = $upload->check()) === true) $result = $upload->execute();
 		if ($result !== true) $this->showError($result->getError());
 		$image = $bhv->getAttachInfo();
-		return $image['filename'] ? Wekit::app()->attach .'/'. $image['path'] . $image['filename'] : '';
+		return $image['filename'] ? Pw::getPath($image['path'] . $image['filename']) : '';
  	}
 	
 	/**

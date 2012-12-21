@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.PwGenerateApplication');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: DevelopController.php 21267 2012-12-03 10:42:03Z long.shi $
+ * @version $Id: DevelopController.php 22002 2012-12-18 05:58:56Z long.shi $
  * @package appcenter.admin
  */
 class DevelopController extends AdminBaseController {
@@ -152,7 +152,7 @@ class DevelopController extends AdminBaseController {
 		$r = $app->generate();
 		if ($r instanceof PwError) $this->showError($r->getError());
 		Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->installPack(EXT_PATH . $alias);
-		$this->showMessage('success', 'appcenter/develop/edit?alias=' . $alias);
+		$this->showMessage(array('APPCENTER:develop.success', array($name, $alias)), 'appcenter/app/run');
 	}
 	
 	private function _installService($exists = array()) {

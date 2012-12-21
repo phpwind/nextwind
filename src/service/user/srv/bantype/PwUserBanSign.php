@@ -7,7 +7,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUserBanSign.php 21138 2012-11-29 03:07:29Z xiaoxia.xuxx $
+ * @version $Id: PwUserBanSign.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package src.service.user.srv.bantype
  */
 class PwUserBanSign implements PwUserBanTypeInterface {
@@ -26,8 +26,8 @@ class PwUserBanSign implements PwUserBanTypeInterface {
 		//构建显示禁止签名的文本内容
 	//	$newSign = sprintf('由于"%s"被%s禁止签名至%s', $dm->getField('reason'), $dm->getOperator(), $end_time);
 		
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($dm->getField('uid'))->setBanSign(true);
+		$userDm = new PwUserInfoDm($dm->getField('uid'));
+		$userDm->setBanSign(true);
 	//		->setBbsSign($newSign)
 		/* @var $userDs PwUser */
 		$userDs = Wekit::load('SRV:user.PwUser');
@@ -45,8 +45,8 @@ class PwUserBanSign implements PwUserBanTypeInterface {
 		$info = $userDs->getUserByUid($uid, PwUser::FETCH_MAIN);
 		if (!Pw::getstatus($info['status'], PwUser::STATUS_BAN_SIGN)) return $info['status'];//已经解禁不需要再次更改
 		
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($uid)->setBanSign(false);
+		$userDm = new PwUserInfoDm($uid);
+		$userDm->setBanSign(false);
 	//		->setBbsSign('')
 		/* @var $userDs PwUser */
 		$userDs = Wekit::load('SRV:user.PwUser');

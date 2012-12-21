@@ -12,7 +12,7 @@ Wind::import('COM:utility.WindUtility');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwAttMultiUpload.php 21376 2012-12-06 02:59:47Z jieyin $
+ * @version $Id: PwAttMultiUpload.php 22380 2012-12-21 14:54:07Z jieyin $
  * @package upload
  */
 
@@ -130,6 +130,10 @@ class PwAttMultiUpload extends PwUploadAction {
 			$att->setIfthumb($value['ifthumb']);
 			$att->setCreatedUser($this->user->uid);
 			$att->setCreatedTime(Pw::getTime());
+			if ($value['thumb'] && $value['thumb'][0]) {
+				$att->setWidth($value['thumb'][0][2]);
+				$att->setHeight($value['thumb'][0][3]);
+			}
 			$att->setApp('thread');
 			$aid = $srv->addAttach($att);
 

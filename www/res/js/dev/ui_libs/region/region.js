@@ -133,6 +133,7 @@
 				//获取地区数据
 				$.ajax({
 					url : GV.URL.REGION,
+					type : 'post',
 					dataType : 'json',
 					success : function(data){
 						if(data) {

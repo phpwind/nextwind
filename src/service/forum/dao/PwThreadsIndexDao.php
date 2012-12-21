@@ -6,7 +6,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadsIndexDao.php 17055 2012-08-30 11:02:11Z jieyin $
+ * @version $Id: PwThreadsIndexDao.php 22309 2012-12-21 07:58:00Z jieyin $
  * @package forum
  */
 
@@ -15,6 +15,7 @@ class PwThreadsIndexDao extends PwBaseDao {
 	protected $_table = 'bbs_threads_index';
 	protected $_pk = 'tid';
 	protected $_dataStruct = array('tid', 'fid', 'disabled', 'created_time', 'lastpost_time');
+	protected $_threadTable = 'bbs_threads';
 	
 	public function count() {
 		$sql = $this->_bindTable('SELECT count(*) as count FROM %s WHERE disabled=0');
@@ -73,6 +74,11 @@ class PwThreadsIndexDao extends PwBaseDao {
 
 	public function batchUpdateThread($tids, $fields, $increaseFields = array()) {
 		return $this->_batchUpdate($tids, $fields, $increaseFields);
+	}
+
+	public function revertTopic($tids) {
+		$sql = $this->_bindSql('UPDATE %s a LEFT JOIN %s b ON a.tid=b.tid SET a.disabled=b.disabled WHERE a.tid IN %s', $this->getTable(), $this->getTable($this->_threadTable), $this->sqlImplode($tids));
+		return $this->getConnection()->execute($sql);
 	}
 	
 	public function deleteThread($tid) {

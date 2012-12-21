@@ -5,23 +5,23 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-8
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindException.php 2973 2011-10-15 19:22:48Z yishuo $
+ * @version $Id: WindException.php 3866 2012-12-21 15:21:15Z yishuo $
  * @package base
  */
 class WindException extends Exception {
 	/* 系统错误 */
 	const ERROR_SYSTEM_ERROR = '0';
 	/* 类错误 */
-	const ERROR_CLASS_NOT_EXIST = '100';
-	const ERROR_CLASS_TYPE_ERROR = '101';
-	const ERROR_CLASS_METHOD_NOT_EXIST = '102';
-	const ERROR_OBJECT_NOT_EXIST = '103';
+	const ERROR_CLASS_NOT_EXIST = '1100';
+	const ERROR_CLASS_TYPE_ERROR = '1101';
+	const ERROR_CLASS_METHOD_NOT_EXIST = '1102';
+	const ERROR_OBJECT_NOT_EXIST = '1103';
 	/* 参数错误 */
-	const ERROR_PARAMETER_TYPE_ERROR = '110';
+	const ERROR_PARAMETER_TYPE_ERROR = '1110';
 	/* 配置错误 */
-	const ERROR_CONFIG_ERROR = '120';
+	const ERROR_CONFIG_ERROR = '1120';
 	/* 返回值类型错误 */
-	const ERROR_RETURN_TYPE_ERROR = '130';
+	const ERROR_RETURN_TYPE_ERROR = '1130';
 
 	/**
 	 * 异常构造函数

@@ -9,7 +9,7 @@ Wind::import('SRV:user.srv.PwClearUserService');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ManageController.php 21920 2012-12-17 04:03:17Z xiaoxia.xuxx $
+ * @version $Id: ManageController.php 22293 2012-12-21 05:09:51Z long.shi $
  * @package 
  */
 class ManageController extends AdminBaseController {
@@ -146,8 +146,7 @@ class ManageController extends AdminBaseController {
 		$info = $this->checkUser();
 		
 		Wind::import('SRC:service.user.dm.PwUserInfoDm');
-		$dm = new PwUserInfoDm();
-		$dm->setUid($info['uid']);
+		$dm = new PwUserInfoDm($info['uid']);
 		
 		//用户信息
 		$dm->setUsername($this->getInput('username', 'post'));
@@ -212,7 +211,8 @@ class ManageController extends AdminBaseController {
 		if ($result instanceof PwError) {
 			$this->showError($result->getError());
 		}
-		$this->showMessage('USER:update.success', 'u/manage/edit?uid=' . $info['uid']);
+		$isFounder = $this->isFounder($info['username']);
+		$this->showMessage($isFounder ? 'USER:founder.update.success' : 'USER:update.success', 'u/manage/edit?uid=' . $info['uid']);
 	}
 
 	/** 

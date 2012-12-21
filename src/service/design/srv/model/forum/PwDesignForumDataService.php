@@ -10,7 +10,7 @@ Wind::import('SRV:design.srv.model.PwDesignModelBase');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignForumDataService.php 20204 2012-10-24 09:14:08Z gao.wanggao $ 
+ * @version $Id: PwDesignForumDataService.php 22012 2012-12-18 06:32:48Z gao.wanggao $ 
  * @package 
  */
 class PwDesignForumDataService extends PwDesignModelBase{
@@ -72,7 +72,7 @@ class PwDesignForumDataService extends PwDesignModelBase{
 				$list[$k]['forum_url'] = WindUrlHelper::createUrl('bbs/thread/run?fid='.$v['fid'], array(),'','pw');
 			}
 			$list[$k]['descrip'] = $this->_formatDes($v['descrip']);
-			$list[$k]['logo'] = $v['logo'] ? Wekit::app()->attach . '/' . $v['logo'] : '';
+			$list[$k]['logo'] = $v['logo'] ? Pw::getPath($v['logo']) : '';
 			
 			$lastthread = $thread[$v['lastpost_tid']];
 			$list[$k]['lastpost_time'] = $this->_formatTime($lastthread['lastpost_time']);

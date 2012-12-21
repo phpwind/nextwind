@@ -7,17 +7,17 @@ Wind::import('SRV:forum.srv.manage.PwThreadManageDo');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadManageDoBan.php 21170 2012-11-29 12:05:09Z xiaoxia.xuxx $
+ * @version $Id: PwThreadManageDoBan.php 22328 2012-12-21 08:46:57Z xiaoxia.xuxx $
  * @package src.service.forum.srv.manage
  */
 class PwThreadManageDoBan extends PwThreadManageDo {
 	
-	protected $fid;
 	protected $tids;
 	protected $delete = array();
-	protected $users = array();
 	protected $banInfo = array();
-	protected $selectBanUids = array();
+	
+	private $selectBanUsers = array();
+	private $threadCreatedUids = array();
 	
 	/**
 	 * 获得用户权限
@@ -51,7 +51,17 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 	 * @see PwThreadManageDo::check()
 	 */
 	public function check($permission) {
-		return (isset($permission['ban']) && $permission['ban']) ? true : false;
+		if (!isset($permission['ban']) || !$permission['ban']) return false;
+		//管理组的用户不能被禁言
+		$users = $this->getBanUsers();
+		$_tmp = array();
+		foreach ($users as $item) {
+			$item['groupid'] > 0 && $_tmp[] = $item['groupid'];
+		}
+		if ($_tmp && false === $this->canBan($_tmp)) {
+			return new PwError('USER:ban.banuser.forbidden');
+		}
+		return true;
 	}
 
 	/* (non-PHPdoc)
@@ -59,8 +69,7 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 	 */
 	public function gleanData($value) {
 		$this->tids[] = $value['tid'];
-		$this->fid = $value['fid'];
-		$this->selectBanUids[] = $value['created_userid'];
+		$this->threadCreatedUids[] = $value['created_userid'];
 	}
 	
 	/* (non-PHPdoc)
@@ -85,11 +94,14 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 	 * 
 	 * @return array
 	 */
-	public function getThreadUsername() {
+	public function getBanUsers() {
+		if ($this->selectBanUsers) return $this->selectBanUsers;
+		$users = array();
 		foreach ($this->srv->getData() as $key => $value) {
-			$this->users[$value['created_userid']] = $value['created_username'];
+			$users[] = $value['created_userid'];
 		}
-		return $this->users;
+		$this->selectBanUsers = Wekit::load('user.PwUser')->fetchUserByUid($users);
+		return $this->selectBanUsers;
 	}
 	
 	/**
@@ -100,22 +112,51 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 	 */
 	public function getRight() {
 		if ($this->right) return $this->right;
-		if ($this->loginUser->getPermission('operate_thread', false, array())) {
-			$this->right = 1;
-		} else {
-			$this->right = 2;
+		$this->right = array('delCurrentThread' => 0, 'delForumThread' => 0, 'delSiteThread' => 0);
+		$permission = $this->loginUser->getPermission('operate_thread', false, array());
+		//如果是论坛斑竹,并且是操作的是自己的版块的帖子，则有删除选择，否则没有删除本版权限
+		if (isset($permission['delete']) && 1 == $permission['delete']) {
+			$this->right['delCurrentThread'] = 1;
+			$this->right['delSiteThread'] = 1;
+		} elseif (5 == $this->loginUser->gid && $this->srv->isBM($this->srv->getFids())) {
+			$permission = $this->loginUser->getPermission('operate_thread', true, array());
+			if (isset($permission['delete']) && $permission['delete'] == 1) {
+				$this->right['delCurrentThread'] = 1;
+				$this->right['delForumThread'] = 1;
+			}
+		}
+		//如果所选用户不是全都是帖子发帖者，则删除当前帖子不可选
+		if (1 == $this->right['delCurrentThread']) {
+			$threadUids = array();
+			foreach ($this->srv->getData() as $_item) {
+				$threadUids[] = $_item['created_userid'];
+			}
+			if (array_diff(array_keys($this->getBanUsers()), $threadUids)) {
+				$this->right['delCurrentThread'] = 0;
+			}
 		}
 		return $this->right;
 	}
 	
 	/**
-	 * 设置用户禁止DM
+	 * 设置禁止设置
 	 *
 	 * @param array $dmList
 	 * @return PwThreadManageDoBan
 	 */
 	public function setBanInfo($banInfo) {
 		$this->banInfo = $banInfo;
+		return $this;
+	}
+	
+	/**
+	 * 设置禁止的用户ID
+	 *
+	 * @param array $uids
+	 * @return PwThreadManageDoBan
+	 */
+	public function setBanUids($uids) {
+		$this->selectBanUsers = Wekit::load('user.PwUser')->fetchUserByUid(is_array($uids) ? $uids : array($uids));
 		return $this;
 	}
 	
@@ -127,7 +168,17 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 	 */
 	public function setDeletes($deletes) {
 		$this->delete = $deletes;
-		return $this;	
+		return $this;
+	}
+	
+	/**
+	 * 管理组下的用户组不允许被禁止
+	 *
+	 * @param array $groupid
+	 */
+	public function canBan($groupid) {
+		$systemGroups = Wekit::load('usergroup.PwUserGroups')->getGroupsByType('system');
+		return array_intersect((array)$groupid, array_keys($systemGroups)) ? false : true;
 	}
 	
 	/**
@@ -144,8 +195,7 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 		$data = $_notice = array();
 		foreach ($this->banInfo->types as $type) {
 			if (!in_array($type, $rightTypes)) continue;
-			foreach ($this->banInfo->uids as $uid) {
-				if (!$uid) continue;
+			foreach ($this->selectBanUsers as $uid => $_item) {
 				$dm = new PwUserBanInfoDm();
 				$dm->setUid($uid)
 					->setBanAllAccount($this->banInfo->ban_others)
@@ -177,25 +227,28 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 	 */
 	private function _delThreads() {
 		Wind::import('SRV:forum.srv.operation.PwDeleteTopic');
-		
+		$right = $this->getRight();
+		$banUids = array_keys($this->getBanUsers());
 		//【用户禁止帖子删除】
 		//删除当前主题帖子  当禁止非楼主时，不能删除当前主题
-		if (1 == $this->delete['current'] && !array_diff($this->selectBanUids, $this->banInfo->uids)) {
+		if (1 == $this->delete['current'] && 1 === $right['delCurrentThread'] && !array_diff($banUids, $this->threadCreatedUids)) {
 			Wind::import('SRV:forum.srv.dataSource.PwFetchTopicByTid');
 			//【用户禁止帖子删除】-根据帖子ID列表删除帖子到回收站
 			$service = new PwDeleteTopic(new PwFetchTopicByTid($this->tids), $this->loginUser);
 			$service->setRecycle(true)->setIsDeductCredit(true)->execute();
 		}
-		if (1 == $this->delete['all'] && $this->getRight() == 1) {
+		if (1 == $this->delete['site'] && 1 === $right['delSiteThread'] && $this->getRight() == 1) {
 			Wind::import('SRV:forum.srv.dataSource.PwFetchTopicByUid');
 			//【用户禁止帖子删除】-并且按照用户ID列表删除帖子到回收站
-			$service = new PwDeleteTopic(new PwFetchTopicByUid($this->selectBanUids), $this->loginUser);
+			$service = new PwDeleteTopic(new PwFetchTopicByUid($banUids), $this->loginUser);
 			$service->setRecycle(true)->setIsDeductCredit(true)->execute();
-		} elseif (1 == $this->delete['forum'] && $this->getRight() == 2) {
+		} elseif (1 == $this->delete['forum'] && 1 === $right['delForumThread'] && $this->getRight() == 2) {
 			Wind::import('SRV:forum.srv.dataSource.PwFetchTopicByFidAndUids');
 			//【用户禁止帖子删除】-并且按照用户ID列表+版块ID删除帖子到回收站
-			$service = new PwDeleteTopic(new PwFetchTopicByFidAndUids($this->fid, $this->selectBanUids), $this->loginUser);
-			$service->setRecycle(true)->setIsDeductCredit(true)->execute();
+			foreach ($this->srv->getFids() as $fid) {
+				$service = new PwDeleteTopic(new PwFetchTopicByFidAndUids($fid, $banUids), $this->loginUser);
+				$service->setRecycle(true)->setIsDeductCredit(true)->execute();
+			}
 		}
 		return true;
 	}

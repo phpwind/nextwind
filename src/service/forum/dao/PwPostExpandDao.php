@@ -6,7 +6,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostExpandDao.php 14625 2012-07-25 02:47:14Z jinlong.panjl $
+ * @version $Id: PwPostExpandDao.php 22336 2012-12-21 09:36:17Z jieyin $
  * @package forum
  */
 
@@ -17,9 +17,9 @@ class PwPostExpandDao extends PwBaseDao {
 	protected $_dataStruct = array('pid', 'fid', 'tid', 'ischeck', 'useubb', 'aids', 'subject', 'content', 'created_time', 'created_username', 'created_userid', 'created_ip', 'modified_time', 'modified_username', 'modified_userid', 'modified_ip');
 
 	public function countUserPostByFidAndTime($fid, $time, $limit) {
-		$sql = $this->_bindSql('SELECT created_userid,COUNT(*) AS count FROM %s WHERE fid=? AND created_time>? GROUP BY created_userid ORDER BY count DESC %s', $this->getTable(), $this->sqlLimit($limit));
+		$sql = $this->_bindSql('SELECT created_userid,COUNT(*) AS count FROM %s WHERE disabled=0 AND created_time>? AND fid=? GROUP BY created_userid ORDER BY count DESC %s', $this->getTable(), $this->sqlLimit($limit));
 		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->queryAll(array($fid, $time), 'created_userid');
+		return $smt->queryAll(array($time, $fid), 'created_userid');
 	}
 
 	public function countPostsByFid() {

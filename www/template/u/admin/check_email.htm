@@ -13,16 +13,16 @@
 	</div>
 	<div class="h_a">提示信息</div>
 	<div class="mb10 prompt_text">
-		<ol>
+		<ul>
 			<li>如果<a href="{@WindUrlHelper::createUrl('admin/config/regist/run')}">【注册设置】</a>中开启了“新用户邮件激活”，用户由于种种原因无法通过电子邮件激活帐号，管理员可使用此功能激活用户帐号</li>
-		</ol>
+		</ul>
 	</div>
 	<form action="{@WindUrlHelper::createUrl('admin/u/check/doactive')}" method="post" class="J_ajaxForm">
 	<div class="table_list">
 		<table width="100%">
 			<thead>
 				<tr>
-					<td width="50"><input type="checkbox" name="checkAll" value="" class="J_check_all" data-direction="y" data-checklist="J_check_email_y">选择</td>
+					<td width="50"><input type="checkbox" name="checkAll" value="" class="J_check_all" data-direction="y" data-checklist="J_check_email_y">全选</td>
 					<td width="30">UID</td>
 					<td>用户名</td>
 					<td>注册时间</td>
@@ -51,98 +51,8 @@
 	 </div>
 	</div>
 	</form>
-	<page tpl='TPL:common.page' page='$page' count='$count' per='$perPage' url='admin/u/check/email' args='$args'/>
+	<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='admin/u/check/email?perpage=$perpage'/>
 </div>
 <template source='TPL:admin.common.footer' />
-<script>
-/*Wind.use('ajaxForm', 'dialog', function(){
-	var email_form = $('#J_email_form'), check_sub = $('#J_email_check_sub'), del_sub = $('#J_email_del_sub'), email_tip = $('#J_email_tip');
-	
-	//点击“通过”
-	check_sub.on('click', function(e){
-		e.preventDefault();
-		if($('input.J_uid:checked').length) {
-			
-			email_form.ajaxSubmit({
-
-				url				: '{@WindUrlHelper::createUrl('admin/u/check/doactive')|html}',
-				dataType		: 'json',
-				beforeSubmit: function(arr, $form, options) {
-					email_tip.hide(); //隐藏已显示的提示
-					check_sub.prop('disabled',true).addClass('disabled'); //“通过”按钮不可用
-				},
-				success			: function(data, statusText, xhr, $form) {
-
-					if(data.state === 'success') {
-						window.location.href = window.location.pathname + window.location.search; //成功后刷新页面
-					}else{
-				
-						//错误提示
-						email_tip.text(data.message).fadeIn('fast');
-					
-						//“通过”按钮可用
-						check_sub.removeProp('disabled').removeClass('disabled');
-					}
-				
-				}
-			
-			});
-			
-		}else{
-			//未选择用户
-			email_tip.text('请至少选中一个操作对象').fadeIn( 'fast' );
-		};
-		
-	});
-	
-	
-	//点击“删除”
-	del_sub.on('click', function(e){
-		e.preventDefault();
-		if($('input.J_uid:checked').length) {
-			Wind.dialog({
-				message	: '确定要删除选中的操作对象',
-				type	: 'confirm',
-				onOk	: function() {
-					
-					email_form.ajaxSubmit({
-	
-						url				: '{@WindUrlHelper::createUrl('admin/u/check/delete')|html}',
-						dataType		: 'json',
-						beforeSubmit: function(arr, $form, options) {
-							email_tip.hide(); //隐藏已显示的提示
-							del_sub.prop('disabled',true).addClass('disabled'); //“删除”按钮不可用
-						},
-						success			: function(data, statusText, xhr, $form) {
-
-							if(data.state === 'success') {
-								window.location.href = window.location.pathname + window.location.search; //成功后刷新页面
-							}else{
-				
-								//错误提示
-								email_tip.text(data.message).fadeIn('fast');
-				
-								//“删除”按钮可用
-								del_sub.removeProp('disabled').removeClass('disabled');
-					
-							}
-				
-						}
-			
-					});
-						
-				}
-			});
-
-		}else{
-			//未选择用户
-			email_tip.text('请至少选中一个操作对象').fadeIn( 'fast' );
-		};
-
-	});
-	
-	
-});*/
-</script>
 </body>
 </html>

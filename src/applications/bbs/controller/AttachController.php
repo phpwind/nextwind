@@ -5,7 +5,7 @@
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AttachController.php 21170 2012-11-29 12:05:09Z xiaoxia.xuxx $
+ * @version $Id: AttachController.php 22138 2012-12-19 08:59:44Z jieyin $
  * @package forum
  */
 
@@ -29,17 +29,17 @@ class AttachController extends PwBaseController {
 			$this->showError('data.error');
 		}
 		if ($attach['cost'] && !$this->loginUser->isExists()) {
-			$this->showError('USER:user.not.login','bbs/attach/download');
+			$this->showError('download.fail.login.not','bbs/attach/download');
 		}
 		if (!$forum->allowDownload($this->loginUser)) {
 			if (!$this->loginUser->isExists()) {
-				$this->showError('USER:user.not.login','bbs/attach/download');
+				$this->showError('download.fail.login.not','bbs/attach/download');
 			}
 			$this->showError(array('BBS:forum.permissions.download.allow', array('{grouptitle}' => $this->loginUser->getGroupInfo('name'))));
 		}
 		if (!$forum->foruminfo['allow_download'] && !$this->loginUser->getPermission('allow_download')) {
 			if (!$this->loginUser->isExists()) {
-				$this->showError('USER:user.not.login','bbs/attach/download');
+				$this->showError('download.fail.login.not','bbs/attach/download');
 			}
 			$this->showError(array('permission.download.allow', array('{grouptitle}' => $this->loginUser->getGroupInfo('name'))));
 		}
@@ -177,7 +177,7 @@ class AttachController extends PwBaseController {
 
 	public function deleteAction() {
 
-		$aid = $this->getInput('aid', 'get');
+		$aid = $this->getInput('aid');
 		if (!$attach = Wekit::load('attach.PwThreadAttach')->getAttach($aid)) {
 			$this->showError('data.error');
 		}
@@ -325,7 +325,7 @@ class AttachController extends PwBaseController {
 		$downloadCredit = $this->_getDownloadCredit($operate, $user, $creditBo, $forumCredit);
 		if (!$downloadCredit) return false; 
 		if (!$user->isExists()) {
-			return new PwError('USER:user.not.login');
+			return new PwError('download.fail.login.not');
 		}
 		$attachdownload = Wekit::load('attach.PwThreadAttachDownload');
 		$ifDown = $attachdownload->getByAidAndUid($attach['aid'], $user->uid);

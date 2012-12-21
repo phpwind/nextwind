@@ -9,7 +9,7 @@ Wind::import('WIND:utility.WindCookie');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: Pw.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: Pw.php 22341 2012-12-21 09:55:02Z gao.wanggao $
  * @package library
  */
 class Pw {
@@ -281,7 +281,14 @@ class Pw {
 	 * @return string
 	 */
 	public static function getAvatar($uid, $size = 'middle') {
-		return WindidApi::api('avatar')->getAvatar($uid, $size);
+		$file = $uid . (in_array($size, array('middle', 'small')) ? '_' . $size : '') . '.jpg';
+		$storage = Wekit::C('site', 'avatar.storage');
+		if (!$storage || $storage == 'local') {
+			return Wekit::app()->attach . '/avatar/' . self::getUserDir($uid) . '/' . $file;
+		} else {
+			return Wekit::C('site', 'avatar.url'). '/avatar/'. self::getUserDir($uid) . '/' . $file;
+		}
+		//return WindidApi::api('avatar')->getAvatar($uid, $size);
 		/*$file = $uid . (in_array($size, array('middle', 'small')) ? '_' . $size : '') . '.jpg';
 		return Wekit::app()->attach . '/avatar/' . self::getUserDir($uid) . '/' . $file;*/
 	}

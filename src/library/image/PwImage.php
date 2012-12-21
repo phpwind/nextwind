@@ -8,7 +8,7 @@ Wind::import('LIB:image.PwImageThumb');
  *
  * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
  * @author Jianmin Chen <sky_hold@163.com>
- * @version $Id: PwImage.php 20525 2012-10-30 10:46:40Z jieyin $
+ * @version $Id: PwImage.php 22380 2012-12-21 14:54:07Z jieyin $
  * @package lib.image
  */
 
@@ -21,6 +21,7 @@ class PwImage {
 	public $type;		//文件类型
 	
 	protected $_source = null;
+	protected $_thumb;
 	protected $_exts = array('jpg', 'jpeg', 'jpe', 'jfif');
 
 	public function __construct($filename) {
@@ -117,14 +118,18 @@ class PwImage {
 	 * return mixed
 	 */
 	public function makeThumb($thumbUrl, $thumbWidth, $thumbHeight, $quality = 0, $thumbType = 0, $forceMode = 0) {
-		$thumb = new PwImageThumb($this);
-		$thumb->setDstFile($thumbUrl);
-		$thumb->setWidth($thumbWidth);
-		$thumb->setHeight($thumbHeight);
-		$thumb->setQuality($quality);
-		$thumb->setType($thumbType);
-		$thumb->setForceMode($forceMode);
-		$result = $thumb->execute();
+		$this->_thumb = new PwImageThumb($this);
+		$this->_thumb->setDstFile($thumbUrl);
+		$this->_thumb->setWidth($thumbWidth);
+		$this->_thumb->setHeight($thumbHeight);
+		$this->_thumb->setQuality($quality);
+		$this->_thumb->setType($thumbType);
+		$this->_thumb->setForceMode($forceMode);
+		$result = $this->_thumb->execute();
 		return $result;
+	}
+
+	public function getThumb() {
+		return $this->_thumb;
 	}
 }

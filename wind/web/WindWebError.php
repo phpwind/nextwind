@@ -34,7 +34,14 @@ class WindWebError extends WindError {
 			$errPage = $errorcode;
 		else
 			$errPage = 'error';
+		
+		$title = $this->getResponse()->codeMap($errorcode);
+		$title = $title ? $errorcode . ' ' . $title : 'unknowen error';
+		$title = ucwords($title);
+		
 		ob_start();
+		$this->getResponse()->setStatus($errorcode);
+		$this->getResponse()->sendHeaders();
 		require $errDir . '/' . $errPage . '.htm';
 		exit(ob_get_clean());
 	}

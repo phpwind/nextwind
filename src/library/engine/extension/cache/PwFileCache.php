@@ -110,12 +110,12 @@ class PwFileCache extends AbstractWindCache {
 	 * @see AbstractWindCache::formatData()
 	 */
 	protected function formatData($key, $value) {
-		if (!$value) return $value;
+		if (!$value) return false;
 		if (!$value[self::EXPIRE] || $value[self::EXPIRE] >= time()) {
 			return $value[self::DATA];
 		}
 		$this->delete($key);
-		return null;
+		return false;
 	}
 	
 	/**

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="{@Wekit::app()->charset}" />
-		<title>{@G:c.name}</title>
+		<title>系统后台 - {@Wekit::C('site', 'info.name')}</title>
 		<link href="{@G:url.css}/admin_layout.css?v={@G:c.version}" rel="stylesheet" />
 		<style>
 			.fullScreen .content th{display:none;width:0;}
@@ -100,7 +100,7 @@ var GV = {
 							<a href="" id="J_fullScreen" class="full_screen" title="全屏">全屏</a>
 						</div>
 						<div class="loading" id="loading">加载中...</div>
-						<iframe id="iframe_default" src="{@WindUrlHelper::createUrl('home/run')}" style="height: 100%; width: 100%;display:none;" data-id="default" frameborder="0" scrolling="auto"></iframe>
+						<iframe id="iframe_default" src="{@WindUrlHelper::createUrl(Wekit::app()->homeLink)}" style="height: 100%; width: 100%;display:none;" data-id="default" frameborder="0" scrolling="auto"></iframe>
 					</td>
 				</tr>
 			</table>

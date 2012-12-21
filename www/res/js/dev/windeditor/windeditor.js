@@ -4,7 +4,7 @@
  * @Descript	: windeditor
  * @Author		: chaoren1641@gmail.com
  * @Depend		: jquery.js(1.7 or later)
- * $Id: windeditor.js 21905 2012-12-17 03:04:54Z hao.lin $			:
+ * $Id: windeditor.js 22306 2012-12-21 07:16:36Z hao.lin $			:
  */
 ;(function ( $, window, undefined ) {
 
@@ -1000,6 +1000,7 @@
 			var top = _self.toolbar.offset().top;
 			var height = _self.toolbar.height();
 			var dialogTop = top + height;
+			var scrollTimer;
 			element.css({
 　　　　　　		position:'absolute',
 			zIndex:'7',
@@ -1014,6 +1015,16 @@
 						display:''
 		　　　　		});
 				},64);
+			}).on('scroll.showDialog', function(){
+				//滚动计算高度
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(function() {
+                    if(element.is(':visible')) {
+                        element.css({
+							top : ($(window).height() - element.height()) / 2 + $(window).scrollTop()
+						});
+                    }
+                },64);
 			});
 		},
 

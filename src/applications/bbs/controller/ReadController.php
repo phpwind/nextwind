@@ -8,7 +8,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ReadController.php 21764 2012-12-13 06:11:25Z xiaoxia.xuxx $
+ * @version $Id: ReadController.php 22294 2012-12-21 05:34:55Z jieyin $
  * @package forum
  */
 class ReadController extends PwBaseController {
@@ -103,6 +103,7 @@ class ReadController extends PwBaseController {
 		$this->setOutput($this->loginUser->getPermission('look_thread_log', $isBM, array()), 'canLook');
 		$logs = Wekit::load('log.srv.PwLogService')->getThreadLog($tid, 1, 0);
 		$this->setOutput($logs ? array_shift($logs) : array(), 'log');
+		$this->setOutput($this->_getFpage($threadDisplay->fid), 'fpage');
 		
 		//版块风格
 		if ($pwforum->foruminfo['style']) {
@@ -134,7 +135,7 @@ class ReadController extends PwBaseController {
 		} elseif (Pw::getstatus($threadInfo['tpcstatus'], PwThread::STATUS_LOCKED) && !$this->loginUser->getPermission('reply_locked_threads')) {
 			$showReply = false;
 		}
-		$this->setOutput($showReply,'showReply');
+		$this->setOutput($showReply, 'showReply');
 		$this->runReadDesign($threadDisplay->fid);
 		$this->updateReadOnline($threadDisplay->fid, $tid);
 	}
@@ -238,5 +239,16 @@ class ReadController extends PwBaseController {
 
 	private function allowReply(PwForumBo $forum) {
 		return $forum->foruminfo['allow_reply'] ? $forum->allowPost($this->loginUser) : $this->loginUser->getPermission('allow_reply');
+	}
+
+	private function _getFpage($fid) {
+		$fpage = 1;
+		if ($referer = Pw::getCookie('visit_referer')) {
+			$tmp = explode('_', $referer);
+			if ($tmp[0] == 'fid' && $tmp[1] == $fid) {
+				$fpage = intval($tmp[3]);
+			}
+		}
+		return $fpage;
 	}
 }

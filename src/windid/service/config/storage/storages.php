@@ -11,13 +11,16 @@ return array(
 		'name' => '本地存储', 
 		'alias' => 'local', 
 		'managelink' => '',
+		'avatarmanagelink' => '',
 		'description' => '本地存储。附件、图片等将存储在本地磁盘上。默认定义位置为 attachment', 
 		'components' => array('path' => 'WINDID:library.storage.WindidStorageLocal')
 	), 
 	'ftp' => array(
 		'name' => 'FTP 远程附件存储', 
 		'alias' => 'ftp', 
-		'managelink' => 'windid/index/ftp/',
+		'managelink' => 'windid/storage/ftp/',
+		'avatarmanagelink' => 'windid/storage/ftp/',
+		
 		'description' => 'FTP 远程附件存储', 
 		'components' => array('path' => 'WINDID:library.storage.WindidStorageFtp')
 	)

@@ -57,8 +57,9 @@ class PunchController extends PwBaseController {
 			$reduce = $awardNum - $this->config['punch.friend.reward']['rewardMeNum'];
 			$awardNum = $reduce > 0 ? $reduce : 0;
 		}
+		$behaviorNum = $havePunch ? $behavior['number'] : $behavior['number']+1;
 		// 更新用户数据，记录行为
-		$result = $this->_punchBehavior($userInfo,$awardNum);
+		$result = $this->_punchBehavior($userInfo,$awardNum,$behaviorNum);
 		if ($result instanceof PwError) {
 			$this->showError($result->getError());
 		}
@@ -185,7 +186,8 @@ class PunchController extends PwBaseController {
 				$havePunch = $this->_getPunchService()->isPunch($punchData);
 				if ($havePunch) continue;
 			}
-			$this->_punchBehavior($v,$this->config['punch.friend.reward']['rewardMeNum']);
+			$behaviorNum = $behavior['number']+1;
+			$this->_punchBehavior($v,$this->config['punch.friend.reward']['rewardMeNum'],$behaviorNum);
 			$creditUids = array(
 				$this->loginUser->uid => array($this->config['punch.reward']['type'] => $awardNum),
 				$v['uid'] => array($this->config['punch.reward']['type'] => $this->config['punch.friend.reward']['rewardMeNum']),
@@ -258,7 +260,7 @@ class PunchController extends PwBaseController {
 	 * @param int $uid 	
 	 * @return bool
 	 */
-	private function _punchBehavior($userInfo,$awardNum) {
+	private function _punchBehavior($userInfo,$awardNum,$behaviorNum = '') {
 		$reward = $this->config['punch.reward'];
 		$punchData = array(
 			'username' => $this->loginUser->username,
@@ -266,6 +268,7 @@ class PunchController extends PwBaseController {
 			'cNum' => $awardNum,
 			'cUnit' => $this->_creditBo->cUnit[$reward['type']],
 			'cType' => $this->_creditBo->cType[$reward['type']],
+			'days'  => $behaviorNum,
 		);
 
 		// 更新用户data表信息

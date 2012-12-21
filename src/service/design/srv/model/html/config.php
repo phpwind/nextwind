@@ -14,7 +14,7 @@ return array(
 	),
 	
 	'normal'=>array(
-		'html'		=>array('textarea','自定义html','','',''),
+		'html'		=>array('textarea','自定义html','限10000字节','',''),
 	),	
 );
 ?>

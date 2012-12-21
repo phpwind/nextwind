@@ -69,7 +69,7 @@ class ArticleController extends AdminBaseController {
 		$replies_start && $dm->setRepliesStart($replies_start);
 		$replies_end && $dm->setRepliesEnd($replies_end);
 		$created_ip && $dm->setCreatedIp($created_ip);
-		$dm->setDisabled(0);
+		$dm->setDisabled(0)->orderbyCreatedTime(false);
 		$count = $this->_getThreadDs()->countSearchThread($dm);
 		if ($count) {
 			$page = $page ? $page : 1;
@@ -140,7 +140,7 @@ class ArticleController extends AdminBaseController {
 		// dm条件
 		Wind::import('SRV:forum.vo.PwPostSo');
 		$dm = new PwPostSo();
-		$dm->setDisabled(0);
+		$dm->setDisabled(0)->orderbyCreatedTime(false);
 		$keyword && $dm->setKeywordOfTitleOrContent($keyword);
 		if ($fid) {
 			$forum = Wekit::load('forum.PwForum')->getForum($fid);

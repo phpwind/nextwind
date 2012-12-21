@@ -9,7 +9,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: UpgradeController.php 21939 2012-12-17 07:13:16Z long.shi $
+ * @version $Id: UpgradeController.php 22086 2012-12-19 05:46:38Z long.shi $
  * @package appcenter
  */
 class UpgradeController extends AdminBaseController {
@@ -244,7 +244,7 @@ class UpgradeController extends AdminBaseController {
 			$this->setOutput($lang->getMessage('APPCENTER:upgrade.db.error', array(implode(';', $sql))), 'msg');
 		}
 		if ($success) {
-			$this->setOutput($lang->getMessage('APPCENTER:upgrade.db.update', array($step, count($sqlArray))), 'msg');
+			$this->setOutput($lang->getMessage('APPCENTER:upgrade.db.update', array($step, key($sqlArray))), 'msg');
 		}
 		Wekit::cache()->set('system_upgrade_db_step', ++$step);
 	}
@@ -255,6 +255,10 @@ class UpgradeController extends AdminBaseController {
 	 */
 	public function endAction() {
 		list($upgrade, $back) = $this->_backSuccess();
+		Wekit::load('hook.srv.PwHookRefresh')->refresh();
+		Wekit::load('SRV:cache.srv.PwCacheUpdateService')->updateAll();
+		Wekit::load('domain.srv.PwDomainService')->refreshTplCache();
+		
 		PwSystemHelper::log('upgrade success, current version: ' . 'phpwind ' . NEXT_VERSION . ' release ' . NEXT_RELEASE, $this->version);
 		$this->_clear();
 		Pw::setCookie('checkupgrade', '', -1);
@@ -269,21 +273,22 @@ class UpgradeController extends AdminBaseController {
 		WindFolder::clearRecur(dirname($this->upgrade_temp), true);
 		$useFtp = Wekit::cache()->get('system_upgrade_ftp');
 		$updateFile = Wind::getRealPath('PUBLIC:update');
-		$updataSql = Wind::getRealPath('PUBLIC:update.sql', true);
+		$updateSql = Wind::getRealPath('PUBLIC:update.sql', true);
 		if ($useFtp) {
-			$updateFile = str_replace(Wind::getRootPath('ROOT'), '', $updateFile);
-			$updateSql = str_replace(Wind::getRootPath('ROOT'), '', $updateSql);
+			$updateFile = str_replace(ROOT_PATH, '', $updateFile);
+			$updateSql = str_replace(ROOT_PATH, '', $updateSql);
 			try {
 				$ftp = $useFtp['sftp'] ? new PwSftpSave($useFtp) : new PwFtpSave($useFtp);
-				foreach (array($updateFile, $updataSql) as $v) {
+				foreach (array($updateFile, $updateSql) as $v) {
 					$ftp->delete($v);
 				}
 			} catch (WindFtpException $e) {
 				
 			}
+			$ftp->close();
 		} else {
 			WindFile::del($updateFile);
-			WindFile::del($updataSql);
+			WindFile::del($updateSql);
 		}
 		Wekit::cache()->batchDelete(array('system_upgrade', 'system_upgrade_step', 'system_upgrade_db_step', 'system_upgrade_ftp', 'system_upgrade_download_step'));
 	}

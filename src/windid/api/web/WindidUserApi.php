@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUserApi.php 21722 2012-12-12 09:28:56Z gao.wanggao $ 
+ * @version $Id: WindidUserApi.php 22061 2012-12-19 03:09:07Z gao.wanggao $ 
  * @package 
  */
 class WindidUserApi {
@@ -336,6 +336,14 @@ class WindidUserApi {
 			'blackUid'=>$blackUid,
 		);
 		return WindidApi::open('user/addBlack', array(),$params);
+	}
+	
+	public function replaceBlack($uid, $blackList) {
+		$params = array(
+			'uid'=>$uid,
+			'blackList'=>$blackList,
+		);
+		return WindidApi::open('user/replaceBlack', array(),$params);
 	}
 	
 	/**

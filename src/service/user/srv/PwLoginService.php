@@ -11,7 +11,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwLoginService.php 21495 2012-12-10 08:39:05Z jinlong.panjl $
+ * @version $Id: PwLoginService.php 22235 2012-12-19 22:15:51Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwLoginService extends PwBaseHookService {
@@ -106,8 +106,7 @@ class PwLoginService extends PwBaseHookService {
 		if (!$info) {
 			//从windid这边将数据同步到论坛
 			$this->_getUserDs()->activeUser($userid);
-			$pwUserInfoDm = new PwUserInfoDm();
-			$pwUserInfoDm->setUid($userid);
+			$pwUserInfoDm = new PwUserInfoDm($userid);
 			//【用户同步】未验证用户组
 			/* $_uncheckGid = false;
 			if (Wekit::C('register', 'active.check')) {
@@ -142,17 +141,6 @@ class PwLoginService extends PwBaseHookService {
 			$userSrv->restoreDefualtAvatar($userid);
 		}
 		return $info;
-	}
-	
-	/**
-	 * 判断该用户是否有设置安全问题
-	 *
-	 * @param int $uid
-	 * @return boolean
-	 */
-	public function isSetSafecv($uid) {
-		$info = $this->_getWindid()->getUser($uid, 1);
-		return !empty($info['safecv']);
 	}
 	
 	/** 
@@ -346,8 +334,8 @@ class PwLoginService extends PwBaseHookService {
 	 * @return boolean|PwError
 	 */
 	private function _updateTryRecode($uid, $tryPwd) {
-		$userdm = new PwUserInfoDm();
-		$userdm->setUid($uid)->setTrypwd($tryPwd);
+		$userdm = new PwUserInfoDm($uid);
+		$userdm->setTrypwd($tryPwd);
 		return $this->_getUserDs()->editUser($userdm, PwUser::FETCH_DATA);
 	}
 	

@@ -425,8 +425,7 @@
 		<div class="table_list">
 			<div class="h_a"><span class="fr"><input type="checkbox" name="copyitems[]" value="topictype" class="J_line_highlight" style="display:none;"></span>主题分类管理</div>
 			<table width="100%" id="J_table_list">
-				<col width="350">
-				<col width="300">
+				<col width="450">
 				<col width="80">
 				<thead>
 					<tr>
@@ -441,7 +440,7 @@
 				<tr>
 					<td>
 						<input type="number" class="input mr5 length_1" name="t_vieworder[{$v['id']}]" value="{$v['vieworder']}">
-						<input type="text" class="input mr5 length_2" name="t_name[{$v['id']}]" value="{$v['name']}"><a style="display:none;" href="#" data-id="{$v['id']}" data-type="topic_child" data-html="tr" class="link_add J_addChild">添加二级分类</a>
+						<input type="text" class="input mr5 length_4" name="t_name[{$v['id']}]" value="{$v['name']}"><a style="display:none;" href="#" data-id="{$v['id']}" data-type="topic_child" data-html="tr" class="link_add J_addChild">添加二级分类</a>
 					</td>
 					<!--  
 					<td><input name="t_logo[{$v['id']}]" type="file" class="length_3 J_upload_preview" data-preview="#J_icon_{$v['id']}">&nbsp;<img id="J_icon_{$v['id']}" src="{@Wekit::getGlobal('url', 'attach') . '/' . $v['logo']}" style="max-width:100px;"></td>
@@ -461,7 +460,7 @@
 					<td>
 						<span class="{$spanClass}"></span>
 						<input type="number" class="input mr5 length_1" name="t_vieworder[{$v2['id']}]" value="{$v2['vieworder']}">
-						<input type="text" class="input mr5 length_2" name="t_name[{$v2['id']}]" value="{$v2['name']}">
+						<input type="text" class="input mr5 length_4" name="t_name[{$v2['id']}]" value="{$v2['name']}">
 					</td>
 					<!--  
 					<td><input name="t_logo[{$v2['id']}]" type="file" class="length_3 J_upload_preview" data-preview="#J_icon_{$v2['id']}">&nbsp;<img id="J_icon_{$v2['id']}" src="" style="max-width:100px;"></td>
@@ -691,7 +690,7 @@ child_tr_html 为“添加二级分类”html
 */
 var root_tr_html = '<tr class="ct"><td>\
 							<input type="number" name="t_new_vieworder[root_]" class="input length_1 mr5">\
-							<input type="text" name="t_new_name[root_]" class="input length_2 mr5">\
+							<input type="text" name="t_new_name[root_]" class="input length_4 mr5">\
 							<a class="link_add J_addChild" data-id="root_" data-html="tr" data-type="topic_child" href="" style="display:none;">添加二级分类</a>\
 						</td>\
 						<td class="tac"><input class="J_issys_par" type="checkbox" value="1" name="t_new_issys[root_]"></td>\
@@ -700,7 +699,7 @@ var root_tr_html = '<tr class="ct"><td>\
 	child_tr_html = '<tr class="ct">\
                                     <td><span class="plus_icon"></span>\
                                         <input type="number" name="t_new_sub_vieworder[id_][]" class="input length_1 mr5">\
-                                        <input type="text" name="t_new_sub_name[id_][]" class="input length_2 mr5">\
+                                        <input type="text" name="t_new_sub_name[id_][]" class="input length_4 mr5">\
                                     </td>\
                                     <td class="tac"><input class="J_issys_child" type="checkbox" value="1" name="t_new_sub_issys[id_][]"></td>\
                                     <td><a href="" class="mr5 J_newRow_del">[删除]</a></td>\

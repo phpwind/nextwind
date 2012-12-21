@@ -7,7 +7,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PasswordController.php 21573 2012-12-11 08:05:42Z xiaoxia.xuxx $
+ * @version $Id: PasswordController.php 22293 2012-12-21 05:09:51Z long.shi $
  * @package src.products.u.controller.profile
  */
 class PasswordController extends BaseProfileController {
@@ -33,6 +33,10 @@ class PasswordController extends BaseProfileController {
 	 * 修改密码
 	 */
 	public function editAction() {
+		//创始人不允许在前台修改密码
+		if (Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($this->loginUser->username)) {
+			$this->showError('USER:founder.edit');
+		}
 		list($newPwd, $oldPwd, $rePwd) = $this->getInput(array('newPwd', 'oldPwd', 'rePwd'), 'post');
 		if (!$oldPwd) {
 			$this->showError('USER:pwd.change.oldpwd.require');
@@ -44,8 +48,7 @@ class PasswordController extends BaseProfileController {
 			$this->showError('USER:user.error.-20');
 		}
 		
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($this->loginUser->uid);
+		$userDm = new PwUserInfoDm($this->loginUser->uid);
 		$userDm->setUsername($this->loginUser->username);
 		$userDm->setPassword($newPwd);
 		$userDm->setOldPwd($oldPwd);
@@ -62,8 +65,10 @@ class PasswordController extends BaseProfileController {
 	 * 设置安全问题
 	 */
 	public function questionAction() {
+		/* @var $userSrv PwUserService */
+		$userSrv = Wekit::load('SRV:user.srv.PwUserService');
 		$this->setCurrentLeft('password');
-		$this->setOutput($this->ifSetSafecv(), 'isSetSafeQ');
+		$this->setOutput($userSrv->isSetSafecv($this->loginUser->uid), 'isSetSafeQ');
 		$this->setOutput(PwUserHelper::getSafeQuestion(), 'safeQuestionList');
 		$this->appendBread('安全问题设置', WindUrlHelper::createUrl('profile/password/question'));
 		$this->setTemplate('profile_question');
@@ -77,9 +82,8 @@ class PasswordController extends BaseProfileController {
 		if (!$oldPwd) {
 			$this->showError('USER:pwd.error');
 		}
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($this->loginUser->uid)
-			->setOldPwd($oldPwd);
+		$userDm = new PwUserInfoDm($this->loginUser->uid);
+		$userDm->setOldPwd($oldPwd);
 		
 		switch ($question) {
 			case -2://取消安全问题和答案
@@ -105,7 +109,7 @@ class PasswordController extends BaseProfileController {
 		$userService = Wekit::load('user.srv.PwUserService');
 		//如果该用户必须设置安全问题
 		if ($userService->mustSettingSafeQuestion($this->loginUser->uid)) {
-			if (!$question || ($question == -1 && !$this->ifSetSafecv())) {
+			if (!$question || ($question == -1 && !$userService->isSetSafecv())) {
 				$this->showError('USER:user.error.safequestion.need');
 			}
 		}
@@ -149,18 +153,6 @@ class PasswordController extends BaseProfileController {
 			$this->showError('USER:pwd.error');
 		}
 		$this->showMessage();
-	}
-	
-	/**
-	 * 判断是否设置了安全问题
-	 *
-	 * @return boolean
-	 */
-	private function ifSetSafecv() {
-		//TODO [WINDID--判断是否设置有安全问题BUG另议]
-		/* @var $windidUser WindidUser */
-		$info = $this->_getWindid()->getUser($this->loginUser->uid, 1);
-		return $info['safecv'] ? true : false;
 	}
 	
 	private function _getWindid() {

@@ -4,7 +4,7 @@ Wind::import('SRV:design.srv.model.PwDesignModelBase');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImageDataService.php 19954 2012-10-22 03:57:19Z gao.wanggao $ 
+ * @version $Id: PwDesignImageDataService.php 21979 2012-12-17 12:36:08Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImageDataService extends PwDesignModelBase{
@@ -55,7 +55,7 @@ class PwDesignImageDataService extends PwDesignModelBase{
 		if ($result !== true) return $result;
 		$image = $bhv->getAttachInfo();
 		if (!$image['filename']) return '';
-		return Wekit::app()->attach .'/'. $image['path'] . $image['filename'];
+		return Pw::getPath($image['path'] . $image['filename']);
  	}
 	
 }

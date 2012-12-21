@@ -42,6 +42,16 @@ class PwUserBlack {
 	}
 	
 	/**
+	 * 替换黑名单
+	 * 
+	 * @param int $uid
+	 * @param array $blackList 
+	 */
+	public function replaceBlack($uid,$blackList){
+		return $this->_getWindidUserBlack()->replaceBlack($uid, $blackList);
+	}
+	
+	/**
 	 * 删除
 	 * 
 	 * @param int $uid

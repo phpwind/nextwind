@@ -5,13 +5,13 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindViewException.php 2973 2011-10-15 19:22:48Z yishuo $
+ * @version $Id: WindViewException.php 3867 2012-12-21 15:23:37Z yishuo $
  * @package viewer
  * @subpackage exception
  */
 class WindViewException extends WindException {
-	const VIEW_NOT_EXIST = '300';
-	const COMPILE_NOT_EXIST = '400';
+	const VIEW_NOT_EXIST = '1300';
+	const COMPILE_NOT_EXIST = '1400';
 
 	/**
 	 * 自定义异常号的对应异常信息

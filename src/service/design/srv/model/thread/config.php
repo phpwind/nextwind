@@ -1,6 +1,6 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * the last known user to change this file in the repository  <$LastChangedBy: yanchixia $>
  * <note>
  * 1.type为'bbs''user''space''other''api'之一
  * 2.refresh 是否需要设置数据更新
@@ -14,10 +14,10 @@
  * 					2)在template\design\property\目录，新建模板文件, 定义'key1'的模板勾子
  * 					3)<input name="property[abc]" value="{$property[abc]}">',表单name必须以property命名
  * </note>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * @author $Author: yanchixia $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: config.php 19946 2012-10-22 02:57:35Z gao.wanggao $ 
+ * @version $Id: config.php 22091 2012-12-19 06:22:54Z yanchixia $ 
  * @package 
  */
 return array(
@@ -57,7 +57,7 @@ return array(
 		array('{fid}', '版块ID','fid'),
 		array('{forumUrl}', '版块Url','forum_url'),
 		array('{intro}', '帖子内容','content'),
-		array('{thumb|width|height}', '缩略图片｜宽｜高','thumb_attach'),
+		array('{thumb|width|height}', '缩略图片｜宽｜高 （0为自适应）','thumb_attach'),
 		//array('{markAttach}', '水印图片','mark_attach'),
 		array('{replies}', '回复数','replies'),
 		array('{hits}', '浏览数','hits'),

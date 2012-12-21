@@ -95,7 +95,7 @@
 
 					if(_data) {
 						$.each(_data, function(i, o){
-							u_arr.push('<li><a href="'+ GV.U_CENTER + '&uid='+ i +'" target="_blank">'+ o +'</a></li>');
+							u_arr.push('<li><a href="'+ GV.U_CENTER + i +'" target="_blank">'+ o +'</a></li>');
 						});
 						_item.find('.J_loading').hide().siblings('.J_vote_u_list').show().html(u_arr.join(''));
 					}else{

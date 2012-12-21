@@ -3,10 +3,10 @@
  /**
   * 在线服务记录接口
   * 
-  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+  * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
   * @copyright ©2003-2103 phpwind.com
   * @license http://www.phpwind.com
-  * @version $Id: PwOnlineService.php 20204 2012-10-24 09:14:08Z gao.wanggao $ 
+  * @version $Id: PwOnlineService.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $ 
   * @package 
   */
 
@@ -183,8 +183,8 @@ class PwOnlineService {
 		$uid = (int)$uid;
 		if ($uid < 0) return false;
 		Wind::import('SRV:user.dm.PwUserInfoDm');
-		$userDm = new PwUserInfoDm();
-		$userDm->setUid($uid)->setOnline($onlineTime);
+		$userDm = new PwUserInfoDm($uid);
+		$userDm->setOnline($onlineTime);
 		$ds = Wekit::load('user.PwUser');
 		$ds->editUser($userDm, PwUser::FETCH_DATA);
 	}

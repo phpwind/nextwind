@@ -6,10 +6,10 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindSimpleController.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindSimpleController.php 3859 2012-12-18 09:25:51Z yishuo $
  * @package web
  */
-abstract class WindSimpleController extends WindModule {
+abstract class WindSimpleController extends WindModule implements IWindController {
 	/**
 	 *
 	 * @var WindForward

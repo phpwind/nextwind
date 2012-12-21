@@ -7,7 +7,7 @@ Wind::import('WINDID:library.base.WindidBaseDm');
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidCreditDm.php 21722 2012-12-12 09:28:56Z gao.wanggao $
+ * @version $Id: WindidCreditDm.php 22114 2012-12-19 08:18:05Z gao.wanggao $
  * @package windid.service.user.dm
  */
 class WindidCreditDm extends WindidBaseDm {
@@ -33,8 +33,7 @@ class WindidCreditDm extends WindidBaseDm {
 
 	public function setCredit($cType, $value) {
 		if (!$this->_isLegal($cType)) return;
-		$this->_data['field'] =  $cType;
-		$this->_data['credit'] = $value;
+		$this->_data['credit' . $cType] =  $value;
 		return $this;
 	}
 	

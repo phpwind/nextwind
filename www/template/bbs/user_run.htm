@@ -12,7 +12,7 @@
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<pw-drag id="main_segment"/>
+		<pw-tpl id="main_segment"/>
 		<div class="bread_crumb">
 			{@$headguide|html}<em>&gt;</em><a href="{@url:bbs/user/run?fid=$fid}">会员</a>
 		</div>
@@ -134,7 +134,7 @@ Wind.use('jquery', 'global', function(){
 		}
 		lock = true;
 
-		$.getJSON(url, {fid : $this.data('fid')}, function(data){
+		$.post(url, {fid : $this.data('fid')}, function(data){
 			if(data.state == 'success') {
 				if(role == 'join') {
 					$this.html('已加入<span>&nbsp;&nbsp;|&nbsp;&nbsp;取消</span>').removeClass('core_follow').addClass('core_unfollow').data('role', 'quit');
@@ -177,7 +177,7 @@ Wind.use('jquery', 'global', function(){
 			}
 			lock = false;
 
-		});
+		}, 'json');
 	});
 
 	$('#J_forum_join_trigger').on('click', function(e){

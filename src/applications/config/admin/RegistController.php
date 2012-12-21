@@ -89,7 +89,7 @@ class RegistController extends AdminBaseController {
 		$windid->setConfig('reg', 'security.password.min', $password_min); 
 		$windid->setConfig('reg', 'security.password.max', $password_max);
 		$windid->setConfig('reg', 'security.password', $password_security);  
-		$windid->setConfig('reg', 'security.ban.username', explode(',', trim($this->getInput('securityBanUsername', 'post'))));  
+		$windid->setConfig('reg', 'security.ban.username', $this->getInput('securityBanUsername', 'post'));  
 		$this->showMessage('ADMIN:success');
 	}
 

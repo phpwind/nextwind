@@ -6,7 +6,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwCutImage.php 20546 2012-10-31 03:11:39Z gao.wanggao $ 
+ * @version $Id: PwCutImage.php 22257 2012-12-20 09:50:37Z gao.wanggao $ 
  * @package 
  */
 class PwCutImage {
@@ -152,6 +152,10 @@ class PwCutImage {
 		$this->_backImage = imagerotate($this->_frontImage, $this->degrees, $_color);
 		$this->_creatImage();
 		return true;
+	}
+	
+	public function getCutImage() {
+		return $this->_backImage;
 	}
 	 	
 	private function _getImageInfo() {

@@ -5,10 +5,10 @@
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindCommandController.php 3668 2012-06-12 03:36:18Z yishuo $
+ * @version $Id: WindCommandController.php 3859 2012-12-18 09:25:51Z yishuo $
  * @package command
  */
-abstract class WindCommandController extends WindModule {
+abstract class WindCommandController extends WindModule implements IWindController {
 
 	/**
 	 * 默认的操作处理方法
@@ -38,43 +38,77 @@ abstract class WindCommandController extends WindModule {
 		$this->beforeAction($handlerAdapter);
 		$action = $handlerAdapter->getAction();
 		if ($action !== 'run') $action = $this->resolvedActionName($action);
-		if (in_array($action, array('doAction', 'beforeAction', 'afterAction', 'resolvedActionName')) || !method_exists(
-			$this, $action)) {
-			throw new WindException('[command.WindCommandController.doAction] ', 
-				WindException::ERROR_CLASS_METHOD_NOT_EXIST);
-		}
-		$method = new ReflectionMethod($this, $action);
-		if ($method->isProtected()) throw new WindException('[command.WindCommandController.doAction] ', 
-			WindException::ERROR_CLASS_METHOD_NOT_EXIST);
 		$args = $this->getRequest()->getRequest('argv');
 		call_user_func_array(array($this, $action), $args);
+		print_r($args);
+		if ($this->errorMessage !== null) $this->getErrorMessage()->sendError();
 		$this->afterAction($handlerAdapter);
+		return $this->forward;
 	}
 
 	/**
-	 * 显示错误信息
-	 * 
-	 * @param string $error
-	 */
-	protected function showError($error) {
-		echo "Error: " . $error . "\r\n";
-		echo "Try: command help -m someModule -c someController -a someAction";
-		exit();
-	}
-
-	/**
-	 * 显示信息
-	 * 
-	 * @param string $message 默认为空字符串
+	 * 设置模板数据
+	 *
+	 * @param string|array|object $data
+	 * @param string $key
 	 * @return void
 	 */
-	protected function showMessage($message) {
-		if (is_array($message)) {
-			foreach ($message as $key => $value)
-				echo "'" . $key . "' => '" . $value . "',\r\n";
-		} else
-			echo $message, "\r\n";
+	protected function setOutput($data, $key = '') {
+		$this->getForward()->setVars($data, $key);
 	}
+	
+	/* 错误处理 */
+	/**
+	 * 添加错误信息
+	 *
+	 * @param string $message
+	 * @param string $key 默认为空字符串
+	 * @return void
+	 */
+	protected function addMessage($message, $key = '') {
+		$this->getErrorMessage()->addError($message, $key);
+	}
+
+	/**
+	 * 发送一个错误请求
+	 *
+	 * @param string $message 默认为空字符串
+	 * @param string $key 默认为空字符串
+	 * @param string $errorAction 默认为空字符串
+	 * @return void
+	 */
+	protected function showMessage($message = '', $key = '', $errorAction = '') {
+		$this->addMessage($message, $key);
+		$errorAction && $this->getErrorMessage()->setErrorAction($errorAction);
+		$this->getErrorMessage()->sendError();
+	}
+	
+	// 	/**
+	// 	 * 显示错误信息
+	// 	 * 
+	// 	 * @param string $error
+	// 	 */
+	// 	protected function showError($error) {
+	// 		echo "Error: " . $error . "\r\n";
+	// 		echo "Try: command help -m someModule -c someController -a someAction";
+	// 		exit();
+	// 	}
+	
+
+	// 	/**
+	// 	 * 显示信息
+	// 	 * 
+	// 	 * @param string $message 默认为空字符串
+	// 	 * @return void
+	// 	 */
+	// 	protected function showMessage($message) {
+	// 		if (is_array($message)) {
+	// 			foreach ($message as $key => $value)
+	// 				echo "'" . $key . "' => '" . $value . "',\r\n";
+	// 		} else
+	// 			echo $message, "\r\n";
+	// 	}
+	
 
 	/**
 	 * 解析action操作方法名称
@@ -84,7 +118,7 @@ abstract class WindCommandController extends WindModule {
 	 * @param string $action
 	 * @return void
 	 */
-	public function resolvedActionName($action) {
+	protected function resolvedActionName($action) {
 		return $action . 'Action';
 	}
 
@@ -96,6 +130,38 @@ abstract class WindCommandController extends WindModule {
 	protected function getLine($message) {
 		echo $message;
 		return trim(fgets(STDIN));
+	}
+
+	/**
+	 *
+	 * @return WindForward
+	 */
+	public function getForward() {
+		return $this->_getForward();
+	}
+
+	/**
+	 *
+	 * @return WindErrorMessage
+	 */
+	public function getErrorMessage() {
+		return $this->_getErrorMessage();
+	}
+
+	/**
+	 *
+	 * @param WindForward $forward
+	 */
+	public function setForward($forward) {
+		$this->forward = $forward;
+	}
+
+	/**
+	 *
+	 * @param WindErrorMessage $errorMessage
+	 */
+	public function setErrorMessage($errorMessage) {
+		$this->errorMessage = $errorMessage;
 	}
 }
 

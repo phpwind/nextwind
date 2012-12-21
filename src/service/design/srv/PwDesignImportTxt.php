@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImportTxt.php 19784 2012-10-18 03:29:57Z gao.wanggao $ 
+ * @version $Id: PwDesignImportTxt.php 22362 2012-12-21 12:09:33Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImportTxt {
@@ -16,8 +16,11 @@ class PwDesignImportTxt {
 	private $_content = '';
 	
 	
-	public function checkTxt($filename) {
-		if (!$content = WindFile::read($filename)) return new PwError("DESIGN:upload.file.error");
+	public function checkTxt($filename = '', $content = '') {
+		if (!$filename && !$content ) return new PwError("DESIGN:upload.file.error");
+		if ($filename) {
+			if (!$content = WindFile::read($filename)) return new PwError("DESIGN:upload.file.error");
+		}
 		$content = preg_replace("/\/\*(.+)\*\//", '', $content);
 		$content = unserialize(base64_decode($content));
 		$_array = array('page', 'segment', 'structure', 'module');
@@ -25,7 +28,7 @@ class PwDesignImportTxt {
 			if(!isset($content[$v])) return new PwError("DESIGN:file.check.fail");
 		}
 		$this->_content = $content;
-		WindFile::del($filename);
+		if ($filename) WindFile::del($filename);
 		return true;
 	}
 	
@@ -69,10 +72,11 @@ class PwDesignImportTxt {
 				->setTitle(unserialize($v['module_title']))
 				->setStyle($style['font'],$style['link'],$style['border'],$style['margin'],$style['padding'],$style['background'],$style['styleclass'])
 				->setIsused(1)
+				->setModuleType($v['module_type'])
 				->setModuleTpl($v['module_tpl']);
 			$resource = $ds->addModule($dm);
 			if ($resource instanceof PwError) return $resource;
-			$this->newIds[$k] = $resource;
+			$this->newIds[$k] = (int)$resource;
 		}
 		return true;
 	}
@@ -96,10 +100,14 @@ class PwDesignImportTxt {
 	}
 	
 	protected function importSegment($segments) {
+		Wekit::load('design.PwDesignPage');
+		if ($this->_pageInfo['page_type'] == PwDesignPage::PORTAL) {
+			return $this->importPortalSegment($segments);
+		}
 		$_struct = '';
 		$_array = explode(',',$this->_pageInfo['segments']);
-		if (in_array('first_segment', $_array)) {
-			$firstSegment = 'first_segment';
+		if (in_array('first_segment_drag', $_array)) {
+			$firstSegment = 'first_segment_drag';
 		} else {
 			$firstSegment = array_shift($_array);
 		}
@@ -107,6 +115,35 @@ class PwDesignImportTxt {
 			if (!$v) continue;
 			$_struct .= $v;
 		}
+		$_struct = $this->replaceStruct($_struct);
+		$_tpl = $this->_getCompileService()->replaceModule($_struct);
+		$this->_getSegmentDs()->replaceSegment($firstSegment, $this->_pageInfo['page_id'], $_tpl, $_struct);
+		return true;
+	}
+	
+	protected function importPortalSegment($segments) {
+		$srv = $this->_getCompileService();
+		$ds = $this->_getSegmentDs();
+		foreach ($segments AS $k=>$segment) {
+			$struct = $this->replaceStruct($segment);
+			$_tpl = $srv->replaceModule($struct);
+			$ds->replaceSegment($k, $this->_pageInfo['page_id'], $_tpl, $struct);
+		}
+	}
+	
+	protected  function updatePage(){
+    	Wind::import('SRV:design.dm.PwDesignPageDm');
+    	$moduleIds = implode(',',  $this->newIds);
+    	$moduleIds = $moduleIds ? $moduleIds.','.$this->_pageInfo['module_ids'] : $this->_pageInfo['module_ids'];
+    	$moduleIds = array_filter(explode(',', $moduleIds));
+		$dm = new PwDesignPageDm($this->_pageInfo['page_id']);
+		$dm->setModuleIds($moduleIds)
+			->setStrucNames($this->_structures);
+		$resource = Wekit::load('design.PwDesignPage')->updatePage($dm);
+		return $resource;
+	}
+	
+	protected function replaceStruct($struct) {
 		//对新添加的module进行转换
 		foreach ($this->newIds AS $k=>$v) {
 			$_in = array(
@@ -126,7 +163,7 @@ class PwDesignImportTxt {
 				'id="J_mod_'.$v.'"',
 				'id="D_mod_'.$v.'"'
 			);
-			$_struct = str_replace($_in, $_out, $_struct);
+			$struct = str_replace($_in, $_out, $struct);
 		}
 		//对新添加的structures进行转换
 		foreach ($this->_oldstruct AS $k=>$v) {
@@ -139,23 +176,9 @@ class PwDesignImportTxt {
 				'id="'.$this->_structures[$k].'"',
 				'role="structure_'.$this->_structures[$k].'"',
 			);
-			$_struct = str_replace($_in, $_out, $_struct);
+			$struct = str_replace($_in, $_out, $struct);
 		}
-		$_tpl = $this->_getCompileService()->replaceModule($_struct);
-		$this->_getSegmentDs()->replaceSegment($firstSegment, $this->_pageInfo['page_id'], $_tpl, $_struct);
-		return true;
-	}
-	
-	protected  function updatePage(){
-    	Wind::import('SRV:design.dm.PwDesignPageDm');
-    	$moduleIds = implode(',',  $this->newIds);
-    	$moduleIds = $moduleIds ? $moduleIds.','.$this->_pageInfo['module_ids'] : $this->_pageInfo['module_ids'];
-    	$moduleIds = array_filter(explode(',', $moduleIds));
-		$dm = new PwDesignPageDm($this->_pageInfo['page_id']);
-		$dm->setModuleIds($moduleIds)
-			->setStrucNames($this->_structures);
-		$resource = Wekit::load('design.PwDesignPage')->updatePage($dm);
-		return $resource;
+		return $struct;
 	}
 	
 	private function _getCompileService() {

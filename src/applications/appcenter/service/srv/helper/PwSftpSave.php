@@ -8,12 +8,18 @@ require_once Wind::getRealPath('LIB:utility.phpseclib.Net.SFTP');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSftpSave.php 21939 2012-12-17 07:13:16Z long.shi $
+ * @version $Id: PwSftpSave.php 22002 2012-12-18 05:58:56Z long.shi $
  * @package wind
  */
 class PwSftpSave extends AbstractWindFtp {
 
 	protected $port = 22;
+	protected $rootPath = '.';
+	
+	/**
+	 * @var Net_SFTP
+	 */
+	protected $conn;
 	
 	public function __construct($config = array()) {
 		$this->initConfig($config);
@@ -21,11 +27,15 @@ class PwSftpSave extends AbstractWindFtp {
 		if (!$this->conn->login($this->user, $this->pwd)) {
 			throw new WindFtpException($this->user, WindFtpException::LOGIN_FAILED);
 		}
-		$this->dir && $this->changeDir($this->dir);
+		$this->initRootPath();
 	}
 
 	public function upload($localfile, $remotefile, $mode = null) {
-		return $this->conn->put($remotefile, $localfile);
+		if (!in_array(($savedir = dirname($remotefile)), array('.', '/'))) {
+			$this->mkdirs($savedir);
+		}
+		$remotefile = $this->rootPath . WindSecurity::escapePath($remotefile);
+		return $this->conn->put($remotefile, $localfile, NET_SFTP_LOCAL_FILE);
 	}
 	
 	/*
@@ -42,6 +52,10 @@ class PwSftpSave extends AbstractWindFtp {
 		return $this->conn->delete($filename);
 	}
 	
+	public function getError() {
+		return $this->conn->getLastSFTPError();
+	}
+	
 	/*
 	 * (non-PHPdoc) @see AbstractWindFtp::download()
 	 */
@@ -52,7 +66,7 @@ class PwSftpSave extends AbstractWindFtp {
 	/*
 	 * (non-PHPdoc) @see AbstractWindFtp::fileList()
 	 */
-	public function fileList($dir = '') {
+	public function fileList($dir = '.') {
 		return $this->conn->nlist($dir);
 	}
 	
@@ -81,7 +95,7 @@ class PwSftpSave extends AbstractWindFtp {
 	 * (non-PHPdoc) @see AbstractWindFtp::size()
 	 */
 	public function size($file) {
-		return true;
+		return $this->conn->size($file);
 	}
 	
 	/*
@@ -89,6 +103,14 @@ class PwSftpSave extends AbstractWindFtp {
 	 */
 	protected function pwd() {
 		return $this->conn->pwd();
+	}
+	
+	/**
+	 * 重设当前目录为初始化目录信息
+	 */
+	protected function initRootPath() {
+		$this->changeDir($this->dir ? $this->dir : '.');
+		$this->rootPath = $this->pwd();
 	}
 }
 

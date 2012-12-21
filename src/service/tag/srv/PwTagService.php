@@ -22,15 +22,21 @@ class PwTagService {
 		if(!is_array($dmArray) || !$dmArray) return false;
 		$tagsInfo = $this->_getTagDs()->getTagsByNames(array_keys($dmArray));
 		$tagsKeys = array();
-		foreach ($tagsInfo as $k=>$tag){
+		foreach ($tagsInfo as $k => $tag){
 		    $tagsKeys[] = strtolower($k);
 		}
+		$dmArrays = array();
+		foreach ($dmArray as $k => $dm){
+			$k = strtolower($k);
+		    $dmArrays[$k] = $dm;
+		}
 		$tagRecords = $updateTagDms = $relationDms = $attentionTags = array();
-		foreach ($dmArray as $k => $dm) {
+		foreach ($dmArrays as $k => $dm) {
 			$k = strtolower(trim($k));
 			if (!$k || !$dm instanceof PwTagDm) continue;
 			$time = Pw::getTime();
 			$dm->setCreatedTime($time);
+			$dm->setName($k);
 			if (in_array($k, $tagsKeys)) {
 				$dm->tag_id = $tagsInfo[$k]['parent_tag_id'] ? $tagsInfo[$k]['parent_tag_id'] : $tagsInfo[$k]['tag_id'];
 				$dm->setContentTagId($tagsInfo[$k]['tag_id']);
@@ -53,6 +59,7 @@ class PwTagService {
 			$relationDms[] = $dm;
 		//	$this->addAttention($dm->getCreateUid(),$dm->tag_id);
 		}
+		
 		$this->_getTagDs()->batchAddRelation($relationDms);
 		$this->_getTagDs()->batchAddTagRecord($tagRecords);
 		$updateTagDms && $this->_getTagDs()->batchUpdate($updateTagDms);

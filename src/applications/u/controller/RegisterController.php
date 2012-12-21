@@ -9,7 +9,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: RegisterController.php 21857 2012-12-14 06:38:22Z gao.wanggao $
+ * @version $Id: RegisterController.php 22361 2012-12-21 11:50:28Z xiaoxia.xuxx $
  * @package src.products.u.controller
  */
 class RegisterController extends PwBaseController {
@@ -34,7 +34,7 @@ class RegisterController extends PwBaseController {
 	public function run() {
 		$this->init();
 		$this->setOutput($this->getInput('invite'), 'invite');
-		$this->setOutput(urlencode(WindUrlHelper::createUrl('bbs/index/run')), 'backurl');
+		$this->setOutput(WindUrlHelper::createUrl('bbs/index/run'), 'backurl');
 		$this->setTemplate('register');
 		
 		Wind::import('SRV:seo.bo.PwSeoBo');
@@ -95,7 +95,7 @@ class RegisterController extends PwBaseController {
 	 */
 	public function sendActiveEmailAction() {
 		$statu = $this->checkRegisterUser();
-		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE) != PwUser::STATUS_UNACTIVE) {
+		if (!Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE)) {
 			$this->setOutput('activeEmail', 'type');
 			$this->setTemplate('register_about');
 			return;
@@ -123,7 +123,7 @@ class RegisterController extends PwBaseController {
 	 */
 	public function sendActiveEmailAgainAction() {
 		$_statu = $this->checkRegisterUser();
-		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE) != PwUser::STATUS_UNACTIVE) {
+		if (!Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE)) {
 			$this->showMessage('USER:active.email.dumplicate');
 		}
 		$registerService = new PwRegisterService();
@@ -136,15 +136,15 @@ class RegisterController extends PwBaseController {
 	 */
 	public function editEmailAction() {
 		$_statu = $this->checkRegisterUser();
-		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE) != PwUser::STATUS_UNACTIVE) {
+		if (!Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE)) {
 			$this->showMessage('USER:active.email.dumplicate', 'u/login/run');
 		}
 		$email = $this->getInput('email', 'post');
 		if ($this->_getUserDs()->checkEmailExist($email, $this->loginUser->info['username'])) {
 			$this->showError('USER:user.error.-10');
 		} else {
-			$userInfo = new PwUserInfoDm();
-			$userInfo->setUid($this->loginUser->uid)->setEmail($email);
+			$userInfo = new PwUserInfoDm($this->loginUser->uid);
+			$userInfo->setEmail($email);
 			$this->_getUserDs()->editUser($userInfo, PwUser::FETCH_MAIN);
 			$registerService = new PwRegisterService();
 			$registerService->sendEmailActive($this->loginUser->info['username'], $email, $_statu, $this->loginUser->uid);
@@ -157,7 +157,7 @@ class RegisterController extends PwBaseController {
 	 */
 	public function activeEmailAction() {
 		$_statu = $this->checkRegisterUser();
-		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE) != PwUser::STATUS_UNACTIVE) {
+		if (!Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE)) {
 //			$this->showMessage('USER:active.email.success', 'u/register/welcome?_statu=' . $_statu);
 			$this->setOutput('activeEmail', 'type');
 			$this->setTemplate('register_about');
@@ -186,7 +186,7 @@ class RegisterController extends PwBaseController {
 	public function welcomeAction() {
 		if (!$this->getInput('_statu')) $this->forwardRedirect(WindUrlHelper::createUrl('u/register/run'));
 		$statu = $this->checkRegisterUser();
-		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE) == PwUser::STATUS_UNACTIVE) {
+		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNACTIVE)) {
 			$this->forwardAction('u/register/sendActiveEmail', array('_statu' => $statu), true);
 		}
 		Wind::import('SRV:user.srv.PwLoginService');
@@ -209,7 +209,7 @@ class RegisterController extends PwBaseController {
 		if (!$next) {
 			if (Wekit::C('register', 'active.check')) {
 				$this->setOutput(1, 'check');
-				if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNCHECK) != PwUser::STATUS_UNCHECK) {
+				if (!Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNCHECK)) {
 					$this->forwardRedirect(Wekit::app()->baseUrl);
 				}
 			}

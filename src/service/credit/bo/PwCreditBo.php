@@ -11,7 +11,7 @@ Wind::import('SRV:credit.srv.PwCreditOperationConfig');
  * @author JianMin Chen <sky_hold@163.com> 2011-12-19
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwCreditBo.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: PwCreditBo.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
  * @package src.service.credit
  */
 
@@ -237,8 +237,8 @@ class PwCreditBo {
 			$userDs = Wekit::load('user.PwUser');
 			Wind::import('SRV:user.dm.PwUserInfoDm');
 			foreach ($this->_userLog as $_uid => $_log) {
-				$_dm = new PwUserInfoDm();
-				$_dm->setUid($_uid)->setLastCreditAffectLog(serialize($_log));
+				$_dm = new PwUserInfoDm($_uid);
+				$_dm->setLastCreditAffectLog(serialize($_log));
 				$userDs->editUser($_dm, PwUser::FETCH_DATA);
 			}
 		}

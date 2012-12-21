@@ -9,13 +9,13 @@ Wind::import('LIB:base.PwBaseDbCache');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostDbCache.php 20973 2012-11-22 10:33:45Z jieyin $
+ * @version $Id: PwPostDbCache.php 22207 2012-12-19 17:13:36Z jieyin $
  * @package src.service.user
  */
 class PwPostDbCache extends PwBaseDbCache {
 	
 	protected $keys = array(
-		'post' => array('post_%s', array('tid'), PwCache::USE_DBCACHE, 'forum', 0, array('forum.dao.PwPostsDao', 'getPost')),
+		'post' => array('post_%s', array('pid'), PwCache::USE_DBCACHE, 'forum', 0, array('forum.dao.PwPostsDao', 'getPost')),
 		'post_list' => array('post_list_%s_%s_%s_%s_%s', array('tver', 'tid', 'limit', 'offset', 'asc'), PwCache::USE_DBCACHE, 'forum', 0),
 		'post_tver' => array('post_tver_%s', array('tid'), PwCache::USE_DBCACHE, 'forum', 0, 0),
 	);
@@ -93,6 +93,15 @@ class PwPostDbCache extends PwBaseDbCache {
 		Wekit::cache()->batchDelete($this->fetchKeysByPid($pids));
 		return $this->_getDao()->batchDeletePost($pids);
 	}
+	
+	/*
+	public function revertPost($tids) {
+		foreach ($tids as $_tid) {
+			$this->clearPostListCache($_tid);
+		}
+		Wekit::cache()->batchDelete($this->fetchKeysByPid($pids));
+		return $this->_getDao()->revertPost($tids);
+	}*/
 	
 	/**
 	 * 清除一个帖子的列表缓存

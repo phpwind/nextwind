@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadManage');
  * @author peihong <jhqblxt@gmail.com> Dec 2, 2011
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ManageController.php 21758 2012-12-13 05:37:58Z xiaoxia.xuxx $
+ * @version $Id: ManageController.php 22328 2012-12-21 08:46:57Z xiaoxia.xuxx $
  * @package src.applications.bbs.controller
  */
 class ManageController extends PwBaseController {
@@ -357,63 +357,32 @@ class ManageController extends PwBaseController {
 		if ($this->doAction) {
 			$banInfo = new stdClass();
 			$banInfo->types = $this->getInput('types', 'post');
-			$banInfo->uids = $this->getInput('uids', 'post');
 			$banInfo->ban_others = $this->getInput('ban_others', 'post');
 			$banInfo->end_time = $this->getInput('end_time', 'post');
 			$banInfo->reason = $this->getInput('reason', 'post');
 			$banInfo->ban_range = intval($this->getInput('ban_range', 'post'));
 			$banInfo->sendNotice = intval($this->getInput('sendnotice', 'post'));
-			
-			$do->setBanInfo($banInfo)
-				->setDeletes($this->getInput('delete', 'post'));
+			$do->setBanInfo($banInfo)->setBanUids($this->getInput('uids', 'post'))->setDeletes($this->getInput('delete', 'post'));
 		} else {
 			/* @var $banService PwUserBanService */
 			$banService = Wekit::load('user.srv.PwUserBanService');
-			$users = $do->getThreadUsername();
 			$uid = $this->getInput('uid', 'get');
-			$deleteCurrent = true;
 			if ($uid) {
-				if (!key_exists($uid, $users)) {
-					$deleteCurrent = false;
-				}
-				$users = Wekit::load('user.PwUser')->getUserByUid($uid);
-				$users = array($uid => $users['username']);
+				$do->setBanUids($uid);
 			}
+			$info = $do->getBanUsers();
 			$this->setOutput($banService->getBanType(), 'types');
-			$this->setOutput($users, 'userNames');
-			$this->setOutput(count($users), 'count');
+			$this->setOutput($info, 'userNames');
+			$this->setOutput(count($info), 'count');
 			$this->setOutput($do->getRight(), 'right');
-			$this->setOutput($deleteCurrent, 'deleteCurrent');
 			$this->setOutput('doban', 'doaction');
 			$this->setOutput('用户禁止', 'title');
 		}
 		return $do;
 	}
-	
-	/* (non-PHPdoc)
-	 * @see PwBaseController::setDefaultTemplateName()
-	 */
-	/* protected function setDefaultTemplateName($handlerAdapter) {
-		$controller = $handlerAdapter->getController();
-		$action = $handlerAdapter->getAction();
-		
-		switch ($action) {
-			case 'run':
-				$this->setTemplate($controller . '_' . $action);;
-				break;
-			case 'ban':
-				$this->setTemplate('manage_ban');;
-				break;
-			default:
-				$this->setTemplate('manage_threads');
-			break;
-		}
-	} */
 
-	/**
-	 * various manage actions routes to manageAction 
-	 * 
-	 * @see wind/web/WindController::resolvedActionMethod()
+	/* (non-PHPdoc)
+	 * @see WindController::resolvedActionMethod()
 	 */
 	public function resolvedActionMethod($handlerAdapter) {
 		return $this->resolvedActionName('manage');

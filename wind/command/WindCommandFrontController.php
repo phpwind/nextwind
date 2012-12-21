@@ -1,68 +1,24 @@
 <?php
+
 /**
  * 命令行前端控制器
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindCommandFrontController.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindCommandFrontController.php 3859 2012-12-18 09:25:51Z yishuo $
  * @package command
  */
 class WindCommandFrontController extends AbstractWindFrontController {
-	
 	/*
-	 * (non-PHPdoc) @see AbstractWindFrontController::run()
+	 * (non-PHPdoc) @see AbstractWindFrontController::createApplication()
 	 */
-	public function run() {
-		parent::run();
-		exit("Completely Done~\r\n");
-	}
-
-	/**
-	 * 创建并返回应用实例
-	 * 
-	 * @return WindWebApplication
-	 */
-	public function createApplication() {
-		$this->_initConfig();
-		$this->_appName || $this->_appName = 'default';
-		/* @var $router WindRouter */
-		$router = $this->getFactory()->getInstance('router');
-		$router->route($this->getRequest());
-		
-		$this->_app = new WindCommandApplication($this->_request, $this->_factory, $router);
-		if (!empty($this->_config['web-apps'][$this->_appName])) {
-			if ($this->_appName !== 'default' && isset($this->_config['web-apps']['default'])) {
-				$this->_config['web-apps'][$this->_appName] = WindUtility::mergeArray(
-					$this->_config['web-apps']['default'], $this->_config['web-apps'][$this->_appName]);
-				$this->_config['web-apps'][$this->_appName]['_merged'] = true;
-			}
-			$this->_app->setConfig($this->_config['web-apps'][$this->_appName]);
-		}
-	}
-
-	/**
-	 *
-	 * @return WindHttpRequest
-	 */
-	public function getRequest() {
-		if ($this->_request === null) {
-			$this->_request = WindFactory::createInstance('WindCommandRequest');
-		}
-		return $this->_request;
-	}
-	
-	/*
-	 * (non-PHPdoc) @see AbstractWindFrontController::showErrorMessage()
-	 */
-	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {
-		$log = $message . "\r\n" . $file . ":" . $line . "\r\n";
-		list($fileLines, $trace) = WindUtility::crash($file, $line, $trace);
-		foreach ($trace as $key => $value) {
-			$log .= $value . "\r\n";
-		}
-		if (WIND_DEBUG & 2) Wind::getComponent('windLogger')->error($log, 'error', true);
-		exit($log);
+	public function createApplication($config, $factory) {
+		$request = $factory->getInstance('request');
+		$response = $factory->getInstance('response');
+		$application = new WindCommandApplication($request, $response, $factory);
+		$application->setConfig($config);
+		return $application;
 	}
 	
 	/*
@@ -70,16 +26,27 @@ class WindCommandFrontController extends AbstractWindFrontController {
 	 */
 	protected function _components() {
 		return array(
-			'router' => array('path' => 'WIND:command.WindCommandRouter', 'scope' => 'application'), 
+			'request' => array(
+				'path' => 'WIND:command.WindCommandRequest', 
+				'scope' => 'application'), 
+			'response' => array(
+				'path' => 'WIND:command.WindCommandResponse', 
+				'scope' => 'application'), 
+			'router' => array('path' => 'WIND:router.WindCommandRouter', 'scope' => 'application'), 
 			'windView' => array('path' => 'WIND:command.WindCommandView', 'scope' => 'prototype'), 
 			'db' => array('path' => 'WIND:db.WindConnection', 'scope' => 'singleton'), 
-			'configParser' => array('path' => 'WIND:parser.WindConfigParser', 'scope' => 'singleton'), 
+			'configParser' => array(
+				'path' => 'WIND:parser.WindConfigParser', 
+				'scope' => 'singleton'), 
+			'error' => array('path' => 'WIND:command.WindCommandError', 'scope' => 'application'), 
 			'errorMessage' => array('path' => 'WIND:base.WindErrorMessage', 'scope' => 'prototype'), 
 			'windLogger' => array(
 				'path' => 'WIND:log.WindLogger', 
 				'scope' => 'singleton', 
 				'destroy' => 'flush', 
-				'constructor-args' => array('0' => array('value' => 'DATA:log'), '1' => array('value' => '2'))), 
+				'constructor-args' => array(
+					'0' => array('value' => 'DATA:log'), 
+					'1' => array('value' => '2'))), 
 			'i18n' => array(
 				'path' => 'WIND:i18n.WindLangResource', 
 				'scope' => 'singleton', 
@@ -96,8 +63,9 @@ class WindCommandFrontController extends AbstractWindFrontController {
 			'WIND:base.WindErrorMessage' => 'WindErrorMessage', 
 			'WIND:parser.WindConfigParser' => 'WindConfigParser', 
 			'WIND:db.WindConnection' => 'WindConnection', 
+			'WIND:router.WindCommandRouter' => 'WindCommandRouter', 
+			
 			'WIND:command.WindCommandView' => 'WindCommandView', 
-			'WIND:command.WindCommandRouter' => 'WindCommandRouter', 
 			'WIND:command.WindCommandErrorHandler' => 'WindCommandErrorHandler', 
 			'WIND:command.WindCmmandRequest' => 'WindCommandRequest', 
 			'WIND:command.WindCommandResponse' => 'WindCommandResponse', 
@@ -110,8 +78,9 @@ class WindCommandFrontController extends AbstractWindFrontController {
 			'WindErrorMessage' => 'base/WindErrorMessage', 
 			'WindConfigParser' => 'parser/WindConfigParser', 
 			'WindConnection' => 'db/WindConnection', 
+			'WindCommandRouter' => 'router/WindCommandRouter', 
+			
 			'WindCommandView' => 'command/WindCommandView', 
-			'WindCommandRouter' => 'command/WindCommandRouter', 
 			'WindCommandApplication' => 'command/WindCommandApplication', 
 			'WindCommandController' => 'command/WindCommandController', 
 			'WindCommandErrorHandler' => 'command/WindCommandErrorHandler', 

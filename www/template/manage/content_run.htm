@@ -59,9 +59,9 @@
 				<td><input type="checkbox" class="J_check" name="tid[]" value="{$value[tid]}" ></td>
 				<td>
 					<a href="{@url:bbs/read/run/?tid=$value['tid']&fid=$value['fid']}" target="_blank">{@Pw::stripWindCode($value['subject'])}</a>
-					<p class="summary">
+					<!--p class="summary">
 					他不善言辞，从不接受媒体采访，却以“J.Wong”的论坛 ID 为外界熟谙；他彻夜潜水于魅族论坛，偶尔喋喋不休，偶尔勃然大怒；他深居简出捣腾动辄万元的音乐器材，一月只出一次门理发，以至于公司五层的办公室空空荡荡。
-					</p>
+					</p-->
 				</td>
 				<td><a href="{@WindUrlHelper::createUrl('space/index/run?uid='.$value['created_userid'])}">{$value['created_username']}</a></td>
 				<td>{@Pw::time2str($value['created_time'])}</td>

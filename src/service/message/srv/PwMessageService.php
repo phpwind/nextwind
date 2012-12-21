@@ -219,8 +219,9 @@ class PwMessageService {
 	 */
 	public function getDialogMessageList($dialogId,$limit,$start) {
 		// 对话消息分页
-		$messages = $this->_getWindid()->getMessageList($dialogId, $start,$limit);
 		$count = $this->_getWindid()->countMessage($dialogId);
+		if (!$count) return array(0, array());
+		$messages = $this->_getWindid()->getMessageList($dialogId, $start,$limit);
 		krsort($messages);
 		return array($count,$messages);
 	}
@@ -242,7 +243,7 @@ class PwMessageService {
 	 * 删除会话
 	 * @param array $dialogIds
 	 */
-	public function batchDeleteDialog($dialogIds){
+	public function batchDeleteDialog($uid, $dialogIds){
 		return $this->_getWindid()->batchDeleteDialog($uid, $dialogIds);
 	}
 	
@@ -269,12 +270,12 @@ class PwMessageService {
 	 * @param int $endtime
 	 * @return array 
 	 */
-	public function getMessagesByUid($start,$limit,$fromuid = 0,$starttime = 0,$endtime = 0,$keyword = '') {
+	public function getMessagesByUid($start,$limit,$fromuid = '',$starttime = 0,$endtime = 0,$keyword = '') {
 		$search = array();
-		if ($fromuid) $search['fromuid'] = $fromuid;
+		if ($fromuid !== null) $search['fromuid'] = $fromuid;
 		if ($starttime) $search['starttime'] = $starttime;
 		if ($endtime) $search['endtime'] = $endtime;
-		if ($keyword) $search['keyword'] = $keyword;
+		if ($keyword !== null) $search['keyword'] = $keyword;
 		return $this->_getWindid()->searchMessage($search, $start, $limit);
 		
 	}

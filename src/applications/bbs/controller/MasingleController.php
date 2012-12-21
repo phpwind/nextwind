@@ -169,6 +169,9 @@ class MasingleController extends PwBaseController {
 		return $do;
 	}
 	
+	/* (non-PHPdoc)
+	 * @see WindController::resolvedActionMethod()
+	 */
 	public function resolvedActionMethod($handlerAdapter) {
 		return $this->resolvedActionName('manage');
 	}

@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRestoreService.php 19747 2012-10-17 10:43:57Z gao.wanggao $ 
+ * @version $Id: PwRestoreService.php 22357 2012-12-21 10:56:30Z gao.wanggao $ 
  * @package 
  */
 class PwRestoreService {
@@ -119,8 +119,20 @@ class PwRestoreService {
 		$segments = $this->_getBakDs()->getBak(PwDesignBak::SEGMENT, $pageid, $issnap);
 		if (!is_array($segments['bak_info'])) return false;
 		$ds = $this->_getSegmentDs();
+		$srv = null;
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+    	$bo = new PwDesignPageBo($pageid);
+    	$pageInfo = $bo->getPage();
+		if ($pageInfo['page_type'] == PwDesignPage::SYSTEM) {
+    		Wind::import('SRV:design.srv.PwPortalCompile');
+    		$srv = new PwPortalCompile($pageid);
+    	}
 		foreach ($segments['bak_info'] AS $k=>$v) {
 			$ds->replaceSegment($k, $pageid, $v['segment_tpl']);
+			$strr = strrchr($_file['filename'], "__tpl");
+			if (isset($srv) || $strr) {
+				$srv->restoreTpl($k, $v['segment_struct']);//门户片段
+			}
 		}
 		return true;
 	}

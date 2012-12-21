@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwThreadDigestDm.php 15975 2012-08-16 09:40:09Z xiaoxia.xuxx $
+ * @version $Id: PwThreadDigestDm.php 22320 2012-12-21 08:14:25Z xiaoxia.xuxx $
  * @package src.service.forum.dm
  */
 class PwThreadDigestDm extends PwBaseDm {
@@ -51,6 +51,17 @@ class PwThreadDigestDm extends PwBaseDm {
 	 */
 	public function setCid($cid) {
 		$this->_data['cid'] = $cid;
+		return $this;
+	}
+	
+	/**
+	 * 设置帖子的状态
+	 *
+	 * @param int $disabled
+	 * @return PwThreadDigestDm
+	 */
+	public function setDisabled($disabled) {
+		$this->_data['disabled'] = $disabled;
 		return $this;
 	}
 	

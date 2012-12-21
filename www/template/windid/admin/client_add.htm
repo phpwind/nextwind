@@ -3,92 +3,75 @@
 <head>
 <template source='TPL:admin.common.head' />
 </head>
-<body>
-<div class="wrap J_check_wrap">	
-	<div class="nav">
-		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('windid/client/run')}">客户端列表</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('windid/client/add')}">添加客户端</a></li>
-		</ul>
-	</div>
-	<!-- <div class="h_a">功能说明</div>
-	<div class="prompt_text">
-		<ul>
-			<li>在此设置。</li>
-		</ul>
-	</div> -->
+<body class="body_none" style="width:510px;">
 
-	<form class="J_ajaxForm"  action="{@WindUrlHelper::createUrl('windid/client/doadd')}" method="post">
-	<div class="h_a">添加客户端</div>
-	<div class="table_full">
-		<table width="100%">
-			<col class="th" />
-			<col width="400" />
-			<tr>
-				<th>客户端名称(*)</th>
-				<td><input type="text" class="input length_5" name="appname" value=""></td>
-				<td></td>
-			</tr>
-			<tr>
-				<th>客户端地址(*)</th>
-				<td><input type="text" class="input length_5" name="appurl" value=""></td>
-				<td><div class="fun_tips">以"/"结尾，如http://www.phpwind.net/</div></td>
-			</tr>
-			<!-- <tr>
-				<th>客户端IP</th>
-				<td><input type="text" class="input length_5" name="appip" value=""></td>
-				<td></td>
-			</tr> -->
-			<tr>
-				<th>客户端编码</th>
-				<td>
-					<ul class="switch_list cc">
-						<li><label><input name="charset"  value="1" type="radio" checked><span>UTF-8</span></label></li>
-						<li><label><input name="charset"  value="2" type="radio"><span>GBK</span></label></li>
-					</ul>
-				</td>
-				<td></td>
-			</tr>
-			<tr>
-				<th>客户端接口文件</th>
-				<td><input type="text" class="input length_5" name="apifile" value="{$apifile}"></td>
-				<td><div class="fun_tips">为空默认为windid.php</div></td>
-			</tr>
-			<tr>
-				<th>通讯密钥(*)</th>
-				<td><input type="text" class="input length_5" name="appkey" value="{$rand}"></td>
-				<td></td>
-			</tr>
-			<tr>
-				<th>同步登录</th>
-				<td>
-					<ul class="switch_list cc">
-						<li><label><input name="issyn"  value="1" type="radio" checked><span>是</span></label></li>
-						<li><label><input name="issyn"  value="0" type="radio"><span>否</span></label></li>
-					</ul>
-				</td>
-				<td></td>
-			</tr>
-			<tr>
-				<th>接收通知</th>
-				<td>
-					<ul class="switch_list cc">
-						<li><label><input name="isnotify"  value="1" type="radio" checked><span>是</span></label></li>
-						<li><label><input name="isnotify"  value="0" type="radio"><span>否</span></label></li>
-					</ul>
-				</td>
-				<td></td>
-			</tr>
-			
-		</table>
-	</div>
-	<div class="btn_wrap">
-		<div class="btn_wrap_pd">
-			<button class="btn btn_submit J_ajax_submit_btn" type="submit" >提交</button>
+<form class="J_ajaxForm"  action="{@WindUrlHelper::createUrl('windid/client/doadd')}" method="post">
+	<div class="pop_cont">
+		<div class="pop_table">
+			<table width="100%">
+				<tr>
+					<th>客户端名称(*)</th>
+					<td><input type="text" class="input length_4 mr5" name="appname" value=""></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>客户端地址(*)</th>
+					<td><input type="text" class="input length_4 mr5" name="appurl" value=""></td>
+					<td><div class="fun_tips">如http://www.phpwind.net/windid</div></td>
+				</tr>
+				<!-- <tr>
+					<th>客户端IP</th>
+					<td><input type="text" class="input length_5" name="appip" value=""></td>
+					<td></td>
+				</tr> -->
+				<tr>
+					<th>客户端编码</th>
+					<td>
+						<ul class="switch_list cc">
+							<li><label><input name="charset"  value="utf8" type="radio" checked><span>UTF-8</span></label></li>
+							<li><label><input name="charset"  value="gbk" type="radio"><span>GBK</span></label></li>
+						</ul>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>客户端接口文件</th>
+					<td><input type="text" class="input length_4 mr5" name="apifile" value="{$apifile}"></td>
+					<td><div class="fun_tips">为空默认为windid.php</div></td>
+				</tr>
+				<tr>
+					<th>通讯密钥(*)</th>
+					<td><input type="text" class="input length_4 mr5" name="appkey" value="{$rand}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>同步登录</th>
+					<td>
+						<ul class="switch_list cc">
+							<li><label><input name="issyn"  value="1" type="radio" checked><span>是</span></label></li>
+							<li><label><input name="issyn"  value="0" type="radio"><span>否</span></label></li>
+						</ul>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>接收通知</th>
+					<td>
+						<ul class="switch_list cc">
+							<li><label><input name="isnotify"  value="1" type="radio" checked><span>是</span></label></li>
+							<li><label><input name="isnotify"  value="0" type="radio"><span>否</span></label></li>
+						</ul>
+					</td>
+					<td></td>
+				</tr>
+				
+			</table>
+		</div>
+		<div class="pop_bottom">
+			<button class="btn btn_submit fr J_ajax_submit_btn" type="submit" >提交</button>
 		</div>
 	</div>
-	</form>
-</div>
+</form>
 <template source='TPL:admin.common.footer' />
 
 </body>

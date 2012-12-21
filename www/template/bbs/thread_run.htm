@@ -12,27 +12,27 @@
 <div class="wrap">
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
-		<pw-drag id="main_segment"/>
+		<pw-tpl id="main_segment"/>
 		<div class="bread_crumb" id="bread_crumb">
 			{@$headguide|html}<!--# if ($tab == 'digest') { #--><em>&gt;</em><a href="{@url:bbs/thread/run?fid=$fid&tab=digest}">精华</a><!--# } #-->
 			<!--# if ($type) { #--><em>&gt;</em>
 				<!--# $_urladd_ = $tab ? '&tab=' . $tab : ''; #-->
 				<!--# if ($_parentid = $topictypes['all_types'][$type]['parentid']) { #-->
-			<a href="{@url:bbs/thread/run?fid=$fid&type=$_parentid}{$_urladd_}">{$topictypes['all_types'][$_parentid]['name']}</a><em>&gt;</em>
+			<a href="{@url:bbs/thread/run?fid=$fid&type=$_parentid}{$_urladd_}">{$topictypes['all_types'][$_parentid]['name']|html}</a><em>&gt;</em>
 				<!--# } #-->
-			<a href="{@url:bbs/thread/run?fid=$fid&type=$type}{$_urladd_}">{$topictypes['all_types'][$type]['name']}</a>
+			<a href="{@url:bbs/thread/run?fid=$fid&type=$type}{$_urladd_}">{$topictypes['all_types'][$type]['name']|html}</a>
 			<!--# } #-->
 		</div>
-		<pw-drag id="threadTop_segment"/>
+		<pw-tpl id="threadTop_segment"/>
 		<div class="main cc">
 			<div id="cloudwind_thread_top"></div>
 			<div class="main_body">
 				<div class="main_content">
-					<pw-drag id="first_segment"/>
+					<pw-tpl id="first_segment"/>
 					<template source='widget_forum' load='true' />
 					<div id="cloudwind_threadleft_content"></div>
 					<advertisement id='Thread.Top' sys='1'/>
-					<pw-drag id="thread_middle"/>
+					<pw-tpl id="thread_middle"/>
 					<div class="mb10 cc">
 						<a href="{@url:bbs/post/run?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_1">发帖</a>
 						<template source="widget_thread_page" />
@@ -79,14 +79,14 @@
 											<div class="core_menu">
 												<ul class="core_menu_list cc">
 													<!--# foreach ($subTopicTypes as $v2) { #-->
-													<li><a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v2['id']}{$_urladd_}" title="{$v2['name']}">{$v2['name']}</a></li>
+													<li><a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v2['id']}{$_urladd_}" title="{$v2['name']}">{$v2['name']|html}</a></li>
 													<!--# } #-->
 												</ul>
 											</div>
 										</div>
-										<a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v['id']}{$_urladd_}" class="drop">{$v['name']}<span></span></a>
+										<a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v['id']}{$_urladd_}" class="drop">{$v['name']|html}<span></span></a>
 										<!--# } else { #-->
-										<a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v['id']}{$_urladd_}">{$v['name']}</a>
+										<a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v['id']}{$_urladd_}">{$v['name']|html}</a>
 										<!--# } #-->
 									</li>
 									<!--# } #-->
@@ -97,6 +97,7 @@
 						<!--# if ($threaddb) { #-->
 						<div class="thread_posts_list">
 							<table width="100%" id="J_posts_list" summary="帖子列表">
+								<!--# $tpc_topped = 0; #-->
 								<!--# foreach ($threaddb as $key => $value) { #-->
 								<template source='widget_thread' load='true' />
 								<!--# } #-->
@@ -144,7 +145,7 @@
 						<a href="{@url:bbs/post/run/?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_2">发帖</a>
 						<template source="widget_thread_page" />
 					</div>
-					<div id="J_thread_post_types_2" class="btn_post_menu" style="display:none;left:50%;margin:-11px 0 0 120px;">
+					<div id="J_thread_post_types_2" class="btn_post_menu" style="display:none;">
 						<ul>
 							<!--# foreach ($threadType as $key => $value) { #-->
 								<!--# $_urladd_ = $key ? ('&special=' . $key) : ''; #-->
@@ -152,7 +153,7 @@
 							<!--# } #-->
 						</ul>
 					</div>
-					<pw-drag id="thread_bottom"/>
+					<pw-tpl id="thread_bottom"/>
 					<advertisement id='Thread.Btm' sys='1'/>
 				</div>
 			</div>
@@ -176,7 +177,7 @@
 		<div id="cloudwind_thread_bottom"></div>
 	</div>
 <!--# if ($operateThread){ #-->
-	<div id="J_post_manage_main" class="core_pop_wrap J_post_manage_pop" style="display:none;">
+	<div id="J_post_manage_main" class="core_pop_wrap J_post_manage_pop" style="display:none;position:fixed;_position:absolute;">
 		<div class="core_pop">
 			<div style="width:415px;">
 				<div class="pop_top"><a href="#" id="J_post_manage_close" class="pop_close">关闭</a><strong>帖子操作</strong>(已选中&nbsp;<span class="red" id="J_post_checked_count">1</span>&nbsp;篇&nbsp;&nbsp;<a href="" class="s4" id="J_post_manage_checkall" data-type="check">全选</a>)</div>

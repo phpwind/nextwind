@@ -2,8 +2,8 @@
 define('WEKIT_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('WEKIT_VERSION', '0.3.9');
 define('WINDID_VERSION', '0.0.2');
-define('NEXT_VERSION', '9.0RC');
-define('NEXT_RELEASE', '20121108');
+define('NEXT_VERSION', '9.0');
+define('NEXT_RELEASE', '20121219');
 defined('WIND_DEBUG') || define('WIND_DEBUG', 0);
 
 require WEKIT_PATH . '../wind/Wind.php';
@@ -13,7 +13,7 @@ require WEKIT_PATH . '../wind/Wind.php';
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: wekit.php 21909 2012-12-17 03:13:40Z jieyin $
+ * @version $Id: wekit.php 22371 2012-12-21 13:10:32Z yishuo $
  * @package wekit
  */
 class Wekit {
@@ -33,11 +33,10 @@ class Wekit {
 		$config = WindUtility::mergeArray(include WEKIT_PATH . '../conf/application/default.php', 
 			include WEKIT_PATH . '../conf/application/' . $name . '.php');
 		if (!empty($components)) $config['components'] = (array) $components + $config['components'];
-		Wind::import('LIB:compile.acloud.PwAcloudFilter');
+		
 		/* @var $application WindWebFrontController */
 		$application = Wind::application($name, $config);
 		$application->registeFilter(new PwFrontFilters($application));
-		$application->registeFilter(new PwAcloudFilter());
 		$application->run();
 	}
 
@@ -61,7 +60,7 @@ class Wekit {
 	/**
 	 * 获取当前应用
 	 *
-	 * @return phpwind
+	 * @return phpwindBoot
 	 */
 	public static function app() {
 		return self::$_app;
@@ -74,7 +73,7 @@ class Wekit {
 		if (!is_object(self::$_app)) {
 			self::$_var = include CONF_PATH . 'baseconfig.php';
 			self::$_cache = new PwCache();
-			if (self::$_cache->isDbCache()) {
+			if (self::$_var['dbcache'] && self::$_cache->isDbCache()) {
 				PwLoader::importCache(include CONF_PATH . 'cacheService.php');
 			}
 			
@@ -233,7 +232,7 @@ class Wekit {
 		Wind::import('LIB:engine.hook.*');
 		Wind::import('LIB:Pw');
 		Wind::import('LIB:PwLoader');
-		Wind::import('LIB:compile.PwFrontFilters');
+		Wind::import('LIB:filter.PwFrontFilters');
 		
 		Wind::import('SRV:cache.PwCache');
 		Wind::import('SRV:config.bo.PwConfigBo');
@@ -243,5 +242,4 @@ class Wekit {
 		Wind::import('SRV:user.bo.PwUserBo');
 	}
 }
-
 Wekit::init();

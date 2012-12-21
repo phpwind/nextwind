@@ -8,7 +8,7 @@ Wind::import('SRV:user.PwUserBan');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ForbiddenController.php 21659 2012-12-12 07:00:13Z xiaoxia.xuxx $
+ * @version $Id: ForbiddenController.php 22264 2012-12-21 02:33:07Z xiaoxia.xuxx $
  * @package src.products.u.admin
  */
 class ForbiddenController extends AdminBaseController {
@@ -37,7 +37,7 @@ class ForbiddenController extends AdminBaseController {
 		//如果是创始人  则自动设置为system
 		$_uid = $this->adminUser->getUid();
 		$_operator = $this->adminUser->getUsername();
-		if (Wekit::load('APPS:admin.service.srv.AdminUserService')->isFounder($_operator)) {
+		if ($this->isFounder($_operator)) {
 			$_operator = 'system';
 			$_uid = 0;
 		}
@@ -161,7 +161,7 @@ class ForbiddenController extends AdminBaseController {
 			$this->showError($r->getError());
 		} else {
 			$_operator = $this->adminUser->getUsername();
-			if (Wekit::load('APPS:admin.service.srv.AdminUserService')->isFounder($_operator)) {
+			if ($this->isFounder($_operator)) {
 				$_operator = 'system';
 			}
 			

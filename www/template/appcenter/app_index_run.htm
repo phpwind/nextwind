@@ -29,7 +29,7 @@ $app['logo'] = Wekit::app()->extres . '/' . $app['alias'] . '/' . $app['logo'];
 }
 							 #-->
  								<li>
-									<a href="{$app['url']}"><img src="{$app['logo']}" width="80" height="80" class="img" alt="{$app['name']}" /></a>
+									<a href="{$app['url']}"><img src="{$app['logo']}" onerror="this.onerror=null;this.src='{@G:url.images}/admin/yy.png'" width="80" height="80" class="img" alt="{$app['name']}" /></a>
 									<div>
 										<h3 class="title"><a href="{$app['url']}">{$app['name']}</a></h3>
 										<p>{$app['desc']}</p>

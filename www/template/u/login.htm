@@ -66,7 +66,7 @@ if ($_GET['_type'] == 2) {
 				<div class="reg_side">
 					<div class="reg_side_cont">
 						<p class="mb10">还没有帐号？</p>
-						<p><a rel="nofollow" href="{@url:u/register/run?invite=$invite}" class="btn btn_big">免费注册</a></p>
+						<p><a rel="nofollow" href="{@url:u/register/run}<!--#if ($invite) {#-->?invite={$invite}<!--#}#-->" class="btn btn_big">免费注册</a></p>
 					</div>
 				</div>
 			</div>

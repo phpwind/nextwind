@@ -8,7 +8,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
  * @author Zhu Dong <zhudong0808@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AppController.php 21768 2012-12-13 06:39:43Z long.shi $
+ * @version $Id: AppController.php 22322 2012-12-21 08:32:15Z long.shi $
  * @package appcenter.admin
  */
 class AppController extends AdminBaseController {
@@ -64,7 +64,7 @@ class AppController extends AdminBaseController {
 		if (!$winduser) $this->showError('login.not');
 		list($type, $u, $pwd) = explode("\t", Pw::decrypt(urldecode($winduser)));
 		if ($type == 'founder') {
-			$founders = Wekit::load('ADMIN:service.srv.AdminUserService')->getFounders();
+			$founders = Wekit::load('ADMIN:service.srv.AdminFounderService')->getFounders();
 			if (!isset($founders[$u])) $this->showError('login.not');
 			list($md5pwd, $salt) = explode('|', $founders[$u], 2);
 			if (Pw::getPwdCode($md5pwd) != $pwd) $this->showError('login.not');
@@ -228,7 +228,7 @@ class AppController extends AdminBaseController {
 	 */
 	public function hookAction() {
 		$alias = $this->getInput('alias');
-		$manifest = Wind::getRealPath('SRC:extensions.' . $alias . '.Manifest.xml', true);
+		$manifest = Wind::getRealPath('EXT:' . $alias . '.Manifest.xml', true);
 		$hooks = $injectors = array();
 		if (is_file($manifest)) {
 			$man = new PwManifest($manifest);
@@ -273,63 +273,6 @@ class AppController extends AdminBaseController {
 		
 	}
 	
-	public function activateAction() {
-		//TODO applicaton log
-		$app_id = $this->getInput('id', 'get');
-		$app = $this->_appDs()->findByAppId($app_id);
-		if (!$app) $this->showError('APPCENTER:app.exist.fail');
-		$manifest = Wind::getRealPath('EXT:' . $app['alias'] . '.Manifest.xml', true);
-		if (!is_file($manifest)) $this->showError('APPCENTER:manifest.exist.fail');
-		Wind::import('APPS:appcenter.service.dm.PwApplicationDm');
-		$dm = new PwApplicationDm();
-		$dm->setAppId($app_id);
-		if ($app['status'] & 4) {
-			$this->_loadHooks()->delByAppId($app_id);
-			$this->_loadHookInject()->deleteByAppId($app_id);
-			$dm->setStatus($app['status'] ^ 4);
-		} else {
-			$this->_loadHooks()->delByAppId($app_id);
-			$this->_loadHookInject()->deleteByAppId($app_id);
-			$man = new PwManifest($manifest);
-			$hooks = $man->getHooks();
-			$log = array();
-			if ($hooks) {
-				foreach ($hooks as $key => $hook) {
-					$hook['app_id'] = $app_id;
-					$hook['app_name'] = $app['app_name'];
-					$hooks[$key] = $hook;
-				}
-				$this->_loadHooks()->batchAdd($hooks);
-				$log[] = array(
-					'app_id' => $app_id,
-					'log_type' => 'hook',
-					'data' => array_keys($hooks),
-					'created_time' => WEKIT_TIMESTAMP,
-					'modified_time' => WEKIT_TIMESTAMP);
-			}
-			$inject = $man->getInjectServices();
-			if ($inject) {
-				$inject_ids = array();
-				foreach ($inject as $key => &$value) {
-					$value['app_id'] = $app_id;
-					$value['app_name'] = $app['app_name'];
-				}
-				$this->_loadHookInject()->batchAdd($inject);
-				$injects = $this->_loadHookInject()->findByAppId($app_id);
-				$log[] = array(
-					'app_id' => $app_id,
-					'log_type' => 'inject',
-					'data' => array_keys($injects),
-					'created_time' => WEKIT_TIMESTAMP,
-					'modified_time' => WEKIT_TIMESTAMP);
-			}
-			$dm->setStatus($app['status'] | 4);
-		}
-		$this->_appDs()->update($dm);
-		$log && $this->_loadInstallLog()->batchAdd($log);
-		$this->showMessage('success');
-	}
-
 	/**
 	 * 升级
 	 */
@@ -384,27 +327,6 @@ class AppController extends AdminBaseController {
 		return Wekit::load('APPS:appcenter.service.srv.PwInstallApplication');
 	}
 	
-	/**
-	 * @return PwHooks
-	 */
-	private function _loadHooks() {
-		return Wekit::load('hook.PwHooks');
-	}
-	
-	/**
-	 * @return PwHookInject
-	 */
-	private function _loadHookInject() {
-		return Wekit::load('hook.PwHookInject');
-	}
-	
-	/**
-	 *
-	 * @return PwApplicationLog
-	 */
-	private function _loadInstallLog() {
-		return Wekit::load('APPS:appcenter.service.PwApplicationLog');
-	}
 }
 
 ?>

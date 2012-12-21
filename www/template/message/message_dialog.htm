@@ -53,10 +53,10 @@
 						#-->
 						<div class="message_dialogue" id="J_posts_list">
 							<!--# foreach ($messages as $value) { 
-								$value['created_time'] = Pw::time2str($value['created_time'], 'm-d H:i');
 								$value['tousername'] = $value['from_uid'] == $dialog['to_uid'] ? '我' : $value['from_username'];
 								$bubbles = $value['from_uid'] == $dialog['to_uid'] ? ' my' : '';
 								$value['content'] = PwUbbCode::parseEmotion($value['content']);
+								$value['content'] = PwUbbCode::parseUrl($value['content']);
 							#-->
 							<dl class="cc{$bubbles}">
 								<dt><a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $value['from_uid'])}" class="face J_user_card_show" data-uid="{$value['from_uid']}" target="_blank"><img src="{@Pw::getAvatar($value['from_uid'],'small')}" data-type="small" width="50" height="50" onerror="this.onerror=null;this.src='{@G:url.images}/face/face_small.jpg'" alt="{$value['tousername']}" /></a></dt>
@@ -70,14 +70,14 @@
 									<!--# if ($value['from_uid'] != $dialog['to_uid'] && $loginUser->getPermission('allow_report')) { #-->
 									 | <a href="{@WindUrlHelper::createUrl('report/index/report?type=message&type_id='.$value['message_id'])}" data-pid="{$value['message_id']}" class="J_report">举报</a>
 									<!--# } #-->
-									 </span><span class="time">{$value['created_time']}</span></div>
+									 </span><span class="time" title="{@Pw::time2str($value['created_time'], 'Y-m-d H:i')}">{@Pw::time2str($value['created_time'], 'auto')}</span></div>
 								</dd>
 							</dl>
 							<!--# } #-->
-							<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='message/message/dialog' args='$args'/>
 						</div>
 						<!--# } #-->
 					</div>
+					<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='message/message/dialog' args='$args'/>
 				</div>
 			</div>
 			<div class="main_sidebar">

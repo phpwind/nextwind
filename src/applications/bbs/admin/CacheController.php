@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: CacheController.php 21087 2012-11-27 08:41:03Z long.shi $
+ * @version $Id: CacheController.php 22284 2012-12-21 03:47:30Z long.shi $
  * @package admin
  * @subpackage controller
  */
@@ -65,10 +65,6 @@ class CacheController extends AdminBaseController {
 	}
 
 	private function _compressCss() {
-		Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
-		$writable = PwSystemHelper::checkWriteAble(Wind::getRealDir('THEMES:') . '/');
-		if (!$writable) $this->showError(
-			'STYLE:style.css.write.fail');
 		Wind::import('LIB:compile.compiler.PwCssCompress');
 		$compress = new PwCssCompress();
 		$r = $compress->doCompile();

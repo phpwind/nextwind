@@ -22,6 +22,7 @@ delete.error.hassub = "该版块含有子版块，请先删除(或转移)子版�
 
 unite.error.same = "相同版块不能合并"
 unite.error.fid.exists.not = "源版块不存在"
+unite.error.hassub = "源版块含有子版，请先删除(或转移)子版内容，再行合并"
 unite.error.fid.category = "分类不能合并"
 unite.error.tofid.exists.not = "目标版块不存在"
 unite.error.tofid.category = "不能合并到分类"

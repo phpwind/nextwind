@@ -7,7 +7,7 @@ Wind::import('APPS:.profile.controller.BaseProfileController');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: SecretController.php 21925 2012-12-17 05:57:43Z jinlong.panjl $
+ * @version $Id: SecretController.php 22271 2012-12-21 02:59:36Z xiaoxia.xuxx $
  * @package src.products.u.controller.profile
  */
 class SecretController extends BaseProfileController {
@@ -17,7 +17,7 @@ class SecretController extends BaseProfileController {
 	 */
 	public function run() {
 		$this->setCurrentLeft();
-		$model = Wekit::load('APPS:profile.service.PwUserProfileMenu')->getTabs('profile');
+		$model = $this->getProfileMenu();
 		unset($model['profile'], $model['contact'], $model['tag']);
 		$userInfo = Wekit::load('user.PwUser')->getUserByUid($this->loginUser->uid, PwUser::FETCH_INFO);
 		$secret = $userInfo['secret'] ? unserialize($userInfo['secret']) : array();
@@ -37,7 +37,7 @@ class SecretController extends BaseProfileController {
 	
 	public function dorunAction() {
 		$_array = array();
-		$model = Wekit::load('APPS:profile.service.PwUserProfileMenuService')->getProfileTabMenu();
+		$model = $this->getProfileMenu();
 		unset($model['profile'], $model['contact'], $model['tag']);
 		if (count($model) > 1){
 			$post = array_keys($model);
@@ -87,9 +87,7 @@ class SecretController extends BaseProfileController {
 		if (count($userids) > 50) $this->showError('USER:profile.secret.username.num.error');
 		//只能一个一个存
 		$ds = Wekit::load('user.PwUserBlack');
-		foreach ($userids AS $uid) {
-			$ds->setBlacklist($this->loginUser->uid, $uid);
-		}
+		$ds->replaceBlack($this->loginUser->uid, $userids);
 		$attentionService = Wekit::load('attention.srv.PwAttentionService');
 		foreach ($userids as $uid) {
 			$attentionService->deleteFollow($this->loginUser->uid, $uid);
@@ -107,4 +105,10 @@ class SecretController extends BaseProfileController {
 		);
 	}
 	
+	/**
+	 * 获得个人设置的菜单
+	 */
+	private function getProfileMenu() {
+		return Wekit::load('APPS:profile.service.PwUserProfileMenu')->getTabs('profile');
+	}
 }

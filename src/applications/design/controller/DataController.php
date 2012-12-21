@@ -1,11 +1,11 @@
 <?php
 Wind::import('APPS:design.controller.DesignBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
- * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: DataController.php 21659 2012-12-12 07:00:13Z xiaoxia.xuxx $ 
+ * @version $Id: DataController.php 21978 2012-12-17 12:34:07Z gao.wanggao $ 
  * @package 
  */
 class DataController extends DesignBaseController{
@@ -374,7 +374,7 @@ class DataController extends DesignBaseController{
 		if (($result = $upload->check()) === true) $result = $upload->execute();
 		if ($result !== true) $this->showError($result->getError());
 		$image = $bhv->getAttachInfo();
-		return $image['filename'] ? Wekit::app()->attach .'/'. $image['path'] . $image['filename'] : "";
+		return $image['filename'] ? Pw::getPath($image['path'] . $image['filename']) : "";
  	}
 	
 	/**

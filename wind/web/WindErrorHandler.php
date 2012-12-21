@@ -12,7 +12,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindErrorHandler.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: WindErrorHandler.php 3861 2012-12-18 11:13:05Z yishuo $
  * @package web
  */
 class WindErrorHandler extends WindController {
@@ -34,9 +34,23 @@ class WindErrorHandler extends WindController {
 	 * (non-PHPdoc) @see WindAction::run()
 	 */
 	public function run() {
+		$title = $this->getResponse()->codeMap($this->errorCode);
+		$title = $title ? $this->errorCode . ' ' . $title : 'unknowen error';
+		$title .= ' - wind error message';
+		$title = ucwords($title);
+		
+		$this->setOutput($title, 'title');
+		
 		$this->setOutput("Error message", "errorHeader");
 		$this->setOutput($this->error, "errors");
 		$this->setTemplatePath($this->errorDir);
 		$this->setTemplate('erroraction');
+	}
+	
+	/* (non-PHPdoc)
+	 * @see WindSimpleController::afterAction()
+	 */
+	public function afterAction($handlerAdapter) {
+		$this->getResponse()->setStatus($this->errorCode);
 	}
 }

@@ -26,11 +26,10 @@
 			$punchText =  $unPunchDays > 1 ? "{$unPunchDays}天未打卡" : "每日打卡";
 			return array(true,$punchText,array());
 		}
-		$userBehaviorDs = Wekit::load('user.PwUserBehavior');
-		$behavior = $userBehaviorDs->getBehavior($user->uid,'punch_day');
+		$behaviorDays = $this->_getBehavior($punchData['time'],$punchData['days']);
 		if($punchData['username'] == $user->username && $havePunch){
-			$behavior['number'] or $behavior['number'] = 1; 
-			$punchText = "连续{$behavior['number']}天打卡";
+			$behaviorDays or $behaviorDays = 1; 
+			$punchText = "连续{$behaviorDays}天打卡";
 			return array(false,$punchText,array());
 		}
 		return array(true,'继续打卡',$punchData);
@@ -100,6 +99,14 @@
 		$weeksArray = array('周日','周一','周二','周三','周四','周五','周六');
 		$weekDay = Pw::time2str($timestamp, 'w');
 		return array(Pw::time2str($timestamp, 'm.d'),$weeksArray[$weekDay]);
+	}
+ 	
+ 	private function _getBehavior($time,$number) {
+ 		$time = $time + 86400*2;
+ 		$time = Pw::str2time(Pw::time2str($time, 'Y-m-d'));
+ 		
+		if($time > 0 && $time < Pw::getTime()) $number = 0;
+		return $number;
 	}
 }
 ?>

@@ -8,7 +8,7 @@ Wind::import('WIND:utility.WindFile');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindViewTemplate.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: AbstractWindViewTemplate.php 3865 2012-12-19 10:42:33Z yishuo $
  * @package viewer
  */
 abstract class AbstractWindViewTemplate extends WindModule {
@@ -52,8 +52,9 @@ abstract class AbstractWindViewTemplate extends WindModule {
 	 * @return string
 	 */
 	protected function compileDelimiter($content) {
-		$content = preg_replace('/\s*<!--[{#]/i', "<?php ", $content);
+		$content = preg_replace('/<!--[{#]/i', "<?php ", $content);
 		$content = preg_replace('/[#}]-->/i', "?>", $content);
+		
 		/*$content = str_replace(array('<!--{', '<!--#'), '<?php ', $content);
 		$content = str_replace(array('}-->', '#-->'), '?>', $content);*/
 		return $content;

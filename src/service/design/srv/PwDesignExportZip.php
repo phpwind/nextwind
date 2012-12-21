@@ -4,19 +4,21 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignExportZip.php 21891 2012-12-14 12:02:44Z gao.wanggao $ 
+ * @version $Id: PwDesignExportZip.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
  * @package 
  */
 class PwDesignExportZip {
 	protected $dir = '';
 	protected $pageid = 0;
+	protected $folder = '';
 	
 	private $_tplExt = '.htm';
 	private $_files = array();
 	private $_moduleConf = array();
 	
-	public function __construct($pageid) {
+	public function __construct($pageid, $mac = '') {
 		$this->pageid = $pageid;
+		$this->folder = str_replace('/', '_', $mac). '_' . NEXT_VERSION;
 		$this->dir = Wind::getRealDir('THEMES:portal.local.'). $pageid . '/';
 	}
 	
@@ -26,31 +28,53 @@ class PwDesignExportZip {
 		$files = $this->read($this->dir);
 		foreach ($files AS &$v) {
 			$v['filename'] = str_replace($this->dir, '', $v['filename']);
-			if ($v['filename'] != 'template/index'.$this->_tplExt) continue;
-			
-			/*$v['data'] = $this->decompilePw($v['data']);
-			$v['data'] = $this->decompileStruct($v['data']);
-			$v['data'] = $this->decompileSegment($v['data']);
-			$v['data'] = $this->decompileTpl($v['data']);*/
+			$ext = strrchr($v['filename'], ".");
+			if($ext != $this->_tplExt) continue;
+			//$v['data'] = $this->decompilePw($v['data']);
+			$v['data'] = $this->decompileTitle($v['data']);
+			//$v['data'] = $this->decompileList($v['data']);
+			$v['data'] = $this->decompileTpl($v['data']);
 			$v['data'] = $this->decompileStyle($v['data']);
 		}
 		foreach ($files AS $file) {
+			if ($file['filename'] == 'module/data.txt') continue;
 			if (strtolower($file['filename']) == 'manifest.xml') {
 				Wind::import("WIND:parser.WindXmlParser");
 				$xml = new WindXmlParser();
 				$config = $xml->parseXmlStream($file['data'], 0);
 				unset($config['module']);
-				$config = array_merge($config, array('module'=>$this->_moduleConf));
 				$file['data'] = $this->xmlFormat($config);
 			}
-			$file['filename'] = 'phpwind9.0/'.$file['filename'];
+			$file['filename'] = $this->folder.'/'.$file['filename'];
 			if (!$zip->addFile($file['data'], $file['filename'])) return new PwError("DESIGN:zlib.error");
 		}
 		$txt = $this->doTxt();
-		$txtfile = 'phpwind9.0/txt/'.$txt['filename'].'.txt';
+		$txtfile = $this->folder.'/module/data.txt';
 		$zip->addFile($txt['content'], $txtfile);
 		return $zip->getCompressedFile();
 	}
+	
+	protected function decompileTitle($section) {
+		if (preg_match_all('/\<pw-title\s*id=\"(\w+)\"\s*>/isU',$section, $matches)) {
+			foreach ($matches[1] AS $k=>$v) {
+				if (!$v) continue;
+	    		$section = str_replace($matches[0][$k], '<pw-title>', $section);
+    		}
+		}
+		return $section;
+	}
+	
+	/*protected function decompileList($section) {
+		Wind::import("SRV:design.bo.PwDesignModuleBo");
+		if (preg_match_all('/\<pw-list\s*id=\"(\d+)\"\s*>/isU',$section, $matches)) {
+			foreach ($matches[1] AS $k=>$v) {
+				if (!$v) continue;
+				$section = str_replace($matches[0][$k], '<pw-list role="'.$v.'">', $section);
+    		}
+		}
+		return $section;
+	}*/
+	
 	
 	protected function decompileTpl($section) {
 		Wind::import("SRV:design.bo.PwDesignModuleBo");
@@ -77,6 +101,7 @@ class PwDesignExportZip {
 		return $section;
 	}
 	
+	/*
 	protected function decompilePw($section) {
 		$in = array(
 			'<design role="start"/>',
@@ -123,7 +148,7 @@ class PwDesignExportZip {
 			}
 		}
 		return $section;
-	}
+	}*/
 
 	protected function decompileStyle($section) {
 		$in = '/["|\']{\@G\:design\.url\.css}\/style\.css\?rand\=(\d+)["|\']/U';
