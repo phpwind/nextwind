@@ -5,7 +5,7 @@ Wind::import('APPS:windid.api.OpenBaseController');
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AvatarController.php 22343 2012-12-21 09:59:29Z gao.wanggao $
+ * @version $Id: AvatarController.php 22633 2012-12-26 05:29:42Z gao.wanggao $
  * @package windid.service.avatar
  */
 class AvatarController  extends OpenBaseController{
@@ -40,9 +40,9 @@ class AvatarController  extends OpenBaseController{
 	 * @return boolean
 	 */
 	public function defaultAction() {
-		$uid = $this->getInput('uid', 'get');
-		$type = $this->getInput('type', 'get');
-		!$type && $type = 'fase';
+		$uid = $this->getInput('uid', 'post');
+		$type = $this->getInput('type', 'post');
+		!$type && $type = 'face';
 		$srv = Windid::load('user.srv.WindidUserService');
 		$result = $srv->defaultAvatar($uid, $type);
 		$this->output($result);
@@ -103,10 +103,13 @@ class AvatarController  extends OpenBaseController{
 		if ($result instanceof WindidError) {
 			$this->output($result->getCode());
 		} else {
-			//用户上传头像之后的钩子
-			PwSimpleHook::getInstance('update_avatar')->runDo($uid);
+			$this->_getNotifyClient()->send('uploadAvatar', $uid, true);
 			$this->output(1);
 		}
+	}
+	
+	private function _getNotifyClient() {
+		return Windid::load('notify.srv.WindidNotifyClient');
 	}
 	
 }

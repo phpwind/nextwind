@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwWindidInform.php 21774 2012-12-13 07:10:19Z gao.wanggao $ 
+ * @version $Id: PwWindidInform.php 22634 2012-12-26 05:40:19Z gao.wanggao $ 
  * @package 
  */
 class PwWindidInform {
@@ -53,13 +53,18 @@ class PwWindidInform {
 		return $result;
 	}
 	
+	public function uploadAvatar($uid) {
+		PwSimpleHook::getInstance('update_avatar')->runDo($uid);
+		return true;
+	}
+	
 	public function editCredit($uid) {
 		$result = $this->_getUserDs()->synEditUser($uid);
 		return $result;
 	}
 	
 	public function editMessageNum($uid) {
-		$result = $this->_getUserDs()->synEditUser($uid);
+		$result = Wekit::load('message.srv.PwMessageService')->synEditUser($uid);
 		return $result;
 	}
 	

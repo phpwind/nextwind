@@ -10,8 +10,9 @@
  * @package wind
  */
 class PwAttentionRecommendFriendsDao extends PwBaseDao {
+	protected $_Attentiontable = 'attention';
 	protected $_table = 'attention_recommend_friends';
-	protected $_dataStruct = array('uid', 'recommend_uid', 'cnt', 'recommend_user');
+	protected $_dataStruct = array('uid', 'recommend_uid', 'recommend_username', 'cnt', 'recommend_user');
 
 	
 	public function get($uid,$limit,$offset){
@@ -26,6 +27,11 @@ class PwAttentionRecommendFriendsDao extends PwBaseDao {
 		return $result->getOne(array($uid,$recommendUid));
 	}
 	
+	public function getRecommend($uid) {
+		$sql = $this->_bindSql("SELECT a.uid,b.touid as recommend_uid,count(*) as cnt,b.uid AS same_uids FROM `pw_attention` a left join `pw_attention` b ON a.touid = b.uid  where a.uid = 82 GROUP BY recommend_uid", $this->getTable(), $this->sqlLimit($limit, $offset));
+		$result = $this->getConnection()->createStatement($sql);
+		return $result->queryAll(array($uid));
+	}
 	
 	public function batchReplace($data) {
 		$fields = array();
@@ -34,12 +40,13 @@ class PwAttentionRecommendFriendsDao extends PwBaseDao {
 			$_temp = array();
 			$_temp['uid'] = $_item['uid'];
 			$_temp['recommend_uid'] = $_item['recommend_uid'];
+			$_temp['recommend_username'] = $_item['recommend_username'];
 			$_temp['cnt'] = $_item['cnt'];
 			$_temp['recommend_user'] = $_item['recommend_user'];
 			$fields[] = $_temp;
 		}
 		if (!$fields) return false;
-		$sql = $this->_bindSql('INSERT INTO %s (`uid`, `recommend_uid`, `cnt`, `recommend_user`) VALUES %s', $this->getTable(), $this->sqlMulti($fields));
+		$sql = $this->_bindSql('INSERT INTO %s (`uid`, `recommend_uid`, `recommend_username`, `cnt`, `recommend_user`) VALUES %s', $this->getTable(), $this->sqlMulti($fields));
 		return $this->getConnection()->execute($sql);
 	}
 

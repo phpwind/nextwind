@@ -26,7 +26,7 @@ SEO信息中可以直接输入文字，也可以使用代码。
 以上标签（必须包含大括号"{}"）可以通过添加在下面来优化页面SEO设置，多个标签之间可以用半角连字符"-"、半角","或半角空格隔开。留空为默认SEO设置
 
 </div>
-<form action="{@WindUrlHelper::createUrl('/seo/manage/doRun?mod=bbs')}" method="post" class="J_ajaxForm">
+<form action="{@url:/seo/manage/doRun?mod=bbs}" method="post" class="J_ajaxForm">
 <!--#foreach($pages as $alias => $title):#-->
 <div class="h_a"><!--#if($alias == 'thread'):#--><span class="away_icon mr5 J_toggle_row" title="展开全部版块"></span><!--#endif;#-->
 {$title}

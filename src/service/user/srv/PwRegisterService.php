@@ -10,7 +10,7 @@ Wind::import('SRV:user.PwUser');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRegisterService.php 22361 2012-12-21 11:50:28Z xiaoxia.xuxx $
+ * @version $Id: PwRegisterService.php 22484 2012-12-25 02:22:44Z gao.wanggao $
  * @package src.service.user.srv
  */
 class PwRegisterService extends PwBaseHookService {
@@ -113,7 +113,7 @@ class PwRegisterService extends PwBaseHookService {
 			return $uid;
 		}
 		$this->userDm->setUid($uid);
-		Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($uid);
+		//Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($uid); windid处理
 		
 		//获得注册积分
 		/* @var $creditBo PwCreditBo */

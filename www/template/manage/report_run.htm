@@ -1,12 +1,12 @@
 <div class="content">
 	<div class="profile_nav">
 		<ul>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('manage/report/run')}">举报列表</a></li>
+			<li class="current"><a href="{@url:manage/report/run}">举报列表</a></li>
 		</ul>
 	</div>
 	<div class="report_page">
 		<div class="hd"><strong>筛选：</strong>
-		<form action="{@WindUrlHelper::createUrl('manage/report/run')}" method="post">
+		<form action="{@url:manage/report/run}" method="post">
 			<select id="J_report_select" class="select_2" name="type">
 				<option value="" href="">全部</option>
 				<!--# foreach ($reportTypes as $k => $v) { 
@@ -19,7 +19,7 @@
 		</div>
 		<div class="profile_table">
 		<!--# if ($reports) { #-->
-		<form class="J_form_ajax" action="{@WindUrlHelper::createUrl('manage/report/dealCheck')}" method="post" >
+		<form class="J_form_ajax" action="{@url:manage/report/dealCheck}" method="post" >
 			<table width="100%" class="J_check_wrap">
 				<colgroup>
 					<col width="60">
@@ -42,28 +42,24 @@
 				<tfoot>
 					<tr>
 						<td><label><input type="checkbox" class="J_check_all">全选</label></td>
-						<td colspan="3"><button type="submit" class="btn btn_submit J_form_sub_check">标记已处理</button><button type="submit" class="btn J_form_sub_check" data-action="{@WindUrlHelper::createUrl('manage/report/delete')}">忽略</button></td>
+						<td colspan="3"><button type="submit" class="btn btn_submit J_form_sub_check">标记已处理</button><button type="submit" class="btn J_form_sub_check" data-action="{@url:manage/report/delete}">忽略</button></td>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 					</tr>
 				</tfoot>
-				<!--# foreach ($reports as $v) { 
-				$v['content'] = Pw::substrs(Pw::stripWindCode($v['content']), 20);
-				$v['created_username'] = $v['created_username'] ? '<a href="'.WindUrlHelper::createUrl('space/index/run?uid='.$v['created_userid']).'" target="_blank">'.$v['created_username'].'</a>' : '游客';
-				$v['author_username'] = $v['author_username'] ? $v['author_username'] : '游客';
-				#-->
+				<!--# foreach ($reports as $v) { #-->
 				<tr>
 					<td><input class="J_check" type="checkbox" name="id[]" value="{$v['id']}"></td>
 					<td>{$reportTypes[$v['type']]}</td>
 					<td>
 					<!--# if ($v['content_url']) { #-->
-					<a href="{$v['content_url']}" target="_blank">{$v['content']}</a>
+					<a href="{$v['content_url']}" target="_blank">{@Pw::substrs(Pw::stripWindCode($v['content']), 20)}</a>
 					<!--# } else { #-->
-					{$v['content']}
+					{@Pw::substrs(Pw::stripWindCode($v['content']), 20)}
 					<!--# } #-->
 					</td>
-					<td><a href="{@WindUrlHelper::createUrl('space/index/run?uid='.$v['author_userid'])}">{$v['author_username']}</a></td>
-					<td>{$v['created_username']|html}<br>{@Pw::time2str($v['created_time'])}</td>
+					<td><!--#if (!empty($v['author_username'])){#--><a href="{@url:space/index/run?uid=$v['author_userid']}">{$v['author_username']}</a><!--#}else{#-->游客<!--#} #--></td>
+					<td><!--#if (!empty($v['created_username'])){#--><a href="{@url:space/index/run?uid=$v['created_userid']}" target="_blank">{$v['created_username']}</a><!--#}else{#-->游客<!--#} #--><br>{@Pw::time2str($v['created_time'])}</td>
 					<td>{@Pw::substrs($v['reason'], 8)}</td>
 				</tr>
 				<!--# } #-->

@@ -4,11 +4,11 @@
  * 1:PwDesignThreadPushService->getFromData() 用于对推送数据进行验证
  * 2:PwDesignThreadPushService->afterPush()  推送成功后的更新操作，如发消息  ,增金币等
  * 3:PwDesignThreadDataService->fetchData()	  对推送数据进行模块标签处理
- * the last known user to change this file in the repository  <$LastChangedBy: jinlong.panjl $>
- * @author $Author: jinlong.panjl $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignThreadPushService.php 20575 2012-10-31 06:53:55Z jinlong.panjl $ 
+ * @version $Id: PwDesignThreadPushService.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 
@@ -60,9 +60,9 @@ class PwDesignThreadPushService {
 		//$bo->sets($push['author_uid'], $credit['credit']);
 		
 		if ($push['neednotice']) {
-			$content = '恭喜，您的帖子<a href="'.$sUrl.'">'.Pw::substrs($sTitle, 20).'</a>被<a href="'.WindUrlHelper::createUrl('space/index/run?uid='.$push['created_userid'], array(),'','pw').'">'.$user['username'].'</a>执行 推送 操作。';
-			$extend && $content .= '获得'.$extend;
-			$title = '帖子《<a href="'.$sUrl.'">'.Pw::substrs($sTitle, 20).'</a>》被推送';
+			$content = '恭喜，您的帖子<a href="'.$sUrl.'">'.Pw::substrs($sTitle, 20).'</a>被<a href="' . WindUrlHelper::createUrl('space/index/run', array('uid' => $push['created_userid']), '', 'pw') . '">' . $user['username'] . '</a>执行 推送 操作。';
+			$extend && $content .= '获得' . $extend;
+			$title = '帖子《<a href="' . $sUrl . '">' . Pw::substrs($sTitle, 20) . '</a>》被推送';
 			Wekit::load('SRV:message.srv.PwNoticeService')->sendDefaultNotice($push['author_uid'],$content,$title);
 			$pushDs->updateNeedNotice($pushid, 0);
 		}

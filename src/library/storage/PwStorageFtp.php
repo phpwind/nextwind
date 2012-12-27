@@ -1,13 +1,13 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
-
+@set_time_limit('800');
 /**
  * 上传组件
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwStorageFtp.php 21376 2012-12-06 02:59:47Z jieyin $
+ * @version $Id: PwStorageFtp.php 22526 2012-12-25 07:18:36Z yishuo $
  * @package upload
  */
 

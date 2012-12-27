@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: SetforumController.php 21383 2012-12-06 03:45:42Z long.shi $
+ * @version $Id: SetforumController.php 22644 2012-12-26 06:14:02Z liusanbian $
  * @package admin
  * @subpackage controller
  */
@@ -68,8 +68,8 @@ class SetforumController extends AdminBaseController {
 		}
 
 		$forumset = array(
-			'allowtype' => 1,
-			'typeorder' => array(0)
+			'allowtype' => array('default'),
+			'typeorder' => array('default' => 0)
 		);
 	
 		/**
@@ -259,14 +259,15 @@ class SetforumController extends AdminBaseController {
 			($flag || $copyItems['readperpage']) && $forumset['readperpage'] = $readperpage ? intval($readperpage) : '';
 			($flag || $copyItems['threadorderby']) && $forumset['threadorderby'] = $threadorderby;
 			if ($isCate) {
-				$parentid = 0;
+				$tmpParentid = 0;
 				$creditset = array();
 			} else {
+				$tmpParentid = $parentid;
 				($flag || $copyItems['minlengthofcontent']) && $forumset['minlengthofcontent'] = $minlengthofcontent ? intval($minlengthofcontent) : '';
 				($flag || $copyItems['locktime']) && $forumset['locktime'] = $locktime ? intval($locktime) : '';
 				($flag || $copyItems['edittime']) && $forumset['edittime'] = $edittime ? intval($edittime) : '';
 				if ($flag || $copyItems['allowtype']) {
-					$forumset['allowtype'] = array_sum($allowtype);
+					$forumset['allowtype'] = is_array($allowtype) ? $allowtype : array();
 					$forumset['typeorder'] = array_map('intval', $typeorder);
 				}
 				if ($flag || $copyItems['allowhide']) {
@@ -295,7 +296,7 @@ class SetforumController extends AdminBaseController {
 			if ($flag) {
 				$dm->setName($forumname)
 					->setVieworder($vieworder)
-					->setParentid($parentid);
+					->setParentid($tmpParentid);
 					//上传版块图标 
 					$icon = $this->_uploadImage('icon', $fid);
 					//上传版块logo
@@ -341,8 +342,8 @@ class SetforumController extends AdminBaseController {
 			//domain
 			($flag || $copyItems['forumdomain']) && $this->_updateForumDomain($tmpforum);
 			
-			if ($flag && $tmpforum->foruminfo['parentid'] != $parentid) {
-				Wekit::load('forum.srv.PwForumService')->updateForumStatistics($parentid);
+			if ($flag && $tmpforum->foruminfo['parentid'] != $tmpParentid) {
+				Wekit::load('forum.srv.PwForumService')->updateForumStatistics($tmpParentid);
 				Wekit::load('forum.srv.PwForumService')->updateForumStatistics($tmpforum->foruminfo['parentid']);
 				$misc = true;
 			}

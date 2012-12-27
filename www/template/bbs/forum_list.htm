@@ -4,7 +4,19 @@
 <template source='TPL:common.head' load='true' />
 <link href="{@theme:css}/forum.css?v={@G:version}" rel="stylesheet" />
 <style>
+.forum_recommend{
+	padding:15px;
+}
 /*焦点图*/
+.forum_recommend .home_push_slide{
+	float:left;
+}
+.home_push_slidewrap{
+	float:left;
+	width: 360px;
+	display:inline;
+	height:240px;
+}
 .home_push_slide {
 	height: 240px;
 	overflow: hidden;
@@ -64,11 +76,11 @@
 	font-size: 12px;
 }
 /*热门推荐*/
-.home_push_hot{
-	padding-left:10px;
+.forum_recommend .home_push_hot{
+	float:right;
 }
-.home_push_hot dl{
-	padding:15px 0 0 0;
+.home_push_hot{
+	width:555px;
 }
 .home_push_hot dt{
 	line-height:1.2;
@@ -92,6 +104,13 @@
 .home_push_hot li em a{
 	color:#ff5500;
 	margin-right:5px;
+}
+.home_push_hot li a{
+	color:#333;
+}
+/*友情链接颜色*/
+.tmode_traverseList a{
+	color:#333;
 }
 </style>
 </head>

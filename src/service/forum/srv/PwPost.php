@@ -11,7 +11,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPost.php 20996 2012-11-23 08:33:21Z jieyin $
+ * @version $Id: PwPost.php 22682 2012-12-26 09:58:20Z jieyin $
  * @package forum
  */
 class PwPost extends PwBaseHookService {
@@ -130,14 +130,6 @@ class PwPost extends PwBaseHookService {
 		return false;
 	}
 
-	public function displayHtmlFromBeforeContent() {
-		$this->action->displayHtmlFromBeforeContent();
-	}
-
-	public function displayHtmlFromRightContent() {
-		$this->action->displayHtmlFromRightContent();
-	}
-
 	public function getDm() {
 		return $this->action->getDm();
 	}
@@ -208,6 +200,11 @@ class PwPost extends PwBaseHookService {
 
 	public function appendDo($do) {
 		$this->action->appendDo($do);
+	}
+	
+	public function runDo($method) {
+		$args = func_get_args();
+		call_user_func_array(array($this->action, 'runDo'), $args);
 	}
 
 	/**

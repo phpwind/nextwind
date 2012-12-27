@@ -10,20 +10,20 @@
 <!--添加模板-->
 
 	<div class="nav">
-		<div class="return"><a href="{@WindUrlHelper::createUrl('design/module/run?type='.$isapi)}">返回上一级</a></div>
+		<div class="return"><a href="{@url:design/module/run?type=$isapi}">返回上一级</a></div>
 		<ul class="cc">
 		<!--# if ($isdata): #-->
-			<li><a href="{@WindUrlHelper::createUrl('design/data/run?moduleid='.$moduleid)}">显示数据</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('design/data/push?moduleid='.$moduleid)}">推送审核</a></li>
+			<li><a href="{@url:design/data/run?moduleid=$moduleid}">显示数据</a></li>
+			<li><a href="{@url:design/data/push?moduleid=$moduleid}">推送审核</a></li>
 		<!--# endif; #-->
-			<li class="current"><a href="{@WindUrlHelper::createUrl('design/property/edit?moduleid='.$moduleid)}">属性</a></li>
+			<li class="current"><a href="{@url:design/property/edit?moduleid=$moduleid}">属性</a></li>
 		<!--# if ($isdata): #-->
-			<li><a href="{@WindUrlHelper::createUrl('design/template/edit?moduleid='.$moduleid)}">模板</a></li>
+			<li><a href="{@url:design/template/edit?moduleid=$moduleid}">模板</a></li>
 		<!--# endif; #-->
 		</ul>
 	</div>
 	<div class="h_a">属性</div>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('design/property/doedit?_json=1')}" method="post">
+	<form class="J_ajaxForm" action="{@url:design/property/doedit?_json=1}" method="post">
 	<div class="design_ct">
 		<dl class="cc">
 			<dt>数据模型：</dt>

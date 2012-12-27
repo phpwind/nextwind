@@ -15,7 +15,7 @@
 		<!--#if ($step == 2) {#-->
 					<div class="reg_cont">
 						<div class="reg_form">
-							<form id="J_bymail_form" action="{@WindUrlHelper::createUrl('u/findPwd/dobymail')}" method="post">
+							<form id="J_bymail_form" action="{@url:u/findPwd/dobymail}" method="post">
 								<input type="hidden" name="username" value="{$username}" />
 								<dl>
 									<dt><label>用户名：</label></dt>
@@ -49,7 +49,7 @@
 						<div class="reg_activation_tip">
 							<h2>提示：</h2>
 							<p>若您长时间未收到邮件，请检查您的垃圾箱或广告箱，邮件有可能被误认为垃圾或广告邮件。<br>
-							如果您一直未收到邮件，请重新尝试<a href="{@WindUrlHelper::createUrl('u/findPwd/run')}" class="s4">找回密码。</a><br>
+							如果您一直未收到邮件，请重新尝试<a href="{@url:u/findPwd/run}" class="s4">找回密码。</a><br>
 							如果您连续多次申请找回密码，请以最新收到的邮件为准！</p>
 						</div>
 					</div>
@@ -80,7 +80,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 				email : true,
 				remote : {
 					type : 'post',
-					url : "{@WindUrlHelper::createUrl('u/findPwd/checkMailFormat')|url}",
+					url : "{@url:u/findPwd/checkMailFormat}",
 					dataType: "json",
 					data : {
 						email :  function(){
@@ -92,7 +92,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 			code : {
 				required : true,
 				remote : {
-					url : "{@WindUrlHelper::createUrl('verify/index/check')|url}",
+					url : "{@url:verify/index/check}",
 					dataType: "json",
 					data : {
 						code :  function(){

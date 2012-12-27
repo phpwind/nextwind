@@ -3,7 +3,7 @@
 @explain: 门户-创建自定义页面
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: create.css 22223 2012-12-19 20:27:38Z yanchixia $
+$Id: create.css 22392 2012-12-24 02:58:25Z yanchixia $
 ===================
 #*/
 
@@ -63,3 +63,48 @@ $Id: create.css 22223 2012-12-19 20:27:38Z yanchixia $
 	color:#666;
 }
 
+/*
+===================
+单附件上传
+===================
+*/
+.single_image_up{
+	width:80px;
+	height:20px;
+	position:relative;
+	margin-bottom:5px;
+	overflow:hidden;
+}
+.single_image_up a{
+	height:20px;
+	width:80px; 
+	display:block;
+	line-height:20px;
+	text-indent:25px;
+	background:url(../../images/common/thumb_up.png) no-repeat;
+	filter:alpha(opacity=80);
+	-moz-opacity:0.8;
+	opacity:0.8;
+	text-decoration:none;
+	color:#333;
+}
+.single_image_up:hover a{
+	text-decoration:none;
+	filter:alpha(opacity=100);
+	-moz-opacity:1;
+	opacity:1;
+}
+.single_image_up input,
+.single_image_up object{
+	width:80px;
+	height:22px;
+	position:absolute;
+	top:0;
+	right:0;
+	background:none;
+	filter:alpha(opacity=0);
+	-moz-opacity:0;
+	opacity:0;
+	cursor:pointer;
+	outline:none;
+}

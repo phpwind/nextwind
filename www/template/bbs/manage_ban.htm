@@ -1,5 +1,5 @@
 <div style="width:440px;">
-	<form action="{@WindUrlHelper::createUrl('manage/doban')}" method="post" id="J_post_manage_ajaxForm">
+	<form action="{@url:manage/doban}" method="post" id="J_post_manage_ajaxForm">
 	<input type="hidden" name="tids" value="{$tids}" id="tids" />
 	
 	<div class="pop_top J_drag_handle"><a href="#" class="pop_close J_close">关闭</a><strong class="mr5">用户禁止</strong>(&nbsp;<span id="J_manage_checked_count" class="red">{$count}</span>&nbsp;名)</div>

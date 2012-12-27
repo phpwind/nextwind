@@ -6,7 +6,7 @@
 <body>
 <div class="wrap">
 <!--===================任务列表====================-->
-<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('/task/manage/open')}" method="post">
+<form class="J_ajaxForm" data-role="list" action="{@url:/task/manage/open}" method="post">
 	<div class="h_a">基本设置</div>
 	<div class="table_full">
 		<table width="100%">
@@ -25,7 +25,7 @@
 			</tr>
 		</table>
 	</div>
-	<div class="mb10"><a href="{@WindUrlHelper::createUrl('/task/manage/add')}" class="btn"><span class="add"></span>添加新任务</a></div>
+	<div class="mb10"><a href="{@url:/task/manage/add}" class="btn"><span class="add"></span>添加新任务</a></div>
 	<div class="table_list">
 		<table width="100%" class="J_check_wrap">
 			<colgroup>
@@ -60,7 +60,7 @@
 				</td>
 				<td>{$reward}</td>
 				<td>{$time}</td>
-				<td><a href="{@WindUrlHelper::createUrl('/task/manage/edit?id='.$id)}" class="mr5">[编辑]</a><a class="J_ajax_del" href="{@WindUrlHelper::createUrl('/task/manage/del?id='.$id)}" {$msg}>[删除]</a></td>
+				<td><a href="{@url:/task/manage/edit?id=$id}" class="mr5">[编辑]</a><a class="J_ajax_del" href="{@url:/task/manage/del?id=$id}" {$msg}>[删除]</a></td>
 			</tr>
 			<!--#}#-->
 			<!--# } else { #-->

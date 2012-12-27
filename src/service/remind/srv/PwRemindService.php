@@ -19,9 +19,11 @@ class PwRemindService {
 	 */
 	public function bulidRemind($content) {
 		if (strpos($content, '@') === false) return array();
-		$min = self::getConfig()->namelength->min;
-		$max = self::getConfig()->namelength->max;
-		$pattern = '/@([^\\&\'"\/\*,<>\[\]\r\t\n\s#%?@:：]{'.$min.','.$max.'})/is';
+		$config = Wekit::C('register');
+		$min = $config['security.username.min'];
+		$max = $config['security.username.max'];
+		
+		$pattern = '/@([\x7f-\xff\dA-Za-z\.\_]+)/is';
 		preg_match_all($pattern, $content, $matches);
 		if (!$matches[1]) return array();
 		$reminds = array();
@@ -68,7 +70,7 @@ class PwRemindService {
 		$i = 0;
 		foreach ($reminds as $v) {
 			if (!isset($_tmp[$v])) continue; 
-			if ($i >= $maxNum) break; 
+			if ($maxNum && $i >= $maxNum) break; 
 			$array[$_tmp[$v]] = $v;
 			$i++;
 		}
@@ -88,20 +90,6 @@ class PwRemindService {
 			$user .= $uid . ',' . $username . ',';
 		}
 		return rtrim($user,',');
-	}
-	
-	/**
-	 * 获得注册配置信息
-	 * 
-	 * @return WindidConfig
-	 */
-	public static function getConfig() {
-		static $config = null;
-		if (null === $config) {
-			Wind::import('WINDID:service.config.bo.WindidConfigBo');
-			$config = WindidConfigBo::getInstance('reg');
-		}
-		return $config;
 	}
 	
 	/**

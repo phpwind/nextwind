@@ -78,7 +78,7 @@
 		}, function(data){
 			//global.js
 			Wind.Util.ajaxBtnEnable($this);
-			if (Wind.Util.ajaxTempError(data)) {
+			if (Wind.Util.ajaxTempError(data, $this)) {
 				if(data.indexOf('审核') > 0) {
 					reply_ft.fadeOut();
 					reply_quick_ta.val('');

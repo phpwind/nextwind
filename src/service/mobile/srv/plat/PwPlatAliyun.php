@@ -11,7 +11,14 @@ Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
  * @package wind
  */
 class PwPlatAliyun {
-
+	public $platUrl = '';
+	
+	public function __construct() {
+		$filePath = Wind::getRealPath('APPS:admin.conf.openplatformurl.php', true);
+		$openPlatformUrl = Wind::getComponent('configParser')->parse($filePath);
+		$this->platUrl = $openPlatformUrl.'index.php?m=appcenter&c=SmsManage';
+	}
+	
 	/**
 	 * 获取剩余短信数量
 	 *
@@ -21,7 +28,7 @@ class PwPlatAliyun {
 		$url = PwApplicationHelper::acloudUrl(
 			array('a' => 'forward', 'do' => 'getSiteLastNum'));
 		$info = PwApplicationHelper::requestAcloudData($url);
-
+		if (!is_array($info)) return new PwError('APPCENTER:center.connect.fail');
 		if ($info['code'] !== '0') return new PwError($info['msg']);
 		
 		return $info['info'];
@@ -36,6 +43,7 @@ class PwPlatAliyun {
 		$url = PwApplicationHelper::acloudUrl(
 			array('a' => 'forward', 'do' => 'sendSms', 'mobile' => $mobile, 'content' => $code));
 		$info = PwApplicationHelper::requestAcloudData($url);
+		if (!is_array($info)) return new PwError('APPCENTER:center.connect.fail');
 	    if ($info['code'] !== '0') return new PwError($info['msg']);
 		
 		return true;

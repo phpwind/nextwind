@@ -1,11 +1,11 @@
 <?php
 Wind::import('ADMIN:library.AdminBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ModuleController.php 19070 2012-10-10 08:19:50Z gao.wanggao $ 
+ * @version $Id: ModuleController.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 
@@ -93,7 +93,7 @@ class ModuleController extends AdminBaseController {
 		if ($module['module_type'] != PwDesignModule::TYPE_SCRIPT) $this->showError("operate.fail");
 		$script = $this->_getScriptDs()->getScript($moduleid);
 		if (!$script)$this->showError("operate.fail");
-		$apiUrl = WindUrlHelper::createUrl("design/api/run?token=".$script['token']."&id=".$moduleid,array(),'','pw');
+		$apiUrl = WindUrlHelper::createUrl('design/api/run', array('token' => $script['token'], 'id' => $moduleid), '', 'pw');
 		$this->setOutput('<design id="D_mod_'.$moduleid.'" role="module"></design>', 'value');
 		$this->setOutput($apiUrl, 'apiUrl');
 		$this->setOutput($module, 'module');

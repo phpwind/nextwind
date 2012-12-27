@@ -32,22 +32,22 @@
 								$profile = $value['profile'] ? '  自我介绍：'.$value['profile'] : '';
 							#-->
 							<dl class="cc J_friends_items">
-								<dt><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run/?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['username']}" /></a></dt>
+								<dt><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['username']}" /></a></dt>
 								<dd>
 									<div class="title">
-										<a href="{@url:space/index/run/?uid=$value['uid']}" data-uid="{$value['uid']}" class="name J_user_card_show">{$value['username']}</a>
+										<a href="{@url:space/index/run?uid=$value['uid']}" data-uid="{$value['uid']}" class="name J_user_card_show">{$value['username']}</a>
 										<!--# $gender = $value['gender'] == 1 ? 'women' : 'man';
 											$online = Pw::checkOnline($value['lastvisit']) ? 'ol' : 'unol';
 										 #-->
 										<span class="{$gender}_{$online}"></span>
 									</div>
 									<div class="num">
-										关注<a href="{@url:space/follows/run/?uid=$value['uid']}">{$value['follows']}</a><span>|</span>粉丝<a href="{@url:space/fans/run/?uid=$value['uid']}">{$value['fans']}</a><span>|</span>帖子<a href="{@url:space/thread/run/?uid=$value['uid']}">{$value['postnum']}</a>
+										关注<a href="{@url:space/follows/run?uid=$value['uid']}">{$value['follows']}</a><span>|</span>粉丝<a href="{@url:space/fans/run?uid=$value['uid']}">{$value['fans']}</a><span>|</span>帖子<a href="{@url:space/thread/run?uid=$value['uid']}">{$value['postnum']}</a>
 									</div>
 									<div class="action">{$birthday}</div>
 									<div class="action">{$profile} </div>
 									<div class="attribute">
-										<a href="{@url:my/follow/add/?uid=$value['uid']}" class="core_follow J_fans_follow" data-uid="{$value['uid']}" data-role="follow">加关注</a>
+										<a href="{@url:my/follow/add?uid=$value['uid']}" class="core_follow J_fans_follow" data-uid="{$value['uid']}" data-role="follow">加关注</a>
 									</div>
 								</dd>
 							</dl>
@@ -66,8 +66,8 @@
 	</div>
 <template source='TPL:common.footer' load='true' />
 <script>
-var URL_UNFOLLOW = "{@WindUrlHelper::createUrl('my/follow/delete/')|url}",
-		URL_FOLLOW = "{@WindUrlHelper::createUrl('my/follow/add/')|url}";
+var URL_UNFOLLOW = "{@url:my/follow/delete/}",
+		URL_FOLLOW = "{@url:my/follow/add/}";
 Wind.use('jquery', 'global', GV.JS_ROOT +'pages/bbs/fansFollow_index.js?v='+ GV.JS_VERSION);
 </script>
 </div>

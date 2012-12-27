@@ -16,7 +16,7 @@ foreach ($forumList as $_id => $_item) {
 	<!--#}#-->
 				<h3 class="fname"><a href="{@url:bbs/thread/run?fid=$_id}">{@$_item['name']|html}</a><!--#if ($_item['todayposts']) {#--><span class="org fn">(今日{$_item['todayposts']})</span><!--#}#--></h3>
 				主题：{$_item['threads']}，帖子：<!--#echo $_item['threads'] + $_item['posts'];#--><br>
-				<!--#if ($_item['lastpost_time']) {#-->最后回复：<a href="{@url:bbs/read/run?tid=$_item['lastpost_tid']&fid=$_id&page=e}#a"><span class="time">{@Pw::time2str($_item['lastpost_time'], 'auto')}</span></a><!--#}#-->
+				<!--#if ($_item['lastpost_time']) {#-->最后回复：<a href="{@url:bbs/read/run?tid=$_item['lastpost_tid']&fid=$_id&page=e}#a" rel="nofollow"><span class="time">{@Pw::time2str($_item['lastpost_time'], 'auto')}</span></a><!--#}#-->
 			</th>
 	<!--#if ($i % $cateForum['across'] == 0) { $i = 0; #-->
 		</tr>
@@ -56,7 +56,7 @@ $_class = $_item['icon'] ? '' : ($_item['todayposts'] > 0 ? 'new' : 'old');
 		<td><em class="org">{$_item['threads']}</em>&nbsp;/&nbsp;<!--#echo $_item['threads'] + $_item['posts'];#--></td>
 		<td class="last">
 			<!--#if($_item['lastpost_time']){#-->
-			<a href="{@url:bbs/read/run?tid=$_item['lastpost_tid']&fid=$_id}" class="s4">{$_item['lastpost_info']}</a><br />最后回复：<a href="{@url:space/index/run?username=$_item['lastpost_username']}" class="last_name J_user_card_show" data-username="{$_item['lastpost_username']}">{$_item['lastpost_username']}</a><a href="{@url:bbs/read/run?tid=$_item['lastpost_tid']&fid=$_id&page=e}#a" aria-label="最后回复时间" title="跳转到最后一个楼层" class="last_name">{@Pw::time2str($_item['lastpost_time'], 'auto')}</a>
+			<a href="{@url:bbs/read/run?tid=$_item['lastpost_tid']&fid=$_id}" class="s4">{$_item['lastpost_info']}</a><br />最后回复：<a href="{@url:space/index/run?username=$_item['lastpost_username']}" class="last_name J_user_card_show" data-username="{$_item['lastpost_username']}">{$_item['lastpost_username']}</a><a href="{@url:bbs/read/run?tid=$_item['lastpost_tid']&fid=$_id&page=e}#a" aria-label="最后回复时间" title="跳转到最后一个楼层" class="last_name" rel="nofollow">{@Pw::time2str($_item['lastpost_time'], 'auto')}</a>
 			<!--#}#-->
 		</td>
 	</tr>

@@ -10,7 +10,7 @@ Wind::import('WINDID:library.image.WindidImage');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUpload.php 22166 2012-12-19 11:19:11Z gao.wanggao $
+ * @version $Id: WindidUpload.php 22500 2012-12-25 03:54:47Z gao.wanggao $
  * @package upload
  */
 
@@ -69,16 +69,9 @@ class WindidUpload {
 	 * 设置附件存储对象
 	 */
 	public function setStore() {
-		$ds = Windid::load('config.WindidConfig');
-		$stores = $ds->getValues('storage');
-		$config = $ds->getValues('attachment');
-		$config = $config['storage.type'];
-		if (!$config || !isset($stores[$config])) $config = 'local';
-		$store = unserialize($stores[$config]);
-		$cls = $store['components']['path'];
-		$srv = Wind::import($cls);
-		$this->store = new $srv();
-		//$this->store = Wind::getComponent($this->bhv->isLocal ? 'windidLocalStorage' : 'windidStorage');
+		Wind::import('WINDID:service.config.srv.WindidStoreService');
+		$srv = new WindidStoreService();
+		$this->store = $srv->getStore();
 	}
 	
 	/**

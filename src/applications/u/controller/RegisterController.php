@@ -9,7 +9,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: RegisterController.php 22361 2012-12-21 11:50:28Z xiaoxia.xuxx $
+ * @version $Id: RegisterController.php 22491 2012-12-25 03:12:23Z xiaoxia.xuxx $
  * @package src.products.u.controller
  */
 class RegisterController extends PwBaseController {
@@ -140,8 +140,9 @@ class RegisterController extends PwBaseController {
 			$this->showMessage('USER:active.email.dumplicate', 'u/login/run');
 		}
 		$email = $this->getInput('email', 'post');
-		if ($this->_getUserDs()->checkEmailExist($email, $this->loginUser->info['username'])) {
-			$this->showError('USER:user.error.-10');
+		$result = PwUserValidator::isEmailValid($email, $this->loginUser->info['username']);
+		if ($result instanceof PwError) {
+			$this->showError($result->getError());
 		} else {
 			$userInfo = new PwUserInfoDm($this->loginUser->uid);
 			$userInfo->setEmail($email);
@@ -304,13 +305,6 @@ class RegisterController extends PwBaseController {
 		$mobileInfo = Wekit::load('user.PwUserMobile')->getByMobile($mobile);
 		if ($mobileInfo) $this->showError('USER:mobile.mobile.exist');
 		return true;
-	}
-	
-	/**
-	 * 购买用户邮箱激活码
-	 */
-	public function buymailcodeAction() {
-		//TODO 购买邀请码
 	}
 	
 	/**

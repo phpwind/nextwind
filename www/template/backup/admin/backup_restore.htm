@@ -8,14 +8,14 @@
 	<div class="nav">
 		<ul class="cc">
 			<!--# if ($subcat) { #-->
-			<div class="return"><a href="{@WindUrlHelper::createUrl('admin/backup/backup/restore')}">返回上一级</a></div>
+			<div class="return"><a href="{@url:admin/backup/backup/restore}">返回上一级</a></div>
 			<!--# } else { #-->
-			<li><a href="{@WindUrlHelper::createUrl('admin/backup/backup/run')}">数据库备份</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('admin/backup/backup/restore')}">数据库还原</a></li>
+			<li><a href="{@url:admin/backup/backup/run}">数据库备份</a></li>
+			<li class="current"><a href="{@url:admin/backup/backup/restore}">数据库还原</a></li>
 			<!--# } #-->
 		</ul>
 	</div>
-	<form action="{@WindUrlHelper::createUrl('admin/backup/backup/batchdelete')}" method="post" class="J_ajaxForm" >
+	<form action="{@url:admin/backup/backup/batchdelete}" method="post" class="J_ajaxForm" >
 	<div class="table_list">
 		<table width="100%">
 			<thead>
@@ -31,7 +31,7 @@
 			</thead>
 			<!--# 
 			foreach ($filedb as $v) {
-				$fileLink = $v['nosub'] ? '' : WindUrlHelper::createUrl("admin/backup/backup/subcat/?name=$v[name]");
+				$fileLink = $v['nosub'] ? '' : WindUrlHelper::createUrl('admin/backup/backup/subcat',array('name'=>$v['name']));
 				$wholeFile = $v['nosub'] ? "$v[dir]/$v[name]" : $v[name];
 			#-->
 			<tr>
@@ -45,7 +45,7 @@
 				<td>{$v['version']}</td>
 				<td>{$v['time']}</td>
 				<td>{$v['num']}</td>
-				<td><a class="J_ajax_del" data-msg="确定要导入吗？" href="{@WindUrlHelper::createUrl('admin/backup/backup/import?isdir='.$v['isdir'].'&dir='.$v['dir'].'&file='.$v['name'])}">[导入]</a></td>
+				<td><a class="J_ajax_del" data-msg="确定要导入吗？" href="{@url:admin/backup/backup/import?isdir=$v['isdir']&dir=$v['dir']&file=$v['name']}">[导入]</a></td>
 			</tr>
 			<!--# } #-->
 		</table>

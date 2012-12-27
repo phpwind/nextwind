@@ -21,9 +21,9 @@
 						<div class="banner"><img src="{@Pw::getPath($tag['tag_logo'])}" width="110" alt="{$tag['tag_name']}" onerror="this.onerror=null;this.src='{@theme:images}/tags/default.png'"/></div>
 						<div class="name"><h3>{$tag['tag_name']}</h3>
 						<!--# if (!$tag['attention']) { #-->
-						<a rel="nofollow" id="J_follow_btn" data-type="add" data-id="{$tag['tag_id']}" href="{@WindUrlHelper::createUrl('tag/index/attention?id='.$tag['tag_id'].'&type=add')}" class="core_follow J_qlogin_trigger">关注该话题</a>
+						<a rel="nofollow" id="J_follow_btn" data-type="add" data-id="{$tag['tag_id']}" href="{@url:tag/index/attention?id=$tag['tag_id']&type=add}" class="core_follow J_qlogin_trigger">关注该话题</a>
 						<!--# } else { #-->
-						<a rel="nofollow" id="J_follow_btn" data-type="del" data-id="{$tag['tag_id']}" href="{@WindUrlHelper::createUrl('tag/index/attention?id='.$tag['tag_id'].'&type=del')}" class="core_unfollow J_qlogin_trigger">取消关注</a>
+						<a rel="nofollow" id="J_follow_btn" data-type="del" data-id="{$tag['tag_id']}" href="{@url:tag/index/attention?id=$tag['tag_id']&type=del}" class="core_unfollow J_qlogin_trigger">取消关注</a>
 						<!--# } #-->
 						</div>
 						<div class="num">
@@ -48,8 +48,8 @@
 								<!--# $thread_current = !$args['type'] ?  "class='current'" : '';
 										$user_current = ($args['type'] == 'users') ?  "class='current'" : '';
 								#-->
-									<li {$thread_current|html}><a href="{@WindUrlHelper::createUrl('tag/index/view?name='.$tag['tag_name'])}">最新帖子</a></li>
-									<li {$user_current|html}><a href="{@WindUrlHelper::createUrl('tag/index/view?name='.$tag['tag_name'].'&type=users')}">会员</a></li>
+									<li {$thread_current|html}><a href="{@url:tag/index/view?name=$tag['tag_name']}">最新帖子</a></li>
+									<li {$user_current|html}><a href="{@url:tag/index/view?name=$tag['tag_name']&type=users}">会员</a></li>
 								</ul>
 							</div>
 						</nav>
@@ -60,8 +60,8 @@
 							<ul class="cc">
 								<!--# foreach ($users as $u) { #-->
 								<li>
-									<a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $u['uid'])}" class="J_user_card_show" data-uid="{$u['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($u['uid'], 'middle')}" data-type="middle" width="100" height="100" alt="{$u['username']}" /></a>
-									<p><a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $u['uid'])}" class="J_user_card_show" data-uid="{$u['uid']}">{$u['username']}</a></p>
+									<a href="{@url:space/index/run?uid=$u['uid']}" class="J_user_card_show" data-uid="{$u['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($u['uid'], 'middle')}" data-type="middle" width="100" height="100" alt="{$u['username']}" /></a>
+									<p><a href="{@url:space/index/run?uid=$u['uid']}" class="J_user_card_show" data-uid="{$u['uid']}">{$u['username']}</a></p>
 								</li>
 								<!--# } #-->
 							</ul>
@@ -71,7 +71,7 @@
 						</div>
 						<!--# } else { #-->
 						<div class="not_content">
-							<p>啊哦，暂没有会员关注该话题哦，我来<a href="{@WindUrlHelper::createUrl('tag/index/attention?id='.$tag['tag_id']).'&type=add'}" id="J_none_follow" class="J_qlogin_trigger">关注一下</a>！</p>
+							<p>啊哦，暂没有会员关注该话题哦，我来<a href="{@url:tag/index/attention?id=$tag['tag_id']&type=add}" id="J_none_follow" class="J_qlogin_trigger">关注一下</a>！</p>
 						</div>
 						<!--# } #-->
 					<!--# } else { #-->
@@ -82,7 +82,7 @@
 									if (!$value['content']) continue;
 								#-->
 								<dl class="cc">
-									<dt class="feed_face"><a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $value['created_userid'])}" class="J_user_card_show" data-uid="{$value['created_userid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['created_username']}" /></a></dt>
+									<dt class="feed_face"><a href="{@url:space/index/run?uid=$value['created_userid']}" class="J_user_card_show" data-uid="{$value['created_userid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['created_username']}" /></a></dt>
 									<dd class="feed_content">
 										<!--# if ($allowManage) { #-->
 											<!--# if ($value['tagifcheck']) { #-->
@@ -92,15 +92,15 @@
 											<!--# } #-->	
 										<!--# } #-->
 										<div class="content">
-											<a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $value['created_userid'])}" class="name J_user_card_show" data-uid="{$value['created_userid']}">{$value['created_username']}</a>：
+											<a href="{@url:space/index/run?uid=$value['created_userid']}" class="name J_user_card_show" data-uid="{$value['created_userid']}">{$value['created_username']}</a>：
 											<em><a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="title">{$value['subject']}</a></em><br>
 											<div class="descrip">{@Pw::substrs(Pw::stripWindCode($value['content'],true),125)}</div>
 										</div>
 										<div class="info">
-											<span class="time">{$value['created_time_auto']}</span>&nbsp;来自版块&nbsp;-&nbsp;<a href="{@WindUrlHelper::createUrl('bbs/thread/run?fid='.$value['fid'])}">{$value['forum_name']|html}</a>
+											<span class="time">{$value['created_time_auto']}</span>&nbsp;来自版块&nbsp;-&nbsp;<a href="{@url:bbs/thread/run?fid=$value['fid']}">{$value['forum_name']|html}</a>
 											<!--# if($relatedTags[$value['tid']]){ #-->
 												<!--# foreach($relatedTags[$value['tid']] as $k=>$v){ if ($k==$key) continue; #-->
-												<a href="{@WindUrlHelper::createUrl('/tag/index/view?name='.$v['tag_name'])}">{$v['tag_name']}</a>
+												<a href="{@url:/tag/index/view?name=$v['tag_name']}">{$v['tag_name']}</a>
 												<!--# } #-->
 											<!--# } #-->
 										</div>
@@ -132,8 +132,8 @@
 <template source='TPL:common.footer' load='true' />
 </div>
 <script>
-var URL_ADD = '{@WindUrlHelper::createUrl("/tag/index/attention?type=add")|url}',	//关注
-	URL_DEL = '{@WindUrlHelper::createUrl("/tag/index/attention?type=del")|url}';	//取消关注
+var URL_ADD = '{@url:/tag/index/attention?type=add}',	//关注
+	URL_DEL = '{@url:/tag/index/attention?type=del}';	//取消关注
 	
 Wind.use('jquery', 'global', function(){
 

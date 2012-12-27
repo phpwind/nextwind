@@ -27,7 +27,7 @@
 						<div id="J_medal_card_wrap" class="medal_content">
 							<div class="medal_show_list">
 								<div class="hd">
-									<h2>自动勋章</h2><span>（无需申请，达到指定任务的要求后到 <a href="{@WindUrlHelper::createUrl('medal/index/run')}">我的勋章</a> 领取即可）</span>
+									<h2>自动勋章</h2><span>（无需申请，达到指定任务的要求后到 <a href="{@url:medal/index/run}">我的勋章</a> 领取即可）</span>
 								</div>
 								<div class="ct">
 									<ul class="cc">
@@ -40,7 +40,7 @@
 												$medals_zy[$key] = $medal;
 											else:
 											#-->
-											<li><a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" href="{@WindUrlHelper::createUrl('medal/index/show?medalid='.$medal['medal_id'])}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
+											<li><a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 											</a></li>
 											<!--# endif; #-->
 										<!--# elseif($medal['receive_type'] ==2):
@@ -51,7 +51,7 @@
 										endforeach; #-->
 										<!-- 与我相关的勋章 -->
 										<!--# foreach ($medals_zw as $key=>$medal): #-->
-										<li><a class="J_medal_card" data-role="receive" data-subid="{$medal['medal_id']}" data-id="{$medal['medal_id']}" href="{@WindUrlHelper::createUrl('medal/index/show?medalid='.$medal['medal_id'])}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
+										<li><a class="J_medal_card" data-role="receive" data-subid="{$medal['medal_id']}" data-id="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 											<!--# if ($myStatus[$key] == 1): #-->	
 													<em class="status_in"></em>
 												<!--# elseif($myStatus[$key] == 2): #-->
@@ -65,7 +65,7 @@
 										<!--# endforeach; #-->	
 										<!-- 我已领取的勋章 -->
 										<!--# foreach ($medals_zy as $key=>$medal): #-->
-										<li><a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" href="{@WindUrlHelper::createUrl('medal/index/show?medalid='.$medal['medal_id'])}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
+										<li><a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 													<em class="status_do"></em>
 											</a></li>
 										<!--# endforeach; #-->	
@@ -92,7 +92,7 @@
 												$medals_cy[$key] = $medal;
 											else: #-->
 											<li>
-												<a class="J_medal_card" data-role="apply" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@WindUrlHelper::createUrl('medal/index/show/?medalid='.$medal['medal_id'])}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
+												<a class="J_medal_card" data-role="apply" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 											</a>
 											</li>
 											<!--# endif; #-->
@@ -100,19 +100,19 @@
 										<!-- 与我相关的勋章 -->
 										<!--# foreach ($medals_cw1 as $key=>$medal):  #-->
 											<li>
-												<a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@WindUrlHelper::createUrl('medal/index/show/?medalid='.$medal['medal_id'])}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
+												<a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 												<em class="status_in"></em></a>
 											</li>
 										<!--# endforeach; #-->
 										<!--# foreach ($medals_cw2 as $key=>$medal):  #-->
 											<li>
-												<a class="J_medal_card" data-role="applied" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@WindUrlHelper::createUrl('medal/index/show/?medalid='.$medal['medal_id'])}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
+												<a class="J_medal_card" data-role="applied" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 												<em class="status"></em></a>
 											</li>
 										<!--# endforeach; #-->
 										<!--# foreach ($medals_cw3 as $key=>$medal):  #-->
 											<li>
-												<a class="J_medal_card" data-role="receive" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@WindUrlHelper::createUrl('medal/index/show/?medalid='.$medal['medal_id'])}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
+												<a class="J_medal_card" data-role="receive" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 												<em class="status_can"></em></a>
 												
 											</li>
@@ -120,7 +120,7 @@
 									
 										<!--# foreach ($medals_cy as $key=>$medal):  #-->
 											<li>
-												<a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@WindUrlHelper::createUrl('medal/index/show/?medalid='.$medal['medal_id'])}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
+												<a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 												<em class="status_do"></em>
 												</a>
 											</li>
@@ -145,9 +145,9 @@
 //所有未展示勋章数据
 var MEDAL_JSON = {@$medalJson|json},
 		MEDAL_COUNT = '{$count}',																													//已领取勋章数
-		MEDAL_APPLY_URL = '{@WindUrlHelper::createUrl('medal/index/doApply/')|url}',			//勋章申请url
-		MEDAL_AWARD_URL = '{@WindUrlHelper::createUrl('medal/index/doAward/')|url}',			//勋章领取url
-		MEDAL_PAGE_URL = '{@WindUrlHelper::createUrl('medal/index/run')|url}',						//勋章应用的链接地址
+		MEDAL_APPLY_URL = '{@url:medal/index/doApply/}',			//勋章申请url
+		MEDAL_AWARD_URL = '{@url:medal/index/doAward/}',			//勋章领取url
+		MEDAL_PAGE_URL = '{@url:medal/index/run}',						//勋章应用的链接地址
 		medel_data = {};
 
 Wind.use('jquery', 'global', 'ajaxForm', function(){

@@ -1,11 +1,11 @@
 <div class="content">
 	<div class="profile_nav">
 		<ul>
-			<li><a href="{@WindUrlHelper::createUrl('profile/secret/run', array('_left' => 'secret'))}">空间隐私</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('profile/secret/black', array('_left' => 'secret'))}">黑名单</a></li>
+			<li><a href="{@url:profile/secret/run?_left=secret}">空间隐私</a></li>
+			<li class="current"><a href="{@url:profile/secret/black?_left=secret}">黑名单</a></li>
 		</ul>
 	</div>
-	<form action="{@WindUrlHelper::createUrl('profile/secret/doblack')}" method="post">
+	<form action="{@url:profile/secret/doblack}" method="post">
 	<div class="profile_ct">
 		<div class="tips mb15">
 			<div class="tips_icon">被列入黑名单的用户，将不能关注你，给你私信，并且屏蔽该用户对你的@和回复提醒</div>

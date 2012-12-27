@@ -8,7 +8,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ReadController.php 22294 2012-12-21 05:34:55Z jieyin $
+ * @version $Id: ReadController.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package forum
  */
 class ReadController extends PwBaseController {
@@ -17,7 +17,7 @@ class ReadController extends PwBaseController {
 	 * 帖子阅读页
 	 */
 	public function run() {
-		$tid = $this->getInput('tid');
+		$tid = intval($this->getInput('tid'));
 		list($page, $uid, $desc) = $this->getInput(array('page', 'uid', 'desc'), 'get');
 		
 		$threadDisplay = new PwThreadDisplay($tid, $this->loginUser);
@@ -31,7 +31,7 @@ class ReadController extends PwBaseController {
 		$pwforum = $threadDisplay->getForum();
 		if ($pwforum->foruminfo['password']) {
 			if (!$this->loginUser->isExists()) {
-				$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('bbs/cate/run?fid=' . $$pwforum->fid)));
+				$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('bbs/cate/run', array('fid' => $$pwforum->fid))));
 			} elseif (Pw::getPwdCode($pwforum->foruminfo['password']) != Pw::getCookie('fp_' . $pwforum->fid)) {
 				$this->forwardAction('bbs/forum/password', array('fid' => $pwforum->fid));
 			}

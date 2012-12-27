@@ -111,9 +111,9 @@
 	<!--# endif; #-->
 
 	<!--# if($v[0] == 'html'): 
-		$hook = Wekit::load('design.srv.property.PwDesignDoPropertyService');
+		list($tpl,$name) = explode('|', $v[4]);
 	#-->
-		<hook class='$hook' method='displayHtml' args="array($v[4], $vProperty, $v[3])" />
+		<segment alias='$tpl' tpl="TPL:design.property.$tpl" args='$vProperty, $v[3]' name="$name" />
 	<!--# endif; #-->
 
 	<!--# endforeach; #-->

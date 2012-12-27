@@ -46,7 +46,7 @@ Wind.ready(document, function(){
 	Wind.use('jquery', function(){
 		$('#J_design_quit_direct').on('click', function(e){
 			e.preventDefault();
-			$.post("{@WindUrlHelper::createUrl('design/design/exit')|html}", {pageid: $('#J_pageid').val(), uri : $('#J_uri').val()}, function(data){
+			$.post("{@url:design/design/exit}", {pageid: $('#J_pageid').val(), uri : $('#J_uri').val()}, function(data){
 				location.href = data.data;
 			}, 'json');
 		});

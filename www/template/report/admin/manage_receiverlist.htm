@@ -7,15 +7,15 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('report/manage/run')}">未处理</a></li>
-			<li {$ifcheck}><a href="{@WindUrlHelper::createUrl('report/manage/run?ifcheck=1')}">已处理</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('report/manage/receiverlist')}">举报提醒</a></li>
+			<li><a href="{@url:report/manage/run}">未处理</a></li>
+			<li {$ifcheck}><a href="{@url:report/manage/run?ifcheck=1}">已处理</a></li>
+			<li class="current"><a href="{@url:report/manage/receiverlist}">举报提醒</a></li>
 		</ul>
 	</div>
 	<div class="h_a">功能说明</div>
 	<div class="prompt_text">
 		<ol>
-			<li>需手动添加用户，列表中的用户会接收到举报提醒信息，处理举报要有对应的管理权限，需要到相应的"<a href="{@WindUrlHelper::createUrl('u/groups/run')}">用户->用户组权限</a>"中设置。</li>
+			<li>需手动添加用户，列表中的用户会接收到举报提醒信息，处理举报要有对应的管理权限，需要到相应的"<a href="{@url:u/groups/run}">用户->用户组权限</a>"中设置。</li>
 		</ol>
 	</div>
 	<div class="h_a">接收提醒用户列表</div>
@@ -34,11 +34,11 @@
 			<tr>
 				<th>{$v['username']}</th>
 				<td>{$v['group']}</td>
-				<td><a href="{@WindUrlHelper::createUrl('report/manage/deleteReceiver?uid='.$v['uid'])}" class="J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:report/manage/deleteReceiver?uid=$v['uid']}" class="J_ajax_del">[删除]</a></td>
 			</tr>
 			<!--# } #-->
 		</table>
-		<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('report/manage/addReceiver')}" method="post" >
+		<form class="J_ajaxForm" action="{@url:report/manage/addReceiver}" method="post" >
 		<table width="100%">
 			<colgroup>
 				<col width="160">

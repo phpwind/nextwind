@@ -5,10 +5,18 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: StorageController.php 22166 2012-12-19 11:19:11Z gao.wanggao $ 
+ * @version $Id: StorageController.php 22512 2012-12-25 06:04:12Z gao.wanggao $ 
  * @package 
  */
 class StorageController extends AdminBaseController { 
+	
+	public function beforeAction($handlerAdapter) {
+		parent::beforeAction($handlerAdapter);
+		$config = Wekit::C('site', 'windid');
+		if ($config == 'client') {
+			$this->showError('WINDID:is.server.config');
+		}
+	}
 	/**
 	 * 附件存储方式设置列表页
 	 */

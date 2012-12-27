@@ -25,8 +25,8 @@
 						</div>
 						<div class="content_type">
 							<ul class="cc">
-								<li><a href="{@WindUrlHelper::createUrl('vote/my/run')}">我参与的</a></li>
-								<li class="line"></li><li class="current"><a href="{@WindUrlHelper::createUrl('vote/my/create')}">我发起的</a></li>
+								<li><a href="{@url:vote/my/run}">我参与的</a></li>
+								<li class="line"></li><li class="current"><a href="{@url:vote/my/create}">我发起的</a></li>
 							</ul>
 						</div>
 					</nav>
@@ -68,7 +68,7 @@ foreach($pollInfo as $value) {
 	</div>
 	<div class="ft">
 		<div class="associate">
-			<label class="fr"><input type="checkbox" id="J_vote_forum_join" data-url="{@WindUrlHelper::createUrl('bbs/forum/join')}">添加到我的版块</label>
+			<label class="fr"><input type="checkbox" id="J_vote_forum_join" data-url="{@url:bbs/forum/join}">添加到我的版块</label>
 			发帖到：<span id="J_vote_post_to_cate"></span>-<span id="J_vote_post_to_forum"></span>
 		</div>
 		<div class="tac">
@@ -80,7 +80,7 @@ foreach($pollInfo as $value) {
 <template source='TPL:common.footer' load='true' />
 </div>
 <script>
-var URL_FORUM_LIST = '{@WindUrlHelper::createUrl("vote/vote/forumlist")|html}';
+var URL_FORUM_LIST = '{@url:vote/vote/forumlist}';
 Wind.use('jquery', 'global', function(){
 	Wind.js(GV.JS_ROOT +'pages/vote/vote_index.js?v=' + GV.JS_VERSION);
 	//快速发投票帖

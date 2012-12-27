@@ -352,6 +352,7 @@ DROP TABLE IF EXISTS `pw_attention_recommend_friends`;
 CREATE TABLE `pw_attention_recommend_friends` (
   `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户uid',
   `recommend_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐好友ID',
+  `recommend_username` varchar(15) NOT NULL DEFAULT '' COMMENT '推荐好友用户名',
   `cnt` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '好友数量',
   `recommend_user` text COMMENT '推荐好友信息',
   UNIQUE KEY `idx_uid_recommenduid` (`uid`,`recommend_uid`)
@@ -542,7 +543,7 @@ CREATE TABLE `pw_bbs_threads` (
   `replies` int(10) unsigned NOT NULL DEFAULT '0',
   `hits` int(10) unsigned NOT NULL DEFAULT '0',
   `like_count` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `special` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `special` varchar(20) NOT NULL DEFAULT '0',
   `tpcstatus` int(10) unsigned NOT NULL DEFAULT '0',
   `ifupload` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `created_time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -555,7 +556,7 @@ CREATE TABLE `pw_bbs_threads` (
   `modified_ip` varchar(40) NOT NULL DEFAULT '',
   `lastpost_time` int(10) unsigned NOT NULL DEFAULT '0',
   `lastpost_userid` int(10) unsigned NOT NULL DEFAULT '0',
-  `lastpost_username` varchar(15) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL DEFAULT '',
+  `lastpost_username` varchar(15) NOT NULL DEFAULT '',
   `special_sort` tinyint(4) NOT NULL DEFAULT '0',
   `reply_notice` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `reply_topped` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -810,6 +811,7 @@ CREATE TABLE `pw_design_image` (
   `height` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '缩略图高',
   `moduleid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属模块',
   `data_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '门户数据ID',
+  `sign` varchar(50) NOT NULL DEFAULT '' COMMENT '标签key',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '原图片状态1正常0不正常',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='门户异步缩略图片表';
@@ -1034,7 +1036,6 @@ CREATE TABLE `pw_hook_inject` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` char(20) NOT NULL DEFAULT '',
   `app_name` varchar(100) NOT NULL DEFAULT '',
-  `app_alias` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '应用标识',
   `hook_name` varchar(100) NOT NULL DEFAULT '' COMMENT '钩子名',
   `alias` varchar(100) NOT NULL DEFAULT '' COMMENT '挂载别名',
   `class` varchar(100) NOT NULL DEFAULT '' COMMENT '挂载类',
@@ -1174,9 +1175,9 @@ CREATE TABLE `pw_log` (
   `extends` varchar(100) NOT NULL DEFAULT '' COMMENT '扩展信息',
   `content` text COMMENT '操作日志内容',
   PRIMARY KEY (`id`),
-  INDEX `idx_tid_pid` (`tid`, `pid`),
-  INDEX `idx_fid` (`fid`),
-  INDEX `idx_created_time` (`created_time`)
+  KEY `idx_tid_pid` (`tid`, `pid`),
+  KEY `idx_fid` (`fid`),
+  KEY `idx_created_time` (`created_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='前台管理日志表';
 
 DROP TABLE IF EXISTS `pw_log_login`;
@@ -1188,9 +1189,9 @@ CREATE TABLE `pw_log_login` (
   `created_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '尝试时间',
   `ip` varchar(40) NOT NULL DEFAULT '' COMMENT '尝试IP',
   PRIMARY KEY (`id`),
-  INDEX `idx_username` (`username`),
-  INDEX `idx_ip` (`ip`),
-  INDEX `idx_created_time` (`created_time`)
+  KEY `idx_username` (`username`),
+  KEY `idx_ip` (`ip`),
+  KEY `idx_created_time` (`created_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='前台用户登录错误日志表';
 
 DROP TABLE IF EXISTS `pw_medal_info`;
@@ -1866,7 +1867,8 @@ CREATE TABLE `pw_windid_message_dialog` (
   `last_message` text COMMENT '最新对话',
   `modified_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`dialog_id`),
-  UNIQUE KEY `idx_touid_fromuid` (`to_uid`,`from_uid`)
+  UNIQUE KEY `idx_touid_fromuid_modifiedtime` (`to_uid`,`from_uid`,`modified_time`),
+  KEY `idx_touid_modifiedtime` (`to_uid`,`modified_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='消息对话表';
 
 DROP TABLE IF EXISTS `pw_windid_message_relation`;

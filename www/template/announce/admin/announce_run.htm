@@ -7,9 +7,9 @@
 <div class="wrap J_check_wrap">
 <!--==============================公告管理列表================================-->
 	<div class="mb10">
-		<a href="{@WindUrlHelper::createUrl('announce/announce/add')}" class="btn" title="添加公告"><span class="add"></span>添加公告</a>
+		<a href="{@url:announce/announce/add}" class="btn" title="添加公告"><span class="add"></span>添加公告</a>
 	</div>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('announce/announce/doRun')}" method="post">
+	<form class="J_ajaxForm" action="{@url:announce/announce/doRun}" method="post">
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -60,7 +60,7 @@
 				<td><span class="{$statusColor}">{$status}</span></td>
 				<td>{$value['username']}</td>
 				<td>{$start_date}至{$end_date}</td>
-				<td><a href="{@WindUrlHelper::createUrl('announce/announce/update?aid='.$value['aid'])}" title="编辑公告管理" class="mr10">[编辑]</a><a href="{@WindUrlHelper::createUrl('announce/announce/doDelete/?aid='.$value['aid'])}" class="mr10 J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:announce/announce/update?aid=$value['aid']}" title="编辑公告管理" class="mr10">[编辑]</a><a href="{@url:announce/announce/doDelete?aid=$value['aid']}" class="mr10 J_ajax_del">[删除]</a></td>
 			</tr>
 			<!--# } #-->
 			<!--# } else { #-->
@@ -111,7 +111,7 @@ Wind.use('dialog',function() {
 			onOk	: function() {
 				$('form.J_ajaxForm').ajaxSubmit({
 					dataType : 'json',
-					url		 : '{@WindUrlHelper::createUrl('announce/announce/doBatchDelete')|html}',
+					url		 : '{@url:announce/announce/doBatchDelete}',
 					success	 : function(data, statusText, xhr, $form) {
 						if(data.state === 'success') {
 							var location = window.location;

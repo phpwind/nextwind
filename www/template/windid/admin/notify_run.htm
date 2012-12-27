@@ -7,7 +7,7 @@
 <div class="wrap">
 	<!-- <div class="nav">
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('admin/windid/notify/run')}">通知管理</a></li>
+			<li class="current"><a href="{@url:admin/windid/notify/run}">通知管理</a></li>
 		</ul>
 	</div> -->
 	<div class="h_a">提示信息</div>
@@ -20,7 +20,7 @@
 	
 	<div class="h_a">搜索</div>
 	<div class="search_type cc mb10">
-		<form action="{@WindUrlHelper::createUrl('admin/windid/notify/run')}" method="post">
+		<form action="{@url:admin/windid/notify/run}" method="post">
 		<label>执行状态：</label>
 			<select name="complete" class="select_2">
 				<option value="">不限</option>
@@ -60,7 +60,7 @@
 				<td>{@Pw::time2str($v['time'], 'Y-m-d H:i:s')}</td>
 				<td>{$v['send_num']}</td>
 				<td><!--# if($v['complete']){#-->成功<!--# }else{ #--><span style="color:#ff0000">失败</span><!--#}#--></td>
-				<td><!--# if($v['complete']){#-->-<!--# }else{ #--><a href="{@WindUrlHelper::createUrl('windid/notify/resend?logid=' . $v['logid'])}" class="mr10" title="重新发送">[重新发送]<!--#}#--></a>
+				<td><!--# if($v['complete']){#-->-<!--# }else{ #--><a href="{@url:windid/notify/resend?logid=$v['logid']}" class="mr10" title="重新发送">[重新发送]<!--#}#--></a>
 			</tr>
 		<!--#}#-->
 		</table>
@@ -68,7 +68,7 @@
 	<page tpl='TPL:common.page' page='$page' count='$count' per='$perPage' url='windid/notify/run' args='$args'/>
 	<div class="btn_wrap">
 		<div class="btn_wrap_pd" id="J_sub_wrap">
-			<a class="btn" href="{@WindUrlHelper::createUrl('admin/windid/notify/clear')}" title="清理过期通知">清理过期通知</a>
+			<a class="btn" href="{@url:admin/windid/notify/clear}" title="清理过期通知">清理过期通知</a>
 		</div>
 	</div>
 </div>

@@ -1,16 +1,16 @@
 <?php
 Wind::import('SRV:design.srv.model.PwDesignModelBase');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
  * <note>
  *  decorateAddProperty 为插入表单值修饰
  *  decorateEditProperty 为修改表单值修饰
  *  _getData 获取数据
  * </note>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignForumDataService.php 22012 2012-12-18 06:32:48Z gao.wanggao $ 
+ * @version $Id: PwDesignForumDataService.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 class PwDesignForumDataService extends PwDesignModelBase{
@@ -67,9 +67,9 @@ class PwDesignForumDataService extends PwDesignModelBase{
 		foreach ($list AS $k=>$v ) {
 			$list[$k]['name'] = $this->_filterForumHtml($v['name']);
 			if ($v['type'] == 'category') {
-				$list[$k]['forum_url'] = WindUrlHelper::createUrl('bbs/cate/run?fid='.$v['fid'], array(),'','pw');
+				$list[$k]['forum_url'] = WindUrlHelper::createUrl('bbs/cate/run', array('fid' => $v['fid']), '', 'pw');
 			} else {
-				$list[$k]['forum_url'] = WindUrlHelper::createUrl('bbs/thread/run?fid='.$v['fid'], array(),'','pw');
+				$list[$k]['forum_url'] = WindUrlHelper::createUrl('bbs/thread/run', array('fid' => $v['fid']), '', 'pw');
 			}
 			$list[$k]['descrip'] = $this->_formatDes($v['descrip']);
 			$list[$k]['logo'] = $v['logo'] ? Pw::getPath($v['logo']) : '';
@@ -82,8 +82,8 @@ class PwDesignForumDataService extends PwDesignModelBase{
 
 			$list[$k]['lastpost_userid'] = $lastthread['lastpost_userid'];
 			$list[$k]['lastpost_username'] = $lastthread['lastpost_username'];
-			$list[$k]['lastpost_space'] = $lastthread['lastpost_userid'] ? WindUrlHelper::createUrl('space/index/run?uid='.$lastthread['lastpost_userid'], array(),'','pw') : '';
-			$list[$k]['lastthread_space'] = $lastthread['created_userid'] ? WindUrlHelper::createUrl('space/index/run?uid='.$lastthread['created_userid'], array(),'','pw') : '';
+			$list[$k]['lastpost_space'] = $lastthread['lastpost_userid'] ? WindUrlHelper::createUrl('space/index/run', array('uid' => $lastthread['lastpost_userid']), '', 'pw') : '';
+			$list[$k]['lastthread_space'] = $lastthread['created_userid'] ? WindUrlHelper::createUrl('space/index/run', array('uid' => $lastthread['created_userid']), '', 'pw') : '';
 			$list[$k]['lastthread_smallavatar'] = $lastthread['created_userid'] ? Pw::getAvatar($lastthread['created_userid'],'small') : '';
 			$list[$k]['lastthread_middleavatar'] = $lastthread['created_userid'] ? Pw::getAvatar($lastthread['created_userid'],'middle') : '';
 			$list[$k]['lastthread_username'] =  $lastthread['created_username'];

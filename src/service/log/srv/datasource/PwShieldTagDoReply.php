@@ -32,9 +32,9 @@ class PwShieldTagDoReply extends iPwGleanDoHookProcess {
 			$logSrv = Wekit::load('log.srv.PwLogService');
 			
 			$langArgs = array();
-			$langArgs['tag_url'] = WindUrlHelper::createUrl('tag/index/view?name=' . $tag['tag_name']);
+			$langArgs['tag_url'] = WindUrlHelper::createUrl('tag/index/view', array('name' => $tag['tag_name']));
 			$langArgs['tag'] = $tag['tag_name'];
-			$langArgs['content_url'] = WindUrlHelper::createUrl('bbs/read/run?tid=' . $data['tid'], array(), $data['pid']);
+			$langArgs['content_url'] = WindUrlHelper::createUrl('bbs/read/run', array('tid' => $data['tid']), $data['pid']);
 			$langArgs['content'] = $data['subject'];
 			$langArgs['type'] = '帖子回复';
 			

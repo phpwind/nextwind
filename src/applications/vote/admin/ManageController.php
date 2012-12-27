@@ -112,12 +112,11 @@ class ManageController extends AdminBaseController {
 				if (!$_forum) continue;
 				
 				$setting = unserialize($_forum['settings_basic']);
-				$allowType = $setting['allowtype'];
-				
-				if ($allowType & 2) continue;
-				
-				$setting['allowtype'] += 2;
-				!isset($setting['typeorder'][1]) && $setting['typeorder'][1] = 0;
+				$allowType = is_array($setting['allowtype']) ? $setting['allowtype'] : array();
+				if (in_array('poll', $allowType)) continue;
+				$allowType[] = 'poll';
+				!isset($setting['typeorder']['poll']) && $setting['typeorder']['poll'] = 0;
+				$setting['allowtype'] = $allowType;
 
 				$dm = new PwForumDm($value);
 				$dm->setBasicSetting($setting);
@@ -131,11 +130,13 @@ class ManageController extends AdminBaseController {
 				if (!$_forum) continue;
 				
 				$setting = unserialize($_forum['settings_basic']);
-				$allowType = $setting['allowtype'];
-				
-				if (!($allowType & 2)) continue;
-				
-				$setting['allowtype'] -= 2;
+				$allowType = is_array($setting['allowtype']) ? $setting['allowtype'] : array();
+				if (!in_array('poll', $allowType)) continue;
+
+				$allowType = array_diff($allowType, array('poll'));
+				unset($setting['typeorder']['poll']);
+				$setting['allowtype'] = $allowType;
+
 				$dm = new PwForumDm($value);
 				$dm->setBasicSetting($setting);
 				$this->_getForumDs()->updateForum($dm, 4);
@@ -178,11 +179,10 @@ class ManageController extends AdminBaseController {
 		foreach ($forumExtra as $value) {
 			$setting = (array)unserialize($value['settings_basic']);
 			$allowType = $setting['allowtype'];
-			if ($allowType & 2) {
+			if (is_array($allowType) && in_array('poll', $allowType)) {
 				$result[$value['fid']] = $value['fid'];
 			}
 		}
-		
 		return $result;
 	}
 	

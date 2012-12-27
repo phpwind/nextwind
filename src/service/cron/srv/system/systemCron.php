@@ -2,11 +2,11 @@
 /**
  * 系统任务列表
  * 
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jinlong.panjl $>
+ * @author $Author: jinlong.panjl $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: systemCron.php 19382 2012-10-13 09:41:58Z gao.wanggao $ 
+ * @version $Id: systemCron.php 22664 2012-12-26 07:55:11Z jinlong.panjl $ 
  * @package 
  */
 
@@ -34,12 +34,6 @@ return array(
 		'file'=>'PwCronDoClearForumTodayposts',
 		'type'=>'day',
 		'time'=>array('day'=>0,'hour'=>0,'minute'=>0),
-	),
-	array(
-		'name'=>'好友推荐触发任务',
-		'file'=>'PwCronDoRecommendUser',
-		'type'=>'day',
-		'time'=>array('day'=>0,'hour'=>3,'minute'=>0),
 	)
 );
 ?>

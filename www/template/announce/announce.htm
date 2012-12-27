@@ -7,11 +7,11 @@
 		 	$url = $value['url']; 
 		 	$showTarget = 'target=_blank';
 		 }else{
-		 	$url = WindUrlHelper::createUrl('announce/index/run?aid='.$key); 
+		 	$url = WindUrlHelper::createUrl('announce/index/run',array('aid'=>$key)); 
 		 	$showTarget='target=_self';
 		 }
 		 #-->
-		 <li><a href="{$url}" {$showTarget}>{$value['subject']}</a><span>{$value['start_date']}</span></li>
+		 <li><a href="{$url|url}" {$showTarget}>{$value['subject']}</a><span>{$value['start_date']}</span></li>
 		 <!--#
 		 } #-->
 		</ul>

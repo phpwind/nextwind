@@ -9,7 +9,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUbbCode.php 21360 2012-12-05 08:05:40Z jieyin $
+ * @version $Id: PwUbbCode.php 22763 2012-12-27 03:43:54Z jieyin $
  * @package lib.utility
  */
 
@@ -172,7 +172,7 @@ class PwUbbCode {
 	public static function convertTable($message, $max = 0) {
 		$t = 0;
 		while (self::hasTag($message, 'table')) {
-			$message = preg_replace('/\[table(?:=(\d{1,3}(?:%|px)?)(?:,(#\w{6})?)?(?:,(#\w{6})?)?(?:,(\d+))?(?:,(\d+))?)?\](?!.*(\[table))(.*?)\[\/table\]/eis', "self::createTable('\\7','\\1','\\2','\\3','\\4','\\5')", $message);
+			$message = preg_replace('/\[table(?:=(\d{1,4}(?:%|px)?)(?:,(#\w{6})?)?(?:,(#\w{6})?)?(?:,(\d+))?(?:,(\d+))?(?:,(left|center|right))?)?\](?!.*(\[table))(.*?)\[\/table\]/eis', "self::createTable('\\8','\\1','\\2','\\3','\\4','\\5', '\\6')", $message);
 			if (++$t > $max) break;
 		}
 		return $message;
@@ -342,7 +342,7 @@ class PwUbbCode {
 	}
 
 	public static function parseRemind($message, $remindUser) {
-		return preg_replace('/@([^\\&\'"\/\*,<>\[\]\r\t\n\s#%?@:：]+)(?=\s?)/ie', "self::createRemind('\\1', \$remindUser)", $message);
+		return preg_replace('/@([\x7f-\xff\dA-Za-z\.\_]+)(?=\s?)/ie', "self::createRemind('\\1', \$remindUser)", $message);
 	}
 
 	/**
@@ -460,7 +460,7 @@ class PwUbbCode {
 		if ($hasCode) {
 			self::_init();
 			self::_startParse();
-			self::hasTag($message, 'code') && $message = preg_replace("/\[code.*?\].+?\[\/code\]/eis", "self::_pushCode('\\0')", $message, self::$_cvtimes);
+			self::hasTag($message, 'code') && $message = preg_replace("/\[code.*?\].+?\[\/code\]/eis", "self::srcCode('\\0')", $message, self::$_cvtimes);
 		}
 		$message = preg_replace(
 			"/(?<![\]a-z0-9-=\"'(\\/])((https?|ftp|gopher|news|telnet|mms|rtsp):\/\/|www\.)([a-z0-9\/\-_+=.~!%@?#%&;:$\\│\|]+)/i",
@@ -471,6 +471,10 @@ class PwUbbCode {
 			$message = self::_convertCode($message);
 		}
 		return $message;
+	}
+
+	public static function srcCode($str) {
+		return self::_pushCode(str_replace('\"', '"', $str));
 	}
 
 	/**
@@ -675,8 +679,8 @@ class PwUbbCode {
 	 */
 	public static function createQoute($str, $username = '', $rpid = 0) {
 		$str = str_replace('\\"', '"', $str);
-		$username && $str = "<span class=\"fl\"><a href=" . WindUrlHelper::createUrl('space/index/run?username=' . $username) . ">" . $username . '</a>：' . $str . '</span>';
-		$rpid && $str .= '<a href="' . WindUrlHelper::createUrl('bbs/read/jump?pid=' . $rpid) . '" class="return">回到原帖</a>';
+		$username && $str = "<span class=\"fl\"><a href=" . WindUrlHelper::createUrl('space/index/run', array('username' => $username)) . ">" . $username . '</a>：' . $str . '</span>';
+		$rpid && $str .= '<a href="' . WindUrlHelper::createUrl('bbs/read/jump', array('pid' => $rpid)) . '" class="return">回到原帖</a>';
 		$html = "<blockquote class=\"blockquote cc\">" . $str . "</blockquote>";
 		return self::_pushCode($html);
 	}
@@ -727,7 +731,7 @@ class PwUbbCode {
 	}
 
 	public static function createRemind($username, $uArray) {
-		return isset($uArray[$username]) ? '<a href="'. WindUrlHelper::createUrl('space/index/run/?uid=' . $uArray[$username]) . '">@' . $username . '</a>' : '@' . $username;
+		return isset($uArray[$username]) ? '<a href="'. WindUrlHelper::createUrl('space/index/run', array('uid' => $uArray[$username])) . '">@' . $username . '</a>' : '@' . $username;
 	}
 
 	/**
@@ -756,7 +760,7 @@ class PwUbbCode {
 	 * @param int $borderWidth 边框大小
 	 * @return string
 	 */
-	public static function createTable($text, $width = '', $bgColor = '', $borderColor = '', $borderWidth = '', $cellpadding = '') {
+	public static function createTable($text, $width = '', $bgColor = '', $borderColor = '', $borderWidth = '', $cellpadding = '', $align = '') {
 		if ($width && preg_match('/^(\d{1,3})(%|px)?$/', $width, $matchs)) {
 			$unit = $matchs[2] ? $matchs[2] : 'px';
 			$width = $unit == 'px' ? min($matchs[1], 600).'px' : min($matchs[1], 100).'%';
@@ -770,6 +774,7 @@ class PwUbbCode {
 		$tableStyle .= ';border-color:' . $borderColor;
 		$tdStyle = ' style="border-color:' . $borderColor . '"';
 		$cellpadding || $cellpadding = 0;
+		$align || $align = 'left';
 
 		$text = trim(str_replace(array('\\"', '<br />'), array('"', "\n"), $text));
 		$text = preg_replace(
@@ -780,7 +785,7 @@ class PwUbbCode {
 		$text = str_replace('[tr]', "<tr><td{$tdStyle}>", $text);
 		$text = str_replace("\n", '<br />', $text);
 
-		return self::_pushCode("<table class=\"read_form\" style=\"$tableStyle\" cellspacing=\"0\" cellpadding=\"{$cellpadding}\">$text</table>");
+		return self::_pushCode("<table class=\"read_form\" style=\"$tableStyle\" cellspacing=\"0\" cellpadding=\"{$cellpadding}\" align=\"$align\">$text</table>");
 	}
 
 	/**

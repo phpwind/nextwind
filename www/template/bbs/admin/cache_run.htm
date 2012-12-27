@@ -5,7 +5,7 @@
 </head>
 <body>
 <div class="wrap">
-	<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('bbs/cache/dorun')}">
+	<form method="post" class="J_ajaxForm" action="{@url:bbs/cache/dorun}">
 	<div class="h_a">缓存更新</div>
 	<div class="table_full">
 		<table width="100%">
@@ -15,14 +15,14 @@
 			<tr>
 				<th>更新站点缓存</th>
 				<td>
-					<a class="btn" href="{@WindUrlHelper::createUrl('bbs/cache/dorun')}">提交</a>
+					<a class="btn" href="{@url:bbs/cache/dorun}">提交</a>
 				</td>
 				<td><div class="fun_tips">数据转换后或前台不能正常访问时，可以使用此功能更新所有缓存</div></td>
 			</tr>
 			<tr>
 				<th>重新统计版块帖子数</th>
 				<td>
-					<a class="btn" href="{@WindUrlHelper::createUrl('bbs/cache/doforum')}">提交</a>
+					<a class="btn" href="{@url:bbs/cache/doforum}">提交</a>
 				</td>
 				<td><div class="fun_tips">当版块帖子数统计不准确时，可以使用此功能重新统计</div></td>
 			</tr>

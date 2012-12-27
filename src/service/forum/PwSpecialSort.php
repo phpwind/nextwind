@@ -7,7 +7,7 @@
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: PwSpecialSort.php 17072 2012-08-31 02:25:02Z peihong.zhangph $
+ * @version $Id: PwSpecialSort.php 22514 2012-12-25 06:12:19Z jieyin $
  */
 
 class PwSpecialSort {
@@ -24,10 +24,13 @@ class PwSpecialSort {
 	}
 	
 	/**
-	 * 
 	 * 根据排序类型及参数获取相关Tids
+	 * 
+	 * @param string $sortType
+	 * @param int $extra
+	 * @return array
 	 */
-	public function getSpecialSortByTypeExtra($sortType,$extra = 0){
+	public function getSpecialSortByTypeExtra($sortType, $extra = 0) {
 		$extra = intval($extra);
 		return $this->_getDao()->getSpecialSortByTypeExtra($sortType,$extra);
 	}
@@ -41,6 +44,20 @@ class PwSpecialSort {
 	public function getSpecialSortByTid($tid) {
 		if (empty($tid)) return array();
 		return $this->_getDao()->getSpecialSortByTid($tid);
+	}
+
+	/**
+	 * 
+	 * 添加特殊排序
+	 *
+	 * @param PwSpecialSortDm $dm
+	 */
+	public function addSpecialSort($dm) {
+		if (($result = $dm->beforeAdd()) !== true) {
+			return $result;
+		}
+		$fields = $dm->getData();
+		return $this->_getDao()->addSpecialSort($fields);
 	}
 	
 	/**
@@ -61,33 +78,23 @@ class PwSpecialSort {
 	}
 	
 	/**
+	 * 删除1个帖子的排序信息
+	 *
+	 * @param int $tid
+	 * @return bool
+	 */
+	public function deleteSpecialSortByTid($tid) {
+		if (empty($tid)) return false;
+		return $this->_getDao()->deleteSpecialSortByTid($tid);
+	}
+	
+	/**
 	 * 删除多个帖子的排序信息
 	 *
 	 * @param array $tids
 	 * @return bool
 	 */
 	public function batchDeleteSpecialSortByTid($tids) {
-		if (empty($tids) || !is_array($tids)) return false;
-		return $this->_getDao()->batchDeleteSpecialSortByTid($tids);
-	}
-
-	/*******************************************************************************/
-
-	/**
-	 * 
-	 * 添加特殊排序
-	 *
-	 * @param PwSpecialSortDm $dm
-	 */
-	public function addSpecialSort($dm) {
-		if (($result = $dm->beforeAdd()) !== true) {
-			return $result;
-		}
-		$fields = $dm->getData();
-		return $this->_getDao()->addSpecialSort($fields);
-	}
-	
-	public function deleteSpecialSortByTids($tids) {
 		if (empty($tids) || !is_array($tids)) return false;
 		return $this->_getDao()->batchDeleteSpecialSortByTid($tids);
 	}

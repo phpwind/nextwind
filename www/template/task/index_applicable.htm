@@ -57,7 +57,7 @@
 									<p>目标：{$item['description']|html}</p>
 									<p>时限：{$time}</p>
 									<p>奖励：<span class="green">{$reward}</span></p>
-									<p class="tar"><a data-id="{$item['taskid']}" class="btn btn_submit J_task_get_btn" href="{@WindUrlHelper::createUrl('task/index/applyTask?id=' . $id)}">领取任务</a></p>
+									<p class="tar"><a data-id="{$item['taskid']}" class="btn btn_submit J_task_get_btn" href="{@url:task/index/applyTask?id=$id}">领取任务</a></p>
 								</dd>
 							</dl>
 		<!--#}#-->

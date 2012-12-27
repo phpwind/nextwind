@@ -5,7 +5,7 @@ Wind::import('SRC:library.base.PwBaseDao');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignModuleDao.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: PwDesignModuleDao.php 22555 2012-12-25 08:37:31Z gao.wanggao $ 
  * @package 
  */
 class PwDesignModuleDao extends PwBaseDao {
@@ -20,6 +20,12 @@ class PwDesignModuleDao extends PwBaseDao {
 	
 	public function fetchModule($ids) {
 		return $this->_fetch($ids,'module_id');
+	}
+	
+	public function getByPageid($pageid) {
+		$sql = $this->_bindTable('SELECT * FROM %s WHERE `page_id` = ? AND `isused` = 1');
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->queryAll(array($pageid), 'module_id');
 	}
 	
 	public function countModule($data) {

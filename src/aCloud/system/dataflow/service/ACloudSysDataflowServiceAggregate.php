@@ -81,7 +81,7 @@ class Aggregate_SQLLogExtension {
 		if (is_null ( $type ) || ! $insertId)
 			return false;
 		$sign = ACloudSysCoreCommon::getSiteSign ();
-		return setcookie ( '_ac_' . $sign, intval ( $type ), time () + 60 );
+		return setcookie ( '_ac_' . $sign, intval ( $type ), time () + 3600 );
 	}
 	
 	private function buildSql($sql) {

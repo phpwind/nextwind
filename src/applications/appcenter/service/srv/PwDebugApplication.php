@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwDebugApplication.php 22322 2012-12-21 08:32:15Z long.shi $
+ * @version $Id: PwDebugApplication.php 22552 2012-12-25 08:29:31Z long.shi $
  * @package wind
  */
 class PwDebugApplication {
@@ -73,7 +73,7 @@ class PwDebugApplication {
 		Wekit::load('APPS:appcenter.service.PwApplication')->update($dm);
 		
 		$this->_loadPwHooks()->delByAppId($this->app_id);
-		$this->_loadPwHookInject()->deleteByAppId($this->app_id);
+		$this->_loadPwHookInject()->deleteByAppId($alias);
 		$hooks = $this->manifest->getHooks();
 		$log = array();
 		if ($hooks) {
@@ -94,12 +94,11 @@ class PwDebugApplication {
 		if ($inject) {
 			$inject_ids = array();
 			foreach ($inject as $key => &$value) {
-				$value['app_id'] = $this->app_id;
-				$value['app_alias'] = $alias;
+				$value['app_id'] = $alias;
 				$value['app_name'] = $this->app['app_name'];
 			}
 			$this->_loadPwHookInject()->batchAdd($inject);
-			$injects = $this->_loadPwHookInject()->findByAppId($this->app_id);
+			$injects = $this->_loadPwHookInject()->findByAppId($alias);
 			$log[] = array(
 				'app_id' => $this->app_id, 
 				'log_type' => 'inject', 
@@ -185,38 +184,46 @@ class PwDebugApplication {
 		$r = $install->initInstall($manifest);
 		if ($r instanceof PwError) return $this->_e(null, $r);;
 		
-		$r = $_install->install($install);
-		if ($r instanceof PwError) return $this->_e($install, $r);
-		$r = $_install->registeHooks($install);
-		if ($r instanceof PwError) return $this->_e($install, $r);
-		$r = $_install->registeInjectServices($install);
-		if ($r instanceof PwError) return $this->_e($install, $r);
-		$r = $_install->registeData($install);
-		if ($r instanceof PwError) return $this->_e($install, $r);
-		foreach ($install->getManifest()->getInstallationService() as $var) {
-			$_tmp = $install->getConfig('installation-service', $var);
-			if (!$_tmp) continue;
-			$toinstall = Wekit::load($_tmp['class']);
-			if (!$toinstall instanceof iPwInstall) continue;
-			$_tmp['_key'] = $var;
-			$_m = empty($_tmp['method']) ? 'install' : $_tmp['method'];
-			$r = $toinstall->$_m($install);
+		try {
+			$r = $_install->install($install);
 			if ($r instanceof PwError) return $this->_e($install, $r);
-			$install->addInstallLog('service', $_tmp);
-		}
-		$manifest = $install->getManifest()->getManifest();
-		if (isset($manifest['install']) && $manifest['install']) {
-			$_tmp = array('class' => $manifest['install']);
-			$toinstall = Wekit::load($manifest['install']);
-			if (!$toinstall instanceof iPwInstall) continue;
-			$r = $toinstall->install($install);
+			$r = $_install->registeHooks($install);
 			if ($r instanceof PwError) return $this->_e($install, $r);
-			$install->addInstallLog('service', $_tmp);
+			$r = $_install->registeInjectServices($install);
+			if ($r instanceof PwError) return $this->_e($install, $r);
+			$r = $_install->registeData($install);
+			if ($r instanceof PwError) return $this->_e($install, $r);
+			foreach ($install->getManifest()->getInstallationService() as $var) {
+				$_tmp = $install->getConfig('installation-service', $var);
+				if (!$_tmp) continue;
+				$toinstall = Wekit::load($_tmp['class']);
+				if (!$toinstall instanceof iPwInstall) continue;
+				$_tmp['_key'] = $var;
+				$_m = empty($_tmp['method']) ? 'install' : $_tmp['method'];
+				$r = $toinstall->$_m($install);
+				if ($r instanceof PwError) return $this->_e($install, $r);
+				$install->addInstallLog('service', $_tmp);
+			}
+			$manifest = $install->getManifest()->getManifest();
+			if (isset($manifest['install']) && $manifest['install']) {
+				$_tmp = array('class' => $manifest['install']);
+				$toinstall = Wekit::load($manifest['install']);
+				if (!$toinstall instanceof iPwInstall) continue;
+				$r = $toinstall->install($install);
+				if ($r instanceof PwError) return $this->_e($install, $r);
+				$install->addInstallLog('service', $_tmp);
+			}
+			$r = $_install->registeResource($install);
+			if ($r instanceof PwError) return $this->_e($install, $r);
+			$r = $_install->registeApplication($install);
+			if ($r instanceof PwError) return $this->_e($install, $r);
+		} catch (Exception $e) {
+			$error = $e->getMessage();
+			is_array($error) || $error = array(
+			'APPCENTER:install.fail',
+			array('{{error}}' => $e->getMessage()));
+			return $this->_e($install, new PwError($error[0], $error[1]));
 		}
-		$r = $_install->registeResource($install);
-		if ($r instanceof PwError) return $this->_e($install, $r);
-		$r = $_install->registeApplication($install);
-		if ($r instanceof PwError) return $this->_e($install, $r);
 		$install->addInstallLog('packs', $pack);
 		$install->addInstallLog('service', $conf);
 		$fields = array();

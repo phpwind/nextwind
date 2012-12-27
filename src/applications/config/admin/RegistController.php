@@ -92,7 +92,7 @@ class RegistController extends AdminBaseController {
 		$windid->setConfig('reg', 'security.ban.username', $this->getInput('securityBanUsername', 'post'));  
 		$this->showMessage('ADMIN:success');
 	}
-
+	
 	/**
 	 * 站点设置
 	 *
@@ -110,13 +110,13 @@ class RegistController extends AdminBaseController {
 		$this->setOutput($groups, 'groups');
 		$this->setOutput($groupTypes, 'groupTypes');
 	}
-
+	
 	/**
 	 * 全局配置增加表单处理器
 	 *
 	 * @return void
 	 */
-	public function dologinAction() {
+	 public function dologinAction() {
 		$way = $this->getInput('ways', 'post');
 		if (!$way) $this->showError('config.login.type.require');
 		$config = new PwConfigSet('login');
@@ -125,8 +125,9 @@ class RegistController extends AdminBaseController {
 			->set('question.groups', $this->getInput('questionGroups', 'post'))
 			->set('resetpwd.mail.title', $this->getInput('resetPwdMailTitle', 'post'))
 			->set('resetpwd.mail.content', $this->getInput('resetPwdMailContent', 'post'))
-			->flush();	
+			->flush();
 		$this->showMessage('operate.success');
+
 	}
 	
 	/**
@@ -137,6 +138,7 @@ class RegistController extends AdminBaseController {
 		$guideService = Wekit::load('APPS:u.service.PwUserRegisterGuideService');
 		$this->setOutput($guideService->getGuideList(), 'list');
 	}
+	
 
 	/**
 	 * 用户引导页面设置
@@ -156,7 +158,9 @@ class RegistController extends AdminBaseController {
 	 * @return PwConfig
 	 */
 	private function _loadConfigService() {
+
 		return Wekit::load('config.PwConfig');
+
 	}
 	
 	protected function _getWindid() {

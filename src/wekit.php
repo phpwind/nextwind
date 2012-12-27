@@ -3,7 +3,7 @@ define('WEKIT_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('WEKIT_VERSION', '0.3.9');
 define('WINDID_VERSION', '0.0.2');
 define('NEXT_VERSION', '9.0');
-define('NEXT_RELEASE', '20121219');
+define('NEXT_RELEASE', '20121226');
 defined('WIND_DEBUG') || define('WIND_DEBUG', 0);
 
 require WEKIT_PATH . '../wind/Wind.php';
@@ -13,7 +13,7 @@ require WEKIT_PATH . '../wind/Wind.php';
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: wekit.php 22371 2012-12-21 13:10:32Z yishuo $
+ * @version $Id: wekit.php 22719 2012-12-26 12:44:12Z jieyin $
  * @package wekit
  */
 class Wekit {

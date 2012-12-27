@@ -90,7 +90,7 @@
 		<tr>
 		<td>{$v2}</td>
 		<td>差异</td>
-		<td><a>[合并代码]</a><a>[强制覆盖]</a></td>
+		<td><!-- <a>[合并代码]</a><a>[强制覆盖]</a> --></td>
 		</tr>
 		<!--# } #-->
 		<!--# foreach($new as $v3){ #-->
@@ -113,7 +113,7 @@
 		<tr>
 		<td colspan="3">
 		<!--# if($change){ #-->
-		<a href="{@url:appcenter/upgrade/doupgrade?type=merge}" class="btn">全部合并代码</a>
+		<!-- <a href="{@url:appcenter/upgrade/doupgrade?type=merge}" class="btn">全部合并代码</a> -->
 		<a href="{@url:appcenter/upgrade/doupgrade?type=replace}" class="btn">全部强制覆盖</a>
 		<!--# }else{ #-->
 		<a href="{@url:appcenter/upgrade/doupgrade}" class="btn">开始升级</a>

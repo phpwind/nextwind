@@ -5,7 +5,7 @@
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwHookRefresh.php 20096 2012-10-23 08:17:52Z long.shi $
+ * @version $Id: PwHookRefresh.php 22568 2012-12-25 09:21:06Z long.shi $
  * @package hook.srv
  */
 class PwHookRefresh {
@@ -24,14 +24,15 @@ class PwHookRefresh {
 		foreach ($conf as $k => $v) {
 			$hooks[] = array(
 				'name' => $k,
-				'app_name' => 'system',
+				'app_name' => '系统',
 				'created_time' => time(),
 				'document' => implode("\r\n",
 					array($v['description'], implode("\n", (array) $v['param']), $v['interface'])));
 			foreach ($v['list'] as $k1 => $v1) {
 				$inject[] = array(
 					'hook_name' => $k,
-					'app_name' => 'system',
+					'app_id' => 'system',
+					'app_name' => '系统',
 					'alias' => $k1,
 					'class' => $v1['class'],
 					'method' => $v1['method'],
@@ -43,6 +44,7 @@ class PwHookRefresh {
 		}
 		$this->_loadHooks()->delByAppId('');
 		$this->_loadHookInject()->deleteByAppId('');
+		$this->_loadHookInject()->deleteByAppId('system');
 		$this->_loadHooks()->batchAdd($hooks);
 		$this->_loadHookInject()->batchAdd($inject);
 		return true;

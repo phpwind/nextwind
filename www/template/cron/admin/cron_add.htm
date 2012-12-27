@@ -6,7 +6,7 @@
 <body>
 <div class="wrap">	
 	<div class="nav">
-		<div class="return"><a href="{@WindUrlHelper::createUrl('cron/cron/run')}">返回上一级</a></div>
+		<div class="return"><a href="{@url:cron/cron/run}">返回上一级</a></div>
 	</div>
 <!--添加计划任务-->
 	<div class="h_a">功能说明</div>
@@ -18,7 +18,7 @@
 		</ol>
 	</div>
 	<div class="h_a">添加计划任务</div>
-	<form class="J_ajaxForm"  action="{@WindUrlHelper::createUrl('cron/cron/doadd')}" method="post">
+	<form class="J_ajaxForm"  action="{@url:cron/cron/doadd}" method="post">
 	<div class="table_full">
 		<table width="100%">
 			<col class="th" />

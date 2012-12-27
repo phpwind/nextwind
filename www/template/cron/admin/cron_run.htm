@@ -15,8 +15,8 @@
 		</ol>
 	</div>
 	<div class="cc mb10">
-		<a href="{@WindUrlHelper::createUrl('cron/cron/add')}" class="btn"><span class="add"></span>添加计划</a>
-		<a href="{@WindUrlHelper::createUrl('cron/cron/import')}" class="btn J_cron_back fr">恢复系统计划任务</a>
+		<a href="{@url:cron/cron/add}" class="btn"><span class="add"></span>添加计划</a>
+		<a href="{@url:cron/cron/import}" class="btn J_cron_back fr">恢复系统计划任务</a>
 	</div>
 	<div class="table_list">
 		<table width="100%">
@@ -41,9 +41,9 @@
 				<td><!--# if ($cron['isopen']) {#--> 开启 <!--# }else{#--> 关闭<!--#}#--></td>
 				<td>{$modified}</td>
 				<td>{$next}</td>
-				<td><a href="{@WindUrlHelper::createUrl('cron/cron/edit/?id=' .$cron['cron_id'])}" class="mr5">[编辑]</a>
+				<td><a href="{@url:cron/cron/edit?id=$cron['cron_id']}" class="mr5">[编辑]</a>
 				<!--# if ($cron['isopen'] !=2): #-->
-				<a class="J_ajax_del" href="{@WindUrlHelper::createUrl('cron/cron/dodelete/?id=' .$cron['cron_id'])}">[删除]</a></td>
+				<a class="J_ajax_del" href="{@url:cron/cron/dodelete?id=$cron['cron_id']}">[删除]</a></td>
 				<!--# endif; #-->
 			</tr>
 		<!--# 

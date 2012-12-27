@@ -161,10 +161,10 @@ foreach($ac_evninfo as $info):
 <!--#endforeach;#-->
 	</table>
 	<div class="tac p10">
-		<form name="reset" action="{@WindUrlHelper::createUrl('appcenter/server/run/')}" method="post" style="display:inline;">
+		<form name="reset" action="{@url:appcenter/server/run/}" method="post" style="display:inline;">
 			<button type="submit" class="btn btn_big btn_submit">继续</button>
 		</form>
-		<form name="reset" action="{@WindUrlHelper::createUrl('appcenter/server/check/',array('operate' => 'reset'))}" method="post" style="display:inline;">
+		<form name="reset" action="{@url:appcenter/server/check?operate=reset}" method="post" style="display:inline;">
 			<button type="submit" onClick="return confirm('确认重置云服务？');" class="btn btn_big">重置云服务</button>
 		</form>
 	</div>
@@ -176,10 +176,10 @@ foreach($ac_evninfo as $info):
 <ul>
 <li>出错了：“ {$ac_message} ”</li>
 <li>请尝试：</li>
-<li>1、<a href="{@WindUrlHelper::createUrl('appcenter/server/run',array('operate' => 'check'))}">[环境监测]</a>，查看问题所在。待各指标结果正常后，再重试。</li>
+<li>1、<a href="{@url:appcenter/server/run?operate=check}">[环境监测]</a>，查看问题所在。待各指标结果正常后，再重试。</li>
 <li>2、若仍无法连接成功，请在<a href="http://www.phpwind.net/thread-htm-fid-131.html" target="_blank">[这里]</a>反馈给官方人员，我们竭诚为您解决。</li>
 </ul>
-<div class="error_return"><a href="{@WindUrlHelper::createUrl('appcenter/server/run/')}" class="btn">重试</a></div>
+<div class="error_return"><a href="{@url:appcenter/server/run/}" class="btn">重试</a></div>
 </div>
 </div>
 <!--#elseif($ac_type == 'reset' ):#-->
@@ -190,7 +190,7 @@ foreach($ac_evninfo as $info):
 	<li><span>重置云服务成功</span></li>
 	<li>你可以点击刷新重新申请云服务</li>
 </ul>
-<div class="error_return"><a href="{@WindUrlHelper::createUrl('appcenter/server/run/')}" class="btn">刷新</a></div>
+<div class="error_return"><a href="{@url:appcenter/server/run/}" class="btn">刷新</a></div>
 </div>
 <!--#endif;#-->	
 </div>

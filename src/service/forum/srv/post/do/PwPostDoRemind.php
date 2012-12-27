@@ -55,7 +55,7 @@ class PwPostDoRemind extends PwPostDoBase {
 			'remindUid' => $this->loginUser->uid,
 			'remindUsername' => $this->loginUser->username,
 			'title' =>    $title,
-			'notice' => '在帖子 <a href="' . WindUrlHelper::createUrl('bbs/read/run/?tid=' . $tid) . '" target="_blank">' . $title . '</a> @了您',
+			'notice' => '在帖子 <a href="' . WindUrlHelper::createUrl('bbs/read/run', array('tid' => $tid)) . '" target="_blank">' . $title . '</a> @了您',
 		);
 		// 是否黑名单
 		$remindUids = $this->_checkBlack($remindUids);

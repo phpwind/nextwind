@@ -9,16 +9,16 @@
 		<ul class="cc">
 			<li class="current"><a href="{@url:bbs/setforum/run}">版块管理</a></li>
 			<li><a href="{@url:bbs/setforum/unite}">版块合并</a></li>
-			<!-- <li><a href="{@WindUrlHelper::createUrl('bbs/setforum/baseinfo')}">基本信息</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('bbs/setforum/extinfo')}">功能设置</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('bbs/setforum/classif')}">主题分类</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('bbs/setforum/permissions')}">权限相关</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('bbs/setforum/credits')}">积分相关</a></li> -->
+			<!-- <li><a href="{@url:bbs/setforum/baseinfo}">基本信息</a></li>
+			<li><a href="{@url:bbs/setforum/extinfo}">功能设置</a></li>
+			<li><a href="{@url:bbs/setforum/classif}">主题分类</a></li>
+			<li><a href="{@url:bbs/setforum/permissions}">权限相关</a></li>
+			<li><a href="{@url:bbs/setforum/credits}">积分相关</a></li> -->
 		</ul>
 	</div>
 	<div class="h_a">搜索</div>
 	<div class="table_full">
-		<form id="J_forum_search_form" method="post" action="{@WindUrlHelper::createUrl('bbs/setforum/searchforum')}">
+		<form id="J_forum_search_form" method="post" action="{@url:bbs/setforum/searchforum}">
 			<table width="100%">
 				<tr>
 					<td>
@@ -30,7 +30,7 @@
 			</table>
 		</form>
 	</div>
-	<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('bbs/setforum/dorun')}" method="post">
+	<form class="J_ajaxForm" data-role="list" action="{@url:bbs/setforum/dorun}" method="post">
 	<div class="mb10">
 		<a href="#" id="J_start_all" class="mr5">全部展开</a><span class="mr5 gray">|</span><a id="J_away_all" href="">全部收起</a>
 	</div>
@@ -67,7 +67,7 @@
 				<td><input type="text" class="input mr5" name="vieworder[{$cate['fid']}]" value="{$cate['vieworder']}" style="width:20px;"><span class="mr10 J_forum_names" data-id="{$cate['fid']}">{@$cate['name']|html}</span><a style="display:none" data-id="{$cate['fid']}" data-type="forum_child" data-forumlevel="2" data-html="tbody" href="#" class="link_add J_addChild">添加新版块</a></td>
 				<td class="tar">{$cate['fid']}</td>
 				<td><input type="text" class="input length_3" name="manager[{$cate['fid']}]" value="{@trim($cate['manager'], ',')}"></td>
-				<td><a href="{@url:bbs/cate/run?fid=$cate['fid']|pw}" target="_blank" class="mr5">[访问]</a><a href="{@WindUrlHelper::createUrl('bbs/setforum/edit/?fid='.$cate['fid'])}" class="mr5">[编辑]</a><a href="{@WindUrlHelper::createUrl('bbs/setforum/deleteforum/?fid=' . $cate['fid'])}" class="mr5 J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:bbs/cate/run?fid=$cate['fid']|pw}" target="_blank" class="mr5">[访问]</a><a href="{@url:bbs/setforum/edit?fid=$cate['fid']}" class="mr5">[编辑]</a><a href="{@url:bbs/setforum/deleteforum?fid=$cate['fid']}" class="mr5 J_ajax_del">[删除]</a></td>
 			</tr>
 			</tbody>
 				<!--# if ($forumList[$cate['fid']]) { #-->
@@ -78,7 +78,7 @@
 				<td>{@$lang[$forum['type']]|html}<span class="plus_icon<!--# if ($forum['isEnd']) echo ' plus_end_icon'; #-->"></span><input type="text" class="input mr5" name="vieworder[{$forum['fid']}]" value="{$forum['vieworder']}" style="width:20px;"><span class="mr10 J_forum_names" data-id="{$forum['fid']}">{@$forum['name']|html}</span><!--# if ($forum['type'] == 'forum') { #--><a style="display:none" data-id="{$forum['fid']}" data-type="forum_child" data-forumlevel="3" data-html="tr" href="#" class="link_add J_addChild">添加二级版块</a><!--# } elseif ($forum['type'] == 'sub') { #--><a style="display:none" data-id="{$forum['fid']}" data-type="forum_child" data-forumlevel="4" data-html="tr" href="#" class="link_add J_addChild">添加三级版块</a><!--# } #--></td>
 				<td class="tar">{$forum['fid']}</td>
 				<td><input type="text" class="input length_3" name="manager[{$forum['fid']}]" value="{@trim($forum['manager'], ',')}"></td>
-				<td><a href="{@url:bbs/thread/run?fid=$forum['fid']|pw}" target="_blank" class="mr5">[访问]</a><a href="{@WindUrlHelper::createUrl('bbs/setforum/edit/?fid='.$forum['fid'])}" class="mr5">[编辑]</a><a href="{@WindUrlHelper::createUrl('bbs/setforum/deleteforum/?fid=' . $forum['fid'])}" class="mr5 J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:bbs/thread/run?fid=$forum['fid']|pw}" target="_blank" class="mr5">[访问]</a><a href="{@url:bbs/setforum/edit?fid=$forum['fid']}" class="mr5">[编辑]</a><a href="{@url:bbs/setforum/deleteforum?fid=$forum['fid']}" class="mr5 J_ajax_del">[删除]</a></td>
 			</tr>
 					<!--# } #-->
 			</tbody>
@@ -196,7 +196,7 @@ $(function(){
 			
 		//判断版块名是否修改过
 		if($this.val() !== org_val) {
-			$.post("{@WindUrlHelper::createUrl('bbs/setforum/editname')|html}", {fid: $this.data('id'), name: $this.val() }, function(data){
+			$.post("{@url:bbs/setforum/editname}", {fid: $this.data('id'), name: $this.val() }, function(data){
 				if(data.state === 'success') {
 					restore();
 				}
@@ -339,12 +339,12 @@ $(function(){
 		if(search_text.length >= 2) {
 			//搜索内容大于2个字符，提交查询
 			
-			$.post('{@WindUrlHelper::createUrl('bbs/setforum/searchforum')|html}', {'keyword':search_data}, function(data) {
+			$.post('{@url:bbs/setforum/searchforum}', {'keyword':search_data}, function(data) {
 			
 				if(data.state === 'success') {
 					var push_html = [];
 					$.each(data.data, function(i, o){
-						push_html.push('<li><a href="{@WindUrlHelper::createUrl("bbs/setforum/edit/")}&fid='+ o.fid +'">'+ o.name +'</a></li>');
+						push_html.push('<li><a href="{@url:bbs/setforum/edit/}&fid='+ o.fid +'">'+ o.name +'</a></li>');
 					});console.log(push_html);
 					suggestion_list.html($('<ul/>').append(push_html.join(''))).fadeIn('fast');
 				}else{

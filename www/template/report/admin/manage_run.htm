@@ -10,15 +10,15 @@
 		<!--# $ifcheck = $args['ifcheck'] ? 'class=current' : '';
 			$noifcheck = !$args['ifcheck'] ? 'class=current' : '';
 		#-->
-			<li {$noifcheck}><a href="{@WindUrlHelper::createUrl('report/manage/run')}">未处理</a></li>
-			<li {$ifcheck}><a href="{@WindUrlHelper::createUrl('report/manage/run?ifcheck=1')}">已处理</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('report/manage/receiverlist')}">举报提醒</a></li>
+			<li {$noifcheck}><a href="{@url:report/manage/run}">未处理</a></li>
+			<li {$ifcheck}><a href="{@url:report/manage/run?ifcheck=1}">已处理</a></li>
+			<li><a href="{@url:report/manage/receiverlist}">举报提醒</a></li>
 		</ul>
 	</div>
 	<div class="h_a">功能说明</div>
 	<div class="prompt_text">
 		<ol>
-			<li>帖子内容管理请前往前台帖子页或者后台<a href="{@WindUrlHelper::createUrl('bbs/article/run')}">内容-->帖子管理</a>中处理；消息内容请前往<a href="{@WindUrlHelper::createUrl('message/manage/run')}">内容-->消息管理</a>中处理。</li>
+			<li>帖子内容管理请前往前台帖子页或者后台<a href="{@url:bbs/article/run}">内容-->帖子管理</a>中处理；消息内容请前往<a href="{@url:message/manage/run}">内容-->消息管理</a>中处理。</li>
 			<li>标记已处理：标记后系统会发送消息反馈给举报的用户。</li>
 			<li>忽略：忽略该条举报，不对举报者和被举报者产生影响。</li>
 		</ol>
@@ -33,7 +33,7 @@
 		<!--# } #-->
 		</select>
 	</div>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('report/manage/dealCheck')}" method="post" >
+	<form class="J_ajaxForm" action="{@url:report/manage/dealCheck}" method="post" >
 	<!--# if ($reports) { #-->
 	<div class="table_list">
 		<table width="100%">
@@ -85,7 +85,7 @@
 				<td>{$created_username|html}</td>
 				<td>{$v['reason']}</td>
 				<!--# if (!$args['ifcheck']) { #-->
-				<td><a href="{@WindUrlHelper::createUrl('report/manage/dealCheck?id='.$v['id'])}" class="mr5 J_ajax_refresh">[标记已处理]</a><a href="{@WindUrlHelper::createUrl('report/manage/delete?id='.$v['id'])}" class="J_ajax_refresh">[忽略]</a></td>
+				<td><a href="{@url:report/manage/dealCheck?id=$v['id']}" class="mr5 J_ajax_refresh">[标记已处理]</a><a href="{@url:report/manage/delete?id=$v['id']}" class="J_ajax_refresh">[忽略]</a></td>
 				<!--# } else { #-->
 				<td><a href="{@url:space/index/run?uid=$v['operate_userid']|pw}" target="_blank">{$v['operate_username']}</a> 已处理</td>
 				<!--# } #-->
@@ -101,7 +101,7 @@
 		<div class="btn_wrap_pd">
 			<label class="mr20"><input class="J_check_all" data-direction="x" data-checklist="J_check_x" type="checkbox">全选</label>
 			<button class="btn btn_submit J_ajax_submit_btn" data-subcheck="true" type="submit">标记已处理</button>
-			<button class="btn J_ajax_submit_btn" data-subcheck="true" type="submit" data-action="{@WindUrlHelper::createUrl('report/manage/delete')}">忽略</button>
+			<button class="btn J_ajax_submit_btn" data-subcheck="true" type="submit" data-action="{@url:report/manage/delete}">忽略</button>
 		</div>
 	</div>
 	<!--# } #-->
@@ -117,7 +117,7 @@ $(function(){
 	//筛选
 	$('#J_report_filter').on('change', function(){
 		var sel_option = $(this).find('option:selected');
-		window.location.href = '{@WindUrlHelper::createUrl('report/manage/run?ifcheck=')|url}&type=' +sel_option.val() + '&ifcheck=' +sel_option.data('check');
+		window.location.href = '{@url:report/manage/run?ifcheck=}&type=' +sel_option.val() + '&ifcheck=' +sel_option.data('check');
 	});
 });
 </script>

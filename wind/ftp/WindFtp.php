@@ -13,7 +13,7 @@ Wind::import('WIND:ftp.AbstractWindFtp');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindFtp.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: WindFtp.php 3876 2012-12-26 07:52:05Z yishuo $
  * @package ftp
  */
 class WindFtp extends AbstractWindFtp {
@@ -24,7 +24,7 @@ class WindFtp extends AbstractWindFtp {
 	 * @var boolean
 	 */
 	private $isPasv = true;
-	
+
 	/**
 	 * 构造函数
 	 * 
@@ -54,7 +54,8 @@ class WindFtp extends AbstractWindFtp {
 	private function connection($config = array()) {
 		$this->initConfig($config);
 		if (false === ($this->conn = ftp_connect($this->server, $this->port, $this->timeout))) {
-			throw new WindFinalException("$this->server:$this->port", WindFtpException::CONNECT_FAILED);
+			throw new WindFinalException("$this->server:$this->port", 
+				WindFtpException::CONNECT_FAILED);
 		}
 		if (false == ftp_login($this->conn, $this->user, $this->pwd)) {
 			throw new WindFtpException($this->user, WindFtpException::LOGIN_FAILED);
@@ -65,7 +66,7 @@ class WindFtp extends AbstractWindFtp {
 		$this->initRootPath();
 		return true;
 	}
-	
+
 	/**
 	 * 获得ftp链接
 	 * 
@@ -76,25 +77,25 @@ class WindFtp extends AbstractWindFtp {
 		$this->connection();
 		return $this->conn;
 	}
-
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::rename()
 	 */
 	public function rename($oldName, $newName) {
 		return ftp_rename($this->getFtp(), $oldName, $newName);
 	}
-
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::delete()
 	 */
 	public function delete($filename) {
 		return ftp_delete($this->getFtp(), $filename);
 	}
-
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::upload()
 	 */
-	public function upload($sourceFile, $desFile, $mode = 'A') {
+	public function upload($sourceFile, $desFile, $mode = 'I') {
 		$mode = $this->getMode($sourceFile, $mode);
 		if (!in_array(($savedir = dirname($desFile)), array('.', '/'))) {
 			$this->mkdirs($savedir);
@@ -105,22 +106,22 @@ class WindFtp extends AbstractWindFtp {
 		$this->chmod($desFile, 0644);
 		return $this->size($desFile);
 	}
-
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::download()
 	 */
-	public function download($filename, $localname = '', $mode = 'auto') {
+	public function download($filename, $localname = '', $mode = 'I') {
 		$mode = $this->getMode($filename, $mode);
 		return ftp_get($this->getFtp(), $localname, $filename, $mode);
 	}
-
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::fileList()
 	 */
 	public function fileList($dir = '') {
 		return ftp_nlist($this->getFtp(), $dir);
 	}
-
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::close()
 	 */
@@ -129,14 +130,14 @@ class WindFtp extends AbstractWindFtp {
 		$this->conn = null;
 		return true;
 	}
-    
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::initConfig()
 	 */
 	public function initConfig($config) {
 		if (!$config || !is_array($config)) return false;
 		parent::initConfig($config);
-		$this->isPasv = (isset($config['ispasv']) && $config['ispasv'] == 0)  ? false : true;
+		$this->isPasv = (isset($config['ispasv']) && $config['ispasv'] == 0) ? false : true;
 	}
 	
 	/* (non-PHPdoc)
@@ -147,7 +148,7 @@ class WindFtp extends AbstractWindFtp {
 		if (!$result) return false;
 		return $this->chmod($result, $permissions) === false ? false : true;
 	}
-	
+
 	/**
 	 * 给文件赋指定权限
 	 * 
@@ -165,7 +166,7 @@ class WindFtp extends AbstractWindFtp {
 	protected function pwd() {
 		return ftp_pwd($this->getFtp()) . '/';
 	}
-
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::changeDir()
 	 */
@@ -175,14 +176,14 @@ class WindFtp extends AbstractWindFtp {
 		}
 		return true;
 	}
-
+	
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::size()
 	 */
 	public function size($file) {
 		return ftp_size($this->getFtp(), $file);
 	}
-	
+
 	/**
 	 * 根据文件获得文件访问的模式
 	 * 
@@ -191,24 +192,24 @@ class WindFtp extends AbstractWindFtp {
 	 * @return string 返回模式方式FTP_ASCII或是FTP_BINARY
 	 */
 	private function getMode($filename, $mode) {
-		$ext = $this->getExt($filename);
-		$mode = strtolower($mode);
-		if ($mode == 'auto') {
-			$ext = $this->getExt($filename);
-			$mode = $this->getModeMap($ext);
+		if (strcasecmp($mode, 'auto') == 0) {
+			$ext = WindFile::getSuffix($filename);
+			$mode = (in_array(strtolower($ext), 
+				array(
+					'txt', 
+					'text', 
+					'php', 
+					'phps', 
+					'php4', 
+					'js', 
+					'css', 
+					'htm', 
+					'html', 
+					'phtml', 
+					'shtml', 
+					'log', 
+					'xml'))) ? 'A' : 'I';
 		}
-		return (strtolower($mode) == 'A') ? FTP_ASCII : FTP_BINARY;
-	}
-
-	/**
-	 * 根据文件后缀获得该文件的访问模式
-	 * 
-	 * @param string 文件的后缀
-	 * @return string A（ASCII）或是I（BINARY）模式
-	 */
-	private function getModeMap($ext){
-		$exts = array('txt', 'text', 'php', 'phps', 'php4', 'js', 'css',
-				'htm', 'html', 'phtml', 'shtml', 'log', 'xml');
-		return (in_array($ext, $exts)) ? 'A' : 'I';
+		return ($mode == 'A') ? FTP_ASCII : FTP_BINARY;
 	}
 }

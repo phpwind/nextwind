@@ -1,15 +1,15 @@
 <div class="content">
 	<div class="profile_nav">
 		<ul>
-			<li><a href="{@WindUrlHelper::createUrl('profile/password/run')}">修改密码</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('profile/password/question')}">安全问题设置</a></li>
+			<li><a href="{@url:profile/password/run}">修改密码</a></li>
+			<li class="current"><a href="{@url:profile/password/question}">安全问题设置</a></li>
 		</ul>
 	</div>
-	<form id="J_pw_edit" action="{@WindUrlHelper::createUrl('profile/password/dosetQ')}" method="post">
+	<form id="J_pw_edit" action="{@url:profile/password/dosetQ}" method="post">
 	<div class="profile_ct">
 		<dl class="cc">
 			<dt>登录密码：</dt>
-			<dd><span class="must_red">*</span><input id="J_old_pwd" data-checkurl="{@WindUrlHelper::createUrl('profile/password/checkOldPwd')}" type="password" name="oldPwd" value="" class="input length_5"><span id="J_tip_oldPwd"></span></dd>
+			<dd><span class="must_red">*</span><input id="J_old_pwd" data-checkurl="{@url:profile/password/checkOldPwd}" type="password" name="oldPwd" value="" class="input length_5"><span id="J_tip_oldPwd"></span></dd>
 		</dl>
 		<dl class="cc">
 			<dt>安全问题：</dt>

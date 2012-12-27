@@ -35,14 +35,14 @@
 			</dt>
 			<dd class="notice_segment_cont">
 				<div class="summary">
-					<a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $detailList['extend_params']['remindUid'])}"  target="_blank">{$detailList['extend_params']['remindUsername']}</a> {$detailList['extend_params']['notice']|html}
+					<a href="{@url:space/index/run?uid=$detailList['extend_params']['remindUid']}"  target="_blank">{$detailList['extend_params']['remindUsername']}</a> {$detailList['extend_params']['notice']|html}
 				</div>
 				<div class="time">{@Pw::time2str($notice['modified_time'],'auto')}</div>
 			</dd>
 		</dl>
 	</div>
 	<div class="my_message_bottom">
-		<a href="{@WindUrlHelper::createUrl('message/notice/run?type='.$notice['typeid'])}">查看全部提醒通知&nbsp;&gt;&gt;</a>
+		<a href="{@url:message/notice/run?type=$notice['typeid']}">查看全部提醒通知&nbsp;&gt;&gt;</a>
 	</div>
 </hook-action>
 
@@ -64,9 +64,9 @@
 				<span class="time">{@Pw::time2str($v['modified_time'],'auto')}</span>
 				<span class="operating">
 					<span class="line">|</span>
-					<a class="J_msg_del" href="{@WindUrlHelper::createUrl('message/notice/delete?id='.$v['id'])}">删除</a>
+					<a class="J_msg_del" href="{@url:message/notice/delete?id=$v['id']}">删除</a>
 					<!-- span class="line">|</span>
-					<a class="J_addblack" data-type="notice" data-user="{$v['extend_params']['remindUsername']}" href="{@url:message/message/addBlack?uid=$v['extend_params']['remindUid']}" data-referer="{@WindUrlHelper::createUrl("profile/secret/black", array("_left" => "secret"))}">加入黑名单</a -->
+					<a class="J_addblack" data-type="notice" data-user="{$v['extend_params']['remindUsername']}" href="{@url:message/message/addBlack?uid=$v['extend_params']['remindUid']}" data-referer="{@url:profile/secret/black?_left=secret}">加入黑名单</a -->
 				</span>
 			</div>
 		</div>

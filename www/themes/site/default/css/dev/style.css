@@ -3,7 +3,7 @@
 @explain: 全局样式表（头尾效果、全局背景、右侧个人信息等）
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: style.css 22231 2012-12-19 21:45:31Z yanchixia $
+$Id: style.css 22527 2012-12-25 07:20:05Z yanchixia $
 ===================
 #*/
 
@@ -73,7 +73,7 @@ a:hover{
 }
 /*全局模块标题*/
 .box_wrap .box_title{
-	padding:7px 15px;
+	padding:7px 10px;
 	border-bottom:1px solid #e8e8e8;
 	font-size:12px;
 	color:#666;

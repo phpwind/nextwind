@@ -16,16 +16,12 @@ class ProfileController extends SpaceBaseController {
 	 * 用户资料
 	 */
 	public function run() {
-		Wind::import('SRV:space.srv.PwSpaceProfile');
 		$lang = Wind::getComponent('i18n');
-		$profile = new PwSpaceProfile();
-		$this->runHook('c_space_profile', $profile);
 		$gid = ($this->space->spaceUser['groupid'] == 0) ? $this->space->spaceUser['memberid'] : $this->space->spaceUser['groupid'];
 		$group = Wekit::load('usergroup.PwUserGroups')->getGroupByGid($gid);
 		$constellation = Wekit::load('space.srv.PwSpaceService')->getConstellation(
 			$this->space->spaceUser['byear'], $this->space->spaceUser['bmonth'], 
 			$this->space->spaceUser['bday']);
-		$this->setOutput($profile, 'profile');
 		$this->setOutput($group['name'], 'groupName');
 		$this->setOutput($lang->getMessage('USER:profile.constellation.' . $constellation), 'constellation');
 		$this->setOutput('profile', 'src');

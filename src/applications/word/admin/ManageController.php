@@ -10,7 +10,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Mingqu Luo <luo.mingqu@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ManageController.php 19851 2012-10-19 02:00:01Z hejin $
+ * @version $Id: ManageController.php 22564 2012-12-25 09:00:06Z jinlong.panjl $
  * @package wind
  */
 class ManageController extends AdminBaseController {
@@ -67,7 +67,7 @@ class ManageController extends AdminBaseController {
 			}
 		}
 		$this->_getWordFilter()->updateCache();
-		$this->showMessage('WORD:success');	
+		$this->showMessage('success');	
 	}
 	
 	public function editAction () {
@@ -109,7 +109,7 @@ class ManageController extends AdminBaseController {
 		 	$this->showError($result->getError());
 		};
 		$this->_getWordFilter()->updateCache();
-		$this->showMessage('WORD:success');	
+		$this->showMessage('success');	
 	}
 	
 	public function deleteAction() {
@@ -119,7 +119,7 @@ class ManageController extends AdminBaseController {
 		
 		$this->_getWordDS()->delete($id);
 		$this->_getWordFilter()->updateCache();
-		$this->showMessage('WORD:success');	
+		$this->showMessage('success');	
 	}
 	
 	public function batchdeleteAction() {
@@ -129,14 +129,14 @@ class ManageController extends AdminBaseController {
 			list($type, $keyword) = $this->getInput(array('type', 'keyword'));
 			$this->_getWordService()->deleteByCondition($type, $keyword);
 			$this->_getWordFilter()->updateCache();
-			$this->showMessage('WORD:success');
+			$this->showMessage('success');
 		}
 
 		if (empty($ids) || !is_array($ids)) $this->showError('WORD:no_operate_object');
 		
 		$this->_getWordDS()->batchDelete($ids);
 		$this->_getWordFilter()->updateCache();
-		$this->showMessage('WORD:success');
+		$this->showMessage('success');
 	}
 	
 	public function batcheditAction() {
@@ -167,13 +167,13 @@ class ManageController extends AdminBaseController {
 			$wordService = $this->_getWordService();
 			$word['replace'] = $this->_getWordDS()->isReplaceWord($word['type']) ? ($word['replace'] ? $word['replace'] : '****') : '';
 			$this->_getWordDS()->updateAllByTypeAndRelpace($word['type'], $word['replace']);
-			$this->showMessage('WORD:success');
+			$this->showMessage('success');
 		}
 		
 		$ids = $word['ids'] ? explode(',', $word['ids']) : array();
 		$ids = array_unique($ids);
 		
-		if (empty($ids) || !is_array($ids)) $this->showError('WORD:fail');
+		if (empty($ids) || !is_array($ids)) $this->showError('operate.fail');
 		
 		$wordService = $this->_getWordService();
 		if ($this->_getWordDS()->isReplaceWord($word['type']) && !$word['replace']) {
@@ -190,7 +190,7 @@ class ManageController extends AdminBaseController {
 		 	$this->showError($result->getError());
 		};
 		$this->_getWordFilter()->updateCache();
-		$this->showMessage('WORD:success');
+		$this->showMessage('success');
 	}
 	
 	public function searchAction() {
@@ -279,15 +279,11 @@ class ManageController extends AdminBaseController {
 		
 		$source = $bhv->getAbsoluteFile();
 
-		if (!WindFile::isFile($source)) $this->showError('WORD:fail');
+		if (!WindFile::isFile($source)) $this->showError('operate.fail');
 		
 		$content = WindFile::read($source);
 
 		pw::deleteAttach($bhv->dir.$bhv->filename, 0, $bhv->isLocal);
-		
-	  	$encoding = mb_detect_encoding($content, array('ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5'));
-	  	
-		$content = WindConvert::convert($content, Wind::getApp()->getResponse()->getCharset(), $encoding);
 		$content = explode("\n", $content);
 			
 		if (!$content) $this->showError('WORD:import.data.empty');
@@ -310,7 +306,7 @@ class ManageController extends AdminBaseController {
 			$this->_getWordDS()->add($dm);
 		}
 		$this->_getWordFilter()->updateCache();
-		$this->showMessage('WORD:success');	
+		$this->showMessage('success');	
 	}
 		
 	public function setconfigAction() {
@@ -319,7 +315,7 @@ class ManageController extends AdminBaseController {
 		$configService = new PwConfigSet($this->_configName);
 		$configService->set('istip', intval($config['tip']))->flush();
 		
-		$this->showMessage('WORD:success');
+		$this->showMessage('success');
 	}
 	
 	public function _parseTextUseInImport($text, $typeMap) {

@@ -1,11 +1,12 @@
 <?php
+Wind::import('SRV:task.dm.PwTaskDmFactory');
 /**
  * 任务服务
  *
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwTaskService.php 20272 2012-10-25 07:49:18Z yishuo $
+ * @version $Id: PwTaskService.php 22594 2012-12-25 11:46:33Z long.shi $
  * @package src.service.task.srv
  */
 class PwTaskService {
@@ -53,6 +54,7 @@ class PwTaskService {
 		$task = $this->_taskDs()->get($id);
 		if (!$task) return new PwError('TASK:id.illegal');
 		$taskDm = new PwTaskDm();
+		$reward = unserialize($task['reward']);
 		$taskDm->setTaskId($id)
 			->setTitle($title)
 			->setViewOrder($order)
@@ -60,7 +62,9 @@ class PwTaskService {
 			->setEndTime($task['end_time'])
 			->setIsAuto($task['is_auto'])
 			->setIsDisplayAll($task['is_display_all'])
-			->setUserGroups(explode(',', $task['user_groups']));
+			->setUserGroups(explode(',', $task['user_groups']))
+			->setReward($reward);
+		PwTaskDmFactory::addRewardDecoration($taskDm, $reward);
 		return $this->_taskDs()->updateTask($taskDm);
 	}
 

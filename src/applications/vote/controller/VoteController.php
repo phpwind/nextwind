@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author MingXing Sun <mingxing.sun@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: VoteController.php 19337 2012-10-12 11:28:15Z hejin $
+ * @version $Id: VoteController.php 22451 2012-12-24 10:44:34Z jieyin $
  * @package poll
  */
 
@@ -55,7 +55,7 @@ class VoteController extends PwBaseController {
 		
 			foreach ($array as $k => $v) {
 				$forumset = $forums[$k]['settings_basic'] ? unserialize($forums[$k]['settings_basic']) : array();
-				$isAllowPoll = isset($forumset['allowtype']) ? (($forumset['allowtype'] & 2) ? true : false) : false;
+				$isAllowPoll = isset($forumset['allowtype']) && is_array($forumset['allowtype']) && in_array('poll', $forumset['allowtype']);
 				 
 				if ($forums[$k]['isshow'] && $isAllowPoll && (!$forums[$k]['allow_post'] || $this->loginUser->inGroup(explode(',', $forums[$k]['allow_post'])))) {
 					$tmp[$k] = strip_tags($v);

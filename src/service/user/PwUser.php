@@ -9,7 +9,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUser.php 22131 2012-12-19 08:39:22Z gao.wanggao $
+ * @version $Id: PwUser.php 22491 2012-12-25 03:12:23Z xiaoxia.xuxx $
  * @package src.service.user
  */
 class PwUser {
@@ -84,17 +84,6 @@ class PwUser {
 	public function fetchUserByName($names, $type = PwUser::FETCH_MAIN) {//getUserListByNames($names, $type = PwUser::FETCH_MAIN) {
 		if (empty($names) || !is_array($names)) return array();
 		return $this->_getDao($type)->fetchUserByName($names);
-	}
-
-	/** 
-	 * 检查用户的email是否存在 
-	 *
-	 * @param string $email    待检查的用户email
-	 * @param string $username 排除的用户名字
-	 * @return boolean
-	 */
-	public function checkEmailExist($email, $username = '') {
-		return $this->_getWindid()->checkUserInput($email, 3, $username);
 	}
 
 	/** 

@@ -10,15 +10,15 @@
 Wind.use('ajaxForm', function(){
 	var avatgar_normal_btn = $('#J_avatgar_normal_btn'),
 		error_map = {
-			'90' : '请求超时',
-			'91' : '请求错误',
-			'92' : '请求错误',
-			'93' : '服务器错误',
-			'80' : '上传失败',
-			'81' : '上传类型错误',
-			'82' : '文件大小错误',
-			'83' : '文件大小超出限制',
-			'84' : '文件错误',
+			'-90' : '请求超时',
+			'-91' : '请求错误',
+			'-92' : '请求错误',
+			'-93' : '服务器错误',
+			'-80' : '上传失败',
+			'-81' : '上传类型错误',
+			'-82' : '文件大小错误',
+			'-83' : '文件大小超出限制',
+			'-84' : '文件错误'
 		};
 
 	$('#J_avatgar_normal_form').ajaxForm({
@@ -35,6 +35,7 @@ Wind.use('ajaxForm', function(){
 				});
 			}else{
 				var msg;
+				data = String(data);
 				if(error_map[data]) {
 					msg = error_map[data];
 				}else{

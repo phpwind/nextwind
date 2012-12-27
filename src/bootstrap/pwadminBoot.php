@@ -69,8 +69,8 @@ class pwadminBoot extends adminBoot {
 	/* (non-PHPdoc)
 	 * @see phpwindBoot::init()
 	 */
-	public function init() {
-		parent::init();
+	public function init($front = null) {
+		parent::init($front);
 		Wind::getComponent('router')->getRoute('pw') || Wind::getComponent('router')->addRoute('pw', 
 			WindFactory::createInstance(Wind::import('LIB:route.PwRoute')));
 		Wind::getComponent('router')->addRoute('admin', 

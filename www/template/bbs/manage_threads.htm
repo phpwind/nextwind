@@ -1,5 +1,5 @@
 <div style="width:440px;">
-	<form action="{@WindUrlHelper::createUrl('bbs/manage/' . $doaction)}" method="post" id="J_post_manage_ajaxForm">
+	<form action="{@WindUrlHelper::createUrl('bbs/manage/' . $doaction)|url}" method="post" id="J_post_manage_ajaxForm">
 	<div class="pop_top J_drag_handle"><a href="#" class="pop_close J_close">关闭</a><strong>{$title}</strong>(&nbsp;<span id="J_manage_checked_count" class="red">{$count}</span>&nbsp;<!--#if ($action == 'ban'){#-->个<!--#}else{#-->篇<!--#}#-->)</div>
 	<div class="pop_cont">
 <!--#
@@ -111,7 +111,7 @@ $combined2 = array('down','lock');
 		<!--# } elseif ($action == 'move') { #-->
 		<div class="pop_operat_management">
 			<dl class="cc">
-				<dt>移&nbsp;动&nbsp;到：</dt><dd><select name="fid" class="select_3 mr10" id="J_postmanage_forum" data-url="{@WindUrlHelper::createUrl('bbs/cate/topictypes/')}"><option value="0">请选择版块</option>{@$option_html|html}</select></dd>
+				<dt>移&nbsp;动&nbsp;到：</dt><dd><select name="fid" class="select_3 mr10" id="J_postmanage_forum" data-url="{@url:bbs/cate/topictypes/}"><option value="0">请选择版块</option>{@$option_html|html}</select></dd>
 			</dl>
 			<dl class="cc" id="J_postmanage_topic" style="display:none;">
 				<dt>主题分类：</dt><dd>
@@ -127,7 +127,7 @@ $combined2 = array('down','lock');
 		<!--# } elseif ($action == 'copy') { #-->
 		<div class="pop_operat_management">
 			<dl class="cc">
-				<dt>复&nbsp;制&nbsp;到：</dt><dd><select name="fid" class="select_3 mr10" id="J_postmanage_forum" data-url="{@WindUrlHelper::createUrl('bbs/cate/topictypes/')}"><option value="0">请选择版块</option>{@$option_html|html}</select></dd>
+				<dt>复&nbsp;制&nbsp;到：</dt><dd><select name="fid" class="select_3 mr10" id="J_postmanage_forum" data-url="{@url:bbs/cate/topictypes/}"><option value="0">请选择版块</option>{@$option_html|html}</select></dd>
 			</dl>
 			<dl class="cc" id="J_postmanage_topic" style="display:none;">
 				<dt>主题分类：</dt><dd>
@@ -186,7 +186,7 @@ $combined2 = array('down','lock');
 			</dl>
 			<input name="actions[]" type="hidden" value="type"/>
 		</div>
-		<script>var THREAD_SORT = $.parseJSON('{$topicTypes|json}');</script>
+		<script>var THREAD_SORT = {$topicTypes|json};</script>
 <!--===========用户禁止================-->
 		<!--# } elseif ($action == 'ban') { #-->
 		<div class="pop_operat_management">
@@ -253,39 +253,3 @@ $combined2 = array('down','lock');
 	</div>
 	</form>
 </div>
-<script>
-$(function(){
-	//分类联动
-	/*var SORT_CONFIG = {
-		2 : {
-			'怀旧' : 16,
-		},
-		5 : {
-			'唯美1' : 9,
-			'唯美2' : 11,
-			'唯美3' : 14,
-		},
-		13 : {
-			'唯美' : 17,
-		}
-	};
-	
-	var sort_1 = $('#J_sort_1'), sort_2 = $('#J_sort_2');
-	sort_1.on('change', function(){
-		var sort_2_obj = SORT_CONFIG[$(this).val()], //二级分类对象
-			sort_2_arr = [];
-			
-		if(sort_2_obj) {
-			//存在二级分类
-			$.each(sort_2_obj, function(i, o){
-				sort_2_arr.push('<option value="'+ o +'">'+ i +'</option>');
-			});
-			sort_2.html(sort_2_arr.join('')).show();
-		}else{
-			//不存在二级分类
-			sort_2.hide().empty();
-		}
-	});*/
-});
-
-</script>

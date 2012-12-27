@@ -3,7 +3,7 @@
 @explain: 版块页面（包含列表和阅读页）
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: forum.css 22245 2012-12-19 23:53:01Z yanchixia $
+$Id: forum.css 22527 2012-12-25 07:20:05Z yanchixia $
 ===================
 #*/
 
@@ -360,7 +360,6 @@ $Id: forum.css 22245 2012-12-19 23:53:01Z yanchixia $
 }
 .thread_posts_list .author{
 	width:55px;
-
 }
 .thread_posts_list .author a{
 	display:block;
@@ -415,6 +414,95 @@ $Id: forum.css 22245 2012-12-19 23:53:01Z yanchixia $
 .thread_posts_list .info span{
 	margin:0 10px 0 5px;
 }
+/*
+===================
+旧版帖子列表样式
+===================
+*/
+.thread_posts_oldlist{
+	padding:0 10px 15px;
+	min-height:400px;
+}
+.thread_posts_oldlist table{
+	table-layout:fixed;
+}
+.thread_posts_oldlist thead td{
+	background:#f7f7f7;
+}
+.thread_posts_oldlist td{
+	border-bottom:1px dashed #dcdcdc;
+	padding:5px 0;
+}
+.thread_posts_oldlist tr.tr_check td{
+	background:#ffffee;
+}
+.thread_posts_oldlist .icon{
+	width:20px;
+	padding-left:5px;
+}
+.thread_posts_oldlist .author{
+	width:140px;
+	line-height:1.2;
+}
+.thread_posts_oldlist .face{
+	margin:2px 10px 0 0;
+}
+.thread_posts_oldlist .face{
+	float:left;
+}
+.thread_posts_oldlist .face img{
+	vertical-align:top;
+}
+.thread_posts_oldlist .author a{
+	color:#666;
+}
+.thread_posts_oldlist .author span{
+	font-size:11px;
+	color:#999;
+}
+.thread_posts_oldlist .ordinary{
+	background:#f7f7f7;
+	padding:3px 0;
+	color:#666;
+}
+.thread_posts_oldlist .num{
+	width:80px;
+	color:#666;
+}
+.thread_posts_oldlist .num em{
+	color:#ff6600;
+}
+.thread_posts_oldlist .lastpost{
+	width:120px;
+	line-height:1.2;
+}
+.thread_posts_oldlist .lastpost a{
+	color:#666;
+}
+.thread_posts_oldlist .lastpost span a{
+	font-size:11px;
+	color:#999;
+}
+.thread_posts_oldlist .st{
+	font-size:14px;
+	margin-right:3px;
+}
+.thread_posts_oldlist .subject{
+}
+.thread_posts_oldlist .subject em{
+	font-size:14px;
+	margin-right:5px;
+}
+.thread_posts_oldlist .title{
+	padding-bottom:5px;
+}
+.thread_posts_oldlist .info,
+.thread_posts_oldlist .info a{
+	color:#999;
+}
+.thread_posts_oldlist .info span{
+	margin:0 10px 0 5px;
+}
 
 /*
 ===================
@@ -423,8 +511,8 @@ $Id: forum.css 22245 2012-12-19 23:53:01Z yanchixia $
 */
 .posts_icon i{
 	display:inline-block;
-	width:20px;
-	height:20px;
+	width:16px;
+	height:16px;
 	overflow:hidden;
 	vertical-align:middle;
 	background-position:-80px -40px;
@@ -576,10 +664,45 @@ $Id: forum.css 22245 2012-12-19 23:53:01Z yanchixia $
 	vertical-align:bottom;
 	padding:0 20px;
 }
-
 .editor_content{
 	min-height:100px;
 }
+/*底部快速回复*/
+.floor_reply{
+	padding:15px;
+	vertical-align:top;
+	width:600px;
+}
+.reply_toolbar_wrap{
+	border:1px solid #e4e4e4;
+	margin-bottom:10px;
+}
+.reply_toolbar{
+	background:#f7f7f7;
+	border-bottom:1px solid #e4e4e4;
+	padding:5px 10px;
+	line-height:20px;
+	height:20px;
+}
+.floor_reply textarea{
+	width:590px;
+	height:110px;
+	border:0 none;
+	box-shadow:0 0 0;
+}
+.floor_reply textarea:focus{
+	outline:0 none;
+}
+.floor_reply .btn{
+	padding-left:15px;
+	padding-right:15px;
+}
+/*进入高级模式*/
+.reply_high{
+	float:right;
+	color:#666;
+}
+
 
 /*
 ===================
@@ -1253,6 +1376,7 @@ $Id: forum.css 22245 2012-12-19 23:53:01Z yanchixia $
 }
 .reply_list li .reply_content .time{
 	color:#999;
+	margin-right:10px;
 }
 .reply_list li .reply_content .operate{
 	float:right;

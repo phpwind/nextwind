@@ -9,14 +9,14 @@
 <!-- start -->
 <div class="nav">
 	<ul class="cc">
-		<li class="current"><a href="{@WindUrlHelper::createUrl('/config/attachment/run')}">附件设置</a></li>
-		<li><a href="{@WindUrlHelper::createUrl('/config/attachment/storage')}">附件存储</a></li>
-		<li><a href="{@WindUrlHelper::createUrl('/config/attachment/thumb')}">附件缩略</a></li>
-		<li><a href="{@WindUrlHelper::createUrl('/config/storage/run')}">头像存储</a></li>
+		<li class="current"><a href="{@url:/config/attachment/run}">附件设置</a></li>
+		<li><a href="{@url:/config/attachment/storage}">附件存储</a></li>
+		<li><a href="{@url:/config/attachment/thumb}">附件缩略</a></li>
+		<li><a href="{@url:/config/storage/run}">头像存储</a></li>
 	</ul>
 </div>
 
-<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/config/attachment/dorun')}" data-role="list">
+<form method="post" class="J_ajaxForm" action="{@url:/config/attachment/dorun}" data-role="list">
 	<div class="h_a">基本设置</div>
 	<div class="table_full">
 		<table width="100%">

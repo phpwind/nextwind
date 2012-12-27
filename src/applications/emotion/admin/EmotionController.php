@@ -43,6 +43,7 @@ class EmotionController extends AdminBaseController {
 		if (!$catids)  $this->showError('ADMIN:fail');
 		Wind::import('SRV:emotion.dm.PwEmotionCategoryDm');
 		foreach ($catids AS $k=>$v) {
+			if (!$catnames[$v]) $this->showError('ADMIN:catname.empty');
 			$dm = new PwEmotionCategoryDm($v);
 			$dm->setCategoryMame($catnames[$v])
 				->setEmotionApps($apps[$v])

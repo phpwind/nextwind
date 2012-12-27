@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PostController.php 22374 2012-12-21 14:18:27Z jinlong.panjl $
+ * @version $Id: PostController.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package forum
  */
 
@@ -103,7 +103,7 @@ class PostController extends PwBaseController {
 		$this->setOutput($info['tid'], 'tid');
 		$this->setOutput($pid, 'pid');
 		$this->setOutput('checked', 'reply_notice');
-		$this->setOutput($this->post->forum->headguide() . $this->post->forum->bulidGuide(array($info['subject'], WindUrlHelper::createUrl('bbs/read/run?tid=' . $info['tid'] . '&fid=' . $this->post->forum->fid))), 'headguide');
+		$this->setOutput($this->post->forum->headguide() . $this->post->forum->bulidGuide(array($info['subject'], WindUrlHelper::createUrl('bbs/read/run', array('tid' => $info['tid'], 'fid' => $this->post->forum->fid)))), 'headguide');
 		$this->_initVar();
 		$this->setTemplate('post_run');
 		// seo设置
@@ -226,7 +226,7 @@ class PostController extends PwBaseController {
 			$thread = Wekit::load('forum.PwThread')->getThread($info['tid']);
 			$headtitle = $thread['subject'];
 		}
-		$this->setOutput($this->post->forum->headguide() . $this->post->forum->bulidGuide(array($headtitle, WindUrlHelper::createUrl('bbs/read/run?tid=' . $info['tid'] . '&fid=' . $this->post->forum->fid))), 'headguide');
+		$this->setOutput($this->post->forum->headguide() . $this->post->forum->bulidGuide(array($headtitle, WindUrlHelper::createUrl('bbs/read/run', array('tid' => $info['tid'], 'fid' => $this->post->forum->fid)))), 'headguide');
 		$this->_initVar();
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');

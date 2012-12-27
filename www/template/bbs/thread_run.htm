@@ -41,7 +41,7 @@
 					<div id="J_thread_post_types_1" class="btn_post_menu" style="display:none;">
 						<ul>
 							<!--# foreach (($threadType = $pwforum->getThreadType($loginUser)) as $key => $value) { #-->
-								<!--# $_urladd_ = $key ? ('&special=' . $key) : ''; #-->
+								<!--# $_urladd_ = ($key != 'default') ? ('&special=' . $key) : ''; #-->
 							<li><a href="{@url:bbs/post/run?fid=$pwforum->fid}{$_urladd_}" data-referer="true" class="{@trim($postNeedLogin)}">{$value[0]}</a></li>
 							<!--# } #-->
 						</ul>
@@ -52,7 +52,7 @@
 								<!--#
 								$_urladd_ = rtrim('&' . http_build_query(array('type' => $type, 'tab' => $tab)), '&');
 								#-->
-								<div class="content_filter"><a href="{@url:bbs/thread/run/?fid=$fid}{$_urladd_}{@$defaultOrderby == 'lastpost' ? '&orderby=postdate' : ''}" class="{@Pw::isCurrent($orderby == 'postdate')}">最新发帖</a><span>|</span><a href="{@url:bbs/thread/run/?fid=$fid}{$_urladd_}{@$defaultOrderby == 'lastpost' ? '' : '&orderby=lastpost'}" class="{@Pw::isCurrent($orderby != 'postdate')}">最后回复</a></div>
+								<div class="content_filter"><a href="{@url:bbs/thread/run?fid=$fid}{$_urladd_}{@$defaultOrderby == 'lastpost' ? '&orderby=postdate' : ''}" class="{@Pw::isCurrent($orderby == 'postdate')}">最新发帖</a><span>|</span><a href="{@url:bbs/thread/run?fid=$fid}{$_urladd_}{@$defaultOrderby == 'lastpost' ? '' : '&orderby=lastpost'}" class="{@Pw::isCurrent($orderby != 'postdate')}">最后回复</a></div>
 								<ul class="cc" id="hashpos_ttype">
 									<li class="{@Pw::isCurrent(!$tab)}"><a href="{@url:bbs/thread/run?fid=$fid}">全部</a></li>
 									<li class="{@Pw::isCurrent('digest' == $tab)}"><a href="{@url:bbs/thread/run?fid=$fid&tab=digest}">精华</a></li>
@@ -67,7 +67,7 @@
 								#-->
 							<div class="content_type">
 								<ul class="cc">
-									<li class="{@Pw::isCurrent(!$type)}"><a href="{@url:bbs/thread/run/?fid=$pwforum->fid}{$_urladd_}">全部</a></li>
+									<li class="{@Pw::isCurrent(!$type)}"><a href="{@url:bbs/thread/run?fid=$pwforum->fid}{$_urladd_}">全部</a></li>
 									<!--#
 									foreach ($topictypes['topic_types'] as $v) {
 										$subTopicTypes = $topictypes['sub_topic_types'][$v['id']];
@@ -79,14 +79,14 @@
 											<div class="core_menu">
 												<ul class="core_menu_list cc">
 													<!--# foreach ($subTopicTypes as $v2) { #-->
-													<li><a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v2['id']}{$_urladd_}" title="{$v2['name']}">{$v2['name']|html}</a></li>
+													<li><a href="{@url:bbs/thread/run?fid=$pwforum->fid&type=$v2['id']}{$_urladd_}" title="{@strip_tags($v2['name'])}">{$v2['name']|html}</a></li>
 													<!--# } #-->
 												</ul>
 											</div>
 										</div>
-										<a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v['id']}{$_urladd_}" class="drop">{$v['name']|html}<span></span></a>
+										<a href="{@url:bbs/thread/run?fid=$pwforum->fid&type=$v['id']}{$_urladd_}" class="drop">{$v['name']|html}<span></span></a>
 										<!--# } else { #-->
-										<a href="{@url:bbs/thread/run/?fid=$pwforum->fid&type=$v['id']}{$_urladd_}">{$v['name']|html}</a>
+										<a href="{@url:bbs/thread/run?fid=$pwforum->fid&type=$v['id']}{$_urladd_}">{$v['name']|html}</a>
 										<!--# } #-->
 									</li>
 									<!--# } #-->
@@ -112,20 +112,20 @@
 								$hasThirdPart = $operateThread['lock'] || $operateThread['down'];
 								$hasFirthPart = $operateThread['delete'] || $operateThread['ban'];
 							#-->
-							<!--# if ($operateThread['topped']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/topped')}">置顶</a><!--# } #-->
-							<!--# if ($operateThread['digest']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/digest')}">精华</a><!--# } #-->
-							<!--# if ($operateThread['highlight']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/highlight')}">加亮</a><!--# } #-->
-							<!--# if ($operateThread['up']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/up')}">提前</a><!--# } #-->
+							<!--# if ($operateThread['topped']){ #--><a href="{@url:bbs/manage/topped}">置顶</a><!--# } #-->
+							<!--# if ($operateThread['digest']){ #--><a href="{@url:bbs/manage/digest}">精华</a><!--# } #-->
+							<!--# if ($operateThread['highlight']){ #--><a href="{@url:bbs/manage/highlight}">加亮</a><!--# } #-->
+							<!--# if ($operateThread['up']){ #--><a href="{@url:bbs/manage/up}">提前</a><!--# } #-->
 							<!--# if ($hasFirstPart && $hasSecondPart){ #--><i>|</i><!--# } #-->
-							<!--# if ($operateThread['type']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/type')}">分类</a><!--# } #-->
-							<!--# if ($operateThread['move']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/move')}">移动</a><!--# } #-->
-							<!--# if ($operateThread['copy']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/copy')}">复制</a><!--# } #-->
-							<!--# if ($operateThread['unite']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/unite')}">合并</a><!--# } #-->
+							<!--# if ($operateThread['type']){ #--><a href="{@url:bbs/manage/type}">分类</a><!--# } #-->
+							<!--# if ($operateThread['move']){ #--><a href="{@url:bbs/manage/move}">移动</a><!--# } #-->
+							<!--# if ($operateThread['copy']){ #--><a href="{@url:bbs/manage/copy}">复制</a><!--# } #-->
+							<!--# if ($operateThread['unite']){ #--><a href="{@url:bbs/manage/unite}">合并</a><!--# } #-->
 							<!--# if ($hasThirdPart && ($hasFirstPart ^ $hasSecondPart || $hasFirstPart && $hasSecondPart)){ #--><i>|</i><!--# } #-->
-							<!--# if ($operateThread['lock']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/lock')}">锁定</a><!--# } #-->
-							<!--# if ($operateThread['down']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/down')}">压帖</a><!--# } #-->
+							<!--# if ($operateThread['lock']){ #--><a href="{@url:bbs/manage/lock}">锁定</a><!--# } #-->
+							<!--# if ($operateThread['down']){ #--><a href="{@url:bbs/manage/down}">压帖</a><!--# } #-->
 							<!--# if (($hasFirstPart || $hasSecondPart || $hasThirdPart) && $hasFirthPart){ #--><i>|</i><!--# } #-->
-							<!--# if ($operateThread['delete']){ #--><a href="{@WindUrlHelper::createUrl('bbs/manage/delete')}">删除</a><!--# } #-->
+							<!--# if ($operateThread['delete']){ #--><a href="{@url:bbs/manage/delete}">删除</a><!--# } #-->
 							<!--# if ($operateThread['ban']){ #--><a href="{@url:bbs/manage/ban}">禁止</a><!--# } #-->
 						</div>
 							<!--# } #-->
@@ -142,7 +142,7 @@
 						<!--# } #-->
 					</div>
 					<div class="mb10 cc">
-						<a href="{@url:bbs/post/run/?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_2">发帖</a>
+						<a href="{@url:bbs/post/run?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_2">发帖</a>
 						<template source="widget_thread_page" />
 					</div>
 					<div id="J_thread_post_types_2" class="btn_post_menu" style="display:none;">
@@ -184,18 +184,18 @@
 				<div class="pop_cont">
 					<div class="pop_operat_list">
 						<ul class="cc J_post_manage_col" data-role="list">
-							<!--# if ($operateThread['topped']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/topped')}">置顶</a></li><!--# } #-->
-							<!--# if ($operateThread['digest']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/digest')}">精华</a></li><!--# } #-->
-							<!--# if ($operateThread['highlight']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/highlight')}">加亮</a></li><!--# } #-->
-							<!--# if ($operateThread['up']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/up')}">提前</a></li><!--# } #-->
-							<!--# if ($operateThread['type']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/type')}">分类</a></li><!--# } #-->
-							<!-- <li><a href="{@WindUrlHelper::createUrl('manage/topped')}">印戳</a></li>  -->
-							<!--# if ($operateThread['move']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/move')}">移动</a></li><!--# } #-->
-							<!--# if ($operateThread['copy']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/copy')}">复制</a></li><!--# } #-->
-							<!--# if ($operateThread['unite']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/unite')}">合并</a></li><!--# } #-->
-							<!--# if ($operateThread['lock']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/lock')}">锁定</a></li><!--# } #-->
-							<!--# if ($operateThread['down']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/down')}">压帖</a></li><!--# } #-->
-							<!--# if ($operateThread['delete']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/manage/delete')}">删除</a></li><!--# } #-->
+							<!--# if ($operateThread['topped']){ #--><li><a href="{@url:bbs/manage/topped}">置顶</a></li><!--# } #-->
+							<!--# if ($operateThread['digest']){ #--><li><a href="{@url:bbs/manage/digest}">精华</a></li><!--# } #-->
+							<!--# if ($operateThread['highlight']){ #--><li><a href="{@url:bbs/manage/highlight}">加亮</a></li><!--# } #-->
+							<!--# if ($operateThread['up']){ #--><li><a href="{@url:bbs/manage/up}">提前</a></li><!--# } #-->
+							<!--# if ($operateThread['type']){ #--><li><a href="{@url:bbs/manage/type}">分类</a></li><!--# } #-->
+							<!-- <li><a href="{@url:manage/topped}">印戳</a></li>  -->
+							<!--# if ($operateThread['move']){ #--><li><a href="{@url:bbs/manage/move}">移动</a></li><!--# } #-->
+							<!--# if ($operateThread['copy']){ #--><li><a href="{@url:bbs/manage/copy}">复制</a></li><!--# } #-->
+							<!--# if ($operateThread['unite']){ #--><li><a href="{@url:bbs/manage/unite}">合并</a></li><!--# } #-->
+							<!--# if ($operateThread['lock']){ #--><li><a href="{@url:bbs/manage/lock}">锁定</a></li><!--# } #-->
+							<!--# if ($operateThread['down']){ #--><li><a href="{@url:bbs/manage/down}">压帖</a></li><!--# } #-->
+							<!--# if ($operateThread['delete']){ #--><li><a href="{@url:bbs/manage/delete}">删除</a></li><!--# } #-->
 							<!--# if ($operateThread['ban']){ #--><li><a href="{@url:bbs/manage/ban}">禁止</a></li><!--# } #-->
 						</ul>
 					</div>

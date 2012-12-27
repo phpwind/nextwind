@@ -180,7 +180,7 @@ class PwPollThread {
 		$result['allow_read'] = $this->allowRead($forum, $this->loginUser);
 		
 		$result['typeid'] = $thread['tid'];
-		$result['url'] = WindUrlHelper::createUrl('bbs/read/run?tid='.$thread['tid'] . '&fid=' . $thread['fid']);
+		$result['url'] = WindUrlHelper::createUrl('bbs/read/run', array('tid' => $thread['tid'], 'fid' => $thread['fid']));
 		$result['title'] = $thread['subject'];
 		$result['content'] = $thread['content'] ? $thread['content'] : '';
 		

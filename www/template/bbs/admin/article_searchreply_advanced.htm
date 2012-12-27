@@ -6,8 +6,8 @@
 <body style="width:440px;" class="body_none">
 <!--高级管理弹窗-->
 		<div class="pop_advanced_search">
-		<form id="J_threadadvanced_form" method="post" action="{@WindUrlHelper::createUrl('bbs/article/searchReply')}">
-			<div class="pop_cont" style="margin-bottom:60px;">
+		<form id="J_threadadvanced_form" method="post" action="{@url:bbs/article/searchReply}">
+			<div class="pop_cont" style="padding-top:30px;padding-bottom:110px;">
 				<ul class="cc">
 					<li>
 						<p>关键字：</p>
@@ -60,7 +60,7 @@ Wind.use('ajaxForm', function(){
 		}
 
 		//序列化 写入url
-		parent.window.location.href = "{@WindUrlHelper::createUrl('bbs/article/searchreply')|html}" + '&' +$('#J_threadadvanced_form').formSerialize()
+		parent.window.location.href = "{@url:bbs/article/searchreply}" + '&' +$('#J_threadadvanced_form').formSerialize()
 	});
 });
 </script>

@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.PwGenerateApplication');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: DevelopController.php 22002 2012-12-18 05:58:56Z long.shi $
+ * @version $Id: DevelopController.php 22552 2012-12-25 08:29:31Z long.shi $
  * @package appcenter.admin
  */
 class DevelopController extends AdminBaseController {
@@ -56,7 +56,7 @@ class DevelopController extends AdminBaseController {
 		$app = $appDs->findByAlias($alias);
 		$this->setOutput($app, 'app');
 		
-		$myHooks = Wekit::load('hook.PwHookInject')->findByAppId($app['app_id']);
+		$myHooks = Wekit::load('hook.PwHookInject')->findByAppId($alias);
 		$this->setOutput(array('myHooks' => $myHooks));
 	}
 	

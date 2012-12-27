@@ -7,12 +7,12 @@
 <div class="wrap">	
 	<div class="nav">
 		<ul class="cc">
-			<li  class="current"><a href="{@WindUrlHelper::createUrl('design/component/run')}">模块模板</a></li>
+			<li  class="current"><a href="{@url:design/component/run}">模块模板</a></li>
 			
 		</ul>
 	</div>
 	<div class="h_a">搜索</div>
-	<form method="post"  action="{@WindUrlHelper::createUrl('design/component/run')}" >
+	<form method="post"  action="{@url:design/component/run}" >
 	<div class="search_type cc mb10">
 		<span class="mr20">ID：<input type="text" class="input length_2" name="compid"></span>
 		<span class="mr20">模块名称：<input type="text" class="input length_2" value="{$args['compname']}" name="compname"></span>
@@ -28,7 +28,7 @@
 	</div>
 	</form>
 	<div class="mb10">
-			<a  class="btn" href="{@WindUrlHelper::createUrl('design/component/add1')}"><span class="add"></span>添加模板</a>
+			<a  class="btn" href="{@url:design/component/add1}"><span class="add"></span>添加模板</a>
 	</div>
 	<div class="table_list">
 		<table width="100%">
@@ -51,7 +51,7 @@
 				<td>{$v['comp_id']}</td>
 				<td>{$v['comp_name']}</td>
 				<td>{$models[$v['model_flag']]['name']}</td>
-				<td><a href="{@WindUrlHelper::createUrl('design/component/edit?id='.$v['comp_id'].'&page='.$page)}" class="mr10">[编辑]</a><a href="{@WindUrlHelper::createUrl('design/component/del?id='.$v['comp_id'])}" class="J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:design/component/edit?id=$v['comp_id']&page=$page}" class="mr10">[编辑]</a><a href="{@url:design/component/del?id=$v['comp_id']}" class="J_ajax_del">[删除]</a></td>
 			</tr>
 			<!--# endforeach; #-->
 			<!--# } else { #-->

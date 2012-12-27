@@ -20,7 +20,7 @@ if ($_GET['_type'] == 2) {
 				<h2 class="reg_head">{$_errMsg}</h2>
 				<div class="reg_cont_wrap">
 					<div class="reg_cont">
-						<form id="J_u_login_form" action="{@WindUrlHelper::createUrl('u/login/dorun')}" method="post" >
+						<form id="J_u_login_form" action="{@url:u/login/dorun}" method="post" >
 						<div class="reg_form">
 		<!--#if ($url) {#-->
 							<div class="tips"><span class="tips_icon">请登录后再继续浏览</span></div>
@@ -50,7 +50,7 @@ if ($_GET['_type'] == 2) {
 		<!--#}#-->
 							<dl class="cc pick">
 								<dt>&nbsp;</dt>
-								<dd><a rel="nofollow" href="{@WindUrlHelper::createUrl('u/findPwd/run')|url}" class="fr mr10">找回密码</a><input name="rememberme" type="checkbox" class="checkbox" id="cktime"><label for="cktime">自动登录</label></dd>
+								<dd><a rel="nofollow" href="{@url:u/findPwd/run}" class="fr mr10">找回密码</a><input name="rememberme" type="checkbox" class="checkbox" id="cktime"><label for="cktime">自动登录</label></dd>
 							</dl>
 							<dl class="cc">
 								<dt>&nbsp;</dt>
@@ -107,7 +107,7 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 		//设置同步
 		$.ajaxSetup({ async : false });
 		$.ajax({
-			url : '{@WindUrlHelper::createUrl('u/login/checkname')|url}',
+			url : '{@url:u/login/checkname}',
 			beforeSend : '', //取消startRequest方法
 			dataType: "json",
 			data : {username : $('#J_u_login_username').val()},
@@ -155,7 +155,7 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 				required	: true,
 				//nameCheck : true
 				remote		: {
-					url : '{@WindUrlHelper::createUrl("u/login/checkname")|url}',
+					url : '{@url:u/login/checkname}',
 					//beforeSend : '', //取消startRequest方法
 					dataType: "json",
 					type : 'post',
@@ -191,7 +191,7 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 			password : {
 				required	: true/*,
 				remote : {
-					url : "{@WindUrlHelper::createUrl('u/login/checkpwd')|url}",
+					url : "{@url:u/login/checkpwd}",
 					dataType: "json",
 					type : 'post',
 					data : {
@@ -207,7 +207,7 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 			code : {
 				required : true,
 				remote : {
-					url : "{@WindUrlHelper::createUrl('verify/index/check')|url}",
+					url : "{@url:verify/index/check}",
 					dataType: "json",
 					data : {
 						code :  function(){
@@ -222,7 +222,7 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 			answer : {
 				required : true,
 				remote : {
-					url : '{@WindUrlHelper::createUrl("u/login/checkquestion")|url}',
+					url : '{@url:u/login/checkquestion}',
 					dataType: "json",
 					type : 'post',
 					ignoreRepeat : true,

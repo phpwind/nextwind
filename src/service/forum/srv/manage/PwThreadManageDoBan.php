@@ -7,7 +7,7 @@ Wind::import('SRV:forum.srv.manage.PwThreadManageDo');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadManageDoBan.php 22328 2012-12-21 08:46:57Z xiaoxia.xuxx $
+ * @version $Id: PwThreadManageDoBan.php 22504 2012-12-25 05:14:04Z xiaoxia.xuxx $
  * @package src.service.forum.srv.manage
  */
 class PwThreadManageDoBan extends PwThreadManageDo {
@@ -237,12 +237,12 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 			$service = new PwDeleteTopic(new PwFetchTopicByTid($this->tids), $this->loginUser);
 			$service->setRecycle(true)->setIsDeductCredit(true)->execute();
 		}
-		if (1 == $this->delete['site'] && 1 === $right['delSiteThread'] && $this->getRight() == 1) {
+		if (1 == $this->delete['site'] && 1 === $right['delSiteThread']) {
 			Wind::import('SRV:forum.srv.dataSource.PwFetchTopicByUid');
 			//【用户禁止帖子删除】-并且按照用户ID列表删除帖子到回收站
 			$service = new PwDeleteTopic(new PwFetchTopicByUid($banUids), $this->loginUser);
 			$service->setRecycle(true)->setIsDeductCredit(true)->execute();
-		} elseif (1 == $this->delete['forum'] && 1 === $right['delForumThread'] && $this->getRight() == 2) {
+		} elseif (1 == $this->delete['forum'] && 1 === $right['delForumThread']) {
 			Wind::import('SRV:forum.srv.dataSource.PwFetchTopicByFidAndUids');
 			//【用户禁止帖子删除】-并且按照用户ID列表+版块ID删除帖子到回收站
 			foreach ($this->srv->getFids() as $fid) {

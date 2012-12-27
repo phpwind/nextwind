@@ -1,11 +1,11 @@
 <?php
 Wind::import('SRV:design.bo.PwDesignModuleBo');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwModuleData.php 22257 2012-12-20 09:50:37Z gao.wanggao $ 
+ * @version $Id: PwModuleData.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 class PwModuleData {
@@ -145,11 +145,11 @@ class PwModuleData {
 		$_data = array();
 		$params = $this->getComponentValue($this->bo->getTemplate(), implode('', $this->bo->getStandardSign()));
 		if ($data['from_type'] == 'auto' && $data['data_type'] == PwDesignData::AUTO  && !$data['is_edited']) {
-			if ($this->bo->getLimit() > 10) {
+			//if ($this->bo->getLimit() > 10) {
 				$data = $this->asynCutImg($data);
-			} else {
-				$data = $this->cutImg($data);
-			}
+			//} else {
+			//	$data = $this->cutImg($data);
+			//}
 		}
 		foreach($params AS $param) {
 			if (isset($data[$param])){
@@ -207,12 +207,12 @@ class PwModuleData {
 				$data[$k] = Pw::getPath($data[$k]);
 			} else {
 				$dm = new PwDesignAsynImageDm();
-				$dm->setHeight($thumbH)->setWidth($thumbW)->setPath($data[$k])->setModuleid($this->bo->moduleid);
+				$dm->setHeight($thumbH)->setWidth($thumbW)->setPath($data[$k])->setModuleid($this->bo->moduleid)->setSign($k);
 				$result = $ds->addImage($dm);
 				if ($result instanceof PwError) {
 					$data[$k] = Pw::getPath($data[$k]);
 				} else {
-					$data[$k] = WindUrlHelper::createUrl('design/image/run?id='.(int)$result, array(),'','pw');
+					$data[$k] = WindUrlHelper::createUrl('design/image/run', array('id' => (int)$result), '', 'pw');
 					$data['__asyn'] = (int)$result;
 				}
 				$data['standard_image'] = '';

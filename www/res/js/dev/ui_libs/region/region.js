@@ -183,7 +183,7 @@
 						region_pop.remove();
 						Wind.Util.resultTip({
 							error : true,
-							msg : '数据请求失败，请与管理严联系',
+							msg : '数据请求失败！',
 							follow : _this.element
 						});
 					}

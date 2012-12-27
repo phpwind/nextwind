@@ -7,7 +7,7 @@
 <div class="wrap">
 
 	<div class="h_a">打卡设置</div>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('admin/config/punch/dorun')}" method="post">
+	<form class="J_ajaxForm" action="{@url:admin/config/punch/dorun}" method="post">
 	<div class="table_full">
 		<table width="100%">
 			<col class="th" />
@@ -41,8 +41,8 @@
 				<th>帮Ta打卡</th>
 				<td>
 					<ul class="switch_list cc">
-						<li><label><input type="radio" name="punchFrendOpen" value="1" {@Pw::ifcheck($config['punch.frend.open'] == 1)}><span>开启</span></label></li>
-						<li><label><input type="radio" name="punchFrendOpen" value="0" {@Pw::ifcheck($config['punch.frend.open'] == 0)}><span>关闭</span></label></li>
+						<li><label><input type="radio" name="punchFrendOpen" value="1" {@Pw::ifcheck($config['punch.friend.open'] == 1)}><span>开启</span></label></li>
+						<li><label><input type="radio" name="punchFrendOpen" value="0" {@Pw::ifcheck($config['punch.friend.open'] == 0)}><span>关闭</span></label></li>
 					</ul>
 				</td>
 				<td><div class="fun_tips">开启后可以帮好友打卡，并获的积分奖励。</div></td>

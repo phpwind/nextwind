@@ -9,7 +9,7 @@ Wind::import('APPS:u.service.helper.PwUserHelper');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: LoginController.php 22361 2012-12-21 11:50:28Z xiaoxia.xuxx $
+ * @version $Id: LoginController.php 22735 2012-12-26 13:54:10Z gao.wanggao $
  * @package products.u.controller
  */
 class LoginController extends PwBaseController {
@@ -97,10 +97,11 @@ class LoginController extends PwBaseController {
 		$config = Wekit::C('site');
 		if ($config['windid'] != 'local') {
 			$localUser = $this->_getUserDs()->getUserByUid($isSuccess['uid'], PwUser::FETCH_MAIN); 
-			if ($userForm['username'] != $localUser['username']) $this->showError('USER:user.syn.error');
+			if ($localUser['username'] && $userForm['username'] != $localUser['username']) $this->showError('USER:user.syn.error');
 		}
 	
 		$info = $login->sysUser($isSuccess['uid']);
+		if (!$info)  $this->showError('USER:user.syn.error');
 		$identity = PwLoginService::createLoginIdentify($info);
 		$identity = base64_encode($identity . '|' . $this->getInput('backurl'));
 		
@@ -109,7 +110,7 @@ class LoginController extends PwBaseController {
 		$userService = Wekit::load('user.srv.PwUserService');
 		if (empty($isSuccess['safecv']) && $userService->mustSettingSafeQuestion($info['uid'])) {
 			$this->addMessage(
-				array('url' => WindUrlHelper::createUrl('u/login/setquestion?v=1&_statu=' . $identity)), 'check');
+				array('url' => WindUrlHelper::createUrl('u/login/setquestion', array('v' => 1, '_statu' => $identity))), 'check');
 		}
 		$this->showMessage('', 'u/login/welcome?_statu=' . $identity);
 	}
@@ -137,11 +138,11 @@ class LoginController extends PwBaseController {
 			$identity = base64_encode($identity . '|' . $backUrl);
 			
 			if ($result['safecv']) {
-				$url = WindUrlHelper::createUrl('u/login/showquestion?_statu=' . $identity);
+				$url = WindUrlHelper::createUrl('u/login/showquestion', array('_statu' => $identity));
 			} elseif (Wekit::load('user.srv.PwUserService')->mustSettingSafeQuestion($info['uid'])) {
-				$url = WindUrlHelper::createUrl('u/login/setquestion?_statu=' . $identity);
+				$url = WindUrlHelper::createUrl('u/login/setquestion', array('_statu' => $identity));
 			} elseif ($this->_showVerify()) {
-				$url = WindUrlHelper::createUrl('u/login/showquestion?_statu=' . $identity);
+				$url = WindUrlHelper::createUrl('u/login/showquestion', array('_statu' => $identity));
 			}
 			$this->addMessage(array('url' => $url), 'check');
 			$this->showMessage('USER:login.success', 'u/login/welcome?_statu=' . $identity);
@@ -285,7 +286,7 @@ class LoginController extends PwBaseController {
 		$login->welcome($this->loginUser, $this->getRequest()->getClientIp());
 		list(, $refUrl) = explode('|', base64_decode($identify));
 		if (Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNCHECK)) {
-			$this->forwardRedirect(WindUrlHelper::createUrl('u/login/show?backurl=' . $refUrl));
+			$this->forwardRedirect(WindUrlHelper::createUrl('u/login/show', array('backurl' => $refUrl)));
 		}
 		if (!$refUrl) $refUrl = Wekit::app()->baseUrl;
 		$config = Wekit::C('site');

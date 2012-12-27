@@ -8,7 +8,7 @@ Wind::import('LIB:process.iPwGleanDoHookProcess');
  * @author xiaoxia.xu<xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwShieldTagDoTopic.php 21525 2012-12-11 02:54:55Z jinlong.panjl $
+ * @version $Id: PwShieldTagDoTopic.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package wind
  */
 class PwShieldTagDoTopic extends iPwGleanDoHookProcess {
@@ -35,9 +35,9 @@ class PwShieldTagDoTopic extends iPwGleanDoHookProcess {
 			$logSrv = Wekit::load('log.srv.PwLogService');
 			
 			$langArgs = array();
-			$langArgs['tag_url'] = WindUrlHelper::createUrl('tag/index/view?name=' . $tag['tag_name']);
+			$langArgs['tag_url'] = WindUrlHelper::createUrl('tag/index/view', array('name' => $tag['tag_name']));
 			$langArgs['tag'] = $tag['tag_name'];
-			$langArgs['content_url'] = WindUrlHelper::createUrl('bbs/read/run?tid=' . $data['tid']);
+			$langArgs['content_url'] = WindUrlHelper::createUrl('bbs/read/run', array('tid' => $data['tid']));
 			$langArgs['content'] = $data['subject'];
 			$langArgs['type'] = '帖子';
 			

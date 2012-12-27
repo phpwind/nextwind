@@ -9,12 +9,12 @@
 <!-- start -->
 	<div class="nav">
 		<ul class="cc">
-		<li class="current"><a href="{@WindUrlHelper::createUrl('/config/watermark/run')}">水印设置</a></li>
-		<li><a href="{@WindUrlHelper::createUrl('/config/watermark/set')}">水印策略</a></li>
+		<li class="current"><a href="{@url:/config/watermark/run}">水印设置</a></li>
+		<li><a href="{@url:/config/watermark/set}">水印策略</a></li>
 		</ul>
 	</div>
 	<div class="h_a">水印设置</div>
-	<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/config/watermark/dorun')}" data-role="list">
+	<form method="post" class="J_ajaxForm" action="{@url:/config/watermark/dorun}" data-role="list">
 	<div class="table_full">
 		<table width="100%">
 			<col class="th" />
@@ -192,7 +192,7 @@ $(function(){
 			var $this = $(this);
 
 			$('form.J_ajaxForm').ajaxSubmit({
-				url         : '{@WindUrlHelper::createUrl("/config/watermark/view")|url}',
+				url         : '{@url:/config/watermark/view}',
 				dataType	: 'json',
 				success		: function(data, statusText, xhr, $form) {
 					if(data.state === "success") {

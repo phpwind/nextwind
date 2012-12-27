@@ -83,10 +83,7 @@ class PwTemplateCompilerDesign extends AbstractWindTemplateCompiler {
 	}
 	
 	private function _pageName() {
-		$path = Wind::getRealPath('SRV:design.srv.router.router');
-		if (!is_file($path)) return false;
-		$sysPage = @include $path;
-		
+		$sysPage = Wekit::load('design.srv.router.PwDesignRouter')->get();
 		if ($this->_router && isset($sysPage[$this->_router])){ 
 			return $sysPage[$this->_router];
 		}

@@ -7,7 +7,7 @@ Wind::import('WINDID:api.local.WindidUserApi');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: UserController.php 22061 2012-12-19 03:09:07Z gao.wanggao $ 
+ * @version $Id: UserController.php 22693 2012-12-26 11:04:49Z gao.wanggao $ 
  * @package 
  */
 class UserController extends OpenBaseController {
@@ -19,8 +19,16 @@ class UserController extends OpenBaseController {
 		$question = $this->getInput('question', 'post');
 		$answer = $this->getInput('answer', 'post');
 		$regip = $this->getInput('regip', 'post');
-		$result = $this->getApi()->register($username, $email, $password, $question, $answer, $regip);
-		$this->output($result);
+		Wind::import('WINDID:service.user.dm.WindidUserDm');
+		$dm = new WindidUserDm();
+		$dm->setUsername($username)->setEmail($email)->setPassword($password)->setQuestion($question)->setAnswer($answer)->setRegip($regip);
+		$result = $this->getUserDs()->addUser($dm);
+		if ($result instanceof WindidError) return $result->getCode();
+		$uid = (int)$result;
+		$srv = Windid::load('user.srv.WindidUserService');
+		$srv->defaultAvatar($uid, 'face');
+		$this->_getNotifyClient()->send('register', $uid);
+		$this->output($uid);
 	}
 	
 	public function loginAction() {
@@ -244,6 +252,10 @@ class UserController extends OpenBaseController {
 	
 	protected function getBlackDs() {
 		return Windid::load('user.WindidUserBlack');
+	}
+	
+	private function _getNotifyClient() {
+		return Windid::load('notify.srv.WindidNotifyClient');
 	}
 	
 }

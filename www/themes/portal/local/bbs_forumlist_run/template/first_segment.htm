@@ -1,0 +1,44 @@
+<div class="box_title">
+	<h2 class="f12"><pw-list id="20">站点推荐</pw-list></h2>
+</div>
+<div class="forum_recommend cc">
+
+<div id="J_slides" class="home_push_slide">
+<pw-list id="33">
+	<div class="slides_container">
+		<for:>
+		 <div class="slide">
+			 <a href="{url}" title="" target="_blank"><img src="{thumb|360|240}" width="360" height="240" alt="{title}"></a>
+				<div class="caption">
+					<div class="h2"><a href="{url}" target="_blank">{title|18}</a></div>
+				</div>
+		</div>
+		</for>
+	</div>
+	<ul class="J_slides_num num">
+	<for:>
+		<li><a href="">{$__k+1}</a></li>
+	</for>
+	</ul>
+</pw-list>
+</div>
+<div class="home_push_hot">
+<pw-list id="34">
+<for:>
+  <dl>
+    <dt><a href="{url}" target="_blank">{title}</a></dt>
+    <dd>{intro|100}</dd>
+  </dl>
+</for>
+</pw-list>
+
+<pw-list id="35">
+<ul class="cc">
+  <for:>
+  <li><em><a href="{forumUrl}" target="_blank">[{forum|4}]</a></em><a href="" target="_blank">{title}</a></li>
+   </for>
+</ul>
+</pw-list>
+</div>
+</div>
+<pw-drag id="first_segment_drag"/>

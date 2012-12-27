@@ -37,15 +37,15 @@
 			<div class="box">
 				<div class="space_fresh">
 					<dl class="cc">
-						<dt><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run/?uid=$value['created_userid']}" target="_blank"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="50" height="50" /></a></dt>
+						<dt><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run?uid=$value['created_userid']}" target="_blank"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="50" height="50" /></a></dt>
 						<dd>
 							<!--# if ($value['title']) { #-->
-							<div class="title"><a href="{@url:space/index/run/?uid=$value['created_userid']}" class="author J_user_card_show" data-uid="{$value['created_userid']}" target="_blank">{$value['created_username']}</a>：
-							<a href="{@url:bbs/read/run/?tid=$value['src_id']}" class="subject" target="_blank">{$value['title']}</a>
+							<div class="title"><a href="{@url:space/index/run?uid=$value['created_userid']}" class="author J_user_card_show" data-uid="{$value['created_userid']}" target="_blank">{$value['created_username']}</a>：
+							<a href="{@url:bbs/read/run?tid=$value['src_id']}" class="subject" target="_blank">{$value['title']}</a>
 							</div>
 							<div id="J_feed_content_{$value['id']}" class="descrip">{@$value['content']|html}</div>
 							<!--# } else { #-->
-							<div class="title"><a href="{@url:space/index/run/?uid=$value['created_userid']}" class="author J_user_card_show" data-uid="{$value['created_userid']}" target="_blank">{$value['created_username']}</a>：
+							<div class="title"><a href="{@url:space/index/run?uid=$value['created_userid']}" class="author J_user_card_show" data-uid="{$value['created_userid']}" target="_blank">{$value['created_username']}</a>：
 								<span id="J_feed_content_{$value['id']}" class="descrip fn">{@$value['content']|html}</span>
 							</div>
 							<!--# } #-->
@@ -77,12 +77,12 @@
 									</div>
 									
 									<!--# if ($value['quote']['subject']) { #-->
-									<div class="title"><a href="{@url:space/index/run/?uid=$value['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
-									<a href="{@url:bbs/read/run/?tid=$value['quote']['tid']}" class="subject" target="_blank">{$value['quote']['subject']}</a>
+									<div class="title"><a href="{@url:space/index/run?uid=$value['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
+									<a href="{@url:bbs/read/run?tid=$value['quote']['tid']}" class="subject" target="_blank">{$value['quote']['subject']}</a>
 									</div>
 									<div class="descrip">{$value['quote']['content']|html}</div>
 									<!--# } else { #-->
-									<div class="title"><a href="{@url:space/index/run/?uid=$value['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
+									<div class="title"><a href="{@url:space/index/run?uid=$value['quote']['created_userid']}" class="name" target="_blank">{$value['quote']['created_username']}</a>：
 										<span class="descrip">{$value['quote']['content']|html}</span>
 									</div>
 									<!--# } #-->
@@ -96,13 +96,13 @@
 								</div>
 							<!--# } #-->
 							<!--# if ($value['is_read_all']) { #-->
-							<div class="more"><a class="J_read_all_none" data-dir="down" data-id="J_feed_content_{$value['id']}" href="{@url:bbs/read/run/?tid=$value['src_id']}">阅读全部&darr;</a></div>
+							<div class="more"><a class="J_read_all_none" data-dir="down" data-id="J_feed_content_{$value['id']}" href="{@url:bbs/read/run?tid=$value['src_id']}">阅读全部&darr;</a></div>
 							<!--# } #-->
 						</dd>
 					</dl>
 					<p class="my_info">
 						<!--# if($loginUser->uid) { #-->
-						<span class="right"><a rel="nofollow" data-id="{$value['id']}" class="J_feed_toggle" href="{@url:space/index/reply/?id=$value['id']&uid=$space->spaceUid}">回复<span style="{$style_reply}">(<em id="J_feed_count_{$value['id']}">{$value['replies']}</em>)</span></a></span>
+						<span class="right"><a rel="nofollow" data-id="{$value['id']}" class="J_feed_toggle" href="{@url:space/index/reply?id=$value['id']&uid=$space->spaceUid}">回复<span style="{$style_reply}">(<em id="J_feed_count_{$value['id']}">{$value['replies']}</em>)</span></a></span>
 						<!--# } #-->
 						<span class="time"><a href="{@url:space/index/fresh?uid=$value['created_userid']&id=$value['id']}">{@Pw::time2str($value['created_time'], 'auto')}</a></span>&nbsp;来自{@$value['from']|html}
 					</p>

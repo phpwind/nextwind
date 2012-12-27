@@ -27,14 +27,14 @@
 	var IMAGE_CONFIG = {
 		tabs : ['local','album','network'],
 		filetype : {@Pw::array2str(Pw::subArray(Wekit::C('attachment', 'extsize'), array('jpg', 'jpeg', 'png', 'gif', 'bmp')))|html},
-		uploadUrl: "{@url:bbs/upload/dorun/?_json=1}",//上传地址
+		uploadUrl: "{@url:bbs/upload/dorun?_json=1}",//上传地址
 		postData : {fid : '{$fid}', uid : '{$loginUser->uid}'}
 	};
 	var ATTACH_CONFIG = {
 		ifopen : '{$allowUpload}',
-		uploadUrl : "{@url:bbs/upload/dorun/?_json=1}",//上传地址
-		modifyUrl : "{@url:bbs/upload/replace/?_json=1}",//修改地址
-		deleteUrl : '{@url:bbs/attach/delete/?_json=1}',
+		uploadUrl : "{@url:bbs/upload/dorun?_json=1}",//上传地址
+		modifyUrl : "{@url:bbs/upload/replace?_json=1}",//修改地址
+		deleteUrl : '{@url:bbs/attach/delete?_json=1}',
         attachnum : parseInt('{$attachnum}'),
         list : {@Pw::array2str($attach)|html},
         postData : {fid : '{$fid}', csrf_token : GV.TOKEN},
@@ -43,11 +43,11 @@
         atUserList:[{$atusers}]
     }
     //表情数据的地址
-    var EMOTION_URL = '{@url:emotion/index/run/?type=bbs}';
+    var EMOTION_URL = '{@url:emotion/index/run?type=bbs}';
     //at好友数据地址
     var AT_URL = '{@url:bbs/remind/run}';
     //at弹窗的地址
-    //var AT_DIALOG_URL = '{@WindUrlHelper::createUrl('bbs/remind/friend')|url}';
+    //var AT_DIALOG_URL = '{@url:bbs/remind/friend}';
     var AT_USER_SPACE = '{@url:space/index/run}?uid=';
    //应用插件配置
 	var editorApp = {

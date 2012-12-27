@@ -8,7 +8,7 @@ Wind::import('SRV:report.dm.PwReportDm');
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ReportController.php 20560 2012-10-31 05:32:43Z jieyin $
+ * @version $Id: ReportController.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package wind
  */
 class ReportController extends BaseManageController {
@@ -68,7 +68,7 @@ class ReportController extends BaseManageController {
 	}
 	
 	private function _buildNoticeTitle($username,$action) {
-		return '您举报的内容已被 <a href="' . WindUrlHelper::createUrl('space/index/run?username='.$username) .'">' . $username . '</a> '.$action.'，感谢您能一起协助我们管理站点。';
+		return '您举报的内容已被 <a href="' . WindUrlHelper::createUrl('space/index/run', array('username' => $username)) .'">' . $username . '</a> '.$action.'，感谢您能一起协助我们管理站点。';
 	}
 	
 	/**

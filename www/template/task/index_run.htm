@@ -60,10 +60,10 @@
 		$url = $item['conditions']['url'];
 		$cls = 'btn_submit';
 		if ($item['tag'] == 5) {
-			$url = 'task/index/reward?id=' . $item['taskid'];
+			$url = 'task/index/reward?id=' . intval($item['taskid']);
 			$cls = ' J_task_get_btn btn_success';
 		}
-		#--><a href="{@WindUrlHelper::createUrl($url)}" data-id="{$item['taskid']}" class="btn {$cls}">{$modes[$item['tag']]['button']}</a>
+		#--><a href="{@WindUrlHelper::createUrl($url)|url}" data-id="{$item['taskid']}" class="btn {$cls}">{$modes[$item['tag']]['button']}</a>
 		<!--#}#-->
 										</p>
 									</dd>

@@ -3,7 +3,7 @@
 @explain: 初始化/全局的公用控件
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: core.css 22223 2012-12-19 20:27:38Z yanchixia $
+$Id: core.css 22416 2012-12-24 06:46:55Z yanchixia $
 ===================
 #*/
 
@@ -2634,7 +2634,7 @@ div.pop_show_mini{
 ===================
 */
 .tmode_traverseList{
-	padding:5px 10px 5px 0;
+	padding:5px 10px 5px 5px;
 }
 .tmode_traverseList li{
 	float:left;

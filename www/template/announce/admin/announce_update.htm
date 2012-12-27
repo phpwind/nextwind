@@ -6,11 +6,11 @@
 <body>
 <div class="wrap">
 	<div class="nav">
-		<div class="return"><a href="{@WindUrlHelper::createUrl('announce/announce/run')}">返回上一级</a></div>
+		<div class="return"><a href="{@url:announce/announce/run}">返回上一级</a></div>
 	</div>
 <!--==============================编辑公告================================-->
 
-	<form id="J_announce_form" action="{@WindUrlHelper::createUrl('announce/announce/doUpdate')}" method="post">
+	<form id="J_announce_form" action="{@url:announce/announce/doUpdate}" method="post">
 	<div class="h_a">编辑公告</div>
 	<input name="aid" type="hidden" value="{$announceInfo['aid']}">
 	<div class="table_full">

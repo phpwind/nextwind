@@ -8,7 +8,7 @@ Wind::import('SRV:forum.PwThread');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwTopicDm.php 17954 2012-09-10 10:45:12Z jieyin $
+ * @version $Id: PwTopicDm.php 22488 2012-12-25 02:57:19Z xiaoxia.xuxx $
  * @package forum
  */
 
@@ -80,6 +80,11 @@ class PwTopicDm extends PwPostDm {
 
 	public function setDowned($bool) {
 		$this->_bitData['tpcstatus'][PwThread::STATUS_DOWNED] = (bool)$bool;
+		return $this;
+	}
+	
+	public function setOperatorLog($bool) {
+		$this->_bitData['tpcstatus'][PwThread::STATUS_OPERATORLOG] = (bool)$bool;
 		return $this;
 	}
 	

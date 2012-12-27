@@ -36,8 +36,8 @@
 								<ul class="cc">
 								<!--#foreach ($list as $id => $item) {#-->
 									<li>
-										<a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $id)}"><img data-type="middle" class="J_avatar" src="{@Pw::getAvatar($id, 'middle')}" width="90" height="90" alt="{$item['username']}" /></a>
-										<p><a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $id)}">{$item['username']}</a></p>
+										<a href="{@url:space/index/run?uid=$id}"><img data-type="middle" class="J_avatar" src="{@Pw::getAvatar($id, 'middle')}" width="90" height="90" alt="{$item['username']}" /></a>
+										<p><a href="{@url:space/index/run?uid=$id}">{$item['username']}</a></p>
 									</li>
 								<!--#}#-->
 								</ul>

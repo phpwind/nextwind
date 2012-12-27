@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PushController.php 17555 2012-09-06 09:43:13Z gao.wanggao $ 
+ * @version $Id: PushController.php 22735 2012-12-26 13:54:10Z gao.wanggao $ 
  * @package 
  */
 class PushController extends PwBaseController{
@@ -50,8 +50,7 @@ class PushController extends PwBaseController{
 			$this->setOutput($option, 'data');
 			$this->showMessage("operate.success");
 		}
-		$pageInfo = $this->_getPageDs()->getPage($pageid);
-		$moduleList = $this->_getModuleDs()->fetchModule(explode(',',$pageInfo['module_ids']));
+		$moduleList = $this->_getModuleDs()->getByPageid($pageid);
 		foreach ($moduleList AS $v) {
 			if ($v['model_flag'] != $fromtype) continue;
 			$option .= '<option value="'.$v['module_id'].'">'.$v['module_name'].'</option>';

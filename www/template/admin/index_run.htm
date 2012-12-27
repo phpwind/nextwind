@@ -55,14 +55,14 @@ var GV = {
 						</ul>
 					</div>
 					<div class="login_info">
-						<a href="{@url:index/run|pw}" class="home" target="_blank">前台首页</a><span class="mr10">管理员： {$adminUser->username}</span><a href="{@WindUrlHelper::createUrl('index/logout')}" class="mr10">[注销]</a>
+						<a href="{@url:index/run|pw}" class="home" target="_blank">前台首页</a><span class="mr10">管理员： {$adminUser->username}</span><a href="{@url:index/logout}" class="mr10">[注销]</a>
 					</div></td>
 				</tr>
 				<tr class="tab">
 					<th>
 					<div class="search">
 						<input size="15" placeholder="Hi，phpwind 9！" id="J_search_keyword" type="text">
-						<button type="button" name="keyword" id="J_search" value="" data-url="{@WindUrlHelper::createUrl('/find/run')}">搜索</button>
+						<button type="button" name="keyword" id="J_search" value="" data-url="{@url:/find/run}">搜索</button>
 					</div></th>
 					<td>
 					<div id="B_tabA" class="tabA">
@@ -100,7 +100,7 @@ var GV = {
 							<a href="" id="J_fullScreen" class="full_screen" title="全屏">全屏</a>
 						</div>
 						<div class="loading" id="loading">加载中...</div>
-						<iframe id="iframe_default" src="{@WindUrlHelper::createUrl(Wekit::app()->homeLink)}" style="height: 100%; width: 100%;display:none;" data-id="default" frameborder="0" scrolling="auto"></iframe>
+						<iframe id="iframe_default" src="{@WindUrlHelper::createUrl(Wekit::app()->homeLink)|url}" style="height: 100%; width: 100%;display:none;" data-id="default" frameborder="0" scrolling="auto"></iframe>
 					</td>
 				</tr>
 			</table>
@@ -432,7 +432,7 @@ function showTab(li) {
 </script>
 
 <!--#
-$isFounder =  Wekit::load('APPS:admin.service.srv.AdminUserService')->isFounder($adminUser->getUsername());
+$isFounder =  Wekit::load('APPS:admin.service.srv.AdminFounderService')->isFounder($adminUser->getUsername());
 if ($isFounder) {
 $filePath = Wind::getRealPath('ADMIN:conf.openplatformurl.php', true);
 $openPlatformUrl = Wind::getComponent('configParser')->parse($filePath);

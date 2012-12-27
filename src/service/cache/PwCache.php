@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwCache.php 22179 2012-12-19 13:04:01Z jieyin $
+ * @version $Id: PwCache.php 22639 2012-12-26 06:02:15Z jinlong.panjl $
  * @package forum
  */
 
@@ -30,6 +30,8 @@ class PwCache {
 		'medal_all' => array('medal_all', array(), self::USE_ALL, 'default', 0, array('medal.srv.PwMedalService', 'getMedalAllCacheValue')),
 		'medal_auto' => array('medal_auto', array(), self::USE_ALL, 'default', 0, array('medal.srv.PwMedalService', 'getMedalAutoCacheValue')),
 		'all_emotions' => array('all_emotions', array(), self::USE_ALL, 'default', 0, array('emotion.srv.PwEmotionService', 'getAllEmotionNoCache')),
+		'word' => array('word', array(), self::USE_FILE, 'default', 0, array('SRV:word.srv.PwWordFilter', 'fetchAllWordNoCache')),
+		'word_replace' => array('word_replace', array(), self::USE_FILE, 'default', 0, array('SRV:word.srv.PwWordFilter', 'getReplaceWordNoCache')),
 	);
 	
 	protected $_prekeys = array();

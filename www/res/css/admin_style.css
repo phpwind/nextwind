@@ -3,7 +3,7 @@
 @explain: 系统后台内容区域
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: admin_style.css 22304 2012-12-21 06:59:18Z yanchixia $
+$Id: admin_style.css 22392 2012-12-24 02:58:25Z yanchixia $
 ===================
 */
 html,body, 
@@ -736,7 +736,7 @@ select[size]{
 }
 .pop_top{
 	line-height:18px;
-	padding:9px 15px 8px;
+	padding:9px 0 8px;
 	border-top:1px solid #fff;
 	border-bottom:1px solid #e7e7e7;
 	background:#f6f6f6;
@@ -752,6 +752,7 @@ select[size]{
 	width:1px;
 }
 .pop_top strong{
+	text-indent:15px;
 	font-size:14px;
 	color:#333;
 	font-weight:700;
@@ -782,6 +783,9 @@ select[size]{
 	border:1px solid #ccc;
 	background:#fff;
 	border-bottom:0 none;
+}
+.pop_top .pop_close{
+	margin-right:15px;
 }
 .pop_bottom{
 	padding:10px 15px;

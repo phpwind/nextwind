@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUserApi.php 22061 2012-12-19 03:09:07Z gao.wanggao $ 
+ * @version $Id: WindidUserApi.php 22709 2012-12-26 12:00:08Z gao.wanggao $ 
  * @package 
  */
 class WindidUserApi {
@@ -112,7 +112,7 @@ class WindidUserApi {
 	 * Enter description here ...
 	 * @param int $uid
 	 * @param string $password
-	 * @param array $editInfo  array('username', 'newpassword', 'email', 'question', 'answer')
+	 * @param array $editInfo  array('username', 'password', 'email', 'question', 'answer')
 	 */
 	public function editUser($uid, $password, $editInfo) {
 		if (!is_array($editInfo)) return false;

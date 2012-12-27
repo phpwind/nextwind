@@ -6,7 +6,7 @@
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: FriendController.php 18719 2012-09-26 09:11:41Z xiaoxia.xuxx $
+ * @version $Id: FriendController.php 22660 2012-12-26 07:45:31Z jinlong.panjl $
  * @package wind
  */
 class FriendController extends PwBaseController {
@@ -25,7 +25,7 @@ class FriendController extends PwBaseController {
 	 * 推荐关注
 	 */
 	public function run() {
-		$uids = $this->_getRecommendService()->getRecommendAttention($this->loginUser->uid,40);
+		$uids = $this->getOnlneUids(40);
 		$userList = $this->_buildUserInfo($this->loginUser->uid, $uids, 20);
 		$this->setOutput($userList, 'userList');
 		
@@ -39,7 +39,7 @@ class FriendController extends PwBaseController {
 	 * 可能认识
 	 */
 	public function friendAction() {
-		$uids = $this->_getRecommendService()->getPotentialAttention($this->loginUser,40);
+		$uids = $this->getOnlneUids(40);
 		$userList = $this->_buildUserInfo($this->loginUser->uid, $uids, 20);
 		$this->setOutput($userList, 'userList');
 	}
@@ -103,6 +103,11 @@ class FriendController extends PwBaseController {
 		$this->setOutput($args, 'args');
 		$this->setOutput($hotTags, 'hotTags');
 		$this->setOutput($usertags, 'usertags');
+	}
+	
+	private function getOnlneUids($num) {
+		$onlineUser = Wekit::load('online.PwUserOnline')->getInfoList('',0,$num);
+		return array_keys($onlineUser);
 	}
 	
 	/** 

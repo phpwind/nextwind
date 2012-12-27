@@ -67,7 +67,7 @@
 		</dl>
 	</div>
 	<div class="my_message_bottom">
-		<a href="{@WindUrlHelper::createUrl('message/notice/run?type='.$notice['typeid'])}">查看全部勋章通知&nbsp;&gt;&gt;</a>
+		<a href="{@url:message/notice/run?type=$notice['typeid']}">查看全部勋章通知&nbsp;&gt;&gt;</a>
 	</div>
 </hook-action>
 
@@ -107,7 +107,7 @@
 			</div>
 			<div class="info">
 				<span class="time">{@Pw::time2str($v['modified_time'],'auto')}</span>
-				<span class="operating"><span class="line">|</span><a class="J_msg_del" href="{@WindUrlHelper::createUrl('message/notice/delete?id='.$v['id'])}">删除</a></span>
+				<span class="operating"><span class="line">|</span><a class="J_msg_del" href="{@url:message/notice/delete?id=$v['id']}">删除</a></span>
 			</div>
 		</div>
 	</div>

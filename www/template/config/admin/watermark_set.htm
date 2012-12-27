@@ -9,12 +9,12 @@
 <!-- start -->
 	<div class="nav">
 		<ul class="cc">
-		<li><a href="{@WindUrlHelper::createUrl('/config/watermark/run')}">水印设置</a></li>
-		<li  class="current"><a href="{@WindUrlHelper::createUrl('/config/watermark/set')}">水印策略</a></li>
+		<li><a href="{@url:/config/watermark/run}">水印设置</a></li>
+		<li  class="current"><a href="{@url:/config/watermark/set}">水印策略</a></li>
 		</ul>
 	</div>
 	
-	<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/config/watermark/doset')}" data-role="list">
+	<form method="post" class="J_ajaxForm" action="{@url:/config/watermark/doset}" data-role="list">
 	<div class="h_a">水印策略</div>
 	<div class="table_purview mb10">
 		<table class="J_check_wrap" width="100%">

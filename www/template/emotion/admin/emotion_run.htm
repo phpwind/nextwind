@@ -14,7 +14,7 @@
 			<li>“管理”该该分类下的表情，“添加”需要启用的表情。</li>
 		</ol>
 	</div>
-<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('emotion/emotion/dorun')}" method="post">
+<form class="J_ajaxForm" action="{@url:emotion/emotion/dorun}" method="post">
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -59,8 +59,8 @@
 					<a href="" class="cate_link_down J_click_toggle"></a><span class="J_support_list">{$cat['appsname']}</span>
 				</td>
 				<td>
-					<a href="{@WindUrlHelper::createUrl('emotion/emotion/emotion/?catid='.$cat['category_id'])}" class="mr5">[管理]</a>
-					<a href="{@WindUrlHelper::createUrl('emotion/emotion/deletecate/?cateid='.$cat['category_id'])}" class="mr5 J_ajax_del">[删除]</a>
+					<a href="{@url:emotion/emotion/emotion?catid=$cat['category_id']}" class="mr5">[管理]</a>
+					<a href="{@url:emotion/emotion/deletecate?cateid=$cat['category_id']}" class="mr5 J_ajax_del">[删除]</a>
 				</td>
 			</tr>
 		<!--# endforeach; #-->
@@ -70,7 +70,7 @@
 	</form>
 	<div class="table_list mb10">
 		<div class="h_a">未安装表情</div>
-		<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('emotion/emotion/doadd')}" method="post">
+		<form class="J_ajaxForm" action="{@url:emotion/emotion/doadd}" method="post">
 		<table width="100%">
 			<tr>
 				<td width="80">顺序</td>

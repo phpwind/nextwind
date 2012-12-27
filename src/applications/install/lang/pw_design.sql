@@ -47,3 +47,12 @@ INSERT INTO `pw_design_component` (`model_flag`, `comp_name`, `comp_tpl`, `sys_i
 ('link', '【系统】友情链接 [ 横向+logo ]', '<div class="tmode_traverseList">\n<ul class="cc">\n<for:>\n  <li><a href="{url}" target="_blank"><img src="{logo}" width="88" height="31" alt="{name}"></a></li>\n</for>\n  <li><a href="index.php?m=link&c=index&a=run" class="J_link_apply">申请链接</a></li>\n</ul>\n</div>', '42'),
 ('link', '【系统】友情链接 [ 竖列无序 ]', '<div class="tmode_list tmode_list_light">\n<ul>\n<for:>\n  <li><a href="{url}" target="_blank">{name}</a></li>\n</for>\n  <li><a href="index.php?m=link&c=index&a=run" class="J_link_apply">申请链接</a></li>\n</ul>\n</div>', '43'),
 ('link', '【系统】友情链接 [ 竖列基础 ]', '<div class="tmode_list">\n<ul>\n<for:>\n  <li><a href="{url}" target="_blank">{name}</a></li>\n</for>\n  <li><a href="index.php?m=link&c=index&a=run" class="J_link_apply">申请链接</a></li>\n</ul>\n</div>', '44');
+
+INSERT INTO `pw_design_page` (`page_id`, `page_type`, `page_name`, `page_router`, `page_unique`, `is_unique`, `module_ids`, `struct_names`, `segments`, `design_lock`) VALUES
+(1, 2, '版块列表首页', 'bbs/forumlist/run', 0, 0, ',', '', '', ''),
+(2, 2, '论坛新贴', 'bbs/index/run', 0, 0, ',', '', '', ''),
+(3, 2, '版块列表页', 'bbs/thread/run', 0, 0, ',', '', '', ''),
+(4, 2, '帖子阅读页', 'bbs/read/run', 0, 0, ',', '', '', ''),
+(5, 2, '论坛分类页', 'bbs/cate/run', 0, 0, ',', '', '', ''),
+(6, 2, '版块精华', 'bbs/cate/digest', 0, 0, ',', '', '', ''),
+(7, 2, '我的关注', 'bbs/fresh/run', 0, 0, ',', '', '', '');

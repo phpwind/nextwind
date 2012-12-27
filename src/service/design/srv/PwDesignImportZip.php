@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImportZip.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: PwDesignImportZip.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImportZip {
@@ -12,13 +12,15 @@ class PwDesignImportZip {
 	
 	protected $themesPath = '';
 	protected $pageid = 0;
+	protected $tplPath = '';
 	
 	private $_files = array();
 	private $_tplExt = '.htm';
 	
-	public function __construct($pageid) {
-		$this->pageid = $pageid;
+	public function __construct($pageBo) {
+		$this->pageid = $pageBo->pageid;
 		$this->themesPath = Wind::getRealDir('THEMES:portal.local.');
+		$this->tplPath = $this->themesPath . $pageBo->getTplPath();
 	}
 	
 	/**
@@ -157,7 +159,7 @@ class PwDesignImportZip {
 	
 	protected function writeFile($fileData) {
 		$failArray = array();
-		$dir = $this->themesPath . $this->pageid;
+		$dir = $this->tplPath;
 		WindFolder::rm($dir, true);
 		WindFolder::mk($dir);
 		foreach ($fileData AS $file) {

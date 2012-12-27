@@ -7,8 +7,8 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('admin/config/email/run')}">电子邮件设置</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('admin/config/email/send')}">电子邮件检测</a></li>
+			<li class="current"><a href="{@url:admin/config/email/run}">电子邮件设置</a></li>
+			<li><a href="{@url:admin/config/email/send}">电子邮件检测</a></li>
 		</ul>
 	</div>
 	<div class="h_a">功能说明</div>
@@ -16,7 +16,7 @@
 		目前只提供SMTP模式
 	</div>
 	<div class="h_a">电子邮件设置</div>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('admin/config/email/dorun')}" method="post">
+	<form class="J_ajaxForm" action="{@url:admin/config/email/dorun}" method="post">
 	<div class="table_full">
 		<table width="100%">
 			<col class="th" />

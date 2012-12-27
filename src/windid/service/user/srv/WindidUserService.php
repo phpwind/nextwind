@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUserService.php 21452 2012-12-07 10:18:33Z gao.wanggao $ 
+ * @version $Id: WindidUserService.php 22500 2012-12-25 03:54:47Z gao.wanggao $ 
  * @package 
  */
 class WindidUserService {
@@ -13,12 +13,16 @@ class WindidUserService {
 		Wind::import('WINDID:service.upload.WindidUpload');
 		$_avatar = array('.jpg' => '_big.jpg', '_middle.jpg' => '_middle.jpg', '_small.jpg' => '_small.jpg');
 		$defaultBanDir = Wind::getRealDir('PUBLIC:') . 'res/images/face/';
-		$fileDir = ATTACH_PATH . '/avatar/' . Windid::getUserDir($uid) . '/';
+		Wind::import('WINDID:service.config.srv.WindidStoreService');
+		$srv = new WindidStoreService();
+		$store = $srv->getStore();
+		$fileDir =  '/avatar/' . Windid::getUserDir($uid) . '/';
 		foreach ($_avatar as $des => $org) {
-			$toPath = $fileDir . $uid . $des;
+			$toPath = $store->getAbsolutePath($uid . $des, $fileDir);
 			$fromPath = $defaultBanDir . $type . $org;
 			WindidUpload::createFolder(dirname($toPath));
 			WindidUpload::copyFile($fromPath, $toPath);
+			$store->save($toPath, $fileDir . $uid . $des);
 		}
 		return true;
 	}

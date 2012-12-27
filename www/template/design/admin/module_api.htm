@@ -15,12 +15,12 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li class="{$run}"><a href="{@WindUrlHelper::createUrl('design/module/run')}">模块管理</a></li>
-			<li class="{$api}"><a href="{@WindUrlHelper::createUrl('design/module/run?type=api')}">调用管理</a></li>
+			<li class="{$run}"><a href="{@url:design/module/run}">模块管理</a></li>
+			<li class="{$api}"><a href="{@url:design/module/run?type=api}">调用管理</a></li>
 		</ul>
 	</div>
 	<div class="h_a">搜索</div>
-	<form method="post" action="{@WindUrlHelper::createUrl('design/module/run')}">
+	<form method="post" action="{@url:design/module/run}">
 	<div class="search_type cc mb10">
 		<div class="mb10">
 		<span class="mr20">ID：<input type="text" class="input length_2" name="moduleid" value="{$args['moduleid']}"></span>
@@ -39,7 +39,7 @@
 	</div>
 	</form>
 	<div class="mb10">
-			<a  class="btn" href="{@WindUrlHelper::createUrl('design/property/add1')}"><span class="add"></span>添加模块</a>
+			<a  class="btn" href="{@url:design/property/add1}"><span class="add"></span>添加模块</a>
 	</div>
 	<div class="table_list">
 		<table width="100%">
@@ -64,13 +64,13 @@
 				<td>{$models[$v['model_flag']]['name']}</td>
 				<td>
 				<!--# if ($v['isdata']): #-->
-					<a href="{@WindUrlHelper::createUrl('design/data/run?moduleid='.$v['module_id'])}" class="mr10">[管理]</a>
+					<a href="{@url:design/data/run?moduleid=$v['module_id']}" class="mr10">[管理]</a>
 				<!--# else: #-->
-					<a href="{@WindUrlHelper::createUrl('design/property/edit?moduleid='.$v['module_id'])}" class="mr10">[管理]</a>
+					<a href="{@url:design/property/edit?moduleid=$v['module_id']}" class="mr10">[管理]</a>
 				<!--# endif; #-->
-					<!--a href="{@WindUrlHelper::createUrl('design/data/run?moduleid='.$v['module_id'])}" class="mr10">[数据]</a-->
-					<a href="{@WindUrlHelper::createUrl('design/module/script?moduleid='.$v['module_id'])}"  class="mr10">[调用代码]</a>
-					<a href="{@WindUrlHelper::createUrl('design/module/delete?moduleid='.$v['module_id'])}" class="mr10 J_ajax_del">[删除]</a>
+					<!--a href="{@url:design/data/run?moduleid=$v['module_id']}" class="mr10">[数据]</a-->
+					<a href="{@url:design/module/script?moduleid=$v['module_id']}"  class="mr10">[调用代码]</a>
+					<a href="{@url:design/module/delete?moduleid=$v['module_id']}" class="mr10 J_ajax_del">[删除]</a>
 				</td>
 			</tr>
 		<!--# endforeach; #-->

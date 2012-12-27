@@ -19,6 +19,7 @@ class ConfigController extends AdminBaseController {
 	 * @return void
 	 */
 	public function run() {
+
 		/* @var $userGroup PwUserGroups */
 		$userGroup = Wekit::load('usergroup.PwUserGroups');
 		$groups = $userGroup->getAllGroups();
@@ -63,9 +64,9 @@ class ConfigController extends AdminBaseController {
 	 * @return void
 	 */
 	public function siteAction() {
-		 $service = $this->_loadConfigService();
-		 $config = $service->getValues('site');
-		 $this->setOutput($config, 'config');
+		$service = $this->_loadConfigService();
+		$config = $service->getValues('site');
+		$this->setOutput($config, 'config');
 	
 	}
 
@@ -100,7 +101,7 @@ class ConfigController extends AdminBaseController {
 			$windid->setConfig('site', 'timecv', (int)$this->getInput('timeCv', 'post'));
 		}
 		$this->showMessage('ADMIN:success');
-	
+
 	}
 	
 	protected function _getWindid() {

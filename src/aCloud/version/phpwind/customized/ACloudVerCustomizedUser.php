@@ -258,7 +258,7 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 		if (!$user->isExists() || Pw::getPwdCode($user->info['password']) != $password) {
 			return $this->buildResponse(-1,'cookie非法');
 		} else {
-			return $this->buildResponse(0,array('uid'=>$uid));
+			return $this->buildResponse(0,array('uid'=>$uid,'username'=>$user->username));
 		}
 		
 	}

@@ -1,16 +1,16 @@
 <?php
 Wind::import('SRV:design.srv.model.PwDesignModelBase');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
  * <note>
  *  decorateAddProperty 为插入表单值修饰
  *  decorateEditProperty 为修改表单值修饰
  *  _getData 获取数据
  * </note>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignThreadDataService.php 20209 2012-10-24 10:00:09Z gao.wanggao $ 
+ * @version $Id: PwDesignThreadDataService.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 class PwDesignThreadDataService extends PwDesignModelBase{
@@ -161,20 +161,20 @@ class PwDesignThreadDataService extends PwDesignModelBase{
 				$styleArr = $highlight->parseHighlight($v['highlight']);
 				$list[$k]['__style'] = array($styleArr['bold'],$styleArr['underline'],$styleArr['italic'],$styleArr['color']);
 			}
-			$list[$k]['url'] = WindUrlHelper::createUrl('bbs/read/run?tid='.$v['tid'].'&fid='.$v['fid'], array(),'','pw');
+			$list[$k]['url'] = WindUrlHelper::createUrl('bbs/read/run', array('tid' => $v['tid'], 'fid' => $v['fid']), '', 'pw');
 			$list[$k]['content'] = $this->_formatDes($content[$k]['content']);
 			$list[$k]['created_time'] = $this->_formatTime($v['created_time']);
 			$list[$k]['lastpost_time'] = $this->_formatTime($v['lastpost_time']);
-			$list[$k]['created_space'] = WindUrlHelper::createUrl('space/index/run?uid='.$v['created_userid'], array(),'','pw');
+			$list[$k]['created_space'] = WindUrlHelper::createUrl('space/index/run', array('uid' => $v['created_userid']), '', 'pw');
 			$list[$k]['created_smallavatar'] = Pw::getAvatar($v['created_userid'],'small');
 			$list[$k]['created_middleavatar'] = Pw::getAvatar($v['created_userid'],'middle');
 			$list[$k]['created_bigavatar'] = Pw::getAvatar($v['created_userid'],'big');
 			$list[$k]['lastpost_smallavatar'] = Pw::getAvatar($v['lastpost_userid'],'small');
 			$list[$k]['lastpost_middleavatar'] = Pw::getAvatar($v['lastpost_userid'],'middle');
-			$list[$k]['lastpost_space'] = WindUrlHelper::createUrl('space/index/run?uid='.$v['lastpost_userid'], array(),'','pw');
+			$list[$k]['lastpost_space'] = WindUrlHelper::createUrl('space/index/run', array('uid' => $v['lastpost_userid']), '', 'pw');
 			
 			$list[$k]['forum_name'] = $this-> _filterForumHtml($forums[$v['fid']]['name']);
-			$list[$k]['forum_url'] = WindUrlHelper::createUrl('bbs/thread/run?fid='.$v['fid'], array(),'','pw');
+			$list[$k]['forum_url'] = WindUrlHelper::createUrl('bbs/thread/run', array('fid' => $v['fid']), '', 'pw');
 			$list[$k]['tType'] = isset($tTypes[$v['topic_type']]['name']) ? $tTypes[$v['topic_type']]['name'] : '' ;
 			$list[$k]['thumb_attach'] = $attachs[$v['tid']]['path'] ? $attachs[$v['tid']]['path']: '';
 		}

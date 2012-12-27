@@ -7,14 +7,14 @@ Wind::import('SRV:word.PwWord');
  * @author Mingqu Luo <luo.mingqu@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwWordFilter.php 20167 2012-10-24 05:50:51Z jinlong.panjl $
+ * @version $Id: PwWordFilter.php 22639 2012-12-26 06:02:15Z jinlong.panjl $
  * @package wind
  */
 
 class PwWordFilter {
 	
-	const WORD_ALL_KEY = 'allWord';
-	const WORD_REPLACE_KEY = 'replaceWord';
+	const WORD_ALL_KEY = 'word';
+	const WORD_REPLACE_KEY = 'word_replace';
 	
 	public $isTip; //是否敏感词提示
 	public $word;
@@ -70,8 +70,7 @@ class PwWordFilter {
 		$this->word = $this->fetchAllWord();
 		list($type, $words) = $this->_getAlgorithms($this->word)->match($str);
 		if (!$words) return array(0,array());
-		$this->isTip && $word = $words;
-		return array($type, (array)$word);
+		return array($type, $words, $this->isTip);
 	}
 	
 	/**
@@ -95,28 +94,36 @@ class PwWordFilter {
 	 * @return array
 	 */
 	public function fetchAllWord() {
-		$result = include $this->_getAllWordFile();
-		if (!$result) {
-			$words = $this->_buildWord($this->_getWordDS()->fetchAllWord());
-			$result = $this->_getAlgorithms()->createData($words);
-			$this->updateAllWordCache($result);
-		}
-		return $result;
+		return Wekit::cache()->get(self::WORD_ALL_KEY);
 	}
 	
 	/**
-	 * 获得所有替换敏感词列表(需谨慎)
+	 * 从数据库获得所有敏感词列表
+	 *
+	 * @return array
+	 */
+	public function fetchAllWordNoCache() {
+		$words = $this->_buildWord($this->_getWordDS()->fetchAllWord());
+		return $this->_getAlgorithms()->createData($words);
+	}
+	
+	/**
+	 * 从cache获得所有替换敏感词列表
 	 *
 	 * @return array
 	 */
 	public function getReplaceWord() {
-		$result = include $this->_getReplaceWordFile();
-		if (!$result) {
-			$words = $this->_buildWord($this->_getWordDS()->getWordByType(PwWord::WORD_REPLACE));
-			$result = $this->_getAlgorithms()->createData($words);
-			$this->updateReplaceWordCache($result);
-		}
-		return $result;
+		return Wekit::cache()->get(self::WORD_REPLACE_KEY);
+	}
+	
+	/**
+	 * 从数据库获得所有替换敏感词列表
+	 *
+	 * @return array
+	 */
+	public function getReplaceWordNoCache() {
+		$words = $this->_buildWord($this->_getWordDS()->getWordByType(PwWord::WORD_REPLACE));
+		return $this->_getAlgorithms()->createData($words);
 	}
 	
 	public function updateCache() {
@@ -133,64 +140,20 @@ class PwWordFilter {
 	}
 	
 	public function updateAllWordCache($data) {
-		$this->writeData($this->_getAllWordFile(), $data);
+		Wekit::cache()->set(self::WORD_ALL_KEY, $data);
+		return true;
 	}
 	
 	public function updateReplaceWordCache($data) {
-		$this->writeData($this->_getReplaceWordFile(), $data);
+		Wekit::cache()->set(self::WORD_REPLACE_KEY, $data);
+		return true;
 	}
-	
-	private function writeData($file, $data) {
-		$temp = "<?php\t";
-			$temp .= " return ";
-			$temp .= $this->varToString($data) . ";\t?>";
 
-		return WindFile::write($file, $temp);
-	}
-	
-	public static function varToString($input) {
-			switch (gettype($input)) {
-			case 'string':
-				return "'" . str_replace(array("\\", "'"), array("\\\\", "\\'"), $input) . "'";
-			case 'array':
-				$output = "array(";
-				foreach ($input as $key => $value) {
-					$output .= self::varToString($key) . ' => ' . self::varToString($value);
-					$output .= ",";
-				}
-				$output .= ')';
-				return $output;
-			case 'boolean':
-				return $input ? 'true' : 'false';
-			case 'NULL':
-				return 'NULL';
-			case 'integer':
-			case 'double':
-			case 'float':
-				return "'" . (string) $input . "'";
-		}
-		return 'NULL';
-	}
-	
 	private function _getAlgorithms($data = array()) {
 		$algorithms = strtolower($this->_algorithms);
 		$className = sprintf('PwFilter%s', ucfirst($algorithms));
 		Wind::import('SRV:word.srv.filter.'.$className);
 		return new $className($data);
-	}
-	
-	private function _getAllWordFile() {
-		$file = Wind::getRealPath('DATA:cache.word.php', true);
-		if (file_exists($file)) return $file;
-		$this->writeData($file,array());
-		return $file;
-	}
-	
-	private function _getReplaceWordFile() {
-		$file = Wind::getRealPath('DATA:cache.word_replace.php', true);
-		if (file_exists($file)) return $file;
-		$this->writeData($file,array());
-		return $file;
 	}
 	
 	/**

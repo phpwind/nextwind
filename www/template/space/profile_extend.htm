@@ -3,7 +3,7 @@
 				<div class="space_profile">
 					<h3>
 						<!--# if ($space->tome == 2): #-->
-						<a href="{@WindUrlHelper::createUrl('profile/education/run', array('_tab'=>'education'))}" class="edit">编辑</a>
+						<a href="{@url:profile/education/run?_tab=education}" class="edit">编辑</a>
 						<!--# endif; #-->
 						<strong>教育经历</strong>
 					</h3>
@@ -20,7 +20,7 @@
 				<div class="space_profile">
 					<h3>
 						<!--# if ($space->tome == 2): #-->
-						<a href="{@WindUrlHelper::createUrl('profile/work/run',array('_tab'=>'work'))}" class="edit">编辑</a>
+						<a href="{@url:profile/work/run?_tab=work}" class="edit">编辑</a>
 						<!--# endif; #-->
 						<strong>工作经历</strong>
 					</h3>

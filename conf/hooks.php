@@ -12,7 +12,7 @@ return array(
 			'poll' => array(
 				'class' => 'SRV:forum.srv.post.injector.PwPostDoPollInjector', 
 				'method' => 'run', 
-				'expression' => 'special.get==1',
+				'expression' => 'special.get==poll',
 				'description' => '投票帖展示'
 			)
 		)
@@ -89,8 +89,8 @@ return array(
 		'list' => array(
 			'poll' => array(
 				'class' => 'SRV:forum.srv.post.injector.PwPostDoPollInjector', 
-				'method' => 'doadd', 
-				'expression' => 'special.post==1',
+				'method' => 'doadd',
+				'expression' => 'special.post==poll',
 				'description' => '发投票帖'
 			), 
 			'att' => array(
@@ -133,6 +133,11 @@ return array(
 				'method' => 'run', 
 				'expression' => 'from_type.post==like',
 				'description' => '回复发布 - 最后喜欢的回复'
+			),
+			'word' => array(
+				'class' => 'SRV:forum.srv.post.injector.PwPostDoWordInjector', 
+				'method' => 'doadd',
+				'description' => '帖子发布 - 敏感词'
 			)
 		)
 	), 
@@ -144,7 +149,7 @@ return array(
 			'poll' => array(
 				'class' => 'SRV:forum.srv.post.injector.PwPostDoPollInjector', 
 				'method' => 'modify', 
-				'expression' => 'service:special==1',
+				'expression' => 'service:special==poll',
 				'description' => '帖子编辑 - 投票帖'
 			),
 		)
@@ -157,7 +162,7 @@ return array(
 			'poll' => array(
 				'class' => 'SRV:forum.srv.post.injector.PwPostDoPollInjector', 
 				'method' => 'domodify', 
-				'expression' => 'service:action.info.special==1',
+				'expression' => 'service:special==poll',
 				'description' => '帖子编辑提交 - 投票帖'
 			), 
 			'att' => array(
@@ -192,7 +197,7 @@ return array(
 			'poll' => array(
 				'class' => 'SRV:forum.srv.threadDisplay.injector.PwThreadDisplayDoPollInjector', 
 				'method' => 'run', 
-				'expression' => 'service:thread.info.special==1',
+				'expression' => 'service:thread.info.special==poll',
 				'description' => '帖子阅读页 - 投票帖'
 			),
 			'like' => array(
@@ -208,7 +213,6 @@ return array(
 			),
 			'word' => array(
 				'class' => 'SRV:forum.srv.threadDisplay.injector.PwThreadDisplayDoWordInjector', 
-				'method' => 'run',
 				'description' => '帖子阅读页 - 替换敏感词'
 			),
 		)
@@ -398,11 +402,11 @@ return array(
 				'method' => 'delFollow',
 				'loadway' => 'load'
 			),
-			'recommend' => array(
+/*			'recommend' => array(
 				'class' => 'SRV:attention.srv.recommend.PwRecommendAttentionDo',
 				'method' => 'delFollow',
 				'loadway' => 'load'
-			),
+			),*/
 		)
 	),
 	
@@ -461,7 +465,7 @@ return array(
 		)
 	),
 	
-	'm_PwMessageService' => array( //todo 金龙 simpleHook
+	'm_PwMessageService' => array(
 		'description' => '消息服务',
 		'param' => array(),
 		'interface' => 'SRV:message.srv.do.PwMessageDoBase',
@@ -491,14 +495,14 @@ return array(
 				'class' => 'SRV:medal.srv.condition.do.PwMedalUserDo',
 				'loadway' => 'load'
 			),
-			'recommendUser' => array(
-				'class' => 'SRV:attention.srv.recommend.PwRecommendUserDo',
-				'loadway' => 'load'
-			),
 			'updateOnline' => array(
 				'class' => 'SRV:online.srv.do.PwLoginDoUpdateOnline',
 				'loadway' => 'load'
 			),
+/*			'recommendUser' => array(
+				'class' => 'SRV:attention.srv.recommend.PwRecommendUserDo',
+				'loadway' => 'load'
+			),*/
 		)
 	),
 	's_PwUser_delete' => array(
@@ -594,18 +598,18 @@ return array(
 			),
 		)
 	),
-	'c_space_profile' => array(
+	's_space_profile' => array(
 		'description' => '空间资料页面',
 		'param' => array(''),
 		'interface' => '',
 		'list' => array( //这个顺序别改，pd要求的
 			'education' => array(
-				'class' => 'SRV:space.srv.profile.injector.PwSpaceProfileInjector', 
-				'method' => 'extendEducation'
+				'class' => 'SRV:education.srv.profile.do.PwSpaceProfileDoEducation', 
+				'method' => 'createHtml'
 			),
 			'work' => array(
-				'class' => 'SRV:space.srv.profile.injector.PwSpaceProfileInjector', 
-				'method' => 'extendWork'
+				'class' => 'SRV:work.srv.profile.do.PwSpaceProfileDoWork', 
+				'method' => 'createHtml'
 			),
 		)
 	),
@@ -887,15 +891,20 @@ return array(
 			),
 		)
 	),
-	'm_threadmanage_copy' => array( //todo
+	's_PwThreadManageDoCopy' => array( //todo
+		'description' => '退出登录',
+		'param' => array('@param PwThreadManage $srv', '@return void'),
+		'interface' => 'PwThreadManageCopyDoBase',
 		'list' => array(
 			'poll' => array(
 				'class' => 'SRV:forum.srv.manage.do.PwThreadManageCopyDoPoll', 
+				'method' => 'copyThread',
 				'loadway' => 'load',
-				'expression' => 'service:special!=0',
+				'expression' => 'service:special==poll',
 			), 
 			'att' => array(
 				'class' => 'SRV:forum.srv.manage.do.PwThreadManageCopyDoAtt', 
+				'method' => 'copyThread',
 				'loadway' => 'load',
 				'expression' => 'service:ifupload!=0',
 			),

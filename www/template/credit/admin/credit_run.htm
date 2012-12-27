@@ -6,7 +6,7 @@
 <body>
 <div class="wrap">
 	<template source="credit_headtab" />
-	<form class="J_ajaxForm" method="post" action="{@WindUrlHelper::createUrl('credit/credit/doSetting')}" data-role="list">
+	<form class="J_ajaxForm" method="post" action="{@url:credit/credit/doSetting}" data-role="list">
 	<div class="table_list">
 		<table id="J_table_list" width="100%">
 			<col width="220">
@@ -30,7 +30,7 @@
 				<td><input name="credits[{$key}][open]" type="checkbox" value="1"{@Pw::ifcheck($localCredits[$key]['open'])}></td>
 				<td><input name="credits[{$key}][log]" type="checkbox" value="1"{@Pw::ifcheck($localCredits[$key]['log'])}></td>
 				<!--# if($key > 4) {#-->
-				<td><a href="{@WindUrlHelper::createUrl('credit/credit/doDelete', array('creditId' => $key))}" class="mr10 J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:credit/credit/doDelete?creditId=$key}" class="mr10 J_ajax_del">[删除]</a></td>
 				<!--#} else {#-->
 				<td>-- --</td>
 				<!--#}#-->

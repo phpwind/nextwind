@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUserApi.php 22377 2012-12-21 14:28:48Z gao.wanggao $ 
+ * @version $Id: WindidUserApi.php 22709 2012-12-26 12:00:08Z gao.wanggao $ 
  * @package 
  */
 class WindidUserApi {
@@ -24,11 +24,17 @@ class WindidUserApi {
 	public function register($username, $email, $password, $question = '', $answer = '', $regip = '') {
 		Wind::import('WINDID:service.user.dm.WindidUserDm');
 		$dm = new WindidUserDm();
-		$dm->setUsername($username)->setEmail($email)->setPassword($password)->setQuestion($question)->setAnswer($answer)->setRegip($regip)->setLastvisit(Windid::getTime());
+		$dm->setUsername($username)->setEmail($email)->setPassword($password)->setQuestion($question)->setAnswer($answer)->setRegip($regip);
 		$result = $this->_getUserDs()->addUser($dm);
 		if ($result instanceof WindidError) return $result->getCode();
-		$this->_getNotifyClient()->send('register', (int)$result);
-		return (int)$result;
+		$uid = (int)$result;
+		$params = array(
+			'uid'=>$uid,
+			'type'=>'face',
+		);
+		WindidApi::open('avatar/default', array(), $params);
+		$this->_getNotifyClient()->send('register', $uid);
+		return $uid;
 	}
 	
 	/**
@@ -223,7 +229,7 @@ class WindidUserApi {
 	 * Enter description here ...
 	 * @param int $uid
 	 * @param string $password
-	 * @param array $editInfo  array('username', 'newpassword', 'email', 'question', 'answer')
+	 * @param array $editInfo  array('username', 'password', 'email', 'question', 'answer')
 	 */
 	public function editUser($uid, $password, $editInfo) {
 		if(!is_array($editInfo)) $editInfo = array($editInfo);
@@ -302,8 +308,14 @@ class WindidUserApi {
 		if (!$dm instanceof WindidUserDm) return WindidError::CLASS_ERROR;
 		$result =  $this->_getUserDs()->addUser($dm);
 		if (!$result instanceof WindidError) {
-			$this->_getNotifyClient()->send('register', (int)$result);
-			return (int)$result;
+			$uid = (int)$result;
+			$params = array(
+				'uid'=>$uid,
+				'type'=>'face',
+			);
+			WindidApi::open('avatar/default', array(), $params);
+			$this->_getNotifyClient()->send('register', $uid);
+			return $uid;
 		} else {
 			return WindidError::FAIL;
 		}

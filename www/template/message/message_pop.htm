@@ -1,5 +1,5 @@
 <div id="J_send_msg_pop" tabindex="0" class="core_pop_wrap" style="display:none;z-index:11;">
-	<form id="J_send_msg_form" style="display:block;" action="{@WindUrlHelper::createUrl('message/message/doAddMessage')}" method="post" >
+	<form id="J_send_msg_form" style="display:block;" action="{@url:message/message/doAddMessage}" method="post" >
 	<div class="pop_message_add">
 		<div class="core_pop">
 			<div class="J_drag_handle pop_top"><a href="#" id="J_send_msg_close" class="pop_close">关闭</a><strong>写私信</strong></div>
@@ -29,7 +29,7 @@
 						</div>
 						</div>
 						<div class="user_select_input cc J_user_tag_wrap">
-							<a href="{@WindUrlHelper::createUrl('message/message/follows')}" class="input_down" id="J_get_follows">下拉选择</a>
+							<a href="{@url:message/message/follows}" class="input_down" id="J_get_follows">下拉选择</a>
 							<ul class="fl J_user_tag_ul">
 							<!--# if ($username) { #-->
 							<!--# foreach ($username as $value) { #-->

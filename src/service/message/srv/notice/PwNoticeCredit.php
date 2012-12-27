@@ -6,7 +6,7 @@ Wind::import('SRV:message.srv.notice.PwNoticeAction');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwNoticeCredit.php 20272 2012-10-25 07:49:18Z yishuo $
+ * @version $Id: PwNoticeCredit.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package src.service.task.srv.notice
  */
 class PwNoticeCredit extends PwNoticeAction{
@@ -23,7 +23,7 @@ class PwNoticeCredit extends PwNoticeAction{
 		switch($extendParams['change_type']) {
 			//转账
 			case 'transfer':
-				$params['{username}'] = '<a href="' . WindUrlHelper::createUrl('space/index/run?uid=' . $extendParams['fromUid']) . '">' . $extendParams['fromUserName'] . '</a>';
+				$params['{username}'] = '<a href="' . WindUrlHelper::createUrl('space/index/run', array('uid' => $extendParams['fromUid'])) . '">' . $extendParams['fromUserName'] . '</a>';
 				$params['{num}'] = $extendParams['num'];
 				$params['{unit}'] = $extendParams['unit'];
 				$params['{credit}'] = $extendParams['credit'];

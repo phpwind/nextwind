@@ -25,11 +25,11 @@
 								
 							</dl>
 							<dl>
-								<dt class="J_friend_dt" data-name="type" data-id="" data-fanurl="{@WindUrlHelper::createUrl('bbs/remind/getfollow?page='.$page)}">全部</dt>						
+								<dt class="J_friend_dt" data-name="type" data-id="" data-fanurl="{@url:bbs/remind/getfollow?page=$page}">全部</dt>						
 							</dl>
 							<!--# foreach ($typeArr as $k => $v) { #-->
 							<dl>
-								<dt class="J_friend_dt" data-name="type" data-id="{$k}" data-fanurl="{@WindUrlHelper::createUrl('bbs/remind/getfollow?type='.$k.'&page='.$page)}">{$v}</dt>						
+								<dt class="J_friend_dt" data-name="type" data-id="{$k}" data-fanurl="{@url:bbs/remind/getfollow?type=$k&page=$page}">{$v}</dt>						
 							</dl>
 							<!--# } #-->
 						</div>

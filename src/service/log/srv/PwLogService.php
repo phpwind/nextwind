@@ -7,7 +7,7 @@ Wind::import('SRV:log.dm.PwLogDm');
  * @author xiaoxia.xu<xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwLogService.php 21760 2012-12-13 05:52:13Z xiaoxia.xuxx $
+ * @version $Id: PwLogService.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package src.service.log.srv
  */
 class PwLogService {
@@ -52,13 +52,13 @@ class PwLogService {
 	public function addEditThreadLog(PwUserBo $user, $thread, $isReply = false) {
 		if (!$thread) return false;
 		$langArgs = array();
-		$langArgs['{createdUser}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run?uid=' .$user->uid), $user->username);
+		$langArgs['{createdUser}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run', array('uid' => $user->uid)), $user->username);
 		$msg = '';
 		if ($isReply) {
-			$langArgs['{title}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('bbs/read/run?tid=' . $thread['tid'], array(), $thread['pid']), $this->_buildSecurity($thread['subject']));
+			$langArgs['{title}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('bbs/read/run', array('tid' => $thread['tid']), $thread['pid']), $this->_buildSecurity($thread['subject']));
 			$msg = 'LOG:editThread.reply.message';
 		} else {
-			$langArgs['{title}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('bbs/read/run?tid=' . $thread['tid']), $this->_buildSecurity($thread['subject']));
+			$langArgs['{title}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('bbs/read/run', array('tid' => $thread['tid'])), $this->_buildSecurity($thread['subject']));
 			$msg = 'LOG:editThread.message';
 		}
 		$dm = new PwLogDm();
@@ -85,8 +85,8 @@ class PwLogService {
 	public function addDeleteAtachLog(PwUserBo $user, $attach) {
 		if (!$attach) return false;
 		$langArgs = array();
-		$langArgs['{createdUser}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run?uid=' .$user->uid), $user->username);
-		$langArgs['{attach}'] = sprintf('<a href="%s" target="_blank">%s</a>', WindUrlHelper::createUrl('bbs/read/run?tid=' . $attach['tid'], array(), $attach['pid'] ? $attach['pid'] : ''), $this->_buildSecurity($attach['name']));
+		$langArgs['{createdUser}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run', array('uid' => $user->uid)), $user->username);
+		$langArgs['{attach}'] = sprintf('<a href="%s" target="_blank">%s</a>', WindUrlHelper::createUrl('bbs/read/run', array('tid' => $attach['tid']), $attach['pid'] ? $attach['pid'] : ''), $this->_buildSecurity($attach['name']));
 		$_createdUser = Wekit::load('user.PwUser')->getUserByUid($attach['created_userid']);
 		$dm = new PwLogDm();
 		$dm->setFid($attach['fid'])
@@ -121,9 +121,10 @@ class PwLogService {
 		$langArgs['{operattype}'] = $typeTitle;
 		$langArgs['{reason}'] = $reason ? $this->_buildSecurity($reason) : '无';
 		$_logMsg = $useReplyMsg ? 'LOG:thread.reply.message' : 'LOG:thread.manage.message';
+		Wind::import('SRV:forum.dm.PwTopicDm');
 		foreach ($threads as $thread) {
-			$langArgs['{title}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('bbs/read/run?tid=' . $thread['tid']), $this->_buildSecurity($thread['subject']));
-			$langArgs['{createdUser}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run?uid=' . $user->uid), $user->username);
+			$langArgs['{title}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('bbs/read/run', array('tid' => $thread['tid'])), $this->_buildSecurity($thread['subject']));
+			$langArgs['{createdUser}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run', array('uid' => $user->uid)), $user->username);
 			$_dm = new PwLogDm();
 			$_dm->setCreatedTime(Pw::getTime())
 			->setCreatedUser($user->uid, $user->username)
@@ -135,6 +136,12 @@ class PwLogService {
 			->setPid((isset($thread['pid']) && $thread['pid']) ? $thread['pid'] : 0)
 			->setTypeid($typeid)
 			->setContent($this->getLogMsg($_logMsg, $langArgs));
+			if (!isset($thread['pid']) && !Pw::getstatus($thread['tpcstatus'], PwThread::STATUS_OPERATORLOG)) {
+				$topicDm = new PwTopicDm($thread['tid']);
+				$topicDm->setOperatorLog(true);
+				Wekit::load('forum.PwThread')->updateThread($topicDm, PwThread::FETCH_MAIN);
+			}
+			
 			$_logDms[] = $_dm;
 		}
 		$this->_getLogDs()->batchAddLog($_logDms);
@@ -170,11 +177,11 @@ class PwLogService {
 			$title = $this->getOperatTypeTitle($type);
 			$langArgs = array(
 				'{operatedUser}' => '',
-				'{createdUser}' => sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run?uid=' . $user->uid), $user->username),
+				'{createdUser}' => sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run', array('uid' => $user->uid)), $user->username),
 				'{operattype}' => $title,
 				'{reason}' => $reason ? $this->_buildSecurity($reason) : '无');
 			foreach ($userList as $_uid => $_user) {
-				$langArgs['{operatedUser}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run?uid=' . $_uid), $_user['username']);
+				$langArgs['{operatedUser}'] = sprintf("<a href='%s' target='_blank'>%s</a>", WindUrlHelper::createUrl('space/index/run', array('uid' => $_uid)), $_user['username']);
 				$_dm = new PwLogDm();
 				$_dm->setCreatedTime(Pw::getTime())
 					->setCreatedUser($user->uid, $user->username)

@@ -7,16 +7,16 @@
 <div class="wrap J_check_wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/run')}">勋章管理</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/award')}">勋章颁发</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('medal/medal/approval')}">勋章审核</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/set')}">勋章设置</a></li>
+			<li><a href="{@url:medal/medal/run}">勋章管理</a></li>
+			<li><a href="{@url:medal/medal/award}">勋章颁发</a></li>
+			<li class="current"><a href="{@url:medal/medal/approval}">勋章审核</a></li>
+			<li><a href="{@url:medal/medal/set}">勋章设置</a></li>
 		</ul>
 	</div>
 	
 	<div class="h_a">勋章会员筛选</div>
 	<div class="search_type cc mb10">
-		<form  action="{@WindUrlHelper::createUrl('medal/medal/approval')}" method="post">
+		<form  action="{@url:medal/medal/approval}" method="post">
 			<label>勋章名称：</label>
 			<select size="1" name="medalid" class="mr10">
 				<option value="0">全部</option>
@@ -30,7 +30,7 @@
 	</div>
 
 	<!-- list -->
-	<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('medal/medal/batchPass')}" method="post">
+	<form class="J_ajaxForm" data-role="list" action="{@url:medal/medal/batchPass}" method="post">
 	<div class="table_list">
 	<table width="100%" id="J_subcheck">
 			<colgroup>
@@ -50,11 +50,11 @@
 			<!--# foreach ($list as $log): #-->
 			<tr>
 				<td><input class="J_check" data-yid="J_check_y" data-xid="J_check_x" type="checkbox" name="logids[]" value="{$log['log_id']}"/></td>
-				<td><a href="{@WindUrlHelper::createUrl('medal/medal/approval/?uid='.$log['uid'])}">{$users[$log['uid']]['username']}</a></td>
+				<td><a href="{@url:medal/medal/approval?uid=$log['uid']}">{$users[$log['uid']]['username']}</a></td>
 				<td>{$medals[$log['medal_id']]['name']}</td>
 				<td><img src="{$medals[$log['medal_id']]['medalImage']}" width="30" height="30" /></td>
 				<td>{$medals[$log['medal_id']]['descrip']}</td>
-				<td><a href="{@WindUrlHelper::createUrl('medal/medal/doEditApply/?id='.$log['log_id'].'&check=yes')}" class="mr5 J_medal_pass">[通过]</a><a href="{@WindUrlHelper::createUrl('medal/medal/doEditApply/?id='.$log['log_id'].'&check=no')}" class="J_ajax_del" data-msg="确定要拒绝此申请？">[拒绝]</a></td>
+				<td><a href="{@url:medal/medal/doEditApply?id=$log['log_id']&check=yes}" class="mr5 J_medal_pass">[通过]</a><a href="{@url:medal/medal/doEditApply?id=$log['log_id']&check=no}" class="J_ajax_del" data-msg="确定要拒绝此申请？">[拒绝]</a></td>
 			</tr>
 			<!--# endforeach; #-->
 			<!--# } else { #-->
@@ -69,7 +69,7 @@
 		<div class="btn_wrap_pd">
 			<label class="mr20"><input class="J_check_all" data-checklist="J_check_x" data-direction="x" type="checkbox" />全选</label>
 			<button class="btn btn_submit J_ajax_submit_btn" data-subcheck="true" type="submit">通过</button>
-			<button class="btn btn_submit J_ajax_submit_btn" data-subcheck="true" data-msg="确定拒绝它们？" data-action="{@WindUrlHelper::createUrl('medal/medal/batchDisclaim')}" type="submit">拒绝</button>
+			<button class="btn btn_submit J_ajax_submit_btn" data-subcheck="true" data-msg="确定拒绝它们？" data-action="{@url:medal/medal/batchDisclaim}" type="submit">拒绝</button>
 		</div>
 	</div>
 	<!--# } #-->

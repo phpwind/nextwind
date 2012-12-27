@@ -10,11 +10,11 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertThread');
  * <3>PwBuildLikeService->_getDataFrom??? 增加喜欢内容
  * <4>PwBuildLikeService->_getReplyFrom??? 增加喜欢回复内容
  * <5>PwLikeService->_getSpecialAndBeLikeuid 增加被喜欢信息
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwBuildLikeService.php 20211 2012-10-24 10:10:21Z gao.wanggao $ 
+ * @version $Id: PwBuildLikeService.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 class PwBuildLikeService {
@@ -228,7 +228,11 @@ class PwBuildLikeService {
 			$data['username'] = $info['created_username'];
 			$data['fid'] = $info['fid'];
 			$data['like_count'] = $info['like_count'];
-			$data['url'] =  WindUrlHelper::createUrl('bbs/read/run/?tid='. $info['tid'].'&fid='.$info['fid'].'&pid='.$info['pid']).'#read_'.$info['pid'];
+			$data['url'] =  WindUrlHelper::createUrl('bbs/read/run', array(
+				'tid' => $info['tid'],
+				'fid' => $info['fid'],
+				'pid' => $info['pid']
+			), 'read_' . $info['pid']);
 			$data['content'] .= '   <a href="' . $data['url']  .'">'. '查看' . '</a>';
 			$this->_appendFid($info['fid']);
 			if ($info['aids']) $_aPid[] = array($info['tid'],$info['pid']);
@@ -254,7 +258,7 @@ class PwBuildLikeService {
 			$data['username'] = $info['created_username'];
 			$data['fid'] = $info['fid'];
 			$data['like_count'] = $info['like_count'];
-			$data['url'] =  WindUrlHelper::createUrl('bbs/read/run/?tid='. $info['tid'] . '&fid=' . $info['fid']);
+			$data['url'] =  WindUrlHelper::createUrl('bbs/read/run', array('tid' => $info['tid'], 'fid' => $info['fid']));
 			$this->_appendFid($info['fid']);
 			if ($info['aids']) $_aTid[] = $info['tid'];
 			$datas[$info['tid']] = $data;
@@ -277,7 +281,7 @@ class PwBuildLikeService {
 			$data['uid'] = $info['created_userid'];
 			$data['username'] = $info['created_username'];
 			$data['like_count'] = $info['like_count'];
-			$data['url'] =  WindUrlHelper::createUrl('space/index/fresh/?typeid=3&id='. $info['weibo_id']. '&uid='. $info['created_userid']);
+			$data['url'] =  WindUrlHelper::createUrl('space/index/fresh', array('typeid' => 3, 'id' => $info['weibo_id'], 'uid' => $info['created_userid']));
 			if (!$data['subject'] && $info['type'] != PwWeibo::TYPE_MEDAL) $data['content'] .= '   <a href="' . $data['url']  .'">'. '查看' . '</a>';
 			$datas[$info['weibo_id']] = $data;
 		}
@@ -310,7 +314,7 @@ class PwBuildLikeService {
 			$data['content'] = $this->_buildLikeContent($info['content']);
 			$data['uid'] = $info['created_userid'];
 			$data['username'] = $info['created_username'];
-			$data['url'] =  WindUrlHelper::createUrl('bbs/read/run/?tid='. $info['tid'] . '&fid=' . $info['fid'] .'&pid='.$info['pid']).'#'.$info['pid'];
+			$data['url'] =  WindUrlHelper::createUrl('bbs/read/run', array('tid' => $info['tid'], 'fid' => $info['fid'], 'pid' => $info['pid']), $info['pid']);
 			$this->_replyInfo[$info['pid']] = $data;
 		}
 	}
@@ -323,7 +327,7 @@ class PwBuildLikeService {
 			$data['content'] = $this->_buildLikeContent($info['content']);
 			$data['uid'] = $info['created_userid'];
 			$data['username'] = $info['created_username'];
-			$data['url'] =  WindUrlHelper::createUrl('bbs/read/run/?tid='. $info['tid'] . '&fid=' . $info['fid'] .'&pid='.$info['pid']).'#'.$info['pid'];
+			$data['url'] =  WindUrlHelper::createUrl('bbs/read/run', array('tid' => $info['tid'], 'fid' => $info['fid'], 'pid' => $info['pid']), $info['pid']);
 			$this->_replyInfo[$info['pid']] = $data;
 		}
 	}

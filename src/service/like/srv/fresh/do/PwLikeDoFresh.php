@@ -3,11 +3,11 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
- * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwLikeDoFresh.php 20459 2012-10-30 06:12:01Z xiaoxia.xuxx $ 
+ * @version $Id: PwLikeDoFresh.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 
@@ -23,8 +23,7 @@ class PwLikeDoFresh extends PwPostDoBase {
 	}
 	
 	public function addPost($pid, $tid) {
-		$url = isset($this->info['pid']) ?  '&pid=' . $this->info['pid'] : '';
-		$url = WindUrlHelper::createUrl('bbs/read/run/?tid='. $this->info['tid'] . '&fid=' . $this->info['fid'] . $url);
+		$url = WindUrlHelper::createUrl('bbs/read/run', array('tid' => $this->info['tid'], 'fid' => $this->info['fid']));
 		$lang = Wind::getComponent('i18n');
 		$content = $lang->getMessage("BBS:like.like.flesh") . '[url=' .$url .']' .$this->content . '[/url]';
 		Wind::import('SRV:weibo.dm.PwWeiboDm');

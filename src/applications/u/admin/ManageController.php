@@ -9,7 +9,7 @@ Wind::import('SRV:user.srv.PwClearUserService');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ManageController.php 22293 2012-12-21 05:09:51Z long.shi $
+ * @version $Id: ManageController.php 22484 2012-12-25 02:22:44Z gao.wanggao $
  * @package 
  */
 class ManageController extends AdminBaseController {
@@ -98,7 +98,7 @@ class ManageController extends AdminBaseController {
 			if ($result instanceof PwError) {
 				$this->showError($result->getError());
 			}
-			Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($result);
+			//Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($result);
 			$this->showMessage('USER:add.success');
 		}
 		/* @var $groupDs PwUserGroups */

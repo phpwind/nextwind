@@ -9,13 +9,13 @@
 
 <!--角色管理: 编辑角色  -->
 <div class="nav">
-	<div class="return"><a href="{@WindUrlHelper::createUrl('role/run')}">返回上一级</a></div>
+	<div class="return"><a href="{@url:role/run}">返回上一级</a></div>
 	<ul class="cc">
-		<li><a href="{@WindUrlHelper::createUrl('auth/run')}">后台用户</a></li>
-		<li class="current"><a href="{@WindUrlHelper::createUrl('role/run')}">管理角色</a></li>
+		<li><a href="{@url:auth/run}">后台用户</a></li>
+		<li class="current"><a href="{@url:role/run}">管理角色</a></li>
 	</ul>
 </div>
-<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('role/doEdit')}" method="post">
+<form class="J_ajaxForm" data-role="list" action="{@url:role/doEdit}" method="post">
 <input type="hidden" value="{$role['id']}" name="rid" />
 <div class="h_a">编辑角色</div>
 <div class="table_full">

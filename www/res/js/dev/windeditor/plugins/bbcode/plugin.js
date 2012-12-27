@@ -71,6 +71,7 @@
     var regCp = /\s+cellpadding\s*=\s*(["']?)\s*(.+?)\s*\1(\s|$)/i;
     var regBg = /(?:background|background-color|bgcolor)\s*[:=]\s*(["']?)\s*((rgb\s*\(\s*\d{1,3}%?,\s*\d{1,3}%?\s*,\s*\d{1,3}%?\s*\))|(#[0-9a-f]{3,6})|((?!initial)[a-z]{1,20}))\s*\1/i;
     var regBc = /(?:border-color|bordercolor)\s*[:=]\s*(["']?)\s*((rgb\s*\(\s*\d{1,3}%?,\s*\d{1,3}%?\s*,\s*\d{1,3}%?\s*\))|(#[0-9a-f]{3,6})|([a-z]{1,20}))\s*\1/i;
+    var regAg = /(?:border-color|align)\s*[:=]\s*(["']?)\s*((rgb\s*\(\s*\d{1,3}%?,\s*\d{1,3}%?\s*,\s*\d{1,3}%?\s*\))|(#[0-9a-f]{3,6})|([a-z]{1,20}))\s*\1/i;
     var regBw = /\s+border\s*=\s*(["']?)\s*(\d+(?:\.\d+)?)\s*\1(\s|$)/i;
 
 	function html2ubb(s) {
@@ -216,12 +217,13 @@
 	    });
 	    rep(/<table(\s+[^>]*?)?>/ig, function (all, attr) {
 	        var str = '[table';
-	        if (attr) {
+	        if (attr) {//console.log(regBg)
 	            var w = attr.match(regWidth),
 	                b = attr.match(regBg),
 	                c = attr.match(regBc),
 	                s = attr.match(regBw),
 	                p = attr.match(regCp);
+	                a = attr.match(regAg);
 	            if (w) {
 	                str += '=' + w[2];
 	                if (s && s[2] == '1') {s = null;}
@@ -233,10 +235,15 @@
 	                if(p){
 	                	str += ',' + p[2] || 0;
 	                }
+
+	                if(a) {
+	                	str += ',' + a[2];
+	                }
 	            }
 	        }
 	        return str + ']';
 	    });
+
 	    rep(/<tr(\s+[^>]*?)?>/ig, function (all, attr) {
 	        var str = '[tr';
 	        return str + ']';
@@ -400,11 +407,10 @@
 	        return '<embed type="application/x-mplayer2" src="' + url + '" enablecontextmenu="false" autostart="' + (play == '1' ? 'true' : 'false') + '" width="' + w + '" height="' + h + '"/>';
 	    });
 	    rep(/\[table\s*(?:=\s*(\d{1,4}%?)\s*(?:,\s*([^\]"]+){1,3}(?:"[^\]]*?)?)?)?\s*\]/ig, function (all, w, o) {
-	        var str = '<table',
-	            b, c, s, p;
+	        var str = '<table',b, c, s, p;
 	        if (o) {
 	            o = o.split(',');
-	            b = o[0], c = o[1], s = o[2], p = o[3];
+	            b = o[0], c = o[1], s = o[2], p = o[3], g = o[4];
 	        }
 	        str += ' width="' + (w ? w : '100%') + '"';
 	        if (b) { str += ' bgcolor="' + b + '"';}
@@ -412,6 +418,9 @@
 	        str += ' border="' + (s ? s : 1) + '"';
 	        if(p){
 	        	str += ' cellpadding="'+ p +'"';
+	        }
+	        if(g){
+	        	str += ' align="'+ g +'"';
 	        }
 	        return str + '>';
 	    });

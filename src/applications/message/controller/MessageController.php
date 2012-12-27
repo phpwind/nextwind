@@ -163,7 +163,7 @@ class MessageController extends PwBaseController {
 		$page = $page ? $page : 1;
 		$perpage = $perpage ? $perpage : $this->perpage;
 		list($start, $limit) = Pw::page2limit($page, $perpage);
-		list($count, $messages) = $this->_getMessageService()->getDialogMessageList($dialogid, $start, $limit);
+		list($count, $messages) = $this->_getMessageService()->getDialogMessageList($dialogid, $limit, $start);
 		$dialog = $this->_getMessageService()->getDialog($dialogid);
 		//更新统计数
 		$messageIds = array_keys($messages);
@@ -242,7 +242,7 @@ class MessageController extends PwBaseController {
 		} 
 		$dialog = $this->_getWindid()->getDialogByUser($this->loginUser->uid, $userinfo['uid']);
 		if (!$dialog) $this->showError(array('MESSAGE:dialog.notfound',array('{fromUser}' => $keyword)));
-		$this->showMessage('success',WindUrlHelper::createUrl('message/message/dialog?dialogid='.$dialog['dialog_id']));
+		$this->showMessage('success',WindUrlHelper::createUrl('message/message/dialog', array('dialogid' => $dialog['dialog_id'])));
 	}
 
 	/**

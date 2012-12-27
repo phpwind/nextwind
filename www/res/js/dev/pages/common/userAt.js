@@ -27,7 +27,7 @@ var config = {
 	};
 var html = '<div id="autoTalkBox"style="z-index:-2000;top:$top$px;left:$left$px;width:$width$px;height:$height$px;z-index:1;position:absolute;scroll-top:$SCTOP$px;overflow:hidden;overflow-y:auto;visibility:hidden;word-break:break-all;word-wrap:break-word;*letter-spacing:0.6px;"><span id="autoTalkText"></span></div><div id="recipientsTips" class="at_user_wrap"><ul id="autoTipsUserList" class="at_user_list"></ul></div>';
 //var listHTML = '<li><a title="$ACCOUNT$" rel="$ID$" >$NAME$(@$SACCOUNT$)</a></li>';
-var listHTML = '<li><a title="$ACCOUNT$" rel="$ID$" >$SACCOUNT$</a></li>';
+var listHTML = '<li><a title="$ID$" rel="$ACCOUNT$" >$SACCOUNT$</a></li>';
 
 
 /*
@@ -388,7 +388,7 @@ var AutoTips = function(A){
 	
 	_this.enter = function(){
 		TT.del(elem, key.length, key);
-		TT.add(elem, selectList.list[selectList.index].getElementsByTagName('A')[0].rel+' ');
+		TT.add(elem, selectList.list[selectList.index].getElementsByTagName('A')[0].title+' ');
 		_this.hide();
 		return false;
 	}

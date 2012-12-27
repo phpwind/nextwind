@@ -13,14 +13,14 @@ Wind::import('SRV:cron.srv.base.AbstractCronBase');
 class PwCronDoRecommendUser extends AbstractCronBase{
 	
 	public function run($cronId) {
-		$service = Wekit::load('attention.srv.PwAttentionRecommendFriendsService');
+/*		$service = Wekit::load('attention.srv.PwAttentionRecommendFriendsService');
 		$ds = Wekit::load('attention.PwAttentionRecommendCron');
 		$list = $ds->getAllCron();
 		foreach ($list AS $v) {
 			$service->updateRecommendFriend($v['uid']);
 			$ds->deleteCron($v['uid']);
 			sleep(2);
-		}
+		}*/
 	}
 }
 ?>

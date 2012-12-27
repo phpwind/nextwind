@@ -22,7 +22,7 @@ return array(
 	
 	'normal'=>array(
 		'image'		=>array('html','图片','','','image|image'),
-		'url'		=>array('text','图片链接地址','','','long'),
+		'url'		=>array('text','图片链接地址','以http://开头','','long'),
 		'height'		=>array('text','图片高','','',''),
 		'width'		=>array('text','图片宽','','',''),
 		'intro'		=>array('text','图片描述','','','long'),

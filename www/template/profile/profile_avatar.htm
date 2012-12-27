@@ -13,7 +13,7 @@
 	<div class="main_wrap">
 		<div class="main cc">
 			<div class="bread_crumb">
-				<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@WindUrlHelper::createUrl('profile/index/run')}">设置</a>
+				<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:profile/index/run}">设置</a>
 <!--#
 $_profileBread = Wind::getApp()->getResponse()->getData('G','profileBread');
 foreach ($_profileBread as $key => $_item) {
@@ -33,7 +33,7 @@ foreach ($_profileBread as $key => $_item) {
 							<div class="content">
 								<div class="profile_nav">
 									<ul>
-										<li class="current"><a href="{@WindUrlHelper::createUrl('profile/avatar/run?_left=avatar')}">更改头像</a></li>
+										<li class="current"><a href="{@url:profile/avatar/run?_left=avatar}">更改头像</a></li>
 									</ul>
 								</div>
 							<!--#if ($isAvatarBan) {

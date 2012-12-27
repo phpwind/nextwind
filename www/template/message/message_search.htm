@@ -9,7 +9,7 @@
 <template source='TPL:common.header' load='true' />
 	<div class="main_wrap">
 		<div class="bread_crumb">
-			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@WindUrlHelper::createUrl('message/message/run')}">消息</a><em>&gt;</em><a href="{@WindUrlHelper::createUrl('message/message/run')}">私信</a>
+			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:message/message/run}">消息</a><em>&gt;</em><a href="{@url:message/message/run}">私信</a>
 		</div>
 		<div class="main cc">
 			<div class="main_body">
@@ -33,12 +33,12 @@
 								#-->
 								<dl class="cc">
 									<dd>
-										<a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $value['from_uid'])}" class="face"><img src="{@G:url.images}/face/face_small.jpg" width="50" height="50" alt="{$value['username']}" /></a>
+										<a href="{@url:space/index/run?uid=$value['from_uid']}" class="face"><img src="{@G:url.images}/face/face_small.jpg" width="50" height="50" alt="{$value['username']}" /></a>
 										<div class="title">
-											<a href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $value['from_uid'])}" class="b">{$value['username']}</a>：{$value['content']|html}
+											<a href="{@url:space/index/run?uid=$value['from_uid']}" class="b">{$value['username']}</a>：{$value['content']|html}
 										</div>
 										<div class="c"></div>
-										<div class="info"><span class="num"><a href="{@WindUrlHelper::createUrl('message/message/searchdialog?from_uid='.$value['from_uid'].'&mes_id='.$value['id'])}">查看前后内容</a></span><span class="time">{$value['created_time']}</span></div>
+										<div class="info"><span class="num"><a href="{@url:message/message/searchdialog?from_uid=$value['from_uid']&mes_id=$value['id']}">查看前后内容</a></span><span class="time">{$value['created_time']}</span></div>
 									</dd>
 								</dl>
 								<!--# } #-->

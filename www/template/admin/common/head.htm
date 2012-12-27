@@ -1,12 +1,12 @@
 <meta charset="{@Wekit::app()->charset}">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <title>{@G:c.name}</title>
-<link href="{@G:url.css}/admin_style.css?v={@G:c.version}" rel="stylesheet" />
+<link href="{@G:url.css}/admin_style.css?v={@G:version}" rel="stylesheet" />
 <script>
 //全局变量，是Global Variables不是Gay Video喔
 var GV = {
 	JS_ROOT : "{@G:url.res}/js/dev/",																									//js目录
-	JS_VERSION : "{@G:c.version}",																										//js版本号
+	JS_VERSION : "{@G:version}",																										//js版本号
 	TOKEN : '{@Wind::getComponent('windToken')->saveToken('csrf_token')}',	//token ajax全局
 	REGION_CONFIG : {},
 	SCHOOL_CONFIG : {},

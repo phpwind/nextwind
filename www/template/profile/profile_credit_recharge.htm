@@ -3,11 +3,11 @@
 	<!--==============充值开始==============-->
 	<div class="content_type">
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('profile/credit/recharge')}">积分充值</a></li>
-			<li class="line"></li><li><a href="{@WindUrlHelper::createUrl('profile/credit/order')}">订单记录</a></li>
+			<li class="current"><a href="{@url:profile/credit/recharge}">积分充值</a></li>
+			<li class="line"></li><li><a href="{@url:profile/credit/order}">订单记录</a></li>
 		</ul>
 	</div>
-	<form id="J_recharge_form" action="{@WindUrlHelper::createUrl('profile/credit/pay')}" method="post">
+	<form id="J_recharge_form" action="{@url:profile/credit/pay}" method="post">
 	<div class="profile_ct">
 		<dl class="cc">
 			<dt>充值积分：</dt>

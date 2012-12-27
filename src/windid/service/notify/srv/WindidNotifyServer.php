@@ -5,7 +5,7 @@ Wind::import('WINDID:service.notify.dm.WindidNotifyLogDm');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidNotifyServer.php 22131 2012-12-19 08:39:22Z gao.wanggao $ 
+ * @version $Id: WindidNotifyServer.php 22632 2012-12-26 05:27:26Z gao.wanggao $ 
  * @package 
  */
 class WindidNotifyServer {
@@ -17,7 +17,7 @@ class WindidNotifyServer {
 	
 		'201'=>'editUser',
 		'202'=>'editUserInfo',
-		
+		'203'=>'uploadAvatar',
 		'211'=>'editCredit',
 		'222'=>'editMessageNum',
 	

@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.post.do.PwPostDoPoll');
  * @author MingXing Sun <mingxing.sun@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostDoPollInjector.php 17614 2012-09-07 03:14:46Z yanchixia $
+ * @version $Id: PwPostDoPollInjector.php 22440 2012-12-24 09:17:41Z jieyin $
  * @package forum
  */
 
@@ -38,8 +38,8 @@ class PwPostDoPollInjector extends PwBaseHookInjector {
 	 */
 	public function doadd() {
 		$poll = array(
-				'option'	=> $this->getInput('option', 'post'),
-				'poll'		=> $this->getInput('poll', 'post')
+			'option'	=> $this->getInput('option', 'post'),
+			'poll'		=> $this->getInput('poll', 'post')
 		);
 		return new PwPostDoPoll($this->bp, 0, $poll);
 	}
@@ -51,9 +51,9 @@ class PwPostDoPollInjector extends PwBaseHookInjector {
 	 */
 	public function domodify() {
 		$poll = array(
-				'option'	=> (array)$this->getInput('option', 'post'),
-				'newoption'	=> (array)$this->getInput('newoption', 'post'),
-				'poll'		=> $this->getInput('poll', 'post'),
+			'option'	=> (array)$this->getInput('option', 'post'),
+			'newoption'	=> (array)$this->getInput('newoption', 'post'),
+			'poll'		=> $this->getInput('poll', 'post'),
 		);
 		return new PwPostDoPoll($this->bp, $this->bp->action->tid, $poll);
 	}

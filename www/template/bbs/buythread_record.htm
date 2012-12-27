@@ -11,7 +11,7 @@
 		<!--# foreach ($record as $key => $value) { #-->
 		<tr>
 			<td>{@++$i}</td>
-			<td><a href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['created_userid'])}">{$users[$value['created_userid']]['username']}</a></td>
+			<td><a href="{@url:space/index/run?uid=$value['created_userid']}">{$users[$value['created_userid']]['username']}</a></td>
 			<td>{$value['cost']} {$cType[$value['ctype']]}</td>
 			<td>{@Pw::time2str($value['created_time'])}</td>
 		</tr>

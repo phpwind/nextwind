@@ -8,7 +8,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSystemInstallation.php 22252 2012-12-20 06:56:56Z long.shi $
+ * @version $Id: PwSystemInstallation.php 22736 2012-12-26 13:58:39Z long.shi $
  * @package wind
  */
 class PwSystemInstallation extends PwInstallApplication {
@@ -32,7 +32,7 @@ class PwSystemInstallation extends PwInstallApplication {
 			array('a' => 'forward', 'do' => 'getUpdateInfo', 'pwversion' => $this->local));
 
 		$r = PwApplicationHelper::requestAcloudData($url);
-		return $r['code'] === '0' ? $r['info'] : false;
+		return is_array($r) ? ($r['code'] === '0' ? $r['info'] : $r['msg']) : '无法连接云平台!';
 	}
 	
 	public function getNotice($adminUser) {
@@ -106,8 +106,9 @@ class PwSystemInstallation extends PwInstallApplication {
 				return new PwError(
 				'APPCENTER:install.checkpackage.format.fail', array('{{error}}' => $r));
 			}
-			PwApplicationHelper::copyRecursive($r, $this->tmpPackage);
-			WindFolder::clearRecur($r, true);
+			if ($r != realpath($this->tmpPackage)) {
+				PwApplicationHelper::copyRecursive($r, $this->tmpPackage);
+			}
 			$this->_log('extract zip success, dir:' . $this->tmpPackage);
 			return true;
 		} else {
@@ -169,6 +170,7 @@ class PwSystemInstallation extends PwInstallApplication {
 		$this->_log('obtain the md5 list of current version');
 		
 		foreach ($fileList as $v) {
+			$v = trim($v, '/');
 			$_v = $root . $v;
 			$file = $v;
 			foreach ($strtr as $search => $replace) {
@@ -178,7 +180,6 @@ class PwSystemInstallation extends PwInstallApplication {
 					break;
 				}
 			}
-			$file = trim($file, '/');
 			$newFileList[$file] = $md5List[$file];
 		}
 		$this->_log('files need to move ' . var_export($moveList, true));
@@ -209,14 +210,21 @@ class PwSystemInstallation extends PwInstallApplication {
 	 */
 	public function validateLocalFiles($fileList) {
 		$this->_log('start to validate local files' . var_export($fileList, true));
-		return PwSystemHelper::validateMd5($fileList);
+		list($change, $unchange, $new) = PwSystemHelper::validateMd5($fileList);
+		$source = DATA_PATH . 'upgrade' . DIRECTORY_SEPARATOR . $this->target . DIRECTORY_SEPARATOR;
+		foreach ($change as $k => $v) {
+			if (md5_file($source . $v) == md5_file(ROOT_PATH . $v)) {
+				unset($change[$k]);
+				$unchange[] = $v;
+			}
+		}
+		return array($change, $unchange, $new);
 	}
 
 	/**
 	 * 进行升级
 	 */
 	public function doUpgrade($fileList, $useFtp = 0) {
-		$root = Wind::getRealDir('ROOT:', true);
 		$source = Wind::getRealDir('DATA:upgrade') . DIRECTORY_SEPARATOR . $this->target;
 		if ($useFtp) {
 			try {
@@ -240,7 +248,8 @@ class PwSystemInstallation extends PwInstallApplication {
 					return new PwError('APPCENTER:upgrade.upload.fail', array($v));
 				}
 			} else {
-				$r = @copy($source . DIRECTORY_SEPARATOR . $v, $root . DIRECTORY_SEPARATOR . $v);
+				WindFolder::mkRecur(dirname(ROOT_PATH . $v));
+				$r = @copy($source . DIRECTORY_SEPARATOR . $v, ROOT_PATH . $v);
 				if (!$r) return new PwError('APPCENTER:upgrade.copy.fail', array($v));
 			}
 			$this->_log('copy file ' . $v);

@@ -25,7 +25,7 @@ Wind::import('WIND:viewer.AbstractWindTemplateCompiler');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwTemplateCompilerHook.php 21338 2012-12-05 03:51:50Z long.shi $
+ * @version $Id: PwTemplateCompilerHook.php 22627 2012-12-26 03:54:26Z jieyin $
  * @package wekit
  * @subpackage engine.extension.viewer
  */
@@ -69,22 +69,21 @@ class PwTemplateCompilerHook extends AbstractWindTemplateCompiler {
 			$_content = $this->_devHook();
 			$content[] = 'echo \'' . WindSecurity::escapeHTML($_content) . '\';';
 		}
+		if (!$this->args) {
+			$this->args = '';
+		} else {
+			$this->args = preg_replace(array('/\s*array\s*\(\s*/i', '/\s*\)\s*$/i'), '', $this->args);
+		}
+		$this->method = $this->method ? $this->method : 'runDo';
 		if ($this->class) {
+			$this->args = "'" . ltrim(strstr($this->name, '.'), '.') . "'" . ($this->args ? "," . $this->args : '');
 			$callback = 'array(' . $this->class . ', "' . $this->method . '")';
 		} elseif ($this->name) {
-			$content[] = '$_hookSimple = PwSimpleHook::getInstance("' . $this->name . '");';
-			$callback = 'array($_hookSimple, "' . ($this->method ? $this->method : 'runDo') . '")';
+			$callback = 'array(PwSimpleHook::getInstance("' . $this->name . '"), "' . $this->method . '")';
 		} else {
 			$callback = '"' . $this->method . '"';
 		}
-		if (!$this->args) {
-			$this->args = 'array()';
-		} else {
-			$this->args = preg_replace('/\s*array\s*\(\s*/i', 'array(', $this->args);
-			if (strpos($this->args, 'array(') === false) {
-				$this->args = 'array(' . $this->args . ')';
-			}
-		}
+		$this->args = 'array(' . $this->args . ')';
 		$this->alias = trim($this->alias);
 		$content[] = 'PwHook::display(' . $callback . ', ' . $this->args . ', "' . $this->alias . '", $__viewer);';
 		$content[] = '?>';

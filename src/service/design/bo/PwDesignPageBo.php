@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignPageBo.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: PwDesignPageBo.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
  * @package 
  */
 class PwDesignPageBo {
@@ -27,6 +27,16 @@ class PwDesignPageBo {
 	
     public function getPage() {
     	return $this->_pageInfo;
+    }
+    
+    public function getTplPath() {
+    	if ($this->_pageInfo['page_router'] == 'special/index/run') {
+			return 'special_'.$this->_pageInfo['page_unique'];
+		} elseif($this->_pageInfo['is_unique']) {
+			return str_replace('/', '_', $this->_pageInfo['page_router']).'_'.$this->_pageInfo['page_unique'];
+		} else {
+			return str_replace('/', '_', $this->_pageInfo['page_router']);
+		}
     }
     
     public function getPageModules() {
@@ -66,12 +76,13 @@ class PwDesignPageBo {
 			if ($pageId instanceof PwError) return false;
 			//自定义页面复制默认模版
 			if ($router == 'special/index/run') {
+				$tplPath = 'special_'.$uniqueId;
 				$srv = Wekit::load('design.srv.PwDesignService');
-				$result = $srv->defaultTemplate($pageId);
+				$result = $srv->defaultTemplate($pageId, $tplPath);
 				if ($result) {
 					Wind::import('SRV:design.dm.PwDesignPortalDm');
 					$dm = new PwDesignPortalDm($portal['id']);
-				    $dm->setTemplate($pageId);
+				    $dm->setTemplate($tplPath);
 				    Wekit::load('design.PwDesignPortal')->updatePortal($dm);
 				}
 			}

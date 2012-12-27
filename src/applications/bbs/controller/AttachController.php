@@ -5,7 +5,7 @@
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AttachController.php 22138 2012-12-19 08:59:44Z jieyin $
+ * @version $Id: AttachController.php 22488 2012-12-25 02:57:19Z xiaoxia.xuxx $
  * @package forum
  */
 
@@ -194,7 +194,9 @@ class AttachController extends PwBaseController {
 
 		Wekit::load('attach.PwThreadAttach')->deleteAttach($aid);
 		Pw::deleteAttach($attach['path'], $attach['ifthumb']);
-		Wekit::load('log.srv.PwLogService')->addDeleteAtachLog($this->loginUser, $attach);
+		if ($this->loginUser->uid != $attach['created_userid']) {
+			Wekit::load('log.srv.PwLogService')->addDeleteAtachLog($this->loginUser, $attach);
+		}
 		
 		if ($attach['tid']) {
 			if (!$attach['pid']) {
@@ -203,6 +205,9 @@ class AttachController extends PwBaseController {
 				$dm = new PwTopicDm($attach['tid']);
 				if (!Wekit::load('attach.PwThreadAttach')->countType($attach['tid'], 0, $attach['type'])) {
 					$dm->setHasAttach($attach['type'], false);
+				}
+				if (!Pw::getstatus($thread['tpcstatus'], PwThread::STATUS_OPERATORLOG) && $this->loginUser->uid != $attach['created_userid']) {
+					$dm->setOperatorLog(true);
 				}
 			} else {
 				$thread = Wekit::load('forum.PwThread')->getPost($attach['pid']);

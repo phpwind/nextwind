@@ -10,7 +10,7 @@ Wind::import('SRV:forum.dm.PwTopicDm');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwTopicModify.php 21170 2012-11-29 12:05:09Z xiaoxia.xuxx $
+ * @version $Id: PwTopicModify.php 22488 2012-12-25 02:57:19Z xiaoxia.xuxx $
  * @package forum
  */
 
@@ -90,7 +90,9 @@ class PwTopicModify extends PwPostAction {
 		$modifyTime = ($_gtime && (Pw::getTime() - $this->info['created_time'] > $_gtime * 60)) ? Pw::getTime() : 0;
 		$postDm->setDisabled($this->isDisabled())
 			->setModifyInfo($this->user->uid, $this->user->username, $this->user->ip, $modifyTime);
-			
+		if (!Pw::getstatus($this->info['tpcstatus'], PwThread::STATUS_OPERATORLOG) && $this->info['created_userid'] != $this->user->uid) {
+			$postDm->setOperatorLog(true);
+		}
 		if (($result = $this->checkTopictype($postDm)) !== true) {
 			return $result;
 		}

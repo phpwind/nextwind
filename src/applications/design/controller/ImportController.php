@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ImportController.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: ImportController.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
  * @package 
  */
 class ImportController extends PwBaseController {
@@ -23,12 +23,10 @@ class ImportController extends PwBaseController {
 	
 	public function dorunAction() {
 		$pageid = (int)$this->getInput('pageid', 'post');
-		$pageDs = $this->_getPageDs();
-		$pageInfo = $pageDs->getPage($pageid);
-		if (!$pageInfo) $this->showError("operate.fail");
-		
 		Wind::import('SRV:design.bo.PwDesignPageBo');
-		$pageBo = new PwDesignPageBo($pageid);
+    	$pageBo = new PwDesignPageBo($pageid);
+		$pageInfo = $pageBo->getPage();
+		if (!$pageInfo) $this->showError("operate.fail");
 		if ($pageBo->getLock()) $this->showError('DESIGN:page.edit.other.user');
 		
 		$ext = strtolower(substr(strrchr($_FILES['file']['name'], '.'), 1));
@@ -36,7 +34,7 @@ class ImportController extends PwBaseController {
 		
 		if ($ext == 'zip'){//$this->showError("DESIGN:page.emport.fail");
 			$this->clearPage($pageInfo);
-			$this->doZip($pageInfo);
+			$this->doZip($pageBo);
 		} else {
 			$this->doTxt($pageInfo);
 		}
@@ -44,10 +42,10 @@ class ImportController extends PwBaseController {
 		$this->showMessage("operate.success");
 	}
 	
-	protected function doZip($pageInfo) {
-		$portal = $this->_getPortalDs()->getPortal($pageInfo['page_unique']);
+	protected function doZip($pageBo) {
+		//$portal = $this->_getPortalDs()->getPortal($pageInfo['page_unique']);
 		Wind::import('SRV:design.srv.PwDesignImportZip');
-		$srv = new PwDesignImportZip($pageInfo['page_id']);
+		$srv = new PwDesignImportZip($pageBo);
 		if (!$srv->checkDirectory()) $this->showError("DESIGN:directory.not.writeable");
 		$file = $this->_uploadFile();
 		if (!$file || $file['type'] != 'zip') $this->showMessage("DESIGN::upload.fail");

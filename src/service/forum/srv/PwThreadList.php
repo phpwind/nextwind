@@ -12,7 +12,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadList.php 21030 2012-11-26 10:22:03Z jieyin $
+ * @version $Id: PwThreadList.php 22627 2012-12-26 03:54:26Z jieyin $
  * @package forum
  */
 
@@ -60,7 +60,7 @@ class PwThreadList extends PwBaseHookService {
 			1 => 'img', 2 => 'txt', 3 => 'img', 4 => 'file', 5 => 'img', 6 => 'txt', 7 => 'img'
 		);
 		$this->specialIcon = array(
-			1 => 'vote', 2 => 'reward', 3 => 'shop', 4 => 'debate'
+			'poll' => 'vote'
 		);
 		$this->_iconNew = Wekit::C('bbs', 'thread.new_thread_minutes') * 60;
 		$this->_iconHot = Wekit::C('bbs', 'thread.hotthread_replies');
@@ -140,10 +140,6 @@ class PwThreadList extends PwBaseHookService {
 
 	public function getUrlArgs() {
 		return $this->_ds->getUrlArgs();
-	}
-
-	public function displayHtmlFromAfterSubject($thread) {
-		$this->runDo('createHtmlAfterSubject', $thread);
 	}
 
 	protected function _getInterfaceName() {

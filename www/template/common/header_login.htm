@@ -11,7 +11,7 @@
 		$_tmpfid = 0;
 	}
 #-->
-	<a class="header_login_btn" id="{$ifJsFastPost}" role="button" aria-label="快速发帖" aria-haspopup="J_head_forum_pop" href="{@url:bbs/post/run/?fid=$_tmpfid}" title="快速发帖" style="width:68px;" tabindex="-1"><span class="inside"><span class="header_post" >发帖</span></span></a>
+	<a class="header_login_btn" id="{$ifJsFastPost}" role="button" aria-label="快速发帖" aria-haspopup="J_head_forum_pop" href="{@url:bbs/post/run?fid=$_tmpfid}" title="快速发帖" style="width:68px;" tabindex="-1"><span class="inside"><span class="header_post" >发帖</span></span></a>
 	<div id="J_head_forum_pop" tabindex="0" class="pop_select_forum" style="top:45px;left:50%;margin-left:100px;z-index:11;display:none;" aria-label="快速发帖菜单,按ESC键关闭菜单">
 		<a id="J_head_forum_close" href="#" class="pop_close" role="button">关闭窗口</a>
 		<div class="core_arrow_top" style="left:310px;"><em></em><span></span></div>
@@ -75,7 +75,7 @@
 				}
 				if ($_panelManage) {
 				#-->
-					<li><a href="{@WindUrlHelper::createUrl($_url)}" rel="nofollow"><em class="icon_system"></em>前台管理</a></li>
+					<li><a href="{@WindUrlHelper::createUrl($_url)|url}" rel="nofollow"><em class="icon_system"></em>前台管理</a></li>
 				<!--#} if (Pw::getstatus($loginUser->info['status'], PwUser::STATUS_ALLOW_LOGIN_ADMIN) || in_array(3, $loginUser->groups)) {#-->
 					<li><a href="{@Wind::getComponent('router')->getRoute('pw')->checkUrl('admin.php')}" target="_blank" rel="nofollow"><em class="icon_admin"></em>系统后台</a></li>
 				<!--#}#-->

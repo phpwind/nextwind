@@ -28,7 +28,7 @@
 					<div id="J_thread_post_types_1" class="btn_post_menu" style="display:none;left:50%;margin:-11px 0 0 120px;">
 						<ul>
 							<!--# foreach (($threadType = $pwforum->getThreadType($loginUser)) as $key => $value) { #-->
-								<!--# $_urladd_ = $key ? ('&special=' . $key) : ''; #-->
+								<!--# $_urladd_ = ($key != 'default') ? ('&special=' . $key) : ''; #-->
 							<li><a href="{@url:bbs/post/run?fid=$pwforum->fid}{$_urladd_}" data-referer="true" class="{@trim($postNeedLogin)}">{$value[0]}</a></li>
 							<!--# } #-->
 						</ul>
@@ -49,8 +49,8 @@
 							<ul class="cc" id="J_add_list">
 								<!--# foreach ($joinUser as $key => $value) { #-->
 								<li id="J_user_{$key}">
-									<a class="J_user_card_show" data-uid="{$key}" href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $key)}"><img class="J_avatar" src="{@Pw::getAvatar($key, 'middle')}" data-type="middle" width="90" height="90" alt="{$users[$key]['username']}" /></a>
-									<p><a class="J_user_card_show" data-uid="{$key}" href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $key)}">{$users[$key]['username']}</a></p>
+									<a class="J_user_card_show" data-uid="{$key}" href="{@url:space/index/run?uid=$key}"><img class="J_avatar" src="{@Pw::getAvatar($key, 'middle')}" data-type="middle" width="90" height="90" alt="{$users[$key]['username']}" /></a>
+									<p><a class="J_user_card_show" data-uid="{$key}" href="{@url:space/index/run?uid=$key}">{$users[$key]['username']}</a></p>
 								</li>
 								<!--# } #-->
 							</ul>
@@ -64,8 +64,8 @@
 							<ul class="cc">
 								<!--# foreach ($activeUser as $key => $value) { if (!isset($users[$key])) continue;#-->
 								<li>
-									<a class="J_user_card_show" data-uid="{$key}" href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $key)}"><img class="J_avatar" src="{@Pw::getAvatar($key, 'middle')}" data-type="middle" width="90" height="90" alt="{$users[$key]['username']}" /></a>
-									<p><a class="J_user_card_show" data-uid="{$key}" href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $key)}">{$users[$key]['username']}</a></p>
+									<a class="J_user_card_show" data-uid="{$key}" href="{@url:space/index/run?uid=$key}"><img class="J_avatar" src="{@Pw::getAvatar($key, 'middle')}" data-type="middle" width="90" height="90" alt="{$users[$key]['username']}" /></a>
+									<p><a class="J_user_card_show" data-uid="{$key}" href="{@url:space/index/run?uid=$key}">{$users[$key]['username']}</a></p>
 								</li>
 								<!--# } #-->
 							</ul>
@@ -76,7 +76,7 @@
 						<!--版块成员列表结束-->
 					</div>
 					<div class="mb10 cc">
-						<a href="{@url:bbs/post/run/?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_2">发帖</a>
+						<a href="{@url:bbs/post/run?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_2">发帖</a>
 						<template source="widget_thread_page" />
 					</div>
 					<div id="J_thread_post_types_2" class="btn_post_menu" style="display:none;left:50%;margin:-11px 0 0 120px;">
@@ -101,8 +101,8 @@ Wind.use('jquery', 'global', function(){
 
 <!--# if ($loginUser->isExists()) { #-->
 
-	var JOIN_URL = "{@WindUrlHelper::createUrl('bbs/forum/join')|html}",		//版块加入
-		QUIT_URL = "{@WindUrlHelper::createUrl('bbs/forum/quit')|html}",		//版块退出
+	var JOIN_URL = "{@url:bbs/forum/join}",		//版块加入
+		QUIT_URL = "{@url:bbs/forum/quit}",		//版块退出
 		user_count = $('#J_user_count'),	//会员数
 		add_list = $('#J_add_list'),
 		add_none = $('#J_add_none'),

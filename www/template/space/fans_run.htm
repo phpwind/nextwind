@@ -19,10 +19,10 @@
 				<!--# if ($fans) { #-->
 					<!--# foreach ($fans as $key => $value) { #-->
 					<dl class="cc">
-						<dt><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['uid'])}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'small')}" data-type="small" width="50" height="50" /></a><a rel="nofollow" href="{@WindUrlHelper::createUrl('message/message/pop/?username=' . $value['username'])}" data-name="{$value['username']}" class="called J_send_msg_pop J_qlogin_trigger">打招呼</a></dt>
+						<dt><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'small')}" data-type="small" width="50" height="50" /></a><a rel="nofollow" href="{@url:message/message/pop?username=$value['username']}" data-name="{$value['username']}" class="called J_send_msg_pop J_qlogin_trigger">打招呼</a></dt>
 						<dd>
 							<div class="title">
-								<a href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['uid'])}" data-uid="{$value['uid']}" class="name J_user_card_show">{$value['username']}</a>
+								<a href="{@url:space/index/run?uid=$value['uid']}" data-uid="{$value['uid']}" class="name J_user_card_show">{$value['username']}</a>
 							<!--# $status = Pw::checkOnline($value['lastvisit']) ? '' : 'un';
 								if($value['gender']){ #-->
 								<span class="women_{$status}ol"></span>
@@ -31,7 +31,7 @@
 							<!--# } #-->
 							</div>
 							<div class="num">
-								关注<a href="{@WindUrlHelper::createUrl('space/follows/run/?uid=' . $value['uid'])}">{$value['follows']}</a><span>|</span>粉丝<a href="{@WindUrlHelper::createUrl('space/fans/run/?uid=' . $value['uid'])}">{$value['fans']}</a><span>|</span>帖子<a href="{@WindUrlHelper::createUrl('space/thread/run/?uid=' . $value['uid'])}">{$value['postnum']}</a>
+								关注<a href="{@url:space/follows/run?uid=$value['uid']}">{$value['follows']}</a><span>|</span>粉丝<a href="{@url:space/fans/run?uid=$value['uid']}">{$value['fans']}</a><span>|</span>帖子<a href="{@url:space/thread/run?uid=$value['uid']}">{$value['postnum']}</a>
 							</div>
 							<!-- <div class="action">回复了帖子<a href="">那些年，我们一起游过的海南（完整版）</a><span class="time">（{@Pw::time2str($value['created_time'], 'auto')}）</span></div> -->
 							<div class="attribute">

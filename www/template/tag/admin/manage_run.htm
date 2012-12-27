@@ -8,8 +8,8 @@
 	
 		<div class="nav">
 			<ul class="cc">
-				<li class="current"><a href="{@WindUrlHelper::createUrl('/tag/manage/run')}">话题管理</a></li>
-				<li><a href="{@WindUrlHelper::createUrl('/tag/manage/category')}">话题分类</a></li>
+				<li class="current"><a href="{@url:/tag/manage/run}">话题管理</a></li>
+				<li><a href="{@url:/tag/manage/category}">话题分类</a></li>
 			</ul>
 		</div>
 		<div class="h_a">功能说明</div>
@@ -18,7 +18,7 @@
 		</div> 
 		<div class="h_a">搜索</div>
 		<div class="search_type cc mb10">
-			<form action="{@WindUrlHelper::createUrl('/tag/manage/run')}" method="post">
+			<form action="{@url:/tag/manage/run}" method="post">
 			<input type="hidden" name="{$moduleKey}" value="tag" />
 			<input type="hidden" name="{$controllerKey}" value="manage" />
 			<div class="ul_wrap">
@@ -56,7 +56,7 @@
 			</div>
 			</form>
 		</div>
-		<div class="mb10"><a title="添加话题" href="{@WindUrlHelper::createUrl('/tag/manage/add')}" class="btn J_dialog"><span class="add"></span>添加话题</a></div>
+		<div class="mb10"><a title="添加话题" href="{@url:/tag/manage/add}" class="btn J_dialog"><span class="add"></span>添加话题</a></div>
 		<!--# if ($tags) { #-->
 		<form method="post" action="#" id="J_tag_form" class="J_ajaxForm">
 		<div class="table_list">
@@ -102,7 +102,7 @@
 					<td>{$v['categories']}</td>
 					<td><!--# echo implode(',', $realtedTopicsHtml); #--></td>
 					<td><!--# if ($v['ifhot']){ #-->是<!--# }else{ #-->否<!--# } #--></td>
-					<td><a href="{@WindUrlHelper::createUrl('tag/manage/edit?id='.$v['tag_id'])}" title="编辑话题" class="mr5 J_dialog">[编辑]</a><a href="{@url:tag/index/view?name=$v['tag_name']|pw}" target="_blank">[内容管理]</a></td>
+					<td><a href="{@url:tag/manage/edit?id=$v['tag_id']}" title="编辑话题" class="mr5 J_dialog">[编辑]</a><a href="{@url:tag/index/view?name=$v['tag_name']|pw}" target="_blank">[内容管理]</a></td>
 				</tr>
 				<!--# } #-->
 				</tbody>
@@ -115,11 +115,11 @@
 		<div class="btn_wrap">
 			<div class="btn_wrap_pd" id="J_sub_wrap">
 				<label class="mr10"><input class="J_check_all" data-checklist="J_check_y" data-direction="y" type="checkbox">全选</label>
-				<button class="btn J_ajax_submit_btn" data-subcheck="true" data-action="{@WindUrlHelper::createUrl('/tag/manage/sethot')}" type="submit">设为热门</button>
-				<button class="btn J_ajax_submit_btn" data-subcheck="true" data-action="{@WindUrlHelper::createUrl('/tag/manage/deletehot')}" type="submit">取消热门</button>
+				<button class="btn J_ajax_submit_btn" data-subcheck="true" data-action="{@url:/tag/manage/sethot}" type="submit">设为热门</button>
+				<button class="btn J_ajax_submit_btn" data-subcheck="true" data-action="{@url:/tag/manage/deletehot}" type="submit">取消热门</button>
 				<button class="btn" id="J_merger_btn" type="submit" style="width:140px;">合并到关联话题</button>
 				<button class="btn" id="J_move_btn" type="submit">移动分类</button>
-				<button class="btn J_ajax_submit_btn" data-subcheck="true" data-msg="确定要删除吗？" data-action="{@WindUrlHelper::createUrl('/tag/manage/delete')}" type="submit">删除</button>
+				<button class="btn J_ajax_submit_btn" data-subcheck="true" data-msg="确定要删除吗？" data-action="{@url:/tag/manage/delete}" type="submit">删除</button>
 			</div>
 		</div>
 	</form>
@@ -130,8 +130,8 @@
 <template source='TPL:admin.common.footer' />
 <script>
 Wind.use('dialog', 'ajaxForm', function(){
-	var URL_MERGE = "{@WindUrlHelper::createUrl('/tag/manage/merge')|html}",	//合并
-		URL_MOVE = "{@WindUrlHelper::createUrl('/tag/manage/move')|html}";		//移动
+	var URL_MERGE = "{@url:/tag/manage/merge}",	//合并
+		URL_MOVE = "{@url:/tag/manage/move}";		//移动
 	
 	//点击合并
 	$('#J_merger_btn').on('click', function(e){

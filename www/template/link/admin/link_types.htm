@@ -8,7 +8,7 @@
 	<template source='link_tab' />
 <!--==============================链接分类================================-->
 	
-	<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('link/link/doTypes')}" data-role="list">
+	<form method="post" class="J_ajaxForm" action="{@url:link/link/doTypes}" data-role="list">
 	<div class="table_list">
 		<table width="100%" id="J_table_list">
 			<colgroup>
@@ -34,7 +34,7 @@
 				<td><input class="input length_3" type="text" name="data[{$key}][typename]" value="{$value['typename']}"></td>
 				<td>{$value['linknum']}</td>
 				<td><textarea readonly="true" class="textarea_code" id="J_clipboard_copy{$key}"><!--# echo WindSecurity::escapeHTML("<component tpl='TPL:link.link' class='SRV:link.srv.PwLinkService' method='getLinksByType' args='{$value[typename]}'/>") #--></textarea></td>
-				<td><a href="#" style="z-index:0;" class="mr10 J_copy_clipboard" data-rel="J_clipboard_copy{$key}">[复制调用代码]</a><a href="{@WindUrlHelper::createUrl('link/link/run?typeid='.$value['typeid'])}" class="mr10">[查看]</a><a href="{@WindUrlHelper::createUrl('link/link/doDeleteType?typeId='.$value['typeid'])}" class="mr10 J_ajax_del">[删除]</a></td>
+				<td><a href="#" style="z-index:0;" class="mr10 J_copy_clipboard" data-rel="J_clipboard_copy{$key}">[复制调用代码]</a><a href="{@url:link/link/run?typeid=$value['typeid']}" class="mr10">[查看]</a><a href="{@url:link/link/doDeleteType?typeId=$value['typeid']}" class="mr10 J_ajax_del">[删除]</a></td>
 			</tr>
 			<!--# } #-->
 			<!--# } else { #-->

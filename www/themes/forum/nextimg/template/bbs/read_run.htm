@@ -34,7 +34,7 @@
 					<a rel="nofollow" href="{@url:bbs/post/run?fid=$pwforum->fid}" id="J_read_post_btn" class="btn_post{$postNeedLogin}">发帖</a>
 					<!-- 锁定时间 -->
 					<!--# if($showReply){ #-->
-					<a rel="nofollow" href="{@url:bbs/post/reply/?tid=$tid}" data-referer="true" class="btn_replay{$replyNeedLogin}">回复</a>
+					<a rel="nofollow" href="{@url:bbs/post/reply?tid=$tid}" data-referer="true" class="btn_replay{$replyNeedLogin}">回复</a>
 					<!--# } #-->
 					<div class="J_page_wrap" data-key="true">
 						<div class="pages" style="margin-right:3px;"><a href="{@url:bbs/thread/run?fid=$pwforum->fid}" class="pages_pre">&laquo; 返回列表</a></div>
@@ -67,7 +67,7 @@
 						if ($designPermission > 0) {
 					#-->
 					<!--# if ($hasFirstPart || $hasSecondPart || $hasThirdPart){ #--><i>|</i><!--# } #-->
-					<a data-type="norefresh" href="{@WindUrlHelper::createUrl('design/push/add?fromtype=thread&fromid=' .$tid)}" class="" title="推送">推送</a><!--这玩意交互改下class="mr10 J_manage_single" id="J_push_trigger"  以前的推送class="J_read_push" -->
+					<a data-type="norefresh" href="{@url:design/push/add?fromtype=thread&fromid=$tid}" class="" title="推送">推送</a><!--这玩意交互改下class="mr10 J_manage_single" id="J_push_trigger"  以前的推送class="J_read_push" -->
 					<!--# } #-->
 				</div>
 				<!--# } #-->
@@ -91,7 +91,7 @@
 								<a rel="nofollow" href="{@url:bbs/post/run?fid=$pwforum->fid}" id="J_read_post_btn" class="btn_post{$postNeedLogin}">发帖</a>
 								<!-- 锁定时间 -->
 								<!--# if($showReply){ #-->
-								<a rel="nofollow" href="{@url:bbs/post/reply/?tid=$tid}" data-referer="true" class="btn_replay{$replyNeedLogin}">回复</a>
+								<a rel="nofollow" href="{@url:bbs/post/reply?tid=$tid}" data-referer="true" class="btn_replay{$replyNeedLogin}">回复</a>
 								<!--# } #-->
 								<div class="J_page_wrap" data-key="true">
 								<div class="pages" style="margin-right:3px;"><a href="{@url:bbs/thread/run?fid=$pwforum->fid}" class="pages_pre">&laquo; 返回列表</a></div>
@@ -104,8 +104,8 @@
 				<div style="display:none;" class="btn_post_menu" id="J_read_post_types">
 					<ul>
 						<!--# foreach ($pwforum->getThreadType($loginUser) as $key => $value) { #-->
-							<!--# $_urladd_ = $key ? ('&special=' . $key) : ''; #-->
-						<li><a href="{@url:bbs/post/run?fid=$pwforum->fid$_urladd_}" data-referer="true" class="{@trim($postNeedLogin)}">{$value[0]}</a></li>
+							<!--# $_urladd_ = ($key != 'default') ? ('&special=' . $key) : ''; #-->
+						<li><a href="{@url:bbs/post/run?fid=$pwforum->fid}{$_urladd_}" data-referer="true" class="{@trim($postNeedLogin)}">{$value[0]}</a></li>
 						<!--# } #-->
 					</ul>
 				</div>
@@ -115,16 +115,16 @@
 			<!--# if ($operateReply) { #-->
 			<div id="J_post_manage_main" class="core_pop_wrap J_post_manage_pop" style="display:none;">
 				<div class="core_pop">
-					<div style="width:415px;">
+					<div style="width:250px;">
 						<div class="pop_top"><a href="#" id="J_post_manage_close" class="pop_close">关闭</a><strong>帖子操作</strong>(已选中&nbsp;<span class="red" id="J_post_checked_count">1</span>&nbsp;篇&nbsp;&nbsp;<a href="" class="s4" id="J_post_manage_checkall" data-type="check">全选</a>)</div>
 						<div class="pop_cont">
 							<div class="pop_operat_list">
 								<ul class="cc J_post_manage_col" data-role="read">
-									<!--# if ($operateReply['delete']){ #--><li><a data-type="delete" href="{@WindUrlHelper::createUrl('bbs/masingle/delete')}">删除</a></li><!--# } #-->
-									<!--# if ($operateReply['unite']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/masingle/unite')}">合并</a></li><!--# } #-->
-									<!--# if ($operateReply['split']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/masingle/split')}">拆分</a></li><!--# } #-->
-									<!--# if ($operateReply['shield']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/masingle/shield')}">屏蔽</a></li><!--# } #-->
-									<!--# if ($operateReply['remind']){ #--><li><a href="{@WindUrlHelper::createUrl('bbs/masingle/remind')}">提醒</a></li><!--# } #-->
+									<!--# if ($operateReply['delete']){ #--><li><a data-type="delete" href="{@url:bbs/masingle/delete}">删除</a></li><!--# } #-->
+									<!--# if ($operateReply['unite']){ #--><li><a href="{@url:bbs/masingle/unite}">合并</a></li><!--# } #-->
+									<!--# if ($operateReply['split']){ #--><li><a href="{@url:bbs/masingle/split}">拆分</a></li><!--# } #-->
+									<!--# if ($operateReply['shield']){ #--><li><a href="{@url:bbs/masingle/shield}">屏蔽</a></li><!--# } #-->
+									<!--# if ($operateReply['remind']){ #--><li><a href="{@url:bbs/masingle/remind}">提醒</a></li><!--# } #-->
 								</ul>
 							</div>
 						</div>
@@ -280,7 +280,7 @@ Wind.use('jquery', 'global', 'dialog', function(){
 });
 </script>
 <!--# } #-->
-<hook class='$threadDisplay' method="runJs" />
+<hook class='$threadDisplay' name="m_PwThreadDisplay.runJs" />
 <pw-end/>
 </body>
 </html>

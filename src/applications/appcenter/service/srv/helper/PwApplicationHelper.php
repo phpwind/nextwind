@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwApplicationHelper.php 21233 2012-12-03 06:50:45Z long.shi $
+ * @version $Id: PwApplicationHelper.php 22696 2012-12-26 11:23:02Z long.shi $
  * @package wind
  */
 class PwApplicationHelper {
@@ -113,7 +113,6 @@ class PwApplicationHelper {
 			$opt = array(
 				CURLOPT_FILE => $fp, 
 				CURLOPT_HEADER => 0, 
-				CURLOPT_FOLLOWLOCATION => true, 
 				CURLOPT_SSL_VERIFYPEER => false, 
 				CURLOPT_SSL_VERIFYHOST => false);
 			$http->send('GET', $opt);

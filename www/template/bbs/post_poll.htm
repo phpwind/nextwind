@@ -52,13 +52,13 @@
 								<input class="J_vote_img" data-preview="#J_preview{$value['option_id']}" name="optionpic_{$value['option_id']}" type="{@$disabled ? 'input' : 'file'}" title="{@$disabled ? '' : '可插入图片'}" tabindex="-1">
 							</div>
 							<!--# if (!$disabled) { #-->
-								<a class="icon_del J_post_vote_del" data-saved="true" href="{@WindUrlHelper::createUrl('vote/index/deloption?pollid='.$vote->info['poll_id'].'&optionid='.$value['option_id'])}">删除</a>
+								<a class="icon_del J_post_vote_del" data-saved="true" href="{@url:vote/index/deloption?pollid=$vote->info['poll_id']&optionid=$value['option_id']}">删除</a>
  							<!--# } #-->
 							<div class="c"></div>
 							<!--# $value['image'] = $value['image'] ? Pw::getPath($value['image'], 1) : ''; #-->
 
 							<div class="vote_preview" style="<!--# if (!$value['image']) { #-->display:none;<!--# } #-->">
-								<a href="{@WindUrlHelper::createUrl('vote/index/deloptionimg?pollid='.$vote->info['poll_id'].'&optionid='.$value['option_id'])}" class="icon_del J_vicon_saved_del">删除</a>
+								<a href="{@url:vote/index/deloptionimg?pollid=$vote->info['poll_id']&optionid=$value['option_id']}" class="icon_del J_vicon_saved_del">删除</a>
 								<img id="J_preview{$value['option_id']}" class="vote_preview_img J_vote_preview_img" src="{$value['image']}" width="120" height="120" />
 							</div>
 

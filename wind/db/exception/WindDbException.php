@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-22
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindDbException.php 3867 2012-12-21 15:23:37Z yishuo $
+ * @version $Id: WindDbException.php 3871 2012-12-25 07:14:59Z yishuo $
  * @package db
  * @subpackage exception
  */
@@ -58,28 +58,28 @@ class WindDbException extends WindException {
 	
 	const DB_QUERY_JOIN_TYPE_ERROR = 1225;
 	
-	const DB_QUERY_ERROR = 1226;
+	const DB_QUERY_ERROR = 126;
 	
 	/**
 	 * 字段异常
 	 */
-	const DB_TABLE_EMPTY = 240;
+	const DB_TABLE_EMPTY = 1240;
 	
-	const DB_EMPTY = 241;
+	const DB_EMPTY = 1241;
 	
-	const DB_DRIVER_NOT_EXIST = 242;
+	const DB_DRIVER_NOT_EXIST = 1242;
 	
-	const DB_DRIVER_EXIST = 243;
+	const DB_DRIVER_EXIST = 1243;
 	
-	const DB_BUILDER_NOT_EXIST = 250;
+	const DB_BUILDER_NOT_EXIST = 1250;
 	
-	const DB_BUILDER_EXIST = 251;
+	const DB_BUILDER_EXIST = 1251;
 	
-	const DB_DRIVER_BUILDER_NOT_MATCH = 252;
+	const DB_DRIVER_BUILDER_NOT_MATCH = 1252;
 	
-	const DB_ADAPTER_NOT_EXIST = 260;
+	const DB_ADAPTER_NOT_EXIST = 1260;
 	
-	const DB_ADAPTER_EXIST = 261;
+	const DB_ADAPTER_EXIST = 1261;
 
 	/* (non-PHPdoc)
 	 * @see WindException::messageMapper()

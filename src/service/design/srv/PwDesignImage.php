@@ -5,7 +5,7 @@ Wind::import('LIB:image.PwCutImage');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImage.php 22257 2012-12-20 09:50:37Z gao.wanggao $ 
+ * @version $Id: PwDesignImage.php 22740 2012-12-27 02:34:43Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImage {
@@ -62,8 +62,8 @@ class PwDesignImage {
 	public function clearFolder($moduleid) {
 		if (!$moduleid) return false;
 		$dir = $this->getSaveDir($moduleid);
-		$store = Wind::getComponent('storage');
-		if (!$store instanceof PwStorageLocal ) { 
+		$store = Wind::getComponent('storage'); //单独使用
+		if (!$this->store instanceof PwStorageLocal ) { 
 			$store->delete($dir, 0);
 		} else {
 			$dir = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' . $dir;
@@ -76,7 +76,7 @@ class PwDesignImage {
 	public function clearFiles($moduleid, $images) {
 		if (!$images || !is_array($images)) return false;
 		$dir = $this->getSaveDir($moduleid);
-		$store = Wind::getComponent('storage');
+		$store = Wind::getComponent('storage'); //单独使用
 		if (!$store instanceof PwStorageLocal ) { 
 			foreach ($images AS $image) {
 				$store->delete($dir. $image, 0);
@@ -123,26 +123,51 @@ class PwDesignImage {
 		if($ext != ".gif" && $ext!= ".jpg" &&  $ext != ".png") return false;
 		$filename = $filename ? $filename : mt_rand(1, 999999).'.'.$ext; 
 		$filename = $path.$filename;
-		ob_start(); 
-		echo $this->getContents($url);
-		$img = ob_get_contents(); 
-		ob_end_clean(); 
-		WindFile::write($filename, $img);
+		if ($this->store instanceof PwStorageFtp) {
+			$ftp = Wekit::load('design.srv.ftp.PwDesignFtp');
+	    	$ftp->download($this->image, $filename);
+		} else {
+			ob_start(); 
+			echo $this->getContents($url);
+			$img = ob_get_contents(); 
+			ob_end_clean();
+			WindFile::write($filename, $img);
+		}
 		return $filename; 
 	}
 	
 	
 	
 	protected function getContents($url) {
-		$opts = array(  
-			'http'=>array(  
-				'method'=>"GET",  
-				'timeout'=>30,  
-			)  
-		);  
-		return @file_get_contents($url, false, stream_context_create($opts));  
-
+		$timeout = 30;
+		$contents = false;
+		if (function_exists('curl_init')) {
+		    $ch = curl_init();
+		    curl_setopt($ch, CURLOPT_URL, $url);
+		    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		    $contents = curl_exec($ch);
+		    curl_close($ch);
+		    return $contents;
+	    }
+	    if (function_exists('file_get_contents')) {
+		    if (function_exists('stream_context_create')) {
+		    	$opts = array(  
+					'http'=>array(  
+						'method'=>"GET",  
+						'timeout'=>$timeout,  
+					)  
+				); 
+				$contents =  @file_get_contents($url, false, stream_context_create($opts));  
+			} else {
+				$contents =  @file_get_contents($url);  
+			}
+	    }
+	    
+	    return $contents;
 	}
+
+	
 	
 	private function createFolder($path ='') {
 		if (!$path) return false;

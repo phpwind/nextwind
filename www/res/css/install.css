@@ -204,12 +204,15 @@ body{
 	color:#333;
 	background:url(../images/install/bg.png);
 }
-a{
+a:link{
 	color:#246EA5;
 	text-decoration:none;
 }
 a:hover{
 	text-decoration:underline;
+}
+a:visited{
+	color:#762e9c;
 }
 /*
 ===================
@@ -349,7 +352,7 @@ LOGO
 	background:url(../images/install/btn.png) no-repeat;
 	font:bold 14px/30px Arial,"Microsoft Yahei",Simsun;
 	text-decoration:none;
-	color:#fff;
+	color:#fff !important;
 	margin:0 5px;
 	border:0 none;
 	cursor:pointer;
@@ -357,12 +360,20 @@ LOGO
 }
 .btn:hover{
 	background-position:0 -30px;
+	text-decoration:none;
+}
+a.btn:visited{
+	color:#ffffff;
 }
 .btn_old,
 .btn_old:hover{
 	background-position:0 -60px;
-	color:#999;
+	color:#999 !important;
 	cursor:default;
+	text-decoration:none;
+}
+a.btn_old:visited{
+	color:#999 !important;
 }
 
 /*

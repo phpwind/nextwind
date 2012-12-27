@@ -1,12 +1,12 @@
 <?php
 defined('WEKIT_VERSION') or exit(403);
 /**
- * È«¾Ö²úÆ·¼¶Ó¦ÓÃÅäÖÃ
+ * å…¨å±€äº§å“çº§åº”ç”¨é…ç½®
  */
 return array(
 	'components' => array('resource' => 'CONF:components.php'),
 	
-	/**=====ÅäÖÃ¿ªÊ¼ÓÚ´Ë=====**/
+	/**=====é…ç½®å¼€å§‹äºŽæ­¤=====**/
 	'web-apps' => array(
 		'acloud' => array(
 			'charset' => 'utf-8',

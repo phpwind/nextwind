@@ -1,13 +1,10 @@
 <?php
 Wind::import('SRC:bootstrap.phpwindBoot');
-Wind::import('APPS:pwadmin.service.srv.userSource.AdminUserSourceDb');
-Wind::import('APPS:pwadmin.service.srv.userSource.AdminUserSourceFounder');
-Wind::import('APPS:pwadmin.service.bo.AdminUserBo');
 Wind::import('ADMIN:service.srv.AdminUserService');
 
 /**
  * @author Jianmin Chen <sky_hold@163.com>
- * @version $Id: adminBoot.php 22367 2012-12-21 12:42:41Z yishuo $
+ * @version $Id: adminBoot.php 22579 2012-12-25 10:26:38Z xiaoxia.xuxx $
  * @package wekit
  */
 class adminBoot extends phpwindBoot {
@@ -61,7 +58,7 @@ class adminBoot extends phpwindBoot {
 	 * @var array
 	 */
 	protected $dependenceServiceDefinitions = array(
-		'adminUserService' => array('path' => 'ADMIN:service.srv.do.AdminUserDependenceService'));
+		'adminUserService' => array('path' => ''));
 	
 	public function __construct() {
 		parent::__construct();
@@ -70,8 +67,8 @@ class adminBoot extends phpwindBoot {
 	/* (non-PHPdoc)
 	 * @see phpwindBoot::init()
 	 */
-	public function init() {
-		parent::init();
+	public function init($front = null) {
+		parent::init($front);
 		foreach ($this->dependenceServiceDefinitions as $alias => $definition) {
 			if (!$definition) continue;
 			Wind::registeComponent($definition, $alias);
@@ -112,18 +109,18 @@ class adminBoot extends phpwindBoot {
 	/* (non-PHPdoc)
 	 * @see phpwind::runApps()
 	*/
-	public function runApps() {}
+	public function runApps($front = null) {}
 
 	/* (non-PHPdoc)
 	 * @see phpwindBoot::beforeResponse()
 	 */
-	public function beforeResponse() {
+	public function beforeResponse($front = null) {
 		//后台搜索，加亮搜索关键字
 		$searchword = Wind::getComponent('request')->getGet('searchword');
 		if ($searchword) {
 			$content = ob_get_contents();
 			ob_end_clean();
-			$content = str_replace($searchword, '<span class="red">' . $searchword . '</span>', $content);
+			$content = preg_replace('/('.preg_quote($searchword, '/').')([^">;]*<)(?!\/script|\/textarea)/si','<span class="red"><u>\\1</u></span>\\2', $content);
 			$compress = Wind::getApp()->getConfig('compress');
 			if (!$compress || !ob_start('ob_gzhandler')) ob_start();
 			echo $content;

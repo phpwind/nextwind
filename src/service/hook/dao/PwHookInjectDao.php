@@ -12,7 +12,6 @@ class PwHookInjectDao extends PwBaseDao {
 	protected $_dataStruct = array(
 		'id', 
 		'app_id',
-		'app_alias',
 		'app_name',
 		'hook_name', 
 		'alias', 
@@ -48,7 +47,6 @@ class PwHookInjectDao extends PwBaseDao {
 		foreach ($fields as $key => $value) {
 			$_tmp = array();
 			$_tmp['app_id'] = $value['app_id'];
-			$_tmp['app_alias'] = $value['app_alias'];
 			$_tmp['app_name'] = $value['app_name'];
 			$_tmp['hook_name'] = $value['hook_name'];
 			$_tmp['alias'] = $value['alias'];
@@ -62,7 +60,7 @@ class PwHookInjectDao extends PwBaseDao {
 			$fields[$key] = $_tmp;
 		}
 		$sql = $this->_bindSql(
-			'INSERT INTO %s (`app_id`, `app_alias`, `app_name`, `hook_name`, `alias`, `class`, `method`, `loadway`, `expression`, `created_time`, `modified_time`, `description`) VALUES %s', 
+			'INSERT INTO %s (`app_id`, `app_name`, `hook_name`, `alias`, `class`, `method`, `loadway`, `expression`, `created_time`, `modified_time`, `description`) VALUES %s', 
 			$this->getTable(), $this->sqlMulti($fields));
 		return $this->getConnection()->createStatement($sql)->execute();
 	}

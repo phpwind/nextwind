@@ -11,7 +11,7 @@
 		</dt>
 		<dd class="notice_segment_cont">
 			<div class="summary">
-				您的帖子<!--# if ($v['extend_params']['manageThreadTitle']){ #-->《<a href="{@WindUrlHelper::createUrl('bbs/read/run?tid='.$v['extend_params']['manageThreadId'])}" target="_blank">{@Pw::substrs($v['extend_params']['manageThreadTitle'],28)}</a>》<!--# } #-->被&nbsp;<a href="{@WindUrlHelper::createUrl('space/index/run?uid='.$v['extend_params']['manageUserid'])}" target="_blank">{$v['extend_params']['manageUsername']}</a>&nbsp;执行&nbsp;<span>{$v['extend_params']['manageTypeString']}</span>&nbsp;操作。
+				您的帖子<!--# if ($v['extend_params']['manageThreadTitle']){ #-->《<a href="{@url:bbs/read/run?tid=$v['extend_params']['manageThreadId']}" target="_blank">{@Pw::substrs($v['extend_params']['manageThreadTitle'],28)}</a>》<!--# } #-->被&nbsp;<a href="{@url:space/index/run?uid=$v['extend_params']['manageUserid']}" target="_blank">{$v['extend_params']['manageUsername']}</a>&nbsp;执行&nbsp;<span>{$v['extend_params']['manageTypeString']}</span>&nbsp;操作。
 			</div>
 			<div class="time"><!--# echo Pw::time2str($v['modified_time'],'auto');#--></div>
 		</dd>
@@ -29,7 +29,7 @@
 			</dt>
 			<dd class="notice_segment_cont">
 				<div class="summary">
-					您的帖子<!--# if ($notice['extend_params']['manageThreadTitle']){ #--><a href="{@WindUrlHelper::createUrl('bbs/read/run?tid='.$notice['extend_params']['manageThreadId'])}" target="_blank">《{$notice['extend_params']['manageThreadTitle']}》</a><!--# } #-->被&nbsp;<a href="{@WindUrlHelper::createUrl('space/index/run?uid='.$notice['extend_params']['manageUserid'])}" target="_blank">{$notice['extend_params']['manageUsername']}</a>&nbsp;执行&nbsp;<span>{$notice['extend_params']['manageTypeString']}</span>&nbsp;操作。
+					您的帖子<!--# if ($notice['extend_params']['manageThreadTitle']){ #--><a href="{@url:bbs/read/run?tid=$notice['extend_params']['manageThreadId']}" target="_blank">《{$notice['extend_params']['manageThreadTitle']}》</a><!--# } #-->被&nbsp;<a href="{@url:space/index/run?uid=$notice['extend_params']['manageUserid']}" target="_blank">{$notice['extend_params']['manageUsername']}</a>&nbsp;执行&nbsp;<span>{$notice['extend_params']['manageTypeString']}</span>&nbsp;操作。
 					<span>{$manageReasonString|html}</span>
 				</div>
 				<div class="time"><!--# echo Pw::time2str($notice['modified_time'],'auto');#--></div>
@@ -37,7 +37,7 @@
 		</dl>
 	</div>
 	<div class="my_message_bottom">
-		<a href="{@WindUrlHelper::createUrl('message/notice/run?type='.$notice['typeid'])}">查看全部管理&nbsp;&gt;&gt;</a>
+		<a href="{@url:message/notice/run?type=$notice['typeid']}">查看全部管理&nbsp;&gt;&gt;</a>
 	</div>
 </hook-action>
 
@@ -46,16 +46,16 @@
 	<div class="ct cc J_notice_item">
 		<div class="check"><input name="ids[]" class="J_check" type="checkbox" value="{$v['id']}" style="display:none;"></div>
 		<div class="content J_notice_content cp">
-			<a href="{@WindUrlHelper::createUrl('message/notice/detaillist?id='.$v['id'])}" class="open_up J_notice_show" data-role="down">展开&darr;</a>
+			<a href="{@url:message/notice/detaillist?id=$v['id']}" class="open_up J_notice_show" data-role="down">展开&darr;</a>
 			<div class="title"><span class="notice_tip_icon">
 		<!--# if (!$v['is_read']) { #-->
 		<span class="icon_system_new" title="未读"></span>
 		<!--# } else { #-->
 		<span class="icon_system" title="已读"></span>
 		<!--# } #-->
-			</span>您的帖子<!--# if ($v['extend_params']['manageThreadTitle']){ #-->《<a href="{@WindUrlHelper::createUrl('bbs/read/run?tid='.$v['extend_params']['manageThreadId'])}" target="_blank">{@Pw::substrs($v['extend_params']['manageThreadTitle'],28)}</a>》<!--# } #-->被&nbsp;<a href="{@WindUrlHelper::createUrl('space/index/run?uid='.$v['extend_params']['manageUserid'])}" target="_blank">{$v['extend_params']['manageUsername']}</a>&nbsp;执行&nbsp;<span>{$v['extend_params']['manageTypeString']}</span>&nbsp;操作</div>
+			</span>您的帖子<!--# if ($v['extend_params']['manageThreadTitle']){ #-->《<a href="{@url:bbs/read/run?tid=$v['extend_params']['manageThreadId']}" target="_blank">{@Pw::substrs($v['extend_params']['manageThreadTitle'],28)}</a>》<!--# } #-->被&nbsp;<a href="{@url:space/index/run?uid=$v['extend_params']['manageUserid']}" target="_blank">{$v['extend_params']['manageUsername']}</a>&nbsp;执行&nbsp;<span>{$v['extend_params']['manageTypeString']}</span>&nbsp;操作</div>
 			<div class="title J_notice_all" style="display:none;"></div>
-			<div class="info"><span class="time"><!--# echo Pw::time2str($v['modified_time'],'auto');#--></span><span class="operating"><span class="line">|</span><a class="J_msg_del" href="{@WindUrlHelper::createUrl('message/notice/delete?id='.$v['id'])}">删除</a></span></div>
+			<div class="info"><span class="time"><!--# echo Pw::time2str($v['modified_time'],'auto');#--></span><span class="operating"><span class="line">|</span><a class="J_msg_del" href="{@url:message/notice/delete?id=$v['id']}">删除</a></span></div>
 		</div>
 	</div>
 </hook-action>

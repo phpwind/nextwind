@@ -17,8 +17,8 @@
 			<div class="like_nav cc">
 				<ul>
 					<li  class="current"><a href="{@url:like/like/run}">热门喜欢</a></li>
-					<li><a rel="nofollow" href="{@url:like/mylike/ta}" data-referer="true" class="J_qlogin_trigger" rel="nofollow">Ta的喜欢</a></li>
-					<li><a rel="nofollow" href="{@url:like/mylike/run}" data-referer="true" class="J_qlogin_trigger" rel="nofollow">我的喜欢</a></li>
+					<li><a href="{@url:like/mylike/ta}" data-referer="true" class="J_qlogin_trigger" rel="nofollow">Ta的喜欢</a></li>
+					<li><a href="{@url:like/mylike/run}" data-referer="true" class="J_qlogin_trigger" rel="nofollow">我的喜欢</a></li>
 				</ul>
 			</div>
 			<div class="like_falls cc">
@@ -33,7 +33,7 @@
 
 <script>
 var J_LIKE_URL = "{@url:like/like/data?moduleid=$datamodule&pageid=$pageid&page=$page}",getdata="{$getdata}";
-var LIKE_PLUS = "{@url:like/mylike/doLike/?typeid=_FROMTYPE&fromid=_KEY}";		//点击喜欢地址
+var LIKE_PLUS = "{@url:like/mylike/doLike?typeid=_FROMTYPE&fromid=_KEY}";		//点击喜欢地址
 var J_LIKE_DATA = "{@$data|json}";
 if(getdata == 1){
 	Wind.use('jquery', 'global', function(){

@@ -7,10 +7,10 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('appcenter/app/run')}">已安装</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('appcenter/app/install')}">本地安装</a></li>
+			<li><a href="{@url:appcenter/app/run}">已安装</a></li>
+			<li class="current"><a href="{@url:appcenter/app/install}">本地安装</a></li>
 			<!--# if(Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->inDevMode1()){ #-->
-			<li><a href="{@WindUrlHelper::createUrl('appcenter/develop/run')}">开发助手</a></li>
+			<li><a href="{@url:appcenter/develop/run}">开发助手</a></li>
 			<!--# } #-->
 		</ul>
 	</div>

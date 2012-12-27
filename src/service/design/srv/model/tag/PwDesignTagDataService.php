@@ -1,16 +1,16 @@
 <?php
 Wind::import('SRV:design.srv.model.PwDesignModelBase');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: jinlong.panjl $>
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
  * <note>
  *  decorateAddProperty 为插入表单值修饰
  *  decorateEditProperty 为修改表单值修饰
  *  getData 获取数据
  * </note>
- * @author $Author: jinlong.panjl $ Foxsee@aliyun.com
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignTagDataService.php 21525 2012-12-11 02:54:55Z jinlong.panjl $ 
+ * @version $Id: PwDesignTagDataService.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 class PwDesignTagDataService extends PwDesignModelBase{
@@ -53,7 +53,7 @@ class PwDesignTagDataService extends PwDesignModelBase{
 		foreach ($list AS $k => $v) {
 			$list[$k]['tagid'] = $v['tag_id'];
 			$list[$k]['tag_name'] = $this->_formatTitle($v['tag_name']);
-			$list[$k]['url'] = WindUrlHelper::createUrl('tag/index/view?name='.$v['tag_name'], array(),'','pw');
+			$list[$k]['url'] = WindUrlHelper::createUrl('tag/index/view', array('name' => $v['tag_name']), '', 'pw');
 			$list[$k]['logo'] = Pw::getPath($v['tag_logo']);
 			$list[$k]['attention_count'] = $v['attention_count'];
 			$list[$k]['content_count'] = $v['content_count'];

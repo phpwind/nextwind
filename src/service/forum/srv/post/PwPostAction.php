@@ -10,7 +10,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostAction.php 20996 2012-11-23 08:33:21Z jieyin $
+ * @version $Id: PwPostAction.php 22627 2012-12-26 03:54:26Z jieyin $
  * @package forum
  */
 
@@ -39,7 +39,7 @@ abstract class PwPostAction extends PwBaseHookService {
 	 * 当前的帖子类型
 	 */
 	public function getSpecial() {
-		return 0;
+		return 'default';
 	}
 	
 	/**
@@ -189,14 +189,6 @@ abstract class PwPostAction extends PwBaseHookService {
 		$str = trim($str);
 		strlen($str) > 200 && $str = substr($str, -200);
 		return substr(md5($str), 8, 16);
-	}
-
-	public function displayHtmlFromBeforeContent() {
-		$this->runDo('createHtmlBeforeContent');
-	}
-	
-	public function displayHtmlFromRightContent() {
-		$this->runDo('createHtmlRightContent');
 	}
 
 	protected function _getInterfaceName() {

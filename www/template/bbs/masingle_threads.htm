@@ -1,5 +1,5 @@
 <div style="width:440px;">
-	<form action="{@WindUrlHelper::createUrl('bbs/masingle/' . $doaction)}" method="post" id="J_post_manage_ajaxForm">
+	<form action="{@WindUrlHelper::createUrl('bbs/masingle/' . $doaction)|url}" method="post" id="J_post_manage_ajaxForm">
 	<div class="pop_top J_drag_handle"><a href="#" class="pop_close J_close">关闭</a><strong>帖子操作</strong>(&nbsp;<span class="red" id="J_manage_checked_count">{$count}</span>&nbsp;篇)</div>
 	<div class="pop_cont">
 		<!--# if ($action == 'delete') { #-->	

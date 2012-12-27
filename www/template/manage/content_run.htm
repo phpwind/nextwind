@@ -1,12 +1,12 @@
 <div class="content">
 	<div class="profile_nav">
 		<ul>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('manage/content/run')}">主题审核</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('manage/content/reply')}">回复审核</a></li>
+			<li class="current"><a href="{@url:manage/content/run}">主题审核</a></li>
+			<li><a href="{@url:manage/content/reply}">回复审核</a></li>
 		</ul>
 	</div>
 	<div class="profile_search">
-		<form method="post" action="{@WindUrlHelper::createUrl('manage/content/run')}">
+		<form method="post" action="{@url:manage/content/run}">
 		<h2>搜索</h2>
 		<table width="100%">
 			<colgroup>
@@ -29,7 +29,7 @@
 	</div>
 	<div class="profile_table">
 	<!--# if ($threadb) { #-->
-	<form class="J_form_ajax" action="{@WindUrlHelper::createUrl('manage/content/doPassThread')}" method="post">
+	<form class="J_form_ajax" action="{@url:manage/content/doPassThread}" method="post">
 		<h2>帖子列表</h2>
 		<table width="100%" class="J_check_wrap">
 			<colgroup>
@@ -49,7 +49,7 @@
 			<tfoot>
 				<tr>
 					<td><label><input type="checkbox" class="J_check_all">全选</label></td>
-					<td><button type="submit" class="btn btn_submit J_form_sub_check">通过</button><button type="submit" class="btn J_form_sub_check" data-action="{@WindUrlHelper::createUrl('manage/content/doDeleteThread')}">拒绝</button></td>
+					<td><button type="submit" class="btn btn_submit J_form_sub_check">通过</button><button type="submit" class="btn J_form_sub_check" data-action="{@url:manage/content/doDeleteThread}">拒绝</button></td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 				</tr>
@@ -58,12 +58,12 @@
 			<tr>
 				<td><input type="checkbox" class="J_check" name="tid[]" value="{$value[tid]}" ></td>
 				<td>
-					<a href="{@url:bbs/read/run/?tid=$value['tid']&fid=$value['fid']}" target="_blank">{@Pw::stripWindCode($value['subject'])}</a>
+					<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" target="_blank">{@Pw::stripWindCode($value['subject'])}</a>
 					<!--p class="summary">
 					他不善言辞，从不接受媒体采访，却以“J.Wong”的论坛 ID 为外界熟谙；他彻夜潜水于魅族论坛，偶尔喋喋不休，偶尔勃然大怒；他深居简出捣腾动辄万元的音乐器材，一月只出一次门理发，以至于公司五层的办公室空空荡荡。
 					</p-->
 				</td>
-				<td><a href="{@WindUrlHelper::createUrl('space/index/run?uid='.$value['created_userid'])}">{$value['created_username']}</a></td>
+				<td><a href="{@url:space/index/run?uid=$value['created_userid']}">{$value['created_username']}</a></td>
 				<td>{@Pw::time2str($value['created_time'])}</td>
 			</tr>
 	<!--# } #-->

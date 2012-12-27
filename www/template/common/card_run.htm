@@ -16,7 +16,7 @@
 		<!--# $num=0; 
 			foreach ($usernames as $key => $value) { 
 				if ($num++ > 0) { #-->、<!--# } #-->
-				<a href="{@url:space/index/run/?uid=$value['uid']}">{$value['username']}</a>
+				<a href="{@url:space/index/run?uid=$value['uid']}">{$value['username']}</a>
 		<!--# } if ($follow2num > 2) { #-->等<!--#if ($follow2num > 99) {#-->99+<!--#}else{#-->{$follow2num}人<!--#}} #-->
 			也关注了<span class="w">Ta</span></div>
 		<!--# } #-->
@@ -47,8 +47,8 @@
 		}
 		$userurlencode = urlencode($user->info['username']);
 	#-->
-		<div class="J_follow_wrap" style="{$style_f}"><a href="{@url:my/follow/delete/?uid=$uid}" class="J_card_follow core_unfollow">取消关注</a></div>
-		<div class="J_follow_wrap" style="{$style_unf}"><a href="{@url:my/follow/add/?uid=$uid}" class="core_follow J_card_follow">关注</a></div>
-		<a class="message J_send_msg_pop" data-name="{$user->info['username']}" href="{@url:message/message/pop/?uid=$uid}">写私信</a><!--# if (!$isFans && $isFollowed) { #--><span>|</span><a class="J_send_msg_pop" data-name="{$user->info['username']}" href="{@url:message/message/pop/?username=$user->info['username']}">求关注</a><!--# } #-->
+		<div class="J_follow_wrap" style="{$style_f}"><a href="{@url:my/follow/delete?uid=$uid}" class="J_card_follow core_unfollow">取消关注</a></div>
+		<div class="J_follow_wrap" style="{$style_unf}"><a href="{@url:my/follow/add?uid=$uid}" class="core_follow J_card_follow">关注</a></div>
+		<a class="message J_send_msg_pop" data-name="{$user->info['username']}" href="{@url:message/message/pop?uid=$uid}">写私信</a><!--# if (!$isFans && $isFollowed) { #--><span>|</span><a class="J_send_msg_pop" data-name="{$user->info['username']}" href="{@url:message/message/pop?username=$user->info['username']}">求关注</a><!--# } #-->
 	</div>
 	<!--# } #-->

@@ -9,7 +9,7 @@ Wind::import('WIND:utility.WindCookie');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: Pw.php 22341 2012-12-21 09:55:02Z gao.wanggao $
+ * @version $Id: Pw.php 22511 2012-12-25 05:55:53Z gao.wanggao $
  * @package library
  */
 class Pw {
@@ -281,6 +281,10 @@ class Pw {
 	 * @return string
 	 */
 	public static function getAvatar($uid, $size = 'middle') {
+		$config = Wekit::C('site', 'windid');
+		if ($config == 'client') {
+			return WindidApi::api('avatar')->getAvatar($uid, $size);
+		}
 		$file = $uid . (in_array($size, array('middle', 'small')) ? '_' . $size : '') . '.jpg';
 		$storage = Wekit::C('site', 'avatar.storage');
 		if (!$storage || $storage == 'local') {
@@ -482,5 +486,4 @@ class Pw {
 		}
 		return $_newData;
 	}
-
 }

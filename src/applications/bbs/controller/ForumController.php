@@ -7,7 +7,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ForumController.php 22379 2012-12-21 14:47:22Z peihong.zhangph $
+ * @version $Id: ForumController.php 22513 2012-12-25 06:09:48Z jinlong.panjl $
  * @package forum
  */
 
@@ -170,7 +170,7 @@ class ForumController extends PwBaseController {
 			$this->showError('BBS:forum.join.already');
 		}
 		Wekit::load('forum.PwForumUser')->join($this->loginUser->uid, $fid);
-		$this->_addJoionForum($this->loginUser->info, $fid);
+		$this->_addJoionForum($this->loginUser->info, $forum->foruminfo);
 		$this->showMessage('success');
 	}
 
@@ -240,49 +240,86 @@ class ForumController extends PwBaseController {
 		Pw::setCookie('fp_' . $fid, Pw::getPwdCode(md5($password)), 86400);
 		$this->showMessage('success');
 	}
-
+	
 	/**
-	 * Enter description here ...
+	 * 格式化数据  把字符串"1,版块1,2,版块2"格式化为数组
 	 *
-	 * @param unknown_type $userInfo
-	 * @param unknown_type $fid
+	 * @param string $string
+	 * @return array
+	 */
+	public static function splitStringToArray($string) {
+		$a = explode(',', $string);
+		$l = count($a);
+		$l % 2 == 1 && $l--;
+		$r = array();
+		for ($i = 0; $i < $l; $i+=2) {
+			$r[$a[$i]] = $a[$i+1];
+		}
+		return $r;
+	}
+	
+	/**
+	 * 加入版块 - 更新我的版块缓存数据
+	 *
+	 * @param array $userInfo
+	 * @param array $foruminfo
 	 * @return boolean
 	 */
-	private function _addJoionForum($userInfo,$fid) {
-		if (!$fid) return false;
+	private function _addJoionForum($userInfo,$foruminfo) {
 		// 更新用户data表信息
 		$array = array();
-		$userInfo['join_forum'] && $array = explode(',', $userInfo['join_forum']);
-		array_unshift($array,$fid);
-		count($array) > 20 && $array = array_slice($array, 0, 20);
-		$join = implode(',', $array);
-		Wind::import('SRV:user.dm.PwUserInfoDm');
-		$dm = new PwUserInfoDm($userInfo['uid']);
-		$dm->setJoinForum($join);
-		$this->_getUserDs()->editUser($dm, PwUser::FETCH_DATA);
+		$userInfo['join_forum'] && $array = self::splitStringToArray($userInfo['join_forum']);
+		$array = array($foruminfo['fid'] => $foruminfo['name']) + $array;
+		count($array) > 20 && $array = array_slice($array, 0, 20, true);
+		
+		$this->_updateMyForumCache($userInfo['uid'], $array);
 		return true;
 	}
-
+	
 	/**
-	 * Enter description here ...
+	 * 推出版块 - 更新我的版块缓存数据
 	 *
-	 * @param unknown_type $userInfo
-	 * @param unknown_type $fid
+	 * @param array $userInfo
+	 * @param int $fid
 	 * @return boolean
 	 */
 	private function _removeJoionForum($userInfo,$fid) {
-		if (!$fid || !$userInfo['join_forum']) return false;
 		// 更新用户data表信息
-		$array = explode(',', $userInfo['join_forum']);
-		$array = array_diff($array,array($fid));
-		count($array) > 20 && $array = array_slice($array, 0, 20);
-		$join = implode(',', $array);
+		$userInfo['join_forum'] && $array = self::splitStringToArray($userInfo['join_forum']);
+		unset($array[$fid]);
+		
+		$this->_updateMyForumCache($userInfo['uid'], $array);
+		return true;
+	}
+
+	private function _updateMyForumCache($uid, $array) {
+		if (!$array) return false;
+		$joinForums = Wekit::load('forum.srv.PwForumService')->getJoinForum($uid);
+		$_tmpArray = array();
+		foreach ($array as $k => $v) {
+			if (!isset($joinForums[$k])) continue;
+			$_tmpArray[$k] = strip_tags($joinForums[$k]);
+		}
 		
 		Wind::import('SRV:user.dm.PwUserInfoDm');
-		$dm = new PwUserInfoDm($userInfo['uid']);
-		$dm->setJoinForum($join);
-		$this->_getUserDs()->editUser($dm, PwUser::FETCH_DATA);
-		return true;
+		$dm = new PwUserInfoDm($uid);
+		$dm->setJoinForum(self::_formatJoinForum($_tmpArray));
+		return $this->_getUserDs()->editUser($dm, PwUser::FETCH_DATA);	
+	}
+	
+	/**
+	 * 格式化我的版块缓存数据结构
+	 *
+	 * @param array $array 格式化成"1,版块1,2,版块2"
+	 * @return string
+	 */
+	private static function _formatJoinForum($array) {
+		if (!$array) return false;
+		$user = '';
+		foreach ($array as $fid => $name) {
+			$myForum .= $fid . ',' . $name . ',';
+		}
+		return rtrim($myForum,',');
 	}
 	
 	/**

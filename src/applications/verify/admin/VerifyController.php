@@ -7,7 +7,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: VerifyController.php 19222 2012-10-12 01:46:34Z long.shi $
+ * @version $Id: VerifyController.php 22570 2012-12-25 09:25:59Z gao.wanggao $
  * @package 
  */
 class VerifyController extends AdminBaseController {
@@ -38,6 +38,10 @@ class VerifyController extends AdminBaseController {
 			if ($value['ask'] && empty($value['answer'])) $this->showError('ADMIN:verify.answer.empty');
 			$_questions[] = $value;
 		
+		}
+		$type = $this->getInput('type', 'post');
+		if ($type == 'flash') {
+			if (!class_exists('SWFBitmap')) $this->showError('ADMIN:verify.flash.not.allow');
 		}
 		$config = new PwConfigSet('verify');
 		$config->set('type', $this->getInput('type', 'post'))

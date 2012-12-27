@@ -4,18 +4,21 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPortalCompile.php 22377 2012-12-21 14:28:48Z gao.wanggao $ 
+ * @version $Id: PwPortalCompile.php 22740 2012-12-27 02:34:43Z gao.wanggao $ 
  * @package 
  */
 class PwPortalCompile {
 		
 	private $dir = '';
+	private $commonDir = '';
 	private $pageid = 0;
 	private $isCompile = false;
 	
-	public function __construct($pageid) {
-		$this->pageid = $pageid;
-		$this->dir = Wind::getRealDir('THEMES:portal.local.'.$this->pageid . '.template.');
+	public function __construct($pageBo) {
+		$this->pageid = $pageBo->pageid;
+		$dir = Wind::getRealDir('THEMES:portal.local.');
+		$this->dir = $dir .$pageBo->getTplPath() . '/template/';
+		$this->commonDir = $dir . 'common/template/';
 	}
 	
 	/**
@@ -55,19 +58,36 @@ class PwPortalCompile {
 	 * @param unknown_type $tplId
 	 */
 	public function compileTpl($section) {
-		if (preg_match_all('/\<pw-tpl\s*id=\"(\w+)\"\s*\/>/isU',$section, $matches)) {
+		if (preg_match_all('/\<pw-tpl\s*id=\"([\w.]+)\"\s*\/>/isU',$section, $matches)) {
 			$ds = Wekit::load('design.PwDesignSegment');
-			foreach ($matches[1] AS $k=>$v) {
-				if (!$v) continue;
-				$file = $this->dir . $v. '.htm';
+			foreach ($matches[1] AS $k=>$matche) {
+				if (!$matche) continue;
+				list($common, $tpl) = explode('.', $matche,2);
+				//解析pw-tpl id="common.segment"  如果模版目录内文件不存在,使用公共的
+				if ($common == 'common') {
+					$file = $this->dir . $tpl. '.htm';
+					$v = $tpl;
+					$dir = $this->dir;
+					if (!WindFile::isFile($file)) {
+						$v = $tpl;
+						$dir = $this->commonDir;
+					}
+				} else {
+					$v = $matche;
+					$dir = $this->dir;
+				}
+
+				$file = $dir . $v. '.htm';
 				if (!WindFile::isFile($file)) {
-					WindFolder::mkRecur($this->dir);
-					WindFolder::mkRecur(dirname($this->dir) . '/images/');
-					WindFolder::mkRecur(dirname($this->dir) . '/css/');
+					WindFolder::mkRecur($dir);
+					$isAble = $this->_checkRealWriteAble($dir);
+					if (!$isAble) return $section;
+					WindFolder::mkRecur(dirname($dir) . '/images/');
+					WindFolder::mkRecur(dirname($dir) . '/css/');
 					$this->write('<pw-drag id="'.$v.'"/>', $file);
 				}
 				
-				$xmlFile = dirname($this->dir) . '/Manifest.xml';
+				$xmlFile = dirname($dir) . '/Manifest.xml';
 				if (!WindFile::isFile($xmlFile)) {
 					$fromFile = Wind::getRealDir('TPL:special.default.') . 'Manifest.xml';
 					@copy($fromFile, $xmlFile);
@@ -82,16 +102,19 @@ class PwPortalCompile {
 		}
 		return $section;
 	}
-    
+
 	/**
 	 * 修改模块
 	 * Enter description here ...
 	 * @param int $id
 	 * @param string $repace
 	 */
-	public function replaceList($id, $repace, $file = 'index') {
-		if (!$file) return false;
-		$file = $this->dir . $file . '.htm';
+	public function replaceList($id, $repace, $tpl = 'index') {
+		if (!$tpl) return false;
+		$file = $this->dir . $tpl . '.htm';
+		if (!WindFile::isFile($file)) {
+			$file = $this->commonDir . $tpl . '.htm';
+		}
 		$content = $this->read($file);
 		if (preg_match_all('/\<pw-list\s*id=\"(\d+)\"\s*[>|\/>](.+)<\/pw-list>/isU',$content, $matches)) {
     		foreach ($matches[1] AS $k=>$v) {
@@ -109,9 +132,12 @@ class PwPortalCompile {
 	 * @param string $name
 	 * @param string $repace
 	 */
-	public function replaceTitle($name, $repace, $file = 'index') {
-		if (!$file) return false;
-		$file = $this->dir . $file . '.htm';
+	public function replaceTitle($name, $repace, $tpl = 'index') {
+		if (!$tpl) return false;
+		$file = $this->dir . $tpl . '.htm';
+		if (!WindFile::isFile($file)) {
+			$file = $this->commonDir . $tpl . '.htm';
+		}
 		$content = $this->read($file);
 		if (preg_match_all('/\<pw-title\s*id=\"(\w+)\"\s*[>|\/>](.+)<\/pw-title>/isU',$content, $matches)) {
     		foreach ($matches[1] AS $k=>$v) {
@@ -124,7 +150,29 @@ class PwPortalCompile {
 	}
 	
 	public function restoreTpl($file, $content) {
+		list($common, $tpl) = explode('.', $file, 2);
+		if ($common == 'common' || $tpl != '') {
+			$file = $this->commonDir . $tpl . '.htm';
+		}  else {
+			$file = $this->dir . $file . '.htm';
+		}
+		return $this->write($content, $file);
+	}
+	
+	/**
+	 * 导入模块还原
+	 */
+	public function restoreList($bakData, $file = 'index') {
 		$file = $this->dir . $file . '.htm';
+		$content = $this->read($file);
+		if (preg_match_all('/\<pw-list\s*id=\"(\d+)\"\s*[>|\/>](.+)<\/pw-list>/isU',$content, $matches)) {		
+    		foreach ($matches[1] AS $k=>$v) {
+    			if (!isset($bakData[$v])) continue;
+    			$repace = $bakData[$v]['module_tpl'] ? $bakData[$v]['module_tpl'] : '';
+	    		$_html = '<pw-list id="'.$v.'">'.$repace.'</pw-list>';
+	    		$content = str_replace($matches[0][$k], $_html, $content);
+    		}
+    	}
 		return $this->write($content, $file);
 	}
 	
@@ -250,6 +298,27 @@ class PwPortalCompile {
 	
 	protected function read($file) {
 		return WindFile::read($file);
+	}
+	
+	private function _checkRealWriteAble($pathfile) {
+		if (!$pathfile) return false;
+		$isDir = substr($pathfile, -1) == '/' ? true : false;
+		if ($isDir) {
+			if (is_dir($pathfile)) {
+				mt_srand((double) microtime() * 1000000);
+				$pathfile = $pathfile . 'pw_' . uniqid(mt_rand()) . '.tmp';
+			} elseif (@mkdir($pathfile)) {
+				return $this->_checkWriteAble($pathfile);
+			} else {
+				return false;
+			}
+		}
+		@chmod($pathfile, 0777);
+		$fp = @fopen($pathfile, 'ab');
+		if ($fp === false) return false;
+		fclose($fp);
+		$isDir && @unlink($pathfile);
+		return true;
 	}
 	
 	

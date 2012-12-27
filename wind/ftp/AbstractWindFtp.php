@@ -8,60 +8,60 @@ Wind::import('WIND:ftp.exception.WindFtpException');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindFtp.php 3772 2012-10-19 08:58:57Z yishuo $
+ * @version $Id: AbstractWindFtp.php 3876 2012-12-26 07:52:05Z yishuo $
  * @package ftp
  */
 abstract class AbstractWindFtp {
-
+	
 	/**
 	 * ftp主机地址
 	 *
 	 * @var string
 	 */
 	protected $server = '';
-
+	
 	/**
 	 * ftp链接端口号
 	 *
 	 * @var int
 	 */
 	protected $port = 21;
-
+	
 	/**
 	 * ftp链接的用户名
 	 *
 	 * @var string	 
 	 */
 	protected $user = '';
-
+	
 	/**
 	 * ftp链接的用户密码
 	 *
 	 * @var string
 	 */
 	protected $pwd = '';
-
+	
 	/**
 	 * ftp链接之后使用的当前路径
 	 *
 	 * @var string
 	 */
 	protected $dir = '';
-
+	
 	/**
 	 * ftp链接的过期时间单位秒
 	 * 
 	 * @var int
 	 */
 	protected $timeout = 10;
-
+	
 	/**
 	 * 保存ftp的跟目录路径
 	 *
 	 * @var string
 	 */
 	protected $rootPath = '';
-
+	
 	/**
 	 * ftp链接对象
 	 *
@@ -114,12 +114,15 @@ abstract class AbstractWindFtp {
 	/**
 	 * 上传文件
 	 * 
+	 * 'I' == BINARY mode
+     * 'A' == ASCII mode
+	 * 
 	 * @param string $sourceFile 待上传的文件
 	 * @param string $desFile 文件上传的存放位置
 	 * @param string $mode 上传模式二进制还是ASCII上传，I为二进制模式，A为ASCII模式，默认为A模式
 	 * @return int 返回上传文件的大小 
 	 */
-	abstract public function upload($sourceFile, $desFile, $mode = 'A');
+	abstract public function upload($sourceFile, $desFile, $mode = 'I');
 
 	/**
 	 * 下载文件
@@ -129,7 +132,7 @@ abstract class AbstractWindFtp {
 	 * @param string $mode 下载的模式二进制还是ASCII上传，I为二进制模式，A为ASCII模式，默认为A模式
 	 * @return boolean 返回文件下载是否成功
 	 */
-	abstract public function download($localfile, $remotefile = '', $mode = 'A');
+	abstract public function download($localfile, $remotefile = '', $mode = 'I');
 
 	/**
 	 * 列出给定目录的文件列表
@@ -229,28 +232,5 @@ abstract class AbstractWindFtp {
 			$this->rootPath .= trim(str_replace('\\', '/', $this->dir), '/') . '/';
 		}
 		$this->changeDir($this->rootPath);
-	}
-
-	/**
-	 * 检查文件类型
-	 * 
-	 * @param string $filename 待检查的文件
-	 * @return boolean 如果文件带有.php字串则返回false,否则返回true
-	 * @TODO 文件内容的安全性检查
-	 */
-	protected function checkFile($filename) {
-		return (str_replace(array('..', '.php.'), '', $filename) != $filename || preg_match('/\.php$/i', $filename));
-	}
-
-	/**
-	 * 获得文件后缀
-	 *
-	 * @param string $filename 文件
-	 * @return string 返回文件的后缀,如果传入的文件没有后缀将会返回txt
-	 */
-	protected function getExt($filename) {
-		if (false === strpos($filename, '.')) return 'txt';
-		$x = explode('.', $filename);
-		return strtolower(end($x));
 	}
 }

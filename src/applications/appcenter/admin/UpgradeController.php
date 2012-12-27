@@ -9,7 +9,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: UpgradeController.php 22086 2012-12-19 05:46:38Z long.shi $
+ * @version $Id: UpgradeController.php 22565 2012-12-25 09:11:07Z long.shi $
  * @package appcenter
  */
 class UpgradeController extends AdminBaseController {
@@ -33,11 +33,15 @@ class UpgradeController extends AdminBaseController {
 		7 => 'end');
 
 	public function beforeAction($handlerAdapter) {
+		parent::beforeAction($handlerAdapter);
+		if (!Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($this->adminUser->username)) {
+			$this->showError('APPCENTER:upgrade.founder');
+		}
 		$this->installService = $this->_loadInstallation();
 		$this->upgrade_temp = Wind::getRealPath($this->upgrade_temp, true);
 		
 		$action = $handlerAdapter->getAction();
-		if (!in_array($action, array('run', 'check'))) {
+		if (!in_array($action, array('run', 'check', 'select'))) {
 			$r = @include $this->upgrade_temp;
 			$this->_checkLegal($action, $r);
 		}
@@ -69,30 +73,37 @@ class UpgradeController extends AdminBaseController {
 		WindFolder::mkRecur(dirname($this->upgrade_temp));
 		$r = $this->installService->checkUpgrade();
 		$result = array();
-		if ($r) {
-			$md5List = $fileList = array();
-			foreach ($r['filelist'] as $v) {
-				$md5List[] = key($v);
-				$fileList[] = current($v);
+		if (is_array($r)) {
+			foreach ($r as $v) {
+				$result[$v['version']] = $v;
 			}
-			$write_result = WindFile::savePhpData($this->upgrade_temp, 
-				array('version' => $r['version'], 'filelist' => $fileList, 'md5list' => $md5List));
-			if (!$write_result) $this->showError(array('APPCENTER:upgrade.write.fail', array('data')));
-			Wekit::cache()->set('system_upgrade_step', 1);
-			unset($r['filelist']);
-			$r['oldversion'] = NEXT_VERSION;
-			$r['oldrelease'] = NEXT_RELEASE;
-			$r['usezip'] = function_exists('gzinflate');
-			//TODO 
-			$r['usezip'] = 0;
-			Wekit::cache()->set('system_upgrade', $r);
-			$result = array(
-				'name' => $r['version'],
-				'time' => Pw::time2str($r['time']),
-				);
+			Wekit::cache()->set('system_upgrade_info', $result);
+		} else {
+			$this->setOutput($r, 'connect_fail');
 		}
-		$this->setOutput($r === false, 'connect_fail');
 		$this->setOutput($result, 'result');
+	}
+	
+	public function selectAction() {
+		$version = $this->getInput('version');
+		$upgradeInfo = Wekit::cache()->get('system_upgrade_info');
+		if (!isset($upgradeInfo[$version])) $this->showError('APPCENTER:upgrade.illegal.request', 'appcenter/upgrade/check');
+		$r = $upgradeInfo[$version];
+		$md5List = $fileList = array();
+		foreach ($r['filelist'] as $v) {
+			$md5List[] = key($v);
+			$fileList[] = current($v);
+		}
+		$write_result = WindFile::savePhpData($this->upgrade_temp,
+			array('version' => $r['version'], 'filelist' => $fileList, 'md5list' => $md5List));
+		if (!$write_result) $this->showError(array('APPCENTER:upgrade.write.fail', array('data')));
+		Wekit::cache()->set('system_upgrade_step', 1);
+		unset($r['filelist']);
+		$r['oldversion'] = NEXT_VERSION;
+		$r['oldrelease'] = NEXT_RELEASE;
+		$r['usezip'] = function_exists('gzinflate');
+		Wekit::cache()->set('system_upgrade', $r);
+		$this->forwardAction('appcenter/upgrade/list');
 	}
 
 	/**
@@ -290,7 +301,7 @@ class UpgradeController extends AdminBaseController {
 			WindFile::del($updateFile);
 			WindFile::del($updateSql);
 		}
-		Wekit::cache()->batchDelete(array('system_upgrade', 'system_upgrade_step', 'system_upgrade_db_step', 'system_upgrade_ftp', 'system_upgrade_download_step'));
+		Wekit::cache()->batchDelete(array('system_upgrade', 'system_upgrade_step', 'system_upgrade_db_step', 'system_upgrade_ftp', 'system_upgrade_download_step', 'system_upgrade_info'));
 	}
 
 	/**

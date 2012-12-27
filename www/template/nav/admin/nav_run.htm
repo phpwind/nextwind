@@ -27,9 +27,9 @@
 	<!--# endif; #-->
 
 <!--div class="mb10">
-	<a href="{@WindUrlHelper::createUrl('/nav/nav/add')}&type={$navType}" class="btn J_dialog"><span class="add"></span>添加导航</a>
+	<a href="{@url:/nav/nav/add}&type={$navType}" class="btn J_dialog"><span class="add"></span>添加导航</a>
 </div-->
-<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/nav/nav/dorun')}" data-role="list">
+<form method="post" class="J_ajaxForm" action="{@url:/nav/nav/dorun}" data-role="list">
 
 <div class="table_list">
 	<table width="100%" id="J_table_list" style="table-layout:fixed;">
@@ -57,14 +57,14 @@
 				<td>操作</td>
 			</tr>
 		</thead>
-	<!--{
+	<!--#
 		foreach ($navList as $value) {
 		$count=count($value['child']);
 		$icon='zero_icon';
 		if($count>0){
 			$icon='J_start_icon away_icon';
 		}
-	}-->
+	#-->
 		<tbody>
 		<tr>
 			<td><span class="{$icon}" data-id="{$value['navid']}"></span></td>
@@ -73,7 +73,7 @@
 				<input name="data[{$value['navid']}][orderid]" type="text" class="input length_0 mr10" value="{$value['orderid']}">
 				<input name="data[{$value['navid']}][name]" type="text" class="input length_3 mr5" value="{$value['name']}">
 				<!--# if ($navType == 'main'): #-->
-				<a style="display:none" href="{@WindUrlHelper::createUrl('/nav/nav/add',array('parentid'=>$value['navid'],'type'=>$navType))}" class="link_add J_addChild add_nav" data-id="{$value['navid']}" data-html="tbody" data-type="nav_2">添加二级导航</a>
+				<a style="display:none" href="{@url:nav/nav/add?parentid=$value['navid']&type=$navType}" class="link_add J_addChild add_nav" data-id="{$value['navid']}" data-html="tbody" data-type="nav_2">添加二级导航</a>
 				<!--# endif; #-->
 			</td>
 			<td><input name="data[{$value['navid']}][link]" type="text" class="input length_4" value="{$value['link']}"></td>
@@ -87,20 +87,20 @@
 			</td>
 			<td class="tac"><input name="data[{$value['navid']}][isshow]" type="checkbox" value="1" {@Pw::ifcheck($value['isshow'])}></td>
 			<td>
-				<a href="{@WindUrlHelper::createUrl('/nav/nav/edit',array('navid'=>$value['navid'],'type'=>$value['type']))}" class="mr10 J_dialog" title="导航编辑">[编辑]</a>
-				<a href="{@WindUrlHelper::createUrl('/nav/nav/del',array('navid'=>$value['navid']))}" class="mr10 J_ajax_del">[删除]</a>
+				<a href="{@url:nav/nav/edit?navid=$value['navid']&type=$value['type']}" class="mr10 J_dialog" title="导航编辑">[编辑]</a>
+				<a href="{@url:nav/nav/del?navid=$value['navid']}" class="mr10 J_ajax_del">[删除]</a>
 			</td>
 		</tr>
 		</tbody>
-		<!--{
+		<!--#
 			if($count>0){
-		}-->
+		#-->
 			<tbody id="J_table_list_{$value['navid']}">
-		<!--{
+		<!--#
 			foreach ($value['child'] as  $childKey=>$childValue) {
 			$checked=$childValue['isshow']?'checked':'';
 			$endicon=($childKey==$count-1)?'  plus_end_icon':'';
-		}-->
+		#-->
 			<tr>
 				<td>&nbsp;</td>
 				<td><span class="plus_icon{$endicon} mr10"></span><input name="data[{$childValue['navid']}][navid]" type="hidden" value="{$childValue['navid']}" ><input name="data[{$childValue['navid']}][orderid]" type="text" class="input length_0 mr10" value="{$childValue['orderid']}" style="width:20px;"><input name="data[{$childValue['navid']}][name]" type="text" class="input length_3 mr5" value="{$childValue['name']}"><!--<a href="{$addUrl}&type={$navType}&parentid={$value['navid']}" style="display:none" class="s2 dialog">+添加导航</a>-->
@@ -111,17 +111,17 @@
 				<td></td>
 				<td class="tac"><input name="data[{$childValue['navid']}][isshow]" type="checkbox" value="1" {$checked}></td>
 				<td>
-					<a href="{@WindUrlHelper::createUrl('/nav/nav/edit',array('navid'=>$childValue['navid'],'type'=>$childValue['type']))}" class="mr10 J_dialog" title="导航编辑">[编辑]</a><a href="{@WindUrlHelper::createUrl('/nav/nav/del',array('navid'=>$childValue['navid']))}" class="mr10 J_ajax_del">[删除]</a>
+					<a href="{@url:nav/nav/edit?navid=$childValue['navid']&type=$childValue['type']}" class="mr10 J_dialog" title="导航编辑">[编辑]</a><a href="{@url:nav/nav/del?navid=$childValue['navid']}" class="mr10 J_ajax_del">[删除]</a>
 				</td>
 			</tr>
-		<!--{
+		<!--#
 			}
-		}-->
+		#-->
 		</tbody>
-		<!--{
+		<!--#
 			}
 			}
-		}-->
+		#-->
 	</table>
 	<table width="100%">
 		<tr class="ct"><td colspan="5" style="padding-left:38px;"><a data-type="nav_1" data-html="tbody" href="" id="J_add_root" class="link_add">添加导航</a></td></tr>

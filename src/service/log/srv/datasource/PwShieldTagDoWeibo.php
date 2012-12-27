@@ -30,7 +30,7 @@ class PwShieldTagDoWeibo extends iPwGleanDoHookProcess {
 			$logSrv = Wekit::load('log.srv.PwLogService');
 			
 			$langArgs = array();
-			$langArgs['tag_url'] = WindUrlHelper::createUrl('tag/index/view?name=' . $tag['tag_name']);
+			$langArgs['tag_url'] = WindUrlHelper::createUrl('tag/index/view', array('name' => $tag['tag_name']));
 			$langArgs['tag'] = $tag['tag_name'];
 			$langArgs['content_url'] = '';
 			$langArgs['content'] = Pw::substrs(strip_tags(Pw::stripWindCode($data['content'])), 20, 0, true);

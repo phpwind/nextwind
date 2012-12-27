@@ -6,7 +6,7 @@
 <body>
 <div class="wrap">
 <div class="nav">
-	<div class="return"><a href="{@WindUrlHelper::createUrl('bbs/setforum/run')}">返回上一级</a></div>
+	<div class="return"><a href="{@url:bbs/setforum/run}">返回上一级</a></div>
 	<ul class="cc J_tabs_nav">
 		<li id="J_nav_jb" data-tab="nav_jb" class="current"><a href="">基本设置</a></li>
 		<li id="J_nav_gn" data-tab="nav_gn"><a href="">功能设置</a></li>
@@ -24,7 +24,7 @@
 	<p class="tar"><a href="" id="J_tips_bubble_close">我知道了</a></p>
 </div>
 
-<form id="J_rigths_form" data-role="list" action="{@WindUrlHelper::createUrl('bbs/setforum/doedit/?_json=1')}" method="post" enctype="multipart/form-data">
+<form id="J_rigths_form" data-role="list" action="{@url:bbs/setforum/doedit?_json=1}" method="post" enctype="multipart/form-data">
 <input type="hidden" name="fid" value="{$fid}">
 <div class="h_a">版块设置</div>
 <div class="table_full">
@@ -133,7 +133,7 @@
 						</div>
 						<!--# if ($foruminfo['icon']) { #-->
 						<img id="j_forum_preview_icon" src="{@Pw::getPath($foruminfo['icon'])}" align="top" class="mr5"/>
-						<a href="{@WindUrlHelper::createUrl('bbs/setforum/deleteicon?fid=' . $fid)}" class="J_ajax_del">删除</a>
+						<a href="{@url:bbs/setforum/deleteicon?fid=$fid}" class="J_ajax_del">删除</a>
 						<!--# } else { #-->
 						<img id="j_forum_preview_icon" style="display:none"/>
 						<!--# } #-->
@@ -155,7 +155,7 @@
 						</div>
 						<!--# if ($foruminfo['logo']) { #-->
 						<img id="j_forum_preview_logo" src="{@Pw::getPath($foruminfo['logo'])}" align="top" class="mr5" />
-						<a href="{@WindUrlHelper::createUrl('bbs/setforum/deletelogo?fid=' . $fid)}" class="J_ajax_del">删除</a>
+						<a href="{@url:bbs/setforum/deletelogo?fid=$fid}" class="J_ajax_del">删除</a>
 						<!--# } else { #-->
 						<img id="j_forum_preview_logo" style="display:none" />
 						<!--# } #-->
@@ -302,7 +302,7 @@
 								</li>
 								<!--# foreach ($threadtype as $key => $value) { #-->
 								<li>
-									<span class="span_1"><input name="allowtype[]" type="checkbox" value="{@1<<$key}"{@Pw::ifcheck($forumset['allowtype'] & pow(2, $key))}></span>
+									<span class="span_1"><input name="allowtype[]" type="checkbox" value="{$key}"{@Pw::ifcheck(in_array($key, $forumset['allowtype']))}></span>
 									<span class="span_2"><input name="typeorder[{$key}]" value="{$forumset['typeorder'][$key]}" type="number" class="input length_1"></span>
 									<span class="span_3">{$value[0]}</span>
 								</li>
@@ -446,7 +446,7 @@
 					<td><input name="t_logo[{$v['id']}]" type="file" class="length_3 J_upload_preview" data-preview="#J_icon_{$v['id']}">&nbsp;<img id="J_icon_{$v['id']}" src="{@Wekit::getGlobal('url', 'attach') . '/' . $v['logo']}" style="max-width:100px;"></td>
 					-->
 					<td class="tac"><input class="J_issys_par" name="t_issys[{$v['id']}]" type="checkbox" value="1" {@Pw::ifcheck($v['issys'])}></td>
-					<td><a href="{@WindUrlHelper::createUrl('admin/bbs/setforum/deletetopictype?id='.$v['id'])}" class="J_ajax_del" data-msg="确定删除此主题分类？删除此主题分类将同时删除其二级分类">[删除]</a></td>
+					<td><a href="{@url:admin/bbs/setforum/deletetopictype?id=$v['id']}" class="J_ajax_del" data-msg="确定删除此主题分类？删除此主题分类将同时删除其二级分类">[删除]</a></td>
 				</tr>
 					<!--# $subTopicTypes = $topicTypes['sub_topic_types'][$v['id']]; #-->
 					<!--# if (is_array($subTopicTypes)) { #-->
@@ -466,7 +466,7 @@
 					<td><input name="t_logo[{$v2['id']}]" type="file" class="length_3 J_upload_preview" data-preview="#J_icon_{$v2['id']}">&nbsp;<img id="J_icon_{$v2['id']}" src="" style="max-width:100px;"></td>
 					-->
 					<td class="tac"><input class="J_issys_child" name="t_issys[{$v2['id']}]" type="checkbox" value="1" {@Pw::ifcheck($v2['issys'])}></td>
-					<td><a href="{@WindUrlHelper::createUrl('admin/bbs/setforum/deletetopictype?id='.$v2['id'])}" class="J_ajax_del" data-msg="确定删除此主题分类？">[删除]</a></td>
+					<td><a href="{@url:admin/bbs/setforum/deletetopictype?id=$v2['id']}" class="J_ajax_del" data-msg="确定删除此主题分类？">[删除]</a></td>
 				</tr>
 						<!--# } #-->
 					<!--# } #-->

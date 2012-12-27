@@ -13,7 +13,7 @@
 				<h2 class="reg_head">欢迎注册成为 {@Wekit::C('site','info.name')} 会员</h2>
 				<div class="reg_cont_wrap">
 					<div class="reg_cont">
-						<form id="J_register_form" action="{@WindUrlHelper::createUrl('u/register/dorun')}" method="POST">
+						<form id="J_register_form" action="{@url:u/register/dorun}" method="POST">
 						<div class="reg_form">
 							<!--#if ($config['type'] == 2) {#-->
 							<dl>
@@ -186,7 +186,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 			invitecode : {
 				required	: true,
 				remote		: {
-					url : "{@WindUrlHelper::createUrl('u/register/checkInvitecode')|url}",
+					url : "{@url:u/register/checkInvitecode}",
 					type : 'post',
 					dataType: "json",
 					data : {
@@ -199,7 +199,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 			username: {
 				required	: true,
 				remote		: {
-					url : "{@WindUrlHelper::createUrl('u/register/checkusername')|url}",
+					url : "{@url:u/register/checkusername}",
 					type : 'post',
 					dataType: "json",
 					data : {username : function(){
@@ -212,7 +212,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 			password : {
 				required: true,
 				remote : {
-					url : '{@WindUrlHelper::createUrl('u/register/checkpwd')|url}',		//验证密码
+					url : '{@url:u/register/checkpwd}',		//验证密码
 					dataType: "json",
 					type : 'post',
 					data : {
@@ -233,7 +233,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 				required : true,
 				email : true,
 				remote : {
-					url : "{@WindUrlHelper::createUrl('u/register/checkemail')|url}",
+					url : "{@url:u/register/checkemail}",
 					dataType: "json",
 					type : 'post',
 					data : {
@@ -259,7 +259,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 						},
 						mobile : function(){
 							return $('#J_reg_mobile').val();
-						},
+						}
 					}
 				}
 			},
@@ -275,7 +275,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 			code : {
 				required : true,
 				remote : {
-					url : "{@WindUrlHelper::createUrl('verify/index/check')|url}",
+					url : "{@url:verify/index/check}",
 					dataType: "json",
 					type : 'post',
 					data : {
@@ -306,7 +306,7 @@ Wind.use('jquery', 'global', 'validate', 'emailAutoMatch', function(){
 					//过滤tab键
 					if(e.keyCode !== 9) {
 
-						$.post('{@WindUrlHelper::createUrl('u/register/checkpwdStrong')|url}', {
+						$.post('{@url:u/register/checkpwdStrong}', {
 							pwd : reg_password.val()
 						}, function(data){
 							//已失焦，则显示强度

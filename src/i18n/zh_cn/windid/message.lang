@@ -1,7 +1,7 @@
 
 success="操作成功"
 fail="操作失败"
-
+is.server.config="采用WindID服务端设置"
 code.1="操作成功"
 code.0="操作失败"
 code.-1=用户名不能为空

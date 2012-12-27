@@ -40,8 +40,11 @@ class PwThreadManageDoCopy extends PwThreadManageDo {
 				return new PwError('BBS:manage.error.copy.targetforum');
 			}
 			if ($this->topictype && !$forum->forumset['topic_type']) {
+
 				return new PwError('BBS:post.topictype.closed');
+
 			}
+
 			if ($forum->forumset['topic_type'] && $forum->forumset['force_topic_type'] && !$this->topictype) {
 				$topicTypes = Wekit::load('SRV:forum.PwTopicType')->getTypesByFid($forum->fid);
 				if ($topicTypes) {
@@ -114,19 +117,18 @@ class PwThreadManageDoCopy extends PwThreadManageDo {
 					->addSellCount($v['sell_count'])
 					->setReminds($v['reminds'])
 					->setWordVersion($v['word_version'])
-					->setTags($v['tags'])				
-				;	
+					->setTags($v['tags']);	
 				
 			$tid = $this->_getThreadDs()->addThread($topicDm);
 			if ($tid) {
-				$hookService = new PwHookService('threadmanage_copy', 'PwThreadManageCopyDoBase');
-				$hookService->runDo('copyThread', $topicDm, $tid);
+				PwSimpleHook::getInstance('PwThreadManageDoCopy')->runDo($topicDm, $tid);
 				$forumDm = new PwForumDm($this->fid);
 				$forumDm->addThreads(1);
 				$forumDm->addArticle(1);
 				Wekit::load('SRV:forum.PwForum')->updateForum($forumDm);
 			}
 		}
+
 		//管理日志添加
 		Wekit::load('log.srv.PwLogService')->addThreadManageLog($this->srv->user, 'copy', $this->threads, $this->_reason, $this->fid . '|' . $this->topictype);
 	}

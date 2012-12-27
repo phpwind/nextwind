@@ -1,4 +1,4 @@
-
+center.connect.fail = "无法连接云平台"
 install.step.end = 向系统中注册应用安装信息
 
 install.step.install = 验证应用安装信息

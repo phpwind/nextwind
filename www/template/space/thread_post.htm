@@ -16,7 +16,7 @@
 <!--我的回复-->
 			<div class="box">
 				<div class="my_article">
-					<div class="hd"><h2 class="name">{$host}的帖子</h2><a href="{@WindUrlHelper::createUrl('space/thread/run?uid=' .$space->spaceUid)}" >主题</a><span class="line">|</span><a href="{@WindUrlHelper::createUrl('space/thread/post/?uid=' .$space->spaceUid)}" class="current">回复</a></div>
+					<div class="hd"><h2 class="name">{$host}的帖子</h2><a href="{@url:space/thread/run?uid=$space->spaceUid}" >主题</a><span class="line">|</span><a href="{@url:space/thread/post?uid=$space->spaceUid}" class="current">回复</a></div>
 					<div class="ct">
 						<!--# if ($posts) { #-->
 						<table width="100%" class="mb10">

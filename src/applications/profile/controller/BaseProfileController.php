@@ -7,7 +7,7 @@ Wind::import('APPS:u.service.helper.PwUserHelper');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: BaseProfileController.php 21368 2012-12-06 01:39:14Z xiaoxia.xuxx $
+ * @version $Id: BaseProfileController.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package src.products.u.controller.profile
  */
 class BaseProfileController extends PwBaseController {
@@ -23,7 +23,7 @@ class BaseProfileController extends PwBaseController {
 	public function beforeAction($handlerAdapter) {
 		parent::beforeAction($handlerAdapter);
 		if (!$this->loginUser->isExists()) {
-			$this->forwardRedirect(WindUrlHelper::createUrl('u/login/run?_type=' . $this->getInput('_type')));
+			$this->forwardRedirect(WindUrlHelper::createUrl('u/login/run', array('_type' => $this->getInput('_type'))));
 		}
 		if (!$this->getRequest()->getIsAjaxRequest()) {
 			$this->setLayout('TPL:profile.profile_layout');
@@ -52,7 +52,7 @@ class BaseProfileController extends PwBaseController {
 		$currentMenu = $menus[$left];
 		$tab && $currentMenu = $currentMenu['tabs'][$tab];
 		if (!isset($currentMenu['url'])) {
-			$this->forwardRedirect(WindUrlHelper::createUrl('profile/extends/run?_left=' . $left . '&_tab=' . $tab));
+			$this->forwardRedirect(WindUrlHelper::createUrl('profile/extends/run', array('_left' => $left, '_tab' => $tab)));
 		}
 		
 		$menus[$left]['current'] = 'current';

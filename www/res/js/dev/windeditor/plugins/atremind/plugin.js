@@ -169,7 +169,7 @@
 				var key = e.keyCode;
 				var isAt = e.shiftKey && key === 50;
 				//是否开启输入法
-				ime_mode = e.shiftKey && (key === 229 || key === 197);
+				ime_mode = e.shiftKey && (key === 229 || key === 197 || key === 0);
 				if(isAt) {
 					e.preventDefault();
 					createAt();
@@ -211,7 +211,7 @@
 				if(ime_mode){
 					var range = _self.getRange();
 					//获取光标父节点的最后一个节点
-					if(!$.browser.msie||$.browser.version>=9){
+					if(!$.browser.msie){
 						var node=range.startContainer;
 						//如果正常获取节点内容
 						if(node&&node.nodeValue!=null){
@@ -404,7 +404,7 @@
 				var $span = _self.getRangeNode('span');
 				var username = current.text();
 				var uid = current.data('id');
-				var at = $('<span class="J_at" style="color:blue;" data-role="at" data-username="'+ username +'">@'+ username +'</span><span>&nbsp;</span>');
+				var at = $('<span class="J_at" data-role="at" data-username="'+ username +'">@'+ username +'</span><span>&nbsp;</span>');
 				$span.replaceWith(at);
 				var range = _self.getRange();
 				if(!range) {

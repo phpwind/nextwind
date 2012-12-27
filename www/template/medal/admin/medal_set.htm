@@ -7,10 +7,10 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/run')}">勋章管理</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/award')}">勋章颁发</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/approval')}">勋章审核</a></li>
-			<li  class="current"><a href="{@WindUrlHelper::createUrl('medal/medal/set')}">勋章设置</a></li>
+			<li><a href="{@url:medal/medal/run}">勋章管理</a></li>
+			<li><a href="{@url:medal/medal/award}">勋章颁发</a></li>
+			<li><a href="{@url:medal/medal/approval}">勋章审核</a></li>
+			<li  class="current"><a href="{@url:medal/medal/set}">勋章设置</a></li>
 		</ul>
 	</div>
 	<div class="h_a">勋章设置</div>
@@ -19,7 +19,7 @@
 			<li>如果出现勋章统计数据不准确的情况，请点击“重新统计”按钮 ，尽量在服务器相对空闲时使用。</li>
 		</ul>
 	</div>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('medal/medal/doSet')}" method="post">
+	<form class="J_ajaxForm" action="{@url:medal/medal/doSet}" method="post">
 	<div class="table_full">
 		<table width="100%">
 			<col class="th" />
@@ -40,7 +40,7 @@
 	<div class="">
 		<div class="btn_wrap_pd">
 			<button class="btn btn_submit J_ajax_submit_btn" type="submit" >提交</button>
-			<a class="btn"  href="{@WindUrlHelper::createUrl('medal/medal/doUserMedal')}" role="button">重新统计</a>
+			<a class="btn"  href="{@url:medal/medal/doUserMedal}" role="button">重新统计</a>
 		</div>
 	</div>
 	</form>

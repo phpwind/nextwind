@@ -40,7 +40,7 @@
 		</table>
 	</div>
 	
-	<form class="J_ajaxForm J_loading_show" action="{@WindUrlHelper::createUrl('windid/areadata/update')}" method="post" style="display:none;">
+	<form class="J_ajaxForm J_loading_show" action="{@url:windid/areadata/update}" method="post" style="display:none;">
 	<input id="J_parentid" type="hidden" value="{$areaid}" name="parentid" />
 	<div class="table_full">
 		<table id="J_table_list" width="100%">
@@ -73,9 +73,9 @@ foreach ($list as $_i) {#-->
 			<tr>
 				<th data-id="{$_i['areaid']}"><div class="J_items">{$_i['name']}</div></th>
 				<td><!--#if ($hasLevel < 2) {#-->
-					<a href="{@WindUrlHelper::createUrl('windid/areadata/run?parentid='.$_i['areaid'])}" class="mr10 J_region_next" data-name="{$_i['name']}" data-type="{$data_role}" data-id="{$_i['areaid']}">[{$data_name}]</a>
+					<a href="{@url:windid/areadata/run?parentid=$_i['areaid']}" class="mr10 J_region_next" data-name="{$_i['name']}" data-type="{$data_role}" data-id="{$_i['areaid']}">[{$data_name}]</a>
 					<!--#}#-->
-					<a data-id="{$_i['areaid']}" data-role="{$data_role}" href="{@WindUrlHelper::createUrl('windid/areadata/delete?areaid='.$_i['areaid'])}" class="J_region_del">[删除]</a></td>
+					<a data-id="{$_i['areaid']}" data-role="{$data_role}" href="{@url:windid/areadata/delete?areaid=$_i['areaid']}" class="J_region_del">[删除]</a></td>
 			</tr>
 <!--#}#-->
 		</tbody>
@@ -90,7 +90,7 @@ foreach ($list as $_i) {#-->
 <!--=========================弹窗============================-->
 <div class="core_pop_wrap" id="J_region_pop" style="display:none;">
 	<div class="core_pop">
-		<form action="{@WindUrlHelper::createUrl('windid/areadata/run')}" method="post">
+		<form action="{@url:windid/areadata/run}" method="post">
 		<div style="width:600px;">
 			<div class="pop_top">
 				<a href="" id="J_region_pop_x" class="pop_close">关闭</a>
@@ -147,9 +147,9 @@ Wind.use('dialog', 'draggable', function() {
 			yarnball_city = $('#J_yarnball_city');							//面包屑_市
 		
 	//table列表中省市区的html
-	var tr_province = '<tr><th data-id="_ID"><div class="J_items">_TEXT</div></th><td><a data-id="_ID" data-type="province" class="mr10 J_region_next" data-name="_PNAME" href="#">[下级城市]</a><a class="J_region_del" data-role="province" href="{@WindUrlHelper::createUrl('windid/areadata/delete')|url}&areaid=_ID" data-id="_ID">[删除]</a></td></tr>',
-		tr_city = '<tr><th data-id="_ID"><div class="J_items">_TEXT</div></th><td><a data-id="_ID" data-type="city" class="mr10 J_region_next" data-name="_CNAME" href="#">[下级区县]</a><a class="J_region_del" data-role="city" href="{@WindUrlHelper::createUrl('windid/areadata/delete')|url}&areaid=_ID" data-id="_ID">[删除]</a></td></tr>',
-		tr_district = '<tr><th data-id="_ID"><div class="J_items">_TEXT</div></th><td><a class="J_region_del" data-role="district" href="{@WindUrlHelper::createUrl('windid/areadata/delete')|url}&areaid=_ID" data-id="_ID">[删除]</a></td></tr>';
+	var tr_province = '<tr><th data-id="_ID"><div class="J_items">_TEXT</div></th><td><a data-id="_ID" data-type="province" class="mr10 J_region_next" data-name="_PNAME" href="#">[下级城市]</a><a class="J_region_del" data-role="province" href="{@url:windid/areadata/delete?areaid=_ID}" data-id="_ID">[删除]</a></td></tr>',
+		tr_city = '<tr><th data-id="_ID"><div class="J_items">_TEXT</div></th><td><a data-id="_ID" data-type="city" class="mr10 J_region_next" data-name="_CNAME" href="#">[下级区县]</a><a class="J_region_del" data-role="city" href="{@url:windid/areadata/delete?areaid=_ID}" data-id="_ID">[删除]</a></td></tr>',
+		tr_district = '<tr><th data-id="_ID"><div class="J_items">_TEXT</div></th><td><a class="J_region_del" data-role="district" href="{@url:windid/areadata/delete?areaid=_ID}" data-id="_ID">[删除]</a></td></tr>';
 	
 	$('#J_yarnball_list').children().hover(function(){
 		$(this).addClass('hover');
@@ -422,10 +422,14 @@ Wind.use('dialog', 'draggable', function() {
 			parentid.val('0');
 		}if(type === 'province') {
 			//点面包屑上的省或“下级城市”
+			var data = GV.REGION_CONFIG[id]['items'];
 			
-			$.each(GV.REGION_CONFIG[id]['items'], function(i, o){
-				arr.push( tr_city.replace(/_ID/g, i).replace(/_TEXT|_CNAME/g, o.name) );
-			});
+			if(data) {
+				$.each(data, function(i, o){
+					arr.push( tr_city.replace(/_ID/g, i).replace(/_TEXT|_CNAME/g, o.name) );
+				});
+			}
+			
 
 			yarnball_all.removeClass('li_disabled');										//面包屑_全部不可点
 			yarnball_province.show().addClass('li_disabled').children('a.J_yarnball').text(name).data('id', id);	//面包屑_省不可点
@@ -434,10 +438,13 @@ Wind.use('dialog', 'draggable', function() {
 			parentid.val(id);
 		}else if(type === 'city'){
 			//点击“下级区县”
+			var data = GV.REGION_CONFIG[yarnball_province.children('a.J_yarnball').data('id')]['items'][id]['items'];
 
-			$.each(GV.REGION_CONFIG[yarnball_province.children('a.J_yarnball').data('id')]['items'][id]['items'], function(i, o){
-				arr.push( tr_district.replace(/_ID/g, i).replace(/_TEXT/, o) );
-			});
+			if(data) {
+				$.each(data, function(i, o){
+					arr.push( tr_district.replace(/_ID/g, i).replace(/_TEXT/, o) );
+				});
+			}
 			
 			yarnball_all.removeClass('li_disabled');										//面包屑_全部不可点
 			yarnball_province.removeClass('li_disabled');	//面包屑_省不可点

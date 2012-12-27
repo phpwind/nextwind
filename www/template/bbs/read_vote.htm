@@ -187,7 +187,7 @@
 	bottom:3px;
 }
 </style>
-	<form method="post" id="J_read_vote_form" action="{@WindUrlHelper::createUrl('vote/vote/run')}">
+	<form method="post" id="J_read_vote_form" action="{@url:vote/vote/run}">
 	<input type="hidden" name="typeid" value="{$vote->info['tid']}" />
 	<input type="hidden" name="apptype" value="0" />
     <!-- 投票开始 -->
@@ -244,7 +244,7 @@
 <!--# } #-->					
 	
 <!--# if($vote->isViewVoter && $option['voted_num']) { #-->
-						<dd class="moreuser"><a class="J_vote_list_show" data-key="{$key}" href="{@WindUrlHelper::createUrl('vote/index/member?pollid='.$vote->info['poll_id'].'&optionid='.$option['option_id'])}">查看参与人员</a></dd>
+						<dd class="moreuser"><a class="J_vote_list_show" data-key="{$key}" href="{@url:vote/index/member?pollid=$vote->info['poll_id']&optionid=$option['option_id']}">查看参与人员</a></dd>
 <!--# } #-->
 					</dl>
 				</div>
@@ -275,7 +275,7 @@
 <!--# } #-->
 
 <!--# if($vote->isViewVoter && $option['voted_num']) { #-->
-					<dd class="moreuser"><p>&nbsp;</p><a class="J_vote_list_show" data-key="{$key}" href="{@WindUrlHelper::createUrl('vote/index/member?pollid='.$vote->info['poll_id'].'&optionid='.$option['option_id'])}">查看参与人员</a></dd>
+					<dd class="moreuser"><p>&nbsp;</p><a class="J_vote_list_show" data-key="{$key}" href="{@url:vote/index/member?pollid=$vote->info['poll_id']&optionid=$option['option_id']}">查看参与人员</a></dd>
 <!--# } #-->
 
 				</dl>

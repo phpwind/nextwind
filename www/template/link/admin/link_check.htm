@@ -7,7 +7,7 @@
 <div class="wrap J_check_wrap">
 	<template source='link_tab' />
 <!--==============================链接审核================================-->
-	<form method="post" class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('link/link/doCheck')}">
+	<form method="post" class="J_ajaxForm" data-role="list" action="{@url:link/link/doCheck}">
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -50,7 +50,7 @@
 					<span>{$typesList[$typeid]['typename']}</span>
 					<!--# } #--></div>
 				</td>
-				<td><a class="J_check_pass mr10" data-lid="{$value['lid']}" href="">[通过]</a><a href="{@WindUrlHelper::createUrl('link/link/doDelete?lid='.$value['lid'])}" class="mr10 J_ajax_del" data-msg="确定要拒绝此友情链接申请吗？">[拒绝]</a></td>
+				<td><a class="J_check_pass mr10" data-lid="{$value['lid']}" href="">[通过]</a><a href="{@url:link/link/doDelete?lid=$value['lid']}" class="mr10 J_ajax_del" data-msg="确定要拒绝此友情链接申请吗？">[拒绝]</a></td>
 			</tr>
 			<!--# } #-->
 			<!--# } else { #-->
@@ -62,7 +62,7 @@
 	<div class="btn_wrap">
 		<div class="btn_wrap_pd">
 			<label class="mr20"><input class="J_check_all" data-direction="x" data-checklist="J_check_x" type="checkbox">全选</label>
-			<button class="btn btn_submit J_ajax_submit_btn" type="submit">通过</button><button type="button" data-action="{@WindUrlHelper::createUrl('link/link/doDelete')}" class="btn J_ajax_submit_btn">拒绝</button>
+			<button class="btn btn_submit J_ajax_submit_btn" type="submit">通过</button><button type="button" data-action="{@url:link/link/doDelete}" class="btn J_ajax_submit_btn">拒绝</button>
 		</div>
 	</div>
 	<!--# } #-->
@@ -114,7 +114,7 @@ Wind.use('dialog',function() {
 		});
 		
 		$.ajax({
-			url			: "{@WindUrlHelper::createUrl('link/link/doCheck')|html}",
+			url			: "{@url:link/link/doCheck}",
 			type		: 'post',
 			dataType	: 'json',
 			data		: '&signle=1&lid[]='+lid+'&data['+lid+'][vieworder]='+order+'&data['+lid+'][typeid]='+cates_arr+'&csrf_token='+GV.TOKEN,
@@ -143,7 +143,7 @@ Wind.use('dialog',function() {
 			onOk	: function() {
 				$('form.J_ajaxForm').ajaxSubmit({
 					dataType : 'json',
-					url		 : '{@WindUrlHelper::createUrl('link/link/doDelete')|html}',
+					url		 : '{@url:link/link/doDelete}',
 					success	 : function(data, statusText, xhr, $form) {
 						if(data.state === 'success') {
 							var location = window.location;

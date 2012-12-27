@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignExportZip.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: PwDesignExportZip.php 22555 2012-12-25 08:37:31Z gao.wanggao $ 
  * @package 
  */
 class PwDesignExportZip {
@@ -16,10 +16,11 @@ class PwDesignExportZip {
 	private $_files = array();
 	private $_moduleConf = array();
 	
-	public function __construct($pageid, $mac = '') {
-		$this->pageid = $pageid;
-		$this->folder = str_replace('/', '_', $mac). '_' . NEXT_VERSION;
-		$this->dir = Wind::getRealDir('THEMES:portal.local.'). $pageid . '/';
+	public function __construct($pageBo) {
+		$this->pageid = $pageBo->pageid;
+		$pageInfo = $pageBo->getPage();
+		$this->folder = str_replace('/', '_', $pageInfo['page_router']);
+		$this->dir = Wind::getRealDir('THEMES:portal.local.'). $pageBo->getTplPath() . '/';
 	}
 	
 	public function zip() {

@@ -3,11 +3,11 @@ Wind::import('LIB:base.PwBaseController');
 Wind::import('SRV:space.bo.PwSpaceBo');
 /**
  * 我的空间
- * the last known user to change this file in the repository  <$LastChangedBy: long.shi $>
- * @author $Author: long.shi $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: MyspaceController.php 21071 2012-11-27 06:34:14Z long.shi $ 
+ * @version $Id: MyspaceController.php 22614 2012-12-26 01:50:03Z gao.wanggao $ 
  * @package 
  */
 class MyspaceController extends PwBaseController {
@@ -178,7 +178,7 @@ class MyspaceController extends PwBaseController {
  	private function _uploadImage() {
  		Wind::import('SRV:upload.action.PwSpaceUpload');
 		Wind::import('SRV:upload.PwUpload');
- 		$bhv = new PwSpaceUpload();
+ 		$bhv = new PwSpaceUpload($this->loginUser->uid);
 		$upload = new PwUpload($bhv);
 		if (($result = $upload->check()) === true) {
 			$result = $upload->execute();

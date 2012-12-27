@@ -60,7 +60,14 @@ class AdminUserDependenceService implements IAdminUserDependenceService {
 		$userDm->setEmail($email);
 		$userDm->setGroupid($groupid);
 		$password && $userDm->setPassword($password);
-		return $uid ? $this->loadUser()->editUser($userDm) : $this->loadUser()->addUser($userDm);
+		if (!$uid) {
+			$uid = $this->loadUser()->addUser($userDm);
+			//默认头像处理 windid处理
+			//Wekit::load('SRV:user.srv.PwUserService')->restoreDefualtAvatar($uid);
+			return $uid;
+		} else {
+			return $this->loadUser()->editUser($userDm);
+		}
 	}
 
 	/**

@@ -44,7 +44,7 @@ if ($loginUser->isExists()) {
 		LIKE_FORWARDING : '{@url:post/doreply/}',							//喜欢转发(参数 : fid)
 		REGION : '{@url:bbs/webData/area}',									//地区数据
 		SCHOOL : '{@url:bbs/webData/school}',								//学校数据
-		EMOTIONS : "{@url:emotion/index/run/?type=bbs}",					//表情数据
+		EMOTIONS : "{@url:emotion/index/run?type=bbs}",					//表情数据
 		CRON_AJAX : '{$runCron}',											//计划任务 后端输出执行
 		FORUM_LIST : '{@url:bbs/forum/list}',								//版块列表数据
 		CREDIT_REWARD_DATA : '{@url:u/index/showcredit}',					//积分奖励 数据

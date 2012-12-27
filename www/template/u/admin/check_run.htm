@@ -7,17 +7,17 @@
 <div class="wrap J_check_wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('admin/u/check/run')}">注册审核</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('admin/u/check/email')}">邮件审核</a></li>
+			<li class="current"><a href="{@url:admin/u/check/run}">注册审核</a></li>
+			<li><a href="{@url:admin/u/check/email}">邮件审核</a></li>
 		</ul>
 	</div>
 	<div class="h_a">提示信息</div>
 	<div class="mb10 prompt_text">
 		<ul>
-			<li>如果<a href="{@WindUrlHelper::createUrl('admin/config/regist/run')}">【注册设置】</a>中开启了“新用户注册审核”，则需要在这里审核通过后，用户才能正常操作</li>
+			<li>如果<a href="{@url:admin/config/regist/run}">【注册设置】</a>中开启了“新用户注册审核”，则需要在这里审核通过后，用户才能正常操作</li>
 		</ul>
 	</div>
-	<form action="{@WindUrlHelper::createUrl('admin/u/check/docheck')}" method="post" class="J_ajaxForm">
+	<form action="{@url:admin/u/check/docheck}" method="post" class="J_ajaxForm">
 		<div class="table_list">
 			<table width="100%">
 				<thead>
@@ -45,11 +45,11 @@
 		<div class="btn_wrap">
 		 <div class="btn_wrap_pd">
 			<div class="select_pages">
-				<a href="{@WindUrlHelper::createUrl('admin/u/check/run?perpage=20')}">20</a><span>|</span>
-				<a href="{@WindUrlHelper::createUrl('admin/u/check/run?perpage=50')}">50</a><span>|</span>
-				<a href="{@WindUrlHelper::createUrl('admin/u/check/run?perpage=100')}">100</a>
+				<a href="{@url:admin/u/check/run?perpage=20}">20</a><span>|</span>
+				<a href="{@url:admin/u/check/run?perpage=50}">50</a><span>|</span>
+				<a href="{@url:admin/u/check/run?perpage=100}">100</a>
 			</div>
-			<label class="mr20"><input type="checkbox" name="checkAll" value="" class="J_check_all" data-direction="x" data-checklist="J_check_user_x">全选</label><button class="btn btn_submit J_ajax_submit_btn" type="submit">通过</button><button data-action="{@WindUrlHelper::createUrl('admin/u/check/delete')}" type="submit" class="btn mr10 J_ajax_submit_btn">忽略</button><span id="J_user_tip" style="display:none;" class="tips_error"></span>
+			<label class="mr20"><input type="checkbox" name="checkAll" value="" class="J_check_all" data-direction="x" data-checklist="J_check_user_x">全选</label><button class="btn btn_submit J_ajax_submit_btn" type="submit">通过</button><button data-action="{@url:admin/u/check/delete}" type="submit" class="btn mr10 J_ajax_submit_btn">忽略</button><span id="J_user_tip" style="display:none;" class="tips_error"></span>
 		 </div>
 		</div>
 	</form>

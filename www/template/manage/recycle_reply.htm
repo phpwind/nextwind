@@ -69,8 +69,8 @@
 			<tr>
 				<td><input type="checkbox" class="J_check" name="pids[]" value="{$value[pid]}" ></td>
 				<td>{@$value['subject'] ? $value['subject'] : Pw::substrs($value['content'], 20)}</td>
-				<td><a href="{@WindUrlHelper::createUrl('space/index/run?uid='.$value['created_userid'])}" target="_blank">{$value['created_username']}</a><br>{@Pw::time2str($value['created_time'])}</td>
-				<td><a href="{@WindUrlHelper::createUrl('space/index/run?username='.$value['operate_username'])}" target="_blank">{$value['operate_username']}</a><br>{@Pw::time2str($value['operate_time'])}</td>
+				<td><a href="{@url:space/index/run?uid=$value['created_userid']}" target="_blank">{$value['created_username']}</a><br>{@Pw::time2str($value['created_time'])}</td>
+				<td><a href="{@url:space/index/run?username=$value['operate_username']}" target="_blank">{$value['operate_username']}</a><br>{@Pw::time2str($value['operate_time'])}</td>
 				<td>{$value['reason']}</td>
 			</tr>
 	<!--# } #-->

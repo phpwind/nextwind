@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRestoreService.php 22357 2012-12-21 10:56:30Z gao.wanggao $ 
+ * @version $Id: PwRestoreService.php 22735 2012-12-26 13:54:10Z gao.wanggao $ 
  * @package 
  */
 class PwRestoreService {
@@ -56,6 +56,11 @@ class PwRestoreService {
 		$module = $bakDs->getBak(PwDesignBak::MODULE, $pageid, $issnap);
 		if (!is_array($module['bak_info'])) return false;
 		$ds = $this->_getModuleDs();
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+    	$bo = new PwDesignPageBo($pageid);
+    	Wind::import('SRV:design.srv.PwPortalCompile');
+    	$srv = new PwPortalCompile($bo);
+    	
 		foreach ($module['bak_info'] AS $k=>$v) {
 			$dm = new PwDesignModuleDm($k);
 			$dm->setFlag($v['model_flag'])
@@ -69,6 +74,10 @@ class PwRestoreService {
 			$style = unserialize($v['module_style']);
 			$dm->setStyle($style['font'],$style['link'],$style['border'],$style['margin'],$style['padding'],$style['background'],$style['styleclass']);
 			$ds->updateModule($dm);
+		}
+		$pageInfo = $bo->getPage();
+		if ($pageInfo['page_type'] == PwDesignPage::PORTAL) {
+			$srv->restoreList($module['bak_info'], 'index');
 		}
 		return true;
 	}
@@ -117,7 +126,6 @@ class PwRestoreService {
 	
 	protected function restoreSegment($pageid, $issnap = 0) {
 		$segments = $this->_getBakDs()->getBak(PwDesignBak::SEGMENT, $pageid, $issnap);
-		if (!is_array($segments['bak_info'])) return false;
 		$ds = $this->_getSegmentDs();
 		$srv = null;
 		Wind::import('SRV:design.bo.PwDesignPageBo');
@@ -125,12 +133,12 @@ class PwRestoreService {
     	$pageInfo = $bo->getPage();
 		if ($pageInfo['page_type'] == PwDesignPage::SYSTEM) {
     		Wind::import('SRV:design.srv.PwPortalCompile');
-    		$srv = new PwPortalCompile($pageid);
+    		$srv = new PwPortalCompile($bo);
     	}
 		foreach ($segments['bak_info'] AS $k=>$v) {
 			$ds->replaceSegment($k, $pageid, $v['segment_tpl']);
-			$strr = strrchr($_file['filename'], "__tpl");
-			if (isset($srv) || $strr) {
+			$strr = substr(strrchr($k, "__"), 1);
+			if (isset($srv) && $strr == 'tpl') {
 				$srv->restoreTpl($k, $v['segment_struct']);//门户片段
 			}
 		}

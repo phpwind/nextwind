@@ -14,9 +14,9 @@
 	<form action="{@url:appcenter/fixup/doRun}" method="post">
 		<div class="table_list">
 			<table width="100%">
-				<!--# if($connect_fail){ #-->
+				<!--# if(isset($connect_fail)){ #-->
 				<tbody>
-					<tr><td class="tac">无法连接云平台，请尝试申请云服务。</td></tr>
+					<tr><td class="tac">{$connect_fail}</td></tr>
 				</tbody>
 				<!--# }else{ #-->
 				<!--# if ($patches) { #-->

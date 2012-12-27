@@ -361,62 +361,6 @@ class IndexController extends WindController {
 		WindFile::del($this->_getTableSqlFile());
 		
 	}
-	
-	/**
-	 * 87升级到9更新缓存
-	 */
-	public function refreshcacheAction() {
-		//$db = $this->_checkDatabase();
-		Wekit::createapp('phpwind');
-		//更新HOOK配置数据
-		Wekit::load('hook.srv.PwHookRefresh')->refresh();
-		
-		//初始化站点config
-		$site_hash = WindUtility::generateRandStr(8);
-		$cookie_pre = WindUtility::generateRandStr(3);
-		Wekit::load('config.PwConfig')->setConfig('site', 'hash', $site_hash);
-		Wekit::load('config.PwConfig')->setConfig('site', 'cookie.pre', $cookie_pre);
-		//Wekit::load('config.PwConfig')->setConfig('site', 'info.mail', $db['founder']['manager_email']);
-		Wekit::load('config.PwConfig')->setConfig('site', 'info.url', PUBLIC_URL);
-		Wekit::load('nav.srv.PwNavService')->updateConfig();
-	
-		
-		//风格默认数据
-		Wekit::load('APPS:appcenter.service.srv.PwStyleInit')->init();
-		
-		//计划任务默认数据
-		Wekit::load('cron.srv.PwCronService')->updateSysCron();
-		
-		//更新数据缓存
-		/* @var $usergroup PwUserGroupsService */
-		$usergroup = Wekit::load('SRV:usergroup.srv.PwUserGroupsService');
-		$usergroup->updateLevelCache();
-		$usergroup->updateGroupCache(range(1, 16));
-		$usergroup->updateGroupRightCache();
-		/* @var $emotion PwEmotionService */
-		$emotion = Wekit::load('SRV:emotion.srv.PwEmotionService');
-		$emotion->updateCache();
-		
-		//创始人配置
-		//$uid = $this->_writeFounder($db['founder']['manager'], $db['founder']['manager_pwd'], $db['founder']['manager_email']);
-		
-		//门户演示数据
-		Wekit::load('SRV:design.srv.PwDesignDefaultService')->likeModule();
-		Wekit::load('SRV:design.srv.PwDesignDefaultService')->tagModule();
-		Wekit::load('SRV:design.srv.PwDesignDefaultService')->reviseDefaultData();
-		
-		//全局缓存更新
-		Wekit::load('SRV:cache.srv.PwCacheUpdateService')->updateConfig();
-		Wekit::load('SRV:cache.srv.PwCacheUpdateService')->updateMedal();
-		header('Location: index.php');
-		/*
-		//清理安装过程的文件
-		WindFile::write($this->_getInstallLockFile(), 'LOCKED');
-		WindFile::del($this->_getTempFile());
-		WindFile::del($this->_getTableLogFile());
-		WindFile::del($this->_getTableSqlFile());
-		*/	
-	}
 
 	/* (non-PHPdoc)
 	 * @see WindSimpleController::setDefaultTemplateName()
@@ -730,7 +674,7 @@ class IndexController extends WindController {
 		$dm->setApiFile('windid.php')
 			->setIsNotify('1')
 			->setIsSyn('1')
-			->setAppName('PHPWIND9.0')
+			->setAppName('phpwind9.0')
 			->setSecretkey($key)
 			->setAppUrl($baseUrl)
 			->setCharset($charset)

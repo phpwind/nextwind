@@ -93,12 +93,10 @@ class MyController extends PwBaseController {
 		$this->setOutput($this->page, 'page');
 		$this->setOutput($this->perpage, 'perpage');
 
-		$this->setOutput(
-			array(
-				'allowview' => $this->loginUser->getPermission('allow_view_vote'),
-				'allowvote'=> $this->loginUser->getPermission('allow_participate_vote')
-			)
-		, 'pollGroup');
+		$this->setOutput(array(
+			'allowview' => $this->loginUser->getPermission('allow_view_vote'),
+			'allowvote'=> $this->loginUser->getPermission('allow_participate_vote')
+		), 'pollGroup');
 
 		$this->setOutput(false, 'isPostPollGuide');
 	}
@@ -113,12 +111,10 @@ class MyController extends PwBaseController {
 		foreach ($map[0] as $key => $value) {
 			if (!$value['isshow']) continue;
 			$array = $service->findOptionInMap($value['fid'], $map, array());
-			
 			$tmp = array();
-		
 			foreach ($array as $k => $v) {
 				$forumset = $forums[$k]['settings_basic'] ? unserialize($forums[$k]['settings_basic']) : array();
-				$isAllowPoll = isset($forumset['allowtype']) ? (($forumset['allowtype'] & 2) ? true : false) : false;
+				$isAllowPoll = isset($forumset['allowtype']) && is_array($forumset['allowtype']) && in_array('poll', $forumset['allowtype']);
 				 
 				if ($forums[$k]['isshow'] && $isAllowPoll && (!$forums[$k]['allow_post'] || $this->loginUser->inGroup(explode(',', $forums[$k]['allow_post'])))) {
 					return true;

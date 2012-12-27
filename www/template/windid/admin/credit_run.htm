@@ -6,7 +6,7 @@
 <body>
 <div class="wrap">
 	<div class="h_a">积分设置</div>
-	<form class="J_ajaxForm" method="post" action="{@WindUrlHelper::createUrl('windid/credit/docredit')}" data-role="list">
+	<form class="J_ajaxForm" method="post" action="{@url:windid/credit/docredit}" data-role="list">
 	<div class="table_list">
 		<table id="J_table_list" width="100%">
 			<col width="220">
@@ -28,7 +28,7 @@
 				<td><input name="credits[{$key}][unit]" type="text" class="input" value="{$credit['unit']}"></td>
 				<!-- <td><input name="credits[{$key}][open]" type="checkbox" value="1"{@Pw::ifcheck($credit['open'])}></td> -->
 				<!--# if($key > 4) {#-->
-				<td><a href="{@WindUrlHelper::createUrl('windid/credit/doDeletecredit', array('creditId' => $key))}" class="mr10 J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:windid/credit/doDeletecredit?creditId$key}" class="mr10 J_ajax_del">[删除]</a></td>
 				<!--#} else {#-->
 				<td>-- --</td>
 				<!--#}#-->

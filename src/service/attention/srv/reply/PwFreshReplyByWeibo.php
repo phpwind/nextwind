@@ -9,7 +9,7 @@ Wind::import('SRV:weibo.dm.PwWeiboCommnetDm');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwFreshReplyByWeibo.php 22374 2012-12-21 14:18:27Z jinlong.panjl $
+ * @version $Id: PwFreshReplyByWeibo.php 22521 2012-12-25 07:06:32Z jinlong.panjl $
  * @package src.service.user.srv
  */
 
@@ -20,6 +20,7 @@ class PwFreshReplyByWeibo {
 
 	protected $isTransmit;
 	protected $newId = 0;
+	private static $_hookInstance = null;
 
 	public function __construct($fresh, PwUserBo $user) {
 		$this->user = $user;
@@ -57,7 +58,7 @@ class PwFreshReplyByWeibo {
 			$sendweibo = new PwSendWeibo($this->user);
 			$this->newId = $sendweibo->send($dm2);
 		}
-		if (($result = $this->_getHook()->runWithVerified('addWeibo', $this->dm)) instanceof PwError) {
+		if (($result = $this->_getHook()->runDo('addWeibo', $this->dm)) instanceof PwError) {
 			return $result;
 		}
 		return true;
@@ -84,6 +85,9 @@ class PwFreshReplyByWeibo {
 	 * @return PwHookService
 	 */
  	private function _getHook() {
- 		return new PwHookService('PwFreshReplyByWeibo', 'PwWeiboDoBase');
+ 		if (self::$_hookInstance == null) {
+			self::$_hookInstance = new PwHookService('PwFreshReplyByWeibo', 'PwWeiboDoBase');
+		}
+ 		return self::$_hookInstance;
  	}
 }

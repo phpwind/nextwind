@@ -33,7 +33,7 @@
 									<h2>未展示的勋章</h2><span>（共{$count}枚）</span>
 								</div>
 							<!--# if (!$myList_w): #-->
-								<p>您还有勋章没有申请哦，赶紧去申请个吧！ <a href="{@WindUrlHelper::createUrl('medal/index/center')}#medal_manual">点击申请</a><p>
+								<p>您还有勋章没有申请哦，赶紧去申请个吧！ <a href="{@url:medal/index/center}#medal_manual">点击申请</a><p>
 							<!--# else: #-->
 								<div id="J_medal_unshow" class="cc">
 									<div class="pre J_lazyslide_prev pre_disable">上一组</div>
@@ -45,14 +45,14 @@
 									<!--# else: #-->
 										<li>
 									<!--# endif; #-->
-											<a data-role="show" data-id="{$my['medal_id']}" class="J_medal_card" href="{@WindUrlHelper::createUrl('medal/index/show?medalid='.$my['medal_id'].'&pop=wei')}"><img src="{$my['image']}" width="96" height="96" alt="{$my['name']}" /></a>
+											<a data-role="show" data-id="{$my['medal_id']}" class="J_medal_card" href="{@url:medal/index/show?medalid=$my['medal_id']&pop=wei}"><img src="{$my['image']}" width="96" height="96" alt="{$my['name']}" /></a>
 											<p title="{$my['name']}">{$my['name']}</p>
 											<!--# if($my['award_status'] == 1): #-->
 											<button class="btn disabled" type="button" disabled>进行中</button>
 											<!--# elseif($my['award_status'] == 2): #-->
 											<button class="btn disabled" type="button" disabled>等待审核</button>
 											<!--# elseif($my['award_status'] == 3): #-->
-											<a data-role="receive" href="{@WindUrlHelper::createUrl('medal/index/show?medalid='.$my['medal_id'].'&pop=wei')}" data-logid="{$my['log_id']}" data-id="{$my['medal_id']}" class="btn btn_success J_medal_card">领取</a>
+											<a data-role="receive" href="{@url:medal/index/show?medalid=$my['medal_id']&pop=wei}" data-logid="{$my['log_id']}" data-id="{$my['medal_id']}" class="btn btn_success J_medal_card">领取</a>
 											<!--# else: #-->
 											<button class="btn disabled" type="button" disabled>进行中</button>
 											<!--# endif; #-->
@@ -72,7 +72,7 @@
 							<!--# $count = count($myList_y);
 							if ($count > 0):#-->
 							<div id="J_medal_show_wrap" class="medal_show_list">
-								<form id="J_medal_order_form" action="{@WindUrlHelper::createUrl('medal/index/doOrder')}" method="post">
+								<form id="J_medal_order_form" action="{@url:medal/index/doOrder}" method="post">
 								<div class="hd">
 									<!--# if ($count > 1):#-->
 									<div class="fr" style="display:none;" id="J_order_wrap">
@@ -87,7 +87,7 @@
 								<ul id="J_medal_show_list" class="cc" style="position:relative;">
 								<!--# foreach ($myList_y as $key=>$my): #-->
 									<li style="position:relative;z-index:1;">
-										<a data-role="show" data-id="{$my['medal_id']}" class="J_medal_card" href="{@WindUrlHelper::createUrl('medal/index/show?medalid='.$my['medal_id'].'&pop=yi')}">
+										<a data-role="show" data-id="{$my['medal_id']}" class="J_medal_card" href="{@url:medal/index/show?medalid=$my['medal_id']&pop=yi}">
 											<img src="{$my['image']}" width="96" height="96" alt="{$my['name']}" />
 											<p title="{$my['name']}">{$my['name']}</p>
 										</a>
@@ -116,11 +116,11 @@
 
 
 var MEDAL_JSON = {@$medalJson|json},																									//所有未展示勋章数据
-	MEDAL_SHOW = "{@WindUrlHelper::createUrl('medal/index/show?pop=wei')|html}",
+	MEDAL_SHOW = "{@url:medal/index/show?pop=wei}",
 		MEDAL_COUNT = '{@count($myList_y)}',																							//已领取勋章数
-		MEDAL_APPLY_URL = '{@WindUrlHelper::createUrl("medal/index/doApply/")|url}',			//勋章申请url
-		MEDAL_AWARD_URL = '{@WindUrlHelper::createUrl("medal/index/doAward/")|url}',			//勋章领取url
-		MEDAL_PAGE_URL = '{@WindUrlHelper::createUrl("medal/index/run")|url}',						//勋章应用的链接地址
+		MEDAL_APPLY_URL = '{@url:medal/index/doApply/}',			//勋章申请url
+		MEDAL_AWARD_URL = '{@url:medal/index/doAward/}',			//勋章领取url
+		MEDAL_PAGE_URL = '{@url:medal/index/run}',						//勋章应用的链接地址
 		medel_data = {};
 
 Wind.use('jquery', 'global', 'lazySlide', 'ajaxForm', function(){

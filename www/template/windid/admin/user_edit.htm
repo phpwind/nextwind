@@ -6,14 +6,14 @@
 <body class="J_scroll_fixed">
 <div class="wrap jj">
 	<div class="nav">
-		<div class="return"><a href="{@WindUrlHelper::createUrl('windid/user/run')}">返回上一级</a></div>
+		<div class="return"><a href="{@url:windid/user/run}">返回上一级</a></div>
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('windid/user/edit?uid=' . $uid)}">编辑</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('windid/user/editCredit?uid=' . $uid)}">积分</a></li>
+			<li class="current"><a href="{@url:windid/user/edit?uid=$uid}">编辑</a></li>
+			<li><a href="{@url:windid/user/editCredit?uid=$uid}">积分</a></li>
 		</ul>
 	</div>
 <!--====================用户编辑开始====================-->
-<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('admin/windid/user/doEdit')}" method="post">
+<form class="J_ajaxForm" action="{@url:admin/windid/user/doEdit}" method="post">
 <input type="hidden" value="{$uid}" name="uid"/>
 <div class="h_a">用户信息</div>
 <div class="table_full">

@@ -7,7 +7,7 @@ defined('WINDID_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidStorageFtp.php 21642 2012-12-12 04:56:39Z gao.wanggao $
+ * @version $Id: WindidStorageFtp.php 22665 2012-12-26 08:01:32Z gao.wanggao $
  * @package upload
  */
 
@@ -35,7 +35,7 @@ class WindidStorageFtp {
 	 * @return bool
 	 */
 	public function save($source, $filePath) {
-		$this->_getFtp()->upload($source, $filePath);
+		$this->_getFtp()->upload($source, $filePath, 'I');
 		WindFile::del(WindSecurity::escapePath($source, true));
 		return true;
 	}

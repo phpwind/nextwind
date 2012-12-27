@@ -1,7 +1,7 @@
 <div id="J_profile_right" class="content">
 	<div class="profile_nav">
 		<ul>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('profile/right/run')}">权限</a></li>
+			<li class="current"><a href="{@url:profile/right/run}">权限</a></li>
 		</ul>
 	</div>
 	<div class="management_group_list">
@@ -22,7 +22,7 @@
 <!--#foreach ($myGroups as $_gid) {
 	if (!$_gid) continue;
 #-->
-				<li><a href="{@WindUrlHelper::createUrl('profile/right/run?gid=' . $_gid)}">{$allGroups[$_gid]['name']}</a></li>
+				<li><a href="{@url:profile/right/run?gid=$_gid}">{$allGroups[$_gid]['name']}</a></li>
 <!--#}#-->
 			</ul>
 		</div>
@@ -35,7 +35,7 @@
 		<div class="core_menu_list">
 			<ul class="cc">
 <!--#foreach ($_value['sub'] as $_gid => $_gitem) {#-->
-				<li><a href="{@WindUrlHelper::createUrl('profile/right/run?gid=' . $_gid)}">{$_gitem['name']}</a></li>
+				<li><a href="{@url:profile/right/run?gid=$_gid}">{$_gitem['name']}</a></li>
 <!--#}#-->
 			</ul>
 		</div>
@@ -98,7 +98,7 @@ if ($compare) {
 	<div id="J_change_group_pop" class="core_pop_wrap" style="display:none;">
 		<div class="core_pop">
 			<div class="pop_group_select">
-			    <form id="J_change_group_form" action="{@WindUrlHelper::createUrl('profile/right/doset')}" method="post">
+			    <form id="J_change_group_form" action="{@url:profile/right/doset}" method="post">
 				<div class="pop_top">
 					<a href="" class="pop_close" id="J_change_group_close">关闭</a>
 					<strong>切换当前用户组</strong>

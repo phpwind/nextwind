@@ -6,7 +6,7 @@
 <body style="width:450px" class="body_none">
 <!--高级管理弹窗-->
 		<div class="pop_advanced_search">
-		<form id="J_threadadvanced_form" method="post" action="{@WindUrlHelper::createUrl('bbs/article/searchThread')}">
+		<form id="J_threadadvanced_form" method="post" action="{@url:bbs/article/searchThread}">
 			<div class="pop_cont">
 				<ul class="cc">
 					<li>
@@ -69,7 +69,7 @@ Wind.use('ajaxForm', function(){
 		}
 
 		//序列化 写入url
-		parent.window.location.href = "{@WindUrlHelper::createUrl('bbs/article/searchthread')|html}" + '&' +$('#J_threadadvanced_form').formSerialize();
+		parent.window.location.href = "{@url:bbs/article/searchthread}" + '&' +$('#J_threadadvanced_form').formSerialize();
 	});
 });
 </script>

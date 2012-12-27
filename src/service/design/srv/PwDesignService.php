@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignService.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: PwDesignService.php 22476 2012-12-25 01:50:03Z gao.wanggao $ 
  * @package 
  */
 class PwDesignService {
@@ -193,26 +193,32 @@ class PwDesignService {
 		WindFolder::rm(Wind::getRealDir('DATA:design'), true);
 	}
 	
-	public function clearTemplate($pageid) {
-		$dir = Wind::getRealDir('THEMES:portal.local.'). $pageid;
+	public function clearTemplate($pageid, $tplPath) {
+		$dir = Wind::getRealDir('THEMES:portal.local.'). $tplPath;
 		WindFolder::rm($dir, true);
 	}
 	
-	public function defaultTemplate($pageid) {
+	/**
+	 * 自定义页默认模版
+	 */
+	public function defaultTemplate($pageid, $tplPath) {
 		$fromDir = Wind::getRealDir('TPL:special.default');
-		$toDir = Wind::getRealDir('THEMES:portal.local.'.$pageid);
-		if ($this->_copyRecur($fromDir, $toDir)) return true;
+		$toDir = Wind::getRealDir('THEMES:portal.local.'.$tplPath);
+		if ($this->copyRecur($fromDir, $toDir)) return true;
 		return false;
 	}
 	
-	private function _copyRecur($fromFolder, $toFolder) {
+	/**
+	 * 递归复制文件夹
+	 */
+	public function copyRecur($fromFolder, $toFolder) {
 	    $dir = @opendir($fromFolder);
 	    if (!$dir) return false;
 	    WindFolder::mk($toFolder);
 	    while(false !== ( $file = readdir($dir)) ) {
 	        if (( $file != '.' ) && ( $file != '..' )) {
 	            if ( is_dir($fromFolder . '/' . $file) ) {
-	               $this->_copyRecur($fromFolder . '/' . $file, $toFolder . '/' . $file);
+	               $this->copyRecur($fromFolder . '/' . $file, $toFolder . '/' . $file);
 	            }else {
 	                @copy($fromFolder . '/' . $file, $toFolder . '/' . $file);
 	                @chmod($toFolder . '/' . $file, 0777);
@@ -222,6 +228,8 @@ class PwDesignService {
 	    closedir($dir);
 	    return true;
 	}
+	
+	
 
 	private function _transformSign($sign) {
 		if(!preg_match('/\{(.+)}/isU', $sign, $matches)) return false;

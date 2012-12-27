@@ -35,7 +35,7 @@
 					<label>操作描述：</label><input type="text" class="input length_3" value="{$searchData['keywords']}" name="keywords">
 				</li>
 				<li>
-					<label>操作类型</label><select name="typeid" class="select_3">
+					<label>操作类型：</label><select name="typeid" class="select_3">
 						<option value="" {@Pw::isSelected(!$searchData['typeid'])}>全部</option>
 					<!--#foreach ($typeids as $_type => $_typeid) {#-->
 						<option value="{$_typeid}" {@Pw::isSelected($_typeid == $searchData['typeid'])}>{$typeTitles[$_type]}</option>
@@ -43,7 +43,7 @@
 					</select>
 				</li>
 				<li>
-					<label>所属版块</label><select name="fid" class="select_3">
+					<label>所属版块：</label><select name="fid" class="select_3">
 						<option value="">所有版块</option>
 					<!--# foreach($catedb as $cate) {#-->
 						<optgroup label=">>{$cate['name']}">
@@ -58,7 +58,7 @@
 					<label>IP地址：</label><input type="text" class="input length_3" name="ip" value="{$searchData['ip']}">
 				</li>
 				<li>
-					<label>操作时间</label><input class="input length_2 mr5 J_date" type="text" name="start_time" value="{$searchData['start_time']}"><span class="mr5">至</span><input class="input length_2 J_date" type="text" name="end_time" value="{$searchData['end_time']}">
+					<label>操作时间：</label><input class="input length_2 mr5 J_date" type="text" name="start_time" value="{$searchData['start_time']}"><span class="mr5">至</span><input class="input length_2 J_date" type="text" name="end_time" value="{$searchData['end_time']}">
 				</li>
 			</ul>
 		</div>

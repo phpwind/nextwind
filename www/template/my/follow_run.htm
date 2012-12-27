@@ -20,9 +20,9 @@
 						
 						<div class="content_type">
 							<ul class="cc">
-								<li class="{$classCurrent[0]}"><a href="{@WindUrlHelper::createUrl('my/follow/run')}">全部</a></li>
+								<li class="{$classCurrent[0]}"><a href="{@url:my/follow/run}">全部</a></li>
 								<!--# foreach ($typeArr as $key => $value) { #-->
-								<li class="line"></li><li class="{$classCurrent[$key]}"><a href="{@WindUrlHelper::createUrl('my/follow/run/?type=' . $key)}">{$value}</a></li>
+								<li class="line"></li><li class="{$classCurrent[$key]}"><a href="{@url:my/follow/run?type=$key}">{$value}</a></li>
 								<!--# } #-->
 							</ul>
 						</div>
@@ -39,17 +39,17 @@
 								</div>
 							</div>
 							<dl class="cc J_friends_items">
-								<dt><a href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['touid'])}" data-uid="{$value['touid']}" class="J_user_card_show"><img class="J_avatar" src="{@Pw::getAvatar($value['touid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['username']}" /></a><a href="{@WindUrlHelper::createUrl('message/message/pop/?username=' . $value['username'])}" data-name="{$value['username']}" class="called J_send_msg_pop">打招呼</a></dt>
+								<dt><a href="{@url:space/index/run?uid=$value['touid']}" data-uid="{$value['touid']}" class="J_user_card_show"><img class="J_avatar" src="{@Pw::getAvatar($value['touid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['username']}" /></a><a href="{@url:message/message/pop?username=$value['username']}" data-name="{$value['username']}" class="called J_send_msg_pop">打招呼</a></dt>
 								<dd>
 									<div class="title">
-										<a href="{@WindUrlHelper::createUrl('space/index/run/?uid=' . $value['touid'])}" data-uid="{$value['touid']}" class="name J_user_card_show">{$value['username']}</a>
+										<a href="{@url:space/index/run?uid=$value['touid']}" data-uid="{$value['touid']}" class="name J_user_card_show">{$value['username']}</a>
 										<!--# $gender = $value['gender'] == 1 ? 'women' : 'man';
 											$online = Pw::checkOnline($value['lastvisit']) ? 'ol' : 'unol';
 										 #-->
 										<span class="{$gender}_{$online}"></span>
 									</div>
 									<div class="num">
-										关注<a href="{@WindUrlHelper::createUrl('space/follows/run/?uid=' . $value['touid'])}">{$value['follows']}</a><span>|</span>粉丝<a href="{@WindUrlHelper::createUrl('space/fans/run/?uid=' . $value['touid'])}">{$value['fans']}</a><span>|</span>帖子<a href="{@WindUrlHelper::createUrl('space/thread/run/?uid=' . $value['touid'])}">{$value['postnum']}</a>
+										关注<a href="{@url:space/follows/run?uid=$value['touid']}">{$value['follows']}</a><span>|</span>粉丝<a href="{@url:space/fans/run?uid=$value['touid']}">{$value['fans']}</a><span>|</span>帖子<a href="{@url:space/thread/run?uid=$value['touid']}">{$value['postnum']}</a>
 									</div>
 									<div class="action">{$birthday}</div>
 									<div class="action">{$profile} </div>
@@ -66,7 +66,7 @@
 									</div>
 									<div class="attribute">
 										<!--# if (isset($fans[$value['touid']])) { #--><span class="mnfollow" title="互相关注">互相关注</span><!--# } #-->
-										<a href="{@WindUrlHelper::createUrl('my/follow/delete/?uid=' . $value['touid'])}" class="core_unfollow J_unfollow_btn J_friends_unfollow" style="display:none;">取消关注</a>
+										<a href="{@url:my/follow/delete?uid=$value['touid']}" class="core_unfollow J_unfollow_btn J_friends_unfollow" style="display:none;">取消关注</a>
 									</div>
 								</dd>
 							</dl>
@@ -80,7 +80,7 @@
 							<div class="hd">啊哦，你还没有关注任何人，赶紧先关注些人！</div>
 							<ul class="cc">
 								<!--# foreach ($recommend as $value) { #-->
-								<li><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run/?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'middle')}" data-type="middle" width="90" height="90" alt="{$value['username']}" /></a><label title="{$value['username']}"><input class="J_check" type="checkbox" name="uids[]" value="{$value['uid']}">{$value['username']}</label></li>
+								<li><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'middle')}" data-type="middle" width="90" height="90" alt="{$value['username']}" /></a><label title="{$value['username']}"><input class="J_check" type="checkbox" name="uids[]" value="{$value['uid']}">{$value['username']}</label></li>
 								<!--# } #-->
 							</ul>
 							<div class="ft">
@@ -106,15 +106,15 @@
 					<div class="side_cate_list">
 						<ul id="J_side_group_list" class="cc">
 							<li>
-								<a href="{@WindUrlHelper::createUrl('my/follow/run')}" class="title"><span class="">全部</span><em>({$loginUser->info['follows']})</em></a>
+								<a href="{@url:my/follow/run}" class="title"><span class="">全部</span><em>({$loginUser->info['follows']})</em></a>
 							</li>
 							<!--# foreach ($typeArr as $key => $value) { #-->
 							<li id="J_side_group_{$key}">
 								<!--# if ($key > 0) { #-->
-								<a href="{@WindUrlHelper::createUrl('my/follow/deleteType/?id=' . $key)}" class="icon_del J_group_del" data-id="{$key}">删除</a>
-								<a href="{@WindUrlHelper::createUrl('my/follow/editType/?id=' . $key)}" class="icon_edit J_group_edit" data-id="{$key}" data-name="{$value}">编辑</a>
+								<a href="{@url:my/follow/deleteType?id=$key}" class="icon_del J_group_del" data-id="{$key}">删除</a>
+								<a href="{@url:my/follow/editType?id=$key}" class="icon_edit J_group_edit" data-id="{$key}" data-name="{$value}">编辑</a>
 								<!--# } #-->
-								<a href="{@WindUrlHelper::createUrl('my/follow/run/?type=' . $key)}" class="title"><span class="J_name">{$value}</span><em>(<!--# echo isset($typeCounts[$key]) ? $typeCounts[$key]['count'] : 0; #-->)</em></a>
+								<a href="{@url:my/follow/run?type=$key}" class="title"><span class="J_name">{$value}</span><em>(<!--# echo isset($typeCounts[$key]) ? $typeCounts[$key]['count'] : 0; #-->)</em></a>
 							</li>
 							<!--# } #-->
 						</ul>
@@ -178,7 +178,7 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function(){
 		'saveList' : function(elem, type, id){
 			//保存分组
 			Wind.Util.ajaxMaskShow();
-			$.post("{@WindUrlHelper::createUrl('my/follow/savetype')|html}", {
+			$.post("{@url:my/follow/savetype}", {
 				uid : elem.data('id'),
 				id : id,
 				type : (type ? 1 : 0)
@@ -198,7 +198,7 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function(){
 		'saveCreat' : function(btn){
 			//保存创建
 			var creat_wrap = $('#J_group_creat_wrap');
-			$.post("{@WindUrlHelper::createUrl('my/follow/addtype')|html}", { name : $('#J_group_creat_input').val() }, function(data){
+			$.post("{@url:my/follow/addtype}", { name : $('#J_group_creat_input').val() }, function(data){
 				if(data.state === 'success') {
 					var _data = data.data;
 					creat_wrap.remove();
@@ -271,8 +271,8 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function(){
 				}
 			}, 'json');
 		},
-		creatsave :  '{@WindUrlHelper::createUrl('my/follow/addtype/')|html}',
-		editsave : '{@WindUrlHelper::createUrl('my/follow/editType/')|html}',
+		creatsave :  '{@url:my/follow/addtype/}',
+		editsave : '{@url:my/follow/editType/}',
 		deltip : '确定要删除该分组吗？<br><span class="gray">此分组下的人不会被取消关注</span>'
 	});
 	Wind.js(GV.JS_ROOT +'pages/common/checkListGroup.js?v='+ GV.JS_VERSION);

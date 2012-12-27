@@ -6,7 +6,7 @@ Wind::import('SRV:design.bo.PwDesignStructureBo');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: StructureController.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: StructureController.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
  * @package 
  */
 class StructureController extends PwBaseController{
@@ -172,7 +172,7 @@ class StructureController extends PwBaseController{
 		$pageInfo = $pageBo->getPage();
 		
 		Wind::import('SRV:design.srv.PwPortalCompile');
-		$compile = new PwPortalCompile($pageid);
+		$compile = new PwPortalCompile($pageBo);
 		if ($pageInfo['page_type'] == PwDesignPage::PORTAL) {
 			$compile->replaceTitle($this->bo->name, $title);
 		} elseif ($pageInfo['page_type'] == PwDesignPage::SYSTEM) {

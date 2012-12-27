@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignModule.php 17219 2012-09-04 06:05:24Z gao.wanggao $ 
+ * @version $Id: PwDesignModule.php 22555 2012-12-25 08:37:31Z gao.wanggao $ 
  * @package 
  */
 class PwDesignModule {
@@ -22,6 +22,11 @@ class PwDesignModule {
 	public function fetchModule($moduleids) {
 		if (empty($moduleids) || !is_array($moduleids)) return array();
 		return $this->_getDao()->fetchModule($moduleids);
+	}
+	
+	public function getByPageid($pageid) {
+		$pageid = (int)$pageid;
+		return $this->_getDao()->getByPageid($pageid);
 	}
 	
 	public function searchModule(PwDesignModuleSo $vo, $offset = 0, $limit = 10) {

@@ -7,9 +7,9 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('/config/regist/run')}">注册设置</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('/config/regist/login')}">登录设置</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('/config/regist/guide')}">新用户引导设置</a></li>
+			<li><a href="{@url:/config/regist/run}">注册设置</a></li>
+			<li><a href="{@url:/config/regist/login}">登录设置</a></li>
+			<li class="current"><a href="{@url:/config/regist/guide}">新用户引导设置</a></li>
 		</ul>
 	</div>
 	<div class="h_a">功能说明</div>
@@ -20,7 +20,7 @@
 		</ol>
 	</div>
 	
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('config/regist/doguide')}" method="post" >
+	<form class="J_ajaxForm" action="{@url:config/regist/doguide}" method="post" >
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -41,7 +41,7 @@
 				<td><input type="checkbox" {@Pw::ifcheck($item['isopen'] == 1)} name="config[{$key}][isopen]" value="1"></td>
 				<td><input type="number" class="input length_1" name="config[{$key}][order]" value="{$item['order']}"></td>
 				<td>{$item['title']}</td>
-				<td><!--#if ($item['setting']) {#--><a href="{@WindUrlHelper::createUrl($item['setting'])}">[设置]</a><!--#}#--></td>
+				<td><!--#if ($item['setting']) {#--><a href="{@WindUrlHelper::createUrl($item['setting'])|url}">[设置]</a><!--#}#--></td>
 			</tr>
 <!--#}#-->
 		</table>

@@ -15,10 +15,10 @@
 #-->
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('design/push/run')}">显示中数据</a></li>
-			<li  class="{$check}"><a href="{@WindUrlHelper::createUrl('design/push/status?status=1')}">待审核数据</a></li>
-			<li class="{$shield}"><a href="{@WindUrlHelper::createUrl('design/push/status?status=2')}">推送数据</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('design/push/shield')}">屏蔽数据</a></li>	
+			<li><a href="{@url:design/push/run}">显示中数据</a></li>
+			<li  class="{$check}"><a href="{@url:design/push/status?status=1}">待审核数据</a></li>
+			<li class="{$shield}"><a href="{@url:design/push/status?status=2}">推送数据</a></li>
+			<li><a href="{@url:design/push/shield}">屏蔽数据</a></li>	
 		</ul>
 	</div>
 	<!--# if ($status == 1): #-->
@@ -37,7 +37,7 @@
 	</div>
 	<!--# endif; #-->
 	<div class="h_a">搜索</div>
-	<form method="post"  action="{@WindUrlHelper::createUrl('design/push/status?status='.$status)}" >
+	<form method="post"  action="{@url:design/push/status?status=$status}" >
 	<div class="search_type cc mb10">
 		<span class="mr20">所属页面：
 			<select class="select_2" name="pageid" id="J_flag_initiative">
@@ -56,7 +56,7 @@
 		<input type="hidden"  name="check" value="{$check}">
 	</div>
 	</form>
-	<form class="J_ajaxForm" method="post"  action="{@WindUrlHelper::createUrl('design/push/batchcheck')}" >
+	<form class="J_ajaxForm" method="post"  action="{@url:design/push/batchcheck}" >
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -96,9 +96,9 @@
 				<td>{@Pw::time2str($v['start_time'])}</td>
 				<!--# endif; #-->
 				<td>
-					<a href="{@WindUrlHelper::createUrl('design/push/delpush?pushid='.$v['push_id'])}" class="mr10 J_ajax_del">[删除]</a>
+					<a href="{@url:design/push/delpush?pushid=$v['push_id']}" class="mr10 J_ajax_del">[删除]</a>
 					<!--# if ($status == 1): #-->
-					<a href="{@WindUrlHelper::createUrl('design/push/dopush?pushid='.$v['push_id'])}" class="mr10 J_ajax_refresh">[通过]</a>
+					<a href="{@url:design/push/dopush?pushid=$v['push_id']}" class="mr10 J_ajax_refresh">[通过]</a>
 					<!--# endif; #-->
 				</td>
 			</tr>
@@ -116,7 +116,7 @@
 		<!--# if ($status == 1): #-->
 		<button data-subcheck="true" class="btn btn_submit J_ajax_submit_btn" type="submit">通过</button>
 		<!--# endif; #-->
-		<button data-subcheck="true" data-msg="确定要删除选中内容?" class="btn btn_submit J_ajax_submit_btn" type="submit" data-action="{@WindUrlHelper::createUrl('design/push/batchdelete')}">删除</button>
+		<button data-subcheck="true" data-msg="确定要删除选中内容?" class="btn btn_submit J_ajax_submit_btn" type="submit" data-action="{@url:design/push/batchdelete}">删除</button>
 	</div>
 	</div>
 	<!--# } #-->
@@ -141,7 +141,7 @@ $(function(){
 
 	function flatSet(pageid, id){
 		if(pageid) {
-			$.post('{@WindUrlHelper::createUrl('design/page/getModuleOption')|url}', {pageid : pageid}, function(data){
+			$.post('{@url:design/page/getModuleOption}', {pageid : pageid}, function(data){
 				if(data.state == 'success') {
 					flag_passive.html('<option>不限制</option>'+data.data);
 

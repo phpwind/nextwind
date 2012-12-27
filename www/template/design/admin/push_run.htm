@@ -7,10 +7,10 @@
 <div class="wrap J_check_wrap">	
 	<div class="nav">
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('design/push/run')}">显示中数据</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('design/push/status?status=1')}">待审核数据</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('design/push/status?status=2')}">推送数据</a></li>	
-			<li><a href="{@WindUrlHelper::createUrl('design/push/shield')}">屏蔽数据</a></li>	
+			<li class="current"><a href="{@url:design/push/run}">显示中数据</a></li>
+			<li><a href="{@url:design/push/status?status=1}">待审核数据</a></li>
+			<li><a href="{@url:design/push/status?status=2}">推送数据</a></li>	
+			<li><a href="{@url:design/push/shield}">屏蔽数据</a></li>	
 		</ul>
 	</div>
 	<div class="h_a">功能说明</div>
@@ -20,7 +20,7 @@
 		</ul>
 	</div>
 	<div class="h_a">搜索</div>
-	<form method="post"  action="{@WindUrlHelper::createUrl('design/push/run')}" >
+	<form method="post"  action="{@url:design/push/run}" >
 	<div class="search_type cc mb10">
 		<span class="mr20">所属页面：
 			<select class="select_2" name="pageid" id="J_flag_initiative">
@@ -38,7 +38,7 @@
 		<button class="btn">搜索</button>
 	</div>
 	</form>
-	<form class="J_ajaxForm" method="post"  action="{@WindUrlHelper::createUrl('design/push/batchshield')}" >
+	<form class="J_ajaxForm" method="post"  action="{@url:design/push/batchshield}" >
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -66,7 +66,7 @@
 				<td>{$modules[$v['module_id']]['module_name']}</td>
 				<td>{$pushs[$v['from_id']]['created_user']}</td>
 				<td>{@Pw::time2str($v['start_time'])}</td>
-				<td><a href="{@WindUrlHelper::createUrl('design/push/doshield?dataid='.$v['data_id'])}" class="mr10 J_ajax_del" data-msg="确定要删除选中内容?">[删除]</a></td>
+				<td><a href="{@url:design/push/doshield?dataid=$v['data_id']}" class="mr10 J_ajax_del" data-msg="确定要删除选中内容?">[删除]</a></td>
 			</tr>
 			<!--# endforeach; #-->
 			<!--# } else { #-->
@@ -104,7 +104,7 @@ $(function(){
 
 	function flatSet(pageid, id){
 		if(pageid) {
-			$.post('{@WindUrlHelper::createUrl('design/page/getModuleOption')|url}', {pageid : pageid}, function(data){
+			$.post('{@url:design/page/getModuleOption}', {pageid : pageid}, function(data){
 				if(data.state == 'success') {
 					flag_passive.html('<option>不限制</option>'+data.data);
 

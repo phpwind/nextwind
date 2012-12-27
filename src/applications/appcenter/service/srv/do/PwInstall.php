@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwInstall.php 22322 2012-12-21 08:32:15Z long.shi $
+ * @version $Id: PwInstall.php 22581 2012-12-25 10:27:20Z long.shi $
  * @package wind
  */
 class PwInstall implements iPwInstall {
@@ -246,7 +246,7 @@ class PwInstall implements iPwInstall {
 				foreach ($sql as $option => $statements) {
 					if (!in_array($option, array('INSERT', 'UPDATE', 'REPLACE', 'ALTER'))) continue;
 					foreach ($statements as $table => $statement) {
-						if (!array_key_exists($table, $sql['CREATE'])) return new PwError(
+						if ($option == 'ALTER' && !array_key_exists($table, $sql['CREATE'])) return new PwError(
 							'APPCENTER:install.data.fail', array('{{error}}' => $table));
 						$db->execute($statement);
 					}
@@ -289,8 +289,7 @@ class PwInstall implements iPwInstall {
 		if (!$inject) return true;
 		$alias = $hookName = array();
 		foreach ($inject as $key => &$value) {
-			$value['app_id'] = $install->getAppId();
-			$value['app_alias'] = $install->getManifest()->getApplication('alias');
+			$value['app_id'] = $install->getManifest()->getApplication('alias');
 			$value['app_name'] = $install->getManifest()->getApplication('name');
 			$alias[] = $value['alias'];
 			$hookName[] = $value['hook_name'];

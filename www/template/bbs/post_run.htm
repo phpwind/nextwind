@@ -12,18 +12,18 @@
 			{@$headguide|html}
 		</div>
 		<div class="main cc">
-			<form method="post" id="mainForm" name="FORM" action="{@WindUrlHelper::createUrl('bbs/post/' . $do . '/?_json=1&fid=' . $fid)}" enctype="multipart/form-data">
+			<form method="post" id="mainForm" name="FORM" action="{@WindUrlHelper::createUrl('bbs/post/' . $do . '/?_json=1&fid=' . $fid)|url}" enctype="multipart/form-data">
 			<div class="box_wrap post_page">
 				<nav>
 					<div class="content_nav">
 						<ul id="tabTypeHead">
 						<!--# if ($action == 'reply') { #-->
-							<li class="current"><a href="{@url:bbs/post/reply/?tid=$tid}">发表回复</a></li>
+							<li class="current"><a href="{@url:bbs/post/reply?tid=$tid}">发表回复</a></li>
 						<!--# } elseif ($action == 'modify') { #-->
-							<li class="current"><a href="{@url:bbs/post/modify/?tid=$tid&pid=$pid}">编辑帖子</a></li>
+							<li class="current"><a href="{@url:bbs/post/modify?tid=$tid&pid=$pid}">编辑帖子</a></li>
 						<!--# } else { #-->
 							<!--# foreach ($pwforum->getThreadType($loginUser) as $key => $value) { #-->
-							<li class="{@Pw::isCurrent($special == $key)}"><a href="{@WindUrlHelper::createUrl('bbs/post/run/?fid=' . $fid . ($key ? ('&special=' . $key) : ''))}">{$value[1]}</a></li>
+							<li class="{@Pw::isCurrent($special == $key)}"><a href="{@WindUrlHelper::createUrl('bbs/post/run/?fid=' . $fid . ($key != 'default' ? ('&special=' . $key) : ''))}">{$value[1]}</a></li>
 							<!--# } #-->
 						<!--# } #-->
 						</ul>
@@ -54,7 +54,7 @@
 						<!--# }//主题分类结束 #-->
 						<input name="atc_title" id="J_atc_title" value="{$atc_title}" class="input length_6 mr15"{@!empty($isTopic) ? ' required' : ''} aria-required="true" placeholder="{@!empty($default_title) ? $default_title : '请输入标题'}" title="请输入标题" data-max="{@Wekit::C('bbs', 'title.length.max')}"/><span id="J_title_tip"></span>
 					</hgroup>
-					<hook class='$pwpost' method='displayHtmlFromBeforeContent' name="(c_|m_).createHtmlBeforeContent"/>
+					<hook class='$pwpost' name="m_PwPostAction.createHtmlBeforeContent"/>
 					<div class="c"></div>
 					<div class="cc mb10">
 						<div class="cm">
@@ -68,7 +68,7 @@
 								<!--# if ($action == 'run' || $action == 'modify') { #-->
 								<template source='TPL:tag.post_tag' load='true' />
 								<!--# } #-->
-								<hook class='$pwpost' method='displayHtmlFromRightContent' />
+								<hook class='$pwpost' name='m_PwPostAction.createHtmlRightContent' />
 							</div>
 						</div>
 					</div>
@@ -555,54 +555,18 @@ var forceTopic = '{$forceTopic}';//是否强制主题分类，1强制
 	 				Wind.Util.ajaxBtnEnable(post_btn);
 	 				var _data = data.data;
 
-	 				if(_data && _data.word!==undefined) {
-	 					//敏感词
-	 					var words = _data.word,
-	 						words_arr = [];
-
-	 					if(words === ''){
-	 						//未开启提示
-	 						if(_data.isVerified) {
-	 							//审核
-		 						$form[0].action = $form[0].action+'&verifiedWord=1';
-								postSubmit();
-	 						}else{
-	 							//禁用
-	 							Wind.Util.resultTip({
-			 						error : true,
-			 						msg : data.message,
-			 						follow : post_btn
-			 					});
-	 						}
-	 						return;
-	 					}
-
-	 					for(var j in words) {
-	 						words_arr.push('<span class="red w">'+ words[j] +'，</span>');
-	 					}
-
-	 					var ellipsis = '';
-	 					if(words_arr.length > 3) {
-	 						//敏感词超过3组 省略
-	 						words_arr = words_arr.slice(0,3);
-	 						ellipsis = '等';
-	 					}
-
-	 					//去除最后一个逗号
-	 					var w_str = words_arr.join(''),
-							lastindex = w_str.lastIndexOf('，');
-						w_str = w_str.substring(0, lastindex) + w_str.substring(lastindex + 1, w_str.length);
+	 				if(_data) {
 
 	 					if(_data.isVerified) {
 	 						//审核
 	 						Wind.dialog.html(word_tpl, {
 	 							id : 'J_word_wrap',
 	 							callback : function(){
-	 								$('#J_word_tip').html(data.message + '：“'+ w_str +'”'+ ellipsis +'<br>是否继续发布？');
+	 								$('#J_word_tip').html(data.message +'<br>是否继续发布？');
 	 								$('#J_word_bototm').html('<button type="button" id="J_word_change" class="btn btn_submit mr10">马上修改</button><button type="button" class="btn" id="J_word_subdirect">直接发布</button>');
 
 	 								//马上修改
-	 								wordCallback($(words_arr[0]).text());
+	 								wordCallback();
 
 	 								//马上发布
 	 								$('#J_word_subdirect').on('click', function(e){
@@ -615,19 +579,6 @@ var forceTopic = '{$forceTopic}';//是否强制主题分类，1强制
 	 								});
 	 							}
 	 						});
-	 					}else{
-	 						//禁用
-	 						Wind.dialog.html(word_tpl, {
-	 							id : 'J_word_wrap',
-	 							callback : function(){
-	 								$('#J_word_tip').html(data.message + '：“'+ w_str +'”'+ ellipsis +'<br>请修改后提交');
-	 								$('#J_word_bototm').html('<button type="button" id="J_word_change" class="btn btn_submit mr10">马上修改</button>');
-
-	 								//马上修改
-	 								wordCallback($(words_arr[0]).text());
-	 							}
-	 						});
-
 	 					}
 	 				}else{
 	 					Wind.Util.resultTip({
@@ -654,16 +605,12 @@ var forceTopic = '{$forceTopic}';//是否强制主题分类，1强制
  			e.preventDefault();
  			Wind.dialog.closeAll();
 
- 			if(title.val().indexOf(text) >= 0) {
-				title.focus();
-			}else{
-				$('iframe.wind_editor_iframe')[0].contentWindow.document.body.focus();
-			}
+ 			$('iframe.wind_editor_iframe')[0].contentWindow.document.body.focus();
  		});
 
 	}
 
-	<!--# if ($special == 1) { #-->
+	<!--# if ($special == 'poll') { #-->
 	//投票帖
 	Wind.js(GV.JS_ROOT + 'pages/bbs/postVote.js?v=' + GV.JS_VERSION)
 	<!--# } #-->

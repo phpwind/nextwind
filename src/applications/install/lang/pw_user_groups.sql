@@ -185,7 +185,7 @@ INSERT INTO `pw_user_permission_groups` (`gid`, `rkey`, `rtype`, `rvalue`, `vtyp
 (4, 'message_allow_send', 'basic', '1', 'string'),
 (4, 'message_max_send', 'basic', '300', 'string'),
 (4, 'multimedia_auto_open', 'basic', '0', 'string'),
-(4, 'operate_thread', 'systemforum', 'a:8:{s:6:"digest";s:1:"1";s:9:"highlight";s:1:"1";s:4:"lock";s:1:"1";s:4:"down";s:1:"1";s:2:"up";s:1:"1";s:7:"up_time";s:2:"24";s:6:"topped";s:1:"1";s:11:"topped_type";s:1:"2";}', 'array'),
+(4, 'operate_thread', 'systemforum', 'a:18:{s:6:"digest";s:1:"1";s:9:"highlight";s:1:"1";s:4:"type";s:1:"1";s:4:"move";s:1:"1";s:4:"read";s:1:"1";s:4:"edit";s:1:"1";s:4:"copy";s:1:"1";s:6:"delete";s:1:"1";s:4:"lock";s:1:"1";s:4:"down";s:1:"1";s:6:"shield";s:1:"1";s:9:"deleteatt";s:1:"1";s:11:"toppedreply";s:1:"1";s:3:"ban";s:1:"1";s:2:"up";s:1:"1";s:7:"up_time";s:2:"24";s:6:"topped";s:1:"1";s:11:"topped_type";s:1:"2";}', 'array'),
 (4, 'password_limit_time', 'basic', '0', 'string'),
 (4, 'post_check', 'basic', '1', 'string'),
 (4, 'post_modify_time', 'basic', '0', 'string'),

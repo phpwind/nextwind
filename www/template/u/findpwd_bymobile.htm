@@ -16,7 +16,7 @@
 					<div class="reg_cont">
 						<div class="reg_form">
 							<div class="tips">请输入绑定的手机号码，系统会发送一条带有验证码的短信到您的手机</div>
-							<form id="J_bymobile_form" action="{@WindUrlHelper::createUrl('u/findPwd/checkmobilecode')}" method="post">
+							<form id="J_bymobile_form" action="{@url:u/findPwd/checkmobilecode}" method="post">
 								<input type="hidden" id="J_pwd_username" name="username" value="{$username}" />
 								<dl>
 									<dt><label>用户名：</label></dt>

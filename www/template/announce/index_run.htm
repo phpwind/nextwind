@@ -32,7 +32,7 @@
 							<!--# }else{ #-->
 							 <span class="subject">{$value['subject']}</span>
 							<!--# } #-->
-							<a href="{@WindUrlHelper::createUrl('/space/index/run?uid='.$value['created_userid'])}" class="name">{$value['username']}</a>
+							<a href="{@url:/space/index/run?uid=$value['created_userid']}" class="name">{$value['username']}</a>
 							<!--# 
 							$start_date = Pw::time2str($value['start_date'], 'Y-m-d'); 
 							$end_date = Pw::time2str($value['end_date'], 'Y-m-d'); 

@@ -1,4 +1,5 @@
 		<!--#
+			$forumdb = Wekit::load('forum.srv.PwForumService')->getCommonForumList();
 			if ($pwforum instanceof PwForumBo) {
 				$__currentCateId = $pwforum->getCateId();
 				$__currentFid = $pwforum->fid;
@@ -14,10 +15,10 @@
 			<!--# foreach ($forumdb[0] as $k => $cate) { #-->
 				<!--# if ($forumdb[$cate['fid']]) { #-->
 				<dl class="{@Pw::isCurrent($k == $__currentCateId)}">
-					<dt class="J_sidebar_forum_toggle"><a href="{@url:bbs/cate/run?fid=$cate['fid']}">{@$cate['name']|html}</a></dt>
+					<dt class="J_sidebar_forum_toggle"><a href="{@url:bbs/cate/run?fid=$cate['fid']}">{@strip_tags($cate['name'])}</a></dt>
 					<dd role="tabpanel">
 						<!--# foreach ($forumdb[$cate['fid']] as $forums) { #-->
-						<p><a class="{@Pw::isCurrent($forums['fid'] == $__currentFid)}" href="{@url:bbs/thread/run?fid=$forums['fid']}">{@$forums['name']|html}</a></p>
+						<p><a class="{@Pw::isCurrent($forums['fid'] == $__currentFid)}" href="{@url:bbs/thread/run?fid=$forums['fid']}">{@strip_tags($forums['name'])}</a></p>
 						<!--# } #-->
 					</dd>
 				</dl>

@@ -2,7 +2,7 @@
 <div class="core_pop_wrap" id="J_punch_friend_pop" data-max="{$friendNum}">
 	<div class="core_pop">
 		<div class="pop_help_punch">
-		<form id="J_punch_friend_form" action="{@WindUrlHelper::createUrl('space/punch/dofriend')}" method="post" >
+		<form id="J_punch_friend_form" action="{@url:space/punch/dofriend}" method="post" >
 			<div class="pop_top J_drag_handle">
 				<a href="#" class="pop_close J_punch_close">关闭</a>
 				<strong>帮Ta打卡</strong>
@@ -21,7 +21,7 @@
 					<div class="ct cc">
 						<div class="left">
 							<dl class="current">
-								<dt class="J_friend_dt" id="J_punch_dt_all" name="type" value="0" data-url="{@WindUrlHelper::createUrl('space/punch/getfollow')}">全部</dt>
+								<dt class="J_friend_dt" id="J_punch_dt_all" name="type" value="0" data-url="{@url:space/punch/getfollow}">全部</dt>
 								<!--# foreach ($follows as $k => $v) { #-->
 								<dd id="J_firend_dd_{$k}" class="J_friend_item {$v['disable']}" data-name="friend" data-id="{$k}">{$v['username']}</dd>
 								<!--# } #-->
@@ -29,7 +29,7 @@
 							</dl>
 							<!--# foreach ($typeArr as $k => $v) { #-->
 							<dl>
-								<dt class="J_friend_dt" data-name="type" data-id="{$k}" data-url="{@WindUrlHelper::createUrl('space/punch/getfollow?type='.$k)}">{$v}</dt>						
+								<dt class="J_friend_dt" data-name="type" data-id="{$k}" data-url="{@url:space/punch/getfollow?type=$k}">{$v}</dt>						
 							</dl>
 							<!--# } #-->
 						</div>

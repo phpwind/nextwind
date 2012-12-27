@@ -32,7 +32,7 @@
 <!--#if ($count > 0) {#-->
 <!--#foreach ($list as $id => $item) {#-->
 			<li>
-				<span class="fr"><a href="#" class="mr20 J_work_edit" data-id="{$item['id']}" data-company="{$item['company']}" data-starty="{$item['starty']}" data-startm="{$item['startm']}" data-endy="{$item['endy']}" data-endm="{$item['endm']}">编辑</a><a class="J_work_del" href="{@WindUrlHelper::createUrl('profile/work/delete?page=' . $page . '&id=' . $id)}">删除</a></span>
+				<span class="fr"><a href="#" class="mr20 J_work_edit" data-id="{$item['id']}" data-company="{$item['company']}" data-starty="{$item['starty']}" data-startm="{$item['startm']}" data-endy="{$item['endy']}" data-endm="{$item['endm']}">编辑</a><a class="J_work_del" href="{@url:profile/work/delete?page=$page&id=$id}">删除</a></span>
 				<span class="unit">{$item['company']}</span>
 				<span class="time">{$item['starty']}年{$item['startm']}月&nbsp;至&nbsp;
 				<!--#if (!$item['endy']) {#-->今<!--#}else{#-->{$item['endy']}年{$item['endm']}月<!--#}#--></span>
@@ -47,8 +47,8 @@
 	</div>
 </div>
 <script>
-var URL_WORK_ADD = '{@WindUrlHelper::createUrl("profile/work/add")|url}',			//添加工作url
-	URL_WORK_EDIT = '{@WindUrlHelper::createUrl("profile/work/edit")|url}';		//编辑工作url
+var URL_WORK_ADD = '{@url:profile/work/add}',			//添加工作url
+	URL_WORK_EDIT = '{@url:profile/work/edit}';		//编辑工作url
 Wind.ready(document, function(){
 	Wind.use('jquery', 'global', GV.JS_ROOT +'pages/profile/profileWork.js?v=' +GV.JS_VERSION);
 });

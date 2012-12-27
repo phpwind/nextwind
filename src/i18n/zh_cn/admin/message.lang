@@ -60,4 +60,5 @@ role.find.fail = 角色不存在或者查询参数有误
 custom.size = 常用菜单设置不宜超过15个
 
 safe.set.fail = 添加限制Ip失败
+catname.empty = 分类名不能为空
 

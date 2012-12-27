@@ -8,7 +8,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUserBanSpeak.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
+ * @version $Id: PwUserBanSpeak.php 22749 2012-12-27 03:14:34Z xiaoxia.xuxx $
  * @package src.service.user.srv.bantype
  */
 class PwUserBanSpeak implements PwUserBanTypeInterface {
@@ -20,7 +20,6 @@ class PwUserBanSpeak implements PwUserBanTypeInterface {
 		//【禁止用户】禁止发言用户组
 		$userDm = new PwUserInfoDm($dm->getField('uid'));
 		$userDm->setGroupid(6)
-			->setMemberid(0)
 			->setGroups(array());//用户禁止，设置用户的组为禁止发言组，删除用户拥有的其他附加组
 		$result = $this->_getUserDs()->editUser($userDm, PwUser::FETCH_MAIN);
 		if (!$result instanceof PwError) {
@@ -37,7 +36,6 @@ class PwUserBanSpeak implements PwUserBanTypeInterface {
 		if (!$uid) return false;
 		$userDm = new PwUserInfoDm($uid);
 		$userDm->setGroupid(0)
-			->setMemberid(0)
 			->setGroups(array());
 		/* @var $groupService PwUserGroupsService */
 		$groupService = Wekit::load('usergroup.srv.PwUserGroupsService');

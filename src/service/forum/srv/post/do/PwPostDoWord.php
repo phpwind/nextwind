@@ -24,28 +24,34 @@ class PwPostDoWord extends PwPostDoBase {
 
 	public function check($postDm) {
 		$data = $postDm->getData();
-		$content = $data['subject'].$data['content'];
+		$content = $data['subject'];
 		$wordFilter = Wekit::load('SRV:word.srv.PwWordFilter');
+		
 		if ($this->_tagnames) {
-			$tagname = implode(' ', $this->_tagnames);
-			if (($result = $wordFilter->filter($tagname)) === true) {
-				return new PwError('WORD:tag.content.error');
+			$content = $content.implode('', $this->_tagnames);
+		}
+		$banedStrLen = strlen($content);
+		$content = $content.$data['content'];
+		list($type, $words, $isTip) = $wordFilter->filterWord($content);
+		if (!$type) return true; 
+		$words = array_unique($words);
+		foreach ($words as $k => $v) {
+			if ($k < $banedStrLen) {
+				return new PwError('WORD:title.tag.error',array('{wordstr}' => implode(',', $words)));
 			}
 		}
-		list($type, $words) = $wordFilter->filterWord($content);
-		$words = $words ? $words : '';
-		if (!$type) return true; 
-		$this->_word = 1;
+		$errorTip = $isTip ? 'WORD:content.error.tip' : 'WORD:content.error';
 		switch ($type) {
 			case 1:
-				return new PwError('WORD:content.error',array(),array('word' => $words));
+				return new PwError($errorTip,array('{wordstr}' => implode(',', $words)));
 			case 2:
 				$this->_isVerified = 1;
 				if ($this->_confirm) {
 						return true;
 				}
-				return new PwError('WORD:content.error',array(),array('isVerified' => $this->_isVerified, 'word' => $words));
+				return new PwError($errorTip,array('{wordstr}' => implode(',', $words)),array('isVerified' => $this->_isVerified));
 			case 3:	
+				$this->_word = 1;
 			default:
 				return true;
 		}

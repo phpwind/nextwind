@@ -10,7 +10,7 @@
 			$typeTpl = 'notice_segment_' . $v['type'];
 			$class = $v['message_extend_params']['unread_count'] || !$v['is_read'] ? ' unread' : '';
 	#-->
-					<li data-url="{@WindUrlHelper::createUrl('message/notice/detail?id='.$v['id'])}" class="li{$class}">
+					<li data-url="{@url:message/notice/detail?id=$v['id']}" class="li{$class}">
 						<segment alias='notice_minilist' tpl="$typeTpl" args='$v' name="minilist" />
 					</li>
 	<!--# }#-->
@@ -21,6 +21,6 @@
 	 			<div class="not_content_mini" style="margin:30px 0 30px 80px;">暂没有消息</div>
 	<!--# } #-->
 			<div class="my_message_bottom tac">
-				<a href="{@WindUrlHelper::createUrl('message/message/run')}">查看所有消息&nbsp;&gt;&gt;</a>
+				<a href="{@url:message/message/run}">查看所有消息&nbsp;&gt;&gt;</a>
 			</div>
 		</div>

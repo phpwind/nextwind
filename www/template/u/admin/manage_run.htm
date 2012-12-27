@@ -7,7 +7,7 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('admin/u/manage/run')}">用户管理</a></li>
+			<li class="current"><a href="{@url:admin/u/manage/run}">用户管理</a></li>
 		</ul>
 	</div>
 	<div class="h_a">提示信息</div>
@@ -17,10 +17,10 @@
 			<li>可以对用户的基本信息、积分信息、用户组，以及用户产生的内容进行管理。</li>
 		</ol>
 	</div>
-	<div class="mb10"><a class="btn J_dialog" href="{@WindUrlHelper::createUrl('admin/u/manage/add')}" title="添加用户" role="button"><span class="add"></span>添加用户</a></div>
+	<div class="mb10"><a class="btn J_dialog" href="{@url:admin/u/manage/add}" title="添加用户" role="button"><span class="add"></span>添加用户</a></div>
 	<div class="h_a">搜索</div>
 	<div class="search_type cc mb10">
-		<form action="{@WindUrlHelper::createUrl('admin/u/manage/run')}" method="post">
+		<form action="{@url:admin/u/manage/run}" method="post">
 		<input type="hidden" name="page" value="{$page}">
 		<label>用户组：</label>
 		<select name="gid[]" size="5" class="mr10" multiple>
@@ -55,9 +55,9 @@
 				<td>{$item['email']}</td>
 				<td>{@Pw::time2str($item['regdate'], 'Y-m-d H:i:s')}</td>
 				<td>{@Pw::time2str($item['lastvisit'], 'Y-m-d H:i:s')}</td>
-				<td><a href="{@WindUrlHelper::createUrl('u/manage/edit?uid=' . $item['uid'])}" class="mr10" title="编辑">[编辑]</a>
-					<a href="{@WindUrlHelper::createUrl('u/manage/clear?uid=' . $item['uid'])}" class="mr10 J_dialog" title="清理">[清理]</a>
-					<a href="{@WindUrlHelper::createUrl('u/forbidden/run?key=2&value=' . $item['username'])}" title="禁止">[禁止]</a></td>
+				<td><a href="{@url:u/manage/edit?uid=$item['uid']}" class="mr10" title="编辑">[编辑]</a>
+					<a href="{@url:u/manage/clear?uid=$item['uid']}" class="mr10 J_dialog" title="清理">[清理]</a>
+					<a href="{@url:u/forbidden/run?key=2&value=$item['username']}" title="禁止">[禁止]</a></td>
 			</tr>
 		<!--#}#-->
 		<!--# } else { #-->

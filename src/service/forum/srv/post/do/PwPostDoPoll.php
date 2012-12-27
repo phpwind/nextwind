@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
  * @author MingXing Sun <mingxing.sun@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostDoPoll.php 22319 2012-12-21 08:14:13Z jieyin $
+ * @version $Id: PwPostDoPoll.php 22440 2012-12-24 09:17:41Z jieyin $
  * @package forum
  */
 
@@ -272,7 +272,7 @@ class PwPostDoPoll extends PwPostDoBase {
 	}
 	
 	public function dataProcessing($postDm) {
-		$postDm->setSpecial(1);
+		$postDm->setSpecial('poll');
 		return $postDm;
 	}
 	

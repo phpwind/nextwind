@@ -6,7 +6,7 @@
  * @author peihong.zhang
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageDialogDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidMessageDialogDao.php 22410 2012-12-24 04:19:54Z jinlong.panjl $
  * @package forum
  */
 
@@ -51,7 +51,20 @@ class WindidMessageDialogDao extends WindidBaseDao {
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->queryAll(array($uid));
 	}
-		
+	
+	/**
+	 * 获取多条未读对话
+	 * 
+	 * @param int $uid
+	 * @param int $limit
+	 * @return array
+	 */
+	public function getUnreadDialogsByUid($uid,$limit) {
+		$sql = $this->_bindSql('SELECT * FROM %s WHERE `to_uid`=? AND `unread_count` > 0 ORDER BY `modified_time` DESC %s ', $this->getTable(), $this->sqlLimit($limit));
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->queryAll(array($uid));
+	}	
+	
 	/**
 	 * 添加消息聚合 
 	 * 
@@ -104,24 +117,6 @@ class WindidMessageDialogDao extends WindidBaseDao {
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->update();
 	}
-		
-	/**
-	 * 批量更新Aggregated表
-	 * 
-	 * @param int $uid
-	 * @param array $fromUids
-	 * @param array $fields
-	 * @return bool
-	
-	public function updateDialogs($uid,$fromUids,$fields) {
-		if (!($fields = $this->_filterStruct($fields))) {
-			return false;
-		}
-		$sql = $this->_bindSql('UPDATE %s SET %s WHERE `to_uid`=? AND `from_uid` IN %s ',$this->getTable(),$this->sqlSingle($fields),$this->sqlImplode($fromUids));
-		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->update(array($uid));
-	}
-	 */
 	
 	/**
 	 * 统计用户私信数量

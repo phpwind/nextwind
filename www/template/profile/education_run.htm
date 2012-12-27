@@ -8,10 +8,10 @@
 				<span class="unit">学校名称</span>
 				<span class="time">入学年份</span>
 			</li>
-<!--# if ($list) { #-->
+<!--#var_dump($args); if ($list) { #-->
 	<!--#foreach ($list as $id => $item) {#-->
 			<li>
-				<span class="fr"><a href="{@WindUrlHelper::createUrl('profile/education/edit?id=' . $id)}" data-pid="{$item['areaid'][0]}" data-cid="{$item['areaid'][1]}" data-did="{$item['areaid'][2]}" data-degreeid="{$item['degreeid']}" data-school="{$item['school']}" data-schoolid="{$item['schoolid']}" data-startyear="{$item['start_time']}" class="mr20 J_school_edit">编辑</a><a href="{@WindUrlHelper::createUrl('profile/education/delete?id=' . $id . '&page=' . $page, $args)}" class="J_edu_del">删除</a></span>
+				<span class="fr"><a href="{@url:profile/education/edit?id=$id}" data-pid="{$item['areaid'][0]}" data-cid="{$item['areaid'][1]}" data-did="{$item['areaid'][2]}" data-degreeid="{$item['degreeid']}" data-school="{$item['school']}" data-schoolid="{$item['schoolid']}" data-startyear="{$item['start_time']}" class="mr20 J_school_edit">编辑</a><a href="{@WindUrlHelper::createUrl('profile/education/delete?id=' . $id . '&page=' . $page, $args)|url}" class="J_edu_del">删除</a></span>
 				<span class="edu">{$item['degree']}</span>
 				<span class="unit">{$item['school']}</span>
 				<span class="time">{$item['start_time']}年</span>
@@ -21,7 +21,7 @@
 			<li class="tac p20" id="J_work_none">你还没添加教育经历，<a href="#" class="s4" id="J_edu_add_trigger">立即添加&gt;&gt;</a></li>
 <!--# } #-->
 			<li id="J_edu_op_wrap" style="display:none;">
-				<form id="J_edu_form" action="{@WindUrlHelper::createUrl('profile/education/add')}" method="post">
+				<form id="J_edu_form" action="{@url:profile/education/add}" method="post">
 					<span class="fr"><button type="submit" id="J_edu_save" class="btn btn_submit mr20">保存</button><a href="" id="J_edu_cancl">取消</a></span>
 					<span class="edu">
 					<select class="select_2" id="J_edu_select" name="degree">
@@ -41,8 +41,8 @@
 	</div>
 </div>
 <script>
-var URL_EDU_ADD = "{@WindUrlHelper::createUrl('profile/education/add')|html}",
-	URL_EDU_EDIT = "{@WindUrlHelper::createUrl('profile/education/edit')|html}";
+var URL_EDU_ADD = "{@url:profile/education/add}",
+	URL_EDU_EDIT = "{@url:profile/education/edit}";
 Wind.ready(document, function(){
 	Wind.use('jquery', 'global', GV.JS_ROOT +'pages/profile/profileEducation.js?v=' +GV.JS_VERSION);
 });

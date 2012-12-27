@@ -7,16 +7,16 @@
 <div class="wrap J_check_wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/run')}">勋章管理</a></li>
-			<li  class="current"><a href="{@WindUrlHelper::createUrl('medal/medal/award')}">勋章颁发</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/approval')}">勋章审核</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('medal/medal/set')}">勋章设置</a></li>
+			<li><a href="{@url:medal/medal/run}">勋章管理</a></li>
+			<li  class="current"><a href="{@url:medal/medal/award}">勋章颁发</a></li>
+			<li><a href="{@url:medal/medal/approval}">勋章审核</a></li>
+			<li><a href="{@url:medal/medal/set}">勋章设置</a></li>
 		</ul>
 	</div>
 	
 	<div class="h_a">勋章会员筛选</div>
 	<div class="search_type cc mb10">
-		<form  action="{@WindUrlHelper::createUrl('medal/medal/award')}" method="post">
+		<form  action="{@url:medal/medal/award}" method="post">
 				<label>勋章名称：</label>
 				<select id="J_medalid" class="mr10" size="1" name="medalid">
 					<option value="0">全部</option>
@@ -29,11 +29,11 @@
 		</form>
 	</div>
 
-	<!-- <div class="mb10"><a href="{@WindUrlHelper::createUrl('medal/medal/addAward')}" title="颁发勋章" class="btn J_dialog"><span class="add"></span>颁发勋章</a></div> -->
-	<div class="mb10"><a href="{@WindUrlHelper::createUrl('medal/medal/addAward')}" title="颁发勋章" class="btn J_dialog"><span class="add"></span>颁发勋章</a></div>
+	<!-- <div class="mb10"><a href="{@url:medal/medal/addAward}" title="颁发勋章" class="btn J_dialog"><span class="add"></span>颁发勋章</a></div> -->
+	<div class="mb10"><a href="{@url:medal/medal/addAward}" title="颁发勋章" class="btn J_dialog"><span class="add"></span>颁发勋章</a></div>
 
 <!-- list -->
-	<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('medal/medal/batchStop')}" method="post">
+	<form class="J_ajaxForm" data-role="list" action="{@url:medal/medal/batchStop}" method="post">
 	<div class="table_list">
 		<table width="100%" id="J_subcheck">
 			<colgroup>
@@ -55,12 +55,12 @@
 			$expired = $log['expired_time'] > 0 ? Pw::time2str($log['expired_time']) : '长期'; #-->
 			<tr>
 				<td><input class="J_check" data-yid="J_check_y" data-xid="J_check_x" type="checkbox" name="logids[]" value="{$log['log_id']}"/></td>
-				<td><a href="{@WindUrlHelper::createUrl('medal/medal/award/?uid='.$log['uid'])}">{$users[$log['uid']]['username']}</a></td>
+				<td><a href="{@url:medal/medal/award?uid=$log['uid']}">{$users[$log['uid']]['username']}</a></td>
 				<td>{$medals[$log['medal_id']]['name']}</td>
 				<td><img src="{$medals[$log['medal_id']]['medalImage']}" width="30" height="30" /></td>
 				<td>{@Pw::time2str($log['created_time'])}</td>
 				<td>{$expired}</td>
-				<td><a class="J_ajax_del" data-msg="确定要收回吗？" href="{@WindUrlHelper::createUrl('medal/medal/doStop/?logid='.$log['log_id'])}">[收回]</a></td>
+				<td><a class="J_ajax_del" data-msg="确定要收回吗？" href="{@url:medal/medal/doStop?logid=$log['log_id']}">[收回]</a></td>
 			</tr>
 			<!--# endforeach; #-->
 			<!--# } else { #-->

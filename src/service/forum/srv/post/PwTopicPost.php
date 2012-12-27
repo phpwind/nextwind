@@ -10,14 +10,14 @@ Wind::import('SRV:forum.dm.PwTopicDm');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwTopicPost.php 19564 2012-10-16 02:34:48Z jinlong.panjl $
+ * @version $Id: PwTopicPost.php 22440 2012-12-24 09:17:41Z jieyin $
  * @package forum
  */
 
 class PwTopicPost extends PwPostAction {
 	
 	protected $tid;
-	protected $special = 0;
+	protected $special = 'default';
 
 	/**
 	 * @see PwPostAction.isInit
@@ -27,7 +27,7 @@ class PwTopicPost extends PwPostAction {
 	}
 	
 	public function setSpecial($special) {
-		$this->special = Wekit::load('forum.srv.PwThreadType')->has($special) ? $special : 0;
+		$this->special = Wekit::load('forum.srv.PwThreadType')->has($special) ? $special : 'default';
 	}
 
 	public function getSpecial() {
@@ -38,7 +38,7 @@ class PwTopicPost extends PwPostAction {
 	 * @see PwPostAction.check
 	 */
 	public function check() {
-		if (!($this->forum->forumset['allowtype'] & (1 << $this->special))) {
+		if (!in_array($this->special, $this->forum->forumset['allowtype'])) {
 			return new PwError('BBS:post.forum.allow.ttype', array('{ttype}' => Wekit::load('forum.srv.PwThreadType')->getName($this->special)));
 		}
 		if (($result = $this->forum->allowPost($this->user)) !== true) {

@@ -8,14 +8,14 @@
 
 <!-- start -->
 <div class="nav">
-	<div class="return"><a href="{@WindUrlHelper::createUrl('u/manage/run')}">返回上一级</a></div>
+	<div class="return"><a href="{@url:u/manage/run}">返回上一级</a></div>
 	<ul class="cc">
-		<li><a href="{@WindUrlHelper::createUrl('u/forbidden/run')}">手动禁止</a></li>
-		<li><a href="{@WindUrlHelper::createUrl('u/forbidden/auto')}">自动禁止</a></li>
-		<li class="current"><a href="{@WindUrlHelper::createUrl('u/forbidden/list')}">解除禁止</a></li>
+		<li><a href="{@url:u/forbidden/run}">手动禁止</a></li>
+		<li><a href="{@url:u/forbidden/auto}">自动禁止</a></li>
+		<li class="current"><a href="{@url:u/forbidden/list}">解除禁止</a></li>
 	</ul>
 </div>
-<form method="post" action="{@WindUrlHelper::createUrl('u/forbidden/list')}">
+<form method="post" action="{@url:u/forbidden/list}">
 <div class="h_a">搜索</div>
 <div class="search_type cc mb10">
 	<div class="ul_wrap">
@@ -35,7 +35,7 @@
 	</div>
 </div>
 </form>
-<form class="J_ajaxForm" data-role="list" method="post" action="{@WindUrlHelper::createUrl('u/forbidden/del')}" >
+<form class="J_ajaxForm" data-role="list" method="post" action="{@url:u/forbidden/del}" >
 <div class="table_list">
 	<table width="100%">
 		<colgroup>
@@ -65,7 +65,7 @@
 			<td>{$_item['child']}</td>
 			<td>{@Pw::time2str($_item['created_time'], 'Y-m-d H:i:s')}</td>
 			<td>{$_endTmp}</td>
-			<td><a href="{@WindUrlHelper::createUrl('u/forbidden/list', array('operator' => $_item['created_username']))}">{$_item['created_username']}</a></td>
+			<td><a href="{@url:u/forbidden/list?operator=$_item['created_username']}">{$_item['created_username']}</a></td>
 			<td>{$_item['reason']}</td>
 		</tr>
 <!--#}#-->

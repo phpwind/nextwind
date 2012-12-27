@@ -5,7 +5,7 @@
  * @Author		: jquerytools (http://jquerytools.org/demos/dateinput/)
  * @Modify		: chaoren1641@gmail.com
  * @Depend		: jquery.js(1.7 or later)
- * $Id: datePicker.js 21915 2012-12-17 03:49:09Z hao.lin $			:
+ * $Id: datePicker.js 22586 2012-12-25 10:54:55Z hao.lin $			:
  */
 ;(function($, window, document, undefined) {
 	var pluginName = 'datePicker';
@@ -425,11 +425,11 @@
 			});*/
 
 			$(document.body).on("mousedown.d", function(e) {
-				setTimeout(function(){
-					if(e.target !== input[0] && !$.contains(root[0],e.target)) {
+				if(e.target !== input[0] && !$.contains(root[0],e.target)) {
+					setTimeout(function(){
 						self.hide();
-					}
-				},100)
+					},100)
+				}
 			});
 		}
 

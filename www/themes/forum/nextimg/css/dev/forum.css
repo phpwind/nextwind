@@ -3,7 +3,7 @@
 @explain: 版块页面（包含列表和阅读页）
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: forum.css 22234 2012-12-19 22:13:46Z yanchixia $
+$Id: forum.css 22546 2012-12-25 08:10:54Z yanchixia $
 ===================
 #*/
 
@@ -545,7 +545,7 @@ $Id: forum.css 22234 2012-12-19 22:13:46Z yanchixia $
 ===================
 */
 .floor{
-	margin-top:10px;
+	margin-bottom:10px;
 }
 #read_0{
 	margin-top:0;

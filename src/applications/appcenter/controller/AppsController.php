@@ -17,7 +17,7 @@ class AppsController extends PwBaseController {
 		$this->appid = $this->getInput('appid');
 		parent::beforeAction($handlerAdapter);
 		if (!$this->loginUser->isExists()) {
-			$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('appcenter/app/run/?appid='.$this->appid)));
+			$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('appcenter/app/run', array('appid' => $this->appid))));
 		}
 	}
 	

@@ -17,7 +17,7 @@ class PwReportPhoto extends PwReportAction {
 		$photo = $this->_service()->getPhotoInfo($type_id);
 		if (!$photo) return false;
 		$content = "照片({$photo['name']})";
-		$url = WindUrlHelper::createUrl('album/space/view?photoid=' . $type_id . '&uid=' . $photo['created_uid']);
+		$url = WindUrlHelper::createUrl('album/space/view', array('photoid' => $type_id, 'uid' => $photo['created_uid']));
 		$dm = new PwReportDm();
 		$dm->setAuthorUserid($photo['created_uid'])
 		   ->setContent($content)

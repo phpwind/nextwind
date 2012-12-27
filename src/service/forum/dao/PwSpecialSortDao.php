@@ -20,10 +20,16 @@ class PwSpecialSortDao extends PwBaseDao {
 		return $smt->queryAll(array($fid), 'tid');
 	}
 	
-	public function getSpecialSortByTid($tid){
+	public function getSpecialSortByTid($tid) {
 		$sql = $this->_bindTable('SELECT * FROM %s WHERE tid=?');
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->queryAll(array($tid), 'fid');
+	}
+	
+	public function getSpecialSortByTypeExtra($sortType, $extra) {
+		$sql = $this->_bindTable('SELECT * FROM %s WHERE sort_type=? AND extra=?', $this->getTable());
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->queryAll(array($sortType, $extra), 'tid');
 	}
 
 	public function batchAdd($data) {
@@ -35,50 +41,14 @@ class PwSpecialSortDao extends PwBaseDao {
 		return $this->getConnection()->execute($sql);
 	}
 
+	public function deleteSpecialSortByTid($tid) {
+		$sql = $this->_bindTable('DELETE FROM %s WHERE tid=?');
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->update(array($tid));
+	}
+
 	public function batchDeleteSpecialSortByTid($tids) {
 		$sql = $this->_bindSql('DELETE FROM %s WHERE tid IN %s', $this->getTable(), $this->sqlImplode($tids));
 		return $this->getConnection()->execute($sql);
 	}
-	
-	public function getSpecialSortByTypeExtra($sortType,$extra){
-		$sql = $this->_bindTable('SELECT * FROM %s WHERE sort_type=? AND extra=?',$this->getTable());
-		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->queryAll(array($sortType,$extra), 'tid');
-	}
-		
-	/*
-	public function addSpecialSort($data){
-		if (!$data = $this->_filterStruct($data)) {
-			return false;
-		}
-		$sql = $this->_bindTable('INSERT INTO %s SET ') . $this->sqlSingle($data);
-		$this->getConnection()->execute($sql);
-		return $this->getConnection()->lastInsertId();
-	}
-	
-	public function deleteSpecialSort($type,$fid,$tid,$pid = 0){
-		$sql = $this->_bindTable('DELETE FROM %s  WHERE `sort_type`=? AND `fid`=? AND tid`=? AND `pid`=?');
-		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->update(array($type,$fid,$tid,$pid));
-	}
-	
-	public function deleteSpecialSortByTid($type,$tid,$pid = 0){
-		$sql = $this->_bindTable('DELETE FROM %s WHERE `sort_type`=? AND `tid`=? AND `pid`=?');
-		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->update(array($type,$tid,$pid));
-	}
-	
-	public function deleteSpecialSortByTids($tids){
-		$sql = $this->_bindTable('DELETE FROM %s WHERE `pid`=0 AND `tid` IN '.$this->sqlImplode($tids));
-		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->update(array());
-	}
-	
-	public function getSpecialSortTids($fid=0){
-		$sql = 'SELECT tid FROM %s WHERE fid=?';
-		$sql = $this->_bindTable($sql);
-		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->queryAll(array($fid));
-	}
-	*/
 }

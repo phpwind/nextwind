@@ -18,7 +18,7 @@
 <body>
 	<div class="wrap">
 		<h1><a href="{@G:url.base}">phpwind 后台管理中心</a></h1>
-		<form method="post" name="login" action="{@WindUrlHelper::createUrl('index/login')}" autoComplete="off">
+		<form method="post" name="login" action="{@url:index/login}" autoComplete="off">
 			<div class="login">
 				<ul>
 					<li>
@@ -68,7 +68,7 @@ var GV = {
 		}
 
 		wrap.html('<span class="tips_loading">验证码loading</span>');
-		var url = '{@WindUrlHelper::createUrl("index/showVerify")|url}';
+		var url = '{@url:index/showVerify}';
 		$.post(url, {
 			csrf_token : GV.TOKEN
 		}, function(data){

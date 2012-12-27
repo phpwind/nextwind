@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSimpleUbbCode.php 21360 2012-12-05 08:05:40Z jieyin $
+ * @version $Id: PwSimpleUbbCode.php 22725 2012-12-26 13:07:34Z jinlong.panjl $
  * @package lib.utility
  */
 
@@ -329,7 +329,7 @@ class PwSimpleUbbCode {
 	}
 
 	public static function parseRemind($message, $remindUser) {
-		return preg_replace('/@([^\\&\'"\/\*,<>\[\]\r\t\n\s#%?@:：]+)(?=\s?)/ie', "self::_pushCode('createRemind', '\\1', \$remindUser)", $message);
+		return preg_replace('/@([\x7f-\xff\dA-Za-z\.\_]+)(?=\s?)/ie', "self::_pushCode('createRemind', '\\1', \$remindUser)", $message);
 	}
 	
 	/**
@@ -495,7 +495,7 @@ class PwSimpleUbbCode {
 	 * @return string
 	 */
 	public static function createUrl($length, $url, $name, $protocol, $isdownload = 0, $checkurl = 0) {
-		list($name, $strlen) = self::_substrs($name, $length);
+		list($name, $strlen) = self::_subConvert($name, $length);
 		!$protocol && $url = 'http://' . $url;
 		$attributes = '';
 		$isdownload && $attributes .= ' class="down"';
@@ -604,7 +604,7 @@ class PwSimpleUbbCode {
 	
 	public static function createRemind($length, $username, $uArray) {
 		list($html, $strlen) = self::_substrs('@' . $username, $length);
-		isset($uArray[$username]) && $html = '<a href="' . WindUrlHelper::createUrl('space/index/run/?uid=' . $uArray[$username]) . '">@' . $username . '</a>';
+		isset($uArray[$username]) && $html = '<a href="' . WindUrlHelper::createUrl('space/index/run', array('uid' => $uArray[$username])) . '">@' . $username . '</a>';
 		return array($html, $strlen);
 	}
 

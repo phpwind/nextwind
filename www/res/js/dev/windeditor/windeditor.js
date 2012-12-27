@@ -4,7 +4,7 @@
  * @Descript	: windeditor
  * @Author		: chaoren1641@gmail.com
  * @Depend		: jquery.js(1.7 or later)
- * $Id: windeditor.js 22306 2012-12-21 07:16:36Z hao.lin $			:
+ * $Id: windeditor.js 22610 2012-12-25 13:19:23Z hao.lin $			:
  */
 ;(function ( $, window, undefined ) {
 
@@ -1630,8 +1630,12 @@
 				statusbar = _self.statusbar,
 				checkWords = $('<span style="cursor:pointer;">字数检查</span>').appendTo(statusbar),
 				offset = checkWords.offset();
+				
+				
 			checkWords.on('click',function(e) {
-				var length = $(_self.editorDoc.body).html().length,//最终确认算上标签
+				//计算ubb转换后的代码
+				_self.setValue(_self.getContent());
+				var length = _self.codeContainer.val().length,//最终确认算上标签
 					words_span = statusbar.find('span.J_words_length');
 				if(!words_span.length) {
 					words_span = $('<span class="J_words_length">已写'+ length +'字</span>').appendTo(statusbar);

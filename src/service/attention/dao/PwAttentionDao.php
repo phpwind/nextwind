@@ -5,7 +5,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwAttentionDao.php 16021 2012-08-17 07:18:15Z jinlong.panjl $
+ * @version $Id: PwAttentionDao.php 22660 2012-12-26 07:45:31Z jinlong.panjl $
  * @package src.service.user.dao
  */
 class PwAttentionDao extends PwBaseDao {
@@ -77,9 +77,9 @@ class PwAttentionDao extends PwBaseDao {
 	}
 
 	public function getFriendsByUid($uid){
-		$sql = $this->_bindTable("SELECT uid, group_concat( touid SEPARATOR ',' ) AS touids FROM %s WHERE uid=? GROUP BY uid");
+		$sql = $this->_bindSql("SELECT a.uid,b.touid as recommend_uid,b.uid AS same_uid FROM %s a left join %s b ON a.touid = b.uid  where a.uid =? GROUP BY recommend_uid, same_uid", $this->getTable(), $this->getTable());
 		$smt = $this->getConnection()->createStatement($sql);
-		return $smt->getOne(array($uid));
+		return $smt->queryAll(array($uid));
 	}
 	
 	public function fetchFriendsByUids($uids){

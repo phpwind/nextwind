@@ -130,7 +130,7 @@
 											<td id="J_clipboard_code_{$_k}" class="code">{$_item['code']}</td>
 											<td>{@Pw::time2str($_item['created_time'], 'Y-m-d H:i')}</td>
 											<td>{@Pw::time2str($_item['expired_time'], 'Y-m-d H:i')}</td>
-											<td><a href="javascript:;" data-content="{$_item['code']}" data-id="J_clipboard_code_{$_k}" class="mr5 J_copy_clipboard">[复制邀请码]</a><a data-id="J_clipboard_href_{$_k}" class="J_copy_clipboard" href="javascript:;" data-content="{@WindUrlHelper::createUrl('u/register/invite?code=' . $_item['code'])}">[复制邀请码链接]</a></td>
+											<td><a href="javascript:;" data-content="{$_item['code']}" data-id="J_clipboard_code_{$_k}" class="mr5 J_copy_clipboard">[复制邀请码]</a><a data-id="J_clipboard_href_{$_k}" class="J_copy_clipboard" href="javascript:;" data-content="{@url:u/register/invite?code=$_item['code']}">[复制邀请码链接]</a></td>
 										</tr>
 			<!--#}#-->
 								</table>

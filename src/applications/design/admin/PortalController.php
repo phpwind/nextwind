@@ -5,7 +5,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PortalController.php 19070 2012-10-10 08:19:50Z gao.wanggao $ 
+ * @version $Id: PortalController.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
  * @package 
  */
 
@@ -67,7 +67,9 @@ class PortalController extends AdminBaseController {
 			$this->_getPageDs()->deletePage($pageInfo['page_id']);
 			$this->_getPermissionsDs()->deleteByTypeAndDesignId(PwDesignPermissions::TYPE_PAGE, $pageInfo['page_id']);
 		}
-		$this->_getDesignService()->clearTemplate($pageInfo['page_id']);
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+    	$pageBo = new PwDesignPageBo($pageInfo['page_id']);
+		$this->_getDesignService()->clearTemplate($pageBo->pageid, $pageBo->getTplPath());
 		if ($this->_getPortalDs()->deletePortal($portalid)) $this->showMessage("operate.success");
 		$this->showMessage("operate.fail");
 	}

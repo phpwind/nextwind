@@ -8,9 +8,9 @@
 	<template source='link_tab' />
 <!--==============================链接列表================================-->
 	<div class="mb10">
-		<a href="{@WindUrlHelper::createUrl('link/link/add')}" class="btn J_dialog" title="添加友情链接"><span class="add"></span>添加友情链接</a>
+		<a href="{@url:link/link/add}" class="btn J_dialog" title="添加友情链接"><span class="add"></span>添加友情链接</a>
 	</div>
-	<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('link/link/dorun')}" method="post">
+	<form class="J_ajaxForm" data-role="list" action="{@url:link/link/dorun}" method="post">
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -52,7 +52,7 @@
 					<span class="J_link_{$typesList[$lid]['typeid']}">{$typesList[$lid]['typename']}</span>
 					<!--# } #-->
 				</div></td>
-				<td><a href="{@WindUrlHelper::createUrl('link/link/edit?lid='.$v['lid'])}" title="编辑友情链接" class="mr10 J_dialog">[编辑]</a><a href="{@WindUrlHelper::createUrl('link/link/doDelete?lid='.$v['lid'])}" class="mr10 J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:link/link/edit?lid=$v['lid']}" title="编辑友情链接" class="mr10 J_dialog">[编辑]</a><a href="{@url:link/link/doDelete?lid=$v['lid']}" class="mr10 J_ajax_del">[删除]</a></td>
 			</tr>
 			<!--# } #-->
 			<!--# } else { #-->
@@ -113,7 +113,7 @@ Wind.use('dialog',function() {
 			onOk	: function() {
 				$('form.J_ajaxForm').ajaxSubmit({
 					dataType : 'json',
-					url		 : '{@WindUrlHelper::createUrl('link/link/doDelete')|html}',
+					url		 : '{@url:link/link/doDelete}',
 					success	 : function(data, statusText, xhr, $form) {
 						if(data.state === 'success') {
 							var location = window.location;

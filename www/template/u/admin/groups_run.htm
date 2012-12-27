@@ -8,14 +8,14 @@
 
 <div class="nav">
 	<ul class="cc">
-		<li{$typeClasses['member']|html}><a href="{@WindUrlHelper::createUrl('u/groups/run?type=member')}">会员组</a></li>
-		<li{$typeClasses['special']|html}><a href="{@WindUrlHelper::createUrl('u/groups/run?type=special')}">特殊组</a></li>
-		<li{$typeClasses['system']|html}><a href="{@WindUrlHelper::createUrl('u/groups/run?type=system')}">管理组</a></li>
-		<li{$typeClasses['default']|html}><a href="{@WindUrlHelper::createUrl('u/groups/run?type=default')}">默认组</a></li>
+		<li{$typeClasses['member']|html}><a href="{@url:u/groups/run?type=member}">会员组</a></li>
+		<li{$typeClasses['special']|html}><a href="{@url:u/groups/run?type=special}">特殊组</a></li>
+		<li{$typeClasses['system']|html}><a href="{@url:u/groups/run?type=system}">管理组</a></li>
+		<li{$typeClasses['default']|html}><a href="{@url:u/groups/run?type=default}">默认组</a></li>
 	</ul>
 </div>
 
-<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('u/groups/dosave')}" method="post">
+<form class="J_ajaxForm" data-role="list" action="{@url:u/groups/dosave}" method="post">
 <input type="hidden" name="grouptype" value="{$groupType}" />
 <div class="table_list">
 	<table width="100%" id="J_group_table">
@@ -51,13 +51,13 @@
 			<!--# } #-->
 			<td>
 				<!--# if ($groupType == 'special' || $groupType == 'system') { #-->
-				<a href="{@WindUrlHelper::createUrl('admin/u/groups/edit?gid='.$group['gid'])}" class="mr10">[基本权限]</a>
-				<a href="{@WindUrlHelper::createUrl('admin/u/groups/edit?manage=1&gid='.$group['gid'])}" class="mr10">[管理权限]</a>
+				<a href="{@url:admin/u/groups/edit?gid=$group['gid']}" class="mr10">[基本权限]</a>
+				<a href="{@url:admin/u/groups/edit?manage=1&gid=$group['gid']}" class="mr10">[管理权限]</a>
 				<!--# } else { #-->
-				<a href="{@WindUrlHelper::createUrl('admin/u/groups/edit?gid='.$group['gid'])}" class="mr10">[编辑]</a>
+				<a href="{@url:admin/u/groups/edit?gid=$group['gid']}" class="mr10">[编辑]</a>
 				<!--# } #-->
 				<!--# if ($group['gid'] > 7) { #-->
-				<a href="{@WindUrlHelper::createUrl('admin/u/groups/delete?gid='.$group['gid'])}" class="mr10 J_ajax_del">[删除]</a>
+				<a href="{@url:admin/u/groups/delete?gid=$group['gid']}" class="mr10 J_ajax_del">[删除]</a>
 				<!--# } #-->
 			</td>
 		</tr>

@@ -11,14 +11,14 @@
 	</div>
 	<div class="h_a">搜索</div>
 	<div class="search_type cc mb10">
-		<form action="{@WindUrlHelper::createUrl('message/manage/run')}" method="post" >
+		<form action="{@url:message/manage/run}" method="post" >
 			<label>关键字：</label><input type="text" class="input length_3 mr10" name="keyword" value="{$args['keyword']}">
 			<label>发件人：</label><input type="text" class="input length_3 mr10" name="username" value="{$args['username']}">
 			<label>发送时间：</label><input type="text" class="input mr5 length_2 J_datetime" name="starttime" value="{$args['starttime']}"><span class="mr5">至</span><input type="text" class="input length_2 J_datetime mr10" name="endtime" value="{$args['endtime']}">
 			<button class="btn">搜索</button>
 		</form>
 	</div>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('message/manage/deletemessages')}" method="post" >
+	<form class="J_ajaxForm" action="{@url:message/manage/deletemessages}" method="post" >
 	
 	<div class="table_list">
 		<!--# if ($messages) { #-->

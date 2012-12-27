@@ -9,7 +9,7 @@ Wind::import('APPS:profile.service.PwUserProfileExtends');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ExtendsController.php 21375 2012-12-06 02:34:19Z xiaoxia.xuxx $
+ * @version $Id: ExtendsController.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package src.products.u.controller.profile
  */
 class ExtendsController extends PwBaseController {
@@ -20,7 +20,7 @@ class ExtendsController extends PwBaseController {
 	public function beforeAction($handlerAdapter) {
 		parent::beforeAction($handlerAdapter);
 		if (!$this->loginUser->isExists()) {
-			$this->forwardRedirect(WindUrlHelper::createUrl('u/login/run?_type=' . $this->getInput('_type')));
+			$this->forwardRedirect(WindUrlHelper::createUrl('u/login/run', array('_type' => $this->getInput('_type'))));
 		}
 	}
     

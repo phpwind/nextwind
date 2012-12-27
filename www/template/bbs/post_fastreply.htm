@@ -13,8 +13,8 @@
 				<div class="operate">
 					<a href="" class="a_face J_insert_emotions" data-emotiontarget="#J_reply_ta_{$pid}">表情</a>
 				</div>
-				<button type="submit" data-tid="{$tid}" data-pid="{$pid}" class="btn btn_submit disabled J_reply_sub" disabled="disabled" data-action="{@WindUrlHelper::createUrl('bbs/post/doreply?_getHtml=2')}">回复</button>
-				<a href="{@WindUrlHelper::createUrl('bbs/post/reply?tid=' . $tid . '&pid=' . $pid)}">高级模式&gt;&gt;</a>
+				<button type="submit" data-tid="{$tid}" data-pid="{$pid}" class="btn btn_submit disabled J_reply_sub" disabled="disabled" data-action="{@url:bbs/post/doreply?_getHtml=2}">回复</button>
+				<a href="{@url:bbs/post/reply?tid=$tid&pid=$pid}">高级模式&gt;&gt;</a>
 			</div>
 		</div>
 	<div class="J_reply_page_list"><template source='post_replylist' load='true' /></div>

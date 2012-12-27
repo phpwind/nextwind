@@ -11,11 +11,15 @@
 				</dl>
 				<dl class="cc">
 					<dt>链接：</dt>
-					<dd><input type="text" class="input length_5" value="{$title['link']}" name="link[]" placeholder="http://"></dd>
+					<dd><input type="text" class="input length_5" value="{$title['link']}" name="link[]" placeholder="http://">
+						<p class="gray">以http://开头</p>
+					</dd>
 				</dl>
 				<dl class="cc">
 					<dt>图片：</dt>
-					<dd><input type="text" class="input length_5" value="{$title['image']}" name="image[]" placeholder="http://"></dd>
+					<dd><input type="text" class="input length_5" value="{$title['image']}" name="image[]" placeholder="http://">
+						<p class="gray">以http://开头</p>
+					</dd>
 				</dl>
 				<dl class="cc">
 					<dt>位置：</dt>
@@ -60,6 +64,7 @@
 							<option value="center" {@Pw::isSelected($titles['background']['position'] == 'center')}>居中</option>
 							<option value="right" {@Pw::isSelected($titles['background']['position'] == 'right')}>居右</option>
 						</select>
+						<p class="gray">以http://开头</p>
 					</dd>
 				</dl>
 				<dl class="cc">

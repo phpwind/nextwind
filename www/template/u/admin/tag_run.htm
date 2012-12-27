@@ -7,7 +7,7 @@
 <div class="wrap J_check_wrap">
 	<div class="h_a">搜索</div>
 	<div class="search_type cc mb10">
-		<form action="{@WindUrlHelper::createUrl('u/tag/run')}" method="post">
+		<form action="{@url:u/tag/run}" method="post">
 		<input type="hidden" name="page" value="{$page}">
 		<label>标签名称：</label><input name="name" type="text" class="input length_2 mr10" value="{$args['name']}">
 		<label>热门标签状态：</label><select name="ifhot" class="mr10">
@@ -19,7 +19,7 @@
 		<button type="submit" class="btn">搜索</button>
 		</form>
 	</div>
-	<form action="{@WindUrlHelper::createUrl('u/tag/delete')}" method="post" class="J_ajaxForm">
+	<form action="{@url:u/tag/delete}" method="post" class="J_ajaxForm">
 	<div class="table_list">
 		<table width="100%">
 			<thead>
@@ -56,8 +56,8 @@
 	 <div class="btn_wrap_pd">
 		<label class="mr20"><input type="checkbox" name="checkAll" value="" class="J_check_all" data-direction="x" data-checklist="J_check_user_x">全选</label>
 		<button class="btn btn_submit J_ajax_submit_btn" type="submit">删除标签</button>
-		<button data-action="{@WindUrlHelper::createUrl('u/tag/setHot')}" type="submit" class="btn mr10 J_ajax_submit_btn">允许为热门标签</button>
-		<button data-action="{@WindUrlHelper::createUrl('u/tag/cancleHot')}" type="submit" class="btn mr10 J_ajax_submit_btn">不允许为热门标签</button>
+		<button data-action="{@url:u/tag/setHot}" type="submit" class="btn mr10 J_ajax_submit_btn">允许为热门标签</button>
+		<button data-action="{@url:u/tag/cancleHot}" type="submit" class="btn mr10 J_ajax_submit_btn">不允许为热门标签</button>
 		<span id="J_user_tip" style="display:none;" class="tips_error"></span>
 	 </div>
 	</div>

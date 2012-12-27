@@ -6,7 +6,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserService.php 22235 2012-12-19 22:15:51Z xiaoxia.xuxx $
+ * @version $Id: PwUserService.php 22484 2012-12-25 02:22:44Z gao.wanggao $
  * @package src.service.user.srv
  */
 class PwUserService {
@@ -175,18 +175,10 @@ class PwUserService {
 	 * @return boolean
 	 */
 	public function restoreDefualtAvatar($uid, $type = 'face') {
-		Wind::import('SRV:upload.PwUpload');
-		
-		$_avatar = array('.jpg' => '_big.jpg', '_middle.jpg' => '_middle.jpg', '_small.jpg' => '_small.jpg');
-		$defaultBanDir = Wind::getRealDir('PUBLIC:') . 'res/images/face/';
-		$fileDir = ATTACH_PATH . '/avatar/' . Pw::getUserDir($uid) . '/';
-		foreach ($_avatar as $des => $org) {
-			$toPath = $fileDir . $uid . $des;
-			$fromPath = $defaultBanDir . $type . $org;
-			PwUpload::createFolder(dirname($toPath));
-			PwUpload::copyFile($fromPath, $toPath);
-		}
+		$result =  $this->_getWindidAvatar()->defaultAvatar($uid, $type);
+		if ($result < 1) return false;
 		return true;
+		
 	}
 	
 	/**
@@ -233,5 +225,9 @@ class PwUserService {
 	 */
 	private function _getWindidUser() {
 		return WindidApi::api('user');
+	}
+	
+	private function _getWindidAvatar() {
+		return WindidApi::api('avatar');
 	}
 }

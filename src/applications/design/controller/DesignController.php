@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: DesignController.php 20601 2012-10-31 12:42:05Z gao.wanggao $ 
+ * @version $Id: DesignController.php 22560 2012-12-25 08:43:54Z gao.wanggao $ 
  * @package 
  */
 class DesignController extends PwBaseController {
@@ -149,9 +149,9 @@ class DesignController extends PwBaseController {
 		Wind::import('SRV:design.bo.PwDesignPageBo');
 		$pageBo = new PwDesignPageBo($pageid);
 		if ($pageBo->getLock()) $this->showError('DESIGN:page.edit.other.user');
-		$ids = explode(',', $pageInfo['module_ids']);
+		$list = $this->_getModuleDs()->getByPageid($pageid);
 		Wind::import('SRV:design.srv.data.PwAutoData');
-		foreach ($ids AS $id) {
+		foreach ($list AS $id=>$v) {
 			$id = (int)$id;
 			if ($id < 1) continue;
 			$srv = new PwAutoData($id);
@@ -168,8 +168,9 @@ class DesignController extends PwBaseController {
 	 */
 	public function doclearAction() {
 		$pageid = (int)$this->getInput('pageid', 'post');
-		$pageDs = $this->_getPageDs();
-		$pageInfo = $pageDs->getPage($pageid);
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+    	$pageBo = new PwDesignPageBo($pageid);
+		$pageInfo = $pageBo->getPage();
 		if (!$pageInfo) $this->showError("operate.fail");
 		$permissions = $this->_getPermissionsService()->getPermissionsForPage($this->loginUser->uid,$pageid);
 		if ($permissions < PwDesignPermissions::IS_DESIGN ) $this->showError("DESIGN:permissions.fail");
@@ -205,14 +206,22 @@ class DesignController extends PwBaseController {
 		
 		//bak
 		$bakDs->deleteByPageId($pageid);
+
+		$tplPath = $pageBo->getTplPath();
+		$this->_getDesignService()->clearTemplate($pageid, $tplPath);
 		if ($pageInfo['page_type'] == PwDesignPage::PORTAL) {
+			
 			Wind::import('SRV:design.dm.PwDesignPortalDm');
 			$dm = new PwDesignPortalDm($pageInfo['page_unique']);
-			$dm->setTemplate(0);
+			$dm->setTemplate($tplPath);
 			$this->_getPortalDs()->updatePortal($dm);
+			
+			$srv = Wekit::load('design.srv.PwDesignService');
+			$result = $srv->defaultTemplate($pageid, $tplPath);
+		} else {
+			$this->_getPageDs()->deletePage($pageid);
 		}
 		$this->_getDesignService()->clearCompile();
-		$this->_getDesignService()->clearTemplate($pageid);
 		$this->showMessage("operate.success");
 	}
 	

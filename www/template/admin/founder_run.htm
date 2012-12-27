@@ -19,7 +19,7 @@
 </div>
 <div class="h_a">创始人管理</div>
 <div class="table_full">
-<form id="J_founder_form" action="{@WindUrlHelper::createUrl('founder/add')}" method="post">
+<form id="J_founder_form" action="{@url:founder/add}" method="post">
 	<table width="100%">
 		<col class="th" />
 		<col />
@@ -27,8 +27,8 @@
 		<tr>
 			<th>{$user}</th>
 			<td>
-			<a class="J_dialog mr5" href="{@WindUrlHelper::createUrl('founder/edit?username='.$user)}" title="编辑">[编辑]</a>
-			<a class="J_ajax_del" href="{@WindUrlHelper::createUrl('founder/del?username='.$user)}">[删除]</a></td>
+			<a class="J_dialog mr5" href="{@url:founder/edit?username=$user}" title="编辑">[编辑]</a>
+			<a class="J_ajax_del" href="{@url:founder/del?username=$user}">[删除]</a></td>
 		</tr>
 <!--#endforeach;#-->
 

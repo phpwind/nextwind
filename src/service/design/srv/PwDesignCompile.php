@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignCompile.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: PwDesignCompile.php 22596 2012-12-25 11:57:37Z gao.wanggao $ 
  * @package 
  */
 class PwDesignCompile {
@@ -50,6 +50,10 @@ class PwDesignCompile {
     	return $this->pageid;
     }
     
+    public function getPageBo() {
+   	  	return $this->pageBo;
+    }
+    
     public function setPermission() {
     	Wekit::load('design.PwDesignPermissions');
 		$this->_permission = Wekit::load('design.srv.PwDesignPermissionsService')->getPermissionsForPage($this->_loginUid, $this->pageid);
@@ -65,6 +69,7 @@ class PwDesignCompile {
 		$pageid = $this->pageBo->getPageId($router, $pageName, $uniqueId);
 		$this->pageBo->setPageInfo($pageid);
 		$this->pageid = (int)$this->pageBo->pageid;
+  
     }
     
     
@@ -136,11 +141,9 @@ class PwDesignCompile {
 	 */
 	public function refreshPage() {
 		if ($this->_permission < PwDesignPermissions::IS_DESIGN) return false;
-		$pageBo = new PwDesignPageBo($this->pageid);
-		$pageInfo = $pageBo->getPage();
-		$ids = explode(',', $pageInfo['module_ids']);
+		$list = Wekit::load('design.PwDesignModule')->getByPageid($this->pageid);
 		Wind::import('SRV:design.srv.data.PwAutoData');
-		foreach ($ids AS $id) {
+		foreach ($list AS $id=>$v) {
 			if ($id < 1) continue;
 			$srv = new PwAutoData($id);
 			$srv->addAutoData();
@@ -224,7 +227,7 @@ class PwDesignCompile {
 	    $this->appendModuleId($moduleId);
 	   	if ($this->isDesign && $module['module_type'] != PwDesignModule::TYPE_SCRIPT) {//模块进行片段化处理
 	    	if ($html){
-	    		$tpl = '<div class="design_layout_ct mod_box J_mod_box" id="J_mod_'.$moduleId.'" data-id="'.$moduleId.'">';
+	    		$tpl = '<div class="J_mod_box" id="J_mod_'.$moduleId.'" data-id="'.$moduleId.'">';
 		   	$tpl .= $html;
 		    	$tpl .= '</div>';
 	    	}
@@ -286,7 +289,7 @@ class PwDesignCompile {
 	    $this->appendModuleId($moduleId);
 	   	if ($this->isDesign && $module['module_type'] != PwDesignModule::TYPE_SCRIPT) {//模块进行片段化处理
 	    	if ($html){
-	    		$tpl = '<div class="design_layout_ct mod_box J_mod_box" id="J_mod_'.$moduleId.'" data-id="'.$moduleId.'">';
+	    		$tpl = '<div class="J_mod_box" id="J_mod_'.$moduleId.'" data-id="'.$moduleId.'">';
 		   	$tpl .= $html;
 		    	$tpl .= '</div>';
 	    	}

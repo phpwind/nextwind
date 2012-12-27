@@ -18,3 +18,4 @@ hash.fail = 当前版本的文件哈希md5sum丢失
 patch.fail = 找不到该补丁
 patch.update.fail = 补丁#0不支持自动修复或者已做过修复处理
 choose.one = 请选择一个
+founder = 只有创始人才能进行在线升级操作

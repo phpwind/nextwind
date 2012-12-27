@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jinlong.panjl $>
+ * @author $Author: jinlong.panjl $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageApi.php 21658 2012-12-12 07:00:12Z gao.wanggao $ 
+ * @version $Id: WindidMessageApi.php 22412 2012-12-24 05:15:53Z jinlong.panjl $ 
  * @package 
  */
 
@@ -154,6 +154,14 @@ class WindidMessageApi {
 			'uid'=>$uid,
 		);
 		return WindidApi::open('message/countDialog', $params);
+	}
+	
+	public function getUnreadDialogsByUid($uid, $limit) {
+		$params = array(
+			'uid'=>$uid,
+			'limit'=>$limit,
+		);
+		return WindidApi::open('message/getUnreadDialogsByUid', $params);
 	}
 	
 	/**

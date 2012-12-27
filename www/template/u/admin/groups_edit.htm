@@ -7,11 +7,11 @@
 <div class="wrap">
 
 <div class="nav">
-	<div class="return"><a href="{@WindUrlHelper::createUrl('admin/u/groups/run?type=' . $group['type'])}">返回上一级</a></div>
+	<div class="return"><a href="{@url:admin/u/groups/run?type=$group['type']}">返回上一级</a></div>
 	<ul class="cc J_tabs_nav">
 		<!--#foreach($topLevelCategories as $k=>$v): #-->
 		<li{$topLevelCategoryClasses[$k]|html} id="J_nav_{$k}" data-tab="nav_{$k}">
-			<a href="{@WindUrlHelper::createUrl('admin/u/groups/edit?category='.$k.'&gid='.$gid.'&manage='.($isManage?1:0))}">{$v}</a>
+			<a href="{@url:admin/u/groups/edit?category=$k&gid=$gid}&manage={$isManage?1:0}">{$v}</a>
 		</li>
 		<!--#endforeach;#-->
 	</ul>
@@ -23,7 +23,7 @@
 	<p class="tar"><a href="" id="J_tips_bubble_close">我知道了</a></p>
 </div>
 
-<form id="J_rigths_form" action="{@WindUrlHelper::createUrl('admin/u/groups/doedit')}" method="post">
+<form id="J_rigths_form" action="{@url:admin/u/groups/doedit}" method="post">
 <input type="hidden" name="gid" value="{$gid}" />
 <input type="hidden" name="category" value="{$category}" />
 <div class="h_a">用户组设置</div>

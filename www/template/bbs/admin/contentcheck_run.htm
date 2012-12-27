@@ -7,8 +7,8 @@
 <div class="wrap J_check_wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('bbs/contentcheck/run')}">主题审核</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('bbs/contentcheck/reply')}">回复审核</a></li>
+			<li class="current"><a href="{@url:bbs/contentcheck/run}">主题审核</a></li>
+			<li><a href="{@url:bbs/contentcheck/reply}">回复审核</a></li>
 		</ul>
 	</div>
 	
@@ -19,7 +19,7 @@
 		</ol>
 	</div>
 	<div class="h_a">搜索</div>
-	<form method="post" action="{@WindUrlHelper::createUrl('bbs/contentcheck/run')}">
+	<form method="post" action="{@url:bbs/contentcheck/run}">
 	<div class="search_type cc mb10">
 		<label>作者：</label><input name="author" value="{$args['author']}" type="text" class="input length_2 mr10">
 		<label>所属版块：</label><select name="fid" class="select_3 mr10"><option value="0">所有版块</option>{@$option_html|html}</select>
@@ -28,7 +28,7 @@
 	</div>
 	</form>
 	
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('bbs/contentcheck/doPassThread')}" method="post">
+	<form class="J_ajaxForm" action="{@url:bbs/contentcheck/doPassThread}" method="post">
 		<!--# if ($threadb) { #-->
 		<div class="h_a"><!--label><input type="checkbox" class="J_check_all" data-direction="x" data-checklist="J_check_x">全选</label-->列表</div>
 		<div class="table_list">
@@ -48,8 +48,8 @@
 					</td>
 					<td>
 						<ul class="single_list cc">
-							<li><a class="J_ajax_refresh mr5" href="{@WindUrlHelper::createUrl('bbs/contentcheck/doPassThread?tid=' . $value['tid'])}">[通过]</a></li>
-							<li><a class="J_ajax_del" href="{@WindUrlHelper::createUrl('bbs/contentcheck/doDeleteThread?tid=' . $value['tid'])}">[删除]</a></li>
+							<li><a class="J_ajax_refresh mr5" href="{@url:bbs/contentcheck/doPassThread?tid=$value['tid']}">[通过]</a></li>
+							<li><a class="J_ajax_del" href="{@url:bbs/contentcheck/doDeleteThread?tid=$value['tid']}">[删除]</a></li>
 						</ul>
 					</td>
 				</tr>
@@ -63,7 +63,7 @@
 			<div class="btn_wrap_pd">
 				<label class="mr20"><input type="checkbox" class="J_check_all" data-direction="y" data-checklist="J_check_y">全选</label>
 		<button class="btn btn_submit J_ajax_submit_btn" type="submit">通过</button>
-				<button class="btn J_ajax_submit_btn" type="submit" data-action="{@WindUrlHelper::createUrl('bbs/contentcheck/doDeleteThread')}">删除</button>
+				<button class="btn J_ajax_submit_btn" type="submit" data-action="{@url:bbs/contentcheck/doDeleteThread}">删除</button>
 			</div>
 		</div>
 		<!--# } else { #-->

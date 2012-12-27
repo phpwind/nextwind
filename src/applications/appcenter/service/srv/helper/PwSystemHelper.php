@@ -6,7 +6,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSystemHelper.php 21636 2012-12-12 03:41:00Z long.shi $
+ * @version $Id: PwSystemHelper.php 22656 2012-12-26 07:13:56Z long.shi $
  * @package wind
  */
 class PwSystemHelper {
@@ -76,11 +76,10 @@ class PwSystemHelper {
 	 * 返回有更改的/无更改的/新增的
 	 */
 	public static function validateMd5($fileList) {
-		$root = Wind::getRealDir('ROOT:');
 		$change = $unchange = $new = array();
 		foreach ($fileList as $f => $hash) {
-			$file = $root . DIRECTORY_SEPARATOR . $f;
-			if (!file_exists($file)) {
+			$file = ROOT_PATH . $f;
+			if (!file_exists($file) || !$hash) {
 				$new[] = $f;
 				continue;
 			}
@@ -120,10 +119,8 @@ class PwSystemHelper {
 	 */
 	public static function checkFolder($fileList) {
 		foreach ($fileList as $v => $hash) {
-			$root = Wind::getRealDir('ROOT:');
-			$file = $root . DIRECTORY_SEPARATOR . $v;
-			WindFolder::mkRecur(dirname($file));
-			if (!self::checkWriteAble($file)) return array(false, $v);
+			$file = ROOT_PATH . $v;
+			if (!self::checkWriteAble(file_exists($file) ? $file : dirname($file) . '/')) return array(false, $v);
 		}
 		return true;
 	}
@@ -151,10 +148,8 @@ class PwSystemHelper {
 			if (is_dir($pathfile)) {
 				mt_srand((double) microtime() * 1000000);
 				$pathfile = $pathfile . 'pw_' . uniqid(mt_rand()) . '.tmp';
-			} elseif (@mkdir($pathfile)) {
-				return self::checkWriteAble($pathfile);
 			} else {
-				return false;
+				return self::checkWriteAble(dirname($pathfile) . '/');
 			}
 		}
 		$exist = file_exists($pathfile);

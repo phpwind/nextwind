@@ -74,8 +74,8 @@
 <script>
 Wind.use('jquery', 'global', function(){
 	//关注&取消关注
-	var URL_ADD = '{@WindUrlHelper::createUrl("/tag/index/attention?type=add")|url}',
-		URL_DEL = '{@WindUrlHelper::createUrl("/tag/index/attention?type=del")|url}';
+	var URL_ADD = '{@url:/tag/index/attention?type=add}',
+		URL_DEL = '{@url:/tag/index/attention?type=del}';
 
 	var follow_btn = $('a.J_follow_btn'),
 		lock = false;

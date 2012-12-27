@@ -7,12 +7,12 @@
 <div class="wrap">
 <!--=====================表情组管理=========================-->
 	<div class="nav">
-		<div class="return"><a href="{@WindUrlHelper::createUrl('emotion/emotion/run')}">返回上一级</a></div>
+		<div class="return"><a href="{@url:emotion/emotion/run}">返回上一级</a></div>
 		<ul class="cc">
 			<li class="current"><a href="{@url:emotion/emotion/emotion?catid=$catid}">表情管理</a></li>
 		</ul>
 	</div>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('emotion/emotion/dobatchedit')}" method="post">
+	<form class="J_ajaxForm" action="{@url:emotion/emotion/dobatchedit}" method="post">
 	<div class="J_check_wrap">
 		<div class="table_list mb10">
 			<div class="h_a">分类表情管理</div>
@@ -45,9 +45,9 @@
 					<td>{$emotion['emotion_icon']}</td>
 					<td><img src="{$iconUrl}/{$folder}/{$emotion['emotion_icon']}" /></td>
 					<!--# if($emotion['isused']): #-->
-					<td><a href="{@WindUrlHelper::createUrl('emotion/emotion/doused/?emotionid='.$emotion['emotion_id'])}" class="J_ajax_refresh">[关闭]</a></td>
+					<td><a href="{@url:emotion/emotion/doused?emotionid=$emotion['emotion_id']}" class="J_ajax_refresh">[关闭]</a></td>
 					<!--# else: #-->
-					<td><a href="{@WindUrlHelper::createUrl('emotion/emotion/doused/?emotionid='.$emotion['emotion_id']).'&used=1'}" class="J_ajax_refresh" style="color:#ff0000">[开启]</a></td>
+					<td><a href="{@url:emotion/emotion/doused?emotionid=$emotion['emotion_id'])&used=1}" class="J_ajax_refresh" style="color:#ff0000">[开启]</a></td>
 					<!--# endif; #-->
 				</tr>
 			<!--# endforeach; #-->
@@ -58,7 +58,7 @@
 		</div>
 	</div>
 	</form>
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('emotion/emotion/dobatchadd')}" method="post">
+	<form class="J_ajaxForm" action="{@url:emotion/emotion/dobatchadd}" method="post">
 	<div class="J_check_wrap">
 		<div class="table_list mb10">
 			<div class="h_a">未添加的表情</div>
@@ -88,7 +88,7 @@
 					<td>&nbsp;</td>
 					<td>{$icon}<input type="hidden" value="{$icon}" name="icon[]" class="J_icon" /></td>
 					<td><img src="{$iconUrl}/{$folder}/{$icon}" /></td>
-					<td><a href="{@WindUrlHelper::createUrl('emotion/emotion/dobatchadd')}" class="J_emotion_add">[添加]</a></td>
+					<td><a href="{@url:emotion/emotion/dobatchadd}" class="J_emotion_add">[添加]</a></td>
 				</tr>
 				<!--# endforeach; #-->
 			</table>

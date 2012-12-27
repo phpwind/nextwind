@@ -1,6 +1,6 @@
 <div class="content">
 	<template source="profile_run_tab" load="true" />
-	<form class="J_profile_form" action="{@WindUrlHelper::createUrl('profile/index/docontact')}" method="post">
+	<form class="J_profile_form" action="{@url:profile/index/docontact}" method="post">
 	<div class="profile_ct">
 		<h3>交易信息</h3>
 		<dl class="cc">
@@ -59,4 +59,4 @@ Wind.ready(document, function(){
 	Wind.use('jquery', 'global', GV.JS_ROOT +'pages/profile/profileIndex.js?v=' +GV.JS_VERSION);
 });
 </script>
-<hook class='$hookSrc' method='displayFootHtml' args=''/>
+<hook class='$hookSrc' name='m_PwUserProfileExtends.displayFootHtml' args=''/>

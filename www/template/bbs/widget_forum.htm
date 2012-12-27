@@ -24,7 +24,7 @@
 		</div>
 		<!--# if ($forumManager = $pwforum->getManager()) { #-->
 		<div class="moderator">
-			版主：<!--# foreach ($forumManager as $key => $value) { #-->{@$key ? '，' : ''}<a class="J_user_card_show" data-username="{$value}" href="{@url:space/index/run/?username=$value}">{$value}</a><!--# } #-->
+			版主：<!--# foreach ($forumManager as $key => $value) { #-->{@$key ? '，' : ''}<a class="J_user_card_show" data-username="{$value}" href="{@url:space/index/run?username=$value}">{$value}</a><!--# } #-->
 		</div>
 		<!--# } #-->
 		<div class="notice">

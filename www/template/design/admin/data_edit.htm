@@ -10,13 +10,13 @@
 <!--添加模板-->
 
 	<div class="nav">
-		<div class="return"><a href="{@WindUrlHelper::createUrl('design/data/run?moduleid='.$moduleid)}">返回上一级</a></div>
+		<div class="return"><a href="{@url:design/data/run?moduleid=$moduleid}">返回上一级</a></div>
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('design/data/edit?moduleid='.$moduleid.'&dataid='.$data['data_id'])}">修改数据</a></li>
+			<li class="current"><a href="{@url:design/data/edit?moduleid=$moduleid&dataid=$data['data_id']}">修改数据</a></li>
 		</ul>
 	</div>
 	<div class="h_a">修改数据</div>
-	<form class="J_ajaxForm"  action="{@WindUrlHelper::createUrl('design/data/doedit?_json=1')}" method="post">
+	<form class="J_ajaxForm"  action="{@url:design/data/doedit?_json=1}" method="post">
 	<div class="design_ct">
 		<template source='TPL:design.segment.data_edit' load='true' />
 	</div>

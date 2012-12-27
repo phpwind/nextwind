@@ -8,7 +8,7 @@ Wind::import('WIND:utility.WindSecurity');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PwForumBo.php 19120 2012-10-11 03:14:41Z xiaoxia.xuxx $
+ * @version $Id: PwForumBo.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package forum
  */
 
@@ -152,15 +152,15 @@ class PwForumBo {
 	public function getForumChain() {
 		$guide = array();
 		if ($this->foruminfo['type'] == 'category') {
-			$guide[] = array(strip_tags($this->foruminfo['name']), WindUrlHelper::createUrl('bbs/cate/run?fid=' . $this->fid));
+			$guide[] = array(strip_tags($this->foruminfo['name']), WindUrlHelper::createUrl('bbs/cate/run', array('fid' => $this->fid)));
 			return $guide;
 		}
-		$guide[] = array(strip_tags($this->foruminfo['name']), WindUrlHelper::createUrl('bbs/thread/run?fid=' . $this->fid));
+		$guide[] = array(strip_tags($this->foruminfo['name']), WindUrlHelper::createUrl('bbs/thread/run', array('fid' => $this->fid)));
 		$info = $this->getParentForums();
 		$count = count($info);
 		$i = 0;
 		foreach ($info as $fid => $value) {
-			array_unshift($guide, array($value, WindUrlHelper::createUrl('bbs/' . (++$i < $count ? 'thread' : 'cate') . '/run/?fid=' . $fid)));
+			array_unshift($guide, array($value, WindUrlHelper::createUrl('bbs/' . (++$i < $count ? 'thread' : 'cate') . '/run', array('fid' => $fid))));
 		}
 		return $guide;
 	}
@@ -277,7 +277,7 @@ class PwForumBo {
 		$array = array();
 		$tType = Wekit::load('forum.srv.PwThreadType')->getTtype();
 		foreach ($this->forumset['typeorder'] as $key => $value) {
-			if (isset($tType[$key]) && ($this->forumset['allowtype'] & (1 << $key)) && ($tType[$key][2] === true || $user->getPermission($tType[$key][2]))) {
+			if (isset($tType[$key]) && in_array($key, $this->forumset['allowtype']) && ($tType[$key][2] === true || $user->getPermission($tType[$key][2]))) {
 				$array[$key] = $tType[$key];
 			}
 		}

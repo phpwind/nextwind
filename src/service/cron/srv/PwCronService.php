@@ -48,6 +48,11 @@ class PwCronService {
 		$path = Wind::getRealPath('SRV:cron.srv.system.systemCron');
 		if (!is_file($path)) return false;
 		$cron = @include $path;
+		$sysCron = $ds->getList(2);
+		$_sysCron = array();
+		foreach ($sysCron AS $k=>$v) {
+			$_sysCron[$v['cron_file']] = $v;
+		}
 		foreach ($cron AS $k=>$v) {
 			if (!in_array($v['type'],array('month','week','day','hour','now'))) continue;
 			if (!$v['file']) continue;
@@ -95,6 +100,10 @@ class PwCronService {
 			} else {
 				$resource = $ds->addCron($dm);
 			}
+			unset($_sysCron[$v['file']]);
+		}
+		foreach ($_sysCron AS $v) {
+			$ds->deleteCron($v['cron_id']);
 		}
 		return true;
 	}

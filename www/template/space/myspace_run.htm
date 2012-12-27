@@ -241,13 +241,13 @@
 				<li><a href="">模板设置</a></li>
 				<li><a href="">自定义背景</a></li>
 			</ul>
-			<a href="{@WindUrlHelper::createUrl('profile/secret/run?_left=secret')}" class="a_privacy">隐私设置</a>
+			<a href="{@url:profile/secret/run?_left=secret}" class="a_privacy">隐私设置</a>
 		</div>
 			
 <!--=====基本信息=====-->
 	<div id="J_space_pop_content">
 		<div>
-			<form action="{@WindUrlHelper::createUrl('space/myspace/doeditspace')}" method="post">
+			<form action="{@url:space/myspace/doeditspace}" method="post">
 			<div class="pop_cont">
 				<div id="J_edit_tip" style="display:none;"></div>
 				<dl class="cc">
@@ -280,7 +280,7 @@
 		</div>
 <!--=====模板设置=====-->
 		<div style="display:none;">
-			<form class="J_space_pop_form" action="{@WindUrlHelper::createUrl('space/myspace/doeditstyle')}" method="post">
+			<form class="J_space_pop_form" action="{@url:space/myspace/doeditstyle}" method="post">
 			<div class="pop_cont">
 				<div class="pop_space_themes">
 					<div style="height:196px;overflow:hidden;">
@@ -301,9 +301,9 @@
 					#-->
 							<li class="{$class}">
 					<!--# if ($i < $perpage): #-->
-							<a data-id="{$value['app_id']}" href="{@WindUrlHelper::createUrl('space/index/demo?id=' .$value['app_id'] .'&uid='.$space->spaceUid)}"><img src="{$img}" alt="{$value['name']}" title="{$value['name']}" /></a>
+							<a data-id="{$value['app_id']}" href="{@url:space/index/demo?id=$value['app_id']&uid=$space->spaceUid}"><img src="{$img}" alt="{$value['name']}" title="{$value['name']}" /></a>
 					<!--# else: #-->
-							<a data-id="{$value['app_id']}" href="{@WindUrlHelper::createUrl('space/index/demo?id=' .$value['app_id'].'&uid='.$space->spaceUid)}"><img data-src="{$img}" alt="{$value['name']}" title="{$value['name']}" /></a>
+							<a data-id="{$value['app_id']}" href="{@url:space/index/demo?id=$value['app_id']&uid=$space->spaceUid}"><img data-src="{$img}" alt="{$value['name']}" title="{$value['name']}" /></a>
 					<!--# endif; #-->
 							</li>
 				<!--#
@@ -335,7 +335,7 @@
 		</div>
 <!--=====自定义背景=====-->
 		<div style="display:none;">
-			<form class="J_space_pop_form" action="{@WindUrlHelper::createUrl('space/myspace/doeditbackground/?_json=1')}" method="post">
+			<form class="J_space_pop_form" action="{@url:space/myspace/doeditbackground?_json=1}" method="post">
 			<!--# 
 				list($image, $repeat, $fixed, $align) =  $space->space['back_image'];		
 			#-->

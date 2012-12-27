@@ -35,7 +35,7 @@
 							foreach($pollInfo as $value){ #-->
 							<template source='TPL:vote.listcommon' load='true' />
 							<!--# }} else { #-->
-							<div class="not_content">啊哦，你还没有参与过投票哦，赶紧去<a href="{@WindUrlHelper::createUrl('vote/hot/run')}">参与</a>！</div>
+							<div class="not_content">啊哦，你还没有参与过投票哦，赶紧去<a href="{@url:vote/hot/run}">参与</a>！</div>
 							<!--# } #-->
 							<div><page tpl='TPL:common.page' page='$page' per='$perpage' count='$total' url='vote/my/run' /></div>
 						</div>

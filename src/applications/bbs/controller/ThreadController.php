@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ThreadController.php 22294 2012-12-21 05:34:55Z jieyin $
+ * @version $Id: ThreadController.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package forum
  */
 
@@ -22,7 +22,7 @@ class ThreadController extends PwBaseController {
 	 */
 	public function run() {
 		$tab = $this->getInput('tab');
-		$fid = $this->getInput('fid');
+		$fid = intval($this->getInput('fid'));
 		$type = intval($this->getInput('type','get')); //主题分类ID
 		$page = $this->getInput('page', 'get');
 		$orderby = $this->getInput('orderby', 'get');
@@ -39,7 +39,7 @@ class ThreadController extends PwBaseController {
 		}
 		if ($pwforum->foruminfo['password']) {
 			if (!$this->loginUser->isExists()) {
-				$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('bbs/cate/run?fid=' . $fid)));
+				$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('bbs/cate/run', array('fid' => $fid))));
 			} elseif (Pw::getPwdCode($pwforum->foruminfo['password']) != Pw::getCookie('fp_' . $fid)) {
 				$this->forwardAction('bbs/forum/password', array('fid' => $fid));
 			}
@@ -63,13 +63,14 @@ class ThreadController extends PwBaseController {
 		if ($tab == 'digest') {
 			Wind::import('SRV:forum.srv.threadList.PwDigestThread');
 			$dataSource = new PwDigestThread($pwforum->fid, $type, $orderby);
-		} elseif ($orderby == 'postdate' || $type) {
+		} elseif ($type) {
 			Wind::import('SRV:forum.srv.threadList.PwSearchThread');
 			$dataSource = new PwSearchThread($pwforum);
 			$dataSource->setOrderby($orderby);
-			if ($type) {
-				$dataSource->setType($type, $this->_getSubTopictype($type));
-			}
+			$dataSource->setType($type, $this->_getSubTopictype($type));
+		} elseif ($orderby == 'postdate') {
+			Wind::import('SRV:forum.srv.threadList.PwNewForumThread');
+			$dataSource = new PwNewForumThread($pwforum);
 		} else {
 			Wind::import('SRV:forum.srv.threadList.PwCommonThread');
 			$dataSource = new PwCommonThread($pwforum);

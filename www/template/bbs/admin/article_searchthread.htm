@@ -7,8 +7,8 @@
 <div class="wrap J_check_wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li class="current"><a href="{@WindUrlHelper::createUrl('bbs/article/run')}">帖子管理</a></li>
-			<li><a href="{@WindUrlHelper::createUrl('bbs/article/replylist')}">回复管理</a></li>
+			<li class="current"><a href="{@url:bbs/article/run}">帖子管理</a></li>
+			<li><a href="{@url:bbs/article/replylist}">回复管理</a></li>
 		</ul>
 	</div>
 	
@@ -22,7 +22,7 @@
 	</div>
 	<div class="h_a">搜索</div>
 	<!--# $checkedDigest = $args['digest'] ? 'checked=checked' : '' #-->
-	<form method="post" action="{@WindUrlHelper::createUrl('bbs/article/searchthread')}">
+	<form method="post" action="{@url:bbs/article/searchthread}">
 	<div class="search_type cc mb10">
 		<div class="ul_wrap">
 			<ul class="cc">
@@ -41,12 +41,12 @@
 			</ul>
 		</div>
 		<div class="btn_side">
-			<button class="btn mr20" type="submit">搜索</button><a class="mr20 J_dialog" href="{@WindUrlHelper::createUrl('bbs/article/threadadvanced')}" title="高级搜索">高级搜索</a><label class="w" style="display:none"><input type="checkbox" name="digest" value="1" {$checkedDigest}>过滤精华</label>
+			<button class="btn mr20" type="submit">搜索</button><a class="mr20 J_dialog" href="{@url:bbs/article/threadadvanced}" title="高级搜索">高级搜索</a><label class="w" style="display:none"><input type="checkbox" name="digest" value="1" {$checkedDigest}>过滤精华</label>
 		</div>
 	</div>
 	</form>
 	
-	<form class="J_ajaxForm" action="{@WindUrlHelper::createUrl('bbs/article/deletethread')}" method="post">
+	<form class="J_ajaxForm" action="{@url:bbs/article/deletethread}" method="post">
 		<div class="table_list">
 			<table width="100%">
 				<!--# if ($threads) { #-->
@@ -101,13 +101,13 @@
 						$urlargs .= "&$k=$v";
 					}
 				 #-->
-					<a href="{@WindUrlHelper::createUrl('bbs/article/searchthread?perpage=20'.$urlargs)}">20</a><span>|</span>
-					<a href="{@WindUrlHelper::createUrl('bbs/article/searchthread?perpage=50'.$urlargs)}">50</a><span>|</span>
-					<a href="{@WindUrlHelper::createUrl('bbs/article/searchthread?perpage=100'.$urlargs)}">100</a>
+					<a href="{@WindUrlHelper::createUrl('bbs/article/searchthread?perpage=20', $args)}">20</a><span>|</span>
+					<a href="{@WindUrlHelper::createUrl('bbs/article/searchthread?perpage=50', $args)}">50</a><span>|</span>
+					<a href="{@WindUrlHelper::createUrl('bbs/article/searchthread?perpage=100', $args)}">100</a>
 				</div>
 				<label class="mr20"><input type="checkbox" class="J_check_all" data-direction="y" data-checklist="J_check_y">全选</label>
 				<button class="btn J_ajax_submit_btn" type="submit">删除</button>
-				<button class="btn btn_submit J_ajax_submit_btn" type="submit" data-action="{@WindUrlHelper::createUrl('bbs/article/deletethread?isDeductCredit=1')}">删除并扣除积分</button>
+				<button class="btn btn_submit J_ajax_submit_btn" type="submit" data-action="{@url:bbs/article/deletethread?isDeductCredit=1}">删除并扣除积分</button>
 			</div>
 		</div>
 		<!--# } #-->

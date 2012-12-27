@@ -6,7 +6,7 @@ Wind::import('SRV:design.srv.PwPortalCompile');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwTemplateCompilerPortal.php 22358 2012-12-21 11:06:31Z gao.wanggao $ 
+ * @version $Id: PwTemplateCompilerPortal.php 22740 2012-12-27 02:34:43Z gao.wanggao $ 
  * @package 
  */
 class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
@@ -28,10 +28,10 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 		$this->srv->setIsDesign($this->getRequest()->getPost('design'));
 		$_pk = $unique ? $this->getRequest()->getGet($unique) : '';
 		$this->srv->beforeDesign($this->_router, $pageName, $_pk);
-		$pageid = $this->srv->getPageid();
+		$pageBo = $this->srv->getPageBo();
 		$this->srv->setPermission();
 		//对模版进行编译
-		$portalSrv = new PwPortalCompile($pageid);
+		$portalSrv = new PwPortalCompile($pageBo);
 		
 		$content = $portalSrv->compileTpl($content);
 		
@@ -43,6 +43,7 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 		}
 		//转换Pw标签
 		$content = $this->compileStart($content, $_pk, $this->_url);
+		$content = $this->compileCss($content, $pageBo);
 		$content = $this->compileSign($content);
 		$content = $this->compileDrag($content);
 		$content = $this->compileTitle($content);
@@ -70,6 +71,19 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 			'<!--# if($portal[\'footer\']): #--><template source=\'TPL:common.footer\' load=\'true\' /><!--# endif; #-->',
 		);
 		return str_replace($in, $out, $content);
+	}
+	
+	protected function compileCss($content, $pageBo) {
+		$dir = $pageBo->getTplPath();
+		$url =  WindUrlHelper::checkUrl(PUBLIC_THEMES . '/portal/local/' . $dir, PUBLIC_URL);
+		if (preg_match_all('/\{@G:design.url.(\w+)}/isU',$content, $matches)) {
+			foreach ($matches[1] AS $k=>$v) {
+				if (!$v) continue;
+				$replace = $url . '/' . $v;
+	    		$content = str_replace($matches[0][$k], $replace, $content);
+    		}
+		}			
+		return $content;
 	}
 	
 	protected function compileTitle($content) {
@@ -125,14 +139,12 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 	}
 	
 	private function _pageName() {
-		$path = Wind::getRealPath('SRV:design.srv.router.router');
-		if (!is_file($path)) return false;
-		$sysPage = @include $path;
-		
+		$sysPage = Wekit::load('design.srv.router.PwDesignRouter')->get();
 		if ($this->_router && isset($sysPage[$this->_router])){ 
 			return $sysPage[$this->_router];
 		}
 		return array();
 	}
+	
 }
 ?>

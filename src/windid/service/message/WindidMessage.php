@@ -6,7 +6,7 @@
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: WindidMessage.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidMessage.php 22410 2012-12-24 04:19:54Z jinlong.panjl $
  */
 
 class WindidMessage {
@@ -192,6 +192,19 @@ class WindidMessage {
 			$dialogs[$k] = $v;
 		}
 		return $dialogs;
+	}
+	
+	/**
+	 * 获取多条未读对话
+	 * 
+	 * @param int $uid
+	 * @param int $limit
+	 * @return array
+	 */
+	public function getUnreadDialogsByUid($uid, $limit = 20){
+		$uid = intval($uid);
+		if (!$uid) return array();
+		return $this->_getDialogDao()->getUnreadDialogsByUid($uid, $limit);
 	}
 	
 	/**

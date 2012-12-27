@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSpaceBo.php 22363 2012-12-21 12:16:44Z gao.wanggao $ 
+ * @version $Id: PwSpaceBo.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
  class PwSpaceBo {
@@ -107,7 +107,7 @@
  			$root = Wekit::C('domain', 'space.root');
  			if ($root) return 'http://' . $this->space['space_domain'] . '.' . $root;
  		}
- 		return WindUrlHelper::createUrl('space/index/run?uid='.$this->spaceUid);
+ 		return WindUrlHelper::createUrl('space/index/run', array('uid' => $this->spaceUid));
  	}
 	
 	/**

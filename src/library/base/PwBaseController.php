@@ -6,7 +6,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PwBaseController.php 21071 2012-11-27 06:34:14Z long.shi $
+ * @version $Id: PwBaseController.php 22476 2012-12-25 01:50:03Z gao.wanggao $
  * @package lib.base.controller
  */
 class PwBaseController extends WindController {
@@ -193,9 +193,7 @@ class PwBaseController extends WindController {
 		$pageName = $unique = '';
 		$pk = 0;
 		if ($this->_mca == 'bbs/read/run') return true;//帖子阅读页在ReadController里处理
-		$path = Wind::getRealPath('SRV:design.srv.router.router');
-		if (!is_file($path)) return false;
-		$sysPage = @include $path;
+		$sysPage = Wekit::load('design.srv.router.PwDesignRouter')->get();
 		if (!isset($sysPage[$this->_mca]))return false;
 		list($pageName, $unique) = $sysPage[$this->_mca];
 		$unique && $pk = $this->getInput($unique, 'get');

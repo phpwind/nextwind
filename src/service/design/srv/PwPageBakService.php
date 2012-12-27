@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPageBakService.php 19576 2012-10-16 03:43:52Z gao.wanggao $ 
+ * @version $Id: PwPageBakService.php 22555 2012-12-25 08:37:31Z gao.wanggao $ 
  * @package 
  */
 class PwPageBakService {
@@ -63,8 +63,7 @@ class PwPageBakService {
 	}
 	
 	protected function bakModule() {
-		$moduleids = $this->pageInfo['module_ids'] ? explode(',', $this->pageInfo['module_ids']) : array();
-		$info = $this->_getModuleDs()->fetchModule($moduleids);
+		$info = $this->_getModuleDs()->getByPageid($this->pageid);
 		$this->_getBakDs()->replaceBak(PwDesignBak::MODULE, $this->pageid, 1, $info);
 	}
 	

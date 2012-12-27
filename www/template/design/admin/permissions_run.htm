@@ -9,12 +9,12 @@
 	<div class="prompt_text">
 		<ul>
 			<li>此处仅显示在在页面管理或模块管理中有设置过管理权限的用户列表；</li>
-			<li>在<a href="{@WindUrlHelper::createUrl('design/page/run')}">门户-页面管理</a>中可为指定页面添加拥有单独管理权限的管理组用户；</li>
-			<li>在<a href="{@WindUrlHelper::createUrl('design/module/run')}">门户-模块管理</a>中可为指定模块添加拥有单独管理权限的管理组用户；</li>
-			<li>只拥有<a href="{@WindUrlHelper::createUrl('u/groups/run?type=system')}">用户-用户组权限-管理组管理权限</a>里设置的门户权限的用户，不显示在此列表中。</li>
+			<li>在<a href="{@url:design/page/run}">门户-页面管理</a>中可为指定页面添加拥有单独管理权限的管理组用户；</li>
+			<li>在<a href="{@url:design/module/run}">门户-模块管理</a>中可为指定模块添加拥有单独管理权限的管理组用户；</li>
+			<li>只拥有<a href="{@url:u/groups/run?type=system}">用户-用户组权限-管理组管理权限</a>里设置的门户权限的用户，不显示在此列表中。</li>
 		</ul>
 	</div>
-	<form action="{@WindUrlHelper::createUrl('design/permissions/run')}" method="post">
+	<form action="{@url:design/permissions/run}" method="post">
 	<div class="h_a">搜索</div>
 	<div class="prompt_text">
 		<input type="text" placeholder="用户名" class="input length_3 mr5" name="username"><button class="btn" type="submit">搜索</button>
@@ -32,7 +32,7 @@
 			<tr>
 				<th>{$v['username']}</th>
 				<td>{$groups[$v['gid']]['name']}</td>
-				<td><a href="{@WindUrlHelper::createUrl('design/permissions/view?uid='.$v['uid'])}">[查看权限]</a></td>
+				<td><a href="{@url:design/permissions/view?uid=$v['uid']}">[查看权限]</a></td>
 			</tr>
 		<!--# endforeach; #-->
 		<!--# } else { #-->

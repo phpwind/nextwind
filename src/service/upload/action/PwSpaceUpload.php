@@ -5,21 +5,22 @@ Wind::import('SRV:upload.action.PwUploadAction');
 Wind::import('COM:utility.WindUtility');
 
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
- * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSpaceUpload.php 18058 2012-09-11 05:07:19Z xiaoxia.xuxx $ 
+ * @version $Id: PwSpaceUpload.php 22614 2012-12-26 01:50:03Z gao.wanggao $ 
  * @package 
  */
 
 class PwSpaceUpload extends PwUploadAction {
 	public $dir;
 	public $filename;
-
+	protected $uid = 0;
 	
-	public function __construct() {
+	public function __construct($uid) {
 		$this->ftype = array('jpeg'=>2000, 'jpg' => 2000, 'png' => '2000', 'gif' => 2000);
+		$this->uid = $uid;
 	}
 	
 	/**
@@ -41,8 +42,8 @@ class PwSpaceUpload extends PwUploadAction {
 	 * @see PwUploadAction.getSaveName
 	 */
 	public function getSaveName(PwUploadFile $file) {
-		$prename  = substr(md5(Pw::getTime() . WindUtility::generateRandStr(8)), 10, 15);
-		$this->filename = $prename . '.' .$file->ext;
+		//$prename  = substr(md5(Pw::getTime() . WindUtility::generateRandStr(8)), 10, 15);
+		$this->filename = Pw::getTime() . '.' .$file->ext;
 		return $this->filename;
 	}
 	
@@ -50,8 +51,8 @@ class PwSpaceUpload extends PwUploadAction {
 	 * @see PwUploadAction.getSaveDir
 	 */
 	public function getSaveDir(PwUploadFile $file) {
-		list($y, $m, $d) = explode('-', date('Y-m-d', Pw::getTime()));
-		$this->dir = "space/$y/$m/";
+		//list($y, $m, $d) = explode('-', date('Y-m-d', Pw::getTime()));
+		$this->dir = 'space/' . $this->uid . '/';
 		return  $this->dir;
 	}
 	

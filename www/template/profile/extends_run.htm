@@ -24,7 +24,7 @@
 					foreach ($_menus as $key => $_item) {
 						if (isset($_item['url']) && $_item['url']) {
 					#-->
-							<li class="{@Pw::isCurrent($key == $_left)}"><a href="{@WindUrlHelper::createUrl($_item['url'], array('_lef' => $key))}" id="profile_{$key}">{$_item['title']}</a></li>
+							<li class="{@Pw::isCurrent($key == $_left)}"><a href="{@WindUrlHelper::createUrl($_item['url'], array('_lef' => $key))|url}" id="profile_{$key}">{$_item['title']}</a></li>
 					<!--#} else {#-->
 							<li class="{@Pw::isCurrent($key == $_left)}"><a href="{@url:profile/extends/run?_left=$key}">{$_item['title']}</a></li>
 					<!--#}}#-->
@@ -44,14 +44,14 @@
 							<!--#foreach ($_menus[$_left]['tabs'] as $key => $_item) {
 									if (isset($_item['url']) && $_item['url']) {
 							#-->
-									<li class="{@Pw::isCurrent($_tab == $key)}"><a href="{@WindUrlHelper::createUrl($_item['url'], array('_lef' => $_left, '_tab' => $key))}">{$_item['title']}</a></li>
+									<li class="{@Pw::isCurrent($_tab == $key)}"><a href="{@WindUrlHelper::createUrl($_item['url'], array('_lef' => $_left, '_tab' => $key))|url}">{$_item['title']}</a></li>
 							<!--#}else{#-->
 									<li class="{@Pw::isCurrent($_tab == $key)}"><a href="{@url:profile/extends/run?_left=$_left&_tab=$key}">{$_item['title']}</a></li>
 							<!--#}}#-->
 								</ul>
 							</div>
 							<!--#}#-->
-							<hook class='$hookSrc' method='createHtml' args='$_left, $_tab'/>
+							<hook class='$hookSrc' name='m_PwUserProfileExtends.createHtml' args='$_left, $_tab'/>
 						</div>
 						</div>
 					</div>

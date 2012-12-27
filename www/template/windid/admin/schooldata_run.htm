@@ -7,9 +7,9 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li class="{@Pw::isCurrent($type == 3)}"><a href="{@WindUrlHelper::createUrl('admin/windid/schooldata/run?type=3')}">大学管理</a></li>
-			<li class="{@Pw::isCurrent($type == 2)}"><a href="{@WindUrlHelper::createUrl('admin/windid/schooldata/run?type=2')}">中学管理</a></li>
-			<li class="{@Pw::isCurrent($type == 1)}"><a href="{@WindUrlHelper::createUrl('admin/windid/schooldata/run?type=1')}">小学管理</a></li>
+			<li class="{@Pw::isCurrent($type == 3)}"><a href="{@url:admin/windid/schooldata/run?type=3}">大学管理</a></li>
+			<li class="{@Pw::isCurrent($type == 2)}"><a href="{@url:admin/windid/schooldata/run?type=2}">中学管理</a></li>
+			<li class="{@Pw::isCurrent($type == 1)}"><a href="{@url:admin/windid/schooldata/run?type=1}">小学管理</a></li>
 		</ul>
 	</div>
 	<div class="h_a">功能说明</div>
@@ -88,7 +88,7 @@ $_var = $type == 3 ? 'province' : 'other';
 <template source='TPL:admin.common.footer' />
 </div>
 <script>
-var SCHOOL_DEL = "{@WindUrlHelper::createUrl('windid/schooldata/delete')}"; //schoolid
+var SCHOOL_DEL = "{@url:windid/schooldata/delete}"; //schoolid
 Wind.js(GV.JS_ROOT +'pages/config/admin/schoolData.js?v='+ GV.JS_VERSION, GV.JS_ROOT+ 'pages/admin/common/forumTree_table.js?v=' +GV.JS_VERSION);
 
 //添加 模板 forumTree_table.js

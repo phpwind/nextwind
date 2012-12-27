@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PortalController.php 22261 2012-12-21 02:23:02Z gao.wanggao $ 
+ * @version $Id: PortalController.php 22574 2012-12-25 09:34:07Z gao.wanggao $ 
  * @package 
  */
 class PortalController extends PwBaseController {
@@ -224,12 +224,14 @@ class PortalController extends PwBaseController {
 		if (!$pageInfo) $this->showError("operate.fail");
 		
 		//导入文件
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+    	$pageBo = new PwDesignPageBo($pageInfo['page_id']);
 		Wind::import('SRV:design.srv.PwDesignImportZip');
-		$srv = new PwDesignImportZip($pageInfo['page_id']);
+		$srv = new PwDesignImportZip($pageBo);
 		if (!$srv->appcenterToLocal($style['alias'])) $this->showError("operate.fail");
 		Wind::import('SRV:design.dm.PwDesignPortalDm');
  		$dm = new PwDesignPortalDm($portalid);
- 		$dm->setTemplate($pageInfo['page_id']);
+ 		$dm->setTemplate($pageBo->getTplPath());
  		$ds->updatePortal($dm);
  		
 		//更新数据

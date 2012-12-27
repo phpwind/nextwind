@@ -1,6 +1,5 @@
 <?php
 Wind::import("WIND:ftp.AbstractWindFtp");
-@set_time_limit(1000);
 /**
  * 采用sockey方式实现ftp操作
  * 
@@ -14,7 +13,7 @@ Wind::import("WIND:ftp.AbstractWindFtp");
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindSocketFtp.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: WindSocketFtp.php 3876 2012-12-26 07:52:05Z yishuo $
  * @package ftp
  */
 class WindSocketFtp extends AbstractWindFtp {
@@ -85,13 +84,7 @@ class WindSocketFtp extends AbstractWindFtp {
 	/* (non-PHPdoc)
 	 * @see AbstractWindFtp::upload()
 	 */
-	public function upload($localfile, $remotefile, $mode = 'A') {
-		if ($this->checkFile($localfile)) {
-			throw new WindFtpException($localfile, WindFtpException::FILE_FOBIDDEN);
-		}
-		if ($this->checkFile($remotefile)) {
-			throw new WindFtpException($remotefile, WindFtpException::FILE_FOBIDDEN);
-		}
+	public function upload($localfile, $remotefile, $mode = 'I') {
 		if (!in_array(($savedir = dirname($remotefile)), array('.', '/'))) {
 			$this->mkdirs($savedir);
 		}
@@ -99,8 +92,6 @@ class WindSocketFtp extends AbstractWindFtp {
 		if (!($fp = fopen($localfile, 'rb'))) {
 			throw new WindFtpException($localfile, WindFtpException::FILE_READ_FOBIDDEN);
 		}
-		// 'I' == BINARY mode
-		// 'A' == ASCII mode
 		$mode != 'I' && $mode = 'A';
 		$this->delete($remotefile);
 		if (!$this->sendcmd('TYPE', $mode)) {
@@ -126,12 +117,6 @@ class WindSocketFtp extends AbstractWindFtp {
 	 * @see AbstractWindFtp::download()
 	 */
 	public function download($localfile, $remotefile = '', $mode = 'I') {
-		if ($this->checkFile($localfile)) {
-			throw new WindFtpException($localfile, WindFtpException::FILE_FOBIDDEN);
-		}
-		if ($this->checkFile($remotefile)) {
-			throw new WindFtpException($remotefile, WindFtpException::FILE_FOBIDDEN);
-		}
 		$mode != 'I' && $mode = 'A';
 		if (!$this->sendcmd('TYPE', $mode)) {
 			throw new WindFtpException($mode, WindFtpException::COMMUNICATE_TYPE_FAILED);

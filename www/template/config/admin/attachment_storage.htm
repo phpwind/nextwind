@@ -8,10 +8,10 @@
 <!-- start -->
 <div class="nav">
 	<ul class="cc">
-		<li><a href="{@WindUrlHelper::createUrl('/config/attachment/run')}">附件设置</a></li>
-		<li class="current"><a href="{@WindUrlHelper::createUrl('/config/attachment/storage')}">附件存储</a></li>
-		<li><a href="{@WindUrlHelper::createUrl('/config/attachment/thumb')}">附件缩略</a></li>
-		<li><a href="{@WindUrlHelper::createUrl('/config/storage/run')}">头像存储</a></li>
+		<li><a href="{@url:/config/attachment/run}">附件设置</a></li>
+		<li class="current"><a href="{@url:/config/attachment/storage}">附件存储</a></li>
+		<li><a href="{@url:/config/attachment/thumb}">附件缩略</a></li>
+		<li><a href="{@url:/config/storage/run}">头像存储</a></li>
 	</ul>
 </div>
 
@@ -23,7 +23,7 @@
 	</ul>
 </div>
 
-<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/config/attachment/dostroage')}" data-role="list">
+<form method="post" class="J_ajaxForm" action="{@url:/config/attachment/dostroage}" data-role="list">
 	<div class="h_a">附件存储方式设置</div>
 	<div class="table_full">
 		<table width="100%">
@@ -41,11 +41,10 @@
 	  $msg = '';
 	  foreach($storages as $var => $value): 
 	  $storageType === $var && $msg = $value['description'];
-	  $link = empty($value['managelink']) ? '' : WindUrlHelper::createUrl($value['managelink']);
 #-->
 						<li><span class="mr20"><label><input name="att_storage" data-msg="{$value['description']}" value="{$var}" type="radio" {@Pw::ifcheck($storageType==$var)|html}>{$value['name']}</label></span> 
 <!--# if($value['managelink']): #-->
-							<a href="{@WindUrlHelper::createUrl($value['managelink'])|html}">[设置]</a>
+							<a href="{@WindUrlHelper::createUrl($value['managelink'])|url}">[设置]</a>
 <!--# endif; #-->
 						</li>
 <!--# endforeach; #-->

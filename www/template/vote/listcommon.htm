@@ -1,13 +1,13 @@
 <dl class="cc dl" id="vote{$value['poll_id']}">
 							<dt class="dt">
-							<a class="J_user_card_show" data-uid="{$value['created_uid']}" href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $value['created_uid'])}"><img src="{@Pw::getAvatar($value['created_uid'], 'small')}" onerror="this.onerror=null;this.src='{@G:url.images}/face/face_small.jpg'" width="50" height="50" alt="{$value['created_username']}" /></a>
+							<a class="J_user_card_show" data-uid="{$value['created_uid']}" href="{@url:space/index/run?uid=$value['created_uid']}"><img src="{@Pw::getAvatar($value['created_uid'], 'small')}" onerror="this.onerror=null;this.src='{@G:url.images}/face/face_small.jpg'" width="50" height="50" alt="{$value['created_username']}" /></a>
 							</dt>
 							<dd class="content">
 								<p class="title">
-								<a class="name J_user_card_show" data-uid="{$value['created_uid']}" href="{@WindUrlHelper::createUrl('space/index/run?uid=' . $value['created_uid'])}">{$value['created_username']}</a>  发起投票：<a href="{$value['url']}">{@Pw::substrs(Pw::stripWindCode(strip_tags($value['title'])), 50, 0, false)}</a>
+								<a class="name J_user_card_show" data-uid="{$value['created_uid']}" href="{@url:space/index/run?uid=$value['created_uid']}">{$value['created_username']}</a>  发起投票：<a href="{$value['url']}">{@Pw::substrs(Pw::stripWindCode(strip_tags($value['title'])), 50, 0, false)}</a>
 								</p>
 								<p class="descrip">{$value['content']}</p>
-								<form action="{@WindUrlHelper::createUrl('vote/vote/run')}" method="post" id="J_vote_form_{$value['poll_id']}">
+								<form action="{@url:vote/vote/run}" method="post" id="J_vote_form_{$value['poll_id']}">
 									<div class="read_vote_list" id="J_vote_list_{$value['poll_id']}">
 										<input type="hidden" name="typeid" value="{$value['typeid']}" />
 										<input type="hidden" name="apptype" value="{$value['app_type']}" />

@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ExportController.php 22339 2012-12-21 09:37:22Z gao.wanggao $ 
+ * @version $Id: ExportController.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
  * @package 
  */
 class ExportController  extends PwBaseController {
@@ -23,28 +23,30 @@ class ExportController  extends PwBaseController {
 	
 	public function dorunAction() {
 		$pageid = (int)$this->getInput('pageid', 'get');
-		$pageDs = $this->_getPageDs();
-		$pageInfo = $pageDs->getPage($pageid);
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+    	$pageBo = new PwDesignPageBo($pageid);
+		$pageInfo = $pageBo->getPage();
 		if (!$pageInfo) $this->showError("operate.fail");
 		if ($pageInfo['page_type'] == PwDesignPage::PORTAL) { //$this->showError("DESIGN:page.emport.fail");
 			$portal = $this->_getPortalDs()->getPortal($pageInfo['page_unique']);
 			if ($portal['template']) {
-				$this->doZip($pageInfo);	
+				$this->doZip($pageBo);	
 			} else {
 				$this->doTxt($pageInfo);
 			}
 		} else {
-			$this->doZip($pageInfo);	
+			$this->doZip($pageBo);	
 			//$this->doTxt($pageInfo);
 		}
 		$this->_getDesignService()->clearCompile();
 		$this->showMessage("operate.success");
 	}
 	
-	protected function doZip($pageInfo) {
+	protected function doZip($pageBo) {
 		Wind::import('SRV:design.srv.PwDesignExportZip');
-		$srv = new PwDesignExportZip($pageInfo['page_id'], $pageInfo['page_router']);
+		$srv = new PwDesignExportZip($pageBo);
 		$content = $srv->zip();
+		$pageInfo = $pageBo->getPage();
 		$this->forceDownload($content, $pageInfo['page_name'], 'zip');
 	}
 	

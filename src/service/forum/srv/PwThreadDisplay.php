@@ -19,7 +19,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadDisplay.php 22336 2012-12-21 09:36:17Z jieyin $
+ * @version $Id: PwThreadDisplay.php 22750 2012-12-27 03:15:39Z jieyin $
  * @package forum
  */
 
@@ -111,9 +111,9 @@ class PwThreadDisplay extends PwBaseHookService {
 		$this->perpage = $ds->perpage;
 		$this->maxpage = $ds->maxpage;
 		$start = $ds->firstFloor;
-		$this->_initAttachs($ds->getAttach());
 		$this->bulidUsers($ds->getUser());
 		$this->readdb =& $ds->getData();
+		$this->_initAttachs($ds->getAttach());
 		
 		foreach ($this->readdb as $key => $read) {
 			$this->readdb[$key] = $this->bulidRead($read, $start++);
@@ -133,8 +133,13 @@ class PwThreadDisplay extends PwBaseHookService {
 		if (!$read['usehtml']) {
 			$read['content'] = WindSecurity::escapeHTML($read['content']);
 		}
+		$display = 1;
 		if ($read['ifshield']) {
+			$display = 0;
 			$read['content'] = '<div class="shield">此帖已被屏蔽</div>';
+		} elseif ($this->users[$read['created_userid']]['groupid'] == '6') {
+			$display = 0;
+			$read['content'] = '<div class="shield">用户被禁言,该主题自动屏蔽!</div>';
 		} elseif ($read['useubb']) {
 			$ubb = new PwUbbCodeConvertThread($this->thread, $read, $this->user);
 			$ubb->setImgLazy($this->imgLazy);
@@ -143,6 +148,9 @@ class PwThreadDisplay extends PwBaseHookService {
 			$read['content'] = PwUbbCode::convert($read['content'], $ubb);
 		} else {
 			$read['content'] = self::escapeSpace($read['content']);
+		}
+		if (empty($display) && $this->attach) {
+			$this->attach->deleteList($read['pid']);
 		}
 		return $this->runWithFilters('bulidRead', $read);
 	}
@@ -186,22 +194,6 @@ class PwThreadDisplay extends PwBaseHookService {
 	public function getArea() {
 		return $this->area;
 	}
-
-	public function displayHtmlFromBeforeContent($read) {
-		$this->runDo('createHtmlBeforeContent', $read);
-	}
-
-	public function displayHtmlFromAfterContent($read) {
-		$this->runDo('createHtmlAfterContent', $read);
-	}
-
-	public function displayHtmlFromAfterUserInfo($user, $read) {
-		$this->runDo('createHtmlAfterUserInfo', $user, $read);
-	}
-
-	public function runJs() {
-		$this->runDo('runJs');
-	}
 	
 	/**
 	 * 获取楼层名称
@@ -225,7 +217,7 @@ class PwThreadDisplay extends PwBaseHookService {
 	 */
 	public function getHeadguide() {
 		return $this->forum->headguide()
-			. $this->forum->bulidGuide(array(Pw::substrs($this->thread->info['subject'], 30), WindUrlHelper::createUrl('bbs/read/run?tid=' . $this->tid . '&fid=' . $this->fid)));
+			. $this->forum->bulidGuide(array(Pw::substrs($this->thread->info['subject'], 30), WindUrlHelper::createUrl('bbs/read/run', array('tid' => $this->tid, 'fid' => $this->fid))));
 	}
 	
 	public function setUrlArg($key, $value) {
@@ -259,8 +251,9 @@ class PwThreadDisplay extends PwBaseHookService {
 	}
 
 	protected function _initAttachs($pids) {
-		if (empty($pids)) return;
-		$this->attach = new PwAttachDisplay($this->tid, $pids, $this->user, $this->imgLazy);
+		if ($pids) {
+			$this->attach = new PwAttachDisplay($this->tid, $pids, $this->user, $this->imgLazy);
+		}
 	}
 	
 	/**

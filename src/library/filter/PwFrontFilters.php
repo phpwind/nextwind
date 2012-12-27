@@ -6,7 +6,7 @@ Wind::import('WIND:base.AbstractWindBootstrap');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwFrontFilters.php 22371 2012-12-21 13:10:32Z yishuo $
+ * @version $Id: PwFrontFilters.php 22592 2012-12-25 11:38:24Z yetianshi $
  * @package wind
  */
 class PwFrontFilters extends AbstractWindBootstrap {
@@ -14,15 +14,14 @@ class PwFrontFilters extends AbstractWindBootstrap {
 	 * (non-PHPdoc) @see WindHandlerInterceptor::preHandle()
 	 */
 	public function onCreate() {
-		//先注释掉，看一下实现机制，考虑会不会影响效率
-		/* if (Wind::getAppName() == 'phpwind') {
+		if (in_array(Wind::getAppName(), array('phpwind','pwadmin'))) {
 			//云应用监听sql执行
 			WindFactory::_getInstance()->loadClassDefinitions(
 				array(
 					'sqlStatement' => array(
 						'proxy' => 'WIND:filter.proxy.WindEnhancedClassProxy', 
 						'listeners' => array('LIB:compile.acloud.PwAcloudDbListener'))));
-		} */
+		}
 		if (!is_file(Wind::getRealPath('DATA:install.lock', true))) {
 			Wind::getApp()->getResponse()->sendRedirect("install.php");
 		}

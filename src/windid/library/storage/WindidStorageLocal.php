@@ -7,7 +7,7 @@ defined('WINDID_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidStorageLocal.php 22308 2012-12-21 07:28:18Z gao.wanggao $
+ * @version $Id: WindidStorageLocal.php 22500 2012-12-25 03:54:47Z gao.wanggao $
  * @package upload
  */
 
@@ -28,7 +28,11 @@ class WindidStorageLocal {
 	 * @return bool
 	 */
 	public function save($source, $filePath) {
-		return true;
+		if ($source == $filePath) return true;
+		$this->createFolder(dirname($filePath));
+		@copy($source, $filePath);
+	    @chmod($filePath, 0777);
+	    return true;
 	}
 	
 	/**
@@ -60,6 +64,16 @@ class WindidStorageLocal {
 	
 	protected  function deleteFile($filename) {
 		return WindFile::del(WindSecurity::escapePath($filename, true));
+	}
+	
+	protected function createFolder($path) {
+		if (!is_dir($path)) {
+			$this->createFolder(dirname($path));
+			@mkdir($path);
+			@chmod($path, 0777);
+			@fclose(@fopen($path . '/index.html', 'w'));
+			@chmod($path . '/index.html', 0777);
+		}
 	}
 }
 ?>

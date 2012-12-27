@@ -7,13 +7,13 @@
 <div class="wrap">
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('/config/regist/run')}">注册设置</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('/config/regist/login')}">登录设置</a></li>
-			<!-- <li><a href="{@WindUrlHelper::createUrl('/config/regist/guide')}">新用户引导设置</a></li> -->
+			<li><a href="{@url:/config/regist/run}">注册设置</a></li>
+			<li class="current"><a href="{@url:/config/regist/login}">登录设置</a></li>
+			<!-- <li><a href="{@url:/config/regist/guide}">新用户引导设置</a></li> -->
 		</ul>
 	</div>
 	<div class="h_a">登录设置</div>
-	<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('/config/regist/dologin')}" method="post">
+	<form class="J_ajaxForm" data-role="list" action="{@url:/config/regist/dologin}" method="post">
 	<div class="table_full">
 		<table width="100%">
 			<col class="th" />

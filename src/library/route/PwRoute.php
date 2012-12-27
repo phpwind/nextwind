@@ -6,7 +6,7 @@ Wind::import('WIND:router.route.AbstractWindRoute');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwRoute.php 22366 2012-12-21 12:40:59Z long.shi $
+ * @version $Id: PwRoute.php 22590 2012-12-25 11:26:53Z long.shi $
  * @package library
  */
 class PwRoute extends AbstractWindRoute {
@@ -54,11 +54,11 @@ class PwRoute extends AbstractWindRoute {
 		if (empty($rawPath) && empty($args) && empty($_args)) {
 			return Wekit::C()->site->get('homeRouter', array());
 		}
-		$_args += $this->_matchPath($path);
+		$_args = $this->_matchPath($path) + $_args;
 		if (empty($_args)) {
 			$this->_filterIllegal($rawPath);
 		}
-		return $args + $_args;
+		return $_args + $args;
 	}
 	
 	/**
@@ -184,7 +184,7 @@ class PwRoute extends AbstractWindRoute {
 				if (false !== ($pos = strpos($scriptUrl, $k))) {
 					$this->base = rtrim(substr($scriptUrl, 0, $pos), '\\/.');
 					$route = explode('/', $v);
-					return array('m' => $route[0], 'c' => $route[1], 'a' => $route[2]);
+					return array('m' => $route[0], 'c' => $route[1]) + ($route[2] == '*' ? array() : array('a' => $route[2]));
 				}
 			}
 		}
@@ -318,7 +318,7 @@ class PwRoute extends AbstractWindRoute {
 			return $this->_buildCommon($router, array('m' => $_m, 'c' => $_c, 'a' => $_a), $args);
 		} else {
 			/* 非rewrite时获取脚本文件 */
-			$script = $this->_buildScript($_m, $_c, $_a);
+			$script = $this->_buildScript($_m, $_c, $_a, $args);
 			$url = '';
 			if ($this->omit_mca)
 				$url = $args ? $script . '?' . WindUrlHelper::argsToUrl($args) : $script;
@@ -583,10 +583,17 @@ class PwRoute extends AbstractWindRoute {
 	 * @param string $_a        	
 	 * @return string
 	 */
-	private function _buildScript($_m, $_c, $_a) {
+	private function _buildScript($_m, $_c, $_a, &$args) {
 		$pattern = "$_m/$_c/$_a";
 		foreach ($this->_getMulti() as $k => $v) {
-			if ($v == $pattern) {
+			if (strpos($v, '*')) {
+				$v = str_replace(array('*', '/'), array('\w*', '\/'), $v);
+				if (preg_match('/^' . $v . '$/i', $pattern)){
+					$args['a'] = $_a;
+					$this->omit_mca = true;
+					return "/$k";
+				}
+			} elseif ($v == $pattern) {
 				$this->omit_mca = true;
 				return "/$k";
 			}

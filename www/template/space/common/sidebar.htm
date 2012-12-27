@@ -16,9 +16,9 @@
 					<div class="present">{$space->spaceUser['sign']}</div>
 					<div class="num">
 						<ul>
-							<li><a href="{@url:space/follows/run/?uid=$space->spaceUid}"><span>{$space->spaceUser['follows']}</span><em>关注</em></a></li>
-							<li><a href="{@url:space/fans/run/?uid=$space->spaceUid}"><span>{$space->spaceUser['fans']}</span><em>粉丝</em></a></li>
-							<li class="tail"><a href="{@url:space/thread/run/?uid=$space->spaceUid}"><span>{$space->spaceUser['postnum']}</span><em>帖子</em></a></li>
+							<li><a href="{@url:space/follows/run?uid=$space->spaceUid}"><span>{$space->spaceUser['follows']}</span><em>关注</em></a></li>
+							<li><a href="{@url:space/fans/run?uid=$space->spaceUid}"><span>{$space->spaceUser['fans']}</span><em>粉丝</em></a></li>
+							<li class="tail"><a href="{@url:space/thread/run?uid=$space->spaceUid}"><span>{$space->spaceUser['postnum']}</span><em>帖子</em></a></li>
 						</ul>
 					</div>
 					<!--# if (Wekit::C('site','medal.isopen')): #-->
@@ -55,7 +55,7 @@
 							<div class="cont"><a id="J_punch_mine" data-role="space" href="{$punchUrl}" class="btn_punch">{$punchButton}</a></div>
 						</div>
 						<!--# if ($punchData) { #-->
-						<div style="display:none;"><a href="{@url:space/index/run/?username=$punchData['username']}">{$punchData['username']}</a> 已帮{$spaceTome}领取{$punchData['cNum']}{$punchData['cUnit']}{$punchData['cType']}</div>
+						<div style="display:none;"><a href="{@url:space/index/run?username=$punchData['username']}">{$punchData['username']}</a> 已帮{$spaceTome}领取{$punchData['cNum']}{$punchData['cUnit']}{$punchData['cType']}</div>
 						<!--# } #-->
 					<!--# } #-->
 				</div>

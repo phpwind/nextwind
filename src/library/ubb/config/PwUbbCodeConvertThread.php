@@ -9,7 +9,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUbbCodeConvertThread.php 19441 2012-10-15 03:59:58Z jieyin $
+ * @version $Id: PwUbbCodeConvertThread.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package lib.utility
  */
 
@@ -105,8 +105,8 @@ class PwUbbCodeConvertThread extends PwUbbCodeConvertConfig {
 
 	public function getSellInfo() {
 		return array(
-			WindUrlHelper::createUrl('bbs/buythread/record/?tid=' . $this->thread->tid . '&pid=' . $this->pid),
-			WindUrlHelper::createUrl('bbs/buythread/buy/?tid=' . $this->thread->tid . '&pid=' . $this->pid),
+			WindUrlHelper::createUrl('bbs/buythread/record', array('tid' => $this->thread->tid, 'pid' => $this->pid)),
+			WindUrlHelper::createUrl('bbs/buythread/buy', array('tid' => $this->thread->tid, 'pid' => $this->pid)),
 			$this->thread->info['sell_count']
 		);
 	}

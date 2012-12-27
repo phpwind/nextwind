@@ -5,7 +5,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: phpwindBoot.php 22371 2012-12-21 13:10:32Z yishuo $
+ * @version $Id: phpwindBoot.php 22397 2012-12-24 03:28:46Z xiaoxia.xuxx $
  * @package wekit
  */
 class phpwindBoot {
@@ -98,7 +98,7 @@ class phpwindBoot {
 	 * 
 	 * @return void
 	 */
-	public function beforeResponse() {}
+	public function beforeResponse($front = null) {}
 
 	/**
 	 * 获得大概年前登录用户对象

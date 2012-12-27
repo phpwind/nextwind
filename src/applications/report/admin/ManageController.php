@@ -54,7 +54,7 @@ class ManageController extends AdminBaseController {
 	}
 	
 	private function _buildNoticeTitle($username,$action) {
-		return '您举报的内容已被 <a href="' . WindUrlHelper::createUrl('space/index/run?username='.$username,array(),'','pw') .'">' . $username . '</a> '.$action.'，感谢您能一起协助我们管理站点。';
+		return '您举报的内容已被 <a href="' . WindUrlHelper::createUrl('space/index/run', array('username' => $username), '', 'pw') .'">' . $username . '</a> '.$action.'，感谢您能一起协助我们管理站点。';
 	}
 	
 	/**

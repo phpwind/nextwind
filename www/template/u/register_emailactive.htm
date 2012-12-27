@@ -116,7 +116,7 @@ Wind.use('jquery', 'global', 'ajaxForm', 'emailAutoMatch', 'draggable', 'validat
 					required	: true,
 					email : true,
 					remote		: {
-						url : "{@WindUrlHelper::createUrl('u/register/checkemail')|url}", 
+						url : "{@url:u/register/checkemail}", 
 						type : 'post',
 						dataType: "json",
 						data : {

@@ -1,11 +1,11 @@
 <?php
 Wind::import('ADMIN:library.AdminBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PermissionsController.php 22107 2012-12-19 08:04:08Z gao.wanggao $ 
+ * @version $Id: PermissionsController.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 class PermissionsController extends AdminBaseController {
@@ -53,7 +53,7 @@ class PermissionsController extends AdminBaseController {
 				foreach ($ids AS $_k=>$id) {
 					$list[$_k]['type'] = '页面';
 					$list[$_k]['name'] = $info[$id]['page_name'];
-					$list[$_k]['url'] = WindUrlHelper::createUrl("design/permissions/page?id=".$info[$id]['page_id']);
+					$list[$_k]['url'] = WindUrlHelper::createUrl('design/permissions/page', array('id' => $info[$id]['page_id']));
 				}
 			} 
 			if ($k == PwDesignPermissions::TYPE_MODULE) {
@@ -61,7 +61,7 @@ class PermissionsController extends AdminBaseController {
 				foreach ($ids AS $_k=>$id) {
 					$list[$_k]['type'] = '模块';
 					$list[$_k]['name'] = $info[$id]['module_name'];
-					$list[$_k]['url'] = WindUrlHelper::createUrl("design/permissions/module?moduleid=".$info[$id]['module_id']);
+					$list[$_k]['url'] = WindUrlHelper::createUrl('design/permissions/module', array('moduleid' => $info[$id]['module_id']));
 				}
 			}
 			/*
@@ -70,7 +70,7 @@ class PermissionsController extends AdminBaseController {
 				foreach ($ids AS $_k=>$id) {
 					$list[$_k]['type'] = '页面';
 					$list[$_k]['name'] = $info[$id]['page_name'];
-					$list[$_k]['url'] = WindUrlHelper::createUrl("design/permissions/page?id=".$info[$id]['page_id']);
+					$list[$_k]['url'] = WindUrlHelper::createUrl('design/permissions/page', array('id' => $info[$id]['page_id']));
 				}
 			}*/
 		}

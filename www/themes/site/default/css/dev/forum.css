@@ -3,7 +3,7 @@
 @explain: 版块页面（包含列表和阅读页）
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: forum.css 22324 2012-12-21 08:35:00Z yanchixia $
+$Id: forum.css 22496 2012-12-25 03:40:56Z yanchixia $
 ===================
 #*/
 
@@ -1249,6 +1249,7 @@ $Id: forum.css 22324 2012-12-21 08:35:00Z yanchixia $
 }
 .reply_list li .reply_content .time{
 	color:#999;
+	margin-right:10px;
 }
 .reply_list li .reply_content .operate{
 	float:right;

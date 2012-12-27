@@ -11,7 +11,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-13
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: IndexController.php 21989 2012-12-18 02:19:08Z long.shi $
+ * @version $Id: IndexController.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package admin
  * @subpackage controller
  */
@@ -124,7 +124,7 @@ class IndexController extends AdminBaseController {
 			$srv->getVerify($config['type']);
 			exit;
 		}
-		$url = WindUrlHelper::createUrl("index/showVerify?rand=".Pw::getTime());
+		$url = WindUrlHelper::createUrl('index/showVerify', array('rand' => Pw::getTime()));
 		$display = $srv->getOutType($config['type']);
 		if ($display == 'flash') {
 			$html = '<embed align="middle"
@@ -138,7 +138,14 @@ class IndexController extends AdminBaseController {
 				quality="high"
 				src="'.$url.'">';
 			if ($config['voice']){
-				$url = WindUrlHelper::createUrl("index/showVerify?getAudio=1&songVolume=100&autoStart=false&repeatPlay=false&showDownload=false&rand=".Pw::getTime());
+				$url = WindUrlHelper::createUrl('index/showVerify', array(
+					'getAudio' => 1,
+					'songVolume' => 100,
+					'autoStart' => 'false',
+					'repeatPlay'=> 'false',
+					'showDownload' => 'false',
+					'rand' => Pw::getTime()
+				));
 				$html .= '<embed height="20" width="25"
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.macromedia.com/go/getflashplayer"
@@ -151,7 +158,14 @@ class IndexController extends AdminBaseController {
 				width="' . $config['width'] . '"
 				height="' . $config['height'] . '" >';
 			if ($config['voice']){
-				$url = WindUrlHelper::createUrl("index/showVerify?getAudio=1&songVolume=100&autoStart=false&repeatPlay=false&showDownload=false&rand=".Pw::getTime());
+				$url = WindUrlHelper::createUrl('index/showVerify', array(
+					'getAudio' => 1,
+					'songVolume' => 100,
+					'autoStart' => 'false',
+					'repeatPlay' => 'false', 
+					'showDownload' => 'false',
+					'rand' => Pw::getTime()
+				));
 				$html .= '<span title="点击后键入您听到的内容"><embed wmode="transparent" height="20" width="25"
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.macromedia.com/go/getflashplayer"

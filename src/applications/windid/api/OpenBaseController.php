@@ -7,7 +7,7 @@ Wind::import('WINDID:service.client.bo.WindidClientBo');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: OpenBaseController.php 22343 2012-12-21 09:59:29Z gao.wanggao $ 
+ * @version $Id: OpenBaseController.php 22506 2012-12-25 05:24:13Z gao.wanggao $ 
  * @package 
  */
 class OpenBaseController extends PwBaseController {
@@ -38,6 +38,7 @@ class OpenBaseController extends PwBaseController {
 			'clientCharser' => $charset,
 		);
 		WindidClientBo::getInstance($config);
+		
 	}
 	
 	protected function setDefaultTemplateName($handlerAdapter) {

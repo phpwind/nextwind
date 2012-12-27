@@ -4,7 +4,7 @@
 	if (($key == 'recharge') && !Wekit::C('pay', 'ifopen')) continue;
 	if (isset($_item['url']) && $_item['url']) {
 #-->
-		<li class="{$_item['current']}"><a href="{@WindUrlHelper::createUrl($_item['url'], array('_tab' => $key))}">{$_item['title']}</a></li>
+		<li class="{$_item['current']}"><a href="{@WindUrlHelper::createUrl($_item['url'], array('_tab' => $key))|url}">{$_item['title']}</a></li>
 <!--#} else { #-->
 		<li class="{$_item['current']}"><a href="{@url:profile/extends/run?_left=credit&_tab=$key}">{$_item['title']}</a></li>
 <!--#

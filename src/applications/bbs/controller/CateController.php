@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: CateController.php 21191 2012-11-30 06:22:06Z jieyin $
+ * @version $Id: CateController.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package forum
  */
 
@@ -19,7 +19,7 @@ class CateController extends PwBaseController {
 	 * @see WindController::run()
 	 */
 	public function run() {
-		$fid = $this->getInput('fid');
+		$fid = intval($this->getInput('fid'));
 		$pwforum = new PwForumBo($fid, true);
 		if (!$pwforum->isForum(true)) {
 			$this->showError('BBS:forum.exists.not');
@@ -32,7 +32,7 @@ class CateController extends PwBaseController {
 		}
 		if ($pwforum->foruminfo['password']) {
 			if (!$this->loginUser->isExists()) {
-				$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('bbs/cate/run?fid=' . $fid)));
+				$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('bbs/cate/run', array('fid' => $fid))));
 			} elseif (Pw::getPwdCode($pwforum->foruminfo['password']) != Pw::getCookie('fp_' . $fid)) {
 				$this->forwardAction('bbs/forum/password', array('fid' => $fid));
 			}

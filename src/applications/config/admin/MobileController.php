@@ -15,20 +15,19 @@ class MobileController extends AdminBaseController {
 	/* (non-PHPdoc)
 	 * @see WindController::run()
 	 */
-	public function run() {
+	public function setAction() {
 		$registerConfig = $this->_getConfig()->getValues('register');
 		$loginConfig = $this->_getConfig()->getValues('login');
 		$mobileConfig = $this->_getConfig()->getValues('mobile');
 		if (!$mobileConfig['plat.type']) {
-			$this->showError('USER:mobile.plat.choose.error', 'config/mobile/plat', true);
+			$this->showError('USER:mobile.plat.choose.error', 'config/mobile/run', true);
 		}
-		$restMessage = Wekit::load('SRV:mobile.srv.PwMobileService')->getRestMobileMessage();
+		$mobileService = Wekit::load('SRV:mobile.srv.PwMobileService');
+		$restMessage = $mobileService->getRestMobileMessage();
 		if ($restMessage instanceof PwError) {
 			$this->showError($restMessage->getError());
 		}
-		$filePath = Wind::getRealPath('APPS:admin.conf.openplatformurl.php', true);
-		$openPlatformUrl = Wind::getComponent('configParser')->parse($filePath);
-		$appMobileUrl = $openPlatformUrl.'index.php?m=appcenter&c=SmsManage';
+		$appMobileUrl = $mobileService->platUrl;
 		$this->setOutput($appMobileUrl, 'appMobileUrl');
 		$this->setOutput($restMessage, 'restMessage');
 		$this->setOutput($registerConfig, 'registerConfig');
@@ -38,7 +37,7 @@ class MobileController extends AdminBaseController {
 	/**
 	 * 后台设置-手机设置
 	 */
-	public function dorunAction() {
+	public function dosetAction() {
 		$config = new PwConfigSet('register');
 		$config->set('active.phone', $this->getInput('activePhone', 'post'))
 				->set('mobile.message.content', $this->getInput('mobileMessageContent', 'post'))
@@ -60,7 +59,7 @@ class MobileController extends AdminBaseController {
 	/**
 	 * 后台设置-短信平台
 	 */
-	public function platAction() {
+	public function run() {
 		Wind::import('SRV:mobile.srv.PwMobileConfigService');
 		$service = new PwMobileConfigService('PwMobileService_getPlats');
 		$plats = $service->getPlats();
@@ -77,7 +76,7 @@ class MobileController extends AdminBaseController {
 	/**
 	 * 附件存储方式设置列表页
 	 */
-	public function doplatAction() {
+	public function dorunAction() {
 		$mobile_plat = $this->getInput('mobile_plat', 'post');
 		/* @var $attService PwAttacmentService */
 		Wind::import('SRV:mobile.srv.PwMobileConfigService');

@@ -9,15 +9,15 @@
 <!-- start -->
 <div class="nav">
 	<ul class="cc">
-		<li class="current"><a href="{@WindUrlHelper::createUrl('/verify/verify/run')}">验证码</a></li>
-		<li><a href="{@WindUrlHelper::createUrl('/verify/verify/set')}">验证策略</a></li>
+		<li class="current"><a href="{@url:/verify/verify/run}">验证码</a></li>
+		<li><a href="{@url:/verify/verify/set}">验证策略</a></li>
 	</ul>
 </div>
 <div class="h_a">提示信息</div>
 <div class="prompt_text mb10">
 	验证机制统一设置验证码规则，对应模块需要开启验证码功能需在验证策略中启用。
 </div>
-<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/verify/verify/dorun')}" data-role="list">
+<form method="post" class="J_ajaxForm" action="{@url:/verify/verify/dorun}" data-role="list">
 	<div class="h_a">验证码设置</div>
 	<div class="table_full">
 		<table width="100%">

@@ -12,9 +12,9 @@
 		<dd class="notice_segment_cont">
 			<div class="summary">
 		<!--#if ($v['extend_params']['complete']) {#-->
-				恭喜！您有新的任务奖励可领取《{@Pw::substrs($v['extend_params']['title'],16)}》 ，马上前往<a href="{@WindUrlHelper::createUrl('task/index/run')}" style="margin-right:0px">任务中心</a>领取奖励。
+				恭喜！您有新的任务奖励可领取《{@Pw::substrs($v['extend_params']['title'],16)}》 ，马上前往<a href="{@url:task/index/run}" style="margin-right:0px">任务中心</a>领取奖励。
 		<!--#}else{#-->
-				恭喜您成功领取任务《{@Pw::substrs($v['extend_params']['title'],16)}》 ，现在就去<a href="{@WindUrlHelper::createUrl('task/index/run')}" style="margin-right:0px">任务中心</a>做任务！
+				恭喜您成功领取任务《{@Pw::substrs($v['extend_params']['title'],16)}》 ，现在就去<a href="{@url:task/index/run}" style="margin-right:0px">任务中心</a>做任务！
 		<!--#}#-->
 			</div>
 			<div class="time">{@Pw::time2str($v['modified_time'],'auto')}</div>
@@ -39,9 +39,9 @@
 	//$tips = $detailList['is_ignore'] ? '<div class="tips">您不会再收到 任务 通知</div>' : '';
 	#-->
 	<!--#if ($item['complete']) {#-->
-				恭喜！您有新的任务奖励可领取《{$item['title']}》 ，马上前往<a href="{@WindUrlHelper::createUrl('task/index/run')}" style="margin-right:0px">任务中心</a>领取奖励。
+				恭喜！您有新的任务奖励可领取《{$item['title']}》 ，马上前往<a href="{@url:task/index/run}" style="margin-right:0px">任务中心</a>领取奖励。
 	<!--#}else{#-->
-				恭喜您成功领取任务《{$item['title']}》 ，现在就去<a href="{@WindUrlHelper::createUrl('task/index/run')}" style="margin-right:0px">任务中心</a>做任务！
+				恭喜您成功领取任务《{$item['title']}》 ，现在就去<a href="{@url:task/index/run}" style="margin-right:0px">任务中心</a>做任务！
 	<!--#}#-->
 				</div>
 				<div class="time"><!--# echo Pw::time2str($notice['modified_time'],'auto');#--></div>
@@ -49,7 +49,7 @@
 		</dl>
 	</div>
 	<div class="my_message_bottom">
-		<a href="{@WindUrlHelper::createUrl('message/notice/run?type='.$notice['typeid'])}">查看全部任务通知&nbsp;&gt;&gt;</a>
+		<a href="{@url:message/notice/run?type=$notice['typeid']}">查看全部任务通知&nbsp;&gt;&gt;</a>
 	</div>
 </hook-action>
 
@@ -71,12 +71,12 @@
 				<!--# } #-->
 				</span>
 		<!--#if ($v['extend_params']['complete']) {#-->
-				恭喜！您有新的任务奖励可领取《{$v['extend_params']['title']}》 ，马上前往<a href="{@WindUrlHelper::createUrl('task/index/run')}" style="margin-right:0px">任务中心</a>领取奖励。
+				恭喜！您有新的任务奖励可领取《{$v['extend_params']['title']}》 ，马上前往<a href="{@url:task/index/run}" style="margin-right:0px">任务中心</a>领取奖励。
 		<!--#}else{#-->
-				恭喜您成功领取任务《{$v['extend_params']['title']}》 ，现在就去<a href="{@WindUrlHelper::createUrl('task/index/run')}" style="margin-right:0px">任务中心</a>做任务！
+				恭喜您成功领取任务《{$v['extend_params']['title']}》 ，现在就去<a href="{@url:task/index/run}" style="margin-right:0px">任务中心</a>做任务！
 		<!--#}#-->
 			</div>
-			<div class="info"><span class="time">{@Pw::time2str($v['modified_time'],'auto')}</span><span class="operating"><span class="line">|</span><a class="J_msg_del" href="{@WindUrlHelper::createUrl('message/notice/delete?id='.$v['id'])}">删除</a></span></div>
+			<div class="info"><span class="time">{@Pw::time2str($v['modified_time'],'auto')}</span><span class="operating"><span class="line">|</span><a class="J_msg_del" href="{@url:message/notice/delete?id=$v['id']}">删除</a></span></div>
 		</div>
 	</div>
 </hook-action>

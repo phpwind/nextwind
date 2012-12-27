@@ -4,7 +4,7 @@
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidAvatarApi.php 22343 2012-12-21 09:59:29Z gao.wanggao $
+ * @version $Id: WindidAvatarApi.php 22760 2012-12-27 03:37:34Z gao.wanggao $
  * @package windid.service.avatar
  */
 class WindidAvatarApi {
@@ -35,8 +35,17 @@ class WindidAvatarApi {
 	 * @return boolean
 	 */
 	public function defaultAvatar($uid, $type = 'face') {
-		$srv = Windid::load('user.srv.WindidUserService');
-		return $srv->defaultAvatar($uid, $type);
+		$client = Windid::client();
+		if ($client->windid == 'local') {
+			$srv = Windid::load('user.srv.WindidUserService');
+			$result = $srv->defaultAvatar($uid, $type);
+			return (int)$result;
+		}
+		$params = array(
+			'uid'=>$uid,
+			'type'=>$type,
+		);
+		return WindidApi::open('avatar/default', array(), $params);
 	}
 	
 	/**

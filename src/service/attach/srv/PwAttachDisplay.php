@@ -9,7 +9,7 @@ Wind::import('LIB:ubb.PwUbbCode');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwAttachDisplay.php 22380 2012-12-21 14:54:07Z jieyin $
+ * @version $Id: PwAttachDisplay.php 22750 2012-12-27 03:15:39Z jieyin $
  * @package forum|attach
  */
 
@@ -40,8 +40,12 @@ class PwAttachDisplay {
 		return isset($this->attachs[$id]);
 	}
 	
-	public function getList($id) {
-		return $this->showlist[$id];
+	public function getList($pid) {
+		return $this->showlist[$pid];
+	}
+
+	public function deleteList($pid) {
+		unset($this->showlist[$pid]);
 	}
 
 	public function getHtml($pid, $aid) {
@@ -78,7 +82,7 @@ class PwAttachDisplay {
 		}
 		$html .= '<p>图片：' . $att['name'];
 		if ($this->isAdmin) {
-			$html .= '<a class="J_read_img_del" href="' . WindUrlHelper::createUrl('bbs/attach/delete?aid=' . $att['aid']) . '">[删除]</a>';
+			$html .= '<a class="J_read_img_del" href="' . WindUrlHelper::createUrl('bbs/attach/delete', array('aid' => $att['aid'])) . '">[删除]</a>';
 		}
 		$html .= '</p></div>';
 		$html .= $att['img'];
@@ -104,7 +108,7 @@ class PwAttachDisplay {
 		$html = '<span class="file_insert"><span class="file_list_wrap"><span class="file_icon_' . $att['ext'] . '"></span></span> <a href="' . WindUrlHelper::createUrl($this->downloadUrl . 'aid=' . $att['aid']) . '" class="mr5 J_post_attachs' . $lang[2] . '" data-id="' . $att['aid'] . '" data-price="' . $att['cost'] . '" data-type="' . $att['special'] . '" data-typelang="' . $lang[0] . '" data-util="' . $creditBo->cType[$att['ctype']] . '" data-credit="' . $this->user->getCredit($att['ctype']) . '" data-role="attach" data-size="' . $att['size'] . '" data-hits="' . $att['hits'] . '" data-descrip="' . $att['descrip'] . '">' . $att['name'] . '</a><div class="img_info" id="J_attach_post_info_' . $att['aid'] . '" style="display: none;"><p>类型：' . $lang[0] . '</p><p>售价：' . $att['cost'] . '' . $creditBo->cType[$att['ctype']] . '</p><p>大小：'.$att['size'].'KB</p><p>下载：<span class="J_attach_count_' . $att['aid'] . '">' .$att['hits']. '</span>次</p><p>描述：' . $att['descrip'] . '</p><p><a href="' . WindUrlHelper::createUrl($this->downloadUrl . 'aid=' . $att['aid']) . '" class="'.$attachBuyClass.'" data-countrel=".J_attach_count_' . $att['aid'] . '">[下载]</a>';
 		$att['cost'] && $html .= '<a href="' . WindUrlHelper::createUrl($this->recordUrl . 'aid=' . $att['aid']) . '" class="J_buy_record" data-aid="' . $att['aid'] . '">[记录]</a>';
 		if ($this->isAdmin) {
-			$html .= '<a class="J_attach_post_del" data-rel="#J_att_' . $att['aid'] . '" href="' . WindUrlHelper::createUrl('bbs/attach/delete?aid=' . $att['aid']) . '">[删除]</a>';
+			$html .= '<a class="J_attach_post_del" data-rel="#J_att_' . $att['aid'] . '" href="' . WindUrlHelper::createUrl('bbs/attach/delete', array('aid' => $att['aid'])) . '">[删除]</a>';
 		}
 		$html .= '</p></div>' . $lang[1] . '</span>';
 

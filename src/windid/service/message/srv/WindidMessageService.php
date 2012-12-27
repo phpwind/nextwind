@@ -7,7 +7,7 @@ Wind::import('WINDID:service.message.dm.WindidMessageDm');
  * @author peihong <peihong.zhangph@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageService.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidMessageService.php 22410 2012-12-24 04:19:54Z jinlong.panjl $
  * @package windid.service.message.srv
  */
 class WindidMessageService {
@@ -42,7 +42,7 @@ class WindidMessageService {
 		
 		//生成新消息
 		$dm = new WindidMessageDm();
-		$dm->setCreatedUserId($fromUid)->setContent($content);
+		$dm->setCreatedUserId($fromUid)->setToUid($uid)->setContent($content);
 		if (($result = $dm->beforeAdd()) instanceof WindidError) return $result;
 		$messageId = $this->_getMessageDs()->addMessage($dm);
 		$lastMessage = $this->_getLastMessage($fromUid,$uid, $content);

@@ -27,7 +27,7 @@
 								<div class="operate J_notice_op">
 									<span class="filter"><span class="current">{$typeCounts[$typeid]['typename']}</span> - <a href="javascript:;" data-id="J_notice_drop_1" class="drop_down J_hover_more">更多<em class="core_arrow"></em></a></span>
 									<a href="" class="btn J_msg_manage_hide">取消</a>
-									<a href="{@WindUrlHelper::createUrl('message/notice/delete')}" style="visibility:hidden;" class="btn J_check_op J_check_op_sub">删除</a>
+									<a href="{@url:message/notice/delete}" style="visibility:hidden;" class="btn J_check_op J_check_op_sub">删除</a>
 								</div>
 							</div>
 							<div class="hd cc J_op_manage">
@@ -83,7 +83,7 @@
 										</ul>
 									</div>
 									<span class="filter"><span class="current">{$typeCounts[$typeid]['typename']}</span> - <a href="javascript:;" data-id="J_notice_drop_2" class="drop_down J_hover_more">更多<em class="core_arrow"></em></a></span>
-									<a class="btn J_check_op J_check_op_sub" style="visibility:hidden;" href="{@WindUrlHelper::createUrl('message/notice/delete')}">删除</a>
+									<a class="btn J_check_op J_check_op_sub" style="visibility:hidden;" href="{@url:message/notice/delete}">删除</a>
 								</div>
 							</div>
 						<!--# } #-->
@@ -118,8 +118,8 @@ Wind.use('jquery', 'global', 'dialog', function() {
 /*
  * 忽略
 */
-	var URL_IGNORE = "{@WindUrlHelper::createUrl('message/notice/ignore?ignore=1')|html}",		//忽略
-			URL_UNIGNORE = '{@WindUrlHelper::createUrl("message/notice/ignore?ignore=0")|html}';	//取消忽略 开启回复提醒
+	var URL_IGNORE = "{@url:message/notice/ignore?ignore=1}",		//忽略
+			URL_UNIGNORE = '{@url:message/notice/ignore?ignore=0}';	//取消忽略 开启回复提醒
 
 	$('a.J_notice_ignore').on('click', function(e){
 		e.preventDefault();
@@ -171,7 +171,7 @@ Wind.use('jquery', 'global', 'dialog', function() {
 							msg : '已忽略此类通知'
 						});
 						//$this.text('取消忽略').data('type', false);
-						$this.replaceWith('<a href="{@WindUrlHelper::createUrl('message/message/set')|url}">查看通知设置</a>')
+						$this.replaceWith('<a href="{@url:message/message/set}">查看通知设置</a>')
 					}else{
 						$this.text('忽略').data('type', true);
 					}

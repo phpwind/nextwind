@@ -11,7 +11,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwLoginService.php 22235 2012-12-19 22:15:51Z xiaoxia.xuxx $
+ * @version $Id: PwLoginService.php 22676 2012-12-26 09:08:24Z gao.wanggao $
  * @package src.service.user.srv
  */
 class PwLoginService extends PwBaseHookService {
@@ -105,7 +105,7 @@ class PwLoginService extends PwBaseHookService {
 		$info = $this->_getUserDs()->getUserByUid($userid, PwUser::FETCH_MAIN);
 		if (!$info) {
 			//从windid这边将数据同步到论坛
-			$this->_getUserDs()->activeUser($userid);
+			if (!$this->_getUserDs()->activeUser($userid)) return false;
 			$pwUserInfoDm = new PwUserInfoDm($userid);
 			//【用户同步】未验证用户组
 			/* $_uncheckGid = false;
@@ -137,8 +137,8 @@ class PwLoginService extends PwBaseHookService {
 			
 			$info = $this->_getUserDs()->getUserByUid($userid, PwUser::FETCH_MAIN);
 			/* @var $userSrv PwUserService */
-			$userSrv = Wekit::load('SRV:user.srv.PwUserService');
-			$userSrv->restoreDefualtAvatar($userid);
+			//$userSrv = Wekit::load('SRV:user.srv.PwUserService');
+			//$userSrv->restoreDefualtAvatar($userid);
 		}
 		return $info;
 	}

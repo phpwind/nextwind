@@ -12,9 +12,11 @@
 class PwMobileService {
 	protected $plat;	
 	protected $sendNumDay = 3;  //每天发送手机验证码次数
+	public $platUrl;
 	
 	public function __construct() {
 		$this->setPlat();
+		$this->platUrl = $this->plat->platUrl;
 	}
 	
 	/**
@@ -23,6 +25,9 @@ class PwMobileService {
 	 * @return int
 	 */
 	public function getRestMobileMessage() {
+		if (!$this->plat) {
+			return new PwError('USER:mobile.plat.choose.error');
+		}
 		return $this->plat->getRestMobileMessage();
 	}
 
@@ -32,6 +37,9 @@ class PwMobileService {
 	 * @return bool
 	 */
 	public function sendMobileMessage($mobile) {
+		if (!$this->plat) {
+			return new PwError('USER:mobile.plat.choose.error');
+		}
 		$code = $this->_buildCode();
 		$content = $this->_buildContent($code);
 		$number = $this->checkTodayNum($mobile);

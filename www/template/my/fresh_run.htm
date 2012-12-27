@@ -27,7 +27,7 @@
 					<!--新鲜事列表-->
 					<!--点击输入框后-->
 					<div class="fresh_post box_wrap" id="J_fresh_post_wrap">
-						<form id="J_fresh_post_form" action="{@WindUrlHelper::createUrl('my/fresh/post?_getHtml=1')}" method="post">
+						<form id="J_fresh_post_form" action="{@url:my/fresh/post?_getHtml=1}" method="post">
 						<div class="hd">
 							<h2>快速发帖到论坛</h2><!--# if ($unpost) { #--><span>（您已经{$unpost}没发帖了）</span><!--# } #-->
 						</div>
@@ -85,10 +85,10 @@
 					<div class="box_wrap fresh_page">
 						<div class="fresh_nav">
 							<ul class="cc">
-								<li class="{@Pw::isCurrent($currents=='all')}"><a href="{@WindUrlHelper::createUrl('my/fresh/run/')}">全部</a></li>
+								<li class="{@Pw::isCurrent($currents=='all')}"><a href="{@url:my/fresh/run/}">全部</a></li>
 								<!--# foreach ($type as $key => $value) { #-->
 								<li class="line"></li>
-								<li class="{@Pw::isCurrent($currents==$key)}"><a href="{@WindUrlHelper::createUrl('my/fresh/run/?gid=' . $key)}">{$value}</a></li>
+								<li class="{@Pw::isCurrent($currents==$key)}"><a href="{@url:my/fresh/run?gid=$key}">{$value}</a></li>
 								<!--# } #-->
 							</ul>
 						</div>
@@ -119,10 +119,10 @@
 </div>
 <script>
 //回复提交地址
-var FRESH_DOREPLY = '{@WindUrlHelper::createUrl("my/fresh/doreply")|url}',
-	FORUM_LIST = '{@WindUrlHelper::createUrl("forum/list")|url}',
-	FORUM_JOIN = '{@WindUrlHelper::createUrl("bbs/forum/join")|html}',
-	IMG_UPLOAD = "{@WindUrlHelper::createUrl('bbs/upload/dorun/?_json=1')|html}";
+var FRESH_DOREPLY = '{@url:my/fresh/doreply}',
+	FORUM_LIST = '{@url:forum/list}',
+	FORUM_JOIN = '{@url:bbs/forum/join}',
+	IMG_UPLOAD = "{@url:bbs/upload/dorun?_json=1}";
 
 var fast_upload_config = {
 	size_limit : '{$maxSize}',		//图片大小限制

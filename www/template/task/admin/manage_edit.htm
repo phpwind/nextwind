@@ -6,9 +6,9 @@
 <body>
 <div class="wrap">
 	<div class="nav">
-		<div class="return"><a href="{@WindUrlHelper::createUrl('task/manage/run')}">返回上一级</a></div>
+		<div class="return"><a href="{@url:task/manage/run}">返回上一级</a></div>
 	</div>
-<form class="J_ajaxForm" data-role="list" action="{@WindUrlHelper::createUrl('task/manage/doEdit?_json=1')}" method="post">
+<form class="J_ajaxForm" data-role="list" action="{@url:task/manage/doEdit?_json=1}" method="post">
 <input type="hidden" name="id" value="{$id}">
 <div class="h_a">编辑任务</div>
 	<div class="table_full">

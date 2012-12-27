@@ -10,6 +10,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @package src.service.message.srv
  */
 class PwMessageService {
+	private static $_hookInstance = null;
 	
 	/**
 	 * 按用户名发送私信
@@ -327,20 +328,34 @@ class PwMessageService {
 		return $this->_getUserDs()->editUser($dm, PwUser::FETCH_DATA);
 	}
 	
-	/**
-	 * 
-	 * 添加用户黑名单
-	 * @param int $uid
-	 * @param int $blackUid
-	 */
-	/*public function addBlackUser($uid,$blackUid){
-		return $this->_getWindidMessageService()->addBlackUser($uid, $blackUid);
+	public function synEditUser($uid) {
+		if (!$data = $this->_getUserWindid()->getUserCredit($uid)) {
+			return false;
+		}
+		if (!$data['messages']) return false;
+		Wind::import('SRV:user.dm.PwUserInfoDm');
+		$dm = new PwUserInfoDm($uid);
+		$dm->setMessageCount($data['messages']);
+		
+		Wind::import('LIB:utility.PwWindidStd');
+		$std = PwWindidStd::getInstance('user');
+      	$std->setMethod('editDmUser', 1);
+		if (($result = $this->_getUserDs()->editUser($dm, PwUser::FETCH_DATA)) !== true) {
+			return false;
+		}
+		$message = current($this->_getWindid()->getUnreadDialogsByUid($uid, 1));
+		$last_message = $message['last_message'] ? unserialize($message['last_message']) : array();
+		//发件人通知
+		$params = array('from_uid' => $last_message['from_uid'],'to_uid' => $last_message['to_uid'],'content' => $last_message['content'],'is_send' => 1);
+		$this->_getNoticeService()->sendNotice($message['from_uid'],'message',$message['to_uid'],$params,false);
+	
+		//收件人通知
+		$params = array('from_uid' => $last_message['from_uid'],'to_uid' => $last_message['to_uid'],'content' => $last_message['content']);
+		$this->_getNoticeService()->sendNotice($message['to_uid'],'message',$message['from_uid'],$params,false);
+		
+		return true;
 	}
-
-	public function resetDialogMessages($dialogId){
-		$this->_getWindidMessageService()->resetDialogMessages($dialogId);
-	}
-	*/
+	
 	/**
 	 * 检查发私信权限
 	 * 
@@ -400,6 +415,15 @@ class PwMessageService {
 		return array($touids,$behavior['number'],$dayMax);
 	}
 	
+	/** 
+	 * 获得windidDS
+	 *
+	 * @return WindidUser
+	 */
+	private function _getUserWindid() {
+		return Pw::windid('user');
+	}
+	
 	private function _getWindid() {
 		return WindidApi::api('message');
 	}
@@ -426,7 +450,10 @@ class PwMessageService {
 	 * @return PwHookService
 	 */
  	private function _getHook() {
- 		return new PwHookService('PwMessageService', 'PwMessageDoBase');
+ 		if (self::$_hookInstance == null) {
+			self::$_hookInstance = new PwHookService('PwMessageService', 'PwMessageDoBase');
+		}
+ 		return self::$_hookInstance;
  	}
  	
 	

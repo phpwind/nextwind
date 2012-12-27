@@ -1,6 +1,6 @@
 <div class="content">
 	<template source="profile_run_tab" load="true" />
-	<form class="J_profile_form" action="{@WindUrlHelper::createUrl('profile/index/dorun')}" method="post">
+	<form class="J_profile_form" action="{@url:profile/index/dorun}" method="post">
 	<div class="profile_ct">
 		<dl class="cc">
 			<dt>真实姓名：</dt>
@@ -37,7 +37,7 @@
 			<dd class="J_region_set">
 				<span class="J_region_list">
 				<span class="J_province">{$location[0]['name']}</span> <span class="J_city">{$location[1]['name']}</span> <span class="J_district">{$location[2]['name']}</span></span>
-				<a data-pid="{$location[0]['areaid']}" data-cid="{$location[1]['areaid']}" data-did="{$location[2]['areaid']}" href="{@WindUrlHelper::createUrl('bbs/area/run')}" class="J_region_change">更改</a>
+				<a data-pid="{$location[0]['areaid']}" data-cid="{$location[1]['areaid']}" data-did="{$location[2]['areaid']}" href="{@url:bbs/area/run}" class="J_region_change">更改</a>
 				<input class="J_areaid" type="hidden" name="location" value="{$userinfo['location']}" />
 			</dd>
 		</dl>
@@ -46,7 +46,7 @@
 			<dd class="J_region_set">
 				<span class="J_region_list">
 				<span class="J_province">{$hometown[0]['name']}</span> <span class="J_city">{$hometown[1]['name']}</span> <span class="J_district">{$hometown[2]['name']}</span></span>
-				<a data-pid="{$hometown[0]['areaid']}" data-cid="{$hometown[1]['areaid']}" data-did="{$hometown[2]['areaid']}" href="{@WindUrlHelper::createUrl('bbs/area/run')}" class="J_region_change">更改</a>
+				<a data-pid="{$hometown[0]['areaid']}" data-cid="{$hometown[1]['areaid']}" data-did="{$hometown[2]['areaid']}" href="{@url:bbs/area/run}" class="J_region_change">更改</a>
 				<input class="J_areaid" type="hidden" name="hometown" value="{$userinfo['hometown']}" />
 			</dd>
 		</dl>
@@ -139,4 +139,4 @@ Wind.ready(document, function(){
 	Wind.use('jquery', 'global', GV.JS_ROOT +'pages/profile/profileIndex.js?v=' +GV.JS_VERSION);
 });
 </script>
-<hook class='$hookSrc' method='displayFootHtml' args=''/>
+<hook class='$hookSrc' name='m_PwUserProfileExtends.displayFootHtml' args=''/>

@@ -15,7 +15,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertThread');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwFreshDisplay.php 20746 2012-11-06 10:08:50Z jieyin $
+ * @version $Id: PwFreshDisplay.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package src.service.user.srv
  */
 
@@ -99,7 +99,7 @@ abstract class PwBaseFresh {
 	 * @return string
 	 */
 	protected function _bulidFrom($fid, $fname) {
-		return '版块&nbsp;-&nbsp;<a href="' . WindUrlHelper::createUrl('bbs/thread/run/?fid=' . $fid) . '">' . $fname . '</a>';
+		return '版块&nbsp;-&nbsp;<a href="' . WindUrlHelper::createUrl('bbs/thread/run', array('fid' => $fid)) . '">' . $fname . '</a>';
 	}
 }
 
@@ -137,6 +137,8 @@ class PwTopicFresh extends PwBaseFresh {
 		$topic['pic'] = $topic['aids'] ? $this->_att->fetchOne($id . '_0') : array();
 		$errcode = array();
 		$topic = $this->_bulidContent($topic, $errcode);
+		!$topic['word_version'] && $topic['content'] = Wekit::load('SRV:word.srv.PwWordFilter')->replaceWord($topic['content'], $topic['word_version']);
+		
 		$result = array(
 			'replies' => $topic['replies'],
 			'like_count' => $topic['like_count'],
@@ -189,7 +191,8 @@ class PwReplyFresh extends PwBaseFresh {
 		$reply['pic'] = $reply['aids'] ? $this->_att->fetchOne($reply['tid'] . '_' . $id) : array();
 		$reply = $this->_bulidContent($reply, $errcode);
 		$quote = $this->_bulidContent($quote, $_tmp);
-
+		!$reply['word_version'] && $reply['content'] = Wekit::load('SRV:word.srv.PwWordFilter')->replaceWord($reply['content'], $reply['word_version']);
+		
 		$result = array(
 			'replies' => $reply['replies'],
 			'like_count' => $reply['like_count'],
@@ -209,7 +212,7 @@ class PwReplyFresh extends PwBaseFresh {
 				'created_time' => $quote['created_time'],
 				'subject' => $quote['subject'],
 				'content' => $quote['content'],
-				'url' => WindUrlHelper::createUrl('bbs/read/run?tid=' . $quote['tid']),
+				'url' => WindUrlHelper::createUrl('bbs/read/run', array('tid' => $quote['tid'])),
 				'from' => $from
 			)
 		);
@@ -269,7 +272,7 @@ class PwWeiboFresh extends PwBaseFresh {
 				'created_username' => $quote['created_username'],
 				'created_time' => $quote['created_time'],
 				'content' => $quote['content'],
-				'url' => WindUrlHelper::createUrl('space/index/fresh?uid=' . $quote['created_userid'] . '&weiboid=' . $quote['weibo_id']),
+				'url' => WindUrlHelper::createUrl('space/index/fresh', array('uid' => $quote['created_userid'], 'weiboid' => $quote['weibo_id'])),
 				'from' => $this->_bulidFrom($quote['type'], '')
 			);
 		}

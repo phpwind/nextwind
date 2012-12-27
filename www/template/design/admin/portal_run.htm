@@ -7,22 +7,21 @@
 <div class="wrap J_check_wrap">	
 	<div class="nav">
 		<ul class="cc">
-			<li><a href="{@WindUrlHelper::createUrl('design/page/run')}">系统页面</a></li>
-			<li class="current"><a href="{@WindUrlHelper::createUrl('design/portal/run')}">自定义页面</a></li>
+			<li><a href="{@url:design/page/run}">系统页面</a></li>
+			<li class="current"><a href="{@url:design/portal/run}">自定义页面</a></li>
 		</ul>
 	</div>
 
 	<div class="h_a">功能说明</div>
 	<div class="prompt_text">
 		<ul>
-			<li>根域名设置完后，新增页面的二级域名的域名绑定才能生效。<a href="{@WindUrlHelper::createUrl('rewrite/domain/run')}">设置新增页面的根域名</a></li>
-			<li>"页面ID" 指的是此页面在门户体系里的ID，并不是自定义页面的ID，对应 themes/portal/local/目录里的模版文件夹</li>
+			<li>根域名设置完后，新增页面的二级域名的域名绑定才能生效。<a href="{@url:rewrite/domain/run}">设置新增页面的根域名</a></li>
 		</ul>
 	</div>
 	<div class="cc mb10">
 		<a href="{@url:design/portal/add|pw}" class="btn" target="_blank"><span class="add"></span>添加新页面</a>
 	</div>
-	<form class="J_ajaxForm" method="post" action="{@WindUrlHelper::createUrl('design/portal/batchopen')}">
+	<form class="J_ajaxForm" method="post" action="{@url:design/portal/batchopen}">
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -34,7 +33,7 @@
 			<thead>
 				<tr>
 					<td><label><input type="checkbox" data-checklist="J_check_y" data-direction="y" class="J_check_all" name="checkAll">启用</label></td>
-					<td>页面ID</td>
+					
 					<td>页面名称</td>
 					<td>文件名</td>
 					<td>操作</td>
@@ -44,16 +43,16 @@
 			<tr>
 				<td><input data-yid="J_check_y" data-xid="J_check_x" class="J_check" type="checkbox" name="isopen[{$v['id']}]" value="1" {@Pw::ifcheck($v['isopen'])}>
 				<input type="hidden" name="ids[]" value="{$v['id']}"></td>
-				<td>{$v['page_id']}</td>
-				<td><a href="{@WindUrlHelper::createUrl('special/index/run?id='.$v['id'],array(),'','pw')}" target="_blank">{$v['title']}</a></td>
+				
+				<td><a href="{@url:special/index/run?id=$v['id']|pw}" target="_blank">{$v['title']}</a></td>
 				<td>{$v['pagename']}</td>
 				<td>
-					<a href="{@WindUrlHelper::createUrl('special/index/run?id='.$v['id'],array(),'','pw')}" class="mr5" target="_blank">[查看]</a>
+					<a href="{@url:special/index/run?id=$v['id']|pw}" class="mr5" target="_blank">[查看]</a>
 					<a href="{@url:design/portal/edit?id=$v['id']|pw}" class="mr5" target="_blank">[编辑]</a>
-					<a href="{@WindUrlHelper::createUrl('design/portal/delete?id='. $v[id])}" data-msg="确定要删除此页面？" class="mr5 J_ajax_del">[删除]</a>
-					<a href="{@WindUrlHelper::createUrl('design/permissions/page?id='.$v['page_id'])}" class="mr5">[权限管理]</a>
-					<a href="{@WindUrlHelper::createUrl('design/module/run?pageid='.$v['page_id'])}" class="mr5" >[模块管理]</a>
-					<a href="{@WindUrlHelper::createUrl('design/page/doclear?id='.$v['page_id'])}" class="mr5 J_ajax_del" data-msg="您确定要清空页面上的所有模块？<br>清空后将不可恢复！">[清空模块]</a>
+					<a href="{@url:design/portal/delete?id=$v[id]}" data-msg="确定要删除此页面？" class="mr5 J_ajax_del">[删除]</a>
+					<a href="{@url:design/permissions/page?id=$v['page_id']}" class="mr5">[权限管理]</a>
+					<a href="{@url:design/module/run?pageid=$v['page_id']}" class="mr5" >[模块管理]</a>
+					<a href="{@url:design/page/doclear?id=$v['page_id']}" class="mr5 J_ajax_del" data-msg="您确定要清空页面上的所有模块？<br>清空后将不可恢复！">[清空模块]</a>
 				</td>
 			</tr>
 			<!--# endforeach; #-->

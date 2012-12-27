@@ -15,7 +15,7 @@
 					<div class="reg_cont">
 						<div class="reg_form">
 							<div class="tips">验证通过，请设置新密码。如有设置安全问题和答案，请登录后重新设置。</div>
-							<form id="J_reset_pwd_form" action="{@WindUrlHelper::createUrl('u/findPwd/doresetpwd')}" method="post">
+							<form id="J_reset_pwd_form" action="{@url:u/findPwd/doresetpwd}" method="post">
 								<input type="hidden" name="statu" value="{$statu}">
 								<input type="hidden" name="step" value="end" >
 								<dl>
@@ -79,7 +79,7 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 			password : {
 				required	: true,
 				remote : {
-					url : '{@WindUrlHelper::createUrl("u/register/checkpwd")|url}',		//验证密码
+					url : '{@url:u/register/checkpwd}',		//验证密码
 					dataType: "json",
 					type : 'post',
 					data : {
@@ -99,7 +99,7 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 			code : {
 				required : true,
 				remote : {
-					url : "{@WindUrlHelper::createUrl('u/login/checkverify')|url}",
+					url : "{@url:u/login/checkverify}",
 					dataType: "json",
 					data : {
 						code :  function(){
@@ -126,7 +126,7 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 					
 					//过滤tab键
 					if(e.keyCode !== 9) {
-						$.post('{@WindUrlHelper::createUrl("u/register/checkpwdStrong")|url}', {
+						$.post('{@url:u/register/checkpwdStrong}', {
 							pwd : reset_password.val()
 						}, function(data){
 							if(data.state === 'success') {

@@ -1,11 +1,11 @@
 <?php
 Wind::import('ADMIN:library.AdminBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PageController.php 19854 2012-10-19 02:11:42Z gao.wanggao $ 
+ * @version $Id: PageController.php 22678 2012-12-26 09:22:23Z jieyin $ 
  * @package 
  */
 
@@ -19,16 +19,14 @@ class PageController extends AdminBaseController {
 		list($start, $perpage) = Pw::page2limit($page, $perpage);
 		$list = $this->_getPageDs()->getPageList(PwDesignPage::SYSTEM, $start, $perpage);
 		$count =  $this->_getPageDs()->countPage(PwDesignPage::SYSTEM);
-		$path = Wind::getRealPath('SRV:design.srv.router.router');
-		if (!is_file($path)) return false;
-		$sysPage = @include $path;
+		$sysPage = Wekit::load('design.srv.router.PwDesignRouter')->get();
 		foreach ($list AS &$v) {
 			if (isset($sysPage[$v['page_router']])){ 
 				list($pagename, $unique) = $sysPage[$v['page_router']];
 			}
 			list($m,$c,$a,$id) = explode('|', $v['page_router']);
 			if ($unique) {
-				$v['url'] = WindUrlHelper::createUrl($m .'/'. $c .'/'. $a .'/?'.$unique .'=' . $v['page_unique'], array(), '', 'pw');
+				$v['url'] = WindUrlHelper::createUrl($m .'/'. $c .'/'. $a, array($unique => $v['page_unique']), '', 'pw');
 			} else {
 				$v['url'] = WindUrlHelper::createUrl($m .'/'. $c .'/'. $a, array(), '', 'pw');
 			}
@@ -65,8 +63,9 @@ class PageController extends AdminBaseController {
 	 */
 	public function doclearAction() {
 		$pageid = (int)$this->getInput('id', 'get');
-		$pageDs = $this->_getPageDs();
-		$pageInfo = $pageDs->getPage($pageid);
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+    	$pageBo = new PwDesignPageBo($pageid);
+		$pageInfo = $pageBo->getPage();
 		if (!$pageInfo) $this->showError("operate.fail");
 		
 		$ids = explode(',', $pageInfo['module_ids']);
@@ -95,14 +94,20 @@ class PageController extends AdminBaseController {
 		//segment
 		$this->_getSegmentDs()->deleteSegmentByPageid($pageid);
 		
+		$tplPath = $pageBo->getTplPath();
+		$this->_getDesignService()->clearTemplate($pageid, $tplPath);
 		//bak
 		$bakDs->deleteByPageId($pageid);
 		if ($pageInfo['page_type'] == PwDesignPage::PORTAL) {
 			Wind::import('SRV:design.dm.PwDesignPortalDm');
 			$dm = new PwDesignPortalDm($pageInfo['page_unique']);
-			$dm->setTemplate(0);
+			$dm->setTemplate($tplPath);
 			$this->_getPortalDs()->updatePortal($dm);
-			$this->_getDesignService()->clearTemplate($pageid);
+			
+			$srv = Wekit::load('design.srv.PwDesignService');
+			$result = $srv->defaultTemplate($pageid, $tplPath);
+		} else {
+			$this->_getPageDs()->deletePage($pageid);
 		}
 		$this->_getDesignService()->clearCompile();
 		$this->showMessage("operate.success");

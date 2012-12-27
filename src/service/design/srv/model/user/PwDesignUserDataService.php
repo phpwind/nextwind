@@ -12,7 +12,7 @@ Wind::import('SRV:education.srv.helper.PwEducationHelper');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwDesignUserDataService.php 22057 2012-12-19 02:08:40Z gao.wanggao $
+ * @version $Id: PwDesignUserDataService.php 22678 2012-12-26 09:22:23Z jieyin $
  * @package src.service.design.srv.model.user
  */
 class PwDesignUserDataService extends PwDesignModelBase {
@@ -137,7 +137,7 @@ class PwDesignUserDataService extends PwDesignModelBase {
 			$_one = array();
 			$_one['uid'] = $_item['uid'];
 			$_one['username'] = $_item['username'];
-			$_one['url'] = WindUrlHelper::createUrl('space/index/run?uid=' . $_item['uid'], array(), '', 'pw');
+			$_one['url'] = WindUrlHelper::createUrl('space/index/run', array('uid' => $_item['uid']), '', 'pw');
 			$_one['smallavatar'] = Pw::getAvatar($_uid, 'small');
 			$_one['middleavatar'] = Pw::getAvatar($_uid, 'middle');
 			$_one['bigavatar'] = Pw::getAvatar($_uid, 'big');

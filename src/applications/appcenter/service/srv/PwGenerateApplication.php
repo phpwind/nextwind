@@ -6,7 +6,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwGenerateApplication.php 21863 2012-12-14 07:00:10Z long.shi $
+ * @version $Id: PwGenerateApplication.php 22563 2012-12-25 08:57:37Z long.shi $
  * @package appcenter.service.srv
  */
 class PwGenerateApplication {
@@ -185,7 +185,7 @@ class PwGenerateApplication {
 		$extends = ($reflection->isInterface() ? 'implements ' : 'extends ') . $interfacename;
 		$manifest = Wind::getComponent('configParser')->parse($this->baseDir . '/Manifest.xml');
 		$hook = array(
-			$this->alias => array(
+			'app_' . $this->alias => array(
 				'class' => 'EXT:' . $this->alias . '.service.srv.' . $classname, 
 				'description' => 'this is another ' . $hookname));
 		$manifest['inject-services'][$hookname] = $hook;
@@ -232,7 +232,7 @@ class PwGenerateApplication {
 		$classname = $this->_ucwords($this->alias . '_' . $thing) . 'Do';
 		$method = WindUtility::lcfirst($this->_ucwords($this->alias)) . 'Do';
 		$hook = array(
-			$this->alias => array(
+			'app_' . $this->alias => array(
 				'class' => 'EXT:' . $this->alias . '.service.srv.' . $classname, 
 				'loadway' => 'load', 
 				'method' => $method, 
@@ -290,7 +290,7 @@ class PwGenerateApplication {
 			$classname = $this->_ucwords($this->alias) . '_ConfigDo';
 			$hook = array(
 				's_admin_menu' => array(
-					$this->alias => array(
+					'app_' . $this->alias => array(
 						'class' => 'EXT:' . $this->alias . '.service.srv.' . $classname, 
 						'loadway' => 'load', 
 						'method' => 'getAdminMenu', 
