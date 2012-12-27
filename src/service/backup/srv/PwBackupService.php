@@ -13,12 +13,11 @@ class PwBackupService {
 	
 	private $_backupTipLength;
 	private $_backupTip;
-	private $_version;
+	private $_version = NEXT_VERSION;
 	
 	public function __construct() {
 		$this->_backupTip = $this->getBackupTip();
 		$this->_backupTipLength = strlen($this->_backupTip);	
-		$this->_version = Wekit::app()->version;
 	}
 	
 	public function getSpecialTables() {

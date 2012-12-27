@@ -27,7 +27,7 @@ Wind::import("WIND:db.WindResultSet");
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-23
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindConnection.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindConnection.php 3878 2012-12-27 07:13:41Z yishuo $
  * @package db
  */
 class WindConnection extends WindModule {
@@ -292,6 +292,7 @@ class WindConnection extends WindModule {
 			$dbHandleClass = Wind::import($dbHandleClass);
 			$this->_dbHandle = new $dbHandleClass($this->_dsn, $this->_user, $this->_pwd, (array) $this->_attributes);
 			$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 			$this->_dbHandle->setCharset($this->_charset);
 		} catch (PDOException $e) {
 			$this->close();

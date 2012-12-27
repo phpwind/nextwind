@@ -158,6 +158,7 @@
 				<div class="operate cc">
 					<a rel="nofollow" href="{@url:my/follow/add?uid=$read['created_userid']}" data-uid="{$read['created_userid']}" class="follow J_read_follow J_qlogin_trigger">加关注</a>
 					<a rel="nofollow" href="{@url:message/message/pop?username=$read['created_username']}" class="message J_send_msg_pop J_qlogin_trigger" data-name="{$read['created_username']}">写私信</a>
+					<hook class='$threadDisplay' name="m_PwThreadDisplay.createHtmlForUserButton" args="array($users[$read['created_userid']], $read)" />
 				</div>
 				<!--# } #-->
 				<!--# } #-->

@@ -176,7 +176,7 @@ $combined2 = array('down','lock');
 					<select id="J_postmanage_type_topictype" class="mr10" name="topictype">
 						<option value="0">请选择分类</option>
 						<!--# foreach($topicTypes as $k => $v) { #-->
-						<option value="{$k}">{$v['name']}</option>
+						<option value="{$k}">{@strip_tags($v['name'])}</option>
 						<!--# } #-->
 					</select>
 					<select id="J_postmanage_subtopictype" class="mr10" style="display:none;" name="sub_topictype">

@@ -8,7 +8,7 @@
 				<span class="unit">学校名称</span>
 				<span class="time">入学年份</span>
 			</li>
-<!--#var_dump($args); if ($list) { #-->
+<!--# if ($list) { #-->
 	<!--#foreach ($list as $id => $item) {#-->
 			<li>
 				<span class="fr"><a href="{@url:profile/education/edit?id=$id}" data-pid="{$item['areaid'][0]}" data-cid="{$item['areaid'][1]}" data-did="{$item['areaid'][2]}" data-degreeid="{$item['degreeid']}" data-school="{$item['school']}" data-schoolid="{$item['schoolid']}" data-startyear="{$item['start_time']}" class="mr20 J_school_edit">编辑</a><a href="{@WindUrlHelper::createUrl('profile/education/delete?id=' . $id . '&page=' . $page, $args)|url}" class="J_edu_del">删除</a></span>

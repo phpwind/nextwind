@@ -63,7 +63,7 @@ class PwMobileService {
 	 * 
 	 */
 	public function checkVerify($mobile, $inputCode) {
-		if (!$mobile || !$inputCode) return new PwError('USER:mobile.code.empty');
+		if (!$mobile || !$inputCode) return new PwError('USER:mobile.code.mobile.empty');
 		$info = $this->_getDs()->getMobileVerify($mobile);
 		if (!$info) return new PwError('USER:mobile.code.error');
 		if ($info['expired_time'] < Pw::getTime()) return new PwError('USER:mobile.code.expired_time.error');

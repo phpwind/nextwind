@@ -37,10 +37,10 @@
 						<!--公告-->
 						<component tpl='TPL:announce.announce' class='SRV:announce.srv.PwAnnounceService' method='getAnnounceForBbsScroll' args='array()'/>
 						<!--公告结束-->
-						<!--# if ($threadList) { #-->
+						<!--# if ($threaddb) { #-->
 						<div class="thread_posts_list">
 							<table width="100%" id="J_posts_list" summary="帖子列表">
-								<!--# foreach ($threadList as $key => $value) { #-->
+								<!--# foreach ($threaddb as $key => $value) { #-->
 								<tr>
 									<td class="author"><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run?uid=$value['created_userid']}"><img src="{@Pw::getAvatar($value['created_userid'], 'small')}" onerror="this.onerror=null;this.src='{@G:url.images}/face/face_small.jpg'" width="45" height="45" alt="{$value['created_username']}" /></a></td>
 									<td class="subject">
@@ -52,7 +52,8 @@
 											<!--# if ($forums[$value['fid']]) { #-->
 											<a href="{@url:bbs/thread/run?fid=$value['fid']}" class="st">[{@$forums[$value['fid']]['name']|html}]</a>
 											<!--# } #-->
-											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}" title="{$value['subject']}">{@Pw::substrs($value['subject'],$numofthreadtitle)}</a><!--# if ($value['ifupload']) { #--><span class="posts_icon"><i class="icon_{$uploadIcon[$value['ifupload']]}" title="{$icon[$uploadIcon[$value['ifupload']]]}"></i></span><!--# } #-->
+											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}" title="{$value['subject']}">{@Pw::substrs($value['subject'],$numofthreadtitle)}</a>
+											<hook class='$threadList' name='m_PwThreadList.createHtmlAfterSubject' args="array($value)" /><!--# if ($value['ifupload']) { #--><span class="posts_icon"><i class="icon_{$uploadIcon[$value['ifupload']]}" title="{$icon[$uploadIcon[$value['ifupload']]]}"></i></span><!--# } #-->
 										</p>
 										<p class="info">
 											楼主：<a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run?uid=$value['created_userid']}">{$value['created_username']}</a><span><!--# echo Pw::time2str($value['created_time'], 'Y-m-d');#--></span>
@@ -137,7 +138,7 @@
 <script>
 var FID = '{$pwforum->fid}';
 Wind.use('jquery', 'global', function(){
-<!--# if (!$threadList) { #-->
+<!--# if (!$threaddb) { #-->
 	//无内容 发帖引导
 	Wind.js(GV.JS_ROOT + 'pages/common/postGuide.js?v=' + GV.JS_VERSION);
 <!--# } else { #-->

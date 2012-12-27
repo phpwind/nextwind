@@ -6,7 +6,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 20124 2012-10-23 10:11:39Z jieyin $
+ * @version $Id: IndexController.php 22775 2012-12-27 06:57:28Z jieyin $
  * @package forum
  */
 
@@ -18,7 +18,8 @@ class IndexController extends PwBaseController {
 		$page = intval($this->getInput('page', 'get'));
 		
 		$threadList = new PwThreadList();
-		// $this->runHook('c_thread_run', $forumDisplay);
+		$this->runHook('c_index_run', $threadList);
+
 		$threadList->setPage($page)->setPerpage(Wekit::C('bbs', 'thread.perpage'));
 		
 		Wind::import('SRV:forum.srv.threadList.PwNewThread');
@@ -44,7 +45,8 @@ class IndexController extends PwBaseController {
 			$operateThread = Pw::subArray($operateThread, array('delete'));
 		}
 		
-		$this->setOutput($threaddb, 'threadList');
+		$this->setOutput($threadList, 'threadList');
+		$this->setOutput($threaddb, 'threaddb');
 		$this->setOutput($forums, 'forums');
 		$this->setOutput($threadList->icon, 'icon');
 		$this->setOutput($threadList->uploadIcon, 'uploadIcon');

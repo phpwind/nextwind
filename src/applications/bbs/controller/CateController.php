@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: CateController.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: CateController.php 22775 2012-12-27 06:57:28Z jieyin $
  * @package forum
  */
 
@@ -49,6 +49,8 @@ class CateController extends PwBaseController {
 		$orderby = $this->getInput('orderby', 'get');
 		
 		$threadList = new PwThreadList();
+		$this->runHook('c_cate_run', $threadList);
+
 		$threadList->setPage($page)
 			->setPerpage($pwforum->forumset['threadperpage'] ? $pwforum->forumset['threadperpage'] : Wekit::C('bbs', 'thread.perpage'))
 			->setIconNew($pwforum->foruminfo['newtime']);
@@ -73,8 +75,9 @@ class CateController extends PwBaseController {
 		if ($isCommon && $threadList->total > 12000) {
 			Wekit::load('forum.PwThreadCateIndex')->deleteOver($fid, $threadList->total - 10000);
 		}
-
-		$this->setOutput($threadList->getList(), 'threadList');
+		
+		$this->setOutput($threadList, 'threadList');
+		$this->setOutput($threadList->getList(), 'threaddb');
 		$this->setOutput($tab, 'tab');
 		$this->setOutput($defaultOrderby, 'defaultOrderby');
 		$this->setOutput($orderby, 'orderby');

@@ -357,7 +357,7 @@
 				hideResultOptions();
 				return;
 			}
-			resultBox.html('<ul class="edit_menu_select" id="atResult">'+ arr.join('') + '</ul>');
+			resultBox.html('<ul class="edit_menu_select edit_atul" id="atResult">'+ arr.join('') + '</ul>');
 			resultBox.find('li:first').addClass('activate');
 			var iframeOffset = _self.iframe.offset();
 			resultBox.css({

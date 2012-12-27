@@ -108,17 +108,17 @@
                 var _this = this;
                 this.param['start'] = (this.start-1) * this.getNum;
                 this.param['_rand'] = + new Date();
+
+                if(_this.start > 1){
+                    $("#J_loading").show();
+                }
+                _this.isLoading = true;
+                
                 $.ajax({
                         type: "get",
                         url: this.url,
                         dataType: 'json',
                         data: this.param,
-                        beforeSend: function () {
-                            if(_this.start > 1){
-                                $("#J_loading").show();
-                            }
-                            _this.isLoading = true;
-                        },
                         success: function (data) {
                             _this.isLoading = false;
                             var state = data.state;

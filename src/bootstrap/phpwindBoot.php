@@ -5,12 +5,12 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: phpwindBoot.php 22397 2012-12-24 03:28:46Z xiaoxia.xuxx $
+ * @version $Id: phpwindBoot.php 22823 2012-12-27 10:32:19Z jieyin $
  * @package wekit
  */
 class phpwindBoot {
 	public $charset; //程序编码
-	public $version = '9.0RC';
+	public $version = '9.0';
 	public $baseUrl; //网站地址
 	public $res; //res
 	public $css;

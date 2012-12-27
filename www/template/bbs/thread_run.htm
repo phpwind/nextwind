@@ -210,10 +210,12 @@
 <script>
 var FID = '{$pwforum->fid}';
 Wind.use('jquery', 'global', function(){
+<!--# if ($operateThread) { #-->
+	//管理
+	Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v='+ GV.JS_VERSION);
+<!--# } #-->
 
 <!--# if ($loginUser->isExists()) { #-->
-	Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v='+ GV.JS_VERSION);
-
 	var JOIN_URL = "{@url:bbs/forum/join}",		//版块加入
 			QUIT_URL = "{@url:bbs/forum/quit}",		//版块退出
 			lock = false;

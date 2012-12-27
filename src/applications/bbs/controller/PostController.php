@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PostController.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: PostController.php 22782 2012-12-27 07:48:08Z jieyin $
  * @package forum
  */
 
@@ -142,7 +142,7 @@ class PostController extends PwBaseController {
 			$post = Wekit::load('thread.PwThread')->getPost($rpid);
 			if ($post && $post['tid'] == $tid && $post['ischeck']) {
 				$post['content'] = $post['ifshield'] ? '此帖已被屏蔽' : Pw::stripWindCode(preg_replace('/\[quote(=.+?\,\d+)?\].*?\[\/quote\]/is', '', $post['content']));
-				$content = '[quote=' . $post['created_username'] . ',' . $rpid . ']' . Pw::substrs($post['content'], 120) . '[/quote]' . $content;
+				$content = '[quote=' . $post['created_username'] . ',' . $rpid . ']' . Pw::substrs($post['content'], 120) . '[/quote] ' . $content;
 			} else {
 				$rpid = 0;
 			}

@@ -182,8 +182,22 @@ return array(
 			)
 		)
 	),
+	'c_index_run' => array(
+		'description' => '新帖列表页',
+		'param' => array(),
+		'interface' => '',
+		'list' => array(
+		),
+	),
+	'c_cate_run' => array(
+		'description' => '分类帖子列表页',
+		'param' => array(),
+		'interface' => '',
+		'list' => array(
+		),
+	),
 	'c_thread_run' => array(
-		'description' => '帖子列表页',
+		'description' => '版块帖子列表页',
 		'param' => array(),
 		'interface' => '',
 		'list' => array(

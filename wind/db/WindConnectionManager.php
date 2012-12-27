@@ -30,7 +30,7 @@ Wind::import("WIND:db.WindConnection");
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-23
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindConnectionManager.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindConnectionManager.php 3880 2012-12-27 07:23:26Z yishuo $
  * @package db
  */
 class WindConnectionManager extends WindConnection {
@@ -94,18 +94,10 @@ class WindConnectionManager extends WindConnection {
 	public function init() {
 		try {
 			if (!isset($this->pool[$this->except['_current']])) {
-				$driverName = $this->getDriverName();
-				$dbHandleClass = "WIND:db." . $driverName . ".Wind" . ucfirst($driverName) . "PdoAdapter";
-				$dbHandleClass = Wind::import($dbHandleClass);
-				$_dbHandle = new $dbHandleClass($this->_dsn, $this->_user, $this->_pwd, (array) $this->_attributes);
-				$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$_dbHandle->setCharset($this->_charset);
-				$this->pool[$this->except['_current']] = $_dbHandle;
-			}
-			$this->_dbHandle = $this->pool[$this->except['_current']];
-			if (WIND_DEBUG & 2) Wind::getComponent('windLogger')->info(
-				"db.WindConnectionManager.init() Initialize db connection successful. use '" . $this->except['_current'] . "'", 
-				'db');
+				parent::init();
+				$this->pool[$this->except['_current']] = $this->_dbHandle;
+			} else
+				$this->_dbHandle = $this->pool[$this->except['_current']];
 		} catch (PDOException $e) {
 			$this->close();
 			throw new WindDbException($e->getMessage());
@@ -116,12 +108,14 @@ class WindConnectionManager extends WindConnection {
 	 * (non-PHPdoc) @see WindConnection::parseQueryString()
 	 */
 	protected function parseQueryString($sql) {
-		$sql = preg_replace_callback('/^([a-zA-Z]*)\s[\w\*\s]+(\{\{([\w]+\:)?([\w]+\.)?([\w]+)\}\})?[\w\s\<\=\:]*/i', 
+		$sql = preg_replace_callback(
+			'/^([a-zA-Z]*)\s[\w\*\s]+(\{\{([\w]+\:)?([\w]+\.)?([\w]+)\}\})?[\w\s\<\=\:]*/i', 
 			array($this, '_pregQueryString'), $sql);
 		if (!$this->except['_current']) {
 			if (!isset($this->except['_db'][$this->tableName])) {
 				foreach ((array) $this->except['_except'] as $value) {
-					preg_match('/' . str_replace($this->wildcard, '\w*', $value) . '/i', $this->tableName, $matchs);
+					preg_match('/' . str_replace($this->wildcard, '\w*', $value) . '/i', 
+						$this->tableName, $matchs);
 					if (!empty($matchs)) {
 						$_c = $this->except['_db'][$value];
 						break;
@@ -149,7 +143,8 @@ class WindConnectionManager extends WindConnection {
 	 */
 	private function _resolveCurrentDb($_c) {
 		if (empty($_c) || empty($_c['_m'])) throw new WindDbException(
-			'[db.WindConnectionManager._resolveCurrentDb] db error.', WindDbException::DB_BUILDER_NOT_EXIST);
+			'[db.WindConnectionManager._resolveCurrentDb] db error.', 
+			WindDbException::DB_BUILDER_NOT_EXIST);
 		
 		switch ($this->sqlType) {
 			case 'SELECT':
@@ -199,11 +194,12 @@ class WindConnectionManager extends WindConnection {
 		unset($this->_config['connections']['except']);
 		$this->_config = $this->_config['connections'];
 		$_dbNames = array_keys($this->_config);
-		if (empty($_dbNames)) throw new WindDbException('[db.WindConnectionManager._initConfig] db config is required.');
+		if (empty($_dbNames)) throw new WindDbException(
+			'[db.WindConnectionManager._initConfig] db config is required.');
 		$this->_resetConnection($_dbNames[0]);
 		$this->except['_default']['_m'] = $_dbNames[0];
-		if ($_except) preg_replace_callback('/([\w\*\,]+):([\w]+)\|*([\w\,]+)*/i', array($this, '_pregExcept'), 
-			$_except);
+		if ($_except) preg_replace_callback('/([\w\*\,]+):([\w]+)\|*([\w\,]+)*/i', 
+			array($this, '_pregExcept'), $_except);
 	}
 
 	/**

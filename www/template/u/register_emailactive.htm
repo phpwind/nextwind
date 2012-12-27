@@ -64,14 +64,12 @@ Wind.use('jquery', 'global', 'ajaxForm', 'emailAutoMatch', 'draggable', 'validat
 		if(!send_able) {
 			return false;
 		}
+		send_able = false;
 		
 		Wind.Util.ajaxMaskShow();
 		$.ajax({
 			type : 'post',
 			url : $(this).attr('href'),
-			beforeSend : function(){
-				send_able = false;
-			},
 			dataType : 'json',
 			success : function(data){
 				Wind.Util.ajaxMaskRemove();

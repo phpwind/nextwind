@@ -3,7 +3,6 @@
 !defined('WINDID_PATH') && define('WINDID_PATH', WINDID);
 !defined('WINDID_VERSION') && define('WINDID_VERSION', '0.0.2');
 if (!defined('WEKIT_VERSION')) {
-	
 	require_once (WINDID.'/../../wind/Wind.php');
 	$database =  include WINDID.'/conf/database.php';
 	Wind::register(WINDID, 'WINDID');

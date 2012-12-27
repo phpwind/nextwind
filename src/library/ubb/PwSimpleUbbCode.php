@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSimpleUbbCode.php 22725 2012-12-26 13:07:34Z jinlong.panjl $
+ * @version $Id: PwSimpleUbbCode.php 22769 2012-12-27 04:13:10Z jieyin $
  * @package lib.utility
  */
 
@@ -164,7 +164,7 @@ class PwSimpleUbbCode {
 	public static function convertTable($message, $max = 0) {
 		$t = 0;
 		while (self::hasTag($message, 'table')) {
-			$message = preg_replace('/\[table(?:=(\d{1,3}(?:%|px)?)(?:,(#\w{6})?)?(?:,(#\w{6})?)?(?:,(\d+))?(?:,(\d+))?)?\](?!.*(\[table))(.*?)\[\/table\]/eis', "self::_pushCode('createTable', '\\7','\\1','\\2','\\3','\\4','\\5')", $message);
+			$message = preg_replace('/\[table(?:=(\d{1,4}(?:%|px)?)(?:,(#\w{6})?)?(?:,(#\w{6})?)?(?:,(\d+))?(?:,(\d+))?(?:,(left|center|right))?)?\](?!.*(\[table))(.*?)\[\/table\]/eis', "self::_pushCode('createTable', '\\8','\\1','\\2','\\3','\\4','\\5','\\6')", $message);
 			if (++$t > $max) break;
 		}
 		return $message;
@@ -630,7 +630,7 @@ class PwSimpleUbbCode {
 	 * @param int $borderWidth 边框大小
 	 * @return string
 	 */
-	public static function createTable($length, $text, $width = '', $bgColor = '', $borderColor = '', $borderWidth = '') {
+	public static function createTable($length, $text, $width = '', $bgColor = '', $borderColor = '', $borderWidth = '', $align = '') {
 		return self::_substrs('[表格]', $length);
 		//不显示表格内容
 		$text = trim(str_replace(array('\\"', '<br />'), array('"', "\n"), $text));

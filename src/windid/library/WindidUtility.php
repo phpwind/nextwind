@@ -4,7 +4,7 @@
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidUtility.php 22349 2012-12-21 10:05:46Z gao.wanggao $
+ * @version $Id: WindidUtility.php 22791 2012-12-27 08:11:54Z gao.wanggao $
  * @package Windid.library
  */
 class WindidUtility {
@@ -72,6 +72,55 @@ class WindidUtility {
 			return array();
 		}
 		return $result;
+	}
+	
+	public static function uploadRequest($url, $file, $timeout = 30) {
+		if (!function_exists('fsockopen')) {
+			$urlArr = parse_url($url);
+			$port = isset($urlArr['port']) ? $urlArr['port'] : 80;
+        	$boundary = "---------------------".substr(md5(rand(0,32000)),0,10);
+	        $header = "POST ".$urlArr['path'].'?'. $urlArr['query']." HTTP/1.0\r\n";
+	        $header .= "Host: ".$urlArr['host']."\r\n";
+	        $header .= "Content-type: multipart/form-data, boundary=".$boundary."\r\n";
+			if (!file_exists($file)) return false;
+			$imageInfo = @getimagesize($file);
+			$exts = array('1'=>'gif', '2'=>'jpg', '3'=>'png');
+			if (!isset($exts[$imageInfo[2]])) continue;
+			$ext = $exts[$imageInfo[2]];
+			$filename = rand(1000,9999). '.'.$ext;
+	        $data = '';
+	        $data .= "--$boundary\r\n";
+	        $data .="Content-Disposition: form-data; name=\"FileData\"; filename=\"".$filename."\"\r\n";
+	        $data .= "Content-Type: ".$imageInfo['mime']."\r\n\r\n";
+	        $data .= WindFile::read($file)."\r\n";
+	        $data .="--$boundary--\r\n";
+      	 	$header .= "Content-length: " . strlen($data) . "\r\n\r\n";
+       		$fp = fsockopen($urlArr['host'], $port);
+        	fputs($fp, $header.$data);
+        	$response = '';
+		    while (!feof($fp)) {
+		        $response .= fgets($fp, 128);
+		    }
+		    fclose($fp);
+	 		preg_match("/Content-Length:.?(\d+)/", $response, $matches);
+			if (isset($matches[1])) {
+				$response = substr($response, strlen($response) - intval($matches[1]));
+			}
+			return $response;
+	        
+		} elseif (function_exists('curl_init')) {
+			 $curl = curl_init($url);  
+		     curl_setopt($curl,CURLOPT_POST, true);  
+		     curl_setopt($curl,CURLOPT_POSTFIELDS, $file);
+		     curl_setopt($curl,CURLOPT_TIMEOUT, $timeout);  
+		     curl_setopt($curl,CURLOPT_FOLLOWLOCATION, false);  
+		     curl_setopt($curl,CURLOPT_RETURNTRANSFER, true);    
+		     $response = curl_exec($curl);  
+			 curl_close($curl);
+			 return $response;
+		} else {
+			return false;
+		}
 	}
 	
 	public static function buildClientUrl($url, $notiFile) {

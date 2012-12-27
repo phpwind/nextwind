@@ -8,7 +8,7 @@ Wind::import('WIND:ftp.WindSocketFtp');
  * @author xiaoxia.xu<xiaoxia.xuxx@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: UpgradeController.php 22749 2012-12-27 03:14:34Z xiaoxia.xuxx $
+ * @version $Id: UpgradeController.php 22845 2012-12-27 13:11:22Z xiaoxia.xuxx $
  * @package applications.install.controller
  */
 class UpgradeController extends WindController {
@@ -62,7 +62,6 @@ class UpgradeController extends WindController {
 		$cookie_pre = WindUtility::generateRandStr(3);
 		Wekit::load('config.PwConfig')->setConfig('site', 'hash', $site_hash);
 		Wekit::load('config.PwConfig')->setConfig('site', 'cookie.pre', $cookie_pre);
-		//Wekit::load('config.PwConfig')->setConfig('site', 'info.mail', $db['founder']['manager_email']);
 		Wekit::load('config.PwConfig')->setConfig('site', 'info.url', PUBLIC_URL);
 		Wekit::load('nav.srv.PwNavService')->updateConfig();
 		
@@ -81,7 +80,7 @@ class UpgradeController extends WindController {
 		/* @var $usergroup PwUserGroupsService */
 		$usergroup = Wekit::load('SRV:usergroup.srv.PwUserGroupsService');
 		$usergroup->updateLevelCache();
-		$usergroup->updateGroupCache(range(1, 16));
+		$usergroup->updateGroupCache();
 		$usergroup->updateGroupRightCache();
 		/* @var $emotion PwEmotionService */
 		$emotion = Wekit::load('SRV:emotion.srv.PwEmotionService');
@@ -119,7 +118,7 @@ class UpgradeController extends WindController {
 		list($ftp, $attachDir) = $this->_getFtp();
 		$defauleDir = rtrim(Wind::getRealDir('PUBLIC:res.images.face', true), '/');
 		
-		list($start_uid, $end) = $this->_getStartAndLimit(intval($this->getInput('uid', 'get')), $end_uid);
+		list($start_uid, $end) = $this->_getStartAndLimit(intval($this->getInput('uid', 'get')), $end_uid, $ftp ? true : false);
 		while ($start_uid < $end) {
 			$res = $this->_getOldAvatarPath($attachDir, $start_uid);
 			$big = $res['big'];
@@ -188,13 +187,17 @@ class UpgradeController extends WindController {
 	 *
 	 * @param int $start
 	 * @param int $max
+	 * @param boolean $isFtp
 	 * @return array
 	 */
-	private function _getStartAndLimit($start_uid, $end_uid) {
-// 		$_lt = $this->_getConfig('limit');
-// 		$_lt = is_numeric($_lt) ? abs($_lt) : 1;
-// 		$_lt == 0 && $_lt = 1;
+	private function _getStartAndLimit($start_uid, $end_uid, $isFtp = true) {
 		$limit = 10;
+		if (!isFtp) {
+			$_lt = $this->_getConfig('limit');
+			$_lt = is_numeric($_lt) ? abs($_lt) : 1;
+			$_lt == 0 && $_lt = 1;
+			$limit = 1000 * $_lt;
+		}
 		
 		if ($start_uid < 1) $start_uid = 1;
 		if ($start_uid >= $end_uid) {
@@ -266,18 +269,25 @@ class UpgradeController extends WindController {
 		
 		Wind::import('WINDID:service.app.dm.WindidAppDm');
 		$dm = new WindidAppDm();
-		$dm->setApiFile('windid.php')->setIsNotify('1')->setIsSyn('1')->setAppName('PHPWIND9.0')->setSecretkey(
-			$key)->setAppUrl($baseUrl)->setCharset($charset)->setAppIp('');
+		$dm->setApiFile('windid.php')
+			->setIsNotify('1')
+			->setIsSyn('1')
+			->setAppName('phpwind9.0')
+			->setSecretkey($key)
+			->setAppUrl($baseUrl)
+			->setCharset($charset)
+			->setAppIp('');
 		$result = Windid::load('app.WindidApp')->addApp($dm);
 		if ($result instanceof WindidError) $this->showError('INSTALL:windid.init.fail');
 		$config = array(
-			'windid' => 'local', 
-			'serverUrl' => $baseUrl, 
-			'clientId' => (int) $result, 
-			'clientKey' => $key, 
-			'clientDb' => 'mysql', 
-			'clientCharser' => $charset);
-		WindFile::savePhpData(Wind::getRealPath('ROOT:conf.windidconfig.php', true), $config);
+			'windid'  => 'local',
+			'serverUrl' => $baseUrl,
+			'clientId'  => (int)$result,
+			'clientKey'  => $key,
+			'clientDb'  => 'mysql',
+			'clientCharser'  => $charset,
+		);
+		WindFile::savePhpData($this->_getWindidFile(),$config);
 		return true;
 	}
 	

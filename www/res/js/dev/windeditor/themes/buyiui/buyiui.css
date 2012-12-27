@@ -3,7 +3,7 @@
 @explain: 编辑器皮肤样式
 @copyright: Copyright 2011,phpwind.com
 @author: longwenid@gmail.com
-$Id: buyiui.css 22744 2012-12-27 02:44:02Z hao.lin $
+$Id: buyiui.css 22826 2012-12-27 10:36:03Z hao.lin $
 ===================
 */
 /*bg*/
@@ -726,14 +726,16 @@ ul.edit_menu_select{
 }
 .edit_menu_select li a{
 	line-height:1.5;
-	height:18px;
-	overflow:hidden;
 	display:block;
 	text-indent:5px;
 	color:#333;
 	padding:2px 0;
 	border:1px solid #fff;
 	zoom:1;
+}
+.edit_atul a{
+	height:18px;
+	overflow:hidden;
 }
 .edit_menu_select li a:hover,
 .edit_menu_select li.activate{

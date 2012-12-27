@@ -4,7 +4,7 @@
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidAvatarApi.php 22760 2012-12-27 03:37:34Z gao.wanggao $
+ * @version $Id: WindidAvatarApi.php 22791 2012-12-27 08:11:54Z gao.wanggao $
  * @package windid.service.avatar
  */
 class WindidAvatarApi {
@@ -86,5 +86,24 @@ class WindidAvatarApi {
 		               		'token' => $key,
 		                );
 	}
+	
+	public function doAvatar($uid, $file = '') {
+		$client = Windid::client();
+		$time = time();
+		$query = array(
+			'm'=>'api',
+			'c'=>'avatar',
+			'a'=>'doavatar',
+			'windidkey'=>WindidUtility::appKey($client->clientId, $time, $client->clientKey),
+			'clientid'=>$client->clientId,
+			'time'=>$time,
+			'uid'=>$uid,
+		);
+		$url = $client->serverUrl  . '/windid/index.php?' . http_build_query($query) ;
+		$result = WindidUtility::uploadRequest($url, $file);
+		if ($result === false) return WindidError::SERVER_ERROR;
+		return WindJson::decode($result, true, $client->clientCharser);
+	}
+	
 	
 }

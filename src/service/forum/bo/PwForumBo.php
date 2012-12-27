@@ -8,7 +8,7 @@ Wind::import('WIND:utility.WindSecurity');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PwForumBo.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: PwForumBo.php 22798 2012-12-27 08:39:17Z long.shi $
  * @package forum
  */
 
@@ -172,7 +172,7 @@ class PwForumBo {
 	 */
 	public function headguide() {
 		$bbsname = Wekit::C('site', 'info.name');
-		$headguide = '<a href="' . WindUrlHelper::createUrl('') . '" title="' . $bbsname . '" class="home">' . $bbsname . '</a>';
+		$headguide = '<a href="' . WindUrlHelper::createUrl('') . '" title="' . $bbsname . '" class="home">首页</a>';
 		$guide = $this->getForumChain();
 		foreach ($guide as $key => $value) {
 			$headguide .= $this->bulidGuide($value);

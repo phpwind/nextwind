@@ -84,7 +84,9 @@ class PwThreadManageDoType extends PwThreadManageDo {
 		$topicDm = new PwTopicDm(true);
 		$topicDm->setTopictype($this->topictype);
 		$this->_getThreadDs()->batchUpdateThread($this->tids, $topicDm, PwThread::FETCH_MAIN);
+
 		//管理日志添加
+
 		Wekit::load('log.srv.PwLogService')->addThreadManageLog($this->srv->user, 'type', $this->threadsInfo, $this->_reason, $this->topictype);
 	}
 	

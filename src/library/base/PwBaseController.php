@@ -6,10 +6,11 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PwBaseController.php 22476 2012-12-25 01:50:03Z gao.wanggao $
+ * @version $Id: PwBaseController.php 22820 2012-12-27 10:30:26Z jieyin $
  * @package lib.base.controller
  */
 class PwBaseController extends WindController {
+
 	/**
 	 * 当前用户信息
 	 *

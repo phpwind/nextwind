@@ -59,6 +59,9 @@ return array(
 	'bbs/forum/run' => array(
 		array('hot_tags', array(0, 10))
 	),
+	'bbs/cate/run' => array(
+		array('hot_tags', array(0, 10))
+	),
 	'bbs/thread/run' => array(
 		array('hot_tags', array(0, 10)), 'medal_auto', 'medal_all'
 	),
@@ -69,6 +72,8 @@ return array(
 /*-----预设钩子键值-----*/
 
 'prehook' => array(
+	'bbs/index/run' => array('c_index_run', 'm_PwThreadList'),
+	'bbs/cate/run' => array('c_cate_run', 'm_PwThreadList'),
 	'bbs/thread/run' => array('c_thread_run', 'm_PwThreadList', 's_PwThreadType'),
 	'bbs/read/run' => array('c_read_run', 'm_PwThreadDisplay', 's_PwThreadType', 's_PwUbbCode_convert', 's_PwThreadsHitsDao_add'),
 	'bbs/post/doadd' => array('c_post_doadd', 'm_PwTopicPost', 's_PwThreadsDao_add', 's_PwThreadsIndexDao_add', 's_PwThreadsCateIndexDao_add', 's_PwThreadsContentDao_add', 's_PwForumStatisticsDao_update', 's_PwForumStatisticsDao_batchUpdate', 's_PwTagRecordDao_add', 's_PwTagRelationDao_add', 's_PwTagDao_update', 's_PwTagDao_add', 's_PwThreadsContentDao_update', 's_PwFreshDao_add', 's_PwUserDataDao_update', 's_PwUser_update', 's_PwAttachDao_update', 's_PwThreadAttachDao_update', 's_PwCreditOperationConfig'),

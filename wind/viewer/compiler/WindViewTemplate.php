@@ -28,7 +28,7 @@ Wind::import('WIND:utility.WindFile');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindViewTemplate.php 3699 2012-06-27 03:43:23Z yishuo $
+ * @version $Id: WindViewTemplate.php 3882 2012-12-27 10:59:48Z yishuo $
  * @package viewer
  * @subpackage compiler
  */
@@ -131,6 +131,8 @@ class WindViewTemplate extends AbstractWindViewTemplate {
 		/*标签解析结束*/
 		$_tags['expression'] = $this->createTag('expression', 
 			'WIND:viewer.compiler.WindTemplateCompilerEcho', '/({@|{\$[\w$]{1})[^}{@\n]*}/i');
+		
+		$_tags = array_merge($_tags, $this->getConfig('support-tags-end', '', array()));
 		//$_tags['echo'] = $this->createTag('echo', 'WIND:viewer.compiler.WindTemplateCompilerEcho', '/\$[\w_]+/i');
 		/* 块编译标签，嵌套变量处理 */
 		//$_tags['script1'] = $this->createTag('script1', 'WIND:viewer.compiler.WindTemplateCompilerScript', '/<!--\[[\w\s]*\]>(.|\n)*<!\[[\w\s]*\]-->/Ui');

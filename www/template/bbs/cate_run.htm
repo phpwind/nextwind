@@ -34,10 +34,10 @@
 							</ul>
 						</div>
 						</nav>
-						<!--# if ($threadList) { #-->
+						<!--# if ($threaddb) { #-->
 						<div class="thread_posts_list">
 							<table width="100%" id="J_posts_list" summary="帖子列表">
-								<!--# foreach ($threadList as $key => $value) { #-->
+								<!--# foreach ($threaddb as $key => $value) { #-->
 								<tr>
 									<td class="author"><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run?uid=$value['created_userid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="45" height="45" alt="{$value['created_username']}的头像" /></a></td>
 									<td class="subject">
@@ -46,7 +46,8 @@
 											<input class="J_check" name="" type="checkbox" value="{$value['tid']}" />
 											<!--# } #-->
 											<span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}"></i></span>
-											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}">{@Pw::substrs($value['subject'],$numofthreadtitle)}</a><!--# if ($value['ifupload']) { #--><span class="posts_icon"><i class="icon_{$uploadIcon[$value['ifupload']]}" title="{$icon[$uploadIcon[$value['ifupload']]]}"></i></span><!--# } #-->
+											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}">{@Pw::substrs($value['subject'],$numofthreadtitle)}</a>
+											<hook class='$threadList' name='m_PwThreadList.createHtmlAfterSubject' args="array($value)" /><!--# if ($value['ifupload']) { #--><span class="posts_icon"><i class="icon_{$uploadIcon[$value['ifupload']]}" title="{$icon[$uploadIcon[$value['ifupload']]]}"></i></span><!--# } #-->
 										</p>
 										<p class="info">
 											楼主：<a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run?uid=$value['created_userid']}">{$value['created_username']}</a><span><!--# echo Pw::time2str($value['created_time'], 'Y-m-d');#--></span>
@@ -144,7 +145,9 @@
 <!--# if(!$is_design) { #-->
 <script>
 Wind.use('jquery', 'global', function(){
-	Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v=' + GV.JS_VERSION);
+	<!--# if ($operateThread) { #-->
+		Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v=' + GV.JS_VERSION);
+	<!--# } #-->
 });
 </script>
 <!--# } #-->

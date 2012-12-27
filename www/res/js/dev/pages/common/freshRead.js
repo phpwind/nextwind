@@ -59,35 +59,27 @@ $('a.J_fresh_del').on('click', function(e){
 		if(list.children().length) {
 			list.hide().empty();
 		}else{
-			$.ajax({
-				url : $this.attr("href"),
-				type : 'post',
-				dataType : 'html',
-				beforeSend : function(){
-					list.html($loading_html[0]).show();
-				},
-				success : function(data) {
-					if (Wind.Util.ajaxTempError(data)) {
-						list.hide();
-						return false;
-					}
-					
-					list.html(feed_part_html.replace(/_ID/g, id).replace('_DATA', data));
-
-					var feed_ta = list.find('textarea.J_feed_textarea'),
-						feed_btn = list.find('button.J_feed_sub');
-						
-					Wind.Util.buttonStatus(feed_ta, feed_btn);
-					Wind.Util.ctrlEnterSub(feed_ta, feed_btn);
-					list.find('textarea').focus();
-					Wind.Util.avatarError(list.find('img.J_avatar'));
-
-					if(!$.isFunction(window.insertEmotions)) {
-						Wind.js(GV.JS_ROOT+ 'pages/common/insertEmotions.js?v='+ GV.JS_VERSION);
-					}
-					
+			list.html($loading_html[0]).show();
+			$.post($this.attr("href"), function(data) {
+				if (Wind.Util.ajaxTempError(data)) {
+					list.hide();
+					return false;
 				}
-			});
+				
+				list.html(feed_part_html.replace(/_ID/g, id).replace('_DATA', data));
+
+				var feed_ta = list.find('textarea.J_feed_textarea'),
+					feed_btn = list.find('button.J_feed_sub');
+					
+				Wind.Util.buttonStatus(feed_ta, feed_btn);
+				Wind.Util.ctrlEnterSub(feed_ta, feed_btn);
+				list.find('textarea').focus();
+				Wind.Util.avatarError(list.find('img.J_avatar'));
+
+				if(!$.isFunction(window.insertEmotions)) {
+					Wind.js(GV.JS_ROOT+ 'pages/common/insertEmotions.js?v='+ GV.JS_VERSION);
+				}
+			}, 'html');
 			
 		}
 	});
