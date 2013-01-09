@@ -13,7 +13,7 @@ CREATE TABLE `pw_acloud_apis` (
   `modified_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='aCloud预定义的系统接口列表';
 
 DROP TABLE IF EXISTS `pw_acloud_apps`;
 CREATE TABLE `pw_acloud_apps` (
@@ -23,7 +23,7 @@ CREATE TABLE `pw_acloud_apps` (
   `created_time` int(10) unsigned NOT NULL DEFAULT '0',
   `modified_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`app_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='应用调用站点数据所用的token';
 
 DROP TABLE IF EXISTS `pw_acloud_app_configs`;
 CREATE TABLE `pw_acloud_app_configs` (
@@ -34,7 +34,7 @@ CREATE TABLE `pw_acloud_app_configs` (
   `created_time` int(10) unsigned NOT NULL DEFAULT '0',
   `modified_time` int(10) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `app_id` (`app_id`,`app_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='应用自定义设置';
 
 DROP TABLE IF EXISTS `pw_acloud_extras`;
 CREATE TABLE `pw_acloud_extras` (
@@ -44,7 +44,7 @@ CREATE TABLE `pw_acloud_extras` (
   `created_time` int(10) unsigned NOT NULL DEFAULT '0',
   `modified_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ekey`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='站点的云平台开启状态和基本属性';
 
 DROP TABLE IF EXISTS `pw_acloud_keys`;
 CREATE TABLE `pw_acloud_keys` (
@@ -58,7 +58,7 @@ CREATE TABLE `pw_acloud_keys` (
   `created_time` int(10) unsigned NOT NULL DEFAULT '0',
   `modified_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='站点和云平台通信使用的密钥';
 
 DROP TABLE IF EXISTS `pw_acloud_sql_log`;
 CREATE TABLE `pw_acloud_sql_log` (
@@ -66,7 +66,7 @@ CREATE TABLE `pw_acloud_sql_log` (
   `log` text,
   `created_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='aCloud执行SQL后记录的日志';
 
 DROP TABLE IF EXISTS `pw_acloud_table_settings`;
 CREATE TABLE `pw_acloud_table_settings` (
@@ -77,7 +77,7 @@ CREATE TABLE `pw_acloud_table_settings` (
   `created_time` int(10) unsigned NOT NULL DEFAULT '0',
   `modified_time` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户抓取数据时的配置';
 
 DROP TABLE IF EXISTS `pw_admin_auth`;
 CREATE TABLE `pw_admin_auth` (
@@ -141,7 +141,7 @@ CREATE TABLE `pw_announce` (
   `typeid` tinyint(1) NOT NULL DEFAULT '0',
   `url` varchar(80) DEFAULT '',
   `subject` varchar(100) NOT NULL DEFAULT '',
-  `content` mediumtext,
+  `content` MEDIUMTEXT,
   `start_date` int(10) unsigned NOT NULL DEFAULT '0',
   `end_date` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`aid`),
@@ -320,7 +320,7 @@ CREATE TABLE `pw_attention_fresh_index` (
   `tid` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`fresh_id`),
   KEY `idx_tid` (`tid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='新鲜事与帖子关联表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='新鲜事与帖子关联表';
 
 DROP TABLE IF EXISTS `pw_attention_fresh_relations`;
 CREATE TABLE `pw_attention_fresh_relations` (
@@ -798,7 +798,7 @@ CREATE TABLE `pw_design_bak` (
   `bak_type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '备份类型',
   `page_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '备份页面',
   `is_snapshot` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否快照',
-  `bak_info` text COMMENT '备份信息',
+  `bak_info` MEDIUMTEXT COMMENT '备份信息',
   PRIMARY KEY (`page_id`,`bak_type`,`is_snapshot`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='门户备份表';
 
@@ -833,7 +833,7 @@ CREATE TABLE `pw_design_cron` (
   `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`module_id`),
   KEY `idx_createdtime` (`created_time`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='门户更新队列表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='门户更新队列表';
 
 DROP TABLE IF EXISTS `pw_design_data`;
 CREATE TABLE `pw_design_data` (
@@ -885,9 +885,9 @@ CREATE TABLE `pw_design_page` (
   `page_router` varchar(50) NOT NULL DEFAULT '' COMMENT '页面路由信息',
   `page_unique` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '页面唯一标识',
   `is_unique` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '唯一标识的标识',
-  `module_ids` varchar(255) NOT NULL DEFAULT '' COMMENT '页面模块',
-  `struct_names` varchar(255) NOT NULL DEFAULT '' COMMENT '页面结构',
-  `segments` varchar(255) NOT NULL DEFAULT '' COMMENT '页面模块片段',
+  `module_ids` TEXT  COMMENT '页面模块',
+  `struct_names` TEXT  COMMENT '页面结构',
+  `segments` TEXT COMMENT '页面模块片段',
   `design_lock` varchar(50) NOT NULL DEFAULT '' COMMENT '编辑加锁',
   PRIMARY KEY (`page_id`),
   KEY `idx_pagerouter` (`page_router`(10))
@@ -962,8 +962,8 @@ DROP TABLE IF EXISTS `pw_design_segment`;
 CREATE TABLE `pw_design_segment` (
   `segment` varchar(50) NOT NULL DEFAULT '' COMMENT '片段名称',
   `page_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '所属页面ID',
-  `segment_tpl` text COMMENT '片段代码',
-  `segment_struct` text COMMENT '片段结构代码',
+  `segment_tpl` MEDIUMTEXT COMMENT '片段代码',
+  `segment_struct` MEDIUMTEXT  COMMENT '片段结构代码',
   PRIMARY KEY (`segment`,`page_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='门户片段表';
 
@@ -1385,8 +1385,8 @@ CREATE TABLE `pw_space` (
   `space_style` varchar(20) NOT NULL DEFAULT '' COMMENT '空间风格',
   `back_image` varchar(255) NOT NULL DEFAULT '' COMMENT '背景设置',
   `visit_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '访问统计',
-  `visitors` varchar(255) NOT NULL DEFAULT '' COMMENT '来访者',
-  `tovisitors` varchar(255) NOT NULL DEFAULT '' COMMENT '我的访问记录',
+  `visitors` TEXT  COMMENT '来访者',
+  `tovisitors` TEXT  COMMENT '我的访问记录',
   `space_privacy` tinyint(4) NOT NULL DEFAULT '0' COMMENT '隐私等级',
   PRIMARY KEY (`uid`),
   KEY `idx_space_domain` (`space_domain`(10))
@@ -1867,7 +1867,7 @@ CREATE TABLE `pw_windid_message_dialog` (
   `last_message` text COMMENT '最新对话',
   `modified_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`dialog_id`),
-  UNIQUE KEY `idx_touid_fromuid_modifiedtime` (`to_uid`,`from_uid`,`modified_time`),
+  UNIQUE KEY `idx_touid_fromuid` (`to_uid`,`from_uid`),
   KEY `idx_touid_modifiedtime` (`to_uid`,`modified_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='消息对话表';
 
@@ -1877,8 +1877,13 @@ CREATE TABLE `pw_windid_message_relation` (
   `dialog_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '对话id',
   `message_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '私信id',
   `is_read` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否已读',
+  `is_send` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为发送者私信',
   PRIMARY KEY (`id`),
-  KEY `idx_dialogid` (`dialog_id`)
+  KEY `idx_dialogid` (`dialog_id`),
+  KEY `idx_messageid` ( `message_id` ),
+  KEY `idx_isread` ( `is_read` ),
+  KEY `idx_issend` ( `is_send` )
+
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='消息关系表';
 
 DROP TABLE IF EXISTS `pw_windid_notify`;

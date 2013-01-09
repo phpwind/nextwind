@@ -18,7 +18,7 @@ Wind::import('WIND:cache.exception.WindCacheException');
  * @author Su Qian <aoxue.1988.su.qian@163.com> 
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindCache.php 3760 2012-10-11 08:02:25Z yishuo $ 
+ * @version $Id: AbstractWindCache.php 3904 2013-01-08 07:01:26Z yishuo $ 
  * @package cache
  */
 abstract class AbstractWindCache extends WindModule {
@@ -136,7 +136,7 @@ abstract class AbstractWindCache extends WindModule {
 			$data = $this->buildData($value, $expires, $dependency);
 			return $this->setValue($this->buildSecurityKey($key), $data, $expires);
 		} catch (Exception $e) {
-			throw new WindCacheException('[cache.AbstractWindCache.set]Setting cache failed.' . $e->getMessage());
+			throw new WindCacheException('[cache.AbstractWindCache.set] Setting cache failed.' . $e->getMessage());
 		}
 	}
 
@@ -161,7 +161,7 @@ abstract class AbstractWindCache extends WindModule {
 			$data = $this->buildData($value, $expires, $dependency);
 			return $this->addValue($key, $data, $expires);
 		} catch (Exception $e) {
-			throw new WindCacheException('[cache.AbstractWindCache.set]Setting cache failed.' . $e->getMessage());
+			throw new WindCacheException('[cache.AbstractWindCache.set] Setting cache failed.' . $e->getMessage());
 		}
 	}
 
@@ -176,7 +176,7 @@ abstract class AbstractWindCache extends WindModule {
 		try {
 			return $this->formatData($key, $this->getValue($this->buildSecurityKey($key)));
 		} catch (Exception $e) {
-			throw new WindCacheException('Getting cache data failed. (' . $e->getMessage() . ')');
+			throw new WindCacheException('[cache.AbstractWindCache.get] Getting cache data failed. (' . $e->getMessage() . ')');
 		}
 	}
 
@@ -205,7 +205,7 @@ abstract class AbstractWindCache extends WindModule {
 		try {
 			return $this->deleteValue($this->buildSecurityKey($key));
 		} catch (Exception $e) {
-			throw new WindCacheException('Delete cache data failed. (' . $e->getMessage() . ')');
+			throw new WindCacheException('[cache.AbstractWindCache.delete] Delete cache data failed. (' . $e->getMessage() . ')');
 		}
 	}
 

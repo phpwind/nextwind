@@ -9,7 +9,7 @@ Wind::import('WIND:mail.WindMail');
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwMail.php 18618 2012-09-24 09:31:00Z jieyin $
+ * @version $Id: PwMail.php 23438 2013-01-09 11:01:06Z xiaoxia.xuxx $
  * @package Lib:utility.PwMail
  */
 class PwMail {
@@ -30,7 +30,8 @@ class PwMail {
 			'from' => $config['mail.from'], 
 			'auth' => $config['mail.auth'], 
 			'user' => $config['mail.user'], 
-			'password' => $config['mail.password']);
+			'password' => $config['mail.password'],
+			'timeout' => 20);//尝试链接超时时间
 		$this->_mail = new WindMail();
 		$this->_mail->setCharset(Wekit::app()->charset);
 		$this->_mail->setDate(date('r', Pw::getTime()));
@@ -48,15 +49,19 @@ class PwMail {
 	 * @return bool
 	 */
 	public function sendMail($toUser, $subject, $content) {
-		if (!$this->_config['mailOpen']) return false;
+		if (!$this->_config['mailOpen']) return new PwError('ADMIN:email.close');
 		$this->_mail->setSubject($subject);
 		$this->_mail->setTo($toUser);
 		$this->_mail->setBody($content);
 		try {
-			$this->_mail->send($this->getMethod(), $this->_config);
-		}catch(WindException $e) {
+			$rt = $this->_mail->send($this->getMethod(), $this->_config);
+			if (false === $rt) {
+				return new PwError('ADMIN:email.server.error');
+			}
+		} catch(Exception $e) {
 			//TODO 邮件发送失败
-			return new PwError($e->getMessage());
+// 			return new PwError($e->getMessage());
+			return new PwError('ADMIN:email.server.error');
 		}
 		return true;
 	}

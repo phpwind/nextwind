@@ -7,7 +7,7 @@ Wind::import('WINDID:service.message.dm.WindidMessageDm');
  * @author peihong <peihong.zhangph@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageService.php 22410 2012-12-24 04:19:54Z jinlong.panjl $
+ * @version $Id: WindidMessageService.php 23453 2013-01-09 12:17:30Z gao.wanggao $
  * @package windid.service.message.srv
  */
 class WindidMessageService {
@@ -65,7 +65,7 @@ class WindidMessageService {
 		
 		//添加发件人联系
 		$dm = new WindidMessageDm();
-		$dm->setDialogId($dialogId)->setMessageId($messageId);
+		$dm->setDialogId($dialogId)->setMessageId($messageId)->setIsRead(1)->setIsSend(1);
 		$this->_getMessageDs()->addRelation($dm);
 			
 		$dm = new WindidMessageDm();
@@ -95,7 +95,7 @@ class WindidMessageService {
 		$dm = new WindidMessageDm();
 		$dm->setDialogId($dialogId)->setMessageId($messageId);
 		$this->_getMessageDs()->addRelation($dm);
-		
+		$this->resetUserMessages($uid);
 		return true;
 	}
 	

@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindHttpRequest.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: WindHttpRequest.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package http
  * @subpackage request
  */
@@ -609,7 +609,7 @@ class WindHttpRequest implements IWindRequest {
 			$this->_requestUri = $requestUri;
 			if (($query = $this->getServer('QUERY_STRING')) != null) $this->_requestUri .= '?' . $query;
 		} else
-			throw new WindException(__CLASS__ . ' is unable to determine the request URI.');
+			throw new WindException('[web.WindHttpRequest._initRequestUri] unable to determine the request URI.');
 	}
 
 	/**
@@ -623,7 +623,7 @@ class WindHttpRequest implements IWindRequest {
 	 */
 	private function _initScriptUrl() {
 		if (($scriptName = $this->getServer('SCRIPT_FILENAME')) == null) {
-			throw new WindException(__CLASS__ . ' determine the entry script URL failed!!!');
+			throw new WindException('[web.WindHttpRequest._initScriptUrl] determine the entry script URL failed!!!');
 		}
 		$scriptName = basename($scriptName);
 		if (($_scriptName = $this->getServer('SCRIPT_NAME')) != null && basename($_scriptName) === $scriptName) {
@@ -638,7 +638,7 @@ class WindHttpRequest implements IWindRequest {
 			'SCRIPT_FILENAME')) != null && strpos($_scriptName, $_documentRoot) === 0) {
 			$this->_scriptUrl = str_replace('\\', '/', str_replace($_documentRoot, '', $_scriptName));
 		} else
-			throw new WindException(__CLASS__ . ' determine the entry script URL failed!!');
+			throw new WindException('[web.WindHttpRequest._initScriptUrl] determine the entry script URL failed!!');
 	}
 
 	/**
@@ -658,7 +658,7 @@ class WindHttpRequest implements IWindRequest {
 			$this->_hostInfo = $http . '://' . $httpHost;
 			if (($port = $this->getServerPort()) != null) $this->_hostInfo .= ':' . $port;
 		} else
-			throw new WindException(__CLASS__ . ' determine the entry script URL failed!!');
+			throw new WindException('[web.WindHttpRequest._initHostInfo] determine the entry script URL failed!!');
 	}
 
 	/**
@@ -681,7 +681,7 @@ class WindHttpRequest implements IWindRequest {
 		elseif (strpos($_SERVER['PHP_SELF'], $scriptUrl) === 0)
 			$pathInfo = substr($_SERVER['PHP_SELF'], strlen($scriptUrl));
 		else
-			throw new WindException(__CLASS__ . ' determine the entry path info failed!!');
+			throw new WindException('[web.WindHttpRequest._initPathInfo] determine the entry path info failed!!');
 		if (($pos = strpos($pathInfo, '?')) !== false) $pathInfo = substr($pathInfo, $pos + 1);
 		$this->_pathInfo = trim($pathInfo, '/');
 	}

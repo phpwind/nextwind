@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: DesignController.php 22560 2012-12-25 08:43:54Z gao.wanggao $ 
+ * @version $Id: DesignController.php 23273 2013-01-07 09:10:11Z gao.wanggao $ 
  * @package 
  */
 class DesignController extends PwBaseController {
@@ -24,7 +24,10 @@ class DesignController extends PwBaseController {
     	$key = Wekit::load('design.srv.display.PwDesignDisplay')->bindDataKey($moduleId);;
     	$data[$key] = $bo->getData(true, false);
     	$this->setOutput($data, '__design_data');
-    	WindFolder::rm(Wind::getRealDir('DATA:compile.template.design.segment.'), true);
+    	list($theme,)= $this->getForward()->getWindView()->getTheme();
+    	if (is_array($theme)) list($theme, $pack) = $theme;
+    	if (!$theme) $theme = 'default';
+    	WindFolder::rm(Wind::getRealDir('DATA:compile.template.'.$theme.'.design.segment.'), true);
     	$this->setTemplate('TPL:design.segment.module');
 	}
 	
@@ -43,7 +46,7 @@ class DesignController extends PwBaseController {
 				if ($module['module_type'] == PwDesignModule::TYPE_DRAG) {
 					$tab = array('data','push','add','title','style','property','template','delete');
 				} else {
-					$tab = array('data','push','add','title','property','template');
+					$tab = array('data','push','add','title','property','template','delete');
 				}
 				break;
 			case '3':
@@ -112,7 +115,6 @@ class DesignController extends PwBaseController {
 		}
 		$this->_getDesignService()->clearCompile();
 		$this->_getBakService()->doBak($pageid);
-		$this->_getBakService()->doSnap($pageid);
 		$this->setOutput(urldecode($uri), 'data');
 		$this->showMessage("operate.success");
 	}

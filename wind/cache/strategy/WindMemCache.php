@@ -77,7 +77,7 @@ Wind::import('WIND:cache.AbstractWindCache');
  * @author xiaoxiao <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindMemCache.php 3838 2012-11-26 10:47:59Z yishuo $
+ * @version $Id: WindMemCache.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package strategy
  */
 class WindMemCache extends AbstractWindCache {
@@ -202,10 +202,10 @@ class WindMemCache extends AbstractWindCache {
 			'status' => true, 
 			'fcallback' => null);
 		foreach ((array) $servers as $server) {
-			if (!is_array($server)) throw new WindCacheException('The memcache config is incorrect');
+			if (!is_array($server)) throw new WindCacheException('[cache.strategy.WindMemCache.setConfig] The memcache config is incorrect');
 			$args = array_merge($defaultServer, $server);
-			if (empty($server['host'])) throw new WindCacheException('The memcache server ip address is not exist');
-			if (empty($server['port'])) throw new WindCacheException('The memcache server port is not exist');
+			if (empty($server['host'])) throw new WindCacheException('[cache.strategy.WindMemCache.setConfig] The memcache server ip address is not exist');
+			if (empty($server['port'])) throw new WindCacheException('[cache.strategy.WindMemCache.setConfig] The memcache server port is not exist');
 			$this->memcache->addServer($args['host'], $args['port'], $args['pconn'], $args['weight'], $args['timeout'], $args['retry'], $args['status'], $args['fcallback']);
 		}
 	}

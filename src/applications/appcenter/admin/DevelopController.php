@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.PwGenerateApplication');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: DevelopController.php 22552 2012-12-25 08:29:31Z long.shi $
+ * @version $Id: DevelopController.php 23214 2013-01-07 06:04:01Z long.shi $
  * @package appcenter.admin
  */
 class DevelopController extends AdminBaseController {
@@ -128,6 +128,7 @@ class DevelopController extends AdminBaseController {
 		if (!$r) {
 			$this->showError('APPCENTER:generate.copy.fail');
 		}
+		Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->compile(true);
 		$this->showMessage('success');
 	}
 	

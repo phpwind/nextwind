@@ -6,7 +6,7 @@ Wind::import('APPS:admin.library.AdminBaseController');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: DomainController.php 21071 2012-11-27 06:34:14Z long.shi $
+ * @version $Id: DomainController.php 23249 2013-01-07 07:51:09Z long.shi $
  * @package rewrite.admin
  */
 class DomainController extends AdminBaseController {
@@ -70,15 +70,20 @@ class DomainController extends AdminBaseController {
 			$domain_root = '';
 			if ($v['isopen']) {
 				if (!$app['default']) $this->showError('REWRITE:default.empty');
-				if ($k != 'forum' && !$v['root']) $this->showError('REWRITE:root.empty');
-				in_array($v['root'], $unique) && $this->showError('REWRITE:root.same');
+				if ($k == 'space' && !$v['root']) $this->showError('REWRITE:root.empty');
+				$space_root = isset($domain['space']['root']) ? $domain['space']['root'] : '';
+				if ($k != 'space' && $domain['space']['isopen']) {
+					if ($v['root'] == $space_root) {
+						$this->showError('REWRITE:root.same');
+					}
+				}
 				$unique[] = $v['root'];
 				$domain_root = $v['root'] ? $v['root'] . $root : substr($root, 1);
 				$dm = new PwDomainDm();
 				$dm->setRoot($domain_root)->setDomainType($k);
 				$r = $this->_ds()->updateByDomainType($dm);
 				if ($r instanceof PwError) $this->showError($r->getError());
-				$k == 'space' && $space_root = $domain_root;
+				
 			} elseif ($k != 'forum') {
 				$this->_ds()->deleteByDomainType($k);
 			}
@@ -90,6 +95,7 @@ class DomainController extends AdminBaseController {
 		$siteBo->set('domain.space.root', $space_root);
 		$siteBo->flush();
 		$this->_service()->flushAll();
+		Wekit::load('SRV:nav.srv.PwNavService')->updateConfig();
 		$this->showMessage('success');
 	}
 

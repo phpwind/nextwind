@@ -6,7 +6,7 @@ Wind::import('SRV:design.srv.PwPortalCompile');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwTemplateCompilerPortal.php 22740 2012-12-27 02:34:43Z gao.wanggao $ 
+ * @version $Id: PwTemplateCompilerPortal.php 23348 2013-01-09 02:22:16Z gao.wanggao $ 
  * @package 
  */
 class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
@@ -23,34 +23,46 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 			$content = str_replace('<pw-start/>', '', $content);
 			$content = str_replace('<pw-end/>', '', $content);
 			return $viewTemplate->compileStream($content, $this->windViewerResolver);
-		}
-		$this->srv = Wekit::load('design.srv.PwDesignCompile');
+		}	
+		Wind::import('SRV:design.srv.PwDesignCompile');
+		$this->srv = PwDesignCompile::getInstance();
+		//$this->srv = Wekit::load('design.srv.PwDesignCompile');
 		$this->srv->setIsDesign($this->getRequest()->getPost('design'));
 		$_pk = $unique ? $this->getRequest()->getGet($unique) : '';
 		$this->srv->beforeDesign($this->_router, $pageName, $_pk);
 		$pageBo = $this->srv->getPageBo();
 		$this->srv->setPermission();
+		
 		//对模版进行编译
 		$portalSrv = new PwPortalCompile($pageBo);
+		$isPortalCompile = $this->srv->isPortalCompile();
 		
-		$content = $portalSrv->compileTpl($content);
-		
-		//对新模版进行编译
-		$content = $portalSrv->compileDesign($content);
-		$isCompile = $this->srv->isPortalCompile();
-		if ($isCompile == 3) {
-			$portalSrv->compilePortal($content);
+		//对自定义页编辑
+		if ($isPortalCompile == 1) {
+			$content = $portalSrv->compilePortal($content);
 		}
+		
+		//对系统页编辑
+		if ($isPortalCompile == 2) {
+			$content = $portalSrv->compileTpl($content, true);
+		} else {
+			$content = $portalSrv->compileTpl($content);
+		}
+		
+		//$content = $portalSrv->doCompile($content);
+
 		//转换Pw标签
 		$content = $this->compileStart($content, $_pk, $this->_url);
-		$content = $this->compileCss($content, $pageBo);
 		$content = $this->compileSign($content);
 		$content = $this->compileDrag($content);
 		$content = $this->compileTitle($content);
 		$content = $this->compileList($content);
+		$content = $this->compileCss($content, $pageBo);
 		$content = $this->compileEnd($content);
 		$content =  $viewTemplate->compileStream($content, $this->windViewerResolver);
-		$this->srv->refreshPage();//srv 里判断刷新权限
+		/*if ($isPortalCompile > 0) {
+			$this->srv->refreshPage();
+		}*/
 		return $content;
 	}
 	
@@ -124,8 +136,8 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 	 */
 	protected function compileEnd($content) {
 		//$viewTemplate = Wind::getComponent('template');
-		$end = $this->srv->afterDesign();
-		return str_replace('<pw-end/>', $end, $content);
+		$this->srv->afterDesign(); 
+		return str_replace('<pw-end/>', '', $content);
 		//return $viewTemplate->compileStream($content, $this->windViewerResolver);
 	}
 	

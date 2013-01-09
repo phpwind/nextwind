@@ -15,6 +15,7 @@ check.file.fail = 文件下载失败，尝试重新下载
 directory.fail = 下载的升级包没有目录结构directory文件，请尝试返回重新下载
 version.hash.fail = 获取当前版本的文件哈希失败, #0
 hash.fail = 当前版本的文件哈希md5sum丢失
+target.hash.fail = 更新包缺少md5sum文件
 patch.fail = 找不到该补丁
 patch.update.fail = 补丁#0不支持自动修复或者已做过修复处理
 choose.one = 请选择一个

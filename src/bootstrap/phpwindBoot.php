@@ -5,7 +5,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: phpwindBoot.php 22823 2012-12-27 10:32:19Z jieyin $
+ * @version $Id: phpwindBoot.php 22985 2013-01-04 08:06:07Z jieyin $
  * @package wekit
  */
 class phpwindBoot {
@@ -157,8 +157,7 @@ class phpwindBoot {
 			$this->lastvisit = WEKIT_TIMESTAMP;
 			$this->lastRequestUri = '';
 		} else {
-			list($this->onlinetime, $this->lastvisit, $this->lastRequestUri) = explode("\t", 
-				$lastvisit);
+			list($this->onlinetime, $this->lastvisit, $this->lastRequestUri) = explode("\t", $lastvisit);
 			($onlinetime = WEKIT_TIMESTAMP - $this->lastvisit) < $_cOnlinetime && $this->onlinetime += $onlinetime;
 		}
 		$user = $this->getLoginUser();
@@ -168,13 +167,11 @@ class phpwindBoot {
 			$dm = new PwUserInfoDm($user->uid);
 			$dm->setLastvisit(WEKIT_TIMESTAMP)->setLastActiveTime(WEKIT_TIMESTAMP);
 			if ($this->onlinetime > 0) {
-				$dm->addOnline(
-					$this->onlinetime > $_cOnlinetime * 1.2 ? $_cOnlinetime : $this->onlinetime);
+				$dm->addOnline($this->onlinetime > $_cOnlinetime * 1.2 ? $_cOnlinetime : $this->onlinetime);
 			}
 			Wekit::load('user.PwUser')->editUser($dm, PwUser::FETCH_DATA);
 			$this->onlinetime = 0;
 		}
-		Pw::setCookie('lastvisit', 
-			$this->onlinetime . "\t" . WEKIT_TIMESTAMP . "\t" . $this->requestUri, 31536000);
+		Pw::setCookie('lastvisit', $this->onlinetime . "\t" . WEKIT_TIMESTAMP . "\t" . $this->requestUri, 31536000);
 	}
 }

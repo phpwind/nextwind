@@ -10,7 +10,7 @@ Wind::import('WIND:parser.IWindConfigParser');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindConfigParser.php 3612 2012-06-01 07:52:24Z yishuo $
+ * @version $Id: WindConfigParser.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package parser
  */
 class WindConfigParser implements IWindConfigParser {
@@ -26,7 +26,7 @@ class WindConfigParser implements IWindConfigParser {
 	public function parse($configPath, $alias = '', $append = '', AbstractWindCache $cache = null) {
 		if ($alias && $cache && ($config = $this->getCache($alias, $append, $cache))) return $config;
 		if (!is_file($configPath)) throw new WindException(
-			'[component.parser.WindConfigParser.parse] The file \'' . $configPath . '\' is not exists');
+			'[parser.WindConfigParser.parse] The file \'' . $configPath . '\' is not exists');
 		$ext = strtoupper(strrchr($configPath, '.'));
 		$config = ($ext == self::CONFIG_PHP) ? @include ($configPath) : $this->createParser($ext)->parse($configPath);
 		if ($alias && $cache) $this->setCache($alias, $append, $cache, $config);
@@ -91,7 +91,7 @@ class WindConfigParser implements IWindConfigParser {
 				Wind::import("WIND:parser.WindPropertiesParser");
 				return new WindPropertiesParser();
 			default:
-				throw new WindException('\'ConfigParser\' failed to initialize.');
+				throw new WindException('[parser.WindConfigParser.createParser] \'ConfigParser\' failed to initialize.');
 		}
 	}
 }

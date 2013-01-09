@@ -54,6 +54,16 @@
 				<td><div class="fun_tips">格式 “楼层名称”或“N:楼层名称”，N代表楼层数（主题帖为0楼），如果没有指定楼层N，则第一行代表主题帖子。其中，连续楼层之间可以用‘,’逗号隔开或换行，N后面的楼层为N+1，以此类推，直到再次出现N。<br>例:0:楼主，沙发，板凳<br>3:地板，地下室<br>100:中奖楼层</div></td>
 			</tr>
 			<tr>
+				<th>点击率实时更新</th>
+				<td>
+					<ul class="switch_list cc mb10">
+						<li><label><input type="radio" name="hit_update" value="1" {@Pw::ifcheck($config['read.hit_update']==1)}><span>开启</span></label></li>
+						<li><label><input type="radio" name="hit_update" value="0" {@Pw::ifcheck($config['read.hit_update']==0)}><span>关闭</span></label></li>
+					</ul>
+				</td>
+				<td><div class="fun_tips">开启后，浏览帖子将实时更新阅读数</div></td>
+			</tr>
+			<tr>
 				<th>图片懒加载</th>
 				<td>
 					<ul class="switch_list cc mb10">

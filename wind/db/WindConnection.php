@@ -27,7 +27,7 @@ Wind::import("WIND:db.WindResultSet");
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-23
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindConnection.php 3878 2012-12-27 07:13:41Z yishuo $
+ * @version $Id: WindConnection.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package db
  */
 class WindConnection extends WindModule {
@@ -171,7 +171,7 @@ class WindConnection extends WindModule {
 			return $statement->execute();
 		} catch (PDOException $e) {
 			$this->close();
-			throw new WindDbException($e->getMessage(). "\r\nSQL:$sql", WindDbException::DB_QUERY_ERROR);
+			throw new WindDbException('[db.WindConnection.execute] ' . $e->getMessage(). "\r\nSQL:$sql", WindDbException::DB_QUERY_ERROR);
 		}
 	}
 
@@ -185,7 +185,7 @@ class WindConnection extends WindModule {
 			$sql = $this->parseQueryString($sql);
 			return new WindResultSet($this->getDbHandle()->query($sql));
 		} catch (PDOException $e) {
-			throw new WindDbException($e->getMessage(). "\r\nSQL:$sql", WindDbException::DB_QUERY_ERROR);
+			throw new WindDbException('[db.WindConnection.query] ' . $e->getMessage(). "\r\nSQL:$sql", WindDbException::DB_QUERY_ERROR);
 		}
 	}
 
@@ -296,7 +296,7 @@ class WindConnection extends WindModule {
 			$this->_dbHandle->setCharset($this->_charset);
 		} catch (PDOException $e) {
 			$this->close();
-			throw new WindDbException($e->getMessage());
+			throw new WindDbException('[db.WindConnection.init] ' . $e->getMessage());
 		}
 	}
 

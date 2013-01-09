@@ -49,7 +49,7 @@ class PwTemplateCompilerDesign extends AbstractWindTemplateCompiler {
 			case 'tips':
 				return $this->service->compileTips($this->id);
 			case 'end':
-				return $this->service->afterDesign();
+				//return $this->service->afterDesign();
 		}
 	}
 	
@@ -59,7 +59,9 @@ class PwTemplateCompilerDesign extends AbstractWindTemplateCompiler {
 	}
 	
 	private function _beforeDesign() {
-		$this->service = Wekit::load('design.srv.PwDesignCompile');
+		Wind::import('SRV:design.srv.PwDesignCompile');
+		$this->service = PwDesignCompile::getInstance();
+		//$this->service = Wekit::load('design.srv.PwDesignCompile');
 		//纠结的template标签
 		if (!isset($this->_router)) { 
 			$this->_router();

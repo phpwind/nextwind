@@ -5,22 +5,16 @@
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindSocket.php 2973 2011-10-15 19:22:48Z yishuo $ 
+ * @version $Id: WindSocket.php 3904 2013-01-08 07:01:26Z yishuo $ 
  * @package mail
  * @subpackage protocol
  */
 class WindSocket {
-
 	protected $host = '127.0.0.1';
-
 	protected $port = 80;
-
 	protected $timeout = 5;
-
 	protected $errno = 0;
-
 	protected $errstr = '';
-
 	protected $socket = null;
 
 	public function __construct($host = '127.0.0.1', $port = 80, $timeout = 5) {
@@ -34,7 +28,10 @@ class WindSocket {
 	 */
 	public function open() {
 		if (null == $this->socket) {
-			$this->socket = fsockopen($this->host, $this->port, $this->errno, $this->errstr, $this->timeout);
+			$this->socket = fsockopen($this->host, $this->port, $this->errno, $this->errstr, 
+				$this->timeout);
+			if ($this->socket == false) throw new WindMailException(
+				'[mail.protocol.WindSocket.open] Initiates a socket connection fail, ' . $this->host . ' is not a valid domain.');
 		}
 	}
 
@@ -99,7 +96,6 @@ class WindSocket {
 	 */
 	public function setHost($host) {
 		$this->host = $host;
-	
 	}
 
 	/**

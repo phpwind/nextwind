@@ -6,7 +6,7 @@ Wind::import('WINDID:library.base.WindidBaseDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidSchoolDm.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidSchoolDm.php 23087 2013-01-06 03:37:34Z jinlong.panjl $
  * @package service.school.dm
  */
 class WindidSchoolDm extends WindidBaseDm {
@@ -82,7 +82,7 @@ class WindidSchoolDm extends WindidBaseDm {
 	protected function _beforeAdd() {
 		if (!isset($this->_data['name']) || !$this->_data['name']) return new WindidError(WindidError::FAIL);
 		if (!isset($this->_data['areaid']) || $this->_data['areaid'] < 1) return new WindidError(WindidError::FAIL);
-		if (!isset($this->_data['typeid']) || !(in_array($this->_data['typeid'], array(1, 2, 3)))) return new WindidError(WindidError::FAIL);
+		if (!isset($this->_data['typeid'])) return new WindidError(WindidError::FAIL);
 		return true;
 	}
 

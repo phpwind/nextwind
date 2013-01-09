@@ -4,7 +4,7 @@
  * @Descript: 前台全局功能js（www\template\common\foot.htm引用）
  * @Author	:
  * @Depend	: wind.js、jquery.js(1.7 or later)
- * $Id: global.js 21606 2012-12-11 11:33:10Z hao.lin $
+ * $Id: global.js 23179 2013-01-07 02:46:44Z hao.lin $
  */
 
 /*
@@ -1359,11 +1359,12 @@ if(document.getElementById('J_top_design')) {
 	var ad_iframes_div = $('div.J_ad_iframes_div'),
 			ad_iframes_len = ad_iframes_div.length;
 	if(ad_iframes_len && !DESIGN_MODE) {
+		var ad_isf = Wind.Util.flashPluginTest() ? '1' : '0';
 		for(i=0; i<ad_iframes_len; i++) {
 			var ad_item = $(ad_iframes_div[i]),
 					ad_iframe = document.createElement('iframe');
 			$(ad_iframe).attr({
-				src : ad_item.data('src'),
+				src : ad_item.data('src')+'&isf='+ad_isf,
 				frameborder	: '0',
 				scrolling	: 'no',
 				height		: ad_item.data('height'),

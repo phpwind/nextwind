@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author JianMin Chen <sky_hold@163.com> 2011-12-19
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwBaseHookService.php 18345 2012-09-14 07:18:31Z xiaoxia.xuxx $
+ * @version $Id: PwBaseHookService.php 23093 2013-01-06 04:04:36Z jieyin $
  * @package wekit
  * @subpackage engine.hook
  */
@@ -145,6 +145,10 @@ abstract class PwBaseHookService {
 			$result = $this->_getAttribute($result, $args);
 		}
 		return $result;
+	}
+
+	public function getHookKey() {
+		return $this->_key[0];
 	}
 
 	/**

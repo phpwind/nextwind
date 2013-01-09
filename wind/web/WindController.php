@@ -7,7 +7,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindController.php 3711 2012-07-16 03:33:09Z yishuo $
+ * @version $Id: WindController.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package web
  */
 abstract class WindController extends WindSimpleController {
@@ -25,13 +25,14 @@ abstract class WindController extends WindSimpleController {
 		if ($action !== 'run') $action = $this->resolvedActionName($action);
 		if (in_array($action, array('doAction', 'beforeAction', 'afterAction', 'forwardAction')) || !method_exists(
 			$this, $action)) {
-			throw new WindException('[web.WindController.resolvedActionMethod] ' . get_class($this) . '::' . $action, 
-				WindException::ERROR_CLASS_METHOD_NOT_EXIST);
+			throw new WindException(
+				'Your request action \'' . get_class($this) . '::' . $action . '()\' was not found on this server.', 
+				404);
 		}
 		$method = new ReflectionMethod($this, $action);
 		if ($method->isProtected()) throw new WindException(
-			'[web.WindController.resolvedActionMethod] ' . get_class($this) . '::' . $action, 
-			WindException::ERROR_CLASS_METHOD_NOT_EXIST);
+			'Your request action \'' . get_class($this) . '::' . $action . '()\' was not found on this server.', 
+			404);
 		return $action;
 	}
 

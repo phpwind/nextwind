@@ -6,7 +6,7 @@ Wind::import('WIND:router.route.AbstractWindRoute');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwRoute.php 22590 2012-12-25 11:26:53Z long.shi $
+ * @version $Id: PwRoute.php 23295 2013-01-08 03:54:25Z long.shi $
  * @package library
  */
 class PwRoute extends AbstractWindRoute {
@@ -282,10 +282,11 @@ class PwRoute extends AbstractWindRoute {
 						$format = array();
 						preg_match_all('/\{(\w+)\}/', $v['format'], $matches);
 						if (empty($matches[1])) continue;
-						if (1 === count($matches[1])) {
+						$is_fname = strpos($v['format'], '{fname}') !== false;
+						if (1 === count($matches[1]) && !$is_fname) {
 							if (!isset($_args[$matches[1][0]])) continue;
 						}
-						if (strpos($v['format'], '{fname}') !== false) {
+						if ($is_fname) {
 							if ($this->dynamicDomain) continue;
 							if (!isset($_args['fid'])) continue;
 							$domain = $this->_getDomain('id', 'domain');
@@ -376,8 +377,9 @@ class PwRoute extends AbstractWindRoute {
 									'sub' => array('m' => 'bbs', 'c' => 'thread', 'a' => 'run'),
 									'sub2' => array('m' => 'bbs', 'c' => 'thread', 'a' => 'run'),
 									);
+								$forum_type = isset($forums[$matches['fid']]['type']) ? $forums[$matches['fid']]['type'] : 'forum';
 								return array_merge($matches, 
-										$action[$forums[$matches['fid']]['type']], $args);
+										$action[$forum_type], $args);
 							}
 						}
 						$route = explode('/', $v['route']);
@@ -545,7 +547,7 @@ class PwRoute extends AbstractWindRoute {
 	private function _getModuleDomain($_m) {
 		$appType = $this->_getAppType();
 		if (isset($appType[$_m])) return $appType[$_m] . $this->base;
-		$this->dynamicHost = Wekit::app()->baseUrl;
+		isset($appType['default']) || $this->dynamicHost = Wekit::app()->baseUrl;
 		return isset($appType['default']) ? $appType['default'] . $this->base : '';
 	}
 

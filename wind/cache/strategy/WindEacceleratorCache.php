@@ -53,7 +53,7 @@ Wind::import('WIND:cache.AbstractWindCache');
  * @author xiaoxiao <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindEacceleratorCache.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindEacceleratorCache.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package strategy
  */
 class WindEacceleratorCache extends AbstractWindCache {
@@ -67,7 +67,7 @@ class WindEacceleratorCache extends AbstractWindCache {
 	 */
 	public function __construct() {
 		if (!function_exists('eaccelerator_get')) {
-			throw new WindCacheException('The eaccelerator extension must be loaded !');
+			throw new WindCacheException('[cache.strategy.WindEacceleratorCache] The eaccelerator extension must be loaded !');
 		}
 	}
 

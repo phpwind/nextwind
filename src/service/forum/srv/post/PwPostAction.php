@@ -10,7 +10,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostAction.php 22627 2012-12-26 03:54:26Z jieyin $
+ * @version $Id: PwPostAction.php 23093 2013-01-06 04:04:36Z jieyin $
  * @package forum
  */
 
@@ -26,6 +26,7 @@ abstract class PwPostAction extends PwBaseHookService {
 		$this->forum = new PwForumBo($fid);
 		$this->user = $user ? $user : Wekit::getLoginUser();
 		$this->isBM = $this->forum->isBM($this->user->username);
+		parent::__construct();
 	}
 
 	/**

@@ -12,7 +12,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindHttpResponse.php 3850 2012-12-04 07:30:02Z yishuo $
+ * @version $Id: WindHttpResponse.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package http
  * @subpackage response
  */
@@ -669,7 +669,7 @@ class WindHttpResponse implements IWindResponse {
 	public function isSendedHeader($throw = false) {
 		$sended = headers_sent($file, $line);
 		if ($throw && $sended) throw new WindException(
-			__CLASS__ . ' the headers are sent in file ' . $file . ' on line ' . $line);
+			'[web.WindHttpResponse.isSendedHeader] the headers are sent in file ' . $file . ' on line ' . $line);
 		return $sended;
 	}
 

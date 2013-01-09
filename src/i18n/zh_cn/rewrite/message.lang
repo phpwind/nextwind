@@ -14,5 +14,5 @@ domain.same="#0域名重复"
 cookie.domain.fail="cookie作用域设置有误"
 url.incomplete="#0 不是完整url"
 
-root.empty="根域名不可为空"
-root.same="根域名不可重复"
+root.empty="空间根域名不可为空"
+root.same="空间根域名和其他根域名不可重复"

@@ -3,7 +3,8 @@
 	width:75px;
 }
 </style>
-	<div id="J_login_question_wrap" class="core_pop_wrap">
+<!--# $_s = (1 == $s) ? 'top: 223px; left: 485.5px;' : '';#-->
+	<div id="J_login_question_wrap" class="core_pop_wrap" style="{$_s}">
 		<div class="core_pop">
 			<div class="pop_login">
 				<div class="pop_top">
@@ -12,6 +13,7 @@
 				</div>
 				<form id="J_head_question_form" action="{@url:u/login/doshowquestion}" method="post" >
 				<input type="hidden" name="_statu" value="{$_statu}">
+				<input type="hidden" name="v" value="{$v}" />
 				<div class="pop_cont">
 					<div id="J_login_question_tips" style="display:none;" class="tips"></div>
 <!--#if ($hasQuestion) {#-->

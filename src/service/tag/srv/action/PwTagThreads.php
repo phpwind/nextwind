@@ -10,14 +10,26 @@ class PwTagThreads extends PwTagAction{
 	 */
 	public function getContents($ids){
 		$threads = $this->_getThreadDs()->fetchThread($ids,PwThread::FETCH_ALL);
+		$array = array();
 		if ($threads) {
-			$fids = $array = array();
+			$fids = array();
 			foreach ($threads as $v) {
 				$fids[] = $v['fid'];
 			}
+			$user = Wekit::getLoginUser();
 			$forums = $this->_getForumDs()->fetchForum($fids);
-			foreach ($threads as $k=>$v) {
-				if ($v['disabled'] > 0) continue;
+			$forbidFids = $this->getForbidVisitForum($user, $forums);
+			$lang = Wind::getComponent('i18n');
+			foreach ($threads as $k => $v) {
+				if ($v['disabled'] > 0) {
+					$content = $lang->getMessage('BBS:forum.thread.disabled');
+					$v['subject'] = $content;
+					$v['content'] = $content;
+				} elseif (in_array($v['fid'], $forbidFids)) {
+					$content = $lang->getMessage('BBS:forum.thread.right.error');
+					$v['subject'] = $content;
+					$v['content'] = $content;
+				}
 				$v['forum_name'] = $forums[$v['fid']]['name'];
 				$v['created_time_auto'] = pw::time2str($v['created_time'],'auto');
 				$v['type_id'] = $forums[$v['fid']]['name'];
@@ -26,6 +38,22 @@ class PwTagThreads extends PwTagAction{
 		}
 		
 		return $array;
+	}
+	
+	/**
+	 * 获取用户所有禁止访问的版块列表
+	 *
+	 * @param PwUserBo $user
+	 * @return array
+	 */
+	protected function getForbidVisitForum(PwUserBo $user, $forums) {
+		$fids = array();
+		foreach ($forums as $key => $value) {
+			if (($value['allow_visit'] && !$user->inGroup(explode(',', $value['allow_visit']))) || ($value['allow_read'] && !$user->inGroup(explode(',', $value['allow_read'])))) {
+				$fids[] = $value['fid'];
+			}
+		}
+		return $fids;
 	}
 	
 	/**

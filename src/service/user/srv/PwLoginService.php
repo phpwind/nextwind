@@ -11,7 +11,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwLoginService.php 22676 2012-12-26 09:08:24Z gao.wanggao $
+ * @version $Id: PwLoginService.php 23331 2013-01-08 10:04:34Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwLoginService extends PwBaseHookService {
@@ -107,19 +107,6 @@ class PwLoginService extends PwBaseHookService {
 			//从windid这边将数据同步到论坛
 			if (!$this->_getUserDs()->activeUser($userid)) return false;
 			$pwUserInfoDm = new PwUserInfoDm($userid);
-			//【用户同步】未验证用户组
-			/* $_uncheckGid = false;
-			if (Wekit::C('register', 'active.check')) {
-				$pwUserInfoDm->setUncheck(true);
-				$_uncheckGid = true;
-			}
-			if (Wekit::C('register', 'active.mail')) {
-				$pwUserInfoDm->setUnactive(true);
-				$_uncheckGid = true;
-			}
-			if ($_uncheckGid) {
-				$pwUserInfoDm->setGroupid(7);
-			} */
 			//【用户同步】计算memberid
 			/* @var $groupService PwUserGroupsService */
 			$groupService = Wekit::load('usergroup.srv.PwUserGroupsService');
@@ -244,7 +231,7 @@ class PwLoginService extends PwBaseHookService {
 	 * @return string
 	 */
 	public static function createLoginIdentify($userInfo) {
-		$code = Pw::encrypt($userInfo['uid'] . "\t" . Pw::getPwdCode($userInfo['password']) . "\t" . Pw::getTime(), Wekit::C('site', 'hash') . '___loginTemp');
+		$code = Pw::encrypt($userInfo['uid'] . "\t" . Pw::getPwdCode($userInfo['password']) . "\t" . Pw::getTime());
 		return rawurlencode($code);
 	}
 	
@@ -255,7 +242,7 @@ class PwLoginService extends PwBaseHookService {
 	 * @return array array($uid, $password)
 	 */
 	public static function parseLoginIdentify($identify) {
-		$args = explode("\t", Pw::decrypt(rawurldecode($identify), Wekit::C('site', 'hash') . '___loginTemp'));
+		$args = explode("\t", Pw::decrypt(rawurldecode($identify)));
 		if ((Pw::getTime() - $args[2]) > 300) {
 			return array(0, '');
 		} else {

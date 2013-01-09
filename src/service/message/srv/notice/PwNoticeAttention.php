@@ -25,7 +25,10 @@ class PwNoticeAttention extends PwNoticeAction{
 	 * @see PwNoticeAction::formatExtendParams()
 	 */
 	public function formatExtendParams($extendParams,$aggregatedNotice = null){
-		$oldExtendParams = $aggregatedNotice ? unserialize($aggregatedNotice['extend_params']) : $extendParams;
+		$oldExtendParams = array();
+		if ($aggregatedNotice && !$aggregatedNotice['is_read']) {
+			$oldExtendParams = $aggregatedNotice ? unserialize($aggregatedNotice['extend_params']) : $extendParams;
+		}
 		return array_slice($extendParams+$oldExtendParams, 0, 20,true);
 	}
 	

@@ -140,7 +140,7 @@ ul li:hover {
 			<ul>
 				<!--#foreach ($errors as $key => $error):
 		$key = $key + 1;
-		if(!WIND_DEBUG)
+		if(!Wind::$isDebug)
 			$error = str_replace(Wind::getRootPath(Wind::getAppName()), '~/', $error);#-->
 				<li>{$key}. {$error}</li>
 				<!--#endforeach;#-->

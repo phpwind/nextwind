@@ -5,7 +5,7 @@ Wind::import('SRV:design.srv.data.PwModuleData');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwShieldData.php 22257 2012-12-20 09:50:37Z gao.wanggao $ 
+ * @version $Id: PwShieldData.php 23167 2013-01-06 13:29:44Z gao.wanggao $ 
  * @package 
  */
 
@@ -78,7 +78,7 @@ class PwShieldData extends PwModuleData {
 	 				->setVieworder($v['vieworder']);
 	 		}
 	 		if (isset($v['bold'])) $dm->setStyle($v['bold'],$v['underline'], $v['italic'], $v['color']);
-			$extend = $this->getExtend($newData);
+			$extend = $this->getExtend($v);
 	 		$dm->setExtend($extend);
 	 		$resource = $ds->addData($dm);
 	 		if (isset($extend['__asyn'])) {
@@ -98,67 +98,69 @@ class PwShieldData extends PwModuleData {
 		$time = Pw::getTime();
 		$ds = Wekit::load('design.PwDesignPush');
 		$vo = Wekit::load('design.srv.vo.PwDesignPushSo');
-		$vo->setModuleid($this->bo->moduleid);
-		$vo->setGtEndTime($time);
-		$vo->orderbyPushid(false);
-		$data = $ds->searchPush($vo, $limit, $start);
-		$i = 0;
-		$count = count($data);
-		if ($count < 1) return true;
-		foreach ($data AS $k=>$v) {
-			if (in_array($v['push_id'], $this->pushids)) {
-				$i++;
-				continue;
-			} 
-			if ($v['start_time'] > $time){
-				$i++;
-				continue;
-			} 
-			$this->sourData[] = $this->formatPushData($v);
-		}
-		if ($count < $limit) return true;
-		$start += $limit;
-		$times++;
-		if ($i && $times < 100) $this->_getPushData($i,$start, $times);
+		do {
+			$vo->setModuleid($this->bo->moduleid);
+			$vo->setGtEndTime($time);
+			$vo->orderbyPushid(false);
+			$data = $ds->searchPush($vo, $limit, $start);
+			$i = 0;
+			$count = count($data);
+			if ($count < 1) return true;
+			foreach ($data AS $k=>$v) {
+				if (in_array($v['push_id'], $this->pushids)) {
+					$i++;
+					continue;
+				} 
+				if ($v['start_time'] > $time){
+					$i++;
+					continue;
+				} 
+				$this->sourData[] = $this->formatPushData($v);
+			}
+			if ($count < $limit) return true;
+			$start += $limit;
+			$times++;
+		} while ($i && $times < 20); 
 	}
 	
 	private function _getAutoData($param, $times = 0) {
 		$limit = $param['limit'];
-		$shieldids = $fromids = array();
 		$model = $this->bo->getModel();
 		if (!$model) return false;
 		$cls = sprintf('PwDesign%sDataService', ucwords($model));
 		$service = Wekit::load('design.srv.model.'.$model.'.'.$cls);
 		$service->setModuleBo($this->bo);
-		$data = $service->buildAutoData($param, $param['order'], $limit, $param['start']);
-		$count = count($data);
-		if ($count < 1) return true;
-		$i = 0;
-		foreach ($data AS $k=>$v) $fromids[] = $v['standard_fromid']; 
-		
-		$shields = Wekit::load('design.PwDesignShield')->fetchByFromidsAndApp($fromids, $model);
-		if ($shields) {
-			foreach ($shields AS $v) {
-				$shieldids[] = $v['from_id'];
-			}
-		}
-		
-		foreach ($data AS $k=>$v) {
-			if (!isset($v['standard_title']) || in_array($v['standard_fromid'], $shieldids) || in_array($v['standard_fromid'], $this->autoids)){
-				unset($data[$k]);
-				$i++;
-				continue;
-			} else {
-				$v['from_type'] = 'auto';
-				$this->sourData[] = $v;
+		do {
+			$shieldids = $fromids = array();
+			$data = $service->buildAutoData($param, $param['order'], $limit, $param['start']);
+			$count = count($data);
+			if ($count < 1) break;
+			$i = 0;
+			foreach ($data AS $k=>$v) $fromids[] = $v['standard_fromid']; 
+			
+			$shields = Wekit::load('design.PwDesignShield')->fetchByFromidsAndApp($fromids, $model);
+			if ($shields) {
+				foreach ($shields AS $v) {
+					$shieldids[] = $v['from_id'];
+				}
 			}
 			
-		}
-		if ($count < $limit) return true;
-		$param['start'] += $limit;
-		$param['limit'] = $i;
-		$times++;
-		if ($i && $times < 100) $this->_getAutoData($param, $times);
+			foreach ($data AS $k=>$v) {
+				if (!isset($v['standard_title']) || in_array($v['standard_fromid'], $shieldids) || in_array($v['standard_fromid'], $this->autoids)){
+					unset($data[$k]);
+					$i++;
+					continue;
+				} else {
+					$v['from_type'] = 'auto';
+					$this->sourData[] = $v;
+				}
+				
+			}
+			if ($count < $limit) break;
+			$param['start'] += $limit;
+			$param['limit'] = $i;
+			$times++;
+		} while ($i && $times < 20);
 	}
 	
 }

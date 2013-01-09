@@ -13,7 +13,7 @@ Wind::import("WIND:ftp.AbstractWindFtp");
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindSocketFtp.php 3876 2012-12-26 07:52:05Z yishuo $
+ * @version $Id: WindSocketFtp.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package ftp
  */
 class WindSocketFtp extends AbstractWindFtp {
@@ -55,15 +55,15 @@ class WindSocketFtp extends AbstractWindFtp {
 		$errstr = '';
 		$this->conn = fsockopen($this->server, $this->port, $errno, $errstr, $this->timeout);
 		if (!$this->conn || !$this->checkcmd()) {
-			throw new WindFtpException("$this->server:$this->port\r\nEroor:$errstr ($errno)!", WindFtpException::CONNECT_FAILED);
+			throw new WindFtpException("[ftp.WindSocketFtp.getConnection] $this->server:$this->port\r\nEroor:$errstr ($errno)!", WindFtpException::CONNECT_FAILED);
 		}
 		stream_set_timeout($this->conn, $this->timeout);
 		
 		if (!$this->sendcmd('USER', $this->user)) {
-			throw new WindFtpException($this->user, WindFtpException::LOGIN_FAILED);
+			throw new WindFtpException('[ftp.WindSocketFtp.getConnection] ' . $this->user, WindFtpException::LOGIN_FAILED);
 		}
 		if (!$this->sendcmd('PASS', $this->pwd)) {
-			throw new WindFtpException(' error password for ' . $this->user, WindFtpException::LOGIN_FAILED);
+			throw new WindFtpException('[ftp.WindSocketFtp.getConnection] error password for ' . $this->user, WindFtpException::LOGIN_FAILED);
 		}
 		
 		$this->initRootPath();
@@ -90,12 +90,12 @@ class WindSocketFtp extends AbstractWindFtp {
 		}
 		$remotefile = $this->rootPath . WindSecurity::escapePath($remotefile);
 		if (!($fp = fopen($localfile, 'rb'))) {
-			throw new WindFtpException($localfile, WindFtpException::FILE_READ_FOBIDDEN);
+			throw new WindFtpException('[ftp.WindSocketFtp.upload] ' . $localfile, WindFtpException::FILE_READ_FOBIDDEN);
 		}
 		$mode != 'I' && $mode = 'A';
 		$this->delete($remotefile);
 		if (!$this->sendcmd('TYPE', $mode)) {
-			throw new WindFtpException($mode, WindFtpException::COMMUNICATE_TYPE_FAILED);
+			throw new WindFtpException('[ftp.WindSocketFtp.upload] ' . $mode, WindFtpException::COMMUNICATE_TYPE_FAILED);
 		}
 		$this->openTmpConnection();
 		$this->sendcmd('STOR', $remotefile);
@@ -106,7 +106,7 @@ class WindSocketFtp extends AbstractWindFtp {
 		$this->closeTmpConnection();
 
 		if (!$this->checkcmd()) {
-			throw new WindFtpException('PUT', WindFtpException::COMMAND_FAILED);
+			throw new WindFtpException('[ftp.WindSocketFtp.upload] PUT', WindFtpException::COMMAND_FAILED);
 		} else {
 			$this->sendcmd('SITE CHMOD', base_convert(0644, 10, 8) . " $remotefile");
 		}
@@ -119,7 +119,7 @@ class WindSocketFtp extends AbstractWindFtp {
 	public function download($localfile, $remotefile = '', $mode = 'I') {
 		$mode != 'I' && $mode = 'A';
 		if (!$this->sendcmd('TYPE', $mode)) {
-			throw new WindFtpException($mode, WindFtpException::COMMUNICATE_TYPE_FAILED);
+			throw new WindFtpException('[ftp.WindSocketFtp.download] ' . $mode, WindFtpException::COMMUNICATE_TYPE_FAILED);
 		}
 		$this->openTmpConnection();
 		if (!$this->sendcmd('RETR', $remotefile)) {
@@ -127,7 +127,7 @@ class WindSocketFtp extends AbstractWindFtp {
 			return false;
 		}
 		if (!($fp = fopen($localfile, 'wb'))) {
-			throw new WindFtpException($localfile, WindFtpException::FILE_READ_FOBIDDEN);
+			throw new WindFtpException('[ftp.WindSocketFtp.download] ' . $localfile, WindFtpException::FILE_READ_FOBIDDEN);
 		}
 		while (!feof($this->tmpConnection)) {
 			fwrite($fp, fread($this->tmpConnection, 4096));
@@ -135,7 +135,7 @@ class WindSocketFtp extends AbstractWindFtp {
 		fclose($fp);
 		$this->closeTmpConnection();
 
-		if (!$this->checkcmd()) throw new WindFtpException('GET', WindFtpException::COMMAND_FAILED);
+		if (!$this->checkcmd()) throw new WindFtpException('[ftp.WindSocketFtp.download] GET', WindFtpException::COMMAND_FAILED);
 		return true;
 	}
 	
@@ -145,7 +145,7 @@ class WindSocketFtp extends AbstractWindFtp {
 	public function size($file) {
 		$this->sendcmd('SIZE', $file, false);
 		if (!($size_port = $this->checkcmd(true))) {
-			throw new WindFtpException('SIZE', WindFtpException::COMMAND_FAILED);
+			throw new WindFtpException('[ftp.WindSocketFtp.size] SIZE', WindFtpException::COMMAND_FAILED);
 		}
 		return preg_replace("/^[0-9]{3} ([0-9]+)\r\n/", "\\1", $size_port);
 	}
@@ -187,7 +187,7 @@ class WindSocketFtp extends AbstractWindFtp {
 			$dir = substr($dir, 0, -1);
 		}
 		if (!$this->sendcmd('CWD', $dir)) {
-			throw new WindFtpException($dir, WindFtpException::COMMAND_FAILED_CWD);
+			throw new WindFtpException('[ftp.WindSocketFtp.changeDir] ' . $dir, WindFtpException::COMMAND_FAILED_CWD);
 		}
 		return true;
 	}
@@ -203,7 +203,7 @@ class WindSocketFtp extends AbstractWindFtp {
 			$list[] = preg_replace('/[\r\n]/', '', fgets($this->tmpConnection, 512));
 		}
 		$this->closeTmpConnection();
-		if (!$this->checkcmd(true)) throw new WindFtpException('LIST', WindFtpException::COMMAND_FAILED);
+		if (!$this->checkcmd(true)) throw new WindFtpException('[ftp.WindSocketFtp.fileList] LIST', WindFtpException::COMMAND_FAILED);
 		return $list;
 	}
 	
@@ -212,7 +212,7 @@ class WindSocketFtp extends AbstractWindFtp {
 	 */
 	public function close() {
 		if (!$this->conn) return false;
-		if (!$this->sendcmd('QUIT') || !fclose($this->conn)) throw new WindFtpException('QUIT', WindFtpException::COMMAND_FAILED);
+		if (!$this->sendcmd('QUIT') || !fclose($this->conn)) throw new WindFtpException('[ftp.WindSocketFtp.fileList] QUIT', WindFtpException::COMMAND_FAILED);
 		return true;
 	}
 
@@ -257,16 +257,16 @@ class WindSocketFtp extends AbstractWindFtp {
 	private function openTmpConnection() {
 		$this->sendcmd('PASV', '', false);
 		if (!($ip_port = $this->checkcmd(true))) {
-			throw new WindFtpException('PASV', WindFtpException::COMMAND_FAILED);
+			throw new WindFtpException('[ftp.WindSocketFtp.openTmpConnection] PASV', WindFtpException::COMMAND_FAILED);
 		}
 		if (!preg_match('/[0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]+,[0-9]+/', $ip_port, $temp)) {
-			throw new WindFtpException($ip_port, WindFtpException::COMMAND_FAILED_PASS_PORT);
+			throw new WindFtpException('[ftp.WindSocketFtp.openTmpConnection] ' . $ip_port, WindFtpException::COMMAND_FAILED_PASS_PORT);
 		}
 		$temp = explode(',', $temp[0]);
 		$server_ip = "$temp[0].$temp[1].$temp[2].$temp[3]";
 		$server_port = $temp[4] * 256 + $temp[5];
 		if (!$this->tmpConnection = fsockopen($server_ip, $server_port, $errno, $errstr, $this->timeout)) {
-			throw new WindFtpException("{$server_ip}:{$server_port}\r\nError:{$errstr} ({$errno})", WindFtpException::OPEN_DATA_CONNECTION_FAILED);
+			throw new WindFtpException("[ftp.WindSocketFtp.openTmpConnection] {$server_ip}:{$server_port}\r\nError:{$errstr} ({$errno})", WindFtpException::OPEN_DATA_CONNECTION_FAILED);
 		}
 		stream_set_timeout($this->tmpConnection, $this->timeout);
 		return true;

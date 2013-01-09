@@ -8,7 +8,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: GroupsController.php 20660 2012-11-02 02:20:11Z peihong.zhangph $
+ * @version $Id: GroupsController.php 22973 2013-01-04 06:27:52Z jieyin $
  */
 
 class GroupsController extends AdminBaseController {
@@ -148,6 +148,10 @@ class GroupsController extends AdminBaseController {
 		$userGroupService = Wekit::load('usergroup.PwUserGroups'); /* @var $userGroupService PwUserGroups */
 		Wind::import('SRV:usergroup.dm.PwUserGroupDm');
 		
+		is_array($groupName) || $groupName = array();
+		is_array($groupPoints) || $groupPoints = array();
+		is_array($groupImage) || $groupImage = array();
+
 		if ('member' == $groupType) {
 			$_allPointTmp = array_merge($groupPoints, (array)$newGroupPoints);
 			if (count($_allPointTmp) != count(array_unique($_allPointTmp))) {

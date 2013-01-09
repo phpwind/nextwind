@@ -3,7 +3,7 @@ define('WEKIT_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('WEKIT_VERSION', '0.3.9');
 define('WINDID_VERSION', '0.0.2');
 define('NEXT_VERSION', '9.0');
-define('NEXT_RELEASE', '20121226');
+define('NEXT_RELEASE', '20130107');
 defined('WIND_DEBUG') || define('WIND_DEBUG', 0);
 
 require WEKIT_PATH . '../wind/Wind.php';
@@ -13,7 +13,7 @@ require WEKIT_PATH . '../wind/Wind.php';
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: wekit.php 22719 2012-12-26 12:44:12Z jieyin $
+ * @version $Id: wekit.php 23388 2013-01-09 07:23:34Z liusanbian $
  * @package wekit
  */
 class Wekit {
@@ -51,7 +51,7 @@ class Wekit {
 		foreach ($_conf as $namespace => $path) {
 			$realpath = realpath(WEKIT_PATH . $path);
 			Wind::register($realpath, $namespace);
-			define($namespace . '_PATH', $realpath . '/');
+			define($namespace . '_PATH', $realpath . DIRECTORY_SEPARATOR);
 		}
 		Wind::register(WEKIT_PATH, 'WEKIT');
 		self::_loadBase();
@@ -76,7 +76,6 @@ class Wekit {
 			if (self::$_var['dbcache'] && self::$_cache->isDbCache()) {
 				PwLoader::importCache(include CONF_PATH . 'cacheService.php');
 			}
-			
 			$class = Wind::import('SRC:bootstrap.' . $appName . 'Boot');
 			self::$_app = new $class();
 			self::$_config = self::$_app->getConfig();

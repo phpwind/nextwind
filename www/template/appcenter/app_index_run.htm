@@ -2,7 +2,7 @@
 <html>
 <head>
 <template source='TPL:common.head' load='true' />
-<link href="{@theme:css}/app.css?v={@G:version}" rel="stylesheet" />
+<link href="{@theme:css}/app.css?v={@NEXT_RELEASE}" rel="stylesheet" />
 </head>
 <body>
 <div class="wrap">
@@ -17,7 +17,6 @@
 					<div class="box_wrap app_page">
 						<div class="hd">
 							<h2>应用中心</h2>
-							<!--div class="content_filter"><a class="{@Pw::isCurrent($orderby=='time')}" href="{@url:appcenter/index/run?orderby=time}">最新</a></div-->
 						</div>
 						<div class="ct">
 							<!--无搜索动作的话search_num这组代码要隐藏掉-->
@@ -37,44 +36,6 @@ $app['logo'] = Wekit::app()->extres . '/' . $app['alias'] . '/' . $app['logo'];
 									</div>
 								</li>
 								<!--# } #-->
-								<!--# if(Wekit::C('site','album.isopen')){ #-->
-								<!-- <li>
-									<a href="{@url:app/album/index/run}"><img src="{@theme:images}/app/album.png" width="80" height="80" class="img" alt="相册" /></a>
-									<div>
-										<h3 class="title"><a href="{@url:app/album/index/run}">相册</a></h3>
-										<p>还有什么比跟大家分享自己的珍藏照片更快乐的事？</p>
-										<a href="{@url:app/album/index/run}" class="in">进入<em>&gt;&gt;</em></a>
-									</div>
-								</li> -->
-								<!--# } #-->
-								<!--# if(Wekit::C('site','medal.isopen')){ #-->
-								<!-- <li>
-									<a href="{@url:medal/index/run}"><img src="{@theme:images}/app/medal.png" width="80" height="80" class="img" alt="勋章" /></a>
-									<div>
-										<h3 class="title"><a href="{@url:medal/index/run}">勋章</a></h3>
-										<p>咱都是有头头脸的人物，在论坛混怎么能没那么几个勋章呢？</p>
-										<a href="{@url:medal/index/run}" class="in">进入<em>&gt;&gt;</em></a>
-									</div>
-								</li> -->
-								<!--# } #-->
-								<!--# if(Wekit::C('site','task.isOpen')){ #-->
-								<!-- <li>
-									<a href="{@url:task/index/run}"><img src="{@theme:images}/app/task.png" width="80" height="80" class="img" alt="任务" /></a>
-									<div>
-										<h3 class="title"><a href="{@url:task/index/run}">任务</a></h3>
-										<p>发发帖子、加加粉丝、打打卡做个任务还能领奖励，真爽噻。</p>
-										<a href="{@url:task/index/run}" class="in">进入<em>&gt;&gt;</em></a>
-									</div>
-								</li> -->
-								<!--# } #-->
-								<!-- <li>
-									<a href="{@url:vote/my/run}"><img src="{@theme:images}/app/vote.png" width="80" height="80" class="img" alt="投票" /></a>
-									<div>
-										<h3 class="title"><a href="{@url:vote/my/run}">投票</a></h3>
-										<p>任何用户可发起、参与、查看好友投票，大家都来评选心中的美女吧！</p>
-										<a href="{@url:vote/my/run}" class="in">进入<em>&gt;&gt;</em></a>
-									</div>
-								</li> -->
 							</ul>
 							<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" url="appcenter/index/run?orderby=$orderby"/>
 						</div>

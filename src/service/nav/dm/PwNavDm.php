@@ -6,7 +6,7 @@ Wind::import('SRC:library.base.PwBaseDm');
  * @author $Author: gao.wanggao $ 
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwNavDm.php 19250 2012-10-12 05:49:04Z gao.wanggao $ 
+ * @version $Id: PwNavDm.php 23204 2013-01-07 04:27:20Z gao.wanggao $ 
  * @package nav
  */
 class PwNavDm extends PwBaseDm {
@@ -42,7 +42,9 @@ class PwNavDm extends PwBaseDm {
 	public function setSign($router) {
 		$sign = '';
 		if (is_array($router)){
-			foreach ($router AS $v) {
+			$allow = array('m', 'c', 'a', 'tid', 'fid', 'id', 'uid', 'username');
+			foreach ($router AS $k=>$v) {
+				if (!in_array($k, $allow))continue;
 				if (!$v) continue;
 				$sign .= $v . '|';
 			}
@@ -54,7 +56,7 @@ class PwNavDm extends PwBaseDm {
 	}
 	
 	public function setName($name) {
-		$this->_data['name'] = Pw::substrs($name, 20);
+		$this->_data['name'] = $name;
 		return $this;
 	}
 	

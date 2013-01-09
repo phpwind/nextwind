@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: jinlong.panjl $>
- * @author $Author: jinlong.panjl $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageApi.php 22412 2012-12-24 05:15:53Z jinlong.panjl $ 
+ * @version $Id: WindidMessageApi.php 23444 2013-01-09 11:48:37Z gao.wanggao $ 
  * @package 
  */
 
@@ -12,7 +12,7 @@ class WindidMessageApi {
 	
 	public function getUnRead($uid) {
 		$data = $this->_getUserDs()->getUserByUid($uid, WindidUser::FETCH_DATA);
-		return intval($data['message']);
+		return intval($data['messages']);
 	}
 	
 	/**
@@ -101,13 +101,7 @@ class WindidMessageApi {
 	}
 	
 	public function getMessageList($dialogId, $start,$limit) {
-		$list = $this->_getMessageDs()->getDialogMessages($dialogId,$limit,$start);
-		$user = array();
-		foreach ($list AS $k=>$v) {
-			!$user && $user = $this->_getUserDs()->getUserByUid($v['from_uid']);
-			$list[$k]['from_username'] = $user['username'];
-		}
-		return $list;
+		return $this->_getMessageDs()->getDialogMessages($dialogId,$limit,$start);
 	}
 	
 	public function getDialog($dialogId) {
@@ -194,12 +188,48 @@ class WindidMessageApi {
 		return (int)$result;
 	}
 	
+	//传统收件箱，发件箱接口start
+	
+	/**
+	 * 发件箱
+	 * @return array
+	 */
+	public function fromBox($fromUid, $start = 0, $limit = 10) {
+		return $this->_getBoxMessage()->fromBox($fromUid, $start, $limit);
+	}
+	
+	/**
+	 * 收件箱
+	 * @return array
+	 */
+	public function toBox($toUid, $start = 0, $limit = 10) {
+		return $this->_getBoxMessage()->toBox($toUid, $start, $limit);
+	}
+	
+	public function readMessages($uid, $messageIds) {
+		if (!is_array($messageIds)) $messageIds = array($messageIds);
+		$result = $this->_getBoxMessage()->readMessages($uid, $messageIds);
+		return (int)$result;
+	}
+	
+	public function deleteMessages($uid, $messageIds) {
+		if (!is_array($messageIds)) $messageIds = array($messageIds);
+		$result = $this->_getBoxMessage()->deleteMessages($uid, $messageIds);
+		return (int)$result;
+	}
+	
+	//传统收件箱，发件箱接口end
+	
 	private function _getMessageDs() {
 		return Windid::load('message.WindidMessage');
 	}
 	
 	private function _getMessageService() {
 		return Windid::load('message.srv.WindidMessageService');
+	}
+	
+	private function _getBoxMessage() {
+		return Windid::load('message.srv.WindidBoxMessage');
 	}
 	
 	private function _getUserDs(){

@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignDefaultService.php 22476 2012-12-25 01:50:03Z gao.wanggao $ 
+ * @version $Id: PwDesignDefaultService.php 23206 2013-01-07 05:06:41Z gao.wanggao $ 
  * @package 
  */
 class PwDesignDefaultService {
@@ -79,7 +79,6 @@ TPL;
  		Wind::import('SRV:design.srv.data.PwAutoData');
 		$srv = new PwAutoData($moduleid);
 		$srv->addAutoData();
-		$this->_getBakService()->doBak($pageid);
  		return true;
 	}
 	
@@ -133,7 +132,6 @@ TPL;
  		Wind::import('SRV:design.srv.data.PwAutoData');
 		$srv = new PwAutoData($moduleid);
 		$srv->addAutoData();
-		$this->_getBakService()->doBak($pageid);
  		return true;
 	}
 	

@@ -68,6 +68,8 @@ if ($compare) {
 	$cont = $myGroupPermission[$_sub]['value'];
 	if ('radio' == $myGroupPermission[$_sub]['type']) {
 		$cont = ($cont) ? '<span class="correct_span">支持</span>' : '<span class="error_span">不支持</span>';
+	} elseif (!$cont) {
+		$cont = '不限';
 	}
 #-->
 				<li>{$cont|html}</li>
@@ -85,6 +87,8 @@ if ($compare) {
 	$cont = $compareGroupPermission[$_sub]['value'];
 	if ('radio' == $myGroupPermission[$_sub]['type']) {
 		$cont = ($cont) ? '<span class="correct_span">支持</span>' : '<span class="error_span">不支持</span>';
+	} elseif (!$cont) {
+		$cont = '不限';
 	}
 #-->
 				<li>{$cont|html}</li>

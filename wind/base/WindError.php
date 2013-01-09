@@ -8,7 +8,7 @@
  * @version $Id$
  * @package wind.base
  */
-class WindError extends WindModule {
+abstract class WindError extends WindModule {
 	protected $errorDir;
 	protected $isClosed;
 
@@ -29,14 +29,19 @@ class WindError extends WindModule {
 	 * @param Exception $exception
 	 */
 	public function exceptionHandle($exception) {
-		$trace = $exception->getTrace();
-		if (@$trace[0]['file'] == '') {
-			unset($trace[0]);
-			$trace = array_values($trace);
+		$trace = array();
+		$file = $line = '';
+		if (Wind::$isDebug) {
+			$trace = $exception->getTrace();
+			if (@$trace[0]['file'] == '') {
+				unset($trace[0]);
+				$trace = array_values($trace);
+			}
+			$file = @$trace[0]['file'];
+			$line = @$trace[0]['line'];
 		}
-		$file = @$trace[0]['file'];
-		$line = @$trace[0]['line'];
-		$this->showErrorMessage($exception->getMessage(), $file, $line, $trace, $exception->getCode());
+		$this->showErrorMessage($exception->getMessage(), $file, $line, $trace, 
+			$exception->getCode());
 	}
 
 	/**
@@ -48,9 +53,13 @@ class WindError extends WindModule {
 	 * @param int $errline
 	 */
 	public function errorHandle($errno, $errstr, $errfile, $errline) {
-		$trace = debug_backtrace();
-		unset($trace[0]["function"], $trace[0]["args"]);
-		$this->showErrorMessage($this->_friendlyErrorType($errno) . ': ' . $errstr, $errfile, $errline, $trace, $errno);
+		$trace = array();
+		if (Wind::$isDebug) {
+			$trace = debug_backtrace();
+			unset($trace[0]["function"], $trace[0]["args"]);
+		}
+		$this->showErrorMessage($this->_friendlyErrorType($errno) . ': ' . $errstr, $errfile, 
+			$errline, $trace, $errno);
 	}
 
 	/**
@@ -63,16 +72,7 @@ class WindError extends WindModule {
 	 * @param int $errorcode 错误代码
 	 * @throws WindFinalException
 	 */
-	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {
-		if (WIND_DEBUG & 2) {
-			$log = $message . "\r\n" . $file . ":" . $line . "\r\n";
-			list($fileLines, $trace) = $this->crash($file, $line, $trace);
-			foreach ($trace as $key => $value) {
-				$log .= $value . "\r\n";
-			}
-			Wind::getComponent('windLogger')->error($log, 'error', true);
-		}
-	}
+	abstract protected function showErrorMessage($message, $file, $line, $trace, $errorcode);
 
 	/**
 	 * 错误信息处理方法
@@ -82,16 +82,19 @@ class WindError extends WindModule {
 	 * @param array $trace
 	 */
 	protected function crash($file, $line, $trace) {
-		$msg = '';
-		$count = count($trace);
-		$padLen = strlen($count);
-		foreach ($trace as $key => $call) {
-			if (!isset($call['file']) || $call['file'] == '') {
-				$call['file'] = '~Internal Location~';
-				$call['line'] = 'N/A';
+		if ($trace) {
+			$msg = '';
+			$count = count($trace);
+			$padLen = strlen($count);
+			foreach ($trace as $key => $call) {
+				if (!isset($call['file']) || $call['file'] == '') {
+					$call['file'] = '~Internal Location~';
+					$call['line'] = 'N/A';
+				}
+				$traceLine = '#' . str_pad(($count - $key), $padLen, "0", STR_PAD_LEFT) . '  ' . $this->_getCallLine(
+					$call);
+				$trace[$key] = $traceLine;
 			}
-			$traceLine = '#' . str_pad(($count - $key), $padLen, "0", STR_PAD_LEFT) . '  ' . $this->_getCallLine($call);
-			$trace[$key] = $traceLine;
 		}
 		$fileLines = array();
 		if (is_file($file)) {
@@ -103,8 +106,8 @@ class WindError extends WindModule {
 				$padLen = strlen($count);
 				foreach ($fileLines as $line => &$fileLine)
 					$fileLine = " " . htmlspecialchars(
-						str_pad($line + 1, $padLen, "0", STR_PAD_LEFT) . ": " . str_replace("\t", "    ", 
-							rtrim($fileLine)), null, "UTF-8");
+						str_pad($line + 1, $padLen, "0", STR_PAD_LEFT) . ": " . str_replace("\t", 
+							"    ", rtrim($fileLine)), null, "UTF-8");
 			}
 		}
 		return array($fileLines, $trace);
@@ -126,7 +129,7 @@ class WindError extends WindModule {
 					if (is_string($arg))
 						$arg = '"' . (strlen($arg) <= 64 ? $arg : substr($arg, 0, 64) . "…") . '"';
 					else if (is_object($arg))
-						$arg = "[Instance of '" . get_class($arg) . "']";
+						$arg = "" . get_class($arg) . "";
 					else if ($arg === true)
 						$arg = "true";
 					else if ($arg === false)

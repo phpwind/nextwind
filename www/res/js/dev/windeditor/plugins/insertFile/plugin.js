@@ -243,6 +243,7 @@
 						delete file_list[serverData.aid];
 						dd.remove();
 						update_num();
+						delFileEl(aid);
 						return;
 					}
 					$.post(ATTACH_CONFIG.deleteUrl,{aid:aid},function(data) {
@@ -251,6 +252,9 @@
 							dd.remove();
 							//ATTACH_CONFIG.attachnum += 1 ;//删除后可上传数需要加1
 							update_num();
+
+							
+							delFileEl(aid)
 						}else {
 							alert(data.message);
 						}
@@ -261,6 +265,15 @@
 					dd.find('.span_2,.span_3').hide();
 				}
 			});
+
+			function delFileEl(aid){
+				//要删除的元素
+				var del_el = $(editorDoc.body).find('.J_file_img[data-id='+ aid +']');
+				if(del_el.length) {
+					del_el.remove();
+				}
+			}
+
 			//修改附件功能
 			dialog.on('click','#J_file_list :file',function() {
 
@@ -411,7 +424,7 @@
 			}
 
 			//加载插件时把ubb转换成可见即所得
-			$(_self).on('ready',function() {
+			$(editorDoc).ready(function() {
 				wysiwyg();
 			});
 

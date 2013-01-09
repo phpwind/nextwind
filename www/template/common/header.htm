@@ -7,9 +7,9 @@
 			<a href="{@url:index/run}">
 				<!--# if($__css = Wekit::C('site', 'css.logo')) { #-->
 				<!--后台logo上传-->
-							<img src="{@Pw::getPath($__css)}" alt="{@Wekit::C('site','info.name')}">
+				<img src="{@Pw::getPath($__css)}" alt="{@Wekit::C('site','info.name')}">
 				<!--# } else { #-->
-							<img src="{@theme:site.images}/logo.png" alt="{@Wekit::C('site','info.name')}">
+				<img src="{@theme:site.images}/logo.png" alt="{@Wekit::C('site','info.name')}">
 				<!--# } #-->
 			</a>
 		</div>
@@ -40,14 +40,15 @@
 			<form action="{@url:search/s/run}" method="post">
 				<input type="text" id="s" aria-label="搜索关键词" accesskey="s" placeholder="搜索其实很简单" x-webkit-speech speech name="keyword"/>
 				<button type="submit" aria-label="搜索"><img src="{@theme:site.images}/common/search.png" alt="search" /></button>
-      </form>
+			</form>
 		</div>
+		<hook name="header_nav"/>
 		<template source="TPL:common.header_login" load="true" />
 	</div>
 </header>
 <!--#
 if ($child) {
-foreach($child as $ck=>$cv) {
+foreach ($child as $ck => $cv) {
 	 if ($currentId == $ck):
 #-->
 	<div class="nav_weak" id="{$ck}">
@@ -63,4 +64,4 @@ foreach($child as $ck=>$cv) {
 		</ul>
 	</div>
 <!--#}} #-->
-<div class="tac"><advertisement  id='Site.NavBanner' sys='1'/></div>
+<div class="tac"><advertisement id='Site.NavBanner' sys='1'/></div>

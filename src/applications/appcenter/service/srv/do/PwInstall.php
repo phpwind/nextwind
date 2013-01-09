@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwInstall.php 22581 2012-12-25 10:27:20Z long.shi $
+ * @version $Id: PwInstall.php 23309 2013-01-08 07:03:21Z long.shi $
  * @package wind
  */
 class PwInstall implements iPwInstall {
@@ -35,10 +35,11 @@ class PwInstall implements iPwInstall {
 			$hooks);
 		if ($appId = $uninstall->getInstallLog('appId')) $this->_load()->delByAppId($appId);
 		if ($packs = $uninstall->getInstallLog('packs')) {
-			/* foreach ($packs as $value) {
-				if (is_dir($value)) WindFolder::rm($value, true);
-				if (is_file($value)) WindFile::del($value);
-			} */
+			/*
+			 * foreach ($packs as $value) { if (is_dir($value))
+			 * WindFolder::rm($value, true); if (is_file($value))
+			 * WindFile::del($value); }
+			 */
 		}
 		return true;
 	}
@@ -53,15 +54,16 @@ class PwInstall implements iPwInstall {
 		$result = $this->_load()->findByAppId($appId);
 		
 		if ($result instanceof PwError) return $result;
-		if ($result) return new PwError('APPCENTER:install.exist.fail', 
-			array('{{error}}' => $appId));
+		if ($result) return new PwError('APPCENTER:install.exist.fail', array('{{error}}' => $appId));
 		$alias = $manifest->getApplication('alias');
 		if (!$alias) return new PwError('APPCENTER:install.fail.alias.empty');
-		/* if (!preg_match('/^[a-z][a-z0-9]+$/i', $alias)) return new PwError('APPCENTER:illegal.alias'); */
+		/*
+		 * if (!preg_match('/^[a-z][a-z0-9]+$/i', $alias)) return new
+		 * PwError('APPCENTER:illegal.alias');
+		 */
 		$result = $this->_load()->findByAlias($alias);
 		if ($result instanceof PwError) return $result;
-		if ($result) return new PwError('APPCENTER:install.exist.fail', 
-			array('{{error}}' => $alias));
+		if ($result) return new PwError('APPCENTER:install.exist.fail', array('{{error}}' => $alias));
 		
 		$hooks = $manifest->getHooks();
 		if ($hooks) {
@@ -90,12 +92,14 @@ class PwInstall implements iPwInstall {
 					foreach ($inject as $key => $value) {
 						$_hookName = $value['hook_name'];
 						if (in_array($value['alias'], $injects[$_hookName])) {
-							return new PwError('HOOK:inject.exit', array('{{error}}' => $value['alias']));
+							return new PwError('HOOK:inject.exit', 
+								array('{{error}}' => $value['alias']));
 						}
 					}
 				}
 			}
 		}
+		file_put_contents(DATA_PATH . 'tmp/log', 'checkinstall!', FILE_APPEND);
 		return true;
 	}
 	
@@ -191,13 +195,14 @@ class PwInstall implements iPwInstall {
 			if ($r instanceof PwError) return $r;
 			$name = $install->getManifest()->getApplication('alias');
 			$writable = PwSystemHelper::checkWriteAble(EXT_PATH . $name . '/');
-			if (!$writable) return new PwError('APPCENTER:install.mv.fail',
+			if (!$writable) return new PwError('APPCENTER:install.mv.fail', 
 				array('{{error}}' => 'EXT:' . $name));
 			
 			$targetPath = EXT_PATH . $name;
 			PwApplicationHelper::mvSourcePack($install->getTmpPackage(), $targetPath);
 			$install->addInstallLog('packs', $targetPath);
 		}
+		file_put_contents(DATA_PATH . 'tmp/log', 'afterinstall!', FILE_APPEND);
 		return true;
 	}
 
@@ -246,9 +251,35 @@ class PwInstall implements iPwInstall {
 				foreach ($sql as $option => $statements) {
 					if (!in_array($option, array('INSERT', 'UPDATE', 'REPLACE', 'ALTER'))) continue;
 					foreach ($statements as $table => $statement) {
-						if ($option == 'ALTER' && !array_key_exists($table, $sql['CREATE'])) return new PwError(
-							'APPCENTER:install.data.fail', array('{{error}}' => $table));
-						$db->execute($statement);
+						if ($option == 'ALTER') {
+							if (preg_match(
+								'/^ALTER\s+TABLE\s+`?(\w+)`?\s+(DROP|ADD)\s+(KEY|INDEX|UNIQUE)\s+([\w\(\),`]+)?/i', 
+								$statement, $matches)) {
+								list($key, $fields) = explode('(', $matches[4]);
+								$fields = trim($fields, '),');
+								list($matches[3]) = explode(' ', $matches[3]);
+								$matches[3] = trim(strtoupper($matches[3]));
+								PwSystemHelper::alterIndex(
+									array(
+										$matches[1], 
+										$key, 
+										$fields ? $fields : '', 
+										$matches[3], 
+										$matches[2]), $db);
+							} elseif (preg_match(
+								'/^ALTER\s+TABLE\s+`?(\w+)`?\s+(CHANGE|DROP|ADD)\s+`?(\w+)`?/i', 
+								$statement, $matches)) {
+								PwSystemHelper::alterField(
+									array($matches[1], $matches[3], $statement), $db);
+							} else {
+								$db->execute($statement);
+							}
+						} else {
+							if ($option == 'INSERT') {
+								$statement = 'REPLACE' . substr($statement, 6);
+							}
+							$db->execute($statement);
+						}
 					}
 				}
 			}
@@ -256,6 +287,7 @@ class PwInstall implements iPwInstall {
 		} catch (Exception $e) {
 			return new PwError('APPCENTER:install.fail', array('{{error}}' => $e->getMessage()));
 		}
+		file_put_contents(DATA_PATH . 'tmp/log', 'registedata!', FILE_APPEND);
 	}
 
 	/**
@@ -300,6 +332,7 @@ class PwInstall implements iPwInstall {
 			if (!in_array($value['hook_name'], $hookName)) continue;
 			$install->addInstallLog('inject', $value['id']);
 		}
+		file_put_contents(DATA_PATH . 'tmp/log', 'inject!', FILE_APPEND);
 		return true;
 	}
 
@@ -325,7 +358,8 @@ class PwInstall implements iPwInstall {
 		$application->setAuthorIcon($manifest->getApplication('author-icon'));
 		$application->setCreatedTime(Pw::getTime());
 		$application->setModifiedTime(Pw::getTime());
-		//1 - 前台入口 2 - 后台入口 4 - 非纯在线 8 - 站内应用
+		// 1 - 前台入口 2 - 后台入口 4 - 非纯在线 8 - 站内应用
+		$status = 0;
 		if ($tmp = $install->getTmpPackage()) {
 			if (is_file($tmp . '/' . self::CONTROLLER)) {
 				$status |= 1;
@@ -342,6 +376,7 @@ class PwInstall implements iPwInstall {
 		if (!$application->beforeAdd()) return new PwError('APPCENTER:install.mainfest.fail');
 		$this->_load()->add($application);
 		$install->setInstallLog('appId', $install->getAppId());
+		file_put_contents(DATA_PATH . 'tmp/log', 'app!', FILE_APPEND);
 		return true;
 	}
 
@@ -360,9 +395,10 @@ class PwInstall implements iPwInstall {
 		if (!is_dir($source)) return true;
 		$writable = PwSystemHelper::checkWriteAble($targetPath . '/');
 		if (!$writable) return new PwError('APPCENTER:install.mv.fail', 
-					array('{{error}}' => 'THEMES:extres.' . $name));
+			array('{{error}}' => 'THEMES:extres.' . $name));
 		PwApplicationHelper::copyRecursive($source, $targetPath . '/' . $name);
 		$install->addInstallLog('packs', $targetPath . '/' . $name);
+		file_put_contents(DATA_PATH . 'tmp/log', 'res!', FILE_APPEND);
 	}
 
 	/**
@@ -388,7 +424,6 @@ class PwInstall implements iPwInstall {
 	private function _load() {
 		return Wekit::load('APPS:appcenter.service.PwApplication');
 	}
-
 }
 
 ?>

@@ -35,12 +35,13 @@
 			<th>默认用户组</th>
 			<td>
 				<select id="J_u_group_select" class="select_5" name="groupid">
-					<!--# foreach ($default as $item) { #-->
+					<!--# foreach ($allGroups as $item) { #-->
 					<option value="{$item['gid']}"{@Pw::isSelected($info['groupid'] == $item['gid'])}>{$item['name']}</option>
 					<!--# } #-->
+					<option value="{$item['gid']}"{@Pw::isSelected($info['groupid'] == 0)}>普通组</option>
 				</select>
 			</td>
-			<td><div class="fun_tips">用户默认的用户组</div></td>
+			<td><div class="fun_tips">用户默认的用户组，注意：如果拥有用户组中设置了附加组，默认用户组会根据系统默认用户组优先级重新计算当前的用户组。</div></td>
 		</tr>
 		<tfoot>
 		<tr>
@@ -54,25 +55,29 @@
 						</li>
 						<!--#
 						$myGids = array_keys($userGroups);
-						foreach ($groups as $item) {
-								$check = '';
+						foreach ($allGroups as $item) {
+								if (in_array($item['gid'], $defaultGroups)) continue;
+								$check = $canCheck = '';;
 								$disabled = 'disabled=disabled';
 								$disableclass = 'disabled';
 								if (in_array($item['gid'], $myGids)) {
 									$check = 'checked=checked';
 									$disabled = $disableclass = '';
 								}
+								if (in_array($info['groupid'], $defaultGroups)) {
+									$canCheck = 'disabled=disabled';
+								}
 								$endtime = $userGroups[$item['gid']]['endtime'] ? Pw::time2Str($userGroups[$item['gid']]['endtime'], 'Y-m-d H:i') : '';
 						#-->
 						<li>
-							<span class="span_3"><label><input name="groups[]" type="checkbox" class="checkbox J_group_check" id="J_check_{$item['gid']}" value="{$item['gid']}" {$check}>{$item['name']}</label></span>
+							<span class="span_3"><label><input name="groups[]" {$canCheck} type="checkbox" class="checkbox J_group_check" id="J_check_{$item['gid']}" value="{$item['gid']}" {$check}>{$item['name']}</label></span>
 							<span class="span_3"><input name="endtime[{$item['gid']}]" {$disabled} type="text" class="input length_2 {$disableclass} J_date J_group_input" id="J_input_{$item['gid']}" value="{$endtime}"></span>
 						</li>
 						<!--# } #-->
 						<!--普通组-->
 						<li>
-							<span class="span_3"><label><input name="" type="checkbox" class="checkbox J_group_check" id="J_check_0" value="0" checked='checked'  disabled="disabled">普通组</label></span>
-							<span class="span_3"><input name="" {$disabled} type="text" class="input length_2 input_disabled J_group_input" id="J_input_0" disabled="disabled" value="0"></span>
+							<span class="span_3"><label><input name="" type="checkbox" class="checkbox" value="0" checked='checked'  disabled="disabled">普通组</label></span>
+							<span class="span_3"><input name="" type="text" class="input length_2 input_disabled disabled" disabled="disabled" value="0"></span>
 						</li>
 					</ul>
 				</div>
@@ -99,7 +104,7 @@ $(function(){
 	$('#J_u_group_select').change(function(){
 		var select_val = $(this).val();
 		
-		if(select_val === '2' || select_val === '6') {
+		if(select_val === '7' || select_val === '6') {
 			//禁止发言和未验证会员，先取消所有状态
 			$('input.J_group_check').prop({
 				'disabled': true,
@@ -113,11 +118,11 @@ $(function(){
 			});
 
 			//取消禁止发言和未验证会员
-			$('#J_check_2, #J_check_6').prop({
+			/* $('#J_check_7, #J_check_6').prop({
 				'disabled': true,
 				'checked' : false
 			});
-			$('#J_input_2, #J_input_6').prop('disabled', true).addClass('disabled');
+			$('#J_input_7, #J_input_6').prop('disabled', true).addClass('disabled'); */
 		}
 		checkSingle(select_val);
 

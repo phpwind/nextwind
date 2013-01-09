@@ -9,7 +9,7 @@ Wind::import('WIND:utility.WindCookie');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: Pw.php 22511 2012-12-25 05:55:53Z gao.wanggao $
+ * @version $Id: Pw.php 22898 2012-12-28 08:08:00Z long.shi $
  * @package library
  */
 class Pw {
@@ -91,7 +91,7 @@ class Pw {
 	 * @return string
 	 */
 	public static function strlen($string) {
-		return WindString::strlen($string, Wind::getApp()->getResponse()->getCharset());
+		return WindString::strlen($string, Wekit::app()->charset);
 	}
 
 	/**
@@ -103,7 +103,7 @@ class Pw {
 	 * @param bool $dot
 	 */
 	public static function substrs($string, $length, $start = 0, $dot = true) {
-		return WindString::substr($string, $start, $length, Wind::getApp()->getResponse()->getCharset(), $dot);
+		return WindString::substr($string, $start, $length, Wekit::app()->charset, $dot);
 	}
 	
 	/**
@@ -142,7 +142,7 @@ class Pw {
 	 * @return string 加密后的数据
 	 */
 	public static function jsonEncode($value) {
-		return WindJson::encode($value, Wind::getApp()->getResponse()->getCharset());
+		return WindJson::encode($value, Wekit::app()->charset);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Pw {
 	 * @return mixed 解密后的数据
 	 */
 	public static function jsonDecode($value) {
-		return WindJson::decode($value, true, Wind::getApp()->getResponse()->getCharset());
+		return WindJson::decode($value, true, Wekit::app()->charset);
 	}
 	
 	/**
@@ -369,7 +369,7 @@ class Pw {
 	 * @return string
 	 */
 	public static function convert($string, $toEncoding, $fromEncoding = '') {
-		!$fromEncoding && $fromEncoding = Wind::getApp()->getResponse()->getCharset();
+		!$fromEncoding && $fromEncoding = Wekit::app()->charset;
 		return WindConvert::convert($string, $toEncoding, $fromEncoding);
 	}
 

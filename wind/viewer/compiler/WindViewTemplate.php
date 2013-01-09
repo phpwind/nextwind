@@ -28,7 +28,7 @@ Wind::import('WIND:utility.WindFile');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindViewTemplate.php 3882 2012-12-27 10:59:48Z yishuo $
+ * @version $Id: WindViewTemplate.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package viewer
  * @subpackage compiler
  */
@@ -62,7 +62,7 @@ class WindViewTemplate extends AbstractWindViewTemplate {
 			return $content;
 		} catch (Exception $e) {
 			throw new WindViewException(
-				'[component.viewer.WindViewTemplate.doCompile] compile fail.' . $e->getMessage(), 
+				'[viewer.WindViewTemplate.doCompile] compile fail.' . $e->getMessage(), 
 				WindViewException::ERROR_SYSTEM_ERROR);
 		}
 	}

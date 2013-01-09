@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: long.shi $>
- * @author $Author: long.shi $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwNavBo.php 21490 2012-12-10 07:49:24Z long.shi $ 
+ * @version $Id: PwNavBo.php 23013 2013-01-05 02:23:30Z gao.wanggao $ 
  * @package 
  */
 class PwNavBo {
@@ -108,17 +108,21 @@ class PwNavBo {
 				}
 			}
 		}
-
-		asort($rootRating);
-		foreach ($childRating AS $_k=>$_c) {
-			asort($_c);
-			$tmp = array_keys($_c);
-			$childCurrentId = array_shift($tmp);
-			if ($childCurrentId) $list[$_k]['child'][$childCurrentId]['current'] = true;
+		if ($childRating) {
+			foreach ($childRating AS $_k=>$_c) {
+				asort($_c);
+				$tmp = array_keys($_c);
+				$childCurrentId = array_shift($tmp);
+				$list[$_k]['child'][$childCurrentId]['current'] = true;
+				$list[$_k]['current'] = true;
+			}
+			
+		} else {
+			asort($rootRating);
+			$tmp = array_keys($rootRating);
+			$rootCurrentId = array_shift($tmp);
+			$list[$rootCurrentId]['current'] = true;
 		}
-		$tmp = array_keys($rootRating);
-		$rootCurrentId = array_shift($tmp);
-		$list[$rootCurrentId]['current'] = true;
 		return $list;
 	}
 
@@ -143,10 +147,10 @@ class PwNavBo {
     		} else {
     			$rating[] = $m .'|cate|'. $this->default['a'] .'|'.$this->forum['cateid'].'|';
     		}
+			$rating[] = $m .'|'. $this->default['c'] .'|'. $this->default['a'].'|';
     		$rating[] = $m .'|forumlist|'. $this->default['a'] .'|';
     		$rating[] = $m .'|forum|'. $this->default['a'] .'|';
     	}
-    	
     	if ($m == 'special') { //门户兼容
     		$id = Wind::getApp()->getRequest()->getGet('id');
     		$rating[] = $m .'|'.$c.'|'. $a .'|'.$id.'|';

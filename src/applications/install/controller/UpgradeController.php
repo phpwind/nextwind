@@ -1,6 +1,6 @@
 <?php
 define('WIND_SETUP', 'update');
-Wind::import('WIND:ftp.WindSocketFtp');
+define('NEXT_VERSION', '9.0');
 
 /**
  * 87to90升级流程
@@ -8,7 +8,7 @@ Wind::import('WIND:ftp.WindSocketFtp');
  * @author xiaoxia.xu<xiaoxia.xuxx@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: UpgradeController.php 22845 2012-12-27 13:11:22Z xiaoxia.xuxx $
+ * @version $Id: UpgradeController.php 22952 2013-01-04 02:39:27Z gao.wanggao $
  * @package applications.install.controller
  */
 class UpgradeController extends WindController {
@@ -18,6 +18,8 @@ class UpgradeController extends WindController {
 	 * @see WindSimpleController::beforeAction()
 	 */
 	public function beforeAction($handlerAdapter) {
+
+		$this->setOutput(NEXT_VERSION, 'wind_version');
 		$_consts = include (Wind::getRealPath('CONF:publish.php', true));
 		foreach ($_consts as $const => $value) {
 			if (defined($const)) continue;
@@ -95,23 +97,18 @@ class UpgradeController extends WindController {
 		Wekit::load('SRV:cache.srv.PwCacheUpdateService')->updateConfig();
 		Wekit::load('SRV:cache.srv.PwCacheUpdateService')->updateMedal();
 		$this->_writeWindid();
-		
+		$this->_designUpgrade();
 		//清理升级过程的文件
 //		WindFile::del(Wind::getRealPath('DATA:setup.setup_config.php', true));
 // 		WindFile::del(Wind::getRealPath('DATA:setup.tmp_dbsql.php', true));
-		header('Location: index.php');
+		$this->setTemplate('upgrade_finish');
 	}
 
 	/**
 	 * 头像转移
 	 */
 	public function avatarAction() {
-		$db_config = $this->_getConfig('db_config');
-		$db = new DB($db_config['src_host'], $db_config['src_port'], $db_config['src_username'], $db_config['src_password'], $db_config['src_dbname'], $db_config['src_dbpre']);
-		$end_uid = $db->get_value("SELECT MAX(uid) FROM pw_members");
-		if (!$end_uid) {
-			$this->showMessage('没有用户头像需要转换');
-		}
+		$end_uid = $this->getMaxUid();
 		ini_set('max_execution_time', 0);
 		$time_start = microtime(true);
 
@@ -256,6 +253,34 @@ class UpgradeController extends WindController {
 	}
 
 	/**
+	 * 获得最大的用户ID
+	 *
+	 * @return int
+	 */
+	private function getMaxUid() {
+		$db_config = $this->_getConfig('db_config');
+		$link = mysql_connect(sprintf("%s:%s", $db_config['src_host'], $db_config['src_port']), $db_config['src_username'], $db_config['src_password'], true);
+		$pre = $db_config['src_dbpre'] ? $db_config['src_dbpre'] : 'pw_';
+		if (!$link) {
+			$this->showError("Access denied for user '{$db_config['src_username']}'@'{$db_config['src_host']}' (using password: YES)");
+		}
+		$rt = mysql_select_db($db_config['src_dbname'], $link);
+		if (false === $rt) {
+			$this->showError('SQL ERROR:' . mysql_error($link));
+		}
+		$sql = sprintf("SELECT MAX(uid) FROM %smembers", trim($pre));
+		$rt = mysql_query($sql, $link);
+		if (false === $rt) {
+			$this->showError('SQL ERROR:' . mysql_error($link) . ' IN "' . $sql . '"');
+		}
+		$result = mysql_fetch_array($rt, MYSQL_NUM);
+		if (!$result[0]) {
+			$this->showMessage('没有用户头像需要转换');
+		}
+		return $result[0];
+	}
+	
+	/**
 	 * windid更新
 	 * 
 	 * @return boolean
@@ -287,9 +312,134 @@ class UpgradeController extends WindController {
 			'clientDb'  => 'mysql',
 			'clientCharser'  => $charset,
 		);
-		WindFile::savePhpData($this->_getWindidFile(),$config);
+		WindFile::savePhpData(Wind::getRealPath('ROOT:conf.windidconfig.php', true), $config);
 		return true;
 	}
+	/**
+	 * 自定义页面升级  start
+	 * 
+	 * @return boolean
+	 */
+	protected function _designUpgrade() {
+		Wind::import('SRV:design.srv.vo.PwDesignPortalSo');
+		$vo = new PwDesignPortalSo();
+		$vo->setIsopen(1);
+		$list = $this->_getPortalDs()->searchPortal($vo, 0, 100);
+		$dirList = array();
+		foreach ($list AS $k=>$v) {
+			if(empty($v['template']))  $dirList[$k] = $v['id'];
+		}
+		
+		
+		$dir = Wind::getRealDir('THEMES:portal.local.');
+		$_dir = array();
+		if (!is_dir($dir)) return array();
+		if (!$handle = @opendir($dir)) return array();
+		while (false !== ($file = @readdir($handle))) {
+			if ('.' === $file || '..' === $file) continue;
+			$fileName = $dir . $file;
+			if (is_file($fileName)){
+				continue;
+			}elseif (is_dir($fileName) && is_numeric($file)) {
+				$key = array_search($file, $dirList);
+				unset($dirList[$k]);
+				if ((int)$file != $file) continue;
+				$tplPath = 'special_'.$file;
+				Wind::import('SRV:design.dm.PwDesignPortalDm');
+				$dm = new PwDesignPortalDm($file);
+			    $dm->setTemplate($tplPath);
+			    Wekit::load('design.PwDesignPortal')->updatePortal($dm);
+				$this->copyRecur($fileName, $dir . $tplPath . '/');
+			}
+		}
+		$srv = Wekit::load('design.srv.PwDesignService');
+	
+		foreach ($dirList AS $k=>$v) {
+			$tplPath = 'special_'.$v;
+			$result = $srv->defaultTemplate($k, $tplPath);
+			if ($result) {
+				WindFile::write($dir . $tplPath . '/template/index.htm', $this->_tpl());
+				Wind::import('SRV:design.dm.PwDesignPortalDm');
+				$dm = new PwDesignPortalDm($v);
+			    $dm->setTemplate($tplPath);
+			    Wekit::load('design.PwDesignPortal')->updatePortal($dm);
+			}
+		}
+		@closedir($handle);
+		return true;
+	}
+	
+	/**
+	 * 复制目录
+	 *
+	 * @param string $fromFolder
+	 * @param string $toFolder
+	 * @return boolean
+	 */
+	protected function copyRecur($fromFolder, $toFolder) {
+	    $dir = @opendir($fromFolder);
+	    if (!$dir) return false;
+	    WindFolder::mk($toFolder);
+	    while(false !== ($file = readdir($dir)) ) {
+	        if (($file != '.' ) && ($file != '..' )) {
+	            if (is_dir($fromFolder . '/' . $file) ) {
+	               $this->copyRecur($fromFolder . '/' . $file, $toFolder . '/' . $file);
+	            }else {
+	                @copy($fromFolder . '/' . $file, $toFolder . '/' . $file);
+	                @chmod($toFolder . '/' . $file, 0777);
+	            }
+	        }
+	    }
+	    @closedir($dir);
+	    return true;
+	}
+	
+	private function _getPortalDs() {
+		return Wekit::load('design.PwDesignPortal');
+	}
+	
+	private function _tpl() {
+		return  <<<TPL
+<!doctype html>
+<html>
+<head>
+<template source='TPL:common.head' load='true' />
+</head>
+<body>
+<design role="start"/>
+	<!--# 
+	\$wrapall = !\$portal['header'] ? 'custom_wrap' : 'wrap';
+	#-->
+	<div class="{\$wrapall}">
+	<!--# if(\$portal['header']): #-->
+	<template source='TPL:common.header' load='true' />
+	<!--# endif; #-->
+	<div class="main_wrap">
+	<!--# if(\$portal['navigate']): #-->
+		<div class="bread_crumb">{@\$headguide|html}</div>
+	<!--# endif; #-->
+		<div class="main cc">
+			<design role="tips" id="nodesign"/>
+			<design role="segment" id="segment1"/>
+		</div>
+	</div>
+	<!--# if(\$portal['footer']): #-->
+	<template source='TPL:common.footer' load='true' />
+	<!--# endif; #-->
+	</div>
+<script>
+Wind.use('jquery', 'global');
+</script>
+<design role="end"/>
+</body>
+</html>
+TPL;
+		
+	}
+	/**
+	 * 自定义页面升级 end
+	 */
+
 	
 	/* (non-PHPdoc)
 	 * @see WindSimpleController::setDefaultTemplateName()
@@ -328,68 +478,5 @@ class UpgradeController extends WindController {
 			$error = $lang->getMessage($error);
 		}
 		parent::showMessage($error);
-	}
-}
-class DB {
-	var $dbpre;
-	var $link;
-
-	function __construct($host, $port, $user, $password, $db, $pre = 'pw_') {
-		$this->link = mysql_connect("$host:$port", $user, $password, true);
-		$pre && $this->dbpre = $pre;
-		if ($this->link) {
-			mysql_select_db($db, $this->link);
-		} else {
-			showError("Access denied for user '{$user}'@'{$host}' (using password: YES)");
-		}
-	}
-
-	function query($sql) {
-		$originalSQL = $sql;
-		if ($this->dbpre != 'pw_') {
-			$sql = str_replace(array(' pw_', '`pw_', " 'pw_"), 
-				array(" $this->dbpre", "`$this->dbpre", " '$this->dbpre"), $sql);
-		}
-		return mysql_query($sql, $this->link);
-	}
-
-	function affected_rows() {
-		return mysql_affected_rows($this->link);
-	}
-
-	function fetch_array($query, $result_type = MYSQL_ASSOC) {
-		return mysql_fetch_array($query, $result_type);
-	}
-
-	function get_one($sql, $result_type = MYSQL_ASSOC) {
-		$query = $this->query($sql);
-		return mysql_fetch_array($query, $result_type);
-	}
-
-	function insert_id() {
-		return $this->get_value('SELECT LAST_INSERT_ID()');
-	}
-
-	function get_value($sql, $result_type = MYSQL_NUM, $field = 0) {
-		$query = $this->query($sql);
-		$rt = mysql_fetch_array($query, $result_type);
-		return isset($rt[$field]) ? $rt[$field] : false;
-	}
-
-	function get_all($sql, $result_type = MYSQL_ASSOC, $index = '') {
-		$query = $this->query($sql);
-		$data = array();
-		while ($row = mysql_fetch_array($query, $result_type)) {
-			if (isset($row[$index])) {
-				$data[$row[$index]] = $row;
-			} else {
-				$data[] = $row;
-			}
-		}
-		return $data;
-	}
-
-	function escape_string($str) {
-		return addslashes($str);
 	}
 }

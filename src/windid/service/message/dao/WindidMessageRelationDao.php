@@ -6,14 +6,15 @@
  * @author peihong.zhang
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageRelationDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidMessageRelationDao.php 23072 2013-01-06 02:12:11Z gao.wanggao $
  * @package forum
  */
 
 class WindidMessageRelationDao extends WindidBaseDao {
 	
+	protected $_pk = 'id';
 	protected $_table = 'windid_message_relation';
-	protected $_dataStruct = array('id', 'dialog_id', 'message_id','is_read');
+	protected $_dataStruct = array('id', 'dialog_id', 'message_id','is_read', 'is_send');
 
 	/**
 	 * 添加消息关系
@@ -29,6 +30,13 @@ class WindidMessageRelationDao extends WindidBaseDao {
 		$this->getConnection()->execute($sql);
 		return $this->getConnection()->lastInsertId();
 	}
+	
+	public function batchReadRelation($relationIds) {
+		$sql = $this->_bindSql('UPDATE %s SET is_read=1 WHERE  id IN %s', $this->getTable(), $this->sqlImplode($relationIds));
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->update(array(),true);
+	}
+	
 	/**
 	 * 更新消息关系表
 	 * 
@@ -137,6 +145,12 @@ class WindidMessageRelationDao extends WindidBaseDao {
 		$sql = $this->_bindSql('SELECT * FROM %s WHERE `message_id` IN %s ', $this->getTable(), $this->sqlImplode($messageIds));
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->queryAll(array(),'id');
+	}
+	
+	public function fetchRelationByMessageIds($messageIds, $issend = 0) {
+		$sql = $this->_bindSql('SELECT * FROM %s WHERE `message_id` IN %s AND `is_send` = ?', $this->getTable(), $this->sqlImplode($messageIds));
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->queryAll(array($issend),'message_id');
 	}
 	
 	/**

@@ -10,7 +10,7 @@ Wind::import('SRV:user.PwUser');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserInfoDm.php 22233 2012-12-19 22:02:08Z xiaoxia.xuxx $
+ * @version $Id: PwUserInfoDm.php 22985 2013-01-04 08:06:07Z jieyin $
  * @package src.service.user.dm
  */
 class PwUserInfoDm extends PwBaseDm {
@@ -587,7 +587,7 @@ class PwUserInfoDm extends PwBaseDm {
 	 * @param int $online
 	 */
 	public function setOnline($online) {
-		$this->_data['onlinetime'] = $online;
+		$this->_data['onlinetime'] = intval($online);
 		return $this;
 	}
 
@@ -597,7 +597,7 @@ class PwUserInfoDm extends PwBaseDm {
 	 * @param int $online
 	 */
 	public function addOnline($online) {
-		$this->_increaseData['onlinetime'] = $online;
+		$this->_increaseData['onlinetime'] = intval($online);
 		return $this;
 	}
 	

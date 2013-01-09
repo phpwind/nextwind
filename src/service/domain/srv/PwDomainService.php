@@ -6,7 +6,7 @@ Wind::import("Lib:utility.PwCacheService");
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwDomainService.php 21071 2012-11-27 06:34:14Z long.shi $
+ * @version $Id: PwDomainService.php 23231 2013-01-07 06:50:51Z long.shi $
  * @package domain.srv
  */
 class PwDomainService {
@@ -55,7 +55,7 @@ class PwDomainService {
 	 */
 	public function isDomainValid($domain, $root, $key) {
 		$len = strlen($domain);
-		if ($len < 3 || $len > 20) return new PwError('REWRITE:domain.length');
+		if ($len < 3 || $len > 15) return new PwError('REWRITE:domain.length');
 		if ($domain[0] < 'a' || $domain[0] > 'z') return new PwError('REWRITE:domain.first.illegal');
 		if (!preg_match('/^[a-z0-9]+$/', $domain)) return new PwError('REWRITE:domain.char.num');
 		$result = $this->_domainDs()->getByDomainAndRoot($domain, $root);
@@ -81,7 +81,7 @@ class PwDomainService {
 	 */
 	public function isNameValid($domain, $key) {
 		$len = strlen($domain);
-		if ($len < 3 || $len > 20) return new PwError('REWRITE:domain.length');
+		if ($len < 3 || $len > 15) return new PwError('REWRITE:domain.length');
 		if ($domain[0] < 'a' || $domain[0] > 'z') return new PwError('REWRITE:domain.first.illegal');
 		if (!preg_match('/^[a-z0-9]+$/', $domain)) return new PwError('REWRITE:domain.char.num');
 		$result = $this->_domainDs()->getByDomain($domain);

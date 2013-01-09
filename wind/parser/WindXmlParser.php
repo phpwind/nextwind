@@ -6,7 +6,7 @@ Wind::import("WIND:utility.WindConvert");
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindXmlParser.php 3389 2012-03-12 15:44:22Z yishuo $
+ * @version $Id: WindXmlParser.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package parser
  */
 class WindXmlParser {
@@ -29,7 +29,7 @@ class WindXmlParser {
 	 * @return void
 	 */
 	public function __construct($version = '1.0', $encode = 'utf-8') {
-		if (!class_exists('DOMDocument')) throw new WindException('DOMDocument is not exist.');
+		if (!class_exists('DOMDocument')) throw new WindException('[parser.WindXmlParser] DOMDocument is not exist.');
 		$this->dom = new DOMDocument($version, $encode);
 	}
 

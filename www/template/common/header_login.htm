@@ -42,18 +42,20 @@
 		</div>
 	</div>
 	<div class="header_login_later">
+		<hook name="header_info_1"/>
 		<a aria-haspopup="J_head_user_menu" aria-label="个人功能菜单,按pagedown打开菜单,tab键导航,esc键关闭" tabindex="0" rel="nofollow" href="{@url:space/index/run?uid=$loginUser->uid}" id="J_head_user_a" class="username" title="{$loginUser->username}">{@Pw::substrs($loginUser->username,6)}<em class="core_arrow"></em></a>
+		<hook name="header_info_2"/>
 		<div class="fl">
 		<div id="J_head_user_menu" role="menu" class="header_menu_wrap my_menu_wrap" style="display:none;">
 			<div class="header_menu my_menu cc">
 				<div class="header_menu_hd" id="J_head_pl_user"><span title="{$loginUser->username}" class="username">{@Pw::substrs($loginUser->username,6)}</span><em class="core_arrow_up"></em></div>
 				<ul class="ct cc">
-						<!--# $nav = Wekit::load('SRV:nav.bo.PwNavBo');
-							  $myNav = $nav->getNavFromConfig('my');
-							  foreach($myNav as $key=>$value):
-						#-->
-								<li>{$value['name']|html}</li>
-						<!--# endforeach; #-->
+				<!--# $nav = Wekit::load('SRV:nav.bo.PwNavBo');
+					$myNav = $nav->getNavFromConfig('my');
+					foreach($myNav as $key=>$value):
+				#-->
+					<li>{$value['name']|html}</li>
+				<!--# endforeach; #-->
 				<!--#
 				$_url = '';
 				$_panelManage = false;

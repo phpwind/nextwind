@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="{@Wekit::app()->charset}" />
 		<title>系统后台 - {@Wekit::C('site', 'info.name')}</title>
-		<link href="{@G:url.css}/admin_layout.css?v={@G:c.version}" rel="stylesheet" />
+		<link href="{@G:url.css}/admin_layout.css?v{@NEXT_RELEASE}" rel="stylesheet" />
 		<style>
 			.fullScreen .content th{display:none;width:0;}
 			.fullScreen .head,.fullScreen .tab{height:0;display:none;}
@@ -24,7 +24,7 @@
 //全局变量，是Global Variables不是Gay Video喔
 var GV = {
 	JS_ROOT : "{@G:url.res}/js/dev/",																									//js目录
-	JS_VERSION : "{@G:c.version}",																										//js版本号
+	JS_VERSION : "{@NEXT_RELEASE}",																										//js版本号
 	TOKEN : '{@Wind::getComponent('windToken')->saveToken('csrf_token')}',	//token ajax全局
 	REGION_CONFIG : {},
 	SCHOOL_CONFIG : {},
@@ -36,9 +36,9 @@ var GV = {
 	}
 };
 </script>
-<script src="{@G:url.js}/wind.js?v{@G:c.version}"></script>
-<script src="{@G:url.js}/jquery.js?v{@G:c.version}"></script>
-<script src="{@G:url.js}/pages/admin/common/common.js?v{@G:c.version}"></script>
+<script src="{@G:url.js}/wind.js?v{@NEXT_RELEASE}"></script>
+<script src="{@G:url.js}/jquery.js?v{@NEXT_RELEASE}"></script>
+<script src="{@G:url.js}/pages/admin/common/common.js?v{@NEXT_RELEASE}"></script>
 
 	</head>
 	<body>

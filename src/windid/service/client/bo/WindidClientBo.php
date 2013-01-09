@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidClientBo.php 21823 2012-12-13 10:40:29Z gao.wanggao $ 
+ * @version $Id: WindidClientBo.php 22962 2013-01-04 05:11:30Z gao.wanggao $ 
  * @package 
  */
 class WindidClientBo {
@@ -15,6 +15,7 @@ class WindidClientBo {
 	public $clientId = 0;
 	public $clientDb = 'mysql';
 	public $clientCharser = 'utf8';
+	public $timevc = 0;
 	private static $_clientBo = null;
 	
 	public function __construct($config = array()) {
@@ -26,6 +27,7 @@ class WindidClientBo {
 		$this->clientId = $config['clientId'];
 		$this->clientDb = $config['clientDb'];
 		$this->clientCharser = $config['clientCharser'];
+		$this->timevc = isset($config['timevc']) ? $config['timevc'] : 0;
 	}
 	
 	public static function getInstance($config = array()) {

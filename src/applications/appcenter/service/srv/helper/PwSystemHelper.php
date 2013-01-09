@@ -6,7 +6,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSystemHelper.php 22656 2012-12-26 07:13:56Z long.shi $
+ * @version $Id: PwSystemHelper.php 23454 2013-01-09 12:39:58Z long.shi $
  * @package wind
  */
 class PwSystemHelper {
@@ -33,23 +33,131 @@ class PwSystemHelper {
 			$query .= $value;
 			if (substr($query, -1) != ';') continue;
 			$sql_key = strtoupper(substr($query, 0, strpos($query, ' ')));
-			$query = trim(preg_replace('/([ `]+)pw_/', '$1' . $dbprefix, $query, 1), ';');
+			$query = preg_replace('/([ `]+)pw_/', '$1' . $dbprefix, $query);
 			if ($sql_key == 'CREATE') {
-				$query = preg_replace('/\)([\w\s=]*);/i', 
-					')ENGINE=' . $engine . ' DEFAULT CHARSET=' . $charset, $query);
-				$dataSQL[$i][] = $query;
+				$query = preg_replace(
+					array('/CREATE\s+TABLE(\s+IF\s+NOT\s+EXISTS)?/i', '/\)([\w\s=]*);/i'), 
+					array(
+						'CREATE TABLE IF NOT EXISTS', 
+						')ENGINE=' . $engine . ' DEFAULT CHARSET=' . $charset),
+						$query);
+				$dataSQL[$i][] = trim($query, ';');
 			} else if ($sql_key == 'DROP') {
-				$dataSQL[$i][] = $query;
+				$dataSQL[$i][] = trim($query, ';');
 			} else if ($sql_key == 'ALTER') {
 				++$i;
-				$dataSQL[$i][] = $query;
+				$dataSQL[$i][] = trim($query, ';');
 				++$i;
 			} elseif (in_array($sql_key, array('INSERT', 'REPLACE', 'UPDATE', 'DELETE'))) {
-				$dataSQL[$i][] = $query;
+				$dataSQL[$i][] = trim($query, ';');
 			}
 			$query = '';
 		}
 		return $dataSQL;
+	}
+
+	public static function alterIndex($value, $pdo) {
+		$unique = 0;
+		if ($value[3] == 'PRIMARY') {
+			$add = $drop = 'PRIMARY KEY';
+		} elseif ($value[3] == 'UNIQUE') {
+			$add = "UNIQUE $value[1]";
+			$drop = "INDEX $value[1]";
+		} else {
+			$add = $drop = "INDEX $value[1]";
+			$unique = 1;
+		}
+		$indexkey = array();
+		foreach ($pdo->query("SHOW KEYS FROM $value[0]")->fetchAll() as $rt) {
+			$indexkey[$rt['Key_name']][$rt['Column_name']] = $unique;
+		}
+		if ($indexkey[$value[1]]) {
+			if ($value[2]) {
+				$ifdo = false;
+				$column = explode(',', $value[2]);
+				if (count($indexkey[$value[1]]) != count($column)) {
+					$ifdo = true;
+				} else {
+					foreach ($column as $v) {
+						if (!$indexkey[$value[1]][$v]) {
+							$ifdo = true;
+							break;
+						}
+					}
+				}
+				$ifdo && $pdo->execute("ALTER TABLE $value[0] DROP $drop,ADD $add ($value[2])");
+			} elseif (empty($value[4]) || isset($indexkey[$value[1]][$value[4]])) {
+				$pdo->execute("ALTER TABLE $value[0] DROP $drop");
+			}
+		} elseif ($value[2]) {
+			$pdo->execute("ALTER TABLE $value[0] ADD $add ($value[2])");
+		}
+	}
+	
+	/**
+	 * 解析md5sum文件
+	 *
+	 * @param unknown_type $md5sum
+	 * @return multitype:multitype: 
+	 */
+	public static function resolveMd5($md5sum) {
+		$md5List = array();
+		foreach (explode("\n", $md5sum) as $v) {
+			list($_k, $_v) = explode("\t", $v);
+			if ($_k && $_v) {
+				$md5List[$_v] = $_k;
+			}
+		}
+		return $md5List;
+	}
+	
+	public static function md5content($md5, $file) {
+		return $md5 . "\t" . $file . "\n";
+	}
+	
+	/**
+	 * 计算sourcepath相对于targetpath的相对路径值
+	 *
+	 * @param unknown_type $sourcePath
+	 * @param unknown_type $targetPath
+	 * @return string
+	 */
+	public static function resolveRelativePath($sourcePath, $targetPath) {
+		list($sourcePath, $targetPath) = array(realpath($sourcePath), realpath($targetPath));
+		$src_paths = explode(DIRECTORY_SEPARATOR, $sourcePath);
+		$tgt_paths = explode(DIRECTORY_SEPARATOR, $targetPath);
+		$src_count = count($src_paths);
+		$tgt_count = count($tgt_paths);
+	
+		$relative_path = '';
+		//默认把不同点设在最后一个
+		$break_point = $src_count;
+		$i = 0;
+		//计算两个路径不相同的点，然后开始往上数..
+		for ($i = 0; $i < $src_count; $i++) {
+			if ($src_paths[$i] == $tgt_paths[$i]) continue;
+			$relative_path .= '../';
+			$break_point == $src_count && $break_point = $i;
+		}
+		$relative_path || $relative_path = './';
+	
+		//往上..后，继续算目标路径的接下来的path
+		for ($i = $break_point; $i < $tgt_count; $i++) {
+			$relative_path .= $tgt_paths[$i] . '/';
+		}
+		return rtrim($relative_path, '/');
+	}
+
+	public static function alterField($value, $pdo) {
+		// 检查表是否存在，以兼容论坛独立表某些表不存在的情况
+		$ckTableIfExists = $pdo->query("SHOW TABLES LIKE '$value[0]'")->fetch();
+		if (empty($ckTableIfExists)) continue;
+		$rt = $pdo->query("SHOW COLUMNS FROM $value[0] LIKE '$value[1]'")->fetch();
+		$lowersql = strtolower($value[2]);
+		if ((strpos($lowersql, ' add ') !== false && $rt['Field'] != $value[1]) || (str_replace(
+			array(' drop ', ' change '), '', $lowersql) != $lowersql && $rt['Field'] == $value[1])) {
+			$pdo->execute($value[2]);
+		}
 	}
 
 	public static function download($url, $file) {
@@ -60,7 +168,6 @@ class PwSystemHelper {
 		$opt = array(
 			CURLOPT_FILE => $fp, 
 			CURLOPT_HEADER => 0, 
-			CURLOPT_FOLLOWLOCATION => true, 
 			CURLOPT_SSL_VERIFYPEER => false, 
 			CURLOPT_SSL_VERIFYHOST => false);
 		$http->send('GET', $opt);
@@ -90,7 +197,7 @@ class PwSystemHelper {
 		}
 		return array($change, $unchange, $new);
 	}
-	
+
 	/**
 	 * 解压压缩包,将源文件解压至目标文件
 	 * 目前只支持zip文件的解压，返回解后包文件绝对路径地址
@@ -120,7 +227,9 @@ class PwSystemHelper {
 	public static function checkFolder($fileList) {
 		foreach ($fileList as $v => $hash) {
 			$file = ROOT_PATH . $v;
-			if (!self::checkWriteAble(file_exists($file) ? $file : dirname($file) . '/')) return array(false, $v);
+			if (!self::checkWriteAble(file_exists($file) ? $file : dirname($file) . '/')) return array(
+				false, 
+				$v);
 		}
 		return true;
 	}
@@ -160,15 +269,16 @@ class PwSystemHelper {
 		$exist || @unlink($pathfile);
 		return true;
 	}
-	
+
 	public static function relative($relativePath) {
 		$pattern = '/\w+\/\.\.\/?/';
-		while(preg_match($pattern,$relativePath)){
+		$pattern = '/\w+' . preg_quote(DIRECTORY_SEPARATOR) . '\.\.' . preg_quote(DIRECTORY_SEPARATOR) . '?/';
+		while (preg_match($pattern, $relativePath)) {
 			$relativePath = preg_replace($pattern, '', $relativePath);
 		}
 		return $relativePath;
 	}
-	
+
 	public static function replaceStr($str, $search, $replace, $count, $nums) {
 		$strarr = explode($search, $str);
 		$replacestr = '';

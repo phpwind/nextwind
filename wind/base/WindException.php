@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-8
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindException.php 3866 2012-12-21 15:21:15Z yishuo $
+ * @version $Id: WindException.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package base
  */
 class WindException extends Exception {
@@ -44,8 +44,8 @@ class WindException extends Exception {
 	 */
 	public function buildMessage($message, $code) {
 		$message = str_replace(array("<br />", "<br>", "\r\n"), '', $message);
-		eval('$message="' . addcslashes($this->messageMapper($code), '"') . '";');
-		return $message;
+		$_message = $this->messageMapper($code);
+		return $_message ? str_replace('$message', $message, $_message) : $message;
 	}
 
 	/**
@@ -64,6 +64,6 @@ class WindException extends Exception {
 			self::ERROR_CONFIG_ERROR => 'Incorrect config. the config about \'$message\' error.', 
 			self::ERROR_PARAMETER_TYPE_ERROR => 'Incorrect parameter type \'$message\'.', 
 			self::ERROR_RETURN_TYPE_ERROR => 'Incorrect return type for \'$message\'.');
-		return isset($messages[$code]) ? $messages[$code] : '$message';
+		return isset($messages[$code]) ? $messages[$code] : '';
 	}
 }

@@ -32,6 +32,9 @@ class IndexController extends WindController {
 	 * @see WindSimpleController::beforeAction()
 	 */
 	public function beforeAction($handlerAdapter) {
+		
+		if ('finish' != $handlerAdapter->getAction()) Wekit::createapp('install');
+		
 		//ajax递交编码转换
 		if ($this->getRequest()->getIsAjaxRequest()) {
 			$toCharset = $this->getResponse()->getCharset();
@@ -300,8 +303,8 @@ class IndexController extends WindController {
 	 * 安装完成
 	 */
 	public function finishAction() {
-		$db = $this->_checkDatabase();
 		Wekit::createapp('phpwind');
+		$db = $this->_checkDatabase();
 		//更新HOOK配置数据
 
 		Wekit::load('hook.srv.PwHookRefresh')->refresh();
@@ -540,16 +543,17 @@ class IndexController extends WindController {
 	private function _checkFileRight() {
 		$rootdir = Wind::getRootPath('ROOT');
 		
-		$files_writeble[] = DATA_PATH;			//数据缓存目录
+		$files_writeble[] = CONF_PATH;
+		$files_writeble[] = DATA_PATH; //数据缓存目录
 		$files_writeble[] = DATA_PATH . 'cache/';
 		$files_writeble[] = DATA_PATH . 'compile/';
 		$files_writeble[] = DATA_PATH . 'log/';
 		$files_writeble[] = DATA_PATH . 'tmp/';
 		$files_writeble[] = DATA_PATH . 'design/';
-		$files_writeble[] = EXT_PATH;	//扩展应用目录
-		$files_writeble[] = ATTACH_PATH;	//本地附近目录
-		$files_writeble[] = HTML_PATH;		//本地静态文件可写目录
-		$files_writeble[] = THEMES_PATH;		//风格目录
+		$files_writeble[] = EXT_PATH; //扩展应用目录
+		$files_writeble[] = ATTACH_PATH ; //本地附近目录
+		$files_writeble[] = HTML_PATH; //本地静态文件可写目录
+		$files_writeble[] = THEMES_PATH; //风格目录
 		$files_writeble[] = THEMES_PATH . 'extres/';
 		$files_writeble[] = THEMES_PATH . 'forum/';
 		$files_writeble[] = THEMES_PATH . 'portal/';
@@ -578,7 +582,7 @@ class IndexController extends WindController {
 	 */
 	private function _checkWriteAble($pathfile) {
 		if (!$pathfile) return false;
-		$isDir = substr($pathfile, -1) == '/' ? true : false;
+		$isDir = in_array(substr($pathfile, -1), array('/', '\\')) ? true : false;
 		if ($isDir) {
 			if (is_dir($pathfile)) {
 				mt_srand((double) microtime() * 1000000);

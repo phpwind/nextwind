@@ -21,7 +21,7 @@ class PwTemplateCompilerUrlCreater extends AbstractWindTemplateCompiler {
 		
 		$this->_variables = array();
 		$content = preg_replace_callback(
-			'/((\$[a-zA-Z_]+->)|([a-zA-Z_]+::)|\$)([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(\[[a-zA-Z0-9_\x7f-\xff\'\"\$]+\])*)/i', 
+			'/((\$[a-zA-Z_]+->)|([a-zA-Z_]+::)|\$)([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(\[[a-zA-Z0-9_\x7f-\xff\'\"\$\[\]]+\])*)/i', 
 			array($this, '_variable'), trim($content));
 		
 		$content = WindUrlHelper::createUrl($content, array(), '', $route, false);
@@ -82,6 +82,7 @@ class PwTemplateCompilerUrlCreater extends AbstractWindTemplateCompiler {
 			if ($route->dynamicHost) {
 				$content = ltrim(str_replace($route->dynamicHost, '', $content), '/');
 			}
+			$route->dynamicDomain = $route->dynamic = $route->dynamicDomain = null;
 		} 
 		return $content;
 	}

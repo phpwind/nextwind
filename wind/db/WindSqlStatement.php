@@ -10,7 +10,7 @@ Wind::import("WIND:db.WindResultSet");
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-23
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindSqlStatement.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindSqlStatement.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package db
  */
 class WindSqlStatement {
@@ -78,7 +78,7 @@ class WindSqlStatement {
 			$this->_param[$parameter] = $variable;
 			return $this;
 		} catch (PDOException $e) {
-			throw new WindDbException($e->getMessage());
+			throw new WindDbException('[db.WindSqlStatement.bindParam] ' . $e->getMessage());
 		}
 	}
 
@@ -95,7 +95,7 @@ class WindSqlStatement {
 	 */
 	public function bindParams(&$parameters) {
 		if (!is_array($parameters)) throw new WindDbException(
-			'[component.db.WindSqlStatement.bindParams] Error unexpected paraments type ' . gettype($parameters));
+			'[db.WindSqlStatement.bindParams] Error unexpected paraments type ' . gettype($parameters));
 		
 		$keied = (array_keys($parameters) !== range(0, sizeof($parameters) - 1));
 		foreach ($parameters as $key => $value) {
@@ -128,7 +128,7 @@ class WindSqlStatement {
 			$this->_param[$parameter] = $value;
 			return $this;
 		} catch (PDOException $e) {
-			throw new WindDbException($e->getMessage());
+			throw new WindDbException('[db.WindSqlStatement.bindValue] ' . $e->getMessage());
 		}
 	}
 
@@ -142,7 +142,7 @@ class WindSqlStatement {
 	 */
 	public function bindValues($values) {
 		if (!is_array($values)) throw new WindDbException(
-			'[component.db.WindSqlStatement.bindValues] Error unexpected paraments type \'' . gettype($values) . '\'');
+			'[db.WindSqlStatement.bindValues] Error unexpected paraments type \'' . gettype($values) . '\'');
 		
 		$keied = (array_keys($values) !== range(0, sizeof($values) - 1));
 		foreach ($values as $key => $value) {
@@ -176,7 +176,7 @@ class WindSqlStatement {
 			$this->_columns[$column] = & $param;
 			return $this;
 		} catch (PDOException $e) {
-			throw new WindDbException($e->getMessage());
+			throw new WindDbException('[db.WindSqlStatement.bindColumn] ' . $e->getMessage());
 		}
 	}
 
@@ -284,7 +284,7 @@ class WindSqlStatement {
 			$_result = $rowCount ? $this->getStatement()->rowCount() : true;
 			return $_result;
 		} catch (PDOException $e) {
-			throw new WindDbException('[component.db.WindSqlStatement.execute]' . $e->getMessage() . "\r\nSQL:" . $this->getQueryString());
+			throw new WindDbException('[db.WindSqlStatement.execute] ' . $e->getMessage() . "\r\nSQL:" . $this->getQueryString());
 		}
 	}
 
@@ -296,7 +296,7 @@ class WindSqlStatement {
 			$this->_queryString = $sql;
 			$this->_statement = $this->getConnection()->getDbHandle()->prepare($sql);
 		} catch (PDOException $e) {
-			throw new WindDbException("Initialization WindSqlStatement failed." . $e->getMessage());
+			throw new WindDbException("[db.WindSqlStatement.setQueryString] Initialization WindSqlStatement failed." . $e->getMessage());
 		}
 	}
 

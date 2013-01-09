@@ -55,7 +55,7 @@ class WindHandlerInterceptorChain extends WindModule {
 		reset($this->_interceptors);
 		if ($this->_callBack === null) return null;
 		if (is_string($this->_callBack) && !function_exists($this->_callBack)) {
-			throw new WindException('[filter.WindHandlerInterceptorChain.execute]' . $this->_callBack, 
+			throw new WindException('[filter.WindHandlerInterceptorChain.handle] ' . $this->_callBack, 
 				WindException::ERROR_FUNCTION_NOT_EXIST);
 		}
 		$this->_args || $this->_args = func_get_args();

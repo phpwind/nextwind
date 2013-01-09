@@ -1,11 +1,11 @@
 <?php
 Wind::import('LIB:base.PwBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: long.shi $>
- * @author $Author: long.shi $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 21071 2012-11-27 06:34:14Z long.shi $ 
+ * @version $Id: IndexController.php 23101 2013-01-06 06:34:56Z gao.wanggao $ 
  * @package 
  */
 
@@ -43,7 +43,7 @@ class IndexController extends PwBaseController {
 	
 	protected function headguide($protalname) {
 		$bbsname = Wekit::C('site', 'info.name');
-		$headguide = '<a href="' . WindUrlHelper::createUrl('') . '" title="' . $bbsname . '" class="home">' . $bbsname . '</a>';
+		$headguide = '<a href="' . WindUrlHelper::createUrl('') . '" title="' . $bbsname . '" class="home">首页</a>';
 		return $headguide . '<em>&gt;</em>' . WindSecurity::escapeHTML($protalname);
 	}
 	

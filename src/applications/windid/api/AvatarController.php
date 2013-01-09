@@ -5,7 +5,7 @@ Wind::import('APPS:windid.api.OpenBaseController');
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AvatarController.php 22633 2012-12-26 05:29:42Z gao.wanggao $
+ * @version $Id: AvatarController.php 22962 2013-01-04 05:11:30Z gao.wanggao $
  * @package windid.service.avatar
  */
 class AvatarController  extends OpenBaseController{

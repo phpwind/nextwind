@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PropertyController.php 20601 2012-10-31 12:42:05Z gao.wanggao $ 
+ * @version $Id: PropertyController.php 23193 2013-01-07 03:32:13Z gao.wanggao $ 
  * @package 
  */
 class PropertyController extends PwBaseController{
@@ -217,6 +217,18 @@ class PropertyController extends PwBaseController{
 		//if (!$this->_getModuleDs()->deleteModule($moduleid)) $this->showMessage("operate.fail");
 		$this->_getDataDs()->deleteByModuleId($moduleid);
 		Wekit::load('design.PwDesignPush')->deleteByModuleId($moduleid);
+
+		//删除导入数据的模版内容
+		$dir = Wind::getRealDir('THEMES:portal.local.');
+		$path = $dir .$pageBo->getTplPath() . '/template/';
+		$files = WindFolder::read($path, WindFolder::READ_FILE);
+		foreach ($files AS $file) {
+			$filePath = $path . $file;
+			$content = WindFile::read($filePath);
+			if (!$content) continue;
+			$tmp = preg_replace('/\<pw-list\s*id=\"'.$moduleid.'\"\s*>(.+)<\/pw-list>/isU','', $content);
+			if ($tmp != $content) WindFile::write($filePath, $tmp);
+		}
 		$this->showMessage("operate.success");
 	}
 	

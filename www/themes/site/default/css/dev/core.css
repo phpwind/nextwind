@@ -3,7 +3,7 @@
 @explain: 初始化/全局的公用控件
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: core.css 22715 2012-12-26 12:35:38Z hao.lin $
+$Id: core.css 23210 2013-01-07 05:38:39Z yanchixia $
 ===================
 #*/
 
@@ -58,6 +58,7 @@ $Id: core.css 22715 2012-12-26 12:35:38Z hao.lin $
 >>用户下拉选择
 >>弹窗选择好友
 >>帮Ta打卡弹窗
+>>钩子样式
 ===================
 */
 
@@ -1018,7 +1019,7 @@ loading加载
 	outline:0 none;
 }
 .pop_showmsg{
-	display:block;
+	display:inline-block;
 	height:55px;
 	box-shadow:0 1px 6px rgba(0,0,0,0.3);
 	border:1px solid #d6d6d6;
@@ -3202,3 +3203,62 @@ ul.at_user_list{
 .pop_help_punch .pop_bottom{
 	background:#f5f5f5;
 }
+
+/*
+===================
+钩子样式
+===================
+*/
+.icon_hooktip{
+	width:16px !important;
+	height:16px !important;
+	display:inline-block !important;
+	vertical-align:-2px !important;
+	background:url(../../images/common/hook.png) no-repeat !important;
+	position:relative !important;
+	margin:0 !important;
+	padding:0 !important;
+	text-decoration:none !important;
+	z-index:999 !important;
+}
+.icon_hooktip:hover{
+	text-decoration:none !important;
+}
+.icon_hooktip em{
+	display:inline-block !important;
+	width:0 !important;
+	height:0 !important;
+	padding:0 !important;
+	margin:0 !important;
+	border-bottom:5px #000 solid !important;
+	border-bottom:5px rgba(0,0,0,0.7) solid !important;
+	border-top:5px transparent dashed !important;
+	border-right:5px transparent dashed !important;
+	border-left:5px transparent dashed !important;
+	overflow:hidden !important;
+	position:absolute !important;
+	top:-10px !important;
+	right:116px !important;
+}
+.icon_hooktip span{
+	cursor:default !important;
+	display:none !important;
+	position:absolute !important;
+	left:-100px !important;
+	letter-spacing:1px !important;
+	width:200px !important;
+	text-align:center !important;
+	background:#000 !important;
+	background:rgba(0,0,0,0.7) !important;
+	color:#fff !important;
+	border-radius:8px !important;
+	padding:5px 15px !important;
+	margin:20px 0 0 0 !important;
+	line-height:18px !important;
+	white-space:inherit !important;
+	font-family:Arial !important;
+}
+.icon_hooktip:hover span{
+	display:block !important;
+}
+

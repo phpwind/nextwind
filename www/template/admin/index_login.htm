@@ -4,7 +4,7 @@
 		<meta charset="{@Wekit::app()->charset}" />
 		<title>系统后台 - {@Wekit::C('site', 'info.name')}</title>
 		<meta name="robots" content="noindex,nofollow">
-		<link href="{@G:url.css}/admin_login.css?v={@G:c.version}" rel="stylesheet" />
+		<link href="{@G:url.css}/admin_login.css?v{@NEXT_RELEASE}" rel="stylesheet" />
 		<script>
 			if (window.parent !== window.self) {
 					document.write = '';
@@ -44,12 +44,12 @@
 <script>
 var GV = {
 	JS_ROOT : "{@G:url.res}/js/dev/",																									//js目录
-	JS_VERSION : "{@G:c.version}",																										//js版本号
+	JS_VERSION : "{@NEXT_RELEASE}",																										//js版本号
 	TOKEN : '{@Wind::getComponent('windToken')->saveToken('csrf_token')}'	//token ajax全局
 };
 </script>
-<script src="{@G:url.js}/wind.js?v{@G:c.version}"></script>
-<script src="{@G:url.js}/jquery.js?v{@G:c.version}"></script>
+<script src="{@G:url.js}/wind.js?v{@NEXT_RELEASE}"></script>
+<script src="{@G:url.js}/jquery.js?v{@NEXT_RELEASE}"></script>
 <template source='common.footer' />
 <script>
 ;(function(){

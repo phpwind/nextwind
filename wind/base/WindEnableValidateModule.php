@@ -7,7 +7,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindEnableValidateModule.php 2973 2011-10-15 19:22:48Z yishuo $
+ * @version $Id: WindEnableValidateModule.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package base
  */
 class WindEnableValidateModule {
@@ -128,7 +128,7 @@ class WindEnableValidateModule {
 		if ($this->_validator === null) {
 			$_className = Wind::import($this->_validatorClass);
 			$this->_validator = WindFactory::createInstance($_className);
-			if ($this->_validator === null) throw new WindException('validator', WindException::ERROR_RETURN_TYPE_ERROR);
+			if ($this->_validator === null) throw new WindException('[base.WindEnableValidateModule.getValidator] validator', WindException::ERROR_RETURN_TYPE_ERROR);
 		}
 		return $this->_validator;
 	}

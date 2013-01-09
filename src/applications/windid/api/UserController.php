@@ -7,7 +7,7 @@ Wind::import('WINDID:api.local.WindidUserApi');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: UserController.php 22693 2012-12-26 11:04:49Z gao.wanggao $ 
+ * @version $Id: UserController.php 23072 2013-01-06 02:12:11Z gao.wanggao $ 
  * @package 
  */
 class UserController extends OpenBaseController {
@@ -155,6 +155,7 @@ class UserController extends OpenBaseController {
 	 */
 	public function getCreditAction() {
 		$result = $this->getApi()->getUserCredit($this->getInput('uid', 'get'));
+		unset($result['messages']);
 		$this->output($result);
 	}
 	

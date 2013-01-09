@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadAttach.php 21318 2012-12-04 09:24:09Z jieyin $
+ * @version $Id: PwThreadAttach.php 23356 2013-01-09 03:20:51Z jieyin $
  * @package attach
  */
 
@@ -68,6 +68,19 @@ class PwThreadAttach {
 	public function countType($tid, $pid, $type) {
 		return $this->_getDao()->countType($tid, $pid, $type);
 	}
+	
+	/**
+	 * 获取多个tid下的所有附件
+	 *
+	 * @param array tids
+	 * @return array
+	 */
+	public function fetchAttachByTid($tids) {
+		if (!$tids || !is_array($tids)) {
+			return array();
+		}
+		return $this->_getDao()->fetchAttachByTid($tids);
+	}
 
 	/**
 	 * 根据指定tid,pid,获取多个附件
@@ -90,10 +103,10 @@ class PwThreadAttach {
 	 * @param int $pid 指定楼层
 	 * @return array
 	 */
-	public function fetchAttachByTidsAndPid($tids,$pid=0) {
+	public function fetchAttachByTidsAndPid($tids, $pid = 0) {
 		if (empty($tids) || !is_array($tids)) return array();
 		$pid = intval($pid);
-		return $this->_getDao()->fetchAttachByTidsAndPid($tids,$pid);
+		return $this->_getDao()->fetchAttachByTidsAndPid($tids, $pid);
 	}
 	
 	/**

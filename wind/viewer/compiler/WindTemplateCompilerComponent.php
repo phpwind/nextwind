@@ -10,7 +10,7 @@ Wind::import('WIND:viewer.AbstractWindTemplateCompiler');
  * @author xiaoxiao <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindTemplateCompilerComponent.php 2973 2011-10-15 19:22:48Z yishuo $
+ * @version $Id: WindTemplateCompilerComponent.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package viewer
  * @subpackage compiler
  */
@@ -35,7 +35,7 @@ class WindTemplateCompilerComponent extends AbstractWindTemplateCompiler {
 	 */
 	private function getScript($content) {
 		$params = $this->matchConfig($content);
-		if (!isset($params['name']) || !isset($params['componentPath'])) throw new WindException('组件编译错误!');
+		if (!isset($params['name']) || !isset($params['componentPath'])) throw new WindException('[viewer.compiler.WindTemplateCompilerComponent.getScript] component config error!');
 		$content = "<?php\r\n" . $this->rebuildConfig($params) . (isset($params['args']) ? $this->registerUrlParams($params) : '') . "\$componentPath = Wind::getRealDir('" . $params['componentPath'] . "');\r\n" . "Wind::register(\$componentPath, '" . $params['name'] . "');\r\n" . "Wind::run('" . $params['name'] . "', \$config);\r\n?>";
 		return $content;
 	}

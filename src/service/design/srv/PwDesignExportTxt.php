@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignExportTxt.php 21973 2012-12-17 12:17:13Z gao.wanggao $ 
+ * @version $Id: PwDesignExportTxt.php 23387 2013-01-09 07:14:36Z gao.wanggao $ 
  * @package 
  */
 class PwDesignExportTxt {
@@ -18,7 +18,13 @@ class PwDesignExportTxt {
 
 	public function txt() {
 		$pageInfo = $this->pageInfo;
-		$ids = explode(',', $pageInfo['module_ids']);
+		//$ids = explode(',', $pageInfo['module_ids']);
+		$ids = array();
+		$modules = $this->_getModuleDs()->getByPageid($pageInfo['page_id']);
+		foreach ($modules  AS $k=>$v) {
+			if (!$v['isused']) continue;
+			$ids[] = $k;
+		}
 		$names = explode(',', $pageInfo['struct_names']);
 		$modules = $this->_getModuleDs()->fetchModule($ids);
 		foreach ($modules AS &$module) {

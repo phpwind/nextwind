@@ -111,8 +111,8 @@
 			</tr>
 			<tr>
 				<td>图片</td>
-				<th>[img]http://www.phpwind.net/logo.gif[/img]</th>
-				<td><img src="http://www.phpwind.net/logo.gif"></td>
+				<th>[img]{@theme:site.images}/logo.png[/img]</th>
+				<td><img src="{@theme:site.images}/logo.png"></td>
 			</tr>
 			<tr>
 				<td>字号</td>
@@ -139,4 +139,4 @@ Wind.ready(document, function(){
 	Wind.use('jquery', 'global', GV.JS_ROOT +'pages/profile/profileIndex.js?v=' +GV.JS_VERSION);
 });
 </script>
-<hook class='$hookSrc' name='m_PwUserProfileExtends.displayFootHtml' args=''/>
+<hook class='$hookSrc' name='displayFootHtml' args=''/>

@@ -2,7 +2,7 @@
 <html>
 <head>
 <template source='TPL:common.head' load='true' />
-<link href="{@theme:css}/message.css?v={@G:version}" rel="stylesheet" />
+<link href="{@theme:css}/message.css?v={@NEXT_RELEASE}" rel="stylesheet" />
 </head>
 <body>
 <div class="wrap">
@@ -53,7 +53,7 @@
 						#-->
 						<div class="message_dialogue" id="J_posts_list">
 							<!--# foreach ($messages as $value) { 
-								$value['tousername'] = $value['from_uid'] == $dialog['to_uid'] ? '我' : $value['from_username'];
+								$value['tousername'] = $value['from_uid'] == $dialog['to_uid'] ? '我' : $dialogUsername;
 								$bubbles = $value['from_uid'] == $dialog['to_uid'] ? ' my' : '';
 								$value['content'] = PwUbbCode::parseEmotion($value['content']);
 								$value['content'] = PwUbbCode::parseUrl($value['content']);

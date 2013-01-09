@@ -17,7 +17,7 @@ class WindXxtea implements IWindSecurity {
 	public function encrypt($str, $key) {
 		if ($str == '') return '';
 		if (!$key || !is_string($key)) {
-			throw new WindException('[security.WindXxtea.decrypt] security key is required.', 
+			throw new WindException('[security.WindXxtea.encrypt] security key is required.', 
 				WindException::ERROR_PARAMETER_TYPE_ERROR);
 		}
 		$v = $this->str2long($str, true);

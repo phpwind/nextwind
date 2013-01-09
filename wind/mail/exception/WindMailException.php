@@ -8,7 +8,13 @@
  * @subpackage exception
  */
 class WindMailException extends WindException {
-
+	
+	/* (non-PHPdoc)
+	 * @see WindException::messageMapper()
+	 */
+	protected function messageMapper($code) {
+		return '';
+	}
 }
 
 ?>

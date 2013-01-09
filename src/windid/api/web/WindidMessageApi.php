@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: jinlong.panjl $>
- * @author $Author: jinlong.panjl $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageApi.php 22412 2012-12-24 05:15:53Z jinlong.panjl $ 
+ * @version $Id: WindidMessageApi.php 23072 2013-01-06 02:12:11Z gao.wanggao $ 
  * @package 
  */
 
@@ -207,6 +207,52 @@ class WindidMessageApi {
 		);
 		return WindidApi::open('message/deleteUserMessages', array(), $params);
 	}
+	
+	//传统收件箱，发件箱接口start
+	
+	/**
+	 * 发件箱
+	 * @return array
+	 */
+	public function fromBox($fromUid, $start = 0, $limit = 10) {
+		$params = array(
+			'uid'=>$fromUid,
+			'start'=>$start,
+			'limit'=>$limit
+		);
+		return WindidApi::open('message/fromBox', $params);
+	}
+	
+	/**
+	 * 收件箱
+	 * @return array
+	 */
+	public function toBox($toUid, $start = 0, $limit = 10) {
+		$params = array(
+			'uid'=>$uid,
+			'start'=>$start,
+			'limit'=>$limit
+		);
+		return WindidApi::open('message/toBox', $params);
+	}
+	
+	public function readMessages($uid, $messageIds) {
+		$params = array(
+			'uid'=>$uid,
+			'messageIds'=>$messageIds,
+		);
+		return WindidApi::open('message/readMessages', array(), $params);
+	}
+	
+	public function deleteMessages($uid, $messageIds) {
+		$params = array(
+			'uid'=>$uid,
+			'messageIds'=>$messageIds,
+		);
+		return WindidApi::open('message/deleteMessages', array(), $params);
+	}
+	
+	//传统收件箱，发件箱接口end
 
 }
 ?>

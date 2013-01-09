@@ -6,7 +6,7 @@ Wind::import('WIND:mail.sender.IWindSendMail');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindSendMail.php 3298 2012-01-06 12:48:26Z yishuo $ 
+ * @version $Id: WindSendMail.php 3904 2013-01-08 07:01:26Z yishuo $ 
  * @package mail
  * @subpackage sender
  */
@@ -30,7 +30,7 @@ class WindSendMail extends WindModule implements IWindSendMail {
 		$mailCmd = escapeshellcmd($this->sendMail) . " -oi " . ($this->sender ? "-f " . escapeshellarg($this->sender) . " " : "") . "-t";
 		$process = popen($mailCmd, 'w');
 		if (!$process) throw new WindMailException(
-			'[mail.sender.WindSendMail] send mail fail,can not open the sender process.');
+			'[mail.sender.WindSendMail.send] send mail fail,can not open the sender process.');
 		fputs($process, $mail->createHeader());
 		fputs($process, $mail->createBody());
 		return pclose($process);

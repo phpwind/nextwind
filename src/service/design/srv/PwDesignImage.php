@@ -5,7 +5,7 @@ Wind::import('LIB:image.PwCutImage');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImage.php 22740 2012-12-27 02:34:43Z gao.wanggao $ 
+ * @version $Id: PwDesignImage.php 23371 2013-01-09 06:18:14Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImage {
@@ -35,7 +35,7 @@ class PwDesignImage {
 		$outDir = $this->getSaveDir($this->moduleid);
 		$cut = new PwCutImage();
 		$image = $this->getRealPath($outFile);
-		if (!$image) return array();
+		if (!$image) return array('', '',$this->store->get($this->image, 0)); //返回原图片
 		$cut->image = $image;
 		$cut->outImage = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' .$outDir.$outFile;
 		$cut->cutWidth = $this->thumbW;
@@ -56,7 +56,7 @@ class PwDesignImage {
 			}
 			return array($outDir,$outFile, $attachUrl );
 		}
-		return array();
+		return array('', '',$this->store->get($this->image, 0)); //返回原图片
 	}
 	
 	public function clearFolder($moduleid) {

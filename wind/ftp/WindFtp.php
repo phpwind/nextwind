@@ -13,7 +13,7 @@ Wind::import('WIND:ftp.AbstractWindFtp');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindFtp.php 3876 2012-12-26 07:52:05Z yishuo $
+ * @version $Id: WindFtp.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package ftp
  */
 class WindFtp extends AbstractWindFtp {
@@ -54,11 +54,11 @@ class WindFtp extends AbstractWindFtp {
 	private function connection($config = array()) {
 		$this->initConfig($config);
 		if (false === ($this->conn = ftp_connect($this->server, $this->port, $this->timeout))) {
-			throw new WindFinalException("$this->server:$this->port", 
+			throw new WindFtpException("[ftp.WindFtp.connection] $this->server:$this->port", 
 				WindFtpException::CONNECT_FAILED);
 		}
 		if (false == ftp_login($this->conn, $this->user, $this->pwd)) {
-			throw new WindFtpException($this->user, WindFtpException::LOGIN_FAILED);
+			throw new WindFtpException('[ftp.WindFtp.connection] ' . $this->user, WindFtpException::LOGIN_FAILED);
 		}
 		if ($this->isPasv) {
 			ftp_pasv($this->conn, true);
@@ -102,7 +102,7 @@ class WindFtp extends AbstractWindFtp {
 		}
 		$desFile = $this->rootPath . WindSecurity::escapePath($desFile);
 		$result = ftp_put($this->getFtp(), $desFile, $sourceFile, $mode);
-		if (false === $result) throw new WindFtpException('PUT', WindFtpException::COMMAND_FAILED);
+		if (false === $result) throw new WindFtpException('[ftp.WindFtp.upload] PUT', WindFtpException::COMMAND_FAILED);
 		$this->chmod($desFile, 0644);
 		return $this->size($desFile);
 	}
@@ -172,7 +172,7 @@ class WindFtp extends AbstractWindFtp {
 	 */
 	public function changeDir($dir) {
 		if (false === ftp_chdir($this->getFtp(), $dir)) {
-			throw new WindFtpException($dir, WindFtpException::COMMAND_FAILED_CWD);
+			throw new WindFtpException('[ftp.WindFtp.changeDir] ' . $dir, WindFtpException::COMMAND_FAILED_CWD);
 		}
 		return true;
 	}

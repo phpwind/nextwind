@@ -2,7 +2,7 @@
 <html>
 <head>
 	<template source='TPL:common.head' load='true' />
-	<link href="{@theme:css}/post.css?v={@G:version}" rel="stylesheet" />
+	<link href="{@theme:css}/post.css?v={@NEXT_RELEASE}" rel="stylesheet" />
 </head>
 <body>
 <div class="wrap">
@@ -54,7 +54,7 @@
 						<!--# }//主题分类结束 #-->
 						<input name="atc_title" id="J_atc_title" value="{$atc_title}" class="input length_6 mr15"{@!empty($isTopic) ? ' required' : ''} aria-required="true" placeholder="{@!empty($default_title) ? $default_title : '请输入标题'}" title="请输入标题" data-max="{@Wekit::C('bbs', 'title.length.max')}"/><span id="J_title_tip"></span>
 					</hgroup>
-					<hook class='$pwpost' name="m_PwPostAction.createHtmlBeforeContent"/>
+					<hook class='$pwpost' name="createHtmlBeforeContent"/>
 					<div class="c"></div>
 					<div class="cc mb10">
 						<div class="cm">
@@ -68,7 +68,7 @@
 								<!--# if ($action == 'run' || $action == 'modify') { #-->
 								<template source='TPL:tag.post_tag' load='true' />
 								<!--# } #-->
-								<hook class='$pwpost' name='m_PwPostAction.createHtmlRightContent' />
+								<hook class='$pwpost' name='createHtmlRightContent' />
 							</div>
 						</div>
 					</div>

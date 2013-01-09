@@ -6,7 +6,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PwBaseController.php 22820 2012-12-27 10:30:26Z jieyin $
+ * @version $Id: PwBaseController.php 23183 2013-01-07 03:02:15Z jieyin $
  * @package lib.base.controller
  */
 class PwBaseController extends WindController {
@@ -34,11 +34,10 @@ class PwBaseController extends WindController {
 		$this->_a = $handlerAdapter->getAction();
 		$this->_mc = $this->_m . '/' . $this->_c;
 		$this->_mca = $this->_mc . '/' . $this->_a;
-		
 		$this->_setPreCache($this->_m, $this->_mc, $this->_mca);
-		$this->_setPreHook($this->_m, $this->_mc, $this->_mca);
-
+		
 		$this->loginUser = Wekit::getLoginUser();
+		$this->_setPreHook($this->_m, $this->_mc, $this->_mca);
 
 		$config = Wekit::C('site');
 		if ($config['visit.state'] > 0) {
@@ -76,6 +75,8 @@ class PwBaseController extends WindController {
 
 	protected function _setPreHook($m, $mc, $mca) {
 		$prehook = Wekit::V('prehook');
+		PwHook::preset($prehook['ALL']);
+		PwHook::preset($prehook[$this->loginUser->isExists() ? 'LOGIN' : 'UNLOGIN']);
 		if (isset($prehook[$m])) PwHook::preset($prehook[$m]);
 		if (isset($prehook[$mc])) PwHook::preset($prehook[$mc]);
 		if (isset($prehook[$mca])) PwHook::preset($prehook[$mca]);
@@ -143,7 +144,7 @@ class PwBaseController extends WindController {
 	 */
 	protected function setTheme($type, $theme) {
 		$config = Wekit::C('site');
-		$themePack =$config['theme.' . $type . '.pack'];
+		$themePack = $config['theme.' . $type . '.pack'];
 		$themePack = 'THEMES:' . $themePack;
 		// 风格预览，管理员权限
 		if ($style = Pw::getCookie('style_preview')) {

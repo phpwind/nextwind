@@ -13,19 +13,20 @@ Wind::import('WIND:base.WindError');
  */
 class WindWebError extends WindError {
 	
-	/*
-	 * (non-PHPdoc) @see WindError::showErrorMessage()
+	/* (non-PHPdoc)
+	 * @see WindError::showErrorMessage()
 	 */
 	protected function showErrorMessage($message, $file, $line, $trace, $errorcode) {
 		list($fileLines, $trace) = $this->crash($file, $line, $trace);
 		
-		if (WIND_DEBUG & 2) {
+		if (Wind::$isDebug & 2) {
 			$log = $message . "\r\n" . $file . ":" . $line . "\r\n";
 			foreach ($trace as $key => $value) {
 				$log .= $value . "\r\n";
 			}
 			Wind::getComponent('windLogger')->error($log, 'error', true);
 		}
+		
 		$message = nl2br($message);
 		$errDir = Wind::getRealPath($this->errorDir, false);
 		if ($this->isClosed)
@@ -37,8 +38,26 @@ class WindWebError extends WindError {
 		
 		$title = $this->getResponse()->codeMap($errorcode);
 		$title = $title ? $errorcode . ' ' . $title : 'unknowen error';
-		$title = ucwords($title);
+		$__vars['title'] = ucwords($title);
+		$__vars['message'] = $message;
 		
+		if (Wind::$isDebug & 1) {
+			$__vars['debug']['file'] = $file;
+			$__vars['debug']['line'] = $line;
+			$__vars['debug']['trace'] = $trace;
+			$__vars['debug']['fileLines'] = $fileLines;
+		}
+		$this->render($__vars, $errorcode, $errDir, $errPage);
+	}
+
+	/**
+	 * 错误视图渲染
+	 * 
+	 * @param array $__vars
+	 */
+	private function render($__vars, $errorcode, $errDir, $errPage) {
+		@extract($__vars, EXTR_REFS);
+		unset($__vars);
 		ob_start();
 		$this->getResponse()->setStatus($errorcode);
 		$this->getResponse()->sendHeaders();

@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: SetbbsController.php 19181 2012-10-11 07:38:40Z liusanbian $
+ * @version $Id: SetbbsController.php 22963 2013-01-04 05:17:05Z jieyin $
  * @package admin
  * @subpackage controller
  */
@@ -92,7 +92,8 @@ class SetbbsController extends AdminBaseController {
 				'anoymous_displayname', 
 				'shield_banthreads', 
 				'floor_name', 
-				'defined_floor_name', 
+				'defined_floor_name',
+				'hit_update',
 				'image_lazy', 
 				'display_member_info', 
 				'display_info_vieworder', 
@@ -117,6 +118,7 @@ class SetbbsController extends AdminBaseController {
 				->set('read.floor_name', $arrInput['floor_name'])
 				->set('read.defined_floor_name', $arrInput['defined_floor_name'])
 				->set('read.display_member_info', $arrInput['display_member_info'])
+				->set('read.hit_update', $arrInput['hit_update'])
 				->set('read.image_lazy', $arrInput['image_lazy'])
 				->set('read.display_info_vieworder', $arrInput['display_info_vieworder'])
 				->set('read.display_info', $display_info)

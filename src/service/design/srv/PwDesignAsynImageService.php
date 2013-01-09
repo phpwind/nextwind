@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignAsynImageService.php 22292 2012-12-21 05:09:20Z gao.wanggao $ 
+ * @version $Id: PwDesignAsynImageService.php 23371 2013-01-09 06:18:14Z gao.wanggao $ 
  * @package 
  */
 class PwDesignAsynImageService {
@@ -24,9 +24,10 @@ class PwDesignAsynImageService {
 		$dm = new PwDesignAsynImageDm($image['id']);
 		list($dir, $filename, $url) = $thumb;
 		if (!$dir) {
-			$dm->setStatus(0);
+			$dm->setStatus(1)
+				->setThumb($url);
 			$this->_getImageDs()->updateImage($dm); 
-			$thumbUrl = '';
+			$thumbUrl = $url;
 			$filename = '';
 		} else {
 			$thumbUrl = $url . $dir . $filename;
@@ -43,7 +44,7 @@ class PwDesignAsynImageService {
 		$ds = $this->_getDataDs();
 		$data = $ds->getData($dataid);
 		$extend = unserialize($data['extend_info']);
-		if ($thumb) {
+		if ($thumbUrl) {
 			$extend['standard_image'] .= $thumb . "|||" ;
 			$extend[$sign] = $thumbUrl;
 		}

@@ -9,15 +9,20 @@ Wind::import('LIB:process.iPwGleanDoHookProcess');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDeleteArticleDoAttachDelete.php 7282 2012-03-31 13:22:24Z jieyin $
+ * @version $Id: PwDeleteArticleDoAttachDelete.php 23334 2013-01-08 10:22:13Z jieyin $
  * @package forum
  */
 
 class PwDeleteArticleDoAttachDelete extends iPwGleanDoHookProcess {
 
 	public function run($ids) {
-		//$service = Wekit::load('forum.PwThread');
-		//$service->batchDeleteThread($tids);
-		//$service->batchDeletePostByTid($tids);
+		if ($this->srv->isRecycle || (!$attachs = Wekit::load('attach.PwThreadAttach')->fetchAttachByTid($ids))) return;
+
+		$aids = array();
+		foreach ($attachs as $key => $value) {
+			Pw::deleteAttach($value['path'], $value['ifthumb']);
+			$aids[] = $key;
+		}
+		Wekit::load('attach.PwThreadAttach')->batchDeleteAttach($aids);
 	}
 }

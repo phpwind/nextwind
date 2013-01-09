@@ -7,7 +7,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ForumController.php 22513 2012-12-25 06:09:48Z jinlong.panjl $
+ * @version $Id: ForumController.php 22967 2013-01-04 05:55:28Z jinlong.panjl $
  * @package forum
  */
 
@@ -293,7 +293,6 @@ class ForumController extends PwBaseController {
 	}
 
 	private function _updateMyForumCache($uid, $array) {
-		if (!$array) return false;
 		$joinForums = Wekit::load('forum.srv.PwForumService')->getJoinForum($uid);
 		$_tmpArray = array();
 		foreach ($array as $k => $v) {

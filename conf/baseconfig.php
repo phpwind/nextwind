@@ -72,6 +72,11 @@ return array(
 /*-----预设钩子键值-----*/
 
 'prehook' => array(
+	'ALL' => array('s_header_nav', 's_footer'),
+	'LOGIN' => array('s_header_info_1', 's_header_info_2'),
+	'UNLOGIN' => array(),
+
+	'default/index/run' => array('c_index_run', 'm_PwThreadList'),
 	'bbs/index/run' => array('c_index_run', 'm_PwThreadList'),
 	'bbs/cate/run' => array('c_cate_run', 'm_PwThreadList'),
 	'bbs/thread/run' => array('c_thread_run', 'm_PwThreadList', 's_PwThreadType'),

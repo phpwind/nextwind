@@ -65,9 +65,6 @@ class EmailController extends AdminBaseController {
 		$title = Wekit::C('site', 'info.name') . ' 测试邮件';
 		$content = '恭喜您，如果您收到此邮件则代表后台邮件发送设置正确！';
 		$result = $mail->sendMail($toEmail, $title, $content);
-		if ($result === false) {
-			$this->showError('ADMIN:email.close');
-		}
 		if ($result === true) {
 			$this->showMessage('ADMIN:email.test.success');
 		}

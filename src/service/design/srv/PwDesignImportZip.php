@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImportZip.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
+ * @version $Id: PwDesignImportZip.php 23397 2013-01-09 08:12:23Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImportZip {
@@ -101,7 +101,7 @@ class PwDesignImportZip {
 		$fileData = $this->read($appPath);	
 		$ifTpl = false;
 		foreach ($fileData AS &$file) {
-			if ($file['filename'] == 'module/data.txt') {
+			if ($file['filename'] == $appPath . 'module/data.txt') {
 				$this->importTxt($file['data']);
 				unset($file);
 			}

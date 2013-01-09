@@ -8,7 +8,7 @@ Wind::import('SRV:forum.bo.PwForumBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: UserController.php 20996 2012-11-23 08:33:21Z jieyin $
+ * @version $Id: UserController.php 23266 2013-01-07 08:46:40Z long.shi $
  * @package forum
  */
 
@@ -50,7 +50,7 @@ class UserController extends PwBaseController {
 		//版块风格
 		if ($pwforum->foruminfo['style']) {
 			$this->setTheme('forum', $pwforum->foruminfo['style']);
-			$this->addCompileDir($pwforum->foruminfo['style']);
+			//$this->addCompileDir($pwforum->foruminfo['style']);
 		}
 		
 		// seo设置

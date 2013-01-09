@@ -10,7 +10,7 @@ Wind::import('WIND:viewer.exception.WindViewException');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: IWindViewerResolver.php 3722 2012-07-27 06:39:47Z yishuo $
+ * @version $Id: IWindViewerResolver.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package viewer
  */
 interface IWindViewerResolver {
@@ -40,7 +40,7 @@ interface IWindViewerResolver {
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: IWindViewerResolver.php 3722 2012-07-27 06:39:47Z yishuo $
+ * @version $Id: IWindViewerResolver.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package viewer
  */
 class WindRender {
@@ -57,7 +57,7 @@ class WindRender {
 	public static function render($__tpl, $__vars, $__viewer) {
 		@extract($__vars, EXTR_REFS);
 		if (!include ($__tpl)) {
-			throw new WindViewException('[component.viewer.WindRender.render] template name ' . $__tpl, 
+			throw new WindViewException('[viewer.WindRender.render] template name ' . $__tpl, 
 				WindViewException::VIEW_NOT_EXIST);
 		}
 	}

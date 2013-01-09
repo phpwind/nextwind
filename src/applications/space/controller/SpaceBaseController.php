@@ -63,7 +63,7 @@ class SpaceBaseController extends PwBaseController {
 	 */
 	public function afterAction($handlerAdapter) {
 		$this->setTheme('space', $this->space->space['space_style']);
-		$this->addCompileDir($this->space->space['space_style']);
+		//$this->addCompileDir($this->space->space['space_style'] ? $this->space->space['space_style'] : Wekit::C('site', 'theme.space.default'));
 		$host = $this->space->tome == PwSpaceModel::MYSELF ? '我' : 'Ta';
 		$this->setOutput($this->space, 'space');
 		$this->setOutput($host, 'host');

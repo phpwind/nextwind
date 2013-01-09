@@ -22,7 +22,7 @@ Wind::import('WIND:viewer.exception.WindViewException');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindViewerResolver.php 3863 2012-12-19 02:58:43Z yishuo $
+ * @version $Id: WindViewerResolver.php 3905 2013-01-09 11:13:36Z liusanbian $
  * @package viewer
  */
 class WindViewerResolver extends WindNormalViewerResolver implements IWindViewerResolver {
@@ -59,7 +59,7 @@ class WindViewerResolver extends WindNormalViewerResolver implements IWindViewer
 			$template, $suffix);
 		if (!is_file($templateFile)) {
 			throw new WindViewException(
-				'[component.viewer.WindViewerResolver.compile] ' . $templateFile, 
+				'[viewer.resolver.WindViewerResolver.compile] ' . $templateFile, 
 				WindViewException::VIEW_NOT_EXIST);
 		}
 		
@@ -89,7 +89,7 @@ class WindViewerResolver extends WindNormalViewerResolver implements IWindViewer
 
 	/**
 	 * 检查是否需要重新编译,需要编译返回false，不需要编译返回true
-	 * 是否重新进行编译取决于两个变量'WIND_DEBUG'和'isCompile','WIND_DEBUG'是框架层面的'DEBUG'控制常量,当'DEBUG'开启时则总是重新生成编译模板.
+	 * 是否重新进行编译取决于两个变量'Wind::$isDebug'和'isCompile','Wind::$isDebug'是框架层面的'DEBUG'控制常量,当'DEBUG'开启时则总是重新生成编译模板.
 	 * 'isCompile'是一个配置值来自'WindView'对象,用户可以通过配置进行修改.当'isCompile'为'1'时,程序会进一步判断,当编译文件不存在或者已经过期时对模板进行重新编译.
 	 * 如果'isCompile'为'0',则不对模板文件进行重新编译.
 	 * 
@@ -98,7 +98,7 @@ class WindViewerResolver extends WindNormalViewerResolver implements IWindViewer
 	 * @return boolean
 	 */
 	private function checkReCompile($templateFilePath, $compileFilePath) {
-		if (WIND_DEBUG) return true;
+		if (isset(Wind::$isDebug) && Wind::$isDebug) return true;
 		if ($this->getWindView()->isCompile) {
 			if (!is_file($compileFilePath)) return true;
 			$_c_m_t = filemtime($compileFilePath);

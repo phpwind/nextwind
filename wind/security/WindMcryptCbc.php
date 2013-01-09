@@ -17,10 +17,10 @@ class WindMcryptCbc implements IWindSecurity {
 	public function encrypt($string, $key, $iv = '') {
 		if ($string === '') return '';
 		if (!extension_loaded('mcrypt')) {
-			throw new WindException('[security.WindCbc.encrypt] extension \'mcrypt\' is not loaded.');
+			throw new WindException('[security.WindMcryptCbc.encrypt] extension \'mcrypt\' is not loaded.');
 		}
 		if (!$key || !is_string($key)) {
-			throw new WindException('[security.WindCbc.encrypt] security key is required. ', 
+			throw new WindException('[security.WindMcryptCbc.encrypt] security key is required. ', 
 				WindException::ERROR_PARAMETER_TYPE_ERROR);
 		}
 		
@@ -37,10 +37,10 @@ class WindMcryptCbc implements IWindSecurity {
 	public function decrypt($string, $key, $iv = '') {
 		if ($string === '') return '';
 		if (!extension_loaded('mcrypt')) {
-			throw new WindException('[security.WindCbc.decrypt] extension \'mcrypt\' is not loaded.');
+			throw new WindException('[security.WindMcryptCbc.decrypt] extension \'mcrypt\' is not loaded.');
 		}
 		if (!$key || !is_string($key)) {
-			throw new WindException('[security.WindCbc.decrypt] security key is required.', 
+			throw new WindException('[security.WindMcryptCbc.decrypt] security key is required.', 
 				WindException::ERROR_PARAMETER_TYPE_ERROR);
 		}
 		

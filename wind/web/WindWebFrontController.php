@@ -73,7 +73,7 @@ class WindWebFrontController extends AbstractWindFrontController {
 				'path' => 'WIND:log.WindLogger', 
 				'scope' => 'singleton', 
 				'destroy' => 'flush', 
-				'constructor-args' => array('0' => array('value' => 'DATA:log'), '1' => array('value' => '2'))), 
+				'constructor-args' => array('0' => array('value' => 'data.log'))),
 			'i18n' => array(
 				'path' => 'WIND:i18n.WindLangResource', 
 				'scope' => 'singleton', 

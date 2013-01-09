@@ -16,7 +16,6 @@ class PwNoticeThreadmanage extends PwNoticeAction{
 	public $aggregate = false;
 	
 	public function buildTitle($param = 0,$extendParams = null,$aggregatedNotice = null){
-		Wind::import("WIND:component.utility.WindString");
 		return Pw::substrs($extendParams['content'], 80);
 	}
 	

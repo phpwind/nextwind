@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ImportController.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
+ * @version $Id: ImportController.php 23397 2013-01-09 08:12:23Z gao.wanggao $ 
  * @package 
  */
 class ImportController extends PwBaseController {
@@ -40,6 +40,42 @@ class ImportController extends PwBaseController {
 		}
 		$this->_getDesignService()->clearCompile();
 		$this->showMessage("operate.success");
+	}
+	
+	
+	public function editstyleAction() {
+		$styleid = $this->getInput('styleid', 'get');
+		$portalid = (int)$this->getInput('portalid', 'get');
+		$ds = $this->_getPortalDs();
+		$portal = $ds->getPortal($portalid);
+		if (!$portal) $this->showError("operate.fail");
+		$styleDs = Wekit::load('APPS:appcenter.service.PwStyle');
+		$style = $styleDs->getStyle($styleid);
+		if (!$style || $style['style_type'] !='portal') $this->showError("operate.fail");
+		$pageInfo = $this->_getPageDs()->getPageByTypeAndUnique(PwDesignPage::PORTAL, $portalid);
+		if (!$pageInfo) $this->showError("operate.fail");
+		
+		//导入文件
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+    	$pageBo = new PwDesignPageBo($pageInfo['page_id']);
+    	$this->clearPage($pageInfo);
+    	
+		Wind::import('SRV:design.srv.PwDesignImportZip');
+		$srv = new PwDesignImportZip($pageBo);
+		if (!$srv->appcenterToLocal($style['alias'])) $this->showError("operate.fail");
+		Wind::import('SRV:design.dm.PwDesignPortalDm');
+ 		$dm = new PwDesignPortalDm($portalid);
+ 		$dm->setTemplate($pageBo->getTplPath());
+ 		$ds->updatePortal($dm);
+ 		$this->_getDesignService()->clearCompile();
+		//更新数据
+		Wind::import('SRV:design.srv.data.PwAutoData');
+		foreach ($srv->newIds AS $id) {
+			if (!$id) continue;
+			$autoSrv = new PwAutoData($id);
+			$autoSrv->addAutoData();
+		}
+ 		$this->showMessage("operate.success");
 	}
 	
 	protected function doZip($pageBo) {
@@ -125,6 +161,11 @@ class ImportController extends PwBaseController {
 		//segment
 		$this->_getSegmentDs()->deleteSegmentByPageid($pageid);
 		$bakDs->deleteByPageId($pageid);
+		
+		Wind::import('SRV:design.dm.PwDesignPageDm');
+ 		$dm = new PwDesignPageDm($pageid);
+ 		$dm->setModuleIds(array())->setStrucNames(array());
+ 		$this->_getPageDs()->updatePage($dm);
 		//doclear end
 	}
 	

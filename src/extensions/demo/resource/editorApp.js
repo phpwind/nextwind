@@ -7,11 +7,6 @@
  */
 ;(function ( $, window, undefined ) {
 	var appName = 'demo';
-	
-	$.ajaxSetup({
-		beforeSend : function(){},
-		data : ''
-	});
 
 
 	WindEditor.initOpenApp[appName](function(item, root_path){

@@ -262,6 +262,15 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 		}
 		
 	}
+
+	public function getUserBindInfo($uid,$type=''){
+		$extService = Wekit::load('EXT:account.service.srv.App_Account_CommonService');		
+		if(!is_object($extService)){
+			return $this->buildResponse(-1,'can not find extension');
+		}
+		$info = $extService->getUserBoundInfo($uid,$type);
+		return $this->buildResponse(0,$info);
+	}
 	
 	private function getUser() {
 		return Wekit::load ( 'SRV:user.PwUser' );

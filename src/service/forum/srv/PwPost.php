@@ -11,10 +11,11 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPost.php 22682 2012-12-26 09:58:20Z jieyin $
+ * @version $Id: PwPost.php 23093 2013-01-06 04:04:36Z jieyin $
  * @package forum
  */
 class PwPost extends PwBaseHookService {
+
 	public $action;
 	public $forum;
 	public $user;
@@ -28,7 +29,6 @@ class PwPost extends PwBaseHookService {
 		
 		/** hook **/
 		$this->action->setSrv($this);
-		$this->action->setHook(get_class($this->action));
 	}
 
 	/**
@@ -205,6 +205,10 @@ class PwPost extends PwBaseHookService {
 	public function runDo($method) {
 		$args = func_get_args();
 		call_user_func_array(array($this->action, 'runDo'), $args);
+	}
+
+	public function getHookKey() {
+		return $this->action->getHookKey();
 	}
 
 	/**

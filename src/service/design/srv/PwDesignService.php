@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignService.php 22476 2012-12-25 01:50:03Z gao.wanggao $ 
+ * @version $Id: PwDesignService.php 22962 2013-01-04 05:11:30Z gao.wanggao $ 
  * @package 
  */
 class PwDesignService {
@@ -194,8 +194,10 @@ class PwDesignService {
 	}
 	
 	public function clearTemplate($pageid, $tplPath) {
+		if (!$tplPath) return false;
 		$dir = Wind::getRealDir('THEMES:portal.local.'). $tplPath;
 		WindFolder::rm($dir, true);
+		return true;
 	}
 	
 	/**

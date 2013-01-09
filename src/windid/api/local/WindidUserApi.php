@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUserApi.php 22709 2012-12-26 12:00:08Z gao.wanggao $ 
+ * @version $Id: WindidUserApi.php 23441 2013-01-09 11:30:49Z gao.wanggao $ 
  * @package 
  */
 class WindidUserApi {
@@ -28,11 +28,17 @@ class WindidUserApi {
 		$result = $this->_getUserDs()->addUser($dm);
 		if ($result instanceof WindidError) return $result->getCode();
 		$uid = (int)$result;
-		$params = array(
-			'uid'=>$uid,
-			'type'=>'face',
-		);
-		WindidApi::open('avatar/default', array(), $params);
+		$client = Windid::client();
+		if ($client->windid == 'local') {
+			$srv = Windid::load('user.srv.WindidUserService');
+			$result = $srv->defaultAvatar($uid, 'face');
+		} else {
+			$params = array(
+				'uid'=>$uid,
+				'type'=>'face',
+			);
+			WindidApi::open('avatar/default', array(), $params);
+		}
 		$this->_getNotifyClient()->send('register', $uid);
 		return $uid;
 	}
@@ -307,18 +313,21 @@ class WindidUserApi {
 		Wind::import('WINDID:service.user.dm.WindidUserDm');
 		if (!$dm instanceof WindidUserDm) return WindidError::CLASS_ERROR;
 		$result =  $this->_getUserDs()->addUser($dm);
-		if (!$result instanceof WindidError) {
-			$uid = (int)$result;
+		if ($result instanceof WindidError) return WindidError::FAIL;
+		$uid = (int)$result;
+		$client = Windid::client();
+		if ($client->windid == 'local') {
+			$srv = Windid::load('user.srv.WindidUserService');
+			$result = $srv->defaultAvatar($uid, 'face');
+		} else {	
 			$params = array(
 				'uid'=>$uid,
 				'type'=>'face',
 			);
 			WindidApi::open('avatar/default', array(), $params);
-			$this->_getNotifyClient()->send('register', $uid);
-			return $uid;
-		} else {
-			return WindidError::FAIL;
 		}
+		$this->_getNotifyClient()->send('register', $uid);
+		return $uid;
 	}
 	
 	public function editDmUser($dm) {
@@ -345,7 +354,9 @@ class WindidUserApi {
 	 * @param int $uid
 	 */
 	public function getUserCredit($uid) {
-		return $this->_getUserDs()->getUserByUid($uid, WindidUser::FETCH_DATA);
+		$result = $this->_getUserDs()->getUserByUid($uid, WindidUser::FETCH_DATA);
+		unset($result['messages']);
+		return $result;
 	}
 	
 	/**
@@ -356,9 +367,9 @@ class WindidUserApi {
 	 */
 	public function fecthUserCredit($uids) {
 		$users = array();
-		$_data = $this->_getUserDs()->fetchUserByUid($unique, WindidUser::FETCH_MAIN|WindidUser::FETCH_DATA);
+		$_data = $this->_getUserDs()->fetchUserByUid($unique, WindidUser::FETCH_DATA);
 		foreach ($_data AS $key=>&$user) {
-			unset($user['password'], $user['salt'], $user['safecv']);
+			unset($user['messages']);
 			$users[$key] = $_data[$key];
 		}
 		return $users;
@@ -381,6 +392,7 @@ class WindidUserApi {
 		}
 		$result = $this->_getUserDs()->updateCredit($dm);
 		if ($result instanceof WindidError) return $result->getCode();
+		if (!$result) return 0;
 		$this->_getNotifyClient()->send('editCredit', $uid);
 		return  (int)$result;
 	}
@@ -390,6 +402,7 @@ class WindidUserApi {
 		if (!$dm instanceof WindidCreditDm) return WindidError::CLASS_ERROR;
 		$result = $this->_getUserDs()->updateCredit($dm);
 		if ($result instanceof WindidError) return $result->getCode();
+		if (!$result) return 0;
 		$this->_getNotifyClient()->send('editCredit', $dm->uid);
 		return  (int)$result;
 	}

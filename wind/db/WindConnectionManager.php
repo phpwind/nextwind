@@ -30,7 +30,7 @@ Wind::import("WIND:db.WindConnection");
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-23
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindConnectionManager.php 3880 2012-12-27 07:23:26Z yishuo $
+ * @version $Id: WindConnectionManager.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package db
  */
 class WindConnectionManager extends WindConnection {
@@ -100,7 +100,7 @@ class WindConnectionManager extends WindConnection {
 				$this->_dbHandle = $this->pool[$this->except['_current']];
 		} catch (PDOException $e) {
 			$this->close();
-			throw new WindDbException($e->getMessage());
+			throw new WindDbException('[db.WindConnectionManager.init] ' . $e->getMessage());
 		}
 	}
 	

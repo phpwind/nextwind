@@ -3,7 +3,7 @@
 @explain: 发帖页面
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: post.css 22223 2012-12-19 20:27:38Z yanchixia $
+$Id: post.css 23210 2013-01-07 05:38:39Z yanchixia $
 ===================
 */
 .header_wrap,
@@ -56,7 +56,6 @@ body {
 	width:190px;
 	margin-left:-190px;
 	_margin-left:-192px;
-	overflow:hidden;
 }
 
 /*

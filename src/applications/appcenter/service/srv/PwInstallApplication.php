@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwInstallApplication.php 22256 2012-12-20 09:22:22Z long.shi $
+ * @version $Id: PwInstallApplication.php 23300 2013-01-08 05:22:09Z long.shi $
  * @package products
  * @subpackage appcenter.service.srv
  */
@@ -65,9 +65,12 @@ class PwInstallApplication {
 		$this->_appId = $id;
 		$_r = $this->download();
 		if ($_r instanceof PwError) return $_r;
+		file_put_contents(DATA_PATH . 'tmp/log', 'Download!');
 		$extends = $this->getOnlineInfo();
 		if ($extends instanceof PwError) return $extends;
+		file_put_contents(DATA_PATH . 'tmp/log', 'getOnlineInfo!', FILE_APPEND);
 		if (true !== $_r = $this->initInstall('', $extends)) return $_r;
+		file_put_contents(DATA_PATH . 'tmp/log', 'initInstall!', FILE_APPEND);
 		if (true !== $_r = $this->doInstall('all', $this->_hash)) {
 			$this->rollback();
 			return $_r;

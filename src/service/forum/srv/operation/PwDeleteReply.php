@@ -10,8 +10,6 @@ Wind::import('HOOK:PwDeleteReply.PwDeleteReplyDoPostUpdate');
 Wind::import('HOOK:PwDeleteReply.PwDeleteReplyDoForumUpdate');
 Wind::import('HOOK:PwDeleteReply.PwDeleteReplyDoUserUpdate');
 Wind::import('HOOK:PwDeleteReply.PwDeleteReplyDoToppedDelete');
-//Wind::import('HOOK:PwDeleteTopic.PwDeleteTopicDoFreshDelete');
-//Wind::import('HOOK:PwDeleteTopic.PwDeleteTopicDoSpecialDelete');
 
 /**
  * 删除帖子及其关联操作(扩展)
@@ -19,7 +17,7 @@ Wind::import('HOOK:PwDeleteReply.PwDeleteReplyDoToppedDelete');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDeleteReply.php 17853 2012-09-10 05:59:46Z jinlong.panjl $
+ * @version $Id: PwDeleteReply.php 23356 2013-01-09 03:20:51Z jieyin $
  * @package forum
  */
 
@@ -35,7 +33,7 @@ class PwDeleteReply extends PwGleanDoProcess {
 	public $reason;
 	
 	public function __construct(iPwDataSource $ds, PwUserBo $user) {
-		$this->data = $ds->getData();
+		$this->data = $this->_bulidData($ds->getData());
 		$this->user = $user;
 		parent::__construct();
 	}
@@ -88,6 +86,10 @@ class PwDeleteReply extends PwGleanDoProcess {
 		return $this->data;
 	}
 
+	public function getIds() {
+		return $this->pids;
+	}
+
 	protected function init() {
 		if ($this->isRecycle) {
 			$this->appendDo(new PwDeleteReplyDoVirtualDelete($this));
@@ -103,16 +105,20 @@ class PwDeleteReply extends PwGleanDoProcess {
 		$this->appendDo(new PwDeleteReplyDoPostUpdate($this));
 		$this->appendDo(new PwDeleteReplyDoForumUpdate($this));
 		$this->appendDo(new PwDeleteReplyDoToppedDelete($this));
-		//$this->appendDo(new PwDeleteTopicDoFreshDelete($this));
-		//$this->appendDo(new PwDeleteTopicDoSpecialDelete($this));
 	}
 
 	protected function gleanData($value) {
 		$this->pids[] = $value['pid'];
 	}
 
-	public function getIds() {
-		return $this->pids;
+	protected function _bulidData($data) {
+		$pids = array_keys($data);
+		$result = Wekit::load('recycle.PwReplyRecycle')->fetchRecord($pids);
+		foreach ($data as $key => $value) {
+			$value['from_tid'] = isset($result[$key]) ? $result[$key]['tid'] : $value['tid'];
+			$data[$key] = $value;
+		}
+		return $data;
 	}
 
 	protected function run() {

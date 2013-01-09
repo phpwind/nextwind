@@ -5,7 +5,7 @@
  *
  * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
  * @author Jianmin Chen <sky_hold@163.com>
- * @version $Id: PwThreadAttachDao.php 21318 2012-12-04 09:24:09Z jieyin $
+ * @version $Id: PwThreadAttachDao.php 23356 2013-01-09 03:20:51Z jieyin $
  * @package attach
  */
 
@@ -41,10 +41,16 @@ class PwThreadAttachDao extends PwBaseDao {
 		return $smt->getValue(array($tid, $pid, $type));
 	}
 
+	public function fetchAttachByTid($tids) {
+		$sql = $this->_bindSql('SELECT * FROM %s WHERE tid IN %s',$this->getTable(), $this->sqlImplode($tids));
+		$rst = $this->getConnection()->query($sql);
+		return $rst->fetchAll('aid');
+	}
+
 	public function fetchAttachByTidAndPid($tids, $pids) {
 		$sql = $this->_bindSql('SELECT * FROM %s WHERE tid IN %s AND pid IN %s', $this->getTable(), $this->sqlImplode($tids), $this->sqlImplode($pids));
 		$rst = $this->getConnection()->query($sql);
-		return $rst->fetchAll();
+		return $rst->fetchAll('aid');
 	}
 	
 	public function fetchAttachByTidsAndPid($tids, $pid) {

@@ -19,7 +19,7 @@ class LikeController extends PwBaseController {
 	}
 	public function dataAction() {
 		$cron = false;
-		$_data = '';
+		$_data = array();
 		$page = (int)$this->getInput('page','get');
 		$pageid = (int)$this->getInput('pageid','get');
 		$moduleid = (int)$this->getInput('moduleid','get');

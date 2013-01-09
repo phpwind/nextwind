@@ -8,7 +8,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwStyleInstall.php 22284 2012-12-21 03:47:30Z long.shi $
+ * @version $Id: PwStyleInstall.php 22909 2012-12-28 09:01:30Z long.shi $
  * @package service.style.srv
  */
 class PwStyleInstall extends PwInstall {
@@ -45,7 +45,7 @@ class PwStyleInstall extends PwInstall {
 		if ($result instanceof PwError) return $result;
 		if ($result) return new PwError('APPCENTER:install.exist.fail', 
 			array('{{error}}' => $manifest->getApplication('name')));
-		
+		file_put_contents(DATA_PATH . 'tmp/log', 'checkinstall!', FILE_APPEND);
 		return true;
 	}
 	
@@ -118,6 +118,7 @@ class PwStyleInstall extends PwInstall {
 		$target = $targetDir . '/' . $alias;
 		PwApplicationHelper::mvSourcePack($install->getTmpPackage(), $target);
 		$install->addInstallLog('packs', $target);
+		file_put_contents(DATA_PATH . 'tmp/log', 'afterinstall!', FILE_APPEND);
 		return true;
 	}
 
@@ -159,6 +160,7 @@ class PwStyleInstall extends PwInstall {
 		if (!$application->beforeAdd()) return new PwError('APPCENTER:install.mainfest.fail');
 		$this->_load()->addStyle($application);
 		$install->setInstallLog('appId', $install->getAppId());
+		file_put_contents(DATA_PATH . 'tmp/log', 'app!', FILE_APPEND);
 		return true;
 	}
 

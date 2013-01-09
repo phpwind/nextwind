@@ -20,10 +20,12 @@ class PwTagService {
 	 */
 	public function addTags($dmArray) {
 		if(!is_array($dmArray) || !$dmArray) return false;
-		$tagsInfo = $this->_getTagDs()->getTagsByNames(array_keys($dmArray));
-		$tagsKeys = array();
-		foreach ($tagsInfo as $k => $tag){
+		$_tagsInfo = $this->_getTagDs()->getTagsByNames(array_keys($dmArray));
+		$tagsKeys = $tagsInfo = array();
+		foreach ($_tagsInfo as $k => $tag){
 		    $tagsKeys[] = strtolower($k);
+		    $k = strtolower($k);
+		    $tagsInfo[$k] = $tag;
 		}
 		$dmArrays = array();
 		foreach ($dmArray as $k => $dm){

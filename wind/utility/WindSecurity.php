@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindSecurity.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindSecurity.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package utility
  */
 class WindSecurity {
@@ -67,7 +67,7 @@ class WindSecurity {
 	 */
 	public static function decrypt($str, $key, $iv = '') {
 		if (!$str || !is_string($str)) throw new WindException(
-			'[utility.WindSecurity.dncrypt] security string is required.', WindException::ERROR_PARAMETER_TYPE_ERROR);
+			'[utility.WindSecurity.decrypt] security string is required.', WindException::ERROR_PARAMETER_TYPE_ERROR);
 		if (!$key || !is_string($key)) throw new WindException(
 			'[utility.WindSecurity.decrypt] security key is required.', WindException::ERROR_PARAMETER_TYPE_ERROR);
 		
@@ -116,10 +116,6 @@ class WindSecurity {
 		$_tmp['://'] = $_tmp["\0"] = '';
 		$ifCheck && $_tmp['..'] = '';
 		if (strtr($filePath, $_tmp) == $filePath) return preg_replace('/[\/\\\]{1,}/i', '/', $filePath);
-		if (WIND_DEBUG & 2) {
-			Wind::getComponent('windLogger')->info(
-				"[utility.WindSecurity.escapePath] file path is illegal.\r\n\tFilePath:" . $filePath);
-		}
 		throw new WindException('[utility.WindSecurity.escapePath] file path is illegal');
 	}
 }

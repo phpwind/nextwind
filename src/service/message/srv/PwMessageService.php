@@ -126,6 +126,7 @@ class PwMessageService {
 		}
 		Wind::import('LIB:ubb.PwUbbCode');
 		$content = PwUbbCode::autoUrl($content, true);
+		
 		// 发消息前hook
 		if (($result = $this->_getHook()->runWithVerified('check', $fromUid, $content, $uid)) instanceof PwError) {
 			return $result;
@@ -185,8 +186,9 @@ class PwMessageService {
 	 * @return array 
 	 */
 	public function getDialogs($uid,$start,$limit){
-		$dialogs = $this->_getWindid()->getDialogList($uid, $start, $limit);
 		$count = $this->_getWindid()->countDialog($uid);
+		if (!$count) return array(0, array());
+		$dialogs = $this->_getWindid()->getDialogList($uid, $start, $limit);
 		return array($count,$dialogs);
 	}
 	
@@ -222,7 +224,12 @@ class PwMessageService {
 		// 对话消息分页
 		$count = $this->_getWindid()->countMessage($dialogId);
 		if (!$count) return array(0, array());
-		$messages = $this->_getWindid()->getMessageList($dialogId, $start,$limit);
+		$_messages = $this->_getWindid()->getMessageList($dialogId, $start,$limit);
+		$messages = array();
+		foreach ($_messages as $k => $v) {
+			$v['content'] = WindSecurity::escapeHTML($v['content']);
+			$messages[$k] = $v;
+		}
 		krsort($messages);
 		return array($count,$messages);
 	}
@@ -325,17 +332,20 @@ class PwMessageService {
 		} else {
 			$dm->setMessageCount($num);
 		}
+		!defined('WINDID_IS_NOTIFY') && define('WINDID_IS_NOTIFY', 1);
+		Wind::import('LIB:utility.PwWindidStd');
+		$std = PwWindidStd::getInstance('user');
+      	$std->setMethod('editDmUser', 1);
 		return $this->_getUserDs()->editUser($dm, PwUser::FETCH_DATA);
 	}
 	
 	public function synEditUser($uid) {
-		if (!$data = $this->_getUserWindid()->getUserCredit($uid)) {
-			return false;
+		if (!$unread = $this->_getWindid()->getUnRead($uid)) {
+			return true;
 		}
-		if (!$data['messages']) return false;
 		Wind::import('SRV:user.dm.PwUserInfoDm');
 		$dm = new PwUserInfoDm($uid);
-		$dm->setMessageCount($data['messages']);
+		$dm->setMessageCount($unread);
 		
 		Wind::import('LIB:utility.PwWindidStd');
 		$std = PwWindidStd::getInstance('user');

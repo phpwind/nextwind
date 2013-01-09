@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadDisplayDoBase.php 22797 2012-12-27 08:37:07Z jieyin $
+ * @version $Id: PwThreadDisplayDoBase.php 23434 2013-01-09 10:44:12Z jieyin $
  * @package forum
  */
 
@@ -40,9 +40,23 @@ abstract class PwThreadDisplayDoBase {
 	}
 	
 	/**
-	 * 在这里输出插件内容 (位置：用户信息下方操做按钮)
+	 * 在这里输出插件内容 (位置：帖子内容区底部)
 	 */
-	public function createHtmlForUserButton() {
+	public function createHtmlContentBottom($read) {
+
+	}
+	
+	/**
+	 * 在这里输出插件内容 (位置：帖子操作按钮)
+	 */
+	public function createHtmlForThreadButton($read) {
+
+	}
+
+	/**
+	 * 在这里输出插件内容 (位置：用户信息下方操作按钮)
+	 */
+	public function createHtmlForUserButton($user, $read) {
 
 	}
 

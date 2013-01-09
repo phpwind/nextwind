@@ -6,7 +6,7 @@ Wind::import('WIND:mail.protocol.WindSocket');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindSmtp.php 2973 2011-10-15 19:22:48Z yishuo $
+ * @version $Id: WindSmtp.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package mail
  * @subpackage protocol
  */
@@ -195,12 +195,12 @@ class WindSmtp {
 			$response .= $_response;
 			$this->resonse[] = $_response;
 			list($code, $info) = preg_split('/([\s-]+)/', $_response, 2);
-			if (null === $code || !in_array($code, $expect)) throw new WindException($info);
+			if (null === $code || !in_array($code, $expect)) throw new WindException('[mail.protocol.WindSmtp.checkResponse] ' . $info);
 			if (" " == substr($_response, 3, 1)) {
 				break;
 			}
 		}
-		if (empty($response)) throw new WindException('No response');
+		if (empty($response)) throw new WindException('[mail.protocol.WindSmtp.checkResponse] No response');
 		return $response;
 	}
 

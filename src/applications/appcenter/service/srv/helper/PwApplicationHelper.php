@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwApplicationHelper.php 22696 2012-12-26 11:23:02Z long.shi $
+ * @version $Id: PwApplicationHelper.php 23300 2013-01-08 05:22:09Z long.shi $
  * @package wind
  */
 class PwApplicationHelper {
@@ -124,7 +124,11 @@ class PwApplicationHelper {
 			$http->close();
 			fclose($fp);
 			chmod($_tmp, 0766);
-			copy($_tmp, $tmpdir . '/' . $realname);
+			if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+				copy($_tmp, $tmpdir . DIRECTORY_SEPARATOR . $realname);
+			} else {
+				rename($_tmp, $tmpdir . DIRECTORY_SEPARATOR . $realname);
+			}
 			$result = array(true, $tmpdir . '/' . $realname);
 		} else {
 			$result = $http->send('GET', array(CURLOPT_FOLLOWLOCATION => true));
@@ -143,7 +147,7 @@ class PwApplicationHelper {
 	 * @return boolean PwError
 	 */
 	static public function mvSourcePack($source, $target) {
-		return PwApplicationHelper::copyRecursive($source, $target);
+		return self::copyRecursive($source, $target);
 	}
 
 	/**
@@ -156,7 +160,7 @@ class PwApplicationHelper {
 	static public function copyRecursive($source, $target, $ignore = array()) {
 		if (is_dir($source)) {
 			WindFolder::mkRecur($target);
-			$objects = scandir($source);
+			$objects = WindFolder::read($source);
 			foreach ($objects as $file) {
 				if ($file[0] == ".") continue;
 				if (in_array($file, $ignore)) continue;
@@ -232,12 +236,12 @@ class PwApplicationHelper {
 	
 	static public function readRecursive($dir) {
 		static $files = array();
-		$objects = scandir($dir);
+		$objects = WindFolder::read($dir);
 		foreach ($objects as $v) {
 			if ($v[0] == '.') continue;
-			$object = $dir . DIRECTORY_SEPARATOR . $v;
+			$object = $dir . '/' . $v;
 			if (is_dir($object)) {
-				self::readRecursive($dir . DIRECTORY_SEPARATOR . $v);
+				self::readRecursive($dir . '/' . $v);
 			} else {
 				$files[] = $object;
 			}

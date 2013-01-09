@@ -7,7 +7,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindApplication.php 3859 2012-12-18 09:25:51Z yishuo $
+ * @version $Id: AbstractWindApplication.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package base
  */
 abstract class AbstractWindApplication extends WindModule {
@@ -97,8 +97,6 @@ abstract class AbstractWindApplication extends WindModule {
 		} catch (WindActionException $e) {
 			$this->sendErrorMessage(($e->getError() ? $e->getError() : $e->getMessage()), 
 				$e->getCode());
-		} catch (WindException $e) {
-			$this->sendErrorMessage($e->getMessage(), $e->getCode());
 		}
 	}
 
@@ -152,8 +150,11 @@ abstract class AbstractWindApplication extends WindModule {
 			if (empty($_module) && !empty($this->_config['modules']['pattern'])) {
 				$_module = $this->_config['modules']['pattern'];
 			}
-			$_module && $_module = WindUtility::mergeArray($this->_config['modules']['default'], 
-				$_module);
+			if ($_module) {
+				$_module = WindUtility::mergeArray($this->_config['modules']['default'], $_module);
+			} else
+				throw new WindException('Your request was not found on this server.', 404);
+			
 			$_module_str = implode('#', $_module);
 			if (strpos($_module_str, '{') !== false) {
 				preg_match_all('/{(\w+)}/i', $_module_str, $matches);

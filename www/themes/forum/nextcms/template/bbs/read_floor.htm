@@ -76,9 +76,9 @@
 				</div>
 				<!--# } #-->
 				<!--# if ($read['lou'] == 0) { #-->
-				<pw-tpl id="readFloorTop_segment"/>
+				<design role="segment" id="readFloorTop_segment"/>
 				<!--# } #-->
-				<hook class='$threadDisplay' name='m_PwThreadDisplay.createHtmlBeforeContent' args="array($read)" />
+				<hook class='$threadDisplay' name='createHtmlBeforeContent' args="array($read)" />
 				<!--# //$threadDisplay->displayHtmlFromBeforeContent($read) #-->
 				<div class="fr">
 				<!--开始右侧广告位-->
@@ -94,7 +94,7 @@
 				<!--# if ($read['modified_time']) { #-->
 				<div class="edit_log">[{$read['modified_username']}于{@Pw::time2str($read['modified_time'])}编辑了帖子]</div>
 				<!--# } #-->
-				<hook class='$threadDisplay' name='m_PwThreadDisplay.createHtmlAfterContent' args="array($read)" />
+				<hook class='$threadDisplay' name='createHtmlAfterContent' args="array($read)" />
 				<!--# //$threadDisplay->displayHtmlFromAfterContent($read) #-->
 			</div>
 		</td>
@@ -158,13 +158,13 @@
 				<div class="operate cc">
 					<a rel="nofollow" href="{@url:my/follow/add?uid=$read['created_userid']}" data-uid="{$read['created_userid']}" class="follow J_read_follow J_qlogin_trigger">加关注</a>
 					<a rel="nofollow" href="{@url:message/message/pop?username=$read['created_username']}" class="message J_send_msg_pop J_qlogin_trigger" data-name="{$read['created_username']}">写私信</a>
-					<hook class='$threadDisplay' name="m_PwThreadDisplay.createHtmlForUserButton" args="array($users[$read['created_userid']], $read)" />
+					<hook class='$threadDisplay' name="createHtmlForUserButton" args="array($users[$read['created_userid']], $read)" />
 				</div>
 				<!--# } #-->
 				<!--# } #-->
-				<hook class='$threadDisplay' name="m_PwThreadDisplay.createHtmlAfterUserInfo" args="array($users[$read['created_userid']], $read)" />
+				<hook class='$threadDisplay' name="createHtmlAfterUserInfo" args="array($users[$read['created_userid']], $read)" />
 				<!--# if ($read['lou'] == 0) { #-->
-				<pw-tpl id="readSide_segment"/>
+				<design role="segment" id="readSide_segment"/>
 				<!--# } #-->
 				<!--广告位-->
 				<advertisement id='Read.Layer.User' sys='1'/>
@@ -258,7 +258,7 @@
 			<!--# } #-->
 			<advertisement id='Read.Layer.TidDown' sys='1'/>
 			<!--# if ($read['lou'] == 0) { #-->
-				<pw-tpl id="readFloorbot_segment"/>
+				<design role="segment" id="readFloorbot_segment"/>
 			<!--# } #-->
 			<!--# if ($read['lou'] == 0 && $showReply) { #-->
 			<!--快速回复-->
@@ -314,5 +314,5 @@
 </table>
 </div>
 <!--# if ($read['lou'] == 0) { #-->
-<pw-tpl id="readFloor_segment"/>
+<design role="segment" id="readFloor_segment"/>
 <!--# } #-->

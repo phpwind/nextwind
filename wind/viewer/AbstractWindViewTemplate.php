@@ -8,7 +8,7 @@ Wind::import('WIND:utility.WindFile');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindViewTemplate.php 3865 2012-12-19 10:42:33Z yishuo $
+ * @version $Id: AbstractWindViewTemplate.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package viewer
  */
 abstract class AbstractWindViewTemplate extends WindModule {
@@ -68,7 +68,7 @@ abstract class AbstractWindViewTemplate extends WindModule {
 	 */
 	private function getTemplateFileContent($templateFile) {
 		if (false === ($content = WindFile::read($templateFile))) {
-			throw new WindViewException('Unable to open the template file \'' . $templateFile . '\'.');
+			throw new WindViewException('[viewer.AbstractWindViewTemplate.getTemplateFileContent] Unable to open the template file \'' . $templateFile . '\'.');
 		}
 		return $content;
 	}

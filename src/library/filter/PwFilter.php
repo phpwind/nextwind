@@ -6,7 +6,7 @@ Wind::import('WIND:filter.WindActionFilter');
  * @author Qiong Wu <papa0924@gmail.com> 2011-12-2
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwFilter.php 22208 2012-12-19 17:22:25Z jieyin $
+ * @version $Id: PwFilter.php 23173 2013-01-07 02:09:11Z gao.wanggao $
  * @package src
  * @subpackage library.filter
  */

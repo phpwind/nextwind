@@ -1,7 +1,6 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-Wind::import('COM:utility.WindString');
 Wind::import('SRV:forum.dm.PwForumDm');
 Wind::import('SRV:forum.bo.PwForumBo');
 Wind::import('SRV:forum.PwForum');
@@ -11,7 +10,7 @@ Wind::import('SRV:forum.PwForum');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PwForumService.php 17054 2012-08-30 10:51:39Z jieyin $
+ * @version $Id: PwForumService.php 23312 2013-01-08 07:59:39Z jieyin $
  * @package forum
  */
 
@@ -253,7 +252,8 @@ class PwForumService {
 		$dm = new PwForumDm($forum->fid);
 		$dm->addThreads($topic)->addPosts($replies)->addArticle($article)->addTodayPosts($tpost);
 		if ($lastinfo) {
-			$dm->setLastpostInfo($lastinfo['tid'], Pw::substrs($lastinfo['subject'], 26, 0, true), $lastinfo['username'], Pw::getTime());
+			!isset($lastinfo['time']) && $lastinfo['time'] = Pw::getTime();
+			$dm->setLastpostInfo($lastinfo['tid'], Pw::substrs($lastinfo['subject'], 26, 0, true), $lastinfo['username'], $lastinfo['time']);
 		}
 		$service = $this->_getForum();
 		$service->updateForum($dm, PwForum::FETCH_STATISTICS);
@@ -262,7 +262,7 @@ class PwForumService {
 			$dm = new PwForumDm(true);
 			$dm->addArticle($article)->addSubThreads($topic)->addTodayPosts($tpost);
 			if ($lastinfo && $forum->isOpen()) {
-				$dm->setLastpostInfo($lastinfo['tid'], Pw::substrs($lastinfo['subject'], 26, 0, true), $lastinfo['username'], Pw::getTime());
+				$dm->setLastpostInfo($lastinfo['tid'], Pw::substrs($lastinfo['subject'], 26, 0, true), $lastinfo['username'], $lastinfo['time']);
 			}
 			$service->batchUpdateForum($fids, $dm, PwForum::FETCH_STATISTICS);
 		}

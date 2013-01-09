@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImportTxt.php 22362 2012-12-21 12:09:33Z gao.wanggao $ 
+ * @version $Id: PwDesignImportTxt.php 23387 2013-01-09 07:14:36Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImportTxt {
@@ -67,6 +67,7 @@ class PwDesignImportTxt {
 			$dm->setPageId($this->_pageInfo['page_id'])
 				->setFlag($v['model_flag'])
 				->setName($v['module_name'])
+				->setStruct($v['module_struct'])
 				->setProperty(unserialize($v['module_property']))
 				->setCache(unserialize($v['module_cache']))
 				->setTitle(unserialize($v['module_title']))
@@ -106,11 +107,12 @@ class PwDesignImportTxt {
 		}
 		$_struct = '';
 		$_array = explode(',',$this->_pageInfo['segments']);
-		if (in_array('first_segment_drag', $_array)) {
-			$firstSegment = 'first_segment_drag';
+		if (in_array('first_segment', $_array)) {
+			$firstSegment = 'first_segment';
 		} else {
 			$firstSegment = array_shift($_array);
 		}
+
 		foreach ($segments AS $k=>$v) {
 			if (!$v) continue;
 			$_struct .= $v;
@@ -124,6 +126,13 @@ class PwDesignImportTxt {
 	protected function importPortalSegment($segments) {
 		$srv = $this->_getCompileService();
 		$ds = $this->_getSegmentDs();
+		//兼容template的怪异编译方式
+		foreach ($segments AS $k=>$segment) {
+			if ($k != 'footer_segment') continue;
+			$segments['segment_drag'] .= $segment;
+			unset($segments['footer_segment']);
+		}
+		
 		foreach ($segments AS $k=>$segment) {
 			$struct = $this->replaceStruct($segment);
 			$_tpl = $srv->replaceModule($struct);

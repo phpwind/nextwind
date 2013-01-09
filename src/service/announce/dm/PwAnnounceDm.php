@@ -93,7 +93,7 @@ class PwAnnounceDm extends PwBaseDm {
 	 */
 	public function setStartDate($startDate) {
 		$time = $startDate ? Pw::str2time($startDate) : Pw::str2time(Pw::time2str(Pw::getTime(), 'Y-m-d'));
-		$this->_data['start_date'] = $time;
+		$this->_data['start_date'] = (int)$time;
 		return $this;
 	}
 
@@ -105,7 +105,7 @@ class PwAnnounceDm extends PwBaseDm {
 	 */
 	public function setEndDate($endDate) {
 		$time = $endDate ? Pw::str2time($endDate) : 9999999999;
-		$this->_data['end_date'] = $time;
+		$this->_data['end_date'] = (int)$time;
 		return $this;
 	}
 

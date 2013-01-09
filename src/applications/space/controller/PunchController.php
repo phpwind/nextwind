@@ -178,6 +178,7 @@ class PunchController extends PwBaseController {
 		}
 		$allowNum < $countNum && $followUids = array_slice($followUids,0,$allowNum);
 		$awardNum = $this->config['punch.friend.reward']['rewardNum'];
+		$behaviors = $this->fetchBehaviors($followUids);
 		foreach ($followUids as $uid) {
 			$userBo = new PwUserBo($uid);
 			$v = $userBo->info;
@@ -186,7 +187,7 @@ class PunchController extends PwBaseController {
 				$havePunch = $this->_getPunchService()->isPunch($punchData);
 				if ($havePunch) continue;
 			}
-			$behaviorNum = $behavior['number']+1;
+			$behaviorNum = (int)$behaviors[$uid]+1;
 			$this->_punchBehavior($v,$this->config['punch.friend.reward']['rewardMeNum'],$behaviorNum);
 			$creditUids = array(
 				$this->loginUser->uid => array($this->config['punch.reward']['type'] => $awardNum),
@@ -203,7 +204,7 @@ class PunchController extends PwBaseController {
 				'affect' => $this->config['punch.friend.reward']['rewardMeNum'])
 			);
 			$this->_creditBo->execute($creditUids);
-			$this->_getUserBehaviorDs()->replaceDayBehavior($this->loginUser->uid,'punch_num',Pw::getTime());
+			$this->_getUserBehaviorDs()->replaceBehavior($this->loginUser->uid,'punch_num',Pw::getTime());
 			$punchUsers[] = $userBo->username;
 		}
 		if ($punchUsers) {
@@ -214,6 +215,19 @@ class PunchController extends PwBaseController {
 			);
 		}
 		echo Pw::jsonEncode(array('state' => 'success', 'data' => $result));exit;
+	}
+	
+	protected function fetchBehaviors($uids, $behavior = 'punch_day') {
+		$array = array();
+		$behaviors = $this->_getUserBehaviorDs()->fetchBehavior($uids);
+		if (!$behaviors) return $array;
+		$time = Pw::getTime();
+		foreach ($behaviors as $value) {
+			if ($value['behavior'] != $behavior) continue;
+			if($value['expired_time'] > 0 && $value['expired_time'] < $time) $value['number'] = 0;
+			$array[$value['uid']] = $value['number'];
+		}
+		return $array;
 	}
 	
 	/** 

@@ -5,7 +5,7 @@ Wind::import('LIB:utility.verifycode.PwBaseCode');
   * 
   * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
   * @author $Author: gao.wanggao $ foxsee@aliyun.com
-  * @version $Id: PwGDCode.php 20894 2012-11-16 07:07:59Z jieyin $ 
+  * @version $Id: PwGDCode.php 23362 2013-01-09 04:19:41Z gao.wanggao $ 
   * @package 
   */
 class PwGDCode extends PwBaseCode {
@@ -174,7 +174,8 @@ class PwGDCode extends PwBaseCode {
 	}
 	
 	private static function _getCodeLenth() {
-		self::$_codeLen = Pw::strlen(self::$verifyCode);
+		//self::$_codeLen = Pw::strlen(self::$verifyCode);
+		self::$_codeLen = WindString::strlen(self::$verifyCode, 'utf-8');
 	}
 	
 	private static function _outFlash() {
@@ -256,7 +257,8 @@ class PwGDCode extends PwBaseCode {
 	}
 	private static function _writeImage() {
 		for ($i = 0; $i < self::$_codeLen; $i++) { 
-			$_text = Pw::substrs(self::$verifyCode, 1, $i, false);
+			//$_text = Pw::substrs(self::$verifyCode, 1, $i, false);
+			$_text = WindString::substr(self::$verifyCode, $i, 1, 'utf-8', false);
 			self::_setRandSize();
 			self::_setRandAngle();
 			self::_setRandX();

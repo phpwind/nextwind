@@ -86,7 +86,7 @@ class MylikeController extends PwBaseController {
 		$start = (int) $this->getInput('start', 'get');
 		$start >= 100 && $start = 100;
 		$perpage = 20;
-		$_data = '';
+		$_data = array();
 		$logLists = $this->_getBuildLikeService()->getFollowLogList($this->loginUser->uid, $start, $perpage);
 		$likeLists = $this->_getBuildLikeService()->getLikeList();
 		$likeInfos = $this->_getBuildLikeService()->getLikeInfo();

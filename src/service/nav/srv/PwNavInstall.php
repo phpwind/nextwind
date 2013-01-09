@@ -7,7 +7,7 @@ Wind::import('SRV:nav.dm.PwNavDm');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwNavInstall.php 21071 2012-11-27 06:34:14Z long.shi $
+ * @version $Id: PwNavInstall.php 22909 2012-12-28 09:01:30Z long.shi $
  * @package nav
  */
 class PwNavInstall implements iPwInstall {
@@ -115,10 +115,7 @@ class PwNavInstall implements iPwInstall {
 	protected function _install($type, $install) {
 		$manifest = $install->getManifest();
 		if (!$this->link) {
-			$this->link = WindUrlHelper::createUrl('app/index/run', 
-				array('app' => $manifest->getApplication('alias')), '', 'pw');
-			$this->link = trim(
-				str_replace(Wind::getApp()->getRequest()->getBaseUrl(true), '', $this->link), '/');
+			$this->link = 'index.php?m=app&app=' . $manifest->getApplication('alias');
 		}
 		$dm = new PwNavDm();
 		$dm->setLink($this->link)->setType($type);
@@ -133,6 +130,7 @@ class PwNavInstall implements iPwInstall {
 		if ($id instanceof PwError) return $id;
 		$install->addInstallLog('nav', $id);
 		$this->update();
+		file_put_contents(DATA_PATH . 'tmp/log', 'nav!', FILE_APPEND);
 		return true;
 	}
 

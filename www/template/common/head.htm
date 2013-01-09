@@ -4,15 +4,15 @@
 <meta name="generator" content="phpwind v{@G:version}" />
 <meta name="description" content="{@G:seo.description}" />
 <meta name="keywords" content="{@G:seo.keywords}" />
-<link rel="stylesheet" href="{@theme:site.css}/core.css?v={@G:version}" />
-<link rel="stylesheet" href="{@theme:site.css}/style.css?v={@G:version}" />
+<link rel="stylesheet" href="{@theme:site.css}/core.css?v={@NEXT_RELEASE}" />
+<link rel="stylesheet" href="{@theme:site.css}/style.css?v={@NEXT_RELEASE}" />
 <!-- <base id="headbase" href="{@G:url.base}/" /> -->
 {@Wekit::C('site', 'css.tag')|html}
 <script>
 //全局变量 Global Variables
 var GV = {
 	JS_ROOT : '{@G:url.res}/js/dev/',										//js目录
-	JS_VERSION : '{@G:version}',											//js版本号
+	JS_VERSION : '{@NEXT_RELEASE}',											//js版本号(不能带空格)
 	JS_EXTRES : '{@G:url.extres}',
 	TOKEN : '{@Wind::getComponent('windToken')->saveToken('csrf_token')}',	//token $.ajaxSetup data
 	U_CENTER : '{@url:space/index/run}',		//用户空间(参数 : uid)
@@ -53,4 +53,4 @@ if ($loginUser->isExists()) {
 	}
 };
 </script>
-<script src="{@G:url.js}/wind.js?v{@G:version}"></script>
+<script src="{@G:url.js}/wind.js?v={@NEXT_RELEASE}"></script>

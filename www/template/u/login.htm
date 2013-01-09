@@ -2,7 +2,7 @@
 <html>
 <head>
 <template source='TPL:common.head' suffix='htm' />
-<link href="{@theme:css}/register.css?v={@G:version}" rel="stylesheet" />
+<link href="{@theme:css}/register.css?v={@NEXT_RELEASE}" rel="stylesheet" />
 </head>
 <body>
 <div class="wrap">
@@ -97,45 +97,6 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 						</dl>');
 	var _statu = '',
 		login_tip_username = $('#J_u_login_tip_username');
-	
-	/*用户名单独验证
-	jQuery.validator.addMethod("nameCheck", function(value, element, params) {
-	
-		
-		var result = false;
-		
-		//设置同步
-		$.ajaxSetup({ async : false });
-		$.ajax({
-			url : '{@url:u/login/checkname}',
-			beforeSend : '', //取消startRequest方法
-			dataType: "json",
-			data : {username : $('#J_u_login_username').val()},
-			success : function (data) {
-				if(data.state === 'success') {
-							if(data.message.safeCheck){
-							var q_arr = [];
-							$.each(data.message.safeCheck, function(i, o){
-								q_arr.push('<option value="'+ i +'">'+ o +'</option>')
-							});
-							$qa_html.find('#J_login_question').html(q_arr.join(''));
-							login_qa.html($qa_html).show();
-							_statu = data.message._statu;
-						}else{
-							login_qa.html('')
-						};
-
-				result = (data.state === 'success' ? true : false);
-				}
-			}
-					
-		});
-		
-		//恢复异步
-		$.ajaxSetup({ async : true });
-		return result;
-		
-	}, '12');*/
 
 	var u_login_form = $("#J_u_login_form"),
 			u_login_username = $('#J_u_login_username');

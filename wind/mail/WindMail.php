@@ -6,7 +6,7 @@ Wind::import('WIND:mail.exception.WindMailException');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindMail.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindMail.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package mail
  */
 class WindMail {
@@ -114,19 +114,13 @@ class WindMail {
 	 * @param string $type 发送类型
 	 * @param array $config 邮件发送器需要的配置数据
 	 * @return boolean
+	 * @throws Exception
 	 */
 	public function send($type = self::SEND_SMTP, $config = array()) {
-		try {
-			$class = Wind::import('Wind:mail.sender.Wind' . ucfirst($type) . 'Mail');
-			/* @var $sender IWindSendMail */
-			$sender = WindFactory::createInstance($class);
-			return $sender->send($this, $config);
-		} catch (Exception $e) {
-			if (WIND_DEBUG & 2) Wind::getComponent('windLogger')->info(
-				'[mail.WindMail.send] send mail fail. ' . $e->getMessage(), 'windmail');
-			if (WIND_DEBUG & 1) throw new WindMailException('[mail.WindMail.send] send mail fail.' . $e->getMessage());
-			return false;
-		}
+		$class = Wind::import('Wind:mail.sender.Wind' . ucfirst($type) . 'Mail');
+		/* @var $sender IWindSendMail */
+		$sender = WindFactory::createInstance($class);
+		return $sender->send($this, $config);
 	}
 
 	/**
@@ -182,8 +176,9 @@ class WindMail {
 				break;
 			default:
 				$body .= $this->_boundaryStart($this->_boundary());
-				$body .= sprintf("Content-Type: %s;%s" . "\tboundary=\"%s\"%s", 'multipart/alternative', self::CRLF, 
-					$this->_boundary(1), self::CRLF . self::CRLF);
+				$body .= sprintf("Content-Type: %s;%s" . "\tboundary=\"%s\"%s", 
+					'multipart/alternative', self::CRLF, $this->_boundary(1), 
+					self::CRLF . self::CRLF);
 				$body .= $this->_createBoundary($this->_boundary(1), 'text/plain') . self::CRLF;
 				$body .= $this->_encode($this->bodyText) . self::CRLF . self::CRLF;
 				$body .= $this->_createBoundary($this->_boundary(1), 'text/html') . self::CRLF;
@@ -376,8 +371,8 @@ class WindMail {
 		if (self::MIME_TEXT == $type || self::MIME_HTML == $type)
 			$contentType = sprintf("%s; charset=\"%s\"", $type, $this->charset);
 		elseif (self::MIME_RELATED == $type)
-			$contentType = sprintf("%s;%s type=\"text/html\";%s boundary=\"%s\"", self::MIME_RELATED, self::CRLF, 
-				self::CRLF, $this->_boundary());
+			$contentType = sprintf("%s;%s type=\"text/html\";%s boundary=\"%s\"", 
+				self::MIME_RELATED, self::CRLF, self::CRLF, $this->_boundary());
 		else
 			$contentType = sprintf("%s;%s boundary=\"%s\"", $type, self::CRLF, $this->_boundary());
 		$this->contentType = $type;
@@ -395,13 +390,14 @@ class WindMail {
 			list($stream, $mime, $disposition, $encode, $filename, $cid) = $value;
 			$filename || $filename = 'attachment_' . $key;
 			$attach .= $this->_boundaryStart($this->_boundary());
-			$attach .= sprintf(self::CONTENTTYPE . ": %s; name=\"%s\"%s", $mime, $filename, self::CRLF);
+			$attach .= sprintf(self::CONTENTTYPE . ": %s; name=\"%s\"%s", $mime, $filename, 
+				self::CRLF);
 			$attach .= sprintf(self::CONTENTENCODE . ": %s%s", $encode, self::CRLF);
 			if ($disposition == 'inline') {
 				$attach .= sprintf(self::CONTENTID . ": <%s>%s", $cid, self::CRLF);
 			}
-			$attach .= sprintf(self::CONTENTPOSITION . ": %s; filename=\"%s\"%s%s", $disposition, $filename, self::CRLF, 
-				self::CRLF);
+			$attach .= sprintf(self::CONTENTPOSITION . ": %s; filename=\"%s\"%s%s", $disposition, 
+				$filename, self::CRLF, self::CRLF);
 			$attach .= $this->_encode($stream, $encode) . self::CRLF;
 		}
 		$attach .= $this->_boundaryEnd($this->_boundary());
@@ -488,7 +484,8 @@ class WindMail {
 	 */
 	private function _encodeHeader($message, $encode = '') {
 		$message = strtr(trim($message), array("\r" => '', "\n" => '', "\r\n" => ''));
-		return $this->_getEncoder($encode)->encodeHeader($message, $this->charset, self::LINELENGTH, self::CRLF);
+		return $this->_getEncoder($encode)->encodeHeader($message, $this->charset, self::LINELENGTH, 
+			self::CRLF);
 	}
 
 	/**

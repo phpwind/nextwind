@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageSo.php 21452 2012-12-07 10:18:33Z gao.wanggao $ 
+ * @version $Id: WindidMessageSo.php 23072 2013-01-06 02:12:11Z gao.wanggao $ 
  * @package 
  */
 class WindidMessageSo {
@@ -19,6 +19,9 @@ class WindidMessageSo {
 		$this->_data['fromuid'] = (int)$fromuid;
 	}
 	
+	public function setToUid($touid) {
+		$this->_data['touid'] = (int)$touid;
+	}
 
 	public function setKeyword($keyword) {
 		$this->_data['keyword'] = $keyword;

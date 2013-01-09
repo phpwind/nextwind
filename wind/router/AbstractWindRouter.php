@@ -6,7 +6,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-23
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindRouter.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: AbstractWindRouter.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package router
  */
 abstract class AbstractWindRouter extends WindHandlerInterceptorChain {
@@ -88,7 +88,6 @@ abstract class AbstractWindRouter extends WindHandlerInterceptorChain {
 	 * @param AbstractWindRoute $route
 	 * @param boolean $default 是否为默认
 	 * @return void
-	 * @throws WindException
 	 */
 	public function addRoute($alias, $route, $default = false) {
 		$this->addInterceptors(array($alias => $route));

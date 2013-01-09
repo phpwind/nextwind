@@ -20,18 +20,18 @@
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindLogger.php 3760 2012-10-11 08:02:25Z yishuo $
+ * @version $Id: WindLogger.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package log
  */
 class WindLogger extends WindModule {
-
+	
 	/**
 	 * 级别1： 只是记录信息不记录trace信息
 	 *
 	 * @var int
 	 */
 	const LEVEL_INFO = 1;
-
+	
 	/**
 	 * 级别2：将会打印出堆栈中trace信息
 	 *
@@ -47,84 +47,84 @@ class WindLogger extends WindModule {
 	 * @var int
 	 */
 	const LEVEL_DEBUG = 3;
-
+	
 	/**
 	 * 级别4：记录错误信息，不包含trace信息
 	 *
 	 * @var int
 	 */
 	const LEVEL_ERROR = 4;
-
+	
 	/**
 	 * 级别5：分析信息记录，包含详细的时间及内存使用情况等
 	 *
 	 * @var int
 	 */
 	const LEVEL_PROFILE = 5;
-
+	
 	/**
 	 * 日志的方式
 	 *
 	 * @var int
 	 */
 	const WRITE_TYPE = 2;
-
+	
 	/**
 	 * 日志记录中profile信息开始的标志
 	 *
 	 * @var string
 	 */
 	const TOKEN_BEGIN = 'begin:';
-
+	
 	/**
 	 * 日志记录中profile信息结束的标志
 	 *
 	 * @var string
 	 */
 	const TOKEN_END = 'end:';
-
+	
 	/**
 	 * 每次当日志数量达到1000条的时候，就写入文件一次
 	 * 
 	 * @var int
 	 */
 	private $_autoFlush = 1000;
-
+	
 	/**
 	 * 日志内容
 	 *
 	 * @var array
 	 */
 	private $_logs = array();
-
+	
 	/**
 	 * 日志条数统计
 	 *
 	 * @var int
 	 */
 	private $_logCount = 0;
-
+	
 	/**
 	 * 日志的详细信息
 	 *
 	 * @var array
 	 */
 	private $_profiles = array();
-
+	
 	/**
 	 * 日志记录的地址
 	 *
 	 * @var string
 	 */
 	private $_logDir;
-
+	
 	/**
 	 * 日志文件的最大长度
 	 *
 	 * @var int
 	 */
 	private $_maxFileSize = 100;
-
+	
 	/**
 	 * 日志打印形式
 	 * 
@@ -135,7 +135,7 @@ class WindLogger extends WindModule {
 	 * @var int
 	 */
 	private $_writeType = 0;
-
+	
 	/**
 	 * 存放日志打印形式
 	 *
@@ -242,13 +242,13 @@ class WindLogger extends WindModule {
 	 * @return void
 	 */
 	public function log($msg, $level = self::LEVEL_INFO, $type = 'wind.system', $flush = false) {
-		if (!$this->_logDir) return;
 		if ($this->_writeType & self::WRITE_TYPE)
 			(count($this->_types) >= 5 || $this->_logCount >= $this->_autoFlush) && $this->flush();
 		else
 			$this->_logCount >= $this->_autoFlush && $this->flush();
 		if ($level === self::LEVEL_PROFILE)
-			$message = $this->_build($msg, $level, $type, microtime(true), $this->getMemoryUsage(false));
+			$message = $this->_build($msg, $level, $type, microtime(true), 
+				$this->getMemoryUsage(false));
 		elseif ($level === self::LEVEL_DEBUG)
 			$message = $this->_build($msg, $level, $type, microtime(true));
 		else
@@ -268,8 +268,12 @@ class WindLogger extends WindModule {
 		if (empty($this->_logs)) return false;
 		Wind::import('WIND:utility.WindFile');
 		$_l = $_logTypes = $_logLevels = array();
-		$_map = array(self::LEVEL_INFO => 'info', self::LEVEL_ERROR => 'error', self::LEVEL_DEBUG => 'debug', 
-			self::LEVEL_TRACE => 'trace', self::LEVEL_PROFILE => 'profile');
+		$_map = array(
+			self::LEVEL_INFO => 'info', 
+			self::LEVEL_ERROR => 'error', 
+			self::LEVEL_DEBUG => 'debug', 
+			self::LEVEL_TRACE => 'trace', 
+			self::LEVEL_PROFILE => 'profile');
 		
 		foreach ($this->_logs as $key => $value) {
 			$_l[] = $value[2];
@@ -366,8 +370,12 @@ class WindLogger extends WindModule {
 		if (strncasecmp($msg, self::TOKEN_BEGIN, strlen(self::TOKEN_BEGIN)) == 0) {
 			$_token = substr($msg, strlen(self::TOKEN_BEGIN));
 			$_token = substr($_token, 0, strpos($_token, ':'));
-			$this->_profiles[] = array($_token, substr($msg, strpos($msg, ':', strlen(self::TOKEN_BEGIN)) + 1), $type, 
-				$timer, $mem);
+			$this->_profiles[] = array(
+				$_token, 
+				substr($msg, strpos($msg, ':', strlen(self::TOKEN_BEGIN)) + 1), 
+				$type, 
+				$timer, 
+				$mem);
 		} elseif (strncasecmp(self::TOKEN_END, $msg, strlen(self::TOKEN_END)) == 0) {
 			$_msg = "PROFILE! Message:";
 			$_token = substr($msg, strlen(self::TOKEN_END));
@@ -464,7 +472,8 @@ class WindLogger extends WindModule {
 		$traces = debug_backtrace();
 		foreach ($traces as $traceKey => $trace) {
 			if ($num >= 7) break;
-			if ((isset($trace['class']) && $trace['class'] == __CLASS__) || isset($trace['file']) && strrpos($trace['file'], __CLASS__ . '.php') !== false) continue;
+			if ((isset($trace['class']) && $trace['class'] == __CLASS__) || isset($trace['file']) && strrpos(
+				$trace['file'], __CLASS__ . '.php') !== false) continue;
 			$file = isset($trace['file']) ? $trace['file'] . '(' . $trace['line'] . '): ' : '[internal function]: ';
 			$function = isset($trace['class']) ? $trace['class'] . $trace['type'] . $trace['function'] : $trace['function'];
 			if ($function == 'WindBase::log') continue;
@@ -524,8 +533,8 @@ class WindLogger extends WindModule {
 	 * @return void
 	 */
 	public function setLogDir($logDir) {
-		if (!is_dir($logDir)) $logDir = Wind::getRealDir($logDir);
-		$this->_logDir = realpath($logDir);
+		$this->_logDir = Wind::getRealDir($logDir);
+		WindFolder::mkRecur($this->_logDir);
 	}
 
 	/**

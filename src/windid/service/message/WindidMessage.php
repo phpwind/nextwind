@@ -6,7 +6,7 @@
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: WindidMessage.php 22410 2012-12-24 04:19:54Z jinlong.panjl $
+ * @version $Id: WindidMessage.php 23072 2013-01-06 02:12:11Z gao.wanggao $
  */
 
 class WindidMessage {
@@ -47,6 +47,11 @@ class WindidMessage {
 		return $this->_getDao()->getMessage($id);
 	}
 	
+	public function fetchMessage($ids) {
+		if (!is_array($ids) || !$ids) return array();
+		return $this->_getDao()->fetchMessage($ids);
+	}
+	
 	//relation methods
 	
 	/**
@@ -56,6 +61,16 @@ class WindidMessage {
 	 */
 	public function addRelation(WindidMessageDm $dm) {
 		return $this->_getRelationDao()->addMessageRelation($dm->getData());
+	}
+	
+	/**
+	 * 批量修改私信为已读状态
+	 * Enter description here ...
+	 * @param array $relationIds
+	 */
+	public function batchReadRelation($relationIds) {
+		if (!is_array($relationIds) || !$relationIds) return false;
+		return $this->_getRelationDao()->batchReadRelation($relationIds);
 	}
 	
 	/**
@@ -290,7 +305,7 @@ class WindidMessage {
 	 * @param int $limit
 	 * @return array
 	 */
-	public function getDialogMessages($dialogId,$limit,$start) {
+	public function getDialogMessages($dialogId,$limit = 10,$start = 0) {
 		$dialogId = intval($dialogId);
 		$mesages = array();
 		if ($dialogId < 1) $mesages;
@@ -325,6 +340,17 @@ class WindidMessage {
 	public function getRelationsByMessageIds($messageIds){
 		if (!is_array($messageIds) || !$messageIds) return array();
 		return $this->_getRelationDao()->getRelationsByMessageIds($messageIds);
+	}
+	
+	/**
+	 * 获取收件箱，发件箱私信状态列表
+	 * @param $messageIds
+	 * @param $issend
+	 */
+	public function fetchRelationByMessageIds($messageIds, $issend = 0) {
+		if (!is_array($messageIds) || !$messageIds) return array();
+		$issend = intval($issend);
+		return $this->_getRelationDao()->fetchRelationByMessageIds($messageIds, $issend);
 	}
 	
 	/**

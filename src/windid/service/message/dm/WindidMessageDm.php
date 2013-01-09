@@ -6,7 +6,7 @@ Wind::import('WINDID:library.base.WindidBaseDm');
  * @author peihong.zhangph
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageDm.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidMessageDm.php 23072 2013-01-06 02:12:11Z gao.wanggao $
  */
 
 class WindidMessageDm extends WindidBaseDm {
@@ -151,6 +151,17 @@ class WindidMessageDm extends WindidBaseDm {
 	 */
 	public function setModifiedTime($time) {
 		$this->_data['modified_time'] = intval($time);
+		return $this;
+	}
+	
+	public function setIsSend($issend = 0) {
+		$this->_data['is_send'] = intval($issend);
+		return $this;
+	}
+	
+	
+	public function setIsRead($isread = 0) {
+		$this->_data['is_read'] = intval($isread);
 		return $this;
 	}
 

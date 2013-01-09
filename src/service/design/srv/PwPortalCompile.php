@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPortalCompile.php 22740 2012-12-27 02:34:43Z gao.wanggao $ 
+ * @version $Id: PwPortalCompile.php 23177 2013-01-07 02:33:11Z gao.wanggao $ 
  * @package 
  */
 class PwPortalCompile {
@@ -21,20 +21,35 @@ class PwPortalCompile {
 		$this->commonDir = $dir . 'common/template/';
 	}
 	
+	public function doCompile($content) {
+		$content = $this->compilePw($content);
+		$content = $this->compileDrag($content);
+		$content = $this->compileList($content);
+		return $this->compileTitle($content);
+	}
+	
 	/**
-	 * 生成门户模版
+	 * 生成自定义页模版
 	 * Enter description here ...
 	 * @param $compileStr
 	 */
 	public function compilePortal($compileStr) {
 		$file = $this->dir . 'index.htm';
 		$content = $this->read($file);
+		$content = $this->compileDesign($content);
+		
 		if ($content === false) {
 			return true;
 		}
-		$content = preg_replace('/\<pw-start\/>(.+)<pw-end\/>/isU', $compileStr, $content);
+		
+		if (preg_match('/\<pw-start\/>(.+)<pw-end\/>/isU', $content, $matches)) {
+			if ($matches[0]) {
+				$compileStr = $matches[0]; 
+			} 
+		}
+		//$content = preg_replace('/\<pw-start\/>(.+)<pw-end\/>/isU', $compileStr, $content);
 		if ($this->isCompile) $this->write($content, $file);
-		return true;
+		return $compileStr;
 	}
 	
 	/**
@@ -57,7 +72,7 @@ class PwPortalCompile {
 	 * Enter description here ...
 	 * @param unknown_type $tplId
 	 */
-	public function compileTpl($section) {
+	public function compileTpl($section, $compile = false) {
 		if (preg_match_all('/\<pw-tpl\s*id=\"([\w.]+)\"\s*\/>/isU',$section, $matches)) {
 			$ds = Wekit::load('design.PwDesignSegment');
 			foreach ($matches[1] AS $k=>$matche) {
@@ -94,9 +109,11 @@ class PwPortalCompile {
 					@chmod($xmlFile, 0777);
 				}
     			$content = $this->read($file);
-			   	$content = $this->compileDesign($content, $v);
-			    $ds->replaceSegment($v. '__tpl', $this->pageid,'', $content);
-				if ($this->isCompile) $this->write($content, $file);
+    			if ($compile) {
+				   	$content = $this->compileDesign($content, $v);
+				    $ds->replaceSegment($v. '__tpl', $this->pageid,'', $content);
+					if ($this->isCompile) $this->write($content, $file);
+				}
 				$section = str_replace($matches[0][$k], $content, $section);
     		}
 		}

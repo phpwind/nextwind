@@ -9,7 +9,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: UpgradeController.php 22565 2012-12-25 09:11:07Z long.shi $
+ * @version $Id: UpgradeController.php 23455 2013-01-09 12:46:26Z long.shi $
  * @package appcenter
  */
 class UpgradeController extends AdminBaseController {
@@ -28,13 +28,15 @@ class UpgradeController extends AdminBaseController {
 		2 => 'list', 
 		3 => 'download', 
 		4 => 'file', 
-		5 => 'doupgrade',
-		6 => 'db',
-		7 => 'end');
+		5 => 'doupgrade', 
+		6 => 'db', 
+		7 => 'php', 
+		8 => 'end');
 
 	public function beforeAction($handlerAdapter) {
 		parent::beforeAction($handlerAdapter);
-		if (!Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($this->adminUser->username)) {
+		if (!Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder(
+			$this->adminUser->username)) {
 			$this->showError('APPCENTER:upgrade.founder');
 		}
 		$this->installService = $this->_loadInstallation();
@@ -46,7 +48,7 @@ class UpgradeController extends AdminBaseController {
 			$this->_checkLegal($action, $r);
 		}
 	}
-	
+
 	public function afterAction($handlerAdapter) {
 		$this->installService->flushLog();
 	}
@@ -54,13 +56,13 @@ class UpgradeController extends AdminBaseController {
 	public function run() {
 		$r = $this->installService->checkEnvironment();
 		if ($r instanceof PwError) $this->setOutput(1, 'disable');
-		$step = (int)Wekit::cache()->get('system_upgrade_step');
+		$step = (int) Wekit::cache()->get('system_upgrade_step');
 		// 继续上次的流程
 		$action = '';
 		if ($step > 1) {
 			$step++;
 			isset($this->status[$step]) && $action = $this->status[$step];
-			$this->setOutput($step < 6, 'recheck');
+			$this->setOutput(true/*$step < 6*/, 'recheck');
 		}
 		$this->setOutput($action, 'action');
 	}
@@ -83,18 +85,19 @@ class UpgradeController extends AdminBaseController {
 		}
 		$this->setOutput($result, 'result');
 	}
-	
+
 	public function selectAction() {
 		$version = $this->getInput('version');
 		$upgradeInfo = Wekit::cache()->get('system_upgrade_info');
-		if (!isset($upgradeInfo[$version])) $this->showError('APPCENTER:upgrade.illegal.request', 'appcenter/upgrade/check');
+		if (!isset($upgradeInfo[$version])) $this->showError('APPCENTER:upgrade.illegal.request', 
+			'appcenter/upgrade/check');
 		$r = $upgradeInfo[$version];
 		$md5List = $fileList = array();
 		foreach ($r['filelist'] as $v) {
 			$md5List[] = key($v);
 			$fileList[] = current($v);
 		}
-		$write_result = WindFile::savePhpData($this->upgrade_temp,
+		$write_result = WindFile::savePhpData($this->upgrade_temp, 
 			array('version' => $r['version'], 'filelist' => $fileList, 'md5list' => $md5List));
 		if (!$write_result) $this->showError(array('APPCENTER:upgrade.write.fail', array('data')));
 		Wekit::cache()->set('system_upgrade_step', 1);
@@ -138,7 +141,8 @@ class UpgradeController extends AdminBaseController {
 			if ($step < count($this->fileList)) {
 				$success = 0;
 				$file = $this->fileList[$step];
-				$r = $this->installService->download(substr($status['url'], 0, -4), $this->md5FileList[$step], $file);
+				$r = $this->installService->download(substr($status['url'], 0, -4), 
+					$this->md5FileList[$step], $file);
 				if ($r instanceof PwError) {
 					$this->setOutput($lang->getMessage($r->getError()), 'msg');
 				} else {
@@ -151,8 +155,11 @@ class UpgradeController extends AdminBaseController {
 		if ($success) {
 			$fileList = $this->installService->sortDirectory($this->fileList);
 			if ($fileList instanceof PwError) $this->showError($fileList->getError());
-			WindFile::savePhpData($this->upgrade_temp,
-			array('version' => $this->version, 'filelist' => $this->fileList, 'newfilelist' => $fileList));
+			WindFile::savePhpData($this->upgrade_temp, 
+				array(
+					'version' => $this->version, 
+					'filelist' => $this->fileList, 
+					'newfilelist' => $fileList));
 			Wekit::cache()->set('system_upgrade_step', 3);
 			PwSystemHelper::log('download file success', $this->version);
 			$this->showMessage('APPCENTER:upgrade.download.success', 'appcenter/upgrade/file', true);
@@ -179,16 +186,19 @@ class UpgradeController extends AdminBaseController {
 			}
 		} else {
 			try {
-				$config = $this->getInput(array('server', 'port', 'user', 'pwd', 'dir', 'sftp'), 'post', true);
+				$config = $this->getInput(array('server', 'port', 'user', 'pwd', 'dir', 'sftp'), 
+					'post', true);
 				$ftp = $config['sftp'] ? new PwSftpSave($config) : new PwFtpSave($config);
 			} catch (WindFtpException $e) {
-				$this->showError(array('APPCENTER:upgrade.ftp.fail', array($e->getMessage())), 'appcenter/upgrade/file', true);
+				$this->showError(array('APPCENTER:upgrade.ftp.fail', array($e->getMessage())), 
+					'appcenter/upgrade/file', true);
 			}
 			$ftp->close();
 			Wekit::cache()->set('system_upgrade_ftp', $config);
 		}
 		if ($success) {
-			list($change, $unchange, $new) = $this->installService->validateLocalFiles($this->localFileList);
+			list($change, $unchange, $new) = $this->installService->validateLocalFiles(
+				$this->localFileList);
 			$this->setOutput(array('change' => $change, 'unchange' => $unchange, 'new' => $new));
 			Wekit::cache()->set('system_upgrade_step', 4);
 			PwSystemHelper::log('file md5 check success', $this->version);
@@ -205,46 +215,76 @@ class UpgradeController extends AdminBaseController {
 		if ($r instanceof PwError) $this->showError($r->getError());
 		$useFtp = Wekit::cache()->get('system_upgrade_ftp');
 		$r = $this->installService->doUpgrade($this->localFileList, $useFtp);
-		if ($r instanceof PwError) $this->showError($r->getError());
+		if ($r instanceof PwError) {
+			echo '<span>'.$r->getError().'</span>';exit;
+			//$this->showError($r->getError());
+		}
 		Wekit::cache()->set('system_upgrade_step', 5);
 		PwSystemHelper::log('file upgrade success', $this->version);
+		header('Location:' . WindUrlHelper::createUrl('appcenter/upgrade/db'));
+		exit;
 	}
 
 	/**
 	 * step 6 : 数据库更新操作
-	 * 
-	 * 先执行update.sql,再跳转到update.php
 	 *
+	 * 先执行update.sql,再跳转到update.php
 	 */
 	public function dbAction() {
+		$step = (int) Wekit::cache()->get('system_upgrade_db_step');
+		$step || $this->installService->after($this->localFileList, Wekit::cache()->get('system_upgrade_ftp'), $this->fileList);
 		$sqlFile = Wind::getRealPath('PUBLIC:update.sql', true);
 		$success = 1;
 		if (!file_exists($sqlFile)) {
-			$this->_executePhp();
 			Wekit::cache()->set('system_upgrade_step', 6);
 			PwSystemHelper::log('no db update', $this->version);
-			$this->forwardRedirect(WindUrlHelper::createUrl('appcenter/upgrade/end'));
+			$this->forwardRedirect(WindUrlHelper::createUrl('appcenter/upgrade/php'));
 		}
-		$step = (int) Wekit::cache()->get('system_upgrade_db_step');
 		$lang = Wind::getComponent('i18n');
 		try {
 			/* @var $db WindConnection */
 			$db = Wind::getComponent('db');
-			$sqlArray = PwSystemHelper::sqlParser(WindFile::read($sqlFile),
-				$db->getConfig('charset', '', 'utf8'), $db->getTablePrefix(),
-				$db->getConfig('engine', '', 'MYISAM'));
+			if (!$step) {
+				$sqlArray = PwSystemHelper::sqlParser(WindFile::read($sqlFile),
+					$db->getConfig('charset', '', 'utf8'), $db->getTablePrefix(),
+					$db->getConfig('engine', '', 'MYISAM'));
+				WindFile::savePhpData(DATA_PATH . 'upgrade/sql.tmp', $sqlArray);
+			} else {
+				$sqlArray = include DATA_PATH . 'upgrade/sql.tmp';
+			}
 			end($sqlArray);
 			if ($step > key($sqlArray)) {
-				$this->_executePhp();
 				Wekit::cache()->set('system_upgrade_step', 6);
 				PwSystemHelper::log('db update success', $this->version);
-				$this->forwardRedirect(WindUrlHelper::createUrl('appcenter/upgrade/end'));
+				$this->forwardRedirect(WindUrlHelper::createUrl('appcenter/upgrade/php'));
 			}
 			$sql = $sqlArray[$step];
 			if ($sql) {
 				foreach ($sql as $v) {
-					PwSystemHelper::log('execute sql ' . $v, $this->version);
-					$db->execute($v);
+					if (empty($v)) continue;
+					if (preg_match(
+						'/^ALTER\s+TABLE\s+`?(\w+)`?\s+(DROP|ADD)\s+(KEY|INDEX|UNIQUE)\s+([\w\(\),`]+)?/i',
+						$v, $matches)) {
+						list($key, $fields) = explode('(', $matches[4]);
+						$fields = trim($fields, '),');
+						list($matches[3]) = explode(' ', $matches[3]);
+						$matches[3] = trim(strtoupper($matches[3]));
+						PwSystemHelper::log(
+						$matches[1] . ' ' . str_replace('`', '', $key) . ' ' . ($fields ? str_replace('`', '', $fields) : '') . ' ' . $matches[3], $this->version);
+						PwSystemHelper::alterIndex(
+						array(
+						$matches[1],
+						str_replace('`', '', $key),
+						$fields ? str_replace('`', '', $fields) : '',
+						$matches[3], $matches[2]), $db);
+					} elseif (preg_match('/^ALTER\s+TABLE\s+`?(\w+)`?\s+(CHANGE|DROP|ADD)\s+`?(\w+)`?/i', 
+						$v, $matches)) {
+						PwSystemHelper::log($matches[1] . ' ' . $matches[3], $this->version);
+						PwSystemHelper::alterField(array($matches[1], $matches[3], $v), $db);
+					} else {
+						PwSystemHelper::log('execute sql ' . $v, $this->version);
+						$db->execute($v);
+					}
 				}
 			}
 		} catch (Exception $e) {
@@ -252,17 +292,38 @@ class UpgradeController extends AdminBaseController {
 			$success = 0;
 			$this->setOutput(1, 'error');
 			PwSystemHelper::log('execute sql failed' . $e->getMessage(), $this->version);
-			$this->setOutput($lang->getMessage('APPCENTER:upgrade.db.error', array(implode(';', $sql))), 'msg');
+			$this->setOutput(
+				$lang->getMessage('APPCENTER:upgrade.db.error', array(implode(';', $sql))), 'msg');
 		}
 		if ($success) {
-			$this->setOutput($lang->getMessage('APPCENTER:upgrade.db.update', array($step, key($sqlArray))), 'msg');
+			$this->setOutput(
+				$lang->getMessage('APPCENTER:upgrade.db.update', array($step, key($sqlArray))), 
+				'msg');
 		}
 		Wekit::cache()->set('system_upgrade_db_step', ++$step);
 	}
-	
+
+	/**
+	 * 执行数据库脚本升级
+	 */
+	public function phpAction() {
+		$phps = $this->_getPhps();
+		$step = Wekit::cache()->get('system_upgrade_php_step');
+		$step || $step = 0;
+		if ($phps && isset($phps[$step])) {
+			$file = $phps[$step];
+			Wekit::cache()->set('system_upgrade_php_step', ++$step);
+			$this->forwardRedirect(
+				Wekit::app()->baseUrl . '/' . $file . '?from=' . urlencode(
+					WindUrlHelper::createUrl('appcenter/upgrade/php?step=' . $step)));
+		} else {
+			Wekit::cache()->set('system_upgrade_step', 7);
+			$this->forwardRedirect(WindUrlHelper::createUrl('appcenter/upgrade/end'));
+		}
+	}
+
 	/**
 	 * 结束
-	 *
 	 */
 	public function endAction() {
 		list($upgrade, $back) = $this->_backSuccess();
@@ -270,44 +331,59 @@ class UpgradeController extends AdminBaseController {
 		Wekit::load('SRV:cache.srv.PwCacheUpdateService')->updateAll();
 		Wekit::load('domain.srv.PwDomainService')->refreshTplCache();
 		
-		PwSystemHelper::log('upgrade success, current version: ' . 'phpwind ' . NEXT_VERSION . ' release ' . NEXT_RELEASE, $this->version);
+		PwSystemHelper::log(
+			'upgrade success, current version: ' . 'phpwind ' . NEXT_VERSION . ' release ' . NEXT_RELEASE, 
+			$this->version);
 		$this->_clear();
 		Pw::setCookie('checkupgrade', '', -1);
 		$this->setOutput(
 			array(
-				'systeminfo' => 'phpwind ' . NEXT_VERSION . ' release ' . NEXT_RELEASE,
-				'back' => str_replace(ROOT_PATH, '', $back),
+				'systeminfo' => 'phpwind ' . NEXT_VERSION . ' release ' . NEXT_RELEASE, 
+				'back' => str_replace(ROOT_PATH, '', $back), 
 				'upgrade' => str_replace(ROOT_PATH, '', $upgrade)));
 	}
 
 	private function _clear() {
 		WindFolder::clearRecur(dirname($this->upgrade_temp), true);
 		$useFtp = Wekit::cache()->get('system_upgrade_ftp');
-		$updateFile = Wind::getRealPath('PUBLIC:update');
-		$updateSql = Wind::getRealPath('PUBLIC:update.sql', true);
-		if ($useFtp) {
-			$updateFile = str_replace(ROOT_PATH, '', $updateFile);
-			$updateSql = str_replace(ROOT_PATH, '', $updateSql);
-			try {
-				$ftp = $useFtp['sftp'] ? new PwSftpSave($useFtp) : new PwFtpSave($useFtp);
-				foreach (array($updateFile, $updateSql) as $v) {
-					$ftp->delete($v);
-				}
-			} catch (WindFtpException $e) {
-				
+		$phps = $this->_getPhps();
+		$sql = PUBLIC_PATH . 'update.sql';
+		if ($phps || file_exists($sql)) {
+			if ($useFtp) {
+				try {
+					$ftp = $useFtp['sftp'] ? new PwSftpSave($useFtp) : new PwFtpSave($useFtp);
+					$ftp->delete(str_replace(ROOT_PATH, '', $sql));
+				} catch (WindFtpException $e) {}
+			} else {
+				WindFile::del($sql);
 			}
-			$ftp->close();
-		} else {
-			WindFile::del($updateFile);
-			WindFile::del($updateSql);
+			foreach ($phps as $php) {
+				$file = PUBLIC_PATH . $php;
+				if ($useFtp) {
+					$file = str_replace(ROOT_PATH, '', $file);
+					$ftp->delete($file);
+				} else {
+					WindFile::del($file);
+				}
+			}
+			$ftp && $ftp->close();
 		}
-		Wekit::cache()->batchDelete(array('system_upgrade', 'system_upgrade_step', 'system_upgrade_db_step', 'system_upgrade_ftp', 'system_upgrade_download_step', 'system_upgrade_info'));
+		WindFile::del(DATA_PATH . 'upgrade/sql.tmp');
+		Wekit::cache()->batchDelete(
+			array(
+				'system_upgrade', 
+				'system_upgrade_step', 
+				'system_upgrade_db_step', 
+				'system_upgrade_php_step', 
+				'system_upgrade_ftp', 
+				'system_upgrade_download_step', 
+				'system_upgrade_info'));
 	}
 
 	/**
 	 * 更新成功后备份
 	 *
-	 * @return multitype:string 
+	 * @return multitype:string
 	 */
 	private function _backSuccess() {
 		$data_dir = Wind::getRealDir('DATA:');
@@ -357,14 +433,18 @@ class UpgradeController extends AdminBaseController {
 		$this->md5FileList = $r['md5list'];
 		$this->setOutput($this->version, 'version');
 	}
-	
-	private function _executePhp() {
-		//update.php
-		$sqlPhp = Wind::getRealPath('PUBLIC:update');
-		if (file_exists($sqlPhp)) {
-			Wekit::cache()->set('system_upgrade_step', 6);
-			$this->forwardRedirect(Wekit::app()->baseUrl . '/update.php?from=' . urlencode(WindUrlHelper::createUrl('appcenter/upgrade/end')));
+
+	private function _getPhps() {
+		$files = WindFolder::read(PUBLIC_PATH, WindFolder::READ_FILE);
+		$temp = array();
+		foreach ($files as $file) {
+			if (is_file(PUBLIC_PATH . $file) && '.php' === substr($file, -4) && !strncasecmp($file, 
+				'update_', 7)) {
+				$temp[substr($file, 7, 8)] = $file;
+			}
 		}
+		ksort($temp);
+		return array_values($temp);
 	}
 }
 

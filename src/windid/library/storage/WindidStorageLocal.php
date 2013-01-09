@@ -7,7 +7,7 @@ defined('WINDID_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidStorageLocal.php 22500 2012-12-25 03:54:47Z gao.wanggao $
+ * @version $Id: WindidStorageLocal.php 22908 2012-12-28 08:59:54Z gao.wanggao $
  * @package upload
  */
 
@@ -28,10 +28,6 @@ class WindidStorageLocal {
 	 * @return bool
 	 */
 	public function save($source, $filePath) {
-		if ($source == $filePath) return true;
-		$this->createFolder(dirname($filePath));
-		@copy($source, $filePath);
-	    @chmod($filePath, 0777);
 	    return true;
 	}
 	

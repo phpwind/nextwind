@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.threadList.PwThreadDataSource');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSearchThread.php 21241 2012-12-03 07:34:32Z jieyin $
+ * @version $Id: PwSearchThread.php 23245 2013-01-07 07:42:41Z jieyin $
  * @package forum
  */
 
@@ -33,6 +33,8 @@ class PwSearchThread extends PwThreadDataSource {
 	public function setOrderby($order) {
 		if ($order == 'postdate') {
 			$this->so->orderbyCreatedTime(0);
+		} else {
+			$this->so->orderbyLastPostTime(0);
 		}
 	}
 

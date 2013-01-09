@@ -647,7 +647,7 @@
  * @Descript    : PHPWind核心JS
  * @Author      : chaoren1641@gmail.com
  * @Thanks      : head.js (http://headjs.com)
- * $Id: wind.js 21971 2012-12-17 12:11:36Z hao.lin $            :
+ * $Id: wind.js 23158 2013-01-06 11:47:46Z hao.lin $            :
  */
 
 
@@ -678,7 +678,7 @@ Wind.ready(function() {
 */
 (function(win) {
 	var root = win.GV.JS_ROOT || location.origin + '/js/dev/', //在wind.js加载之前定义GV.JS_ROOT
-		ver = win.GV.JS_VERSION || '9.0beta',
+		ver = win.GV.JS_VERSION.replace(/(\s)/g, '_') || '9.0',
 		//定义常用JS组件别名，使用别名加载
 		alias = {
             datePicker         : 'ui_libs/datePicker/datePicker',

@@ -125,7 +125,7 @@
 					photo_list_ul.find('li.J_empty').eq(0).remove();
 					return;
 				}
-				var serverData = {aid:i,path:obj.path,thumbpath:obj.thumbpath};
+				var serverData = {aid:i,path:obj.path,thumbpath:obj.thumbpath,is_new:obj.is_new};
 				//请注意这个uploaded的class添加，是因为每天上传的附件限制，只有在新上传的时候才会更新当前数量，编辑附件的时候不计算
 				var upladedLi = $('<li class="'+ (obj.is_new ? 'uploaded' : '') +'"><div class="get">\
 												<a href="" class="del">删除</a>\
@@ -256,12 +256,36 @@
 			e.preventDefault();
 			var li = $(this).parent().parent();
 			var serverData = li.data('serverData');
-			if(serverData) {
-				delete file_list[serverData.aid]
+			var aid = serverData.aid;
+			
+			if(serverData.is_new) {
+				//第一次发帖上传的附件直接删除DOM
+				delete file_list[serverData.aid];
+				li.remove();
+				update_num();
+				delFileEl(aid)
+				return;
 			}
-			li.remove();
-			update_num();
+
+			$.post(ATTACH_CONFIG.deleteUrl,{aid:aid},function(data) {
+				if(data.state === 'success') {
+					delete file_list[serverData.aid];
+					li.remove();
+					update_num();
+					delFileEl(aid)
+				}else {
+					alert(data.message);
+				}
+			}, 'json');
 		});
+
+		function delFileEl(aid){
+			//要删除的元素
+			var del_el = $(editorDoc.body).find('.J_file_img[data-id='+ aid +']');
+			if(del_el.length) {
+				del_el.remove();
+			}
+		}
 
 		//提交按钮关闭弹窗口
 		dialog.find('.edit_menu_btn').on('click',function() {
@@ -360,6 +384,7 @@
 					return;
 				}
 				var data = json.data;
+				data.is_new = true;//is_new表示为新上传的，而不是编辑的
 				file_list[''+ data['aid']] = {name : file.name, size : file.size, path : data.path, desc : '',is_new : true, thumbpath:data.thumbpath };//图片则有缩略图
 				file_detail.data('serverData',data).removeClass('uploading').addClass('uploaded');
 				file_detail.html('<div class="get">\

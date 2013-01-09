@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwPatchUpdate.php 22648 2012-12-26 06:27:49Z long.shi $
+ * @version $Id: PwPatchUpdate.php 23394 2013-01-09 07:43:46Z long.shi $
  * @package wind
  */
 class PwPatchUpdate {
@@ -50,7 +50,7 @@ class PwPatchUpdate {
 	 */
 	public function checkUpgrade() {
 		$patches = $this->getOnlinePatchList();
-		if ($patches === false) return false;
+		if (!is_array($patches)) return $patches;
 		if ($patches) {
 			$currentPatchId = 0;
 			$patch = end($patches);
@@ -65,7 +65,6 @@ class PwPatchUpdate {
 			$currentPatches = $this->_ds()->getByType(2);
 			$result = array_diff_key($patches, $currentPatches);
 		}
-		Pw::setCookie('checkpatch', $result ? 1 : -1, 7200);
 		return $result;
 	}
 

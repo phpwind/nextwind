@@ -89,7 +89,7 @@ class PwLink {
 	 */
 	public function addLinkType($typename,$vieworder) {
 		if (!$typename) return false;
-		return $this->_getLinkTypeDao()->addLinkType(array('typename' => $typename,'vieworder' => $vieworder));
+		return $this->_getLinkTypeDao()->addLinkType(array('typename' => $typename,'vieworder' => (int)$vieworder));
 	}
 	
 	/**
@@ -112,6 +112,7 @@ class PwLink {
 	 */
 	public function updateLinkType($typeId,$name,$vieworder) {
 		$typeId = intval($typeId);
+		$vieworder = intval($vieworder);
 		if ($typeId < 1) {
 			return false;
 		}

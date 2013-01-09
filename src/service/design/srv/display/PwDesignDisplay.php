@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignDisplay.php 20647 2012-11-01 08:44:25Z gao.wanggao $ 
+ * @version $Id: PwDesignDisplay.php 23256 2013-01-07 08:14:28Z gao.wanggao $ 
  * @package 
  */
 class PwDesignDisplay {
@@ -19,6 +19,7 @@ class PwDesignDisplay {
 	public function getModuleData($moduleId, $isextend = true, $isreserv = false) {
 		if ($moduleId < 1) return false;
 		$time = Pw::getTime();
+		$isCron = false;
 		$delDataid = $extend = array();
 		$ds = Wekit::load('design.PwDesignData');
 		$data = $ds->getDataByModuleid($moduleId);
@@ -33,13 +34,30 @@ class PwDesignDisplay {
 			$data[$k]['url'] = $_tmp[$standard['sUrl']];
 			$data[$k]['intro'] = $_tmp[$standard['sIntro']];
 			$extend[] = $_tmp;
+			//到期数据处理
+    		if ($v['end_time'] > 0 && $v['end_time'] < $time){
+    			$isCron = true;
+    		}
     	}
+    	if ($isCron) $this->updateDesignCron($moduleId);
     	if ($isextend) return $extend;
     	return $data;
 	}
 	
 	public function bindDataKey($moduleId) {
 		return 'J_mod_'.$moduleId;
+	}
+	
+    public function updateDesignCron($moduleId) {
+    	if(!$moduleId) return false;
+		$diff = $_data = array();
+		$ds = Wekit::load('design.PwDesignCron');
+		$cron = $ds->getCron($moduleId);
+		if ($cron) return false;
+		$time = Pw::getTime();
+		$ds->addCron($moduleId, $time);
+		Wekit::load('cron.srv.PwCronService')->getSysCron('PwCronDoDesign',$time);
+		return true;
 	}
 	
 	private function _formatStyle($bold = '', $underline = '', $italic = '', $color = '') {

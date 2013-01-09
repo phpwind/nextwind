@@ -12,7 +12,7 @@ Wind::import('WIND:dao.exception.WindDaoException');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindDaoFactory.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: WindDaoFactory.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package dao
  */
 class WindDaoFactory extends WindModule {
@@ -44,8 +44,7 @@ class WindDaoFactory extends WindModule {
 			$daoInstance->setDelayAttributes(array('connection' => array('ref' => 'db')));
 			return $daoInstance;
 		} catch (Exception $exception) {
-			throw new WindDaoException(
-				'[dao.WindDaoFactory] create dao ' . $className . ' fail.' . $exception->getMessage());
+			throw new WindDaoException('[dao.WindDaoFactory.getDao] create dao ' . $className . ' fail.' . $exception->getMessage());
 		}
 	}
 

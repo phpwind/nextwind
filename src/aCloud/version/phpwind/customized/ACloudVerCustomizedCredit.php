@@ -22,7 +22,7 @@ class ACloudVerCustomizedCredit extends ACloudVerCustomizedBase {
 	}
 
 	private function _loadPwUserDS(){
-		return Wekit::load('SRV:User.PwUser');
+		return Wekit::load('SRV:user.PwUser');
 	}
 
 }

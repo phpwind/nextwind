@@ -6,7 +6,7 @@ Wind::import('APPS:appcenter.service.srv.PwInstallApplication');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUpgradeApplication.php 21608 2012-12-11 11:46:10Z long.shi $
+ * @version $Id: PwUpgradeApplication.php 23309 2013-01-08 07:03:21Z long.shi $
  * @package appcenter.service.srv
  */
 class PwUpgradeApplication extends PwInstallApplication {
@@ -119,6 +119,14 @@ class PwUpgradeApplication extends PwInstallApplication {
 				$service[] = $var;
 			}
 		}
+		
+		$manifest = $this->getManifest()->getManifest();
+		if (isset($manifest['install']) && $manifest['install']) {
+			$_tmp = array('class' => $manifest['install']);
+			$service[] = $_tmp;
+			$this->addInstallLog('service', $_tmp);
+		}
+		
 		$this->addInstallLog('service', $conf);
 		return array($service, $rollback);
 	}
@@ -197,12 +205,6 @@ class PwUpgradeApplication extends PwInstallApplication {
 	public function log() {
 		$this->_loadInstallLog()->delByAppId($this->_appId);
 		$fields = array();
-		$manifest = $this->getManifest()->getManifest();
-		if (isset($manifest['uninstall']) && is_file(Wind::getRealPath($manifest['uninstall']))) {
-			$service_array = $this->getInstallLog('service');
-			array_unshift($service_array, array('class' => $manifest['uninstall']));
-			$this->setInstallLog('service', $service_array);
-		}
 		foreach ($this->getInstallLog() as $key => $value) {
 			$_tmp = array(
 				'app_id' => $this->_appId,

@@ -41,7 +41,7 @@ Wind::import('WIND:viewer.IWindView');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license {@link http://www.windframework.com}
- * @version $Id: WindView.php 3863 2012-12-19 02:58:43Z yishuo $
+ * @version $Id: WindView.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package viewer
  */
 class WindView extends WindModule implements IWindView {
@@ -134,7 +134,7 @@ class WindView extends WindModule implements IWindView {
 		$viewResolver = $this->_getViewResolver();
 		$viewResolver->setWindView($this);
 		if ($viewResolver === null) throw new WindException(
-			'[view.WindView.render] View renderer initialization failure.');
+			'[viewer.WindView.render] View renderer initialization failure.');
 		$viewResolver->windAssign($this->getResponse()->getData($this->templateName));
 		if ($display === false) {
 			if ($this->layout) {
@@ -191,17 +191,17 @@ class WindView extends WindModule implements IWindView {
 		$_template = false !== ($pos = strpos($template, ':')) ? substr($template, $pos + 1) : $template;
 		$currentThemeKey = null;
 		foreach ($this->theme as $currentThemeKey => $theme) {
-			$templatePath = strtr($this->themePackPattern, 
+			$_templatePath = strtr($this->themePackPattern, 
 				array('{pack}' => $theme[1], '{theme}' => $theme[0])) . '.' . $_template;
-			$templatePath = Wind::getRealPath($templatePath, $ext, true);
-			if (!is_file($templatePath)) continue;
-			$compilePath = $this->compileDir . '.' . $theme[0] . '.' . $_template;
-			break;
+			$_templatePath = Wind::getRealPath($_templatePath, $ext, true);
+			isset($_compileDir) || $_compileDir = $theme[0];
+			if (is_file($_templatePath)) {
+				$templatePath = $_templatePath;
+				break;
+			}
 		}
-		if ($compilePath === '') {
-			$templatePath = Wind::getRealPath($template, $ext, true);
-			$compilePath = $this->compileDir . '.' . $_template;
-		}
+		$templatePath === '' && $templatePath = Wind::getRealPath($template, $ext, true);
+		$compilePath = $this->compileDir . '.' . (isset($_compileDir) ? $_compileDir . '.' : '') . $_template;
 		$compilePath = Wind::getRealPath($compilePath, $this->compileExt, true);
 		//WindFolder::mkRecur(dirname($compilePath));
 		return array($templatePath, $compilePath, $currentThemeKey);

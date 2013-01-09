@@ -9,7 +9,7 @@ Wind::import('SRV:user.srv.PwClearUserService');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ManageController.php 22484 2012-12-25 02:22:44Z gao.wanggao $
+ * @version $Id: ManageController.php 23324 2013-01-08 08:47:13Z xiaoxia.xuxx $
  * @package 
  */
 class ManageController extends AdminBaseController {
@@ -276,19 +276,22 @@ class ManageController extends AdminBaseController {
 		$groupDs = Wekit::load('usergroup.PwUserGroups');
 
 		/* @var $groups 将包含有特殊组和管理组 */
-		$systemGroups = $groupDs->getNonUpgradeGroups();
-		unset($systemGroups[1], $systemGroups[2]);
+		$systemGroups = $groupDs->getClassifiedGroups();
+		$groups = array();
+		foreach (array('system','special','default') as $k) {
+			foreach ($systemGroups[$k] as $gid => $_item) {
+				if (in_array($gid, array(1, 2))) continue;
+				$groups[$gid] = $_item;
+			}
+		}
 
 		/* @var $belongDs PwUserBelong */
 		$belongDs = Wekit::load('user.PwUserBelong');
 		$userGroups = $belongDs->getUserBelongs($info['uid']);
 		
-		$allGroups = $systemGroups;
-		$allGroups[0] = $this->upgradeGroups;
-		
+		$this->setOutput(array_keys($systemGroups['default']), 'defaultGroups');
 		$this->setOutput($userGroups, 'userGroups');
-		$this->setOutput($allGroups, 'default');
-		$this->setOutput($systemGroups, 'groups');
+		$this->setOutput($groups, 'allGroups');
 		$this->setOutput($info, 'info');
 	}
 
@@ -303,12 +306,41 @@ class ManageController extends AdminBaseController {
 		list($groupid, $groups, $endtime) = $this->getInput(array('groupid', 'groups', 'endtime'), 'post');
 		/* @var $groupDs PwUserGroups */
 		$groupDs = Wekit::load('usergroup.PwUserGroups');
-		//默认组 的用户
-		$banGids = array_keys($groupDs->getGroupsByType('default'));
+		$banGids = array_keys($groupDs->getGroupsByType('default'));//默认用户组
 		$clearGids = array();
 		
+		//如果用户原先的用户组是在默认组中，则该用户组不允许被修改
+		if (in_array($info['groupid'], $banGids) && $info['groupid'] != $groupid) {
+			switch($info['groupid']) {
+				case 6:
+					$this->showError('USER:user.belong.delban.error');
+					break;
+				case 7:
+					$this->showError('USER:user.belong.delactive.error');
+					break;
+				default :
+					$this->showError('USER:user.belong.default.error');
+					break;
+			}
+		}
+		//如果用户原先的用户组是不在默认组中，新设置的用户组在默认组中，则抛错
+		if (!in_array($info['groupid'], $banGids) && in_array($groupid, $banGids) && $info['groupid'] != $groupid) {
+			switch($groupid) {
+				case 6:
+					$this->showError('USER:user.belong.ban.error');
+					break;
+				case 7:
+					$this->showError('USER:user.belong.active.error');
+					break;
+				default :
+					$this->showError('USER:user.belong.default.error');
+					break;
+			}
+		}
+		
 		if (($if = in_array($groupid, $banGids)) || ($r = array_intersect($banGids, $groups))) {
-			(!$if && $r) && $groupid = array_shift($r);
+			$this->showError('USER:user.belong.default.error');
+// 			(!$if && $r) && $groupid = array_shift($r);
 		} else {
 			foreach ($groups as $value) {
 				$clearGids[$value] = (isset($endtime[$value]) && $endtime[$value]) ? Pw::str2time($endtime[$value]) : 0;

@@ -5,7 +5,7 @@
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AttachController.php 22488 2012-12-25 02:57:19Z xiaoxia.xuxx $
+ * @version $Id: AttachController.php 23025 2013-01-05 03:49:26Z jieyin $
  * @package forum
  */
 
@@ -97,7 +97,7 @@ class AttachController extends PwBaseController {
 			$attachment = 'attachment';
 		}
 		$attach['name'] = trim(str_replace('&nbsp;', ' ', $attach['name']));
-		if (Wekit::app()->charset == 'utf-8') {
+		if (strtoupper(Wekit::app()->charset) == 'UTF-8') {
 			$attach['name'] = Pw::convert($attach['name'], "gbk", 'utf-8');
 		}
 		

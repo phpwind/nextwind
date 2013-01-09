@@ -3,7 +3,7 @@
 @explain: 全局样式表（头尾效果、全局背景、右侧个人信息等）
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: style.css 22527 2012-12-25 07:20:05Z yanchixia $
+$Id: style.css 23211 2013-01-07 05:49:12Z yanchixia $
 ===================
 #*/
 
@@ -308,9 +308,6 @@ a:hover{
 	float:left;
 	margin-right:10px;
 }
-.logo a{
-	width:120px;
-}
 .logo a,
 .logo a img{
 	float:left;
@@ -427,6 +424,7 @@ a:hover{
 .header_login_btn .inside a{
 	color:#fff;
 	display:inline-block;
+	height:18px;
 }
 .header_login_btn .inside a:hover{
 	text-decoration:none;
@@ -440,6 +438,7 @@ a:hover{
 	background-position:5px -32px;
 	color:#fff;
 	font-size:12px;
+	overflow:hidden;
 }
 /*消息*/
 .header_message,
@@ -1158,6 +1157,7 @@ a:hover{
 	height:18px;
 	padding:0 0 10px;
 	position:relative;
+	font-size:12px;
 }
 .bread_crumb .home{
 	padding-left:20px;
@@ -1177,6 +1177,7 @@ a:hover{
 }
 /*面包屑右侧分页*/
 .bread_crumb .pages{
+	position:relative;
 	float:right;
 	margin-top:-4px;
 }
@@ -1640,6 +1641,7 @@ a:hover{
 	background-position:0 -180px;
 	position:relative;
 	text-align:center;
+	font-size:12px;
 }
 .punch_widget .date{
 	display:inline;
@@ -1920,6 +1922,7 @@ a:hover{
 	font-size:12px;
 	overflow:hidden;
 	text-indent:0;
+	white-space:nowrap;
 }
 
 

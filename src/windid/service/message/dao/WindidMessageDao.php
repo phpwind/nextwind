@@ -6,12 +6,12 @@
  * @author peihong.zhang
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageDao.php 22410 2012-12-24 04:19:54Z jinlong.panjl $
+ * @version $Id: WindidMessageDao.php 23072 2013-01-06 02:12:11Z gao.wanggao $
  * @package forum
  */
 
 class WindidMessageDao extends WindidBaseDao {
-	
+	protected $_pk = 'message_id';
 	protected $_table = 'windid_message';
 	protected $_dataStruct = array('message_id', 'from_uid', 'to_uid','content', 'created_time');
 	
@@ -25,6 +25,10 @@ class WindidMessageDao extends WindidBaseDao {
 		$sql = $this->_bindTable('SELECT * FROM %s WHERE message_id=?');
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->getOne(array($id));
+	}
+	
+	public function fetchMessage($ids) {
+		return $this->_fetch($ids, 'message_id');
 	}
 
 	/**
@@ -111,6 +115,10 @@ class WindidMessageDao extends WindidBaseDao {
 			switch ($key) {
 				case 'fromuid':
 					$where .= ' AND from_uid = ?';
+					$array[] = $value;
+					break;
+				case 'touid':
+					$where .= ' AND to_uid = ?';
 					$array[] = $value;
 					break;
 				case 'keyword':

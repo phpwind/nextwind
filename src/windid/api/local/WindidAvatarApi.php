@@ -4,7 +4,7 @@
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidAvatarApi.php 22791 2012-12-27 08:11:54Z gao.wanggao $
+ * @version $Id: WindidAvatarApi.php 22962 2013-01-04 05:11:30Z gao.wanggao $
  * @package windid.service.avatar
  */
 class WindidAvatarApi {
@@ -57,7 +57,7 @@ class WindidAvatarApi {
 	 */
 	public function showFlash($uid, $getHtml = 1) {
 		$client = Windid::client();
-		$time = Windid::getTime();
+		$time = time() + $client->timecv * 60;
 		$key = WindidUtility::appKey($client->clientId,$time,$client->clientKey);
 		$postUrl = "postAction=ra_postAction&redirectURL=/&requestURL=".urlencode($client->serverUrl . "/windid/index.php?m=api&c=avatar&a=doAvatar&uid=" . $uid.'&windidkey='.$key.'&time='.$time.'&clientid='.$client->clientId.'&type=flash').'&avatar=' .urlencode($this->getAvatar($uid, 'big').'?r='.rand(1,99999));
 		return $getHtml ? '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="700" height="430" id="rainbow" align="middle">
@@ -89,7 +89,7 @@ class WindidAvatarApi {
 	
 	public function doAvatar($uid, $file = '') {
 		$client = Windid::client();
-		$time = time();
+		$time = time() + $client->timecv * 60;
 		$query = array(
 			'm'=>'api',
 			'c'=>'avatar',

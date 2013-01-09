@@ -135,22 +135,22 @@ ul li:hover {
 <div class="wrap">
 <div class="main">
 <h2><?php echo "Uncaught error with message '".WindSecurity::escapeHTML($message)."'"; ?></h2>
-<?php if(WIND_DEBUG) {?>
-<h3><?php echo $file,':',$line; ?></h3>
+<?php if(isset($debug)) {?>
+<h3><?php echo $debug['file'],': ',$debug['line']; ?></h3>
 <ul>
-	<?php foreach($fileLines as $key => $value):
-		if($key == ($line-1)):?>
+	<?php foreach($debug['fileLines'] as $key => $value){
+		if($key == ($debug['line']-1)){?>
 	<li class="err"><?php echo $value; ?></li>
-	<?php else: ?>
+	<?php }else{ ?>
 	<li><?php echo $value; ?></li>
-	<?php endif;endforeach; ?>
+	<?php }} ?>
 </ul>
 
 <h3>__Stack:</h3>
 <ul>
-	<?php foreach($trace as $value): ?>
+	<?php foreach($debug['trace'] as $value){ ?>
 	<li><?php echo WindSecurity::escapeHTML($value); ?></li>
-	<?php endforeach; ?>
+	<?php } ?>
 </ul>
 <?php } ?>
 <div class="tips">The server encountered an internal error and failed to process your request. 

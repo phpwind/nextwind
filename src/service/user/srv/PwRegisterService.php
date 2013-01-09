@@ -10,7 +10,7 @@ Wind::import('SRV:user.PwUser');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRegisterService.php 22484 2012-12-25 02:22:44Z gao.wanggao $
+ * @version $Id: PwRegisterService.php 23331 2013-01-08 10:04:34Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwRegisterService extends PwBaseHookService {
@@ -242,7 +242,7 @@ class PwRegisterService extends PwBaseHookService {
 	 * @return string
 	 */
 	public static function createRegistIdentify($uid, $pwd) {
-		$code = Pw::encrypt($uid . "\t" . Pw::getPwdCode($pwd), Wekit::C('site', 'hash') . '___registerForTemp');
+		$code = Pw::encrypt($uid . "\t" . Pw::getPwdCode($pwd));
 		return rawurlencode($code);
 	}
 	
@@ -253,7 +253,7 @@ class PwRegisterService extends PwBaseHookService {
 	 * @return array array($uid, $password);
 	 */
 	public static function parserRegistIdentify($identify) {
-		return explode("\t", Pw::decrypt(rawurldecode($identify), Wekit::C('site', 'hash') . '___registerForTemp'));
+		return explode("\t", Pw::decrypt(rawurldecode($identify)));
 	}
 	
 	/** 

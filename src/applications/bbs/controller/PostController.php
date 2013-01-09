@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PostController.php 22782 2012-12-27 07:48:08Z jieyin $
+ * @version $Id: PostController.php 23445 2013-01-09 11:58:21Z jieyin $
  * @package forum
  */
 
@@ -40,7 +40,7 @@ class PostController extends PwBaseController {
 		$pwforum = $this->post->forum;
 		if ($pwforum->foruminfo['style']) {
 			$this->setTheme('forum', $pwforum->foruminfo['style']);
-			$this->addCompileDir($pwforum->foruminfo['style']);
+			//$this->addCompileDir($pwforum->foruminfo['style']);
 		}
 		
 		$this->setOutput($action, 'action');
@@ -51,6 +51,7 @@ class PostController extends PwBaseController {
 	 */
 	public function run() {
 		$this->runHook('c_post_run', $this->post);
+
 		$this->setOutput('doadd', 'do');
 		$this->setOutput($this->post->special, 'special');
 		$this->setOutput('checked', 'reply_notice');
@@ -71,6 +72,7 @@ class PostController extends PwBaseController {
 		list($title, $content, $topictype, $subtopictype, $reply_notice, $hide) = $this->getInput(array('atc_title', 'atc_content', 'topictype', 'sub_topictype', 'reply_notice', 'hide'), 'post');
 		$pwPost = $this->post;
 		$this->runHook('c_post_doadd', $pwPost);
+
 		$postDm = $pwPost->getDm();
 		$postDm->setTitle($title)
 			->setContent($content)
@@ -96,6 +98,8 @@ class PostController extends PwBaseController {
 	 */
 	public function replyAction() {
 		$pid = $this->getInput('pid');
+		$this->runHook('c_post_reply', $this->post);
+
 		$info = $this->post->getInfo();
 		$this->setOutput('', 'atc_title');
 		$this->setOutput('Re:' . $info['subject'], 'default_title');
@@ -207,10 +211,10 @@ class PostController extends PwBaseController {
 	 */
 	public function modifyAction() {
 		$tid = $this->getInput('tid');
-		$this->setTemplate('post_run');
-		$info = $this->post->getInfo();
 		$this->runHook('c_post_modify', $this->post);
+		$info = $this->post->getInfo();
 
+		$this->setTemplate('post_run');
 		$this->setOutput($info['subject'], 'atc_title');
 		$this->setOutput($info['content'], 'atc_content');
 		$this->setOutput('domodify', 'do');

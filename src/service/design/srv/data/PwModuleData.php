@@ -1,11 +1,11 @@
 <?php
 Wind::import('SRV:design.bo.PwDesignModuleBo');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
- * @author $Author: jieyin $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwModuleData.php 22678 2012-12-26 09:22:23Z jieyin $ 
+ * @version $Id: PwModuleData.php 23371 2013-01-09 06:18:14Z gao.wanggao $ 
  * @package 
  */
 class PwModuleData {
@@ -141,9 +141,9 @@ class PwModuleData {
 	 * Enter description here ...
 	 * @param array $data
 	 */
-	protected function getExtend($data) {
+	protected function getExtend($data, $order = null) {
 		$_data = array();
-		$params = $this->getComponentValue($this->bo->getTemplate(), implode('', $this->bo->getStandardSign()));
+		$params = $this->getComponentValue($this->bo->getTemplate(), implode('', $this->bo->getStandardSign()), $order);
 		if ($data['from_type'] == 'auto' && $data['data_type'] == PwDesignData::AUTO  && !$data['is_edited']) {
 			//if ($this->bo->getLimit() > 10) {
 				$data = $this->asynCutImg($data);
@@ -153,7 +153,9 @@ class PwModuleData {
 		}
 		foreach($params AS $param) {
 			if (isset($data[$param])){
-				$_data[$param] = isset($this->_substrSign[$param]) ? $this->substr($data[$param], $this->_substrSign[$param]) : $data[$param];
+				//在输出阶段截取
+				//$_data[$param] = isset($this->_substrSign[$param]) ? $this->substr($data[$param], $this->_substrSign[$param]) : $data[$param];
+				$_data[$param] = $data[$param];
 			}
 			$_data['standard_image'] = $data['standard_image'];
 			isset($data['__asyn']) && $_data['__asyn'] = $data['__asyn'];
@@ -178,7 +180,8 @@ class PwModuleData {
 			} else {
 				$srv->setInfo($this->bo->moduleid, $data[$k], $thumbW, $thumbH);
 				$array = $srv->cut();
-				if ($array) {
+				list($dir, $filename, $url) = $array;
+				if ($dir) {
 					list($dir, $filename, $url) = $array;
 					$data[$k] = $url . $dir . $filename;
 					$data['standard_image'] .= $filename . "|||" ;
@@ -221,7 +224,27 @@ class PwModuleData {
 		return $data;
 	}
 	
-	protected function getComponentValue($string, $standardSign) {
+	protected function getComponentValue($string, $standardSign, $order = null) {
+		if (isset($order)) {
+			if(preg_match('/\<if:(\d+)>(.+)<else:>(.+)<\/if>/isU', $string, $matche)) {
+				if ($order == $matche[1] +1) {
+					$string = $matche[2];
+				}
+			}
+			
+			if(preg_match('/\<if:odd>(.+)<else:>(.+)<\/if>/isU', $string, $matche)) {
+				if (!is_int($order/2)) {
+					$string = $matche[1];
+				}
+			}
+			
+			if(preg_match('/\<if:even>(.+)<else:>(.+)<\/if>/isU', $string, $matche)) {
+				if (is_int($order/2)) {
+					$string = $matche[1];
+				}
+			}
+		}
+		
 		$string .= $standardSign;
 		//对三元标签（图片）进行处理
 		if(preg_match_all('/\{(\w+)\|(\d+)\|(\d+)}/U', $string, $matche)) {

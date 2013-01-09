@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PortalController.php 22574 2012-12-25 09:34:07Z gao.wanggao $ 
+ * @version $Id: PortalController.php 23397 2013-01-09 08:12:23Z gao.wanggao $ 
  * @package 
  */
 class PortalController extends PwBaseController {
@@ -209,39 +209,6 @@ class PortalController extends PwBaseController {
 		   ->setDescription($description);
  		Wekit::load('seo.srv.PwSeoService')->batchReplaceSeoWithCache($dm);
 		$this->showMessage("operate.success", "special/index/run?id=".$id, true);
-	}
-	
-	public function editstyleAction() {
-		$styleid = $this->getInput('styleid', 'get');
-		$portalid = (int)$this->getInput('portalid', 'get');
-		$ds = $this->_getPortalDs();
-		$portal = $ds->getPortal($portalid);
-		if (!$portal) $this->showError("operate.fail");
-		$styleDs = Wekit::load('APPS:appcenter.service.PwStyle');
-		$style = $styleDs->getStyle($styleid);
-		if (!$style || $style['style_type'] !='portal') $this->showError("operate.fail");
-		$pageInfo = $this->_getPageDs()->getPageByTypeAndUnique(PwDesignPage::PORTAL, $portalid);
-		if (!$pageInfo) $this->showError("operate.fail");
-		
-		//导入文件
-		Wind::import('SRV:design.bo.PwDesignPageBo');
-    	$pageBo = new PwDesignPageBo($pageInfo['page_id']);
-		Wind::import('SRV:design.srv.PwDesignImportZip');
-		$srv = new PwDesignImportZip($pageBo);
-		if (!$srv->appcenterToLocal($style['alias'])) $this->showError("operate.fail");
-		Wind::import('SRV:design.dm.PwDesignPortalDm');
- 		$dm = new PwDesignPortalDm($portalid);
- 		$dm->setTemplate($pageBo->getTplPath());
- 		$ds->updatePortal($dm);
- 		
-		//更新数据
-		Wind::import('SRV:design.srv.data.PwAutoData');
-		foreach ($srv->newIds AS $id) {
-			if (!$id) continue;
-			$autoSrv = new PwAutoData($id);
-			$autoSrv->addAutoData();
-		}
- 		$this->showMessage("operate.success");
 	}
 	
 	private function _validator($string) {

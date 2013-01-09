@@ -8,7 +8,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminMenuHelper.php 14219 2012-07-18 07:39:00Z xiaoxia.xuxx $
+ * @version $Id: AdminMenuHelper.php 23424 2013-01-09 09:31:45Z xiaoxia.xuxx $
  * @package admin
  * @subpackage library
  */
@@ -111,14 +111,14 @@ class AdminMenuHelper {
 	 */
 	static public function resolveMenuStruct($menus) {
 		isset($menus['root']) || $menus['root']['items'] = array();
-		foreach ($menus as $key => &$_node) {
+		foreach ($menus as $key => $_node) {
 			if ($key === 'root') continue;
 			$_tmp = isset($_node['parent']) ? $_node['parent'] : 'root';
 			if (isset($menus[$_tmp])) {
 				if (!isset($menus[$_tmp]['items'])) continue;
-				$menus[$_tmp]['items'][$key] = &$_node;
+				$menus[$_tmp]['items'][$key] = &$menus[$key];
 			} else {
-				$menus['root']['items'][$key] = &$_node;
+				$menus['root']['items'][$key] = &$menus[$key];
 			}
 		}
 		return self::_parseMenuTops($menus['root']['items']);
@@ -134,14 +134,14 @@ class AdminMenuHelper {
 	static private function _parseMenuTops($menus) {
 		$tmp = array();
 		foreach ((array) $menus as $key => $value) {
-			if (in_array($key, $tmp)) continue;
+			if (array_key_exists($key, $tmp)) continue;
 			if (isset($value['items'])) {
 				$value['items'] = self::_parseMenuTops($value['items']);
 			}
 			$top = $value['top'];
 			if (!array_key_exists($top, $menus)) {
 				$tmp[$key] = $value;
-			} elseif (!key_exists($top, $tmp)) {
+			} elseif (!array_key_exists($top, $tmp)) {
 				$tmp[$top] = $menus[$top];
 				$tmp[$key] = $value;
 			} else {

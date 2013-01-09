@@ -5,7 +5,7 @@ Wind::import('APPS:windid.admin.WindidBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: NotifyController.php 22634 2012-12-26 05:40:19Z gao.wanggao $ 
+ * @version $Id: NotifyController.php 23371 2013-01-09 06:18:14Z gao.wanggao $ 
  * @package 
  */
 class NotifyController extends WindidBaseController {
@@ -28,6 +28,7 @@ class NotifyController extends WindidBaseController {
 		$uids = $appids = $nids = array();
 		list($clientid, $complete, $page) = $this->getInput(array('clientid', 'complete', 'page'));
 		$page =  $page > 1 ? $page : 1;
+		$complete = ($complete === '') ? null : $complete;
 		list($start, $limit) = Pw::page2limit($page, $perPage);
 		$list = $this->_getLogDs()->getList($clientid, 0, $limit,  $start, $complete);
 		$count =  $this->_getLogDs()->countList($clientid, 0, $complete);

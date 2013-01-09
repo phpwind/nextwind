@@ -17,71 +17,6 @@ return array(
 			)
 		)
 	),
-	'm_PwTopicPost' => array(
-		'description' => '发表帖子',
-		'param' => array(),
-		'interface' => 'SRV:forum.srv.post.do.PwPostDoBase',
-		'list' => array(
-			'fresh' => array(
-				'class' => 'HOOK:PwPost.do.PwPostDoFresh',
-				'description' => '新鲜事'
-			),
-			'task' => array(
-				'class' => 'SRV:task.srv.condition.PwTaskBbsThreadDo',
-				'expression' => 'config:site.task.isOpen==1',
-				'description' => '发帖做任务'
-			),
-			'behavior' => array(
-				'class' => 'SRV:misc.behavior.do.PwMiscThreadDo',
-				'loadway' => 'load',
-				'description' => '记录发帖行为'
-			),
-			'medal' => array(
-				'class' => 'SRV:medal.srv.condition.do.PwMedalThreadDo',
-				'description' => '发帖做勋章'
-			),
-			'remind' => array(
-				'class' => 'SRV:forum.srv.post.do.PwPostDoRemind',
-			),
-			'word' => array(
-				'class' => 'SRV:forum.srv.post.do.PwReplyDoWord',
-				'description' => '回复-敏感词'
-			),
-		)
-	),
-	'm_PwReplyPost' => array(
-		'description' => '发表回复',
-		'param' => array(),
-		'interface' => 'SRV:forum.srv.post.do.PwPostDoBase',
-		'list' => array(
-			'task' => array(
-				'expression' => 'config:site.task.isOpen==1',
-				'class' => 'SRV:task.srv.condition.PwTaskBbsPostDo',
-				'description' => '发回复做任务'
-			),
-			'behavior' => array(
-				'class' => 'SRV:misc.behavior.do.PwMiscPostDo',
-				'loadway' => 'load',
-				'description' => '记录发回复行为'
-			),
-			'medal' => array(
-				'class' => 'SRV:medal.srv.condition.do.PwMedalPostDo',
-				'description' => '发回复做勋章任务'
-			),
-			'remind' => array(
-				'class' => 'SRV:forum.srv.post.do.PwReplyDoRemind',
-				'description' => '回复-话题'
-			),
-			'notice' => array(
-				'class' => 'SRV:forum.srv.post.do.PwReplyDoNotice',
-				'description' => '回复-通知'
-			),
-			'word' => array(
-				'class' => 'SRV:forum.srv.post.do.PwReplyDoWord',
-				'description' => '回复-敏感词'
-			),
-		)
-	),
 	'c_post_doadd' => array(
 		'description' => '发表帖子提交页',
 		'param' => array(),
@@ -169,7 +104,7 @@ return array(
 				'class' => 'SRV:forum.srv.post.injector.PwPostDoAttInjector', 
 				'method' => 'domodify',
 				'description' => '帖子编辑 - 附件'
-			),  //'expression' => 'flashatt.post!=0'
+			),
 			'tag' => array(
 				'class' => 'SRV:forum.srv.post.injector.PwPostDoTagInjector', 
 				'method' => 'domodify',
@@ -227,6 +162,7 @@ return array(
 			),
 			'word' => array(
 				'class' => 'SRV:forum.srv.threadDisplay.injector.PwThreadDisplayDoWordInjector', 
+				'expression' => 'service:thread.info.word_version==0',
 				'description' => '帖子阅读页 - 替换敏感词'
 			),
 		)
@@ -248,6 +184,198 @@ return array(
 			'verifyMobile' => array(
 				'class' => 'SRV:user.srv.register.injector.PwRegisterDoVerifyMobileInjector',
 				'method' => 'run',
+			),
+		)
+	),
+	'c_fresh_post' => array(
+		'description' => '在新鲜事页面发布帖子',
+		'param' => array(),
+		'interface' => '',
+		'list' => array(
+			'att' => array(
+				'class' => 'SRV:forum.srv.post.injector.PwPostDoAttInjector', 
+				'method' => 'run', 
+				'expression' => 'flashatt.post!=0'
+			)
+		)
+	),
+	'c_profile_extends_run' => array (
+		'description' => '用户菜单功能扩展-展示',
+		'param' => array(),
+		'list' => array(
+		),
+	),
+	'c_profile_extends_dorun' => array (
+		'description' => '用户菜单功能扩展-执行',
+		'param' => array(),
+		'list' => array(
+		),
+	),
+	'c_login_dorun' => array(
+		'description' => '用户登录，表现层',
+		'param' => array(),
+		'interface' => '',
+		'list' => array(
+			'inviteFriend' => array(
+				'class' => 'SRV:user.srv.login.injector.PwLoginDoInviteFriendInjector',
+				'method' => 'run'
+			),
+		)
+	),
+	'm_PwTopicPost' => array(
+		'description' => '发表帖子',
+		'param' => array(),
+		'interface' => 'SRV:forum.srv.post.do.PwPostDoBase',
+		'list' => array(
+			'fresh' => array(
+				'class' => 'HOOK:PwPost.do.PwPostDoFresh',
+				'description' => '新鲜事'
+			),
+			'task' => array(
+				'class' => 'SRV:task.srv.condition.PwTaskBbsThreadDo',
+				'expression' => 'config:site.task.isOpen==1',
+				'description' => '发帖做任务'
+			),
+			'behavior' => array(
+				'class' => 'SRV:misc.behavior.do.PwMiscThreadDo',
+				'loadway' => 'load',
+				'description' => '记录发帖行为'
+			),
+			'medal' => array(
+				'class' => 'SRV:medal.srv.condition.do.PwMedalThreadDo',
+				'description' => '发帖做勋章'
+			),
+			'remind' => array(
+				'class' => 'SRV:forum.srv.post.do.PwPostDoRemind',
+			),
+			'word' => array(
+				'class' => 'SRV:forum.srv.post.do.PwReplyDoWord',
+				'description' => '回复-敏感词'
+			),
+		)
+	),
+	'm_PwReplyPost' => array(
+		'description' => '发表回复',
+		'param' => array(),
+		'interface' => 'SRV:forum.srv.post.do.PwPostDoBase',
+		'list' => array(
+			'task' => array(
+				'expression' => 'config:site.task.isOpen==1',
+				'class' => 'SRV:task.srv.condition.PwTaskBbsPostDo',
+				'description' => '发回复做任务'
+			),
+			'behavior' => array(
+				'class' => 'SRV:misc.behavior.do.PwMiscPostDo',
+				'loadway' => 'load',
+				'description' => '记录发回复行为'
+			),
+			'medal' => array(
+				'class' => 'SRV:medal.srv.condition.do.PwMedalPostDo',
+				'description' => '发回复做勋章任务'
+			),
+			'remind' => array(
+				'class' => 'SRV:forum.srv.post.do.PwReplyDoRemind',
+				'description' => '回复-话题'
+			),
+			'notice' => array(
+				'class' => 'SRV:forum.srv.post.do.PwReplyDoNotice',
+				'description' => '回复-通知'
+			),
+			'word' => array(
+				'class' => 'SRV:forum.srv.post.do.PwReplyDoWord',
+				'description' => '回复-敏感词'
+			),
+		)
+	),
+	'm_PwThreadList' => array(
+		'description' => '帖子列表页',
+		'param' => array(),
+		'interface' => 'SRV:forum.srv.threadList.do.PwThreadListDoBase',
+		'list' => array(
+			'hits' => array(
+				'class' => 'SRV:forum.srv.threadList.do.PwThreadListDoHits',
+				'description' => '点击率实时更新显示',
+				'expression' => 'config:bbs.read.hit_update==1',
+			)
+		),
+	),
+	'm_PwThreadDisplay' => array(
+		'description' => '帖子内容展示',
+		'param' => array(),
+		'interface' => 'SRV:forum.srv.threadDisplay.do.PwThreadDisplayDoBase',
+		'list' => array(
+			'hits' => array(
+				'class' => 'SRV:forum.srv.threadDisplay.do.PwThreadDisplayDoHits',
+				'description' => '点击率实时更新显示',
+				'expression' => 'config:bbs.read.hit_update==1',
+			)
+		)
+	),
+	/*获取任务奖励钩子*/
+	'm_task_gainreward' => array(
+		'description' => '领取任务',
+		'param' => array(),
+		'interface' => 'SRV:task.srv.reward.PwTaskRewardDoBase',
+		'list' => array(
+			'group' => array(
+				'class' => 'SRV:task.srv.reward.PwTaskGroupRewardDo',
+				'expression' => 'service:type==group',
+			),
+			'credit' => array(
+				'class' => 'SRV:task.srv.reward.PwTaskCreditRewardDo',
+				'expression' => 'service:type==credit',
+			),
+		)
+	),
+	'm_PwMessageService' => array(
+		'description' => '消息服务',
+		'param' => array(),
+		'interface' => 'SRV:message.srv.do.PwMessageDoBase',
+		'list' => array(
+			'task' => array(
+				'expression' => 'config:site.task.isOpen==1',
+				'class' => 'SRV:task.srv.condition.PwTaskMemberMsgDo',
+				'loadway' => 'load'
+			)
+		)
+	),
+	'm_login_welcome' => array(
+		'description' => '用户登录之后的操作',
+		'param' => array('@param PwUserBo $userBo 登录用户的对象', '@param string $ip 登录的IP'),
+		'interface' => 'SRV:user.srv.login.PwUserLoginDoBase',
+		'list' => array(
+			'autotask' => array(
+				'expression' => 'config:site.task.isOpen==1',
+				'class' => 'SRV:task.srv.condition.PwAutoTaskLoginDo',
+				'loadway' => 'load'
+			),
+			'behavior' => array(
+				'class' => 'SRV:misc.behavior.do.PwMiscUserDo',
+				'loadway' => 'load'
+			),
+			'medal' => array(
+				'class' => 'SRV:medal.srv.condition.do.PwMedalUserDo',
+				'loadway' => 'load'
+			),
+			'updateOnline' => array(
+				'class' => 'SRV:online.srv.do.PwLoginDoUpdateOnline',
+				'loadway' => 'load'
+			),
+			/*
+			'recommendUser' => array(
+				'class' => 'SRV:attention.srv.recommend.PwRecommendUserDo',
+				'loadway' => 'load'
+			),*/
+		)
+	),
+	'm_PwFreshReplyByWeibo' => array(
+		'description' => '微博',
+		'param' => array(),
+		'interface' => 'SRV:attention.srv.reply.weibo.PwWeiboDoBase',
+		'list' => array(
+			'word' => array(
+				'class' => 'SRV:attention.srv.reply.weibo.PwWeiboDoWord',
+				'description' => '微博-敏感词'
 			),
 		)
 	),
@@ -416,7 +544,8 @@ return array(
 				'method' => 'delFollow',
 				'loadway' => 'load'
 			),
-/*			'recommend' => array(
+			/*
+			'recommend' => array(
 				'class' => 'SRV:attention.srv.recommend.PwRecommendAttentionDo',
 				'method' => 'delFollow',
 				'loadway' => 'load'
@@ -462,63 +591,6 @@ return array(
 			),
 		)
 	),
-	/*获取任务奖励钩子*/
-	'm_task_gainreward' => array(
-		'description' => '领取任务',
-		'param' => array(),
-		'interface' => 'SRV:task.srv.reward.PwTaskRewardDoBase',
-		'list' => array(
-			'group' => array(
-				'class' => 'SRV:task.srv.reward.PwTaskGroupRewardDo',
-				'expression' => 'service:type==group',
-			),
-			'credit' => array(
-				'class' => 'SRV:task.srv.reward.PwTaskCreditRewardDo',
-				'expression' => 'service:type==credit',
-			),
-		)
-	),
-	
-	'm_PwMessageService' => array(
-		'description' => '消息服务',
-		'param' => array(),
-		'interface' => 'SRV:message.srv.do.PwMessageDoBase',
-		'list' => array(
-			'task' => array(
-				'expression' => 'config:site.task.isOpen==1',
-				'class' => 'SRV:task.srv.condition.PwTaskMemberMsgDo',
-				'loadway' => 'load'
-			)
-		)
-	),
-	'm_login_welcome' => array(
-		'description' => '用户登录之后的操作',
-		'param' => array('@param PwUserBo $userBo 登录用户的对象', '@param string $ip 登录的IP'),
-		'interface' => 'SRV:user.srv.login.PwUserLoginDoBase',
-		'list' => array(
-			'autotask' => array(
-				'expression' => 'config:site.task.isOpen==1',
-				'class' => 'SRV:task.srv.condition.PwAutoTaskLoginDo',
-				'loadway' => 'load'
-			),
-			'behavior' => array(
-				'class' => 'SRV:misc.behavior.do.PwMiscUserDo',
-				'loadway' => 'load'
-			),
-			'medal' => array(
-				'class' => 'SRV:medal.srv.condition.do.PwMedalUserDo',
-				'loadway' => 'load'
-			),
-			'updateOnline' => array(
-				'class' => 'SRV:online.srv.do.PwLoginDoUpdateOnline',
-				'loadway' => 'load'
-			),
-/*			'recommendUser' => array(
-				'class' => 'SRV:attention.srv.recommend.PwRecommendUserDo',
-				'loadway' => 'load'
-			),*/
-		)
-	),
 	's_PwUser_delete' => array(
 		'description' => '删除用户时，调用',
 		'param' => array('@param int $uid 用户id', '@return void'),
@@ -537,6 +609,11 @@ return array(
 			'registerCheck' => array(
 				'class' => 'SRC:hooks.PwUser.PwUserDoRegisterCheck',
 				'method' => 'deleteUser',
+				'loadway' => 'load',
+			),
+			'activeCode' => array(
+				'class' => 'SRV:user.PwUserActiveCode',
+				'method' => 'deleteInfoByUid',
 				'loadway' => 'load',
 			),
 			'task' => array(
@@ -612,21 +689,6 @@ return array(
 			),
 		)
 	),
-	's_space_profile' => array(
-		'description' => '空间资料页面',
-		'param' => array(''),
-		'interface' => '',
-		'list' => array( //这个顺序别改，pd要求的
-			'education' => array(
-				'class' => 'SRV:education.srv.profile.do.PwSpaceProfileDoEducation', 
-				'method' => 'createHtml'
-			),
-			'work' => array(
-				'class' => 'SRV:work.srv.profile.do.PwSpaceProfileDoWork', 
-				'method' => 'createHtml'
-			),
-		)
-	),
 	's_PwUserDataDao_update' => array(
 		'description' => '用户数据更新时，调用',
 		'param' => array('@param int $id 用户id', '@param array $fields 更新的用户字段数据', '@param array $increaseFields 递增的用户字段数据', '@return void'),
@@ -696,7 +758,6 @@ return array(
 			),
 		)
 	),
-	
 	's_PwLikeService_addLike' => array( 
 		'description' => '添加喜欢',
 		'list' => array(
@@ -866,18 +927,6 @@ return array(
 			)*/
 		)
 	),
-	'c_fresh_post' => array(
-		'description' => '在新鲜事页面发布帖子',
-		'param' => array(),
-		'interface' => '',
-		'list' => array(
-			'att' => array(
-				'class' => 'SRV:forum.srv.post.injector.PwPostDoAttInjector', 
-				'method' => 'run', 
-				'expression' => 'flashatt.post!=0'
-			)
-		)
-	), 
 	's_punch' => array(
 		'description' => '打卡时，调用',
 		'param' => array('@param PwUserInfoDm $dm', '@return void'),
@@ -893,17 +942,6 @@ return array(
 	),
 	/*扩展存储类型*/
 	's_PwAttacmentService_getStorages' => array( //todo
-	),
-	'c_login_dorun' => array(
-		'description' => '用户登录，表现层',
-		'param' => array(),
-		'interface' => 'PwBaseHookInjector',
-		'list' => array(
-			'inviteFriend' => array(
-				'class' => 'SRV:user.srv.login.injector.PwLoginDoInviteFriendInjector',
-				'method' => 'run'
-			),
-		)
 	),
 	's_PwThreadManageDoCopy' => array( //todo
 		'description' => '退出登录',
@@ -978,65 +1016,73 @@ return array(
 		'list' => array(
 		)
 	),
-
-	's_space_nav' => array(
-		'description' => '个人空间导航扩展',
-		'param' => array(),
-		'list' => array(
-		)
-	),
-
 	's_permissionCategoryConfig' => array(
 		'description' => '用户组根权限',
 		'param' => array('@param array $config 用户组根权限', '@return array'),
 		'list' => array(
 		)
 	),
-
 	's_permissionConfig' => array(
 		'description' => '用户组权限',
 		'param' => array('@param array $config 用户组权限', '@return array'),
 		'list' => array(
 		)
 	),
-	'PwMobileService_getPlats' => array( 
+	's_PwMobileService_checkVerify' => array( 
+		'description' => '验证手机完成',
+		'param' => array('@param int $mobile'),
+		'list' => array(
+		)
+	),
+	's_header_nav' => array(
+		'description' => '全局头部导航',
+		'param' => array(),
+		'list' => array(
+		)
+	),
+	's_header_info_1' => array(
+		'description' => '头部用户信息扩展点1',
+		'param' => array(),
+		'list' => array(
+		)
+	),
+	's_header_info_2' => array(
+		'description' => '头部用户信息扩展点2',
+		'param' => array(),
+		'list' => array(
+		)
+	),
+	's_footer' => array(
+		'description' => '全局底部',
+		'param' => array(),
+		'list' => array(
+		)
+	),
+	's_space_nav' => array(
+		'description' => '个人空间导航扩展',
+		'param' => array('@param array $space', '@param string $src'),
+		'list' => array(
+		)
+	),
+	's_space_profile' => array(
+		'description' => '空间资料页面',
+		'param' => array('@param array $space'),
+		'interface' => '',
+		'list' => array( //这个顺序别改，pd要求的
+			'education' => array(
+				'class' => 'SRV:education.srv.profile.do.PwSpaceProfileDoEducation', 
+				'method' => 'createHtml'
+			),
+			'work' => array(
+				'class' => 'SRV:work.srv.profile.do.PwSpaceProfileDoWork', 
+				'method' => 'createHtml'
+			),
+		)
 	),
 	's_profile_menus' => array (
 		'description' => '个人设置-菜单项扩展',
 		'param' => array('@param array $config 注册的菜单', '@return array'),
 		'list' => array(
 		),
-	),
-	'c_profile_extends_run' => array (
-		'description' => '用户菜单功能扩展-展示',
-		'param' => array(''),
-		'list' => array(
-		),
-	),
-	'c_profile_extends_dorun' => array (
-		'description' => '用户菜单功能扩展-执行',
-		'param' => array(''),
-		'list' => array(
-		),
-	),
-	'm_verify_mobile' => array( 
-		'description' => '验证手机完成',
-		'param' => array(),
-		'interface' => 'SRV:mobile.srv.do.PwVerifyMobileBase',
-		'list' => array(
-			
-		)
-	),
-	
-	'm_PwFreshReplyByWeibo' => array(
-		'description' => '微博',
-		'param' => array(),
-		'interface' => 'SRV:attention.srv.reply.weibo.PwWeiboDoBase',
-		'list' => array(
-			'word' => array(
-				'class' => 'SRV:attention.srv.reply.weibo.PwWeiboDoWord',
-				'description' => '微博-敏感词'
-			),
-		)
 	),
 );

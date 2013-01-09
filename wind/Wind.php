@@ -4,7 +4,11 @@ define('WIND_VERSION', '1.0.0');
 /* 路径相关配置信息 */
 define('WIND_PATH', dirname(__FILE__));
 /*
- * 二进制:十进制 模式描述 00: 0 关闭 01: 1 window 10: 2 log 11: 3 window|log
+ * 二进制:十进制 模式描述 
+ * 00: 0 关闭 
+ * 01: 1 window 
+ * 10: 2 log 
+ * 11: 3 window|log
  */
 !defined('WIND_DEBUG') && define('WIND_DEBUG', 0);
 /**
@@ -12,15 +16,17 @@ define('WIND_PATH', dirname(__FILE__));
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-9
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: Wind.php 3859 2012-12-18 09:25:51Z yishuo $
+ * @version $Id: Wind.php 3904 2013-01-08 07:01:26Z yishuo $
  */
 class Wind {
+	public static $isDebug = 0;
 	public static $_imports = array();
 	public static $_classes = array();
 	private static $_extensions = 'php';
 	private static $_isAutoLoad = true;
 	private static $_namespace = array();
 	private static $_includePaths = array();
+	
 	/**
 	 *
 	 * @var AbstractWindFrontController
@@ -93,7 +99,7 @@ class Wind {
 		} elseif (is_object($componentInstance)) {
 			WindFactory::_getInstance()->registInstance($componentInstance, $componentName, $scope);
 		} else
-			throw new WindException('registe component fail, array or object is required', 
+			throw new WindException('[Wind.registeComponent] registe component fail, array or object is required', 
 				WindException::ERROR_PARAMETER_TYPE_ERROR);
 	}
 
@@ -180,7 +186,7 @@ class Wind {
 			array_unshift(self::$_includePaths, $path);
 			if (set_include_path(
 				'.' . PATH_SEPARATOR . implode(PATH_SEPARATOR, self::$_includePaths)) === false) {
-				throw new Exception('[wind.register] set include path error.');
+				throw new Exception('[Wind.register] set include path error.');
 			}
 		}
 	}
@@ -254,14 +260,15 @@ class Wind {
 			$dirPath = substr($dirPath, $pos + 1);
 		} else
 			$namespace = $absolut ? self::getRootPath(self::getAppName()) : '';
-		$namespace && $dirPath = $namespace . str_replace('.', '/', $dirPath);
-		return $dirPath;
+		
+		return ($namespace ? $namespace : '') . str_replace('.', '/', $dirPath);
 	}
 
 	/**
 	 * 初始化框架
 	 */
 	public static function init() {
+		self::$isDebug = WIND_DEBUG;
 		function_exists('date_default_timezone_set') && date_default_timezone_set('Etc/GMT+0');
 		self::register(WIND_PATH, 'WIND', true);
 		if (!self::$_isAutoLoad) return;
@@ -270,6 +277,25 @@ class Wind {
 		else
 			self::$_isAutoLoad = false;
 		self::_loadBaseLib();
+	}
+
+	/**
+	 * 日志记录
+	 * 
+	 * 调用WindLogger组建进行日志记录
+	 * @param string $message
+	 * @param string $logType
+	 * @throws WindMailException
+	 */
+	public static function log($message, $logType = 'wind.core') {
+		if (self::$isDebug) {
+			$traces = debug_backtrace();
+			if (isset($traces[1])) {
+				$message = "\r\n" . $traces[0]['file'] . " (" . $traces[0]['line'] . ") [" . 
+					$traces[1]['class'] . "::" . $traces[1]['function'] . "]\r\n" . $message;
+			}
+			Wind::getComponent('windLogger')->info($message, $logType);
+		}
 	}
 
 	/**

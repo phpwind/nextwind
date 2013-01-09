@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: CateController.php 22775 2012-12-27 06:57:28Z jieyin $
+ * @version $Id: CateController.php 23266 2013-01-07 08:46:40Z long.shi $
  * @package forum
  */
 
@@ -96,11 +96,8 @@ class CateController extends PwBaseController {
 		
 		//版块风格
 		if ($pwforum->foruminfo['style']) {
-
 			$this->setTheme('forum', $pwforum->foruminfo['style']);
-
-			$this->addCompileDir($pwforum->foruminfo['style']);
-
+			//$this->addCompileDir($pwforum->foruminfo['style']);
 		}
 
 		

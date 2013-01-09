@@ -5,7 +5,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PortalController.php 22471 2012-12-24 12:06:23Z gao.wanggao $ 
+ * @version $Id: PortalController.php 23193 2013-01-07 03:32:13Z gao.wanggao $ 
  * @package 
  */
 
@@ -40,6 +40,8 @@ class PortalController extends AdminBaseController {
 		$portalid = (int)$this->getInput('id','get');
 		//TODO 删除数据
 		$pageInfo = $this->_getPageDs()->getPageByTypeAndUnique(PwDesignPage::PORTAL,$portalid);
+		Wind::import('SRV:design.bo.PwDesignPageBo');
+		$pageBo = new PwDesignPageBo($pageInfo['page_id']);
 		if ($pageInfo) {
 			$ids = explode(',', $pageInfo['module_ids']);
 			$names = explode(',', $pageInfo['module_names']);
@@ -50,7 +52,8 @@ class PortalController extends AdminBaseController {
 			$imageSrv = Wekit::load('design.srv.PwDesignImage');
 			$moduleDs->deleteByPageId($pageInfo['page_id']);
 			// module&& data && push
-			foreach ($ids AS $id) {
+			$list = Wekit::load('design.PwDesignModule')->getByPageid($this->pageid);
+			foreach ($list AS $id=>$v) {
 				$dataDs->deleteByModuleId($id);
 				$pushDs->deleteByModuleId($id);
 				$imageSrv->clearFolder($id);
@@ -67,8 +70,6 @@ class PortalController extends AdminBaseController {
 			$this->_getPageDs()->deletePage($pageInfo['page_id']);
 			$this->_getPermissionsDs()->deleteByTypeAndDesignId(PwDesignPermissions::TYPE_PAGE, $pageInfo['page_id']);
 		}
-		Wind::import('SRV:design.bo.PwDesignPageBo');
-    	$pageBo = new PwDesignPageBo($pageInfo['page_id']);
 		$this->_getDesignService()->clearTemplate($pageBo->pageid, $pageBo->getTplPath());
 		if ($this->_getPortalDs()->deletePortal($portalid)) $this->showMessage("operate.success");
 		$this->showMessage("operate.fail");

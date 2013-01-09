@@ -6,7 +6,7 @@ Wind::import('WIND:mail.protocol.WindSocket');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindPop3.php 2973 2011-10-15 19:22:48Z yishuo $
+ * @version $Id: WindPop3.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package mail
  * @subpackage protocol
  */
@@ -206,10 +206,10 @@ class WindPop3 {
 	public function response($multi = false, $timeout = null) {
 		$ok = $this->responseLine($timeout);
 		if (empty($ok) || !is_string($ok)) {
-			throw new WindException('Read Failed');
+			throw new WindException('[mail.protocol.WindPop3.response] Read Failed');
 		}
 		if ('+OK' !== substr($ok, 0, 3)) {
-			throw new WindException('Request Failed!Pleae See Failed Info:' . $ok);
+			throw new WindException('[mail.protocol.WindPop3.response] Request Failed!Pleae See Failed Info:' . $ok);
 		}
 		if (true === $multi) {
 			$response = '';
@@ -228,7 +228,7 @@ class WindPop3 {
 				$response = $ok;
 			}
 		}
-		if (empty($response)) throw new WindException('No response');
+		if (empty($response)) throw new WindException('[mail.protocol.WindPop3.response] No response');
 		return $response;
 	}
 

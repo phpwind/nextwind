@@ -51,7 +51,7 @@ class PwManifest {
 			$manifest = WindUtility::mergeArray($manifest, $extends);
 			$charset = isset($manifest['application']['charset']) ? $manifest['application']['charset'] : 'utf-8';
 		} else {
-			$charset = Wind::getApp()->getResponse()->getCharset();
+			$charset = Wekit::app()->charset;
 		}
 		strncasecmp($charset, 'utf', 3) && $manifest = WindConvert::convert($manifest, $charset, 'utf-8');
 		$this->manifest = $manifest;

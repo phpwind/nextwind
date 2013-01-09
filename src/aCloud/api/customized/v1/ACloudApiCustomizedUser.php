@@ -42,6 +42,10 @@ class ACloudApiCustomizedUser {
 	public function checkCookie($cookie){
 		return $this->getVersionCustomizedUser()->checkCookie($cookie);
 	}
+
+	public function getUserBindInfo($uid,$type){
+		return $this->getVersionCustomizedUser()->getUserBindInfo($uid,$type);
+	}
 	
 	private function getVersionCustomizedUser() {
 		return ACloudVerCustomizedFactory::getInstance ()->getVersionCustomizedUser ();

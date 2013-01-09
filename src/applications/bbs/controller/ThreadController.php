@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ThreadController.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: ThreadController.php 23266 2013-01-07 08:46:40Z long.shi $
  * @package forum
  */
 
@@ -103,7 +103,7 @@ class ThreadController extends PwBaseController {
 		//版块风格
 		if ($pwforum->foruminfo['style']) {
 			$this->setTheme('forum', $pwforum->foruminfo['style']);
-			$this->addCompileDir($pwforum->foruminfo['style']);
+			//$this->addCompileDir($pwforum->foruminfo['style']);
 		}
 		
 		//seo设置

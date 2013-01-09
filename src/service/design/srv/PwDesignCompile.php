@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignCompile.php 22596 2012-12-25 11:57:37Z gao.wanggao $ 
+ * @version $Id: PwDesignCompile.php 23387 2013-01-09 07:14:36Z gao.wanggao $ 
  * @package 
  */
 class PwDesignCompile {
@@ -25,6 +25,13 @@ class PwDesignCompile {
    	private $_loginUid;
    	private $_pageName = '';
    	private $_uniqueId = 0;
+   	
+	private static $_instance = null;
+	
+	public static function getInstance() {
+		!isset(self::$_instance) && self::$_instance = new self();
+		return self::$_instance;
+	}
     
     public function setIsDesign($isdesign = false) {
     	$loginUser = Wekit::getLoginUser();
@@ -79,14 +86,14 @@ class PwDesignCompile {
      */
     public function isPortalCompile() {
     	if ($this->_permission < PwDesignPermissions::IS_ADMIN ) {
-    		return false;
+    		return 0;
     	}
-    	if (!$this->isDesign) return false;
+    	if (!$this->isDesign) return 0;
     	$pageInfo = $this->pageBo->getPage();
-    	if ($pageInfo['page_type'] != PwDesignPage::PORTAL) {
-    		return false;
+    	if ($pageInfo['page_type'] == PwDesignPage::PORTAL) {
+    		return 1;
     	}
-    	return true;
+    	return 2;
     }
     
     public function startDesign($uniqueId = 0, $uri = '') {
@@ -140,7 +147,6 @@ class PwDesignCompile {
 	 * 刷新当前页面数据
 	 */
 	public function refreshPage() {
-		if ($this->_permission < PwDesignPermissions::IS_DESIGN) return false;
 		$list = Wekit::load('design.PwDesignModule')->getByPageid($this->pageid);
 		Wind::import('SRV:design.srv.data.PwAutoData');
 		foreach ($list AS $id=>$v) {
@@ -167,6 +173,7 @@ class PwDesignCompile {
 			 $dm = new PwDesignPageDm($this->pageid);
 			 $dm->setDesignLock($loginUser->uid, Pw::getTime());
 			 $ds->updatePage($dm);
+			 Wekit::load('design.srv.PwPageBakService')->doSnap($this->pageid);
 		}
     }
     
@@ -211,7 +218,6 @@ class PwDesignCompile {
     	!$moduleId && $moduleId = PwDesignModuleBo::$stdId;
     	$moduleId = (int)$moduleId;
   		if (!$moduleId) return '';
-    	
     	$bo = new PwDesignModuleBo($moduleId);
     	$html = $bo->getTemplate();
 	    $caption = $bo->getTitleHtml();
@@ -223,7 +229,7 @@ class PwDesignCompile {
 	    } else {
 	    	$html = $caption.$html;
 	    }
-	    $this->appendSegment($module);
+	    //$this->appendSegment($module);
 	    $this->appendModuleId($moduleId);
 	   	if ($this->isDesign && $module['module_type'] != PwDesignModule::TYPE_SCRIPT) {//模块进行片段化处理
 	    	if ($html){
@@ -285,7 +291,7 @@ class PwDesignCompile {
 	    } else {
 	    	$html = $caption.$html;
 	    }
-	    $this->appendSegment($module);
+	    //$this->appendSegment($module);
 	    $this->appendModuleId($moduleId);
 	   	if ($this->isDesign && $module['module_type'] != PwDesignModule::TYPE_SCRIPT) {//模块进行片段化处理
 	    	if ($html){

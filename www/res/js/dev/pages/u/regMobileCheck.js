@@ -26,7 +26,7 @@
         	Wind.Util.ajaxBtnDisable(elem);
             $.post(M_CHECK, {
 				mobile : reg_mobile.val(),
-				username : pwd_username.val(),
+				username : pwd_username.val()
 			}, function(data){
             	Wind.Util.ajaxBtnEnable(elem);
                 if(data.state == 'success') {
@@ -89,7 +89,7 @@
 
                 $.post(M_CHECK_MOBILE,{
                     mobile : trim_v,
-					username : pwd_username.val(),
+					username : pwd_username.val()
                 }, function(data){
                     _v = trim_v;
                     checkin = false;

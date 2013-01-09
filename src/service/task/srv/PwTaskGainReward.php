@@ -1,5 +1,6 @@
 <?php
 Wind::import('SRV:task.dm.PwTaskUserDm');
+Wind::import('SRV:task.srv.PwTaskApply');
 /**
  * 获取奖励的BP
  * 
@@ -14,7 +15,7 @@ Wind::import('SRV:task.dm.PwTaskUserDm');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwTaskGainReward.php 16417 2012-08-23 08:06:36Z xiaoxia.xuxx $
+ * @version $Id: PwTaskGainReward.php 23446 2013-01-09 11:59:46Z xiaoxia.xuxx $
  * @package src.service.task.srv
  */
 class PwTaskGainReward extends PwBaseHookService {

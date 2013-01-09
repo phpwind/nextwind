@@ -13,7 +13,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwVerifyService.php 15940 2012-08-16 05:28:25Z gao.wanggao $ 
+ * @version $Id: PwVerifyService.php 23350 2013-01-09 02:40:57Z gao.wanggao $ 
  * @package 
  */
 
@@ -46,7 +46,7 @@ class PwVerifyService {
 		$verify = $types[$verifyType];
 		if (!isset($verify['components']['path'])) return new PwError('operate.fail');
 		$obj = Wekit::load($verify['components']['path']);
-		$obj->getVerify();
+		return $obj->getVerify();
 	}
 	
 	public function getOutType($verifyType) {

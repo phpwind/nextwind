@@ -142,7 +142,7 @@
 							<li><label><input type="radio" name="activeMail" value="0" {@Pw::ifcheck($config['active.mail'] == 0)}><span>关闭</span></label></li>
 						</ul>
 					</td>
-					<td><div class="fun_tips">开启后，系统将向注册 电子邮箱 发送一封验证电子邮件以确认电子邮箱的有效性。用户收到电子邮件并激活帐号后才能拥有正常的权限。</div></td>
+					<td><div class="fun_tips">必须先在<a href="{@url:admin/config/email/run}">邮件设置</a>中配置邮件服务并测试成功。开启后，系统将向注册 电子邮箱 发送一封验证电子邮件以确认电子邮箱的有效性。用户收到电子邮件并激活帐号后才能拥有正常的权限。</div></td>
 				</tr>
 				<tr>
 					<th>激活邮件标题</th>
@@ -166,7 +166,7 @@
 							<li><label><input type="checkbox" name="welcomeType[]" value="2" {@Pw::ifcheck(in_array(2, $config['welcome.type']))}>电子邮件</label></li>
 						</ul>
 					</td>
-					<td><div class="fun_tips">新用户注册后系统自动发送表示欢迎的站内短信或电子邮件。<br/>如果开启了邮件激活,则只发送激活邮件,不发送欢迎邮件</div></td>
+					<td><div class="fun_tips">新用户注册后系统自动发送表示欢迎的站内短信或电子邮件。<br/>如果开启了邮件激活,则只发送激活邮件,不发送欢迎邮件,必须先在<a href="{@url:admin/config/email/run}">邮件设置</a>中配置邮件服务并测试成功。</div></td>
 				</tr>
 				<tr>
 					<th>欢迎信息标题</th>

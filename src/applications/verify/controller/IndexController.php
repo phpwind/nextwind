@@ -1,11 +1,11 @@
 <?php
 Wind::import('LIB:base.PwBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
- * @author $Author: jieyin $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 22678 2012-12-26 09:22:23Z jieyin $ 
+ * @version $Id: IndexController.php 23350 2013-01-09 02:40:57Z gao.wanggao $ 
  * @package 
  */
 
@@ -86,7 +86,7 @@ class IndexController extends PwBaseController {
 			}
 			$html .= '<a id="J_verify_update_a" href="#" role="button">换一个</a>';
 		} else {
-			$html = '';
+			$html = $srv->getVerify($config['type']);;
 		}
 		$this->setOutput($html, 'data');
 		$this->showMessage("operate.success");

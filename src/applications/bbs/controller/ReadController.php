@@ -8,7 +8,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ReadController.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: ReadController.php 23266 2013-01-07 08:46:40Z long.shi $
  * @package forum
  */
 class ReadController extends PwBaseController {
@@ -24,7 +24,7 @@ class ReadController extends PwBaseController {
 		$this->runHook('c_read_run', $threadDisplay);
 		
 		if (($result = $threadDisplay->check()) !== true) {
-			$this->showMessage($result->getError());
+			$this->showError($result->getError());
 		}
 		$_cache = Wekit::cache()->fetch(array('level', 'group_right'));
 
@@ -108,7 +108,7 @@ class ReadController extends PwBaseController {
 		//版块风格
 		if ($pwforum->foruminfo['style']) {
 			$this->setTheme('forum', $pwforum->foruminfo['style']);
-			$this->addCompileDir($pwforum->foruminfo['style']);
+			//$this->addCompileDir($pwforum->foruminfo['style']);
 		}
 		
 		// seo设置

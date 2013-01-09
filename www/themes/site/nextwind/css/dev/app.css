@@ -3,7 +3,7 @@
 @explain: 应用
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: app.css 22223 2012-12-19 20:27:38Z yanchixia $
+$Id: app.css 23148 2013-01-06 11:29:22Z yanchixia $
 ===================
 #*/
 
@@ -67,6 +67,9 @@ $Id: app.css 22223 2012-12-19 20:27:38Z yanchixia $
 }
 .app_page .ct li p{
 	margin-bottom:5px;
+	height:36px;
+	line-height:18px;
+	overflow:hidden;
 }
 .app_page .ct li a.in{
 	color:#999;

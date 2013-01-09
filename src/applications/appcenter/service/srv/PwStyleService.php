@@ -7,7 +7,7 @@ Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwStyleService.php 18552 2012-09-19 10:52:52Z jieyin $
+ * @version $Id: PwStyleService.php 23145 2013-01-06 11:21:46Z long.shi $
  * @package service.style.srv
  */
 class PwStyleService {
@@ -28,6 +28,7 @@ class PwStyleService {
 		$dm = new PwStyleDm();
 		$dm->setAppid($styleid)->setIsCurrent(1);
 		$this->_styleDs()->updateStyle($dm);
+		//Wekit::load('domain.srv.PwDomainService')->refreshTplCache();
 		return $this->_setConfigBo($style);
 	}
 

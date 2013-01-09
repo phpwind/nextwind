@@ -4,7 +4,7 @@ Wind::import('WIND:http.transfer.AbstractWindHttp');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com/license.php
- * @version $Id: WindHttpCurl.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: WindHttpCurl.php 3885 2013-01-06 11:21:34Z yishuo $
  * @package http
  * @subpackage transfer
  */
@@ -85,13 +85,15 @@ final class WindHttpCurl extends AbstractWindHttp {
 		if ($options && is_array($options)) {
 			curl_setopt_array($this->httpHandler, $options);
 		}
+		if (!isset($options[CURLOPT_USERAGENT])) $this->request(CURLOPT_USERAGENT, 
+			'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; InfoPath.1)');
+		
 		$_cookie = '';
 		foreach ($this->cookie as $key => $value) {
 			$_cookie .= ($_cookie !== '' ? "" : "; ") . $key . "=" . $value;
 		}
 		$this->request(CURLOPT_COOKIE, $_cookie);
 		
-		$this->setHeader('Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; InfoPath.1)', 'User-Agent');
 		$_header = array();
 		foreach ($this->header as $key => $value) {
 			$_header[] = $key . ": " . $value;
@@ -99,7 +101,8 @@ final class WindHttpCurl extends AbstractWindHttp {
 		$_header && $this->request(CURLOPT_HTTPHEADER, $_header);
 		$this->request(CURLOPT_URL, $this->url);
 		if (isset($options[CURLOPT_FOLLOWLOCATION])) $this->_redirects = $options[CURLOPT_FOLLOWLOCATION];
-		if (isset($options[CURLOPT_MAXREDIRS])) $this->_maxRedirs = intval($options[CURLOPT_MAXREDIRS]);
+		if (isset($options[CURLOPT_MAXREDIRS])) $this->_maxRedirs = intval(
+			$options[CURLOPT_MAXREDIRS]);
 		$this->followLocation();
 		return $this->response();
 	}

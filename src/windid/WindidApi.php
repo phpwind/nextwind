@@ -34,7 +34,7 @@ class WindidApi {
 	
 	public static function open($script, $getData = array(), $postData = array(), $method='post', $protocol='http') {
 		$client = Windid::client();
-		$time = time();
+		$time = time() + $client->timecv * 60;
 		list($c, $a) = explode('/', $script);
 		$query = array(
 			'm'=>'api',

@@ -25,7 +25,7 @@ Wind::import('WIND:viewer.AbstractWindTemplateCompiler');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwTemplateCompilerHook.php 22627 2012-12-26 03:54:26Z jieyin $
+ * @version $Id: PwTemplateCompilerHook.php 23235 2013-01-07 07:09:15Z jieyin $
  * @package wekit
  * @subpackage engine.extension.viewer
  */
@@ -67,7 +67,7 @@ class PwTemplateCompilerHook extends AbstractWindTemplateCompiler {
 		$content[] = '<?php';
 		if (Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->inDevMode2()) {
 			$_content = $this->_devHook();
-			$content[] = 'echo \'' . WindSecurity::escapeHTML($_content) . '\';';
+			$content[] = 'echo \'' . $_content . '\';';
 		}
 		if (!$this->args) {
 			$this->args = '';
@@ -76,7 +76,7 @@ class PwTemplateCompilerHook extends AbstractWindTemplateCompiler {
 		}
 		$this->method = $this->method ? $this->method : 'runDo';
 		if ($this->class) {
-			$this->args = "'" . ltrim(strstr($this->name, '.'), '.') . "'" . ($this->args ? "," . $this->args : '');
+			$this->args = "'" . $this->name . "'" . ($this->args ? "," . $this->args : '');
 			$callback = 'array(' . $this->class . ', "' . $this->method . '")';
 		} elseif ($this->name) {
 			$callback = 'array(PwSimpleHook::getInstance("' . $this->name . '"), "' . $this->method . '")';
@@ -105,21 +105,13 @@ class PwTemplateCompilerHook extends AbstractWindTemplateCompiler {
 	}
 	
 	private function _devHook() {
-		$_simple = !(in_array(substr($this->name, 0, 2), array('c_', 'm_')) || '(' === $this->name[0]);
-		$_content = '';
-		if ($_simple) {
-			$_content = '<s_' . $this->name . '>';
+		if ($this->class) {
+			$_hookkey = '\',' . $this->class . '->getHookKey(),\'';
+			$_content = $_hookkey . '.' . $this->name;
 		} else {
-			list($_name, $_method) = explode('.', $this->name);
-			list($hook_name) = explode('|', $_name);
-			$hook = Wekit::load('hook.PwHooks')->fetchByName($hook_name);
-			list(, , $interface) = explode("\r\n", $hook['document']);
-			$interface = Wind::import($interface);
-			$_content = '<' . $_name . ' ' . $interface . '.' . $_method . '>';
+			$_content = $_hookkey = 's_' . $this->name;
 		}
-		return $_content;
+		return '<a href="http://wiki.open.phpwind.com/index.php?title=HOOK#' . $_hookkey . '" class="icon_hooktip" target="_blank"><span><em></em>' . $_content . '</span></a>';
 	}
-
 }
-
 ?>

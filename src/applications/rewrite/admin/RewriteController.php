@@ -6,7 +6,7 @@ Wind::import('APPS:admin.library.AdminBaseController');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: RewriteController.php 22366 2012-12-21 12:40:59Z long.shi $
+ * @version $Id: RewriteController.php 22900 2012-12-28 08:26:35Z long.shi $
  * @package rewrite.admin
  */
 class RewriteController extends AdminBaseController {
@@ -57,6 +57,7 @@ class RewriteController extends AdminBaseController {
 		$bo->flush();
 		Wekit::load('config.PwConfig')->setConfig('site', 'rewrite', $rewriteData);
 		Wekit::load('domain.srv.PwDomainService')->refreshTplCache();
+		Wekit::load('SRV:nav.srv.PwNavService')->updateConfig();
 		$this->showMessage('success');
 	}
 

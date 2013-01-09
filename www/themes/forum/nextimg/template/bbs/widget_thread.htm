@@ -16,7 +16,7 @@
 		<a href="{@url:bbs/thread/run?fid=$pwforum->fid&type=$value['topic_type']}" class="st">[{$topictypes['all_types'][$value['topic_type']]['name']|html}]</a>
 		<!--# } #-->
 		<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}" title="{$value['subject']}">{@Pw::substrs($value['subject'],$numofthreadtitle)}</a>
-	<hook class='$threadList' name='m_PwThreadList.createHtmlAfterSubject' args="array($value)" />
+	<hook class='$threadList' name='createHtmlAfterSubject' args="array($value)" />
 	<!--# if ($value['inspect']) { 
 		$value['inspect'][0] = ($value['inspect'][0]) == 0 ? '主' : $value['inspect'][0];
 	#-->

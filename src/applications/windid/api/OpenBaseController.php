@@ -7,7 +7,7 @@ Wind::import('WINDID:service.client.bo.WindidClientBo');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: OpenBaseController.php 22506 2012-12-25 05:24:13Z gao.wanggao $ 
+ * @version $Id: OpenBaseController.php 22962 2013-01-04 05:11:30Z gao.wanggao $ 
  * @package 
  */
 class OpenBaseController extends PwBaseController {
@@ -23,10 +23,9 @@ class OpenBaseController extends PwBaseController {
 		if (!$_time || !$_clientid) $this->output(WindidError::FAIL);
 		$clent = $this->_getAppDs()->getApp($_clientid);
 		if (!$clent) $this->output(WindidError::FAIL);
-		$_time = Windid::getTime($_time);
 		if (WindidUtility::appKey($clent['id'], $_time, $clent['secretkey']) != $_windidkey)  $this->output(WindidError::FAIL);
 		$time = Windid::getTime();
-		if ($time - $_time > 120) $this->output(WindidError::TIMEOUT);
+		if ($time - $_time > 1200) $this->output(WindidError::TIMEOUT);
 		$charset = ($clent['charset'] == 1) ? 'utf8' : 'gbk';
 		$baseUrl = Wind::getApp()->getRequest()->getBaseUrl(true);
 		$config = array(
@@ -51,7 +50,7 @@ class OpenBaseController extends PwBaseController {
 	}
 	
 	protected function output($message = '') {
-		if (is_int($message)) {
+		if (is_numeric($message)) {
 			echo $message; 
 			exit;
 		} else {

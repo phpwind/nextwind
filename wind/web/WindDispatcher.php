@@ -6,7 +6,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindDispatcher.php 3711 2012-07-16 03:33:09Z yishuo $
+ * @version $Id: WindDispatcher.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package web
  */
 class WindDispatcher extends WindModule {
@@ -30,7 +30,7 @@ class WindDispatcher extends WindModule {
 		elseif ($forward->getIsReAction()) {
 			if (count($this->maxForwrd) > 10) {
 				throw new WindFinalException(
-					'[web.WindDispatcher.dispatchWithAction] more than 10 times forward request. (' . implode(', ', 
+					'[web.WindDispatcher.dispatch] more than 10 times forward request. (' . implode(', ', 
 						$this->maxForwrd) . ')');
 			}
 			$token = $router->getModule() . '/' . $router->getController() . '/' . $router->getAction();

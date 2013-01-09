@@ -69,8 +69,7 @@ class PwMobileService {
 		if ($info['expired_time'] < Pw::getTime()) return new PwError('USER:mobile.code.expired_time.error');
 		if ($inputCode !== $info['code']) return new PwError('USER:mobile.code.error');
 		// 手机验证通过后扩展
-		$hookService = new PwHookService('verify_mobile', 'PwVerifyMobileBase');
-		$hookService->runDo('verifyMobile', $mobile);  
+		PwSimpleHook::getInstance('PwMobileService_checkVerify')->runDo($mobile);
 		return true;
 	}
 

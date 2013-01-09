@@ -7,7 +7,7 @@ Wind::import('SRV:word.PwWord');
  * @author Mingqu Luo <luo.mingqu@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwWordFilter.php 22639 2012-12-26 06:02:15Z jinlong.panjl $
+ * @version $Id: PwWordFilter.php 23428 2013-01-09 10:17:46Z jinlong.panjl $
  * @package wind
  */
 
@@ -43,7 +43,7 @@ class PwWordFilter {
 	 */
 	public function replaceWord($str, $version) {
 		$word_version = Wekit::C('bbs', 'word_version');
-		if ($version == $word_version) return false;
+		if ($version == $word_version) return $str;
 		$replaceWord = $this->getReplaceWord();
 		
 		return $this->_getAlgorithms($replaceWord)->replace($str);

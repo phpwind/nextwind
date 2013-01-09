@@ -44,7 +44,7 @@ class PwErrorController extends WindErrorHandler {
 			$lang = Wind::getComponent('i18n');
 			PwSeoBo::setCustomSeo($lang->getMessage('SEO:' . $this->state . '.page.title'), '', '');
 			PwSeoBo::set('{sitename}', Wekit::C('site', 'info.name'));
-			Wekit::setGlobal(WEKIT_VERSION, 'version');
+			Wekit::setGlobal(NEXT_VERSION, 'version');
 			Wekit::setGlobal(PwSeoBo::getData(), 'seo');
 		}
 	}

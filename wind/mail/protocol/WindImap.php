@@ -6,7 +6,7 @@ Wind::import('WIND:mail.protocol.WindSocket');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindImap.php 2973 2011-10-15 19:22:48Z yishuo $
+ * @version $Id: WindImap.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package mail
  * @subpackage protocol
  */
@@ -686,7 +686,7 @@ class WindImap {
 		while ('' != ($_response = $this->responseLine($timeout))) {
 			list($tag, $status, $info) = explode(' ', $_response, 3);
 			if (in_array($status, array('NO', "BAD"))) {
-				throw new WindException($_response);
+				throw new WindException('[mail.protocol.WindImap.response] ' . $_response);
 			}
 			$response .= $_response;
 			$this->resonse[] = $_response;
@@ -694,7 +694,7 @@ class WindImap {
 				break;
 			}
 		}
-		if (empty($response)) throw new WindException('No response');
+		if (empty($response)) throw new WindException('[mail.protocol.WindImap.response] No response');
 		return $response;
 	}
 

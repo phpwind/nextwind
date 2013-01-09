@@ -4,6 +4,7 @@
 <!--#
 $array = array_slice($v['extend_params'],0,3); 
 $countNum = count($v['extend_params']);
+$countNum = $countNum > 1 ? '等'.$countNum.'人' : '';
 $tmpSeparator='';
 #-->
 	<dl class="notice_segment_list cc">
@@ -16,7 +17,7 @@ $tmpSeparator='';
 		</dt>
 		<dd class="notice_segment_cont">
 			<div class="summary">
-			<!--#foreach ($array as $u) {#-->{$tmpSeparator}<a target="_blank" href="{@url:space/index/run?uid=$u['uid']}">{$u['username']}</a><!--#$tmpSeparator='、';}#-->&nbsp;等{$countNum}人关注了您
+			<!--#foreach ($array as $u) {#-->{$tmpSeparator}<a target="_blank" href="{@url:space/index/run?uid=$u['uid']}">{$u['username']}</a><!--#$tmpSeparator='、';}#-->&nbsp;{$countNum}关注了您
 			</div>
 			<div class="time">{@Pw::time2str($v['modified_time'], 'auto')}</div>
 		</dd>
@@ -29,9 +30,10 @@ $tmpSeparator='';
 <!--#
 $array = array_slice($notice['extend_params'],0,3); 
 $countNum = count($notice['extend_params']);
+$countNum = $countNum > 1 ? '等'.$countNum.'人' : '';
 $tmpSeparator='';
 #-->
-	<div class="tips" style="border-left:0;border-right:0;border-top:0;"><!--#foreach ($array as $u) {#-->{$tmpSeparator}<a target="_blank" href="{@url:space/index/run?uid=$u['uid']}">{$u['username']}</a><!--#$tmpSeparator='、';}#-->&nbsp;等{$countNum}人关注了您，<a href="{@url:my/fans/run}" target="_blank">查看全部粉丝&nbsp;&gt;&gt;</a></div>
+	<div class="tips" style="border-left:0;border-right:0;border-top:0;"><!--#foreach ($array as $u) {#-->{$tmpSeparator}<a target="_blank" href="{@url:space/index/run?uid=$u['uid']}">{$u['username']}</a><!--#$tmpSeparator='、';}#-->&nbsp;{$countNum}关注了您，<a href="{@url:my/fans/run}" target="_blank">查看全部粉丝&nbsp;&gt;&gt;</a></div>
 	<div class="J_hm_list my_message_follow">
 	<!--# foreach($detailList['fans'] as $value){ #-->
 		<dl class="cc">
@@ -58,6 +60,7 @@ $tmpSeparator='';
 <!--#
 $array = array_slice($v['extend_params'],0,3); 
 $countNum = count($v['extend_params']);
+$countNum = $countNum > 1 ? '等'.$countNum.'人' : '';
 $tmpSeparator='';
 #-->
 	<div class="ct cc J_notice_item">
@@ -71,7 +74,7 @@ $tmpSeparator='';
 				<!--# } else { #-->
 				<span class="icon_follow" title="已读"></span>
 				<!--# } #-->
-				</span><!--#foreach ($array as $u) {#-->{$tmpSeparator}<a target="_blank" href="{@url:space/index/run?uid=$u['uid']}">{$u['username']}</a><!--#$tmpSeparator='、';}#-->&nbsp;等{$countNum}人关注了您
+				</span><!--#foreach ($array as $u) {#-->{$tmpSeparator}<a target="_blank" href="{@url:space/index/run?uid=$u['uid']}">{$u['username']}</a><!--#$tmpSeparator='、';}#-->&nbsp;{$countNum}关注了您
 			</div>
 			<div class="title J_notice_all" style="display:none;"></div>
 			<div class="info">

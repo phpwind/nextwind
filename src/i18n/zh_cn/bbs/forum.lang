@@ -33,6 +33,7 @@ thread.deleted = "该帖子已被删除"
 thread.closed = "该帖子已被关闭"
 thread.exists.not = "该帖子不存在或已被删除"
 thread.locked.not = "不能回复已被锁定的帖子"
+thread.right.error = "该帖子您暂时无法查看"
 
 permissions.visit.allow = "您所在的用户组 ({grouptitle}) 没有访问该版块的权限"
 permissions.read.allow = "您所在的用户组 ({grouptitle}) 没有在该版块阅读帖子的权限"

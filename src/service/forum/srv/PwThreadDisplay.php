@@ -19,7 +19,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadDisplay.php 22750 2012-12-27 03:15:39Z jieyin $
+ * @version $Id: PwThreadDisplay.php 23306 2013-01-08 06:57:50Z jieyin $
  * @package forum
  */
 
@@ -138,8 +138,7 @@ class PwThreadDisplay extends PwBaseHookService {
 			$display = 0;
 			$read['content'] = '<div class="shield">此帖已被屏蔽</div>';
 		} elseif ($this->users[$read['created_userid']]['groupid'] == '6') {
-			$display = 0;
-			$read['content'] = '<div class="shield">用户被禁言,该主题自动屏蔽!</div>';
+			list($read['content'], $display) = $this->_bulidBanContent($read['content']);
 		} elseif ($read['useubb']) {
 			$ubb = new PwUbbCodeConvertThread($this->thread, $read, $this->user);
 			$ubb->setImgLazy($this->imgLazy);
@@ -237,6 +236,54 @@ class PwThreadDisplay extends PwBaseHookService {
 		$this->imgLazy = empty($isLazy) ? false : true;
 	}
 	
+	/**
+	 * 准备用户显示信息
+	 *
+	 * @param array $uids 用户id序列
+	 * @return array
+	 */
+	public function bulidUsers($uids) {
+		$groupRight = Wekit::cache()->get('group_right');
+		$uids = array_unique($uids);
+		$users = Wekit::load('user.PwUser')->fetchUserByUid($uids, PwUser::FETCH_ALL);
+		in_array('0', $uids) && $users['0'] = $this->_getGuestInfo();
+		foreach ($users as $key => $value) {
+			$value['groupid'] == '0' && $value['groupid'] = $value['memberid'];
+			if ($value['bbs_sign']) {
+				$value['bbs_sign'] = $this->_bulidBbsSign($value['bbs_sign'], $groupRight[$value['groupid']], $value['status']);
+			}
+			$users[$key] = $value;
+		}
+		$this->users = $this->runWithFilters('bulidUsers', $users);
+	}
+
+	public static function escapeSpace($str) {
+		$str = str_replace(array('  ', "\n ", "\n"), array(' &nbsp;', '<br />&nbsp;', '<br />'), $str);
+		$str[0] === ' ' && $str = '&nbsp;' . ltrim($str);
+		return $str;
+	}
+	
+	protected function _bulidBanContent($content) {
+		$tip = '<div class="shield">用户被禁言,该主题自动屏蔽!</div>';
+		if (!$this->user->getPermission('operate_thread.ban', $this->isBM)) {
+			return array($tip, 0);
+		}
+		return array($tip . $content, 1);
+	}
+
+	protected function _bulidBbsSign($sign, $groupRight, $userstatus) {
+		if (!$groupRight['allow_sign'] || Pw::getstatus($userstatus, PwUser::STATUS_BAN_SIGN)) {
+			return '';
+		}
+		$sign = WindSecurity::escapeHTML($sign);
+		if ($groupRight['sign_ubb'] && (Pw::getstatus($userstatus, PwUser::STATUS_SIGN_USEUBB))) {
+			$ubb = new PwUbbCodeConvertConfig();
+			$ubb->isConverImg = $groupRight['sign_ubb_img'] ? true : false;
+			$sign = PwUbbCode::convert($sign, $ubb);
+		}
+		return $sign;
+	}
+	
 	protected function _parseDefindFloorName($string) {
 		$array = array(0 => '楼主');
 		$_tmp = explode("\n", $string);
@@ -254,40 +301,6 @@ class PwThreadDisplay extends PwBaseHookService {
 		if ($pids) {
 			$this->attach = new PwAttachDisplay($this->tid, $pids, $this->user, $this->imgLazy);
 		}
-	}
-	
-	/**
-	 * 准备用户显示信息
-	 *
-	 * @param array $uids 用户id序列
-	 * @return array
-	 */
-	public function bulidUsers($uids) {
-		$groupRight = Wekit::cache()->get('group_right');
-		$uids = array_unique($uids);
-		$users = Wekit::load('user.PwUser')->fetchUserByUid($uids, PwUser::FETCH_ALL);
-		in_array('0', $uids) && $users['0'] = $this->_getGuestInfo();
-		foreach ($users as $key => $value) {
-			$value['groupid'] == '0' && $value['groupid'] = $value['memberid'];
-			if ($value['bbs_sign']) {
-				$value['bbs_sign'] = WindSecurity::escapeHTML($value['bbs_sign']);
-				if (!$groupRight[$value['groupid']]['allow_sign'] || Pw::getstatus($value['status'], PwUser::STATUS_BAN_SIGN)) {
-					$value['bbs_sign'] = '';
-				} elseif ($groupRight[$value['groupid']]['sign_ubb'] && (Pw::getstatus($value['status'], PwUser::STATUS_SIGN_USEUBB))) {
-					$ubb = new PwUbbCodeConvertConfig();
-					$ubb->isConverImg = $groupRight[$value['groupid']]['sign_ubb_img'] ? true : false;
-					$value['bbs_sign'] = PwUbbCode::convert($value['bbs_sign'], $ubb);
-				}
-			}
-			$users[$key] = $value;
-		}
-		$this->users = $this->runWithFilters('bulidUsers', $users);
-	}
-
-	public static function escapeSpace($str) {
-		$str = str_replace(array('  ', "\n ", "\n"), array(' &nbsp;', '<br />&nbsp;', '<br />'), $str);
-		$str[0] === ' ' && $str = '&nbsp;' . ltrim($str);
-		return $str;
 	}
 
 	protected function _getGuestInfo() {

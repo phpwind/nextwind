@@ -8,7 +8,7 @@
 			$username = $v['extend_params']['from_username'];
 			$from_uid = $v['extend_params']['from_uid'];
 		}
-		$v['title'] = Pw::substrs($v['message_extend_params']['title'], 32);
+		$v['title'] = Pw::substrs(WindSecurity::escapeHTML($v['message_extend_params']['title']), 32);
 		$v['title'] = PwUbbCode::parseEmotion($v['title']);
 	#-->
 		<div class="fe"><img src="{@Pw::getAvatar($from_uid, 'small')}" data-type="small" width="50" height="50" onerror="this.onerror=null;this.src='{@G:url.images}/face/face_small.jpg'" alt="{$username}" /></div>
@@ -52,8 +52,9 @@
 		Wind::import('LIB:ubb.PwUbbCode');
 	#-->
 	<!--# foreach($detailList['data'] as $v){ 
-		$username = $v['from_uid'] == $loginUser->uid ? '我' : $v['from_username'];
+		$username = $v['from_uid'] == $loginUser->uid ? '我' : $notice['extend_params']['from_username'];
 		$bubbles = $v['from_uid'] == $loginUser->uid ? 'my cc' : 'cc';
+		$v['content'] = WindSecurity::escapeHTML($v['content']);
 		$v['content'] = PwUbbCode::parseEmotion($v['content']);
 		$v['content'] = PwUbbCode::parseUrl($v['content']);
 	#-->

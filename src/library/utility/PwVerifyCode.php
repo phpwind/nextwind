@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwVerifyCode.php 20209 2012-10-24 10:00:09Z gao.wanggao $ 
+ * @version $Id: PwVerifyCode.php 23443 2013-01-09 11:40:02Z gao.wanggao $ 
  * @package 
  */
 class PwVerifyCode {
@@ -135,7 +135,8 @@ class PwVerifyCode {
 	
 	private function _saveVerifyCode() {
 		Wind::import('LIB:utility.verifycode.PwBaseCode');
-		$code = Pw::encrypt(strtolower(PwBaseCode::getCode()));
+		$code = WindConvert::convert(PwBaseCode::getCode(), Wekit::app()->charset, 'UTF-8');
+		$code = Pw::encrypt(strtolower($code));
 		//Wind::import('WIND:http.session.WindSession');
 		Pw::setCookie('Pw_verify_code',$code ,3600);
 		/*$session = new WindSession();

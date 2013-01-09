@@ -39,9 +39,10 @@ class PwPlatAliyun {
 	 *
 	 * @return bool
 	 */
-	public function sendMobileMessage($mobile, $code) {
+	public function sendMobileMessage($mobile, $content) {
+		$content = Pw::convert($content, 'UTF-8');
 		$url = PwApplicationHelper::acloudUrl(
-			array('a' => 'forward', 'do' => 'sendSms', 'mobile' => $mobile, 'content' => $code));
+			array('a' => 'forward', 'do' => 'sendSms', 'mobile' => $mobile, 'content' => $content));
 		$info = PwApplicationHelper::requestAcloudData($url);
 		if (!is_array($info)) return new PwError('APPCENTER:center.connect.fail');
 	    if ($info['code'] !== '0') return new PwError($info['msg']);

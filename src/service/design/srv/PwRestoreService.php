@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRestoreService.php 22735 2012-12-26 13:54:10Z gao.wanggao $ 
+ * @version $Id: PwRestoreService.php 22964 2013-01-04 05:37:43Z gao.wanggao $ 
  * @package 
  */
 class PwRestoreService {
@@ -139,7 +139,8 @@ class PwRestoreService {
 			$ds->replaceSegment($k, $pageid, $v['segment_tpl']);
 			$strr = substr(strrchr($k, "__"), 1);
 			if (isset($srv) && $strr == 'tpl') {
-				$srv->restoreTpl($k, $v['segment_struct']);//门户片段
+				$file = substr($k, 0, strlen($k) - 5);
+				$srv->restoreTpl($file, $v['segment_struct']);//门户片段
 			}
 		}
 		return true;

@@ -6,7 +6,7 @@ Wind::import('WINDID:api.local.WindidMessageApi');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: MessageController.php 21722 2012-12-12 09:28:56Z gao.wanggao $ 
+ * @version $Id: MessageController.php 23072 2013-01-06 02:12:11Z gao.wanggao $ 
  * @package 
  */
 
@@ -136,20 +136,59 @@ class MessageController extends OpenBaseController {
 	}
 	
 	public function deleteUserMessagesAction() {
-		$uid = (int)$this->getInput('uid');
+		$uid = (int)$this->getInput('uid', 'post');
 		$result = (int)$this->_getMessageService()->deleteUserMessages($uid);
 		$this->_getNotifyClient()->send('editMessageNum', $uid);
 		$this->output($result);
 	}
 	
 	public function editNumAction() {
-		$uid = (int)$this->getInput('uid');
-		$num = (int)$this->getInput('num');
+		$uid = (int)$this->getInput('uid', 'post');
+		$num = (int)$this->getInput('num', 'post');
 		$result = $this->getApi()->editMessageNum($uid, $num);
 		$this->_getNotifyClient()->send('editMessageNum', $uid);
 
 		$this->output($result);
 	}
+	
+	//传统收件箱，发件箱接口start
+	
+	public function fromBox() {
+		$uid = (int)$this->getInput('uid', 'get');
+		$start = (int)$this->getInput('start', 'get');
+		$limit = (int)$this->getInput('limit', 'get');
+		!$limit && $limit = 10;
+		!$start && $start = 0;
+		return $this->_getBoxMessage()->fromBox($uid, $start, $limit);
+	}
+
+	public function toBox() {
+		$uid = (int)$this->getInput('uid', 'get');
+		$start = (int)$this->getInput('start', 'get');
+		$limit = (int)$this->getInput('limit', 'get');
+		!$limit && $limit = 10;
+		!$start && $start = 0;
+		return $this->_getBoxMessage()->toBox($uid, $start, $limit);
+	}
+	
+	public function readMessages() {
+		$uid = (int)$this->getInput('uid', 'post');
+		$messageIds = $this->getInput('messageIds', 'post');
+		if (!is_array($messageIds)) $messageIds = array($messageIds);
+		$result = $this->_getBoxMessage()->readMessages($uid, $messageIds);
+		return (int)$result;
+	}
+	
+	public function deleteMessages() {
+		$uid = (int)$this->getInput('uid', 'post');
+		$messageIds = $this->getInput('messageIds', 'post');
+		if (!is_array($messageIds)) $messageIds = array($messageIds);
+		$result = $this->_getBoxMessage()->deleteMessages($uid, $messageIds);
+		return (int)$result;
+	}
+	
+	
+	//传统收件箱，发件箱接口end
 	
 	private function _getMessageDs() {
 		return Windid::load('message.WindidMessage');
@@ -157,6 +196,10 @@ class MessageController extends OpenBaseController {
 	
 	private function _getMessageService() {
 		return Windid::load('message.srv.WindidMessageService');
+	}
+	
+	private function _getBoxMessage() {
+		return Windid::load('message.srv.WindidBoxMessage');
 	}
 	
 	protected function getApi() {

@@ -28,7 +28,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindLayout.php 3862 2012-12-19 02:58:07Z yishuo $
+ * @version $Id: WindLayout.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package viewer
  */
 class WindLayout extends WindModule {
@@ -55,7 +55,7 @@ class WindLayout extends WindModule {
 			list($__tpl) = $this->viewer->getWindView()->getViewTemplate($layout);
 		
 		if (!@include ($__tpl)) {
-			throw new WindViewException('[component.viewer.WindLayout.parser] layout file ' . $__tpl, 
+			throw new WindViewException('[viewer.WindLayout.parser] layout file ' . $__tpl, 
 				WindViewException::VIEW_NOT_EXIST);
 		}
 	}

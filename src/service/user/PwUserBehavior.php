@@ -6,7 +6,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserBehavior.php 21419 2012-12-07 02:59:21Z gao.wanggao $ 
+ * @version $Id: PwUserBehavior.php 23205 2013-01-07 04:57:31Z jinlong.panjl $ 
  * @package 
  */
 class PwUserBehavior {
@@ -33,7 +33,7 @@ class PwUserBehavior {
 	 */
 	public function fetchBehavior($uids) {
 		if (!is_array($uids) || count($uids) < 1) return array();
-		return $this->_getdao()->fetchInfo($uids);
+		return $this->_getdao()->fecthInfo($uids);
 	}
 	
 	/**

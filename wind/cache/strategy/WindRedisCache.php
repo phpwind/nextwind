@@ -59,7 +59,7 @@ Wind::import('WIND:cache.AbstractWindCache');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindRedisCache.php 3791 2012-10-30 04:01:29Z liusanbian $
+ * @version $Id: WindRedisCache.php 3904 2013-01-08 07:01:26Z yishuo $
  * @package wind.cache.strategy
  */
 class WindRedisCache extends AbstractWindCache {
@@ -131,8 +131,7 @@ class WindRedisCache extends AbstractWindCache {
 	 * //TODO 调用其他方法开放调用，重构 @see WindModule::__call()
 	 */
 	public function __call($methodName, $args) {
-		if (!method_exists($this->redis, $methodName)) throw new WindCacheException(
-			'The method "' . $methodName . '" is no in redis');
+		if (!method_exists($this->redis, $methodName)) throw new WindCacheException('[cache.strategy.WindRedisCache] The method "' . $methodName . '" is no in redis');
 		return call_user_func_array(array($this->redis, $methodName), $args);
 	}
 	
@@ -143,14 +142,14 @@ class WindRedisCache extends AbstractWindCache {
 		parent::setConfig($config);
 		$auth = $this->getConfig('auth', '', '');
 		if ($auth && (true !== $this->redis->auth($auth))) {
-			throw new WindCacheException('Authenticate the redis connection error');
+			throw new WindCacheException('[cache.strategy.WindRedisCache.setConfig] Authenticate the redis connection error');
 		}
 		$servers = $this->getConfig('servers', '', array());
 		$defaultServer = array('host' => '', 'port' => 6379, 'timeout' => 0, 'pconn' => false, 'persistent_id' => '');
 		foreach ((array) $servers as $server) {
-			if (!is_array($server)) throw new WindCacheException('The redis config is incorrect');
+			if (!is_array($server)) throw new WindCacheException('[cache.strategy.WindRedisCache.setConfig] The redis config is incorrect');
 			$args = array_merge($defaultServer, $server);
-			if (!isset($server['host'])) throw new WindCacheException('The redis server ip address is not exist');
+			if (!isset($server['host'])) throw new WindCacheException('[cache.strategy.WindRedisCache.setConfig] The redis server ip address is not exist');
 			$method = $args['pconn'] === true ? 'pconnect' : 'connect';
 			$m_args = array($args['host'], $args['port'], $args['timeout']);
 			// 如果是长链接，则会存在一个长链接的ID号

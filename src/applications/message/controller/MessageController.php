@@ -163,8 +163,12 @@ class MessageController extends PwBaseController {
 		$page = $page ? $page : 1;
 		$perpage = $perpage ? $perpage : $this->perpage;
 		list($start, $limit) = Pw::page2limit($page, $perpage);
-		list($count, $messages) = $this->_getMessageService()->getDialogMessageList($dialogid, $limit, $start);
 		$dialog = $this->_getMessageService()->getDialog($dialogid);
+		if ($dialog['to_uid'] != $this->loginUser->uid) {
+			$this->showError('MESSAGE:dialog.error');
+		}
+		list($count, $messages) = $this->_getMessageService()->getDialogMessageList($dialogid, $limit, $start);
+
 		//更新统计数
 		$messageIds = array_keys($messages);
 		$num = $this->_getWindid()->read($this->loginUser->uid,$dialog['dialog_id'],$messageIds);
