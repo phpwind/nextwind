@@ -16,7 +16,7 @@ class PunchController extends AdminBaseController {
 	 * @see WindController::run()
 	 */
 	public function run() {
-		$config = $this->_getconfigDs()->getValues('site');
+		$config = Wekit::C()->getValues('site');
 		Wind::import('SRV:credit.bo.PwCreditBo');
 		$transfer = Wekit::C('credit', 'transfer');
 		$this->setOutput(PwCreditBo::getInstance(), 'creditBo');
@@ -56,16 +56,5 @@ class PunchController extends AdminBaseController {
 			->flush();
 		$this->showMessage('ADMIN:success');
 	}
-	
-	/**
-	 * 加载Config DS 服务
-	 * 
-	 * @return PwConfig
-	 */
-	private function _getconfigDs() {
-		return Wekit::load('config.PwConfig');
-	}
-
 }
-
 ?>

@@ -1,16 +1,17 @@
 <?php
-Wind::import('WINDID:service.user.dao.WindidUserInterface');
+Wind::import('WSRV:user.dao.WindidUserInterface');
 
 /**
  * 用户积分信息数据访问层
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidUserDataDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidUserDataDao.php 24810 2013-02-21 10:32:03Z jieyin $
  * @package windid.service.user.dao
  */
 class WindidUserDataDao extends WindidBaseDao implements WindidUserInterface {
-	protected $_table = 'windid_user_data';
+
+	protected $_table = 'user_data';
 	protected $_pk = 'uid';
 	protected $_dataStruct = array(
 		'uid', 
@@ -23,7 +24,7 @@ class WindidUserDataDao extends WindidBaseDao implements WindidUserInterface {
 		'credit6', 
 		'credit7', 
 		'credit8');
-	protected $_defaultbaseInstance = 'user.dao.WindidUserDefaultDao';
+	protected $_defaultBaseInstance = 'WSRV:user.dao.WindidUserDefaultDao';
 	
 	/* (non-PHPdoc) 
 	 * @see WindidUserInterface::getUserByUid()
@@ -194,29 +195,18 @@ class WindidUserDataDao extends WindidBaseDao implements WindidUserInterface {
 		}
 		return $user;
 	}
-	
-	// 表字段可扩展，重写对应的字段过滤方法，动态获取表结构
-	/* (non-PHPdoc) 
-	 * @see WindidBaseDao::_filterStruct()
+
+	/**
+	 * 获得数据表结构
+	 *
+	 * @return array
 	 */
-	protected function _filterStruct($array, $allow = array()) {
-		if (empty($array) || !is_array($array)) return array();
-		empty($allow) && $allow = $this->_getStruct();
-		if (empty($allow) || !is_array($allow)) return $array;
-		$data = array();
-		foreach ($array as $key => $value) {
-			in_array($key, $allow) && $data[$key] = $value;
-		}
-		return $data;
-	}
-	
-	/* (non-PHPdoc) 
-	 * @see WindidBaseDao::_getStruct()
-	 */
-	protected function _getStruct() {
+	public function getDataStruct() {
 		static $struct = array();
 		if (!$struct) {
-			$struct = parent::_getStruct();
+			$sql = $this->_bindTable('SHOW COLUMNS FROM %s');
+			$tbFields = $this->getConnection()->createStatement($sql)->queryAll(array(), 'Field');
+			$struct = array_keys($tbFields);
 		}
 		return $struct;
 	}

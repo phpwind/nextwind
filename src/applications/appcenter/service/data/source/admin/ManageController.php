@@ -1,6 +1,6 @@
 <?php
 defined('WEKIT_VERSION') or exit(403);
-Wind::import('APPS:admin.library.AdminBaseController');
+Wind::import('ADMIN:library.AdminBaseController');
 /**
  * 后台访问入口
  *
@@ -9,6 +9,7 @@ Wind::import('APPS:admin.library.AdminBaseController');
 class ManageController extends AdminBaseController {
 	
 	public function beforeAction($handlerAdapter) {
+		parent::beforeAction($handlerAdapter);
 		//TODO do something before all the action
 	}
 	

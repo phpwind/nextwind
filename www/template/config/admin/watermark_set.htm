@@ -16,35 +16,25 @@
 	
 	<form method="post" class="J_ajaxForm" action="{@url:/config/watermark/doset}" data-role="list">
 	<div class="h_a">水印策略</div>
-	<div class="table_purview mb10">
+	<div class="table_full mb10">
 		<table class="J_check_wrap" width="100%">
-			<col width="160">
-			<col width="120">
-			<tr class="hd">
-				<th>&nbsp;</th>
-				<td><label><input class="J_check_all" data-checklist="J_check_watermarkset" data-direction="y" name="" type="checkbox" value="">启用水印</label></td>
-				<td>&nbsp;</td>
-			</tr>
+			<colgroup>
+			<col class="th">
+			<col width="400">
+			<col>
+			</colgroup>
+			<!--# foreach ($watermarkExt as $name => $title) {#-->
 			<tr>
-				<th>论坛图片上传</th>
-				<td><input class="J_check" data-yid="J_check_watermarkset" name="markset[]" type="checkbox" value="bbs" {@Pw::ifcheck(in_array('bbs',$config['mark.markset']))}></td>
+				<th>{$title}</th>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[{$name}]" value="1" {@Pw::ifcheck(Pw::inArray($name,$config['mark.markset']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[{$name}]" value="0" {@Pw::ifcheck(!Pw::inArray($name,$config['mark.markset']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
 				<td>&nbsp;</td>
 			</tr>
-			<tr>
-				<th>相册图片上传</th>
-				<td><input class="J_check" data-yid="J_check_watermarkset" name="markset[]" type="checkbox" value="album" {@Pw::ifcheck(in_array('album',$config['mark.markset']))}></td>
-				<td>&nbsp;</td>
-			</tr>
-			<!-- <tr>
-				<th>日志图片上传</th>
-				<td><input class="J_check" data-yid="J_check_watermarkset" name="markset[]" type="checkbox" value="diary" {@Pw::ifcheck(in_array('diary',$config['mark.markset']))}></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<th>文章图片上传</th>
-				<td><input class="J_check" data-yid="J_check_watermarkset" name="markset[]" type="checkbox" value="cms" {@Pw::ifcheck(in_array('cms',$config['mark.markset']))}></td>
-				<td>&nbsp;</td>
-			</tr> -->
+			<!--#}#-->
 		</table>
 	</div>
 	<div class="btn_wrap">

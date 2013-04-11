@@ -1,11 +1,10 @@
-<div id="J_login_question_set_wrap" tabindex="0" class="core_pop_wrap">
-		<div class="core_pop">
+
 			<div class="pop_login">
 				<div class="pop_top J_drag_handle">
-					<a href="" class="pop_close" id="J_login_question_close">关闭</a>
+					<a href="" class="pop_close J_close">关闭</a>
 					<strong>您必须设置安全问题</strong>
 				</div>
-				<form id="J_head_question_set_form" action="{@url:u/login/dosetting}" method="post" >
+				<form id="J_question_set_form" action="{@url:u/login/dosetting}" method="post" >
 				<input type="hidden" name="_statu" value="{$_statu}">
 				<input type="hidden" name="v" value="{$v}" />
 				<div class="pop_cont">
@@ -42,16 +41,10 @@
 				</div>
 				</form>
 			</div>
-		</div>
-	</div>
 <script type="text/javascript">
 $(function(){
 	
-	var login_question_set_wrap = $('#J_login_question_set_wrap'),
-		login_question_set_tips = $('#J_login_question_set_tips');
-	
-	//拖动组件
-	login_question_set_wrap.draggable( { handle : '.J_drag_handle'} );
+	var login_question_set_tips = $('#J_login_question_set_tips');
 
 	//自定义问题
 	var myqustion_dl = $('#J_myqustion_dl');
@@ -63,20 +56,19 @@ $(function(){
 		}
 	});
 	
-	//关闭
-	$('#J_login_question_close').on('click', function(e){
-		e.preventDefault();
-		login_question_set_wrap.remove();
-		$('#J_sidebar_login').focus();
-	});
-	
 	//提交
-	$('#J_head_question_set_form').ajaxForm({
+	var form = $('#J_question_set_form'),
+		btn = form.find('button:submit');
+	form.ajaxForm({
 		dataType : 'json',
-		//beforeSubmit : function (arr, $form, options) {},
+		beforeSubmit : function (arr, $form, options) {
+			Wind.Util.ajaxBtnDisable(btn);
+		},
 		success : function (data, statusText, xhr, $form) {
+			Wind.Util.ajaxBtnEnable(btn);
 			if(data.state === 'success') {
-				Wind.Util.resultTip({
+				Wind.Util.formBtnTips({
+					wrap: btn.parent(),
 					msg : '设置成功 即将跳转',
 					callback : function(){
 						window.location.href = data.referer;

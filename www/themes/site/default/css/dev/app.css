@@ -3,7 +3,7 @@
 @explain: 应用
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: app.css 23148 2013-01-06 11:29:22Z yanchixia $
+$Id: app.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 #*/
 
@@ -13,7 +13,6 @@ $Id: app.css 23148 2013-01-06 11:29:22Z yanchixia $
 ===================
 */
 .app_page{
-	padding:10px 15px 15px;
 }
 
 /*
@@ -21,23 +20,8 @@ $Id: app.css 23148 2013-01-06 11:29:22Z yanchixia $
 标题
 ===================
 */
-.app_page .hd{
-	border-bottom:1px solid #e8e8e8;
-	padding-bottom:5px;
-	margin-bottom:15px;
-	height:30px;
-}
-.app_page .hd h2{
-	float:left;
+.app_page h2{
 	font-size:14px;
-	line-height:30px;
-}
-.app_page .hd .search{
-	float:right;
-}
-.app_page .hd .input{
-	padding:3px 4px 2px;
-	margin-right:5px;
 }
 
 /*
@@ -46,7 +30,7 @@ $Id: app.css 23148 2013-01-06 11:29:22Z yanchixia $
 ===================
 */
 .app_page .ct{
-	color:#666;
+	padding:20px 10px;
 	min-height:400px;
 }
 .app_page .ct ul{
@@ -56,10 +40,6 @@ $Id: app.css 23148 2013-01-06 11:29:22Z yanchixia $
 	float:left;
 	width:49.5%;
 	height:120px;
-}
-.app_page .ct li img{
-	float:left;
-	margin-right:10px;
 }
 .app_page .ct li div{
 	float:left;
@@ -72,7 +52,6 @@ $Id: app.css 23148 2013-01-06 11:29:22Z yanchixia $
 	overflow:hidden;
 }
 .app_page .ct li a.in{
-	color:#999;
 }
 .app_page .ct li a.in em{
 	font-family:Simsun;
@@ -82,15 +61,25 @@ $Id: app.css 23148 2013-01-06 11:29:22Z yanchixia $
 	margin-bottom:5px;
 }
 
-/*
-===================
-搜索数量
-===================
-*/
-.search_num{
-	margin-bottom:15px;
+/*全局应用图标效果*/
+.app_icon{
+	float:left;
+	margin-right:10px;
+	display:inline-block;
+	vertical-align:top;
+	width:80px;
+	height:80px;
+	position:relative;
+	background:#f7f7f7;
 }
-
-
+.app_icon b{
+	position:absolute;
+	left:0;
+	top:0;
+	width:80px;
+	height:80px;
+	background:url(../../images/app/app_bg.png) no-repeat;
+	_background:none;
+}
 
 

@@ -7,7 +7,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PasswordController.php 22293 2012-12-21 05:09:51Z long.shi $
+ * @version $Id: PasswordController.php 24759 2013-02-20 07:02:37Z jieyin $
  * @package src.products.u.controller.profile
  */
 class PasswordController extends BaseProfileController {
@@ -25,8 +25,10 @@ class PasswordController extends BaseProfileController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:profile.password.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:profile.password.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/** 
@@ -34,9 +36,10 @@ class PasswordController extends BaseProfileController {
 	 */
 	public function editAction() {
 		//创始人不允许在前台修改密码
-		if (Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($this->loginUser->username)) {
+/*		if (Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($this->loginUser->username)) {
 			$this->showError('USER:founder.edit');
 		}
+		*/
 		list($newPwd, $oldPwd, $rePwd) = $this->getInput(array('newPwd', 'oldPwd', 'rePwd'), 'post');
 		if (!$oldPwd) {
 			$this->showError('USER:pwd.change.oldpwd.require');
@@ -48,8 +51,9 @@ class PasswordController extends BaseProfileController {
 			$this->showError('USER:user.error.-20');
 		}
 		
+		$this->checkOldPwd($this->loginUser->uid, $oldPwd);
+
 		$userDm = new PwUserInfoDm($this->loginUser->uid);
-		$userDm->setUsername($this->loginUser->username);
 		$userDm->setPassword($newPwd);
 		$userDm->setOldPwd($oldPwd);
 		/* @var $userDs PwUser */
@@ -82,6 +86,9 @@ class PasswordController extends BaseProfileController {
 		if (!$oldPwd) {
 			$this->showError('USER:pwd.error');
 		}
+		
+		$this->checkOldPwd($this->loginUser->uid, $oldPwd);
+
 		$userDm = new PwUserInfoDm($this->loginUser->uid);
 		$userDm->setOldPwd($oldPwd);
 		
@@ -119,6 +126,7 @@ class PasswordController extends BaseProfileController {
 		if (($result = $userDs->editUser($userDm, PwUser::FETCH_MAIN)) instanceof PwError) {
 			$this->showError($result->getError());
 		}
+		$this->loginUser->reset();
 		$this->showMessage('USER:login.question.setting.success', 'profile/password/question');
 	}
 	
@@ -147,12 +155,38 @@ class PasswordController extends BaseProfileController {
 	 */
 	public function checkOldPwdAction() {
 		$pwd = $this->getInput('pwd', 'post');
-		/* @var $userSrv PwUserService */
-		$userSrv = Wekit::load('user.srv.PwUserService');
-		if (($r = $userSrv->verifyUser($this->loginUser->uid, $pwd)) instanceof PwError) {
-			$this->showError('USER:pwd.error');
-		}
+		$this->checkOldPwd($this->loginUser->uid, $pwd);
 		$this->showMessage();
+	}
+
+	/**
+	 * 检查原密码
+	 * @param int $uid
+	 * @param string $pwd
+	 * @return PwError|true
+	 */
+	private function checkOldPwd($uid, $pwd) {
+		Wind::import('SRV:user.srv.PwTryPwdBp');
+		$userSrv = new PwTryPwdBp();
+		if (($r = $userSrv->checkPassword($uid, $pwd, $this->getRequest()->getClientIp())) instanceof PwError) {
+			$refer = '';
+			$error = $r->getError();
+			$msg = is_array($error) ? $error[0] : $error;
+			switch($msg) {
+				case 'USER:login.error.tryover.pwd':
+					$error[0] = 'USER:pwd.error.tryover';
+					$this->loginUser->reset();
+					$refer = 'u/login/logout';
+					break;
+				case 'USER:login.error.pwd':
+					$error[0] = 'USER:pw.error.limit';
+					break;
+				default:
+					break;
+			}
+			$this->showError($error, $refer);
+		}
+		return true;
 	}
 	
 	private function _getWindid() {

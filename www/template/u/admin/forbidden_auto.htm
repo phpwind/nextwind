@@ -68,7 +68,7 @@
 			<td>
 				<ul class="single_list cc">
 <!--#foreach ($types as $key => $value) {#-->
-					<li><label><input type="checkbox" name="type[]" value="{$key}" {@Pw::ifcheck(in_array($key, $config['autoForbidden.type']))}>{$value['title']}</label></li>
+					<li><label><input type="checkbox" name="type[]" value="{$key}" {@Pw::ifcheck(Pw::inArray($key, $config['autoForbidden.type']))}><span>{$value['title']}</span></label></li>
 <!--#}#-->
 				</ul>
 			</td>
@@ -77,16 +77,6 @@
 					<p>禁止头像：将清空用户当前的头像，并默认显示已禁止的头像，超过设定的天数后，显示网站默认头像</p>
 					<p>禁止签名：禁止用户签名后，签名栏显示管理员设置的禁止理由，超过设定的天数后，签名栏默认为空</p>
 			</div></td>
-		</tr>
-		<tr>
-			<th>禁止多帐号</th>
-			<td>
-				<ul class="switch_list cc">
-				<li><label><input type="radio" name="ban_others" value="1" {@Pw::ifcheck(1 == $config['autoForbidden.ban_others'])}><span>禁止</span></label></li>
-				<li><label><input type="radio" name="ban_others" value="0" {@Pw::ifcheck(0 == $config['autoForbidden.ban_others'])}><span>不禁止</span></label></li>
-				</ul>
-			</td>
-			<td><div class="fun_tips">同时禁止此帐号绑定的所有帐号。</div></td>
 		</tr>
 		<tr>
 			<th>禁止理由</th>

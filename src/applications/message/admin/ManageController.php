@@ -25,7 +25,6 @@ class ManageController extends AdminBaseController {
 			$fromUid = $userinfo['uid'] ? $userinfo['uid'] : 0;
 		}
 		list($count, $messages) = $this->_getMessageService()->getMessagesByUid($start,$limit,$fromUid,$pwStartTime,$pwEndTime,$keyword);
-		
 		$this->setOutput($count, 'count');
 		$this->setOutput($page, 'page');
 		$this->setOutput($perpage, 'perpage');

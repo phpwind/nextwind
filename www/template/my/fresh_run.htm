@@ -8,7 +8,8 @@
 	cursor:url({@theme:images}/common/pre.cur),auto;
 }
 .aNext{
-	cursor:url({@theme:images}/common/next.cur),auto;right:0;
+	cursor:url({@theme:images}/common/next.cur),auto;
+	right:0;
 }
 </style>
 </head>
@@ -25,6 +26,7 @@
 			<div class="main_body">
 				<div class="main_content">
 					<!--新鲜事列表-->
+					<pw-tpl id="first_segment"/>
 					<!--点击输入框后-->
 					<div class="fresh_post box_wrap" id="J_fresh_post_wrap">
 						<form id="J_fresh_post_form" action="{@url:my/fresh/post?_getHtml=1}" method="post">

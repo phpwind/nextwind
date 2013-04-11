@@ -9,7 +9,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ContentcheckController.php 22112 2012-12-19 08:09:21Z jinlong.panjl $
+ * @version $Id: ContentcheckController.php 23742 2013-01-15 09:22:58Z jieyin $
  * @package forum
  */
 
@@ -96,7 +96,7 @@ class ContentcheckController extends AdminBaseController {
 
 		Wind::import('SRV:forum.srv.operation.PwDeleteTopic');
 		Wind::import('SRV:forum.srv.dataSource.PwFetchTopicByTid');
-		$deleteTopic = new PwDeleteTopic(new PwFetchTopicByTid($tid), new PwUserBo($this->adminUser->getUid()));
+		$deleteTopic = new PwDeleteTopic(new PwFetchTopicByTid($tid), new PwUserBo($this->loginUser->uid));
 		$deleteTopic->setIsDeductCredit(1)->execute();
 
 		$this->showMessage('success');
@@ -183,7 +183,7 @@ class ContentcheckController extends AdminBaseController {
 
 		Wind::import('SRV:forum.srv.operation.PwDeleteReply');
 		Wind::import('SRV:forum.srv.dataSource.PwFetchReplyByPid');
-		$deleteReply = new PwDeleteReply(new PwFetchReplyByPid($pid), PwUserBo::getInstance($this->adminUser->getUid()));
+		$deleteReply = new PwDeleteReply(new PwFetchReplyByPid($pid), PwUserBo::getInstance($this->loginUser->uid));
 		$deleteReply->setIsDeductCredit(1)->execute();
 
 		$this->showMessage('success');

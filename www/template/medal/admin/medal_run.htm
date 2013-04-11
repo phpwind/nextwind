@@ -36,7 +36,7 @@
 					<td>操作</td>
 				</tr>
 			</thead>
-		<!--# foreach ($medalList as $medal):
+		<!--# foreach ($medalList as $medal){
 				$type = ($medal['receive_type']==1) ? '自动颁发' : '手动颁发';#-->
 			<tr>
 				<td><input type="nember" class="input length_0" name="orderid[{$medal['medal_id']}]" value="{$medal['vieworder']}" /></td>
@@ -49,12 +49,12 @@
 					<input type="hidden" name="medalid[{$medal['medal_id']}]" value="{$medal['medal_id']}"/>
 				</td>
 				<td><a title="编辑勋章" href="{@url:medal/medal/edit?id=$medal['medal_id']}" class="mr5 J_dialog">[编辑]</a>
-					<!--# if($medal['medal_type'] != 1): #-->
+					<!--# if($medal['medal_type'] != 1){ #-->
 					<a class="J_ajax_del" data-msg="确定要删除此勋章？" href="{@url:medal/medal/doDel?id=$medal['medal_id']}">[删除]</a>
-					<!--# endif; #-->
+					<!--# } #-->
 				</td>
 			</tr>
-		<!--# endforeach; #-->
+		<!--# } #-->
 		</table>
 		<div class="p10"><page tpl='TPL:common.page'  total="$totalpage" page="$page" per="$perpage" count="$count" url="medal/medal/run"/></div>
 	</div>

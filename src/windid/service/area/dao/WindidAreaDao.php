@@ -6,12 +6,12 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidAreaDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidAreaDao.php 23820 2013-01-16 06:14:07Z jieyin $
  * @package windid.service.area.dao
  */
 class WindidAreaDao extends WindidBaseDao {
 	
-	protected $_table = 'windid_area';
+	protected $_table = 'area';
 	protected $_pk = 'areaid';
 	protected $_dataStruct = array('areaid', 'name', 'parentid', 'joinname');
 	

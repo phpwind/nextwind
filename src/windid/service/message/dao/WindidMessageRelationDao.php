@@ -6,14 +6,14 @@
  * @author peihong.zhang
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageRelationDao.php 23072 2013-01-06 02:12:11Z gao.wanggao $
+ * @version $Id: WindidMessageRelationDao.php 23820 2013-01-16 06:14:07Z jieyin $
  * @package forum
  */
 
 class WindidMessageRelationDao extends WindidBaseDao {
 	
 	protected $_pk = 'id';
-	protected $_table = 'windid_message_relation';
+	protected $_table = 'message_relation';
 	protected $_dataStruct = array('id', 'dialog_id', 'message_id','is_read', 'is_send');
 
 	/**

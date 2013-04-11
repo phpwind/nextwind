@@ -115,7 +115,7 @@
 				_this = this;
 
 			//点击相册
-			element.on('click', 'a', function(e) {
+			element.on('click', 'a[data-big]', function(e) {
 				e.preventDefault();
 				var $this = $(this),
 					index = $this.parent().index(),
@@ -255,7 +255,8 @@
 			}
 
 			$('#J_gallery_count_now').text(_index + 1);
-			item = element.children(':eq(' + _index + ')').children();
+			item = element.children(':eq(' + _index + ')').find('a[data-big]');
+			window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
 			preview.attr('src', item.data('big')).data('index', _index);
 			_this.sizeReset(preview);
 		},

@@ -13,7 +13,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindFactory.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: WindFactory.php 3914 2013-01-23 03:07:17Z yishuo $
  * @package base
  */
 class WindFactory {
@@ -48,7 +48,8 @@ class WindFactory {
 			$instance = $this->singleton[$alias];
 		} else {
 			if (!$definition) return null;
-			if (isset($definition['constructor-args']) && !$args) $this->buildArgs($definition['constructor-args'], 
+			$_unscope = empty($args);
+			if (isset($definition['constructor-args']) && $_unscope) $this->buildArgs($definition['constructor-args'], 
 				$args);
 			if (!isset($definition['className'])) $definition['className'] = Wind::import(@$definition['path']);
 			$instance = $this->createInstance($definition['className'], $args);
@@ -56,7 +57,7 @@ class WindFactory {
 			if (isset($definition['properties'])) $this->buildProperties($definition['properties'], $instance);
 			if (isset($definition['initMethod'])) $this->executeInitMethod($definition['initMethod'], $instance);
 			!isset($definition['scope']) && $definition['scope'] = 'application';
-			$this->setScope($alias, $definition['scope'], $instance);
+			$_unscope && $this->setScope($alias, $definition['scope'], $instance);
 			if (isset($definition['destroy'])) $this->destories[$alias] = array($instance, $definition['destroy']);
 		}
 		if (isset($definition['proxy'])) {

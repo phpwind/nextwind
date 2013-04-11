@@ -1,11 +1,11 @@
 <?php
 Wind::import('APPS:space.controller.SpaceBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
+ * the last known user to change this file in the repository  <$LastChangedBy: long.shi $>
  * @author  Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ThreadController.php 21659 2012-12-12 07:00:13Z xiaoxia.xuxx $
+ * @version $Id: ThreadController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package
  */
 class ThreadController extends SpaceBaseController {
@@ -46,16 +46,18 @@ class ThreadController extends SpaceBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
 
 		$des = $lang->getMessage('SEO:space.thread.run.description', array($this->space->spaceUser['username']));
 
 		if ($page <= 1) {
-			PwSeoBo::setCustomSeo($lang->getMessage('SEO:space.thread.run.title', array($this->space->spaceUser['username'], $this->space->space['space_name'])), '', $des);
+			$seoBo->setCustomSeo($lang->getMessage('SEO:space.thread.run.title', array($this->space->spaceUser['username'], $this->space->space['space_name'])), '', $des);
 
 		} else {
-			PwSeoBo::setCustomSeo($lang->getMessage('SEO:space.thread.run.page.title', array($this->space->spaceUser['username'], $page, $this->space->space['space_name'])), '', $des);
+			$seoBo->setCustomSeo($lang->getMessage('SEO:space.thread.run.page.title', array($this->space->spaceUser['username'], $page, $this->space->space['space_name'])), '', $des);
 		}
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -92,15 +94,16 @@ class ThreadController extends SpaceBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
-
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
 		$des = $lang->getMessage('SEO:space.thread.post.description', array($this->space->spaceUser['username']));
 
 		if ($page <= 1) {
-			PwSeoBo::setCustomSeo($lang->getMessage('SEO:space.thread.post.title', array($this->space->spaceUser['username'], $this->space->space['space_name'])), '', $des);
+			$seoBo->setCustomSeo($lang->getMessage('SEO:space.thread.post.title', array($this->space->spaceUser['username'], $this->space->space['space_name'])), '', $des);
 		} else {
-			PwSeoBo::setCustomSeo($lang->getMessage('SEO:space.thread.post.page.title', array($this->space->spaceUser['username'], $page, $this->space->space['space_name'])), '', $des);
+			$seoBo->setCustomSeo($lang->getMessage('SEO:space.thread.post.page.title', array($this->space->spaceUser['username'], $page, $this->space->space['space_name'])), '', $des);
 		}
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	private function _getCountPost($spaceUid,$loginUid) {

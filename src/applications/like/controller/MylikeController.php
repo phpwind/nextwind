@@ -70,15 +70,19 @@ class MylikeController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:like.mylike.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:like.mylike.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	public function taAction() {
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:like.mylike.ta.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:like.mylike.ta.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	public function dataAction() {
@@ -98,7 +102,7 @@ class MylikeController extends PwBaseController {
 			$_data[$k]['url'] = $likeInfos[$logList['likeid']]['url'];
 			$_data[$k]['image'] = $likeInfos[$logList['likeid']]['image'];
 			$_data[$k]['subject'] =  WindSecurity::escapeHTML($likeInfos[$logList['likeid']]['subject']);
-			$_data[$k]['descrip'] =  WindSecurity::escapeHTML($likeInfos[$logList['likeid']]['content']);
+			$_data[$k]['descrip'] =  WindSecurity::escapeHTML(strip_tags($likeInfos[$logList['likeid']]['content']));
 			$_data[$k]['uid'] = $likeInfos[$logList['likeid']]['uid'];
 			$_data[$k]['username'] = $likeInfos[$logList['likeid']]['username'];
 			$_data[$k]['avatar'] = Pw::getAvatar($likeInfos[$logList['likeid']]['uid'], 'small');
@@ -133,8 +137,8 @@ class MylikeController extends PwBaseController {
 	 *
 	 */
 	public function doLikeAction() {
-		$typeid = (int) $this->getInput('typeid', 'get');
-		$fromid = (int) $this->getInput('fromid', 'get');
+		$typeid = (int) $this->getInput('typeid', 'post');
+		$fromid = (int) $this->getInput('fromid', 'post');
 		if ($typeid < 1 || $fromid < 1) $this->showError('BBS:like.fail');
 		$resource = $this->_getLikeService()->addLike($this->loginUser, $typeid, $fromid);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
@@ -183,7 +187,7 @@ class MylikeController extends PwBaseController {
 		$resource = $this->_getLikeService()->addTag($this->loginUser->uid,$tagname);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
 		$tagid = (int)$resource;
-		$this->_getLikeService()->editLogTag($logid, $tagid, 1);;
+		$this->_getLikeService()->editLogTag($logid, $tagid, 1);
 		$this->setOutput(array('id'=>$tagid,'name'=>$tagname), 'data');
 		$this->showMessage('BBS:like.success');
 	}

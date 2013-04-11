@@ -3,7 +3,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwApplication.php 20132 2012-10-23 10:54:49Z long.shi $
+ * @version $Id: PwApplication.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package products
  * @subpackage appcenter.service
  */
@@ -155,7 +155,7 @@ class PwApplication {
 	 * @return PwApplicationDao
 	 */
 	private function _load() {
-		return Wekit::loadDao('APPS:appcenter.service.dao.PwApplicationDao');
+		return Wekit::loadDao('APPCENTER:service.dao.PwApplicationDao');
 	}
 }
 

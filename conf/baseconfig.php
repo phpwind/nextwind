@@ -45,47 +45,7 @@ return array(
 'redis.key.prefix' => 'pw',
 
 'apc.isopen' => 0,				//开启apc缓存，请确保服务器上已安装 apc 服务
-
-
-/*-----预设缓存键值-----*/
-
-'precache' => array(
-	'default/index/run' => array(
-		array('hot_tags', array(0, 10)), 'medal_auto', 'medal_all'
-	),
-	'bbs/index/run' => array(
-		array('hot_tags', array(0, 10)), 'medal_auto', 'medal_all'
-	),
-	'bbs/forum/run' => array(
-		array('hot_tags', array(0, 10))
-	),
-	'bbs/cate/run' => array(
-		array('hot_tags', array(0, 10))
-	),
-	'bbs/thread/run' => array(
-		array('hot_tags', array(0, 10)), 'medal_auto', 'medal_all'
-	),
-	'bbs/read/run' => array('level', 'group_right', 'medal_all'),
-),
-
-
-/*-----预设钩子键值-----*/
-
-'prehook' => array(
-	'ALL' => array('s_header_nav', 's_footer'),
-	'LOGIN' => array('s_header_info_1', 's_header_info_2'),
-	'UNLOGIN' => array(),
-
-	'default/index/run' => array('c_index_run', 'm_PwThreadList'),
-	'bbs/index/run' => array('c_index_run', 'm_PwThreadList'),
-	'bbs/cate/run' => array('c_cate_run', 'm_PwThreadList'),
-	'bbs/thread/run' => array('c_thread_run', 'm_PwThreadList', 's_PwThreadType'),
-	'bbs/read/run' => array('c_read_run', 'm_PwThreadDisplay', 's_PwThreadType', 's_PwUbbCode_convert', 's_PwThreadsHitsDao_add'),
-	'bbs/post/doadd' => array('c_post_doadd', 'm_PwTopicPost', 's_PwThreadsDao_add', 's_PwThreadsIndexDao_add', 's_PwThreadsCateIndexDao_add', 's_PwThreadsContentDao_add', 's_PwForumStatisticsDao_update', 's_PwForumStatisticsDao_batchUpdate', 's_PwTagRecordDao_add', 's_PwTagRelationDao_add', 's_PwTagDao_update', 's_PwTagDao_add', 's_PwThreadsContentDao_update', 's_PwFreshDao_add', 's_PwUserDataDao_update', 's_PwUser_update', 's_PwAttachDao_update', 's_PwThreadAttachDao_update', 's_PwCreditOperationConfig'),
-	'bbs/post/doreply' => array('c_post_doreply', 'm_PwReplyPost', 's_PwPostsDao_add', 's_PwForumStatisticsDao_update', 's_PwForumStatisticsDao_batchUpdate', 's_PwThreadsDao_update', 's_PwThreadsIndexDao_update', 's_PwThreadsCateIndexDao_update', 's_PwThreadsDigestIndexDao_update', 's_PwUserDataDao_update', 's_PwUser_update', 's_PwCreditOperationConfig'),
-	'u/login/dorun' => array('c_login_dorun', 's_PwUserDataDao_update', 's_PwUser_update'),
-	'u/login/welcome' => array('s_PwUserDataDao_update', 's_PwUser_update', 'm_login_welcome', 's_PwCronDao_update'),
-),
+'db.table.name' => 'cache',		//开启db缓存，指定表明
 
 /**=====配置结束于此=====**/
 );

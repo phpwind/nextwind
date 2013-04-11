@@ -6,18 +6,18 @@ Wind::import('WIND:mail.WindMail');
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidMail.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidMail.php 23833 2013-01-16 06:41:42Z jieyin $
  * @package windid.service.mail
  */
 class WindidMail {
 	
-	private $_defaultConfig = 'WINDID:service.config.WindidConfig';
+	private $_defaultConfig = 'WSRV:config.WindidConfig';
 	private $_mail;
 	private $_config;
 
 	public function __construct($config = null) {
 		if (!is_object($config)) {
-			$class = Wind::import('WINDID:service.config.WindidConfig');
+			$class = Wind::import('WSRV:config.WindidConfig');
 			$config = new WindidConfig(WindidConfig::getConfig('mail'));
 		}
 		$this->_mail = new WindMail();

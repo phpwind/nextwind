@@ -3,11 +3,7 @@
 Wind::import('SRV:forum.srv.manage.PwThreadManageDo');
 
 /**
- * 帖子发布流程
- *
- * -> 1.check 检查帖子发布运行环境
- * -> 2.appendDo(*) 增加帖子发布时的行为动作,例:投票、附件等(可选)
- * -> 3.execute 发布
+ * 帖子管理操作-已阅
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com

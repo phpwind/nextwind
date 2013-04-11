@@ -14,9 +14,9 @@ class ACloudVerCustomizedMessage extends ACloudVerCustomizedBase {
 	 * @return int
 	 */
 	public function countUnreadMessage($uid) {
-		if ($uid < 1) return $this->buildResponse ( MESSAGE_UID_ERROR );
+		if ($uid < 1) return $this->buildResponse ( MESSAGE_UID_ERROR,"用户ID错误" );
 		$user = new PwUserBo ( intval ( $uid ) );
-		if(empty($user)) return $this->buildResponse( MESSAGE_UID_ERROR );
+		if(empty($user)) return $this->buildResponse( MESSAGE_UID_ERROR,"用户ID错误" );
 		$result = $user->info ['messages'];
 		return $this->buildResponse ( 0, array ('count' => intval ( $result ) ) );
 	}
@@ -33,7 +33,7 @@ class ACloudVerCustomizedMessage extends ACloudVerCustomizedBase {
 	public function getMessageByUid($uid, $offset, $limit) {
 		$user = PwUserBo::getInstance ( $uid );
 		if (! $user->isExists ())
-			return $this->buildResponse ( MESSAGE_UID_ERROR );
+			return $this->buildResponse ( MESSAGE_UID_ERROR,"用户ID错误" );
 		list ( $count, $result ) = $this->getPwMessageService ()->getDialogs ( $uid, $offset, $limit );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );
@@ -65,7 +65,7 @@ class ACloudVerCustomizedMessage extends ACloudVerCustomizedBase {
 	public function sendMessage($fromUid, $toUid, $content) {
 		list ( $fromUid, $toUid, $content ) = array (intval ( $fromUid ), intval ( $toUid ), trim ( $content ) );
 		if ($fromUid < 1 || $toUid < 1 || ! $content)
-			return $this->buildResponse ( MESSAGE_INVALID_PARAMS );
+			return $this->buildResponse ( MESSAGE_INVALID_PARAMS,"发送消息接口错误");
 		$result = $this->getPwMessageService ()->sendMessageByUid ( $toUid, $content, $fromUid );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );
@@ -85,7 +85,7 @@ class ACloudVerCustomizedMessage extends ACloudVerCustomizedBase {
 	 */
 	public function getMessageById($messageId){
 		$messageId = intval($messageId);
-		if($messageId < 1) return $this->buildResponse ( MESSAGE_INVALID_PARAMS );
+		if($messageId < 1) return $this->buildResponse ( MESSAGE_INVALID_PARAMS,"参数错误" );
 		$message = $this->_getMessageDs()->getMessageById($messageId);
 		return $this->buildResponse(0,array('message' => $message));
 	}
@@ -102,7 +102,7 @@ class ACloudVerCustomizedMessage extends ACloudVerCustomizedBase {
 	public function getMessageAndReply($dialogId, $offset, $limit) {
 		list ( $dialogId, $offset, $limit ) = array (intval ( $dialogId ), intval ( $offset ), intval ( $limit ) );
 		if ($dialogId < 1)
-			return $this->buildResponse ( MESSAGE_INVALID_PARAMS );
+			return $this->buildResponse ( MESSAGE_INVALID_PARAMS,"参数错误" );
 		list ( $count, $dialogResult ) = $this->getPwMessageService ()->getDialogMessageList ( $dialogId, $limit,$offset );
 		if ($dialogResult instanceof PwError)
 			return $this->buildResponse ( - 1, $dialogResult->getError () );

@@ -3,7 +3,7 @@
 @explain: 关注/粉丝/找人/访问脚印
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: fans.css 20308 2012-10-25 09:46:00Z yanchixia $
+$Id: fans.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 #*/
 
@@ -17,7 +17,7 @@ $Id: fans.css 20308 2012-10-25 09:46:00Z yanchixia $
 }
 
 .fans_list{
-	padding:15px;
+	padding:15px 0;
 }
 .fans_list dl{
 	border-bottom:1px dashed #e6e6e6;

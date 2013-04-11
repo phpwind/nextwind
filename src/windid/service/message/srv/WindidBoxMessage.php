@@ -4,20 +4,20 @@
  * the last known user to change this 
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidBoxMessage.php 23096 2013-01-06 05:25:31Z gao.wanggao $ 
+ * @version $Id: WindidBoxMessage.php 24705 2013-02-16 05:18:04Z jieyin $ 
  * @package 
  */
 class WindidBoxMessage {
 	
 	/**
 	 * 发件箱服务
-	 * Enter description here ...
+	 *
 	 * @param unknown_type $fromUid
 	 * @param unknown_type $start
 	 * @param unknown_type $limit
 	 */
 	public function fromBox($fromUid, $start = 0, $limit = 10) {
-		Wind::import('WINDID:service.message.srv.vo.WindidMessageSo');
+		Wind::import('WSRV:message.srv.vo.WindidMessageSo');
 		$vo = new WindidMessageSo();
 		$vo->setFromUid($fromUid);
 		$count = $this->_getMessageDs()->countMessage($vo);
@@ -41,13 +41,13 @@ class WindidBoxMessage {
 	
 	/**
 	 * 收件箱服务
-	 * Enter description here ...
+	 *
 	 * @param unknown_type $toUid
 	 * @param unknown_type $start
 	 * @param unknown_type $limit
 	 */
 	public function toBox($toUid, $start = 0, $limit = 10) {
-		Wind::import('WINDID:service.message.srv.vo.WindidMessageSo');
+		Wind::import('WSRV:message.srv.vo.WindidMessageSo');
 		$vo = new WindidMessageSo();
 		$vo->setToUid($toUid);
 		$count = $this->_getMessageDs()->countMessage($vo);
@@ -73,11 +73,11 @@ class WindidBoxMessage {
 		//查询私信的属主
 		$list = $this->_getMessageDs()->fetchMessage($messageIds);
 
-		foreach ($list AS $k=>$v) {
+		foreach ($list as $k=>$v) {
 			if ($v['to_uid'] != $uid) unset($list[$k]);
 		}
 		$relation = $this->_getMessageDs()->fetchRelationByMessageIds($messageIds, 0);
-		foreach ($relation AS $k=>$v) {
+		foreach ($relation as $k => $v) {
 			$relationIds[] = $v['id'];
 		}
 		$result = $this->_getMessageDs()->batchReadRelation($relationIds);
@@ -87,27 +87,25 @@ class WindidBoxMessage {
 	
 	public function deleteMessages($uid, $messageIds) {
 		$list = $this->_getMessageDs()->fetchMessage($messageIds);
-		foreach ($list AS $k=>$v) {
+		foreach ($list as $k => $v) {
 			if ($v['to_uid'] != $uid || $v['from_uid'] != $uid) unset($list[$k]);
 		}
 		return $this->_getMessageService()->deleteByMessageIds($messageIds);
 	}
 	
 	/**
-	 * 
 	 * @return WindidMessage
 	 */
 	private function _getMessageDs(){
-		return Windid::load('message.WindidMessage');
+		return Wekit::load('WSRV:message.WindidMessage');
 	}
 	
 	private function _getUserDs(){
-		return Windid::load('user.WindidUser');
+		return Wekit::load('WSRV:user.WindidUser');
 	}
 	
 	private function _getMessageService(){
-		return Windid::load('message.srv.WindidMessageService');
+		return Wekit::load('WSRV:message.srv.WindidMessageService');
 	}
-	
 }
 ?>

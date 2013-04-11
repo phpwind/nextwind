@@ -5,7 +5,7 @@
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: UploadController.php 20996 2012-11-23 08:33:21Z jieyin $
+ * @version $Id: UploadController.php 23975 2013-01-17 10:20:11Z jieyin $
  * @package forum
  */
 
@@ -13,7 +13,7 @@ class UploadController extends PwBaseController {
 
 	public function run() {
 
-		header("Content-type: text/html; charset=" . Wekit::app()->charset);
+		header("Content-type: text/html; charset=" . Wekit::V('charset'));
 		//$pwServer['HTTP_USER_AGENT'] = 'Shockwave Flash';
 		$swfhash = 1/*GetVerify($winduid)*/;
 		echo Pw::jsonEncode(array('uid' => $this->loginUser->uid, 'a' => 'dorun', 'verify' => $swfhash));
@@ -29,7 +29,7 @@ class UploadController extends PwBaseController {
 		$fid = $this->getInput('fid', 'post');
 
 		Wind::import('SRV:upload.action.PwAttMultiUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwAttMultiUpload($user, $fid);
 
 		$upload = new PwUpload($bhv);
@@ -54,7 +54,7 @@ class UploadController extends PwBaseController {
 		$aid = $this->getInput('aid');
 		
 		Wind::import('SRV:upload.action.PwAttReplaceUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwAttReplaceUpload($this->loginUser, $aid);
 
 		$upload = new PwUpload($bhv);

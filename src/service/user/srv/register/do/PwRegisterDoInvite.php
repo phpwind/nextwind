@@ -8,7 +8,7 @@ Wind::import('SRV:invite.dm.PwInviteCodeDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRegisterDoInvite.php 17301 2012-09-04 09:38:54Z xiaoxia.xuxx $
+ * @version $Id: PwRegisterDoInvite.php 24134 2013-01-22 06:19:24Z xiaoxia.xuxx $
  * @package src.service.user.srv.register.do
  */
 class PwRegisterDoInvite extends PwRegisterDoBase {
@@ -30,7 +30,7 @@ class PwRegisterDoInvite extends PwRegisterDoBase {
 	 * @param PwUserInfoDm $userDm
 	 * @see PwRegisterDoBase::beforeRegister()
 	 */
-	public function beforeRegister($userDm) {
+	public function beforeRegister(PwUserInfoDm $userDm) {
 		if ($this->bp->config['type'] != 2) return false;
 		/* @var $inviteService PwInviteCodeService */
 		$inviteService = Wekit::load('invite.srv.PwInviteCodeService');
@@ -44,7 +44,7 @@ class PwRegisterDoInvite extends PwRegisterDoBase {
 	/* (non-PHPdoc)
 	 * @see PwRegisterDoBase::afterRegister()
 	 */
-	public function afterRegister($userDm) {
+	public function afterRegister(PwUserInfoDm $userDm) {
 		if ($this->bp->config['type'] != 2) return false;
 		/* @var $inviteDs PwInviteCode */
 		$inviteDs = Wekit::load('invite.PwInviteCode');

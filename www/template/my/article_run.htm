@@ -2,7 +2,7 @@
 <html>
 <head>
 <template source='TPL:common.head' load='true' />
-<link href="{@theme:css}/forum.css?v={@NEXT_RELEASE}" rel="stylesheet" />
+<link href="{@theme:css}/article.css?v={@NEXT_RELEASE}" rel="stylesheet" />
 </head>
 <body>
 <div class="wrap">
@@ -25,7 +25,7 @@
 					</nav>
 						<div class="thread_posts_list">
 							<!--# if ($threads) { #-->
-							<table width="100%" summary="帖子列表">
+							<table width="100%" summary="帖子列表" class="mb10">
 								<!--# foreach ($threads as $value) { 
 								$value['created_time'] = Pw::time2str($value['created_time'],'auto');
 								$value['lastpost_time'] = Pw::time2str($value['lastpost_time'],'auto');
@@ -33,20 +33,12 @@
 								<tr>
 									<td class="subject">
 										<p class="title">
-											<span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}"></i></span>
-											<span class="posts_icon" style="display:none">
-											<!--#if ($value['topped']) {#-->
-											<i class="icon_headtopic_{$value['topped']}" title="置顶"></i>
-											<!--#} else {#-->
-											<i class="icon_topic"></i>
-											<!--#}#-->
-											<!--#if ($value['digest']) {#--><i class="icon_digest" title="精华"></i><!--#}#-->
-											<!--#if ($value['locked']%3==1) {#--><i class="icon_lock" title="锁定"></i><!--#}#-->
-											</span>
+											<span class="posts_icon"><i class="icon_topic"></i></span>
+											<!--span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}"></i></span-->
 											<!--#if($value['topic_type']){#-->
-											<em class="s4">[<a href="{@url:bbs/thread/run?fid=$value['fid']&type=$value['topic_type']}" class="s4">{$topictypes[$value['topic_type']]['name']|html}</a>]</em>
+											<em class="s4">[<a href="{@url:bbs/thread/run?fid=$value['fid']&type=$value['topic_type']}" class="s4" target="_blank">{$topictypes[$value['topic_type']]['name']|html}</a>]</em>
 											<!--#}#-->
-											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}" target="_blank">{$value['subject']}</a><!--# if ($value['disabled']) { #--><span class="red">(审核中)</span><!--# } #-->
+											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="/*{$value['highlight_style']}*/" target="_blank">{$value['subject']}</a><!--# if ($value['disabled']) { #--><span class="red">(审核中)</span><!--# } #-->
 										</p>
 										<p class="info">
 											<span>{$value['created_time']}</span>
@@ -60,12 +52,12 @@
 								</tr>
 								<!--# } #-->
 							</table>
+							<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='my/article/run' />
 							<!--# } else { #-->
 							<div class="not_content">啊哦，您暂没有发布任何主题哦！</div>
 							<!--# } #-->
 						</div>
 					</div>
-					<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='my/article/run' />
 				</div>
 			</div>
 			<div class="main_sidebar">

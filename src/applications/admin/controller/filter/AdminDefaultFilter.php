@@ -1,5 +1,5 @@
 <?php
-Wind::import('WIND:filter.WindActionFilter');
+
 /**
  * 后台管理平台默认过滤器
  * 后台管理平台默认过滤器，职责:<ol>
@@ -11,20 +11,40 @@ Wind::import('WIND:filter.WindActionFilter');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-13
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminDefaultFilter.php 22312 2012-12-21 08:03:00Z yishuo $
+ * @version $Id: AdminDefaultFilter.php 24363 2013-01-29 08:24:25Z jieyin $
  * @package wind
  */
-class AdminDefaultFilter extends WindActionFilter {
+class AdminDefaultFilter extends PwBaseFilter {
 	
 	/*
 	 * (non-PHPdoc) @see WindHandlerInterceptor::preHandle()
 	 */
 	public function preHandle() {
-		$module = $this->router->getModule();
-		$controller = $this->router->getController();
-		$action = $this->router->getAction();
-		if (in_array("$module/$controller/$action", 
-			array('default/index/login', 'default/index/showVerify'))) return;
+
+		$url = array();
+		$var = Wekit::url();
+		$url['base'] = $var->base;
+		$url['res'] = $var->res;
+		$url['css'] = $var->css;
+		$url['images'] = $var->images;
+		$url['js'] = $var->js;
+		$url['attach'] = $var->attach;
+		$url['themes'] = $var->themes;
+		$url['extres'] = $var->extres;
+		Wekit::setGlobal($url, 'url');
+
+		$request = array(
+			'm' => $this->router->getModule(),
+			'c' => $this->router->getController(),
+			'a' => $this->router->getAction(),
+		);
+		$request['mc'] = $request['m'] . '/' . $request['c'];
+		$request['mca'] = $request['mc'] . '/' . $request['a'];
+		Wekit::setGlobal($request, 'request');
+
+		if (in_array($request['mca'], array('default/index/login', 'default/index/showVerify', 'appcenter/app/upload'))) {
+			return;
+		}
 		
 		/* @var $userService AdminUserService */
 		$userService = Wekit::load('ADMIN:service.srv.AdminUserService');
@@ -35,8 +55,8 @@ class AdminDefaultFilter extends WindActionFilter {
 		
 		/* @var $loginUser AdminUserBo */
 		$loginUser = Wekit::getLoginUser();
-		if (!$loginUser->isExists() || (!$founderService->isFounder($loginUser->getUsername()) && !$safeService->ipLegal(
-			Wekit::app()->clientIp))) {
+		if (!$loginUser->isExists() || (!$founderService->isFounder($loginUser->username) && !$safeService->ipLegal(
+			Wind::getComponent('request')->getClientIp()))) {
 			if (!$this->getRequest()->getIsAjaxRequest()) {
 				$this->forward->forwardAction('default/index/login');
 			} else {
@@ -46,13 +66,12 @@ class AdminDefaultFilter extends WindActionFilter {
 		}
 		
 		$_unVerifyTable = array('home', 'index', 'find');
-		if (!in_array(strtolower($controller), $_unVerifyTable)) {
-			if ($controller != 'adminlog') {
+		if (!in_array(strtolower($request['c']), $_unVerifyTable)) {
+			if ($request['c'] != 'adminlog') {
 				$logService = Wekit::load('ADMIN:service.srv.AdminLogService');
-				$logService->log($this->getRequest(), $loginUser->username, $module, $controller, 
-					$action);
+				$logService->log($this->getRequest(), $loginUser->username, $request['m'], $request['c'], $request['a']);
 			}
-			$_result = $userService->verifyUserMenuAuth($loginUser, $module, $controller, $action);
+			$_result = $userService->verifyUserMenuAuth($loginUser, $request['m'], $request['c'], $request['a']);
 			if ($_result instanceof PwError) $this->errorMessage->sendError($_result->getError());
 		}
 	}
@@ -60,7 +79,8 @@ class AdminDefaultFilter extends WindActionFilter {
 	/*
 	 * (non-PHPdoc) @see WindHandlerInterceptor::postHandle()
 	 */
-	public function postHandle() {}
+	public function postHandle() {
+	}
 }
 
 ?>

@@ -1,14 +1,14 @@
 <?php
 Wind::import('ADMIN:library.AdminBaseController');
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
-Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwManifest');
 /**
  * 后台 - 我的应用
  *
  * @author Zhu Dong <zhudong0808@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AppController.php 22322 2012-12-21 08:32:15Z long.shi $
+ * @version $Id: AppController.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package appcenter.admin
  */
 class AppController extends AdminBaseController {
@@ -107,14 +107,14 @@ class AppController extends AdminBaseController {
 	 *
 	 */
 	public function toInstallAction() {
-		$apps = $this->getInput('apps', 'post');
+		$apps = $this->getInput('apps', 'get');
 		$ext = Wind::getRealDir('EXT:', true);
-		$srv = Wekit::load('APPS:appcenter.service.srv.PwDebugApplication');
+		$srv = Wekit::load('APPCENTER:service.srv.PwDebugApplication');
 		foreach ($apps as $v) {
 			$r = $srv->installPack($ext . $v);
 			if ($r instanceof PwError) $this->showError($r->getError());
 		}
-		$this->showMessage('success', 'appcenter/app/run', true);
+		$this->showMessage('success', 'appcenter/app/install', true);
 	}
 
 	/**
@@ -160,7 +160,7 @@ class AppController extends AdminBaseController {
 	public function testUpgradeAction() {
 		list($file) = $this->getInput(array('file'));
 		/* @var $install PwUpgradeApplication */
-		$install = Wekit::load('APPS:appcenter.service.srv.PwUpgradeApplication');
+		$install = Wekit::load('APPCENTER:service.srv.PwUpgradeApplication');
 		$install->_appId = 'L0001344318635mEhO';
 		$file = Wind::getRealDir($install->getConfig('tmp_dir'), true) . '/' . $file;
 		$install->setTmpPath(dirname($file));
@@ -253,7 +253,7 @@ class AppController extends AdminBaseController {
 			else
 				$this->showMessage('success');
 		} else {
-			$uninstall = Wekit::load('APPS:appcenter.service.srv.PwUninstallApplication');
+			$uninstall = Wekit::load('APPCENTER:service.srv.PwUninstallApplication');
 			$r = $uninstall->uninstall($id);
 			if ($r === true) $this->showMessage('success');
 			$this->showError($r->getError());
@@ -316,7 +316,7 @@ class AppController extends AdminBaseController {
 	 * @return PwApplication
 	 */
 	private function _appDs() {
-		return Wekit::load('APPS:appcenter.service.PwApplication');
+		return Wekit::load('APPCENTER:service.PwApplication');
 	}
 
 	/**
@@ -324,7 +324,7 @@ class AppController extends AdminBaseController {
 	 * @return PwInstallApplication
 	 */
 	private function _installService() {
-		return Wekit::load('APPS:appcenter.service.srv.PwInstallApplication');
+		return Wekit::load('APPCENTER:service.srv.PwInstallApplication');
 	}
 	
 }

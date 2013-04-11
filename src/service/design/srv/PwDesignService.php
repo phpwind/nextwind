@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignService.php 22962 2013-01-04 05:11:30Z gao.wanggao $ 
+ * @version $Id: PwDesignService.php 24585 2013-02-01 04:02:37Z jieyin $ 
  * @package 
  */
 class PwDesignService {
@@ -40,14 +40,14 @@ class PwDesignService {
 	 */
 	public function getDesignAppStyle($page = 1, $perpage = 10) {
 		$type = 'portal';
-		$ds = Wekit::load('APPS:appcenter.service.PwStyle');
-		$addons = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig('style-type');	
+		$ds = Wekit::load('APPCENTER:service.PwStyle');
+		$addons = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig('style-type');	
 		$page < 1 && $page = 1;
 		list($start, $limit) = Pw::page2limit($page, $perpage);
 		$list = $ds->getStyleListByType($type, $limit, $start);
 		foreach ($list AS &$v) {
 			if($v['logo'] && (strpos($v['logo'],'http://')===false)) {
-				$args = array(Wekit::app()->themes, $addons[$type][1], $v['alias'], $v['logo']);
+				$args = array(Wekit::url()->themes, $addons[$type][1], $v['alias'], $v['logo']);
 				$v['logo'] = implode('/', $args);
 			}
 		}
@@ -144,10 +144,24 @@ class PwDesignService {
 		/*if(!preg_match('/\<design\s*id=\"*D_mod_(\d+)\"*\s*role=\"*module\"*\s*[>|\/>]<\/design>/isU', $string, $matches)) {
 			$isModule = false;
 		}*/
-		if(!preg_match('/\<for:>(.*)<\/for>/isU', $string, $matches)) {
-			return false;
+		$forr = $forl = $ifr = $ifl = false;
+		if(strpos($string, '<for:') !== false) {
+		   $forr = true;	
 		}
-		//if (!$isModule && !$isTpl) return false;
+		if(strpos($string, '</for>') !== false) {
+		   $forl = true;
+		}
+		
+		if(strpos($string, '<if:') !== false) {
+		   $ifr = true;
+		}
+		
+		if(strpos($string, '</if>') !== false) {
+		   $ifl = true;
+		}
+		
+		if ($forr != $forl) return false;
+		if ($ifr != $ifl) return false;
 		return true;
 	}
 	

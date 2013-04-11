@@ -10,6 +10,10 @@ class ACloudVerCustomizedBase {
 	}
 	
 	public function buildResponse($errorCode, $responseData = array()) {
+		if($errorCode == -1) {
+			$resource = Wind::getComponent('i18n');
+			$responseData = $resource->getMessage($responseData);
+		}
 		return array ($errorCode, $responseData );
 	}
 }

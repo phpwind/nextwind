@@ -124,7 +124,7 @@ class PwMobileService {
 	}
 	
 	private function _buildCode($len = 4) {
-		$str = '1234567890';
+		$str = '123456789';
 		$_tmp = Pw::strlen($str)-1;
 		$code = '';
 	    $_num = 0;

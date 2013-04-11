@@ -5,7 +5,7 @@
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwStyle.php 14130 2012-07-17 08:26:31Z long.shi $
+ * @version $Id: PwStyle.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package service.style
  */
 class PwStyle {
@@ -117,7 +117,7 @@ class PwStyle {
 	 * @return PwStyleDao
 	 */
 	private function _styleDao() {
-		return Wekit::loadDao('APPS:appcenter.service.dao.PwStyleDao');
+		return Wekit::loadDao('APPCENTER:service.dao.PwStyleDao');
 	}
 }
 

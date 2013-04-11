@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 23101 2013-01-06 06:34:56Z gao.wanggao $ 
+ * @version $Id: IndexController.php 25125 2013-03-05 03:29:29Z gao.wanggao $ 
  * @package 
  */
 
@@ -35,10 +35,12 @@ class IndexController extends PwBaseController {
 			$this->setTemplate("TPL:special.index_run");
 		}
 		//$this->getForward()->getWindView()->compileDir = 'DATA:design.default.' . $id;
-		$this->setTheme($portal['template'], 'THEMES:portal.local');
+		$this->setT($portal['template'], 'THEMES:portal.local');
 		Wind::import('SRV:seo.bo.PwSeoBo');
-		PwSeoBo::init('area', 'custom', $id);
-		PwSeoBo::set('{pagename}', $portal['title']);
+		$seoBo = PwSeoBo::getInstance();
+		$seoBo->init('area', 'custom', $id);
+		$seoBo->set('{pagename}', $portal['title']);
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	protected function headguide($protalname) {
@@ -56,7 +58,7 @@ class IndexController extends PwBaseController {
 		return Wekit::load('design.srv.PwDesignPermissionsService');
 	}
 	
-	protected function setTheme($theme, $themePack) {
+	protected function setT($theme, $themePack) {
 		$this->getForward()->getWindView()->setTheme($theme, $themePack);
 	}
 

@@ -14,10 +14,11 @@
 	    比如要设置版块的应用域名，开启子域名，设置根域名为空，则版块的域名形如food.phpwind.net；
 	    如果设置根域名为bbs，则版块的域名形如food.bbs.phpwind.net</li>
 	    <li class="red">不建议频繁更改根域名</li>
-	    <li class="red">设置完二级域名后，建议重新提交下后台<a href="{@url:nav/nav/run}">导航</a>，防止跨子域失败。</li>
+	    <li class="red">设置完二级域名后，建议重新提交下后台<a class="J_linkframe_trigger" href="{@url:nav/nav/run}">导航</a>，防止跨子域失败。</li>
 	</ul>
 </div>
 <form method="post" class="J_ajaxForm" action="{@url:rewrite/domain/doModify}">
+		<!--# if($root){ #-->
 <div class="h_a">应用域名设置</div>
 <div class="table_purview mb10">
 	<table width="100%">
@@ -28,8 +29,7 @@
 			<td width="220">根域名</td>
 			<td></td>
 		</tr>
-		<!--# if($root){
-			foreach($addons as $k => $v){ #-->
+		<!--#foreach($addons as $k => $v){ #-->
 			<tr>
 				<th>{$v[0]}</th>
 				<td><input name="app[{$k}]" type="text" value="{$v[2]}" class="input length_1" >&nbsp;{$root}</td>
@@ -45,11 +45,12 @@
 				<!--# } #-->
 			</tr>
 			<!--# } #-->
-		<!--# } else{ #-->
-		<tr><th>要开启个性域名，需先<a href="{@url:config/config/site}">设置cookie作用域</a></th></tr>
-		<!--# } #-->
 	</table>
 </div>
+		<!--# } else{ #-->
+		<div class="not_content_mini"><i></i>要开启个性域名，需先&nbsp;<a class="J_linkframe_trigger" href="{@url:config/config/site}">设置cookie作用域</a></div>
+		<!--# } #-->
+
 <div class="h_a">保留二级域名</div>
 <div class="table_full">
 	<table width="100%">

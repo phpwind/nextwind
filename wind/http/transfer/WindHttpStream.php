@@ -1,12 +1,10 @@
 <?php
 Wind::import('WIND:http.transfer.AbstractWindHttp');
 /**
- * Enter description here ...
- *
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindHttpStream.php 3862 2012-12-19 02:58:07Z yishuo $
+ * @version $Id: WindHttpStream.php 3912 2013-01-22 06:36:30Z yishuo $
  * @package http
  * @subpackage transfer
  */
@@ -55,35 +53,17 @@ final class WindHttpStream extends AbstractWindHttp {
 	 * @see AbstractWindHttp::response()
 	 */
 	public function response() {
-		var_dump(stream_get_meta_data($this->httpHandler));
-		var_dump(stream_get_contents($this->httpHandler));
-		/* 	$response = '';
-		$_start = $_header = true;
-		while (!feof($this->httpHandler)) {
-			$line = fgets($this->httpHandler);
-			if ($_start) {
-				$_start = false;
-				if (!preg_match('/HTTP\/(\\d\\.\\d)\\s*(\\d+)\\s*(.*)/', $line, $matchs)) {
-					$this->err = "Status code line invalid: " . htmlentities($line);
-					return false;
-				}
-				$this->status = $matchs[2];
-			}
-			if ($_header) {
-				if (trim($line) == '') {
-					if (!$this->_body) break;
-					$_header = false;
-				}
-				if (!$this->_header) continue;
-			}
-			$response .= $line;
-		}
-		return $response; */
 		$response = '';
-		while (!feof($this->httpHandler)) {
-			$line = fgets($this->httpHandler);
-			
-			$response .= $line;
+		if ($this->_header) {
+			$header = stream_get_meta_data($this->httpHandler);
+			$header = isset($header['wrapper_data']) ? $header['wrapper_data'] : array();
+			foreach ($header as $value) {
+				$response .= $value . "\r\n";
+			}
+		}
+		if ($this->_body) {
+			$response && $response .= "\r\n";
+			$response .= stream_get_contents($this->httpHandler);
 		}
 		return $response;
 	}
@@ -127,10 +107,10 @@ final class WindHttpStream extends AbstractWindHttp {
 					break;
 			}
 		}
-		$this->httpHandler = fopen($this->url, 'r', false, $this->context);
 		$this->setHeader($this->host, "Host");
 		!empty($_header) && $this->setHeader($_header);
-		$this->setHeader('Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; InfoPath.1)', 'User-Agent');
+		$this->setHeader('Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; InfoPath.1)', 
+			'User-Agent');
 		$this->setHeader('Close', 'Connection');
 		if ($options) $this->setHeader($options);
 		if ($this->cookie) {
@@ -147,7 +127,8 @@ final class WindHttpStream extends AbstractWindHttp {
 		$this->request('method', $method);
 		$this->request('timeout', $this->timeout);
 		isset($_body) && $this->request('content', $_body);
-		return $this->response();
+		$this->httpHandler = fopen($this->url, 'r', false, $this->context);
+		return $this->_waitResponse ? $this->response() : true;
 	}
 
 	/**

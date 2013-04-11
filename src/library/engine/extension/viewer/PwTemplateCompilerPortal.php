@@ -6,7 +6,7 @@ Wind::import('SRV:design.srv.PwPortalCompile');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwTemplateCompilerPortal.php 23348 2013-01-09 02:22:16Z gao.wanggao $ 
+ * @version $Id: PwTemplateCompilerPortal.php 25125 2013-03-05 03:29:29Z gao.wanggao $ 
  * @package 
  */
 class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
@@ -24,6 +24,9 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 			$content = str_replace('<pw-end/>', '', $content);
 			return $viewTemplate->compileStream($content, $this->windViewerResolver);
 		}	
+		foreach ($this->windViewTemplate->getCompiledBlockData() as $key => $value) {
+            $content = str_replace('#' . $key . '#', ($value ? $value : ''), $content);
+        }
 		Wind::import('SRV:design.srv.PwDesignCompile');
 		$this->srv = PwDesignCompile::getInstance();
 		//$this->srv = Wekit::load('design.srv.PwDesignCompile');
@@ -48,17 +51,18 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 		} else {
 			$content = $portalSrv->compileTpl($content);
 		}
-		
+	
 		//$content = $portalSrv->doCompile($content);
-
 		//转换Pw标签
 		$content = $this->compileStart($content, $_pk, $this->_url);
+			
 		$content = $this->compileSign($content);
+		$content = $this->compileTemplate($content); //自定义页
 		$content = $this->compileDrag($content);
 		$content = $this->compileTitle($content);
 		$content = $this->compileList($content);
 		$content = $this->compileCss($content, $pageBo);
-		$content = $this->compileEnd($content);
+		$content = $this->compileEnd($content, $pageBo);
 		$content =  $viewTemplate->compileStream($content, $this->windViewerResolver);
 		/*if ($isPortalCompile > 0) {
 			$this->srv->refreshPage();
@@ -72,16 +76,18 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 	}
 	
 	protected function compileSign($content) {
+		$this-> _getFooter();
 		$in = array(
 			'<pw-head/>',
 			'<pw-navigate/>',
 			'<pw-footer/>',
 		);
 		$out = array(
-			'<!--# if($portal[\'header\']): #--><template source=\'TPL:common.header\' load=\'true\' /><!--# endif; #-->',
-			'<!--# if($portal[\'navigate\']): #--><div class="bread_crumb">{@$headguide|html}</div><!--# endif; #-->',
-			'<!--# if($portal[\'footer\']): #--><template source=\'TPL:common.footer\' load=\'true\' /><!--# endif; #-->',
+			'<!--# if($portal[\'header\']){ #--><template source=\'TPL:common.header\' load=\'true\' /><!--# } #-->',
+			'<!--# if($portal[\'navigate\']){ #--><div class="bread_crumb">{@$headguide|html}</div><!--# } #-->',
+			'<!--# if($portal[\'footer\']){ #--><template source=\'TPL:common.footer\' load=\'true\' /><!--# } #-->',
 		);
+		
 		return str_replace($in, $out, $content);
 	}
 	
@@ -139,6 +145,41 @@ class PwTemplateCompilerPortal extends AbstractWindTemplateCompiler {
 		$this->srv->afterDesign(); 
 		return str_replace('<pw-end/>', '', $content);
 		//return $viewTemplate->compileStream($content, $this->windViewerResolver);
+	}
+	
+	/**
+	 * 兼容框架怪异的template标签
+	 * Enter description here ...
+	 * @param unknown_type $content
+	 */
+	protected function compileTemplate($content) {
+		if (preg_match_all('/\<template\s*source=[\'|\"](.+)[\'|\"](.+)\/>/isU',$content, $matches)) {
+			foreach ($matches[1] AS $k=>$v) {
+				$content = str_replace($matches[0][$k], $this->_getTemplate($v), $content);
+    		}
+    		$content = $this->compileTemplate($content);
+		}
+		$content = $this->comileSegment($content);
+		return $content;
+	}
+	
+	/**
+	 * 对公共文件的design segment进行转换
+	 * Enter description here ...
+	 */
+	protected function comileSegment($content) {
+		if(preg_match_all('/\<design\s*role=\"segment\"\s*id=\"(.+)\"\s*\/>/isU', $content, $matches)) {
+			foreach ($matches[1] AS $k=>$v) {
+				$content = str_replace($matches[0][$k], '<pw-drag id="'.$v.'"/>', $content);
+			}
+		}
+		return $content;
+	}
+	
+	private function _getTemplate($path) {
+		list($tpl, $compile) = $this->windViewerResolver->getWindView()->getViewTemplate($path);
+		if (!$tpl) return '';
+		return  WindFile::read($tpl);
 	}
 	
 	private function _router() {

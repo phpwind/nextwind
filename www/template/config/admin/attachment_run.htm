@@ -12,7 +12,7 @@
 		<li class="current"><a href="{@url:/config/attachment/run}">附件设置</a></li>
 		<li><a href="{@url:/config/attachment/storage}">附件存储</a></li>
 		<li><a href="{@url:/config/attachment/thumb}">附件缩略</a></li>
-		<li><a href="{@url:/config/storage/run}">头像存储</a></li>
+		<!-- <li><a href="{@url:/config/storage/run}">头像存储</a></li> -->
 	</ul>
 </div>
 
@@ -42,12 +42,12 @@
 								<span class="span_3">后缀名(小写)</span>
 								<span class="span_3">最大值(KB)</span>
 							</li>
-							<!--# foreach($config['extsize'] as $key => $value): #-->
+							<!--# foreach($config['extsize'] as $key => $value){ #-->
 							<li>
 								<span class="span_3"><input name="extsize[{$key}][ext]" type="text" class="input length_2" value="{$key}"></span>
 								<span class="span_4"><input name="extsize[{$key}][size]" type="text" class="input mr15 length_2"  value="{$value}"><a href="#" class="J_ul_list_remove">[删除]</a></span>
 							</li>
-							<!--# endforeach; #-->
+							<!--# } #-->
 						</ul>
 					</div>
 					<a href="" class="link_add J_ul_list_add" data-related="attachment">添加附件类型</a>

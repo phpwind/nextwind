@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: CreditController.php 21573 2012-12-11 08:05:42Z xiaoxia.xuxx $
+ * @version $Id: CreditController.php 24975 2013-02-27 09:24:54Z jieyin $
  * @package src.products.u.controller.profile
  */
 class CreditController extends BaseProfileController {
@@ -96,8 +96,10 @@ class CreditController extends BaseProfileController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:profile.credit.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:profile.credit.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	/**

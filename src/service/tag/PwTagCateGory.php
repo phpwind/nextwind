@@ -83,6 +83,9 @@ class PwTagCateGory {
 	 * return bool
 	 */
 	public function updateTagCategory(PwTagDm $dm){
+		if (!$dm->getField('category_name')) {
+			return new PwError('TAG:category.name.empty');
+		}
 		return $this->_getTagCategoryDao()->update($dm->tag_id, $dm->getData());
 	}
 	
@@ -93,6 +96,9 @@ class PwTagCateGory {
 	 * @return int
 	 */
 	public function addTagCategory(PwTagDm $dm) {
+		if (!$dm->getField('category_name')) {
+			return new PwError('TAG:category.name.empty');
+		}
 		return $this->_getTagCategoryDao()->addTagCategory($dm->getData());
 	}
 	

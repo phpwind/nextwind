@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-11-12
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminRole.php 3219 2011-12-14 06:43:45Z yishuo $
+ * @version $Id: AdminRole.php 24240 2013-01-23 07:09:33Z yishuo $
  * @package wind
  */
 class AdminRole {
@@ -51,8 +51,13 @@ class AdminRole {
 	 * @param array $auths
 	 */
 	public function editRole($id, $name, $auths) {
+		$fields['name'] = $name;
 		$fields['auths'] = implode(',', (array) $auths);
 		$fields['modified_time'] = time();
+		$_roles = $this->findRolesByNames(array($name));
+		foreach ($_roles as $key => $value) {
+			if ($value['id'] !== $id) return new PwError('ADMIN:role.add.fail.name.exist');
+		}
 		return $this->getAdminRoleDao()->updateById($id, $fields);
 	}
 
@@ -117,7 +122,6 @@ class AdminRole {
 	private function getAdminRoleDao() {
 		return Wekit::loadDao('ADMIN:service.dao.AdminRoleDao');
 	}
-
 }
 
 ?>

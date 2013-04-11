@@ -6,7 +6,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostsDao.php 20446 2012-10-30 03:13:45Z jieyin $
+ * @version $Id: PwPostsDao.php 24251 2013-01-23 09:07:13Z jinlong.panjl $
  * @package forum
  */
 
@@ -14,7 +14,7 @@ class PwPostsDao extends PwBaseDao {
 	
 	protected $_table = 'bbs_posts';
 	protected $_pk = 'pid';
-	protected $_dataStruct = array('pid', 'fid', 'tid', 'disabled', 'ischeck', 'ifshield', 'replies', 'useubb', 'aids', 'rpid', 'subject', 'content', 'like_count', 'sell_count', 'created_time', 'created_username', 'created_userid', 'created_ip', 'reply_notice', 'modified_time', 'modified_username', 'modified_userid', 'modified_ip', 'reminds', 'word_version', 'ipfrom', 'manage_remind', 'topped');
+	protected $_dataStruct = array('pid', 'fid', 'tid', 'disabled', 'ischeck', 'ifshield', 'replies', 'useubb', 'aids', 'rpid', 'subject', 'content', 'like_count', 'sell_count', 'created_time', 'created_username', 'created_userid', 'created_ip', 'reply_notice', 'modified_time', 'modified_username', 'modified_userid', 'modified_ip', 'reminds', 'word_version', 'ipfrom', 'manage_remind', 'topped', 'app_mark');
 	
 	public function getPost($pid) {
 		return $this->_get($pid);

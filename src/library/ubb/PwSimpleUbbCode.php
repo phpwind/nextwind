@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSimpleUbbCode.php 22769 2012-12-27 04:13:10Z jieyin $
+ * @version $Id: PwSimpleUbbCode.php 24383 2013-01-29 10:09:39Z jieyin $
  * @package lib.utility
  */
 
@@ -457,7 +457,7 @@ class PwSimpleUbbCode {
 		is_null(self::$_emotion) && self::$_emotion = Wekit::cache()->get('all_emotions');
 		isset(self::$_emotion['name'][$key]) && $key = self::$_emotion['name'][$key];
 		$emotion = isset(self::$_emotion['emotion'][$key]) ? self::$_emotion['emotion'][$key] : current(self::$_emotion['emotion']);
-		$html = "<img src=\"" . Wekit::app()->images . "/emotion/" . $emotion['emotion_folder'] . '/' . $emotion['emotion_icon'] . "\" />";
+		$html = "<img src=\"" . Wekit::url()->images . "/emotion/" . $emotion['emotion_folder'] . '/' . $emotion['emotion_icon'] . "\" />";
 		return array($html, 1);
 	}
 	

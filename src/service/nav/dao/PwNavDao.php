@@ -6,14 +6,14 @@ Wind::import('SRC:library.base.PwBaseDao');
  * @author $Author: gao.wanggao $ 
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwNavDao.php 19309 2012-10-12 09:03:36Z long.shi $ 
+ * @version $Id: PwNavDao.php 24004 2013-01-18 06:18:11Z gao.wanggao $ 
  * @package nav
  */
 
 class PwNavDao extends PwBaseDao {
 	protected $_pk = 'navid';
 	protected $_table = 'common_nav';
-	protected $_dataStruct = array('navid', 'parentid', 'rootid','type', 'sign', 'name', 'style', 'link', 'alt', 'target', 'isshow', 'orderid');
+	protected $_dataStruct = array('navid', 'parentid', 'rootid','type', 'sign', 'name', 'style', 'link', 'alt','image', 'target', 'isshow', 'orderid');
 	
 	/**
 	 * 根据ID获取一条导航信息

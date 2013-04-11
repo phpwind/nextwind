@@ -3,7 +3,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-25
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminBaseController.php 22264 2012-12-21 02:33:07Z xiaoxia.xuxx $
+ * @version $Id: AdminBaseController.php 23742 2013-01-15 09:22:58Z jieyin $
  * @package admin
  * @subpackage library
  */
@@ -14,14 +14,14 @@ class AdminBaseController extends WindController {
 	 *
 	 * @var AdminUserBo
 	 */
-	protected $adminUser = null;
+	protected $loginUser = null;
 
 	/* (non-PHPdoc)
 	 * @see WindSimpleController::beforeAction()
 	 */
 	public function beforeAction($handlerAdapter) {
-		$this->adminUser = Wekit::getLoginUser();
-		$this->setOutput($this->adminUser, 'adminUser');
+		$this->loginUser = Wekit::getLoginUser();
+		$this->setOutput($this->loginUser, 'loginUser');
 	}
 
 	/* (non-PHPdoc)

@@ -145,6 +145,26 @@ class PwDomainDao extends PwBaseDao {
 		$sql = $this->_bindTable('SELECT * FROM %s');
 		return $this->getConnection()->query($sql)->fetchAll($this->_pk);
 	}
+	
+	/**
+	 * 根据类型和id查询
+	 *
+	 * @return array
+	 */
+	public function getByTypeAndId($type,$id) {
+		$sql = $this->_bindTable('SELECT * FROM %s WHERE `domain_type` = ? AND `id` = ?');
+		return $this->getConnection()->createStatement($sql)->getOne(array($type,$id));
+	}
+	
+	/**
+	 * 根据某一类型和id批量查询
+	 *
+	 * @return array
+	 */
+	public function fetchByTypeAndId($type,$ids) {
+		$sql = $this->_bindSql('SELECT * FROM %s WHERE `domain_type` = ? AND `id` IN %s', $this->getTable(), $this->sqlImplode($ids));
+		return $this->getConnection()->createStatement($sql)->queryAll(array($type),'id');
+	}
 }
 
 ?>

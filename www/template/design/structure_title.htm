@@ -6,8 +6,8 @@
 									<div class="pop_cont">
 										<div class="fr" style="padding:5px;"><button class="btn btn_submit J_mod_title_add" type="button"><span class="add"></span>添加新标题</button></div>
 
-							<!--# $i=1;foreach ($titles['titles'] as $title): #-->
-										<!--# if($i>1): #--><a href="" class="fr J_mod_title_del" style="margin:5px;">删除此标题</a><!--# endif; #-->
+							<!--# $i=1;foreach ($titles['titles'] as $title){ #-->
+										<!--# if($i>1){ #--><a href="" class="fr J_mod_title_del" style="margin:5px;">删除此标题</a><!--# } #-->
 										<div class="J_mod_title_cont">
 											<dl class="cc">
 												<dt>标题：</dt>
@@ -41,9 +41,9 @@
 												<dd>
 													<select class="mr20" name="fontsize[]">
 														<option value="">大小</option>
-														<!--# foreach ($sysfontsize as $v): #-->
+														<!--# foreach ($sysfontsize as $v){ #-->
 															<option value="{$v}" {@Pw::isSelected($title['fontsize'] == $v)}>{$v}px</option>
-														<!--# endforeach; #-->
+														<!--# } #-->
 													</select>
 													颜色：<span class="mr20 color_pick J_color_pick"><em class="J_bg"  style="<!--# if ($title['fontcolor']) { #-->background:{$title['fontcolor']};<!--# } #-->"></em></span>
 													<input class="J_hidden_color" name="fontcolor[]"  type="hidden" value="{$title['fontcolor']}">
@@ -57,7 +57,8 @@
 											<div class="hr"></div>
 										
 										</div>
-										<!--# $i++; endforeach; #-->
+										<!--# $i++; #-->
+										<!--# } #-->
 										<div>
 											<dl class="cc">
 												<dt>背景图片：</dt>

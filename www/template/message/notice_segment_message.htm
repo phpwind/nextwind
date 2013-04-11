@@ -30,7 +30,7 @@
 	<!--# 
 		$loginUser = Wekit::getLoginUser(); 
 		$blacklist = Wekit::load('user.PwUserBlack')->getBlacklist($loginUser->uid);
-		if (in_array($notice['extend_params']['from_uid'],$blacklist)) { 
+		if (Pw::inArray($notice['extend_params']['from_uid'],$blacklist)) { 
 		#-->
 	<div class="tips">已把{$notice['extend_params']['from_username']}列入黑名单，您不会再收到Ta的私信。</div>
 	<!--# } #-->

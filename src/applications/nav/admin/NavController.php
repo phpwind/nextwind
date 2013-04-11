@@ -60,38 +60,40 @@ class NavController extends AdminBaseController {
 			$dms[] = $dm;
 			if ($post['navid'] == $homeid) $homeUrl = $post['link'];
 		}
-		foreach ($newposts AS $k=>$newpost) {
-			if (!$newpost['name'] || !$navtype) continue;
-			if ($navtype == 'my') {
-				$router = $newpost['sign'];
-			} else {				
-				$router = Wind::getComponent('router')->getRoute('pw')->matchUrl($newpost['link']);
-			}
-			Wekit::load('SRV:nav.dm.PwNavDm');
-			list($isroot, $id) = explode('_', $k);
-			$dm = new PwNavDm();
-			if ($isroot == 'root'){
-				$dm->setParentid(0);
-			} elseif ($isroot == 'child') {
-				if (is_numeric($newpost['parentid'])) {
-					$dm->setParentid($newpost['parentid']);
-				} else {
-					$dm->setParentid((int)$resource);
+		if ($newposts) {
+			foreach ($newposts AS $k=>$newpost) {
+				if (!$newpost['name'] || !$navtype) continue;
+				if ($navtype == 'my') {
+					$router = $newpost['sign'];
+				} else {				
+					$router = Wind::getComponent('router')->getRoute('pw')->matchUrl($newpost['link']);
 				}
+				Wekit::load('SRV:nav.dm.PwNavDm');
+				list($isroot, $id) = explode('_', $k);
+				$dm = new PwNavDm();
+				if ($isroot == 'root'){
+					$dm->setParentid(0);
+				} elseif ($isroot == 'child') {
+					if (is_numeric($newpost['parentid'])) {
+						$dm->setParentid($newpost['parentid']);
+					} else {
+						$dm->setParentid((int)$resource);
+					}
+				}
+				$dm->setName($newpost['name'])
+					->setLink($newpost['link'])
+					->setSign($router)
+					->setOrderid($newpost['orderid'])
+					->setIsshow($newpost['isshow'])
+					->setTempid($newpost['tempid'])
+					->setType($navtype);
+				$resource = $this->_getNavDs()->addNav($dm);
+				if ($resource instanceof PwError) {
+					$this->showError($resource->getError());
+					break;
+				}
+				if ($homeid == 'home_'.$k) $homeUrl = $newpost['link'];
 			}
-			$dm->setName($newpost['name'])
-				->setLink($newpost['link'])
-				->setSign($router)
-				->setOrderid($newpost['orderid'])
-				->setIsshow($newpost['isshow'])
-				->setTempid($newpost['tempid'])
-				->setType($navtype);
-			$resource = $this->_getNavDs()->addNav($dm);
-			if ($resource instanceof PwError) {
-				$this->showError($resource->getError());
-				break;
-			}
-			if ($homeid == 'home_'.$k) $homeUrl = $newpost['link'];
 		}
 		if ($homeUrl) {
 			$config = new PwConfigSet('site');
@@ -135,8 +137,8 @@ class NavController extends AdminBaseController {
 	 * @return void
 	 */
 	public function doeditAction() {
-		$keys = array('navid', 'type', 'parentid', 'name', 'link', 'fontColor', 'fontBold', 'fontItalic', 'fontUnderline', 'alt', 'target', 'orderid', 'isshow');
-		list($navid, $type, $parentid, $name, $link, $fontColor, $fontBold, $fontItalic, $fontUnderline, $alt, $target, $orderid, $isshow)= $this->getInput($keys, 'post');
+		$keys = array('navid', 'type', 'parentid', 'name', 'link', 'image', 'fontColor', 'fontBold', 'fontItalic', 'fontUnderline', 'alt', 'target', 'orderid', 'isshow');
+		list($navid, $type, $parentid, $name, $link, $image,$fontColor, $fontBold, $fontItalic, $fontUnderline, $alt, $target, $orderid, $isshow)= $this->getInput($keys, 'post');
 		$router = Wind::getComponent('router')->getRoute('pw')->matchUrl($link);
 		if (!$name || !$type) $this->showError("ADMIN:nav.add.fail.strlen.name");
 		Wekit::load('SRV:nav.dm.PwNavDm');
@@ -147,6 +149,7 @@ class NavController extends AdminBaseController {
 			->setLink($link)
 			->setStyle($fontColor, $fontBold, $fontItalic, $fontUnderline)
 			->setAlt($alt)
+			->setImage($image)
 			->setTarget($target)
 			->setOrderid($orderid)
 			->setIsshow($isshow);

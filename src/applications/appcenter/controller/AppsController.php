@@ -55,7 +55,7 @@ class AppsController extends PwBaseController {
 	}
 
 	private function _getCloudApi() {
-		$filePath = Wind::getRealPath('APPS:appcenter.conf.cloudplatformurl.php', true);
+		$filePath = Wind::getRealPath('APPCENTER:conf.cloudplatformurl.php', true);
 		$openPlatformUrl = Wind::getComponent('configParser')->parse($filePath);
 		return sprintf ( "%sapi.php?", $openPlatformUrl);
 	}

@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageSo.php 23072 2013-01-06 02:12:11Z gao.wanggao $ 
+ * @version $Id: WindidMessageSo.php 23620 2013-01-14 02:44:14Z jieyin $ 
  * @package 
  */
 class WindidMessageSo {

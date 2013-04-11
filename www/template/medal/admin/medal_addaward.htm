@@ -20,10 +20,10 @@
 								<th>勋章名称</th>
 								<td>
 									<select class="select_4" name="medalid">
-									<!--# foreach ($medalList as $medal): #-->
+									<!--# foreach ($medalList as $medal){ #-->
 										<option value="{$medal['medal_id']}">{$medal['name']}</option>
-									<!--# endforeach; #-->
-									<!--# if (!$medalList): #--><option value="">只能颁发手动勋章</option><!--# endif; #-->
+									<!--# } #-->
+									<!--# if (!$medalList){ #--><option value="">只能颁发手动勋章</option><!--# } #-->
 									</select>
 								</td>
 							</tr>

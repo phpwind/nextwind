@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadBuy.php 17767 2012-09-09 08:36:12Z jieyin $
+ * @version $Id: PwThreadBuy.php 24066 2013-01-21 07:30:33Z jinlong.panjl $
  * @package forum
  */
 
@@ -45,6 +45,18 @@ class PwThreadBuy {
 	 * @param int $pid 回复id
 	 * @return bool
 	 */
+	public function countByTidAndPid($tid, $pid) {
+		if (empty($tid)) return array();
+		return $this->_getDao()->countByTidAndPid($tid, $pid);
+	}
+	
+	/**
+	 * 获取某帖子一楼层的所有购买记录
+	 *
+	 * @param int $tid 帖子id
+	 * @param int $pid 回复id
+	 * @return bool
+	 */
 	public function getByTidAndPid($tid, $pid, $limit = 20, $offset = 0) {
 		if (empty($tid)) return array();
 		return $this->_getDao()->getByTidAndPid($tid, $pid, $limit, $offset);
@@ -75,6 +87,11 @@ class PwThreadBuy {
 		return $this->_getDao()->add($dm->getData());
 	}
 
+	/**
+	 * PwThreadsBuyDao
+	 *
+	 * @return PwThreadsBuyDao
+	 */
 	protected function _getDao() {
 		return Wekit::loadDao('forum.dao.PwThreadsBuyDao');
 	}

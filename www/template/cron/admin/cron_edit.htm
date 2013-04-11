@@ -36,11 +36,11 @@
 				<td>
 					<select id="J_time_select" name="looptype" class="mr10">
 					<!--# 
-					foreach($loopType as $k=>$v):
+					foreach($loopType as $k=>$v){
 					#-->
 						<option value="{$k}" {@Pw::isSelected($k == $info['loop_type'])}>{$v}</option>
 					<!--# 
-					endforeach; 
+					}
 					#-->
 					</select>
 
@@ -126,9 +126,9 @@
 				</td>
 				<td><div class="fun_tips"></div></td>
 			</tr>
-			<!--# if ($info['isopen'] == 2): #-->
+			<!--# if ($info['isopen'] == 2){ #-->
 			<input type="hidden" name="isopen" value="2">
-			<!--# else: #-->
+			<!--# }else{ #-->
 			<tr>
 				<th>开启计划</th>
 				<td>
@@ -139,17 +139,17 @@
 				</td>
 				<td><div class="fun_tips"></div></td>
 			</tr>
-			<!--# endif; #-->
+			<!--# } #-->
 			<tr>
 				<th>执行文件</th>
 				<td>
 					<select class="select_4 mr5" name="filename">
-						<!--# foreach ($fileList as $file): 
+						<!--# foreach ($fileList as $file){
 							 $basename = basename($file,".php");
 						#-->
 							<option value="{$basename}" {@Pw::isSelected($basename == $info['cron_file'])}>{$file}</option>
 						<!--# 
-							endforeach; 
+							}
 						#-->
 					</select>
 				</td>

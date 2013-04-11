@@ -47,9 +47,9 @@
 	</form>
 	
 	<form class="J_ajaxForm" action="{@url:bbs/article/deletethread}" method="post">
+				<!--# if ($threads) { #-->
 		<div class="table_list">
 			<table width="100%">
-				<!--# if ($threads) { #-->
 				<colgroup>
 					<col width="60">
 					<col width="300">
@@ -80,16 +80,15 @@
 					<td>{$v['replies']}/{$v['hits']}</td>
 				</tr>
 				<!--# } #-->
-				<!--# } else { #-->
-					<tbody>
-						<tr><td class="tac">啊哦，没有符合条件的内容！</td></tr>
-					</tbody>
-				<!--# } #-->
 			</table>
 			<div class="p10">
 				<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='bbs/article/searchthread' args='$args'/>
 			</div>
 		</div>
+				<!--# } else { #-->
+				<div class="not_content_mini"><i></i>啊哦，没有符合条件的内容！</div>
+				<!--# } #-->
+
 		<!--# if ($threads) { #-->
 		<div class="btn_wrap">
 			<div class="btn_wrap_pd">

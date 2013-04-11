@@ -44,7 +44,7 @@ auth.add.fail.username.exist = 该用户是非法用户或者该用户不存在
 auth.edit.success = 后台用户编辑成功
 auth.edit.fail = 编辑后台用户失败
 auth.edit.fail.id.illegal = "编辑后台用户失败,非法的Id"
-auth.edit.fail.user.exist = "编辑后台用户失败,用户不存在"
+auth.edit.fail.user.exist = "编辑后台用户失败,用户不存在或已经被删除"
 
 role.add.success = 添加角色成功
 role.add.fail = 添加角色失败

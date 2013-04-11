@@ -139,7 +139,7 @@
 
 			//把表情相关的bbcode变为图片
 			function showEmotions() {
-				if(emotionData.state !== 'success') { return; }
+				if(!emotionData.data) { return; }
 				var index = 0,allEmotionsArr = [];
 				//把多个分里的表情放在一个数组里来，以便通过bbcode查找它的图片链接地址
 				$.each(emotionData.data,function(key,obj) {
@@ -159,7 +159,7 @@
 							result =  '<img class="J_emotion" src="'+ emotion.url +'" alt="'+ emotion.name +'" data-bbcode="'+ $1 +'" />';
 						}
 					});
-					return result;
+					return result ? result : all;
 				});
 				$(editorDoc.body).html(html);
 			}

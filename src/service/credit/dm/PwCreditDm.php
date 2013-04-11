@@ -5,10 +5,11 @@
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: PwCreditDm.php 22114 2012-12-19 08:18:05Z gao.wanggao $
+ * @version $Id: PwCreditDm.php 24707 2013-02-16 06:39:01Z jieyin $
  * @package windid.service.user.dm
  */
 class PwCreditDm {
+
 	public $dm = null;
 	public $uid;
 	protected $_data = array();

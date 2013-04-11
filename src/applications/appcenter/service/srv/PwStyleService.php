@@ -1,13 +1,13 @@
 <?php
-Wind::import('APPS:appcenter.service.dm.PwStyleDm');
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.dm.PwStyleDm');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
 /**
  * 风格服务
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwStyleService.php 23145 2013-01-06 11:21:46Z long.shi $
+ * @version $Id: PwStyleService.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package service.style.srv
  */
 class PwStyleService {
@@ -38,7 +38,7 @@ class PwStyleService {
 	 * @return array 未安装的风格名
 	 */
 	public function getUnInstalledThemes() {
-		$config = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig('style-type');
+		$config = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig('style-type');
 		$themes = array();
 		foreach ($config as $k => $v) {
 			$dir = Wind::getRealDir('THEMES:' . $v[1]);
@@ -65,7 +65,7 @@ class PwStyleService {
 	 */
 	private function _setConfigBo($style) {
 		$configBo = new PwConfigSet('site');
-		$config = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig('style-type');
+		$config = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig('style-type');
 		foreach ($config as $k => $v) {
 			$configBo->set("theme.$k.pack", $v[1]);
 		}
@@ -79,7 +79,7 @@ class PwStyleService {
 	 * @return PwStyle
 	 */
 	private function _styleDs() {
-		return Wekit::load('APPS:appcenter.service.PwStyle');
+		return Wekit::load('APPCENTER:service.PwStyle');
 	}
 }
 

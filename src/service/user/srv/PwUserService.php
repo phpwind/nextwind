@@ -6,7 +6,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserService.php 22484 2012-12-25 02:22:44Z gao.wanggao $
+ * @version $Id: PwUserService.php 24736 2013-02-19 09:24:40Z jieyin $
  * @package src.service.user.srv
  */
 class PwUserService {
@@ -110,11 +110,12 @@ class PwUserService {
 	 *
 	 * @param int $uid 用户ID
 	 * @param string $password 用户密码
+	 * @param int $rememberme 是否采用记住当前用户，记住则保存1年
 	 * @return boolean
 	 */
-	public function createIdentity($uid, $password) {
+	public function createIdentity($uid, $password, $rememberme = 0) {
 		$identity = Pw::encrypt($uid . "\t" . Pw::getPwdCode($password));
-		return Pw::setCookie('winduser', $identity, 31536000);
+		return Pw::setCookie('winduser', $identity, $rememberme ? 31536000 : NULL);
 	}
 
 	/** 
@@ -125,7 +126,6 @@ class PwUserService {
 	 * @return boolean
 	 */
 	public function updateLastLoginData($uid, $ip) {
-		/* 更新用户登录信息 */
 		$dm = new PwUserInfoDm($uid);
 		$dm->setLastvisit(Pw::getTime())->setLastloginip($ip);
 		return $this->_getUserDs()->editUser($dm, PwUser::FETCH_DATA);
@@ -178,7 +178,6 @@ class PwUserService {
 		$result =  $this->_getWindidAvatar()->defaultAvatar($uid, $type);
 		if ($result < 1) return false;
 		return true;
-		
 	}
 	
 	/**
@@ -196,7 +195,8 @@ class PwUserService {
 			5 => '我最喜欢的运动',
 			6 => '我最喜欢的歌曲',
 			7 => '我最喜欢的电影',
-			8 => '我最喜欢的颜色');
+			8 => '我最喜欢的颜色'
+		);
 		return is_null($id) ? $qList : (isset($qList[$id]) ? $qList[$id] : $id);
 	}
 	

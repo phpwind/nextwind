@@ -7,7 +7,7 @@ Wind::import('APPS:manage.controller.BaseManageController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: RecycleController.php 20560 2012-10-31 05:32:43Z jieyin $
+ * @version $Id: RecycleController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package src.applications.manage.controller
  */
 class RecycleController extends BaseManageController {
@@ -89,8 +89,10 @@ class RecycleController extends BaseManageController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:manage.recycle.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:manage.recycle.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	/**
@@ -186,8 +188,10 @@ class RecycleController extends BaseManageController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:manage.recycle.reply.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:manage.recycle.reply.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	/**

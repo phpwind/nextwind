@@ -3,7 +3,7 @@
 @explain: 喜欢
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: like.css 20308 2012-10-25 09:46:00Z yanchixia $
+$Id: like.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 #*/
 
@@ -67,16 +67,75 @@ $Id: like.css 20308 2012-10-25 09:46:00Z yanchixia $
 }
 
 .like_content{
-	padding:10px 15px;
+	padding:0;
 }
 
-.like_page .feed_lists .icon_edit{
-	margin:2px 0 0 5px;
-	display:none;
+
+/*
+===================
+喜欢的列表
+===================
+*/
+.like_lists{
+	color:#444;
+	padding-bottom:10px;
 }
-.like_page .feed_lists dl:hover .icon_edit{
-	display:inline;
+.like_lists dl{
+	border-bottom:1px dashed #e6e6e6;
+	padding:0 0 7px;
+	margin:0 0 10px;
 }
+/*头像*/
+.like_lists .face{
+	float: left;
+	width: 64px;
+	padding:3px 0;
+}
+.like_lists .face a{
+	display:block;
+}
+/*右侧内容*/
+.like_lists .text_content{
+	margin:0 0 0 65px;
+}
+.like_lists .content{
+	margin-bottom:7px;
+	overflow:hidden;
+}
+/*用户名*/
+.like_lists .name{
+	font-weight:700;
+	font-size:14px;
+}
+/*标题*/
+.like_lists .title{
+	font-weight:700;
+	font-size:14px;
+	color:#333;
+}
+/*简介*/
+.like_lists .descrip{
+	margin-bottom:10px;
+}
+/*底部信息*/
+.like_lists .info{
+	color:#999;
+}
+.like_lists .info a{
+	color:#999;
+}
+.like_lists .info i{
+	font-style:normal;
+	margin:0 5px;
+	color:#E6E6E6;
+}
+.like_lists .info .right{
+	float:right;
+}
+.like_lists .info .right a{
+	color:#568cca;
+}
+
 
 /*
 ===================
@@ -148,17 +207,17 @@ $Id: like.css 20308 2012-10-25 09:46:00Z yanchixia $
 分类
 ===================
 */
-.feed_content .sort{
+.like_lists .sort{
 	float:right;
 	white-space:nowrap;
 }
-.feed_content .sort a{
+.like_lists .sort a{
 	color:#666;
 	display:block;
 	padding:3px 15px;
 }
-.feed_content .sort a:hover,
-.feed_content .sort a.current{
+.like_lists .sort a:hover,
+.like_lists .sort a.current{
 	border:1px solid #c4c4c4;
 	padding:2px 14px;
 	text-decoration:none;
@@ -173,7 +232,7 @@ $Id: like.css 20308 2012-10-25 09:46:00Z yanchixia $
 	background-image: linear-gradient(#f7f7f7, #ebebeb);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#ebebeb', GradientType=0);
 }
-.feed_content .sort em{
+.like_lists .sort em{
 	_vertical-align:0;
 	border-top: 4px #a3a3a3 solid;
 }

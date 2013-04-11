@@ -1,5 +1,5 @@
 <?php
-Wind::import('APPS:admin.library.AdminBaseController');
+Wind::import('ADMIN:library.AdminBaseController');
 Wind::import('SRV:hook.dm.PwHookInjectDm');
 /**
  * inject
@@ -7,7 +7,7 @@ Wind::import('SRV:hook.dm.PwHookInjectDm');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: InjectController.php 15635 2012-08-09 09:16:44Z long.shi $
+ * @version $Id: InjectController.php 24202 2013-01-23 02:18:05Z jieyin $
  * @package hook.admin
  */
 class InjectController extends AdminBaseController {

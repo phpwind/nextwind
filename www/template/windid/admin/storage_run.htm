@@ -25,12 +25,12 @@
 			<col width="400" />
 			<col />
 			<tr>
-				<th>远程头像件地址</th>
-				<td><input type="text" class="input length_5" name="avatarurl" value="{$config['avatarurl']}"></td>
-				<td><div class="fun_tips">如http://www.phpwind.net</div></td>
+				<th>头像存储地址</th>
+				<td>{@C:site.avatarUrl}</td>
+				<td><div class="fun_tips">当修改头像存储方案后，提交本页面，自动更新</div></td>
 			</tr>
 			<tr>
-				<th>头像存储</th>
+				<th>头像存储方案</th>
 				<td>
 					<ul class="single_list cc">
 <!--# if(empty($storages)): #-->
@@ -42,8 +42,8 @@
 	  $storageType === $var && $msg = $value['description'];
 #-->
 						<li><span class="mr20"><label><input name="att_storage" data-msg="{$value['description']}" value="{$var}" type="radio" {@Pw::ifcheck($storageType==$var)|html}>{$value['name']}</label></span> 
-<!--# if($value['avatarmanagelink']): #-->
-							<a href="{@WindUrlHelper::createUrl($value['avatarmanagelink'])|url}">[设置]</a>
+<!--# if($value['managelink']): #-->
+							<a href="{@WindUrlHelper::createUrl($value['managelink'])|url}">[设置]</a>
 <!--# endif; #-->
 						</li>
 <!--# endforeach; #-->

@@ -3,27 +3,27 @@
 <head>
 <template source='TPL:admin.common.head' />
 </head>
-<body class="body_none" style="width:400px;">
+<body class="body_none founder_pop" style="width:350px;">
 <form class="J_ajaxForm" action="{@url:founder/doAdd}" method="post">
 <div class="pop_cont pop_table" style="height:auto;">
 	<table width="100%">
 			<tbody>
 			<tr>
-				<th width="80">用户名</th>
+				<th width="60">用户名</th>
 				<!--# if($uid) { #-->
-				<td><input type="text" class="input length_5" name="username" value="{$username}" readonly="readonly"></td>
+				<td><input type="text" class="input length_4" name="username" value="{$username}" readonly="readonly"></td>
 				<!--# }else{ #-->
-				<td><input type="text" class="input length_5" name="username" value="{$username}"></td>
+				<td><input type="text" class="input length_4" name="username" value="{$username}"></td>
 				<!--# } #-->
 			</tr>
 			<tr>
 				<th>密码</th>
-				<td><input type="text" class="input length_5" name="password"></td>
+				<td><input type="text" class="input length_4" name="password"></td>
 			</tr>
 			<tr>
 				<th>电子邮箱</th>
 				<td>
-					<input name="email" type="email" class="input length_5" value="{$email}">
+					<input name="email" type="email" class="input length_4" value="{$email}">
 				</td>
 			</tr>
 			</tbody>

@@ -1,19 +1,20 @@
 <?php
 Wind::import('WINDID:library.WindidUtility');
-Wind::import('WINDID:library.base.WindidBaseDm');
+
 /**
  * 用户信息数据模型
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidUserDm.php 22295 2012-12-21 05:39:44Z gao.wanggao $
+ * @version $Id: WindidUserDm.php 24943 2013-02-27 03:52:21Z jieyin $
  * @package windid.service.user.dm
  */
-class WindidUserDm extends WindidBaseDm {
+class WindidUserDm extends PwBaseDm {
 	
 	public $uid;
+	public $password = '';
 	
-	public function __construct($uid=0) {
+	public function __construct($uid = 0) {
 		$this->uid = $uid;
 	}
 
@@ -35,6 +36,7 @@ class WindidUserDm extends WindidBaseDm {
 	 */
 	public function setPassword($password) {
 		$this->_data['password'] = $password;
+		$this->password = $password;
 		return $this;
 	}
 	
@@ -238,10 +240,10 @@ class WindidUserDm extends WindidBaseDm {
 	}
 	
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::beforeAdd()
+	 * @see PwBaseDm::beforeAdd()
 	 */
 	protected function _beforeAdd() {
-		Wind::import("WINDID:service.user.validator.WindidUserValidator");
+		Wind::import("WSRV:user.validator.WindidUserValidator");
 		(($result = WindidUserValidator::checkName($this->_data['username'])) === true) &&
 			(($result = WindidUserValidator::checkEmail($this->_data['email'])) === true) &&
 			(($result = WindidUserValidator::checkPassword($this->_data['password'])) === true);
@@ -255,22 +257,29 @@ class WindidUserDm extends WindidBaseDm {
 	}
 	
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::beforeUpdate()
+	 * @see PwBaseDm::beforeUpdate()
 	 */
 	protected function _beforeUpdate() {
+		Wind::import("WSRV:user.validator.WindidUserValidator");
 		if (!$this->uid) return new WindidError(WindidError::FAIL);
+		if (isset($this->_data['username'])) {
+			$result = WindidUserValidator::checkName($this->_data['username'], $this->uid);
+			if ($result !== true) return $result;
+		}
+		if (isset($this->_data['email'])) {
+			$result = WindidUserValidator::checkEmail($this->_data['email'], $this->uid);
+			if ($result !== true) return $result;
+		}
+		if (isset($this->_data['old_password'])) {
+			$result = WindidUserValidator::checkOldPassword($this->_data['old_password'], $this->uid);
+			if ($result !== true) return $result;
+		}
 		if (isset($this->_data['password'])) {
 			$this->_data['salt'] = WindUtility::generateRandStr(6);
 			$this->_data['password'] = WindidUtility::buildPassword($this->_data['password'], $this->_data['salt']);
 		}
 		if (isset($this->_data['question']) && isset($this->_data['answer'])){
 			$this->_data['safecv'] = $this->_data['question'] ? substr(md5($this->_data['question'] . $this->_data['answer']), 8, 8) : '';
-		}
-		if (isset($this->_data['old_password'])) {
-			$user = Windid::load('user.WindidUser')->getUserByUid($this->uid, WindidUser::FETCH_MAIN);
-			if (WindidUtility::buildPassword($this->_data['old_password'], $user['salt']) != $user['password']) {
-				return new WindidError(WindidError::PASSWORD_ERROR);
-			}
 		}
 		return true;
 	}

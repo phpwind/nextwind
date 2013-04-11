@@ -9,7 +9,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUbbCodeConvertThread.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: PwUbbCodeConvertThread.php 24066 2013-01-21 07:30:33Z jinlong.panjl $
  * @package lib.utility
  */
 
@@ -107,7 +107,7 @@ class PwUbbCodeConvertThread extends PwUbbCodeConvertConfig {
 		return array(
 			WindUrlHelper::createUrl('bbs/buythread/record', array('tid' => $this->thread->tid, 'pid' => $this->pid)),
 			WindUrlHelper::createUrl('bbs/buythread/buy', array('tid' => $this->thread->tid, 'pid' => $this->pid)),
-			$this->thread->info['sell_count']
+			$this->pid ? $this->post['sell_count'] : $this->thread->info['sell_count']
 		);
 	}
 

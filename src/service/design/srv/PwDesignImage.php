@@ -5,7 +5,7 @@ Wind::import('LIB:image.PwCutImage');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImage.php 23371 2013-01-09 06:18:14Z gao.wanggao $ 
+ * @version $Id: PwDesignImage.php 24487 2013-01-31 02:50:53Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImage {
@@ -52,7 +52,7 @@ class PwDesignImage {
 				WindFile::del(Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/_tmp/' . $outFile);
 				WindFile::del($localFile);
 			} else {
-				$attachUrl = Wekit::app()->attach . '/';
+				$attachUrl = Wekit::url()->attach . '/';
 			}
 			return array($outDir,$outFile, $attachUrl );
 		}
@@ -63,13 +63,12 @@ class PwDesignImage {
 		if (!$moduleid) return false;
 		$dir = $this->getSaveDir($moduleid);
 		$store = Wind::getComponent('storage'); //单独使用
-		if (!$this->store instanceof PwStorageLocal ) { 
+		if (!$store instanceof PwStorageLocal ) { 
 			$store->delete($dir, 0);
 		} else {
 			$dir = Wind::getRealDir('PUBLIC:') . PUBLIC_ATTACH . '/' . $dir;
+			WindFolder::clearRecur($dir, true);
 		}
-		
-		WindFolder::rm($dir, true);
 		return true;
 	}
 	

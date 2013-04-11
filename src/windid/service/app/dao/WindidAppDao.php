@@ -4,14 +4,14 @@
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidAppDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidAppDao.php 24169 2013-01-22 09:19:23Z jieyin $
  * @package windid.service.app.dao
  */
 class WindidAppDao extends WindidBaseDao {
 
-	protected $_table = 'windid_app';
+	protected $_table = 'app';
 	protected $_pk = 'id';
-	protected $_dataStruct = array('name', 'siteurl', 'siteip', 'secretkey', 'apifile', 'charset', 'issyn', 'isnotify');
+	protected $_dataStruct = array('id', 'name', 'siteurl', 'siteip', 'secretkey', 'apifile', 'charset', 'issyn', 'isnotify');
 
 
 	public function get($id) {

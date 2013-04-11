@@ -8,36 +8,34 @@
 <div class="wrap">
 <template source='TPL:common.header' suffix='htm'/>
 	<div class="main_wrap">
-		<div class="main cc">
-			<div class="box_wrap register cc">
-				<h2 class="reg_head">找回密码</h2>
-				<div class="reg_cont_wrap">
-					<div class="reg_cont">
-						<div class="reg_form">
-							<div class="tips">验证通过，请设置新密码。如有设置安全问题和答案，请登录后重新设置。</div>
-							<form id="J_reset_pwd_form" action="{@url:u/findPwd/doresetpwd}" method="post">
-								<input type="hidden" name="statu" value="{$statu}">
-								<input type="hidden" name="step" value="end" >
-								<dl>
-									<dt><label>用户名：</label></dt>
-									<dd><span class="username" id="J_username">{$username}</span></dd>
-								</dl>
-								<dl>
-									<dt><label>新密码：</label></dt>
-									<dd><input required data-id="password" id="J_reset_password" type="password" name="password" class="input length_4" value=""/></dd>
-									<dd class="dd_r" id="J_reset_pwd_tip_password"></dd>
-								</dl>
-								<dl>
-									<dt><label>确认密码：</label></dt>
-									<dd><input required data-id="repassword" type="password" name="repassword" class="input length_4" value=""/></dd>
-									<dd class="dd_r" id="J_reset_pwd_tip_repassword"></dd>
-								</dl>
-								<dl>
-									<dt>&nbsp;</dt>
-									<dd><button class="btn btn_big btn_submit mr20" type="submit">完成</button></dd>
-								</dl>
-							</form>
-						</div>
+		<div class="box_wrap register cc">
+			<h2 class="reg_head">找回密码</h2>
+			<div class="reg_cont_wrap">
+				<div class="reg_cont">
+					<div class="reg_form">
+						<div class="tips">验证通过，请设置新密码。如有设置安全问题和答案，请登录后重新设置。</div>
+						<form id="J_reset_pwd_form" action="{@url:u/findPwd/doresetpwd}" method="post">
+							<input type="hidden" name="statu" value="{$statu}">
+							<input type="hidden" name="step" value="end" >
+							<dl>
+								<dt><label>用户名：</label></dt>
+								<dd><span class="username" id="J_username">{$username}</span></dd>
+							</dl>
+							<dl>
+								<dt><label>新密码：</label></dt>
+								<dd><input required data-id="password" id="J_reset_password" type="password" name="password" class="input length_4" value=""/></dd>
+								<dd class="dd_r" id="J_reset_pwd_tip_password"></dd>
+							</dl>
+							<dl>
+								<dt><label>确认密码：</label></dt>
+								<dd><input required data-id="repassword" type="password" name="repassword" class="input length_4" value=""/></dd>
+								<dd class="dd_r" id="J_reset_pwd_tip_repassword"></dd>
+							</dl>
+							<dl>
+								<dt>&nbsp;</dt>
+								<dd><button class="btn btn_big btn_submit mr20" type="submit">完成</button></dd>
+							</dl>
+						</form>
 					</div>
 				</div>
 			</div>

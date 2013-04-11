@@ -8,7 +8,7 @@ Wind::import('SRV:forum.PwThread');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwTopicDm.php 22488 2012-12-25 02:57:19Z xiaoxia.xuxx $
+ * @version $Id: PwTopicDm.php 24888 2013-02-25 08:12:54Z jieyin $
  * @package forum
  */
 

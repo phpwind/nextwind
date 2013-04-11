@@ -92,9 +92,9 @@
 						<td>
 							<select class="select_5" name="pre_task">
 							<option value="0" selected>无</option>
-							<!--#foreach($pre_tasks as $id => $title):#-->
+							<!--#foreach($pre_tasks as $id => $title){ #-->
 							<option value="{$id}">{$title|html}</option>
-							<!--#endforeach;#-->
+							<!--# } #-->
 							</select>
 						</td>
 						<td><div class="fun_tips"></div></td>

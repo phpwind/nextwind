@@ -3,9 +3,6 @@
 <head>
 <template source='TPL:common.head' load='true' />
 <link href="{@theme:css}/forum.css?v={@NEXT_RELEASE}" rel="stylesheet" />
-<!--# if ($operateThread) { #-->
-<link href="{@theme:css}/management.css?v={@NEXT_RELEASE}" rel="stylesheet" />
-<!--#}#-->
 </head>
 <body>
 <pw-start/>
@@ -26,9 +23,9 @@
 						<nav>
 							<div class="content_nav" id="hashpos_ttype">
 								<div class="content_filter">
-									<a href="{@url:bbs/forum/run?order=postdate}" class="{@Pw::isCurrent($order == 'postdate')}">最新发帖</a><span>|</span><a href="{@url:bbs/forum/run}" class="{@Pw::isCurrent($order != 'postdate')}">最后回复</a></div>
+									<a href="{@url:bbs/forum/run?order=postdate}" class="{@Pw::isCurrent($order == 'postdate')}">最新发帖</a><span>|</span><a href="{@url:bbs/forum/run?order=lastpost}" class="{@Pw::isCurrent($order != 'postdate')}">最后回复</a></div>
 								<ul>
-									<li class="current"><a href="{@url:bbs/index/run}">本站新帖</a></li>
+									<li class="current"><a href="{@url:bbs/index/run?order=lastpost}">本站新帖</a></li>
 									<!--# if ($loginUser->isExists()) { #--><li><a rel="nofollow" href="{@url:bbs/forum/my}">我的版块</a></li><!--# } #-->
 								</ul>
 							</div>
@@ -47,7 +44,7 @@
 											<!--# if ($operateThread) { #-->
 											<input class="J_check" name="" type="checkbox" value="{$value['tid']}" />
 											<!--# } #-->
-											<span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}"></i></span>
+											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" target="_blank"><span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}  新窗口打开"></i></span></a>
 											<!--# if ($forums[$value['fid']]) { #-->
 											<a href="{@url:bbs/thread/run?fid=$value['fid']}" class="st">[{@$forums[$value['fid']]['name']|html}]</a>
 											<!--# } #-->
@@ -88,10 +85,8 @@
 						</div>
 						<!--# } #-->
 					</div>
-					<div class="cc mb20">
-						<div class="J_page_wrap" data-key="true">
-						<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/forum/run" args="$urlargs"/>
-						</div>
+					<div class="J_page_wrap cc" data-key="true">
+					<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/forum/run" args="$urlargs"/>
 					</div>
 					<pw-tpl id="forum_bottom"/>
 					<!--# if ($operateThread){ #-->
@@ -132,21 +127,22 @@
 	
 <template source='TPL:common.footer' load='true' />
 </div>
-<!--# if(!$is_design) { #-->
+
 <script>
 var FID = '{$pwforum->fid}';
 Wind.use('jquery', 'global', function(){
+<!--# if(!$is_design) { #-->
 <!--# if (!$threadList) { #-->
 	//无内容 发帖引导
-	Wind.js(GV.JS_ROOT + 'pages/common/postGuide.js?v=' + GV.JS_VERSION);
+	Wind.js(GV.JS_ROOT + 'pages/bbs/postGuide.js?v=' + GV.JS_VERSION);
 <!--# } else { #-->
 	if(GV.U_ID) {
-		Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v=' + GV.JS_VERSION);
+		Wind.js(GV.JS_ROOT +'pages/bbs/threadManage.js?v=' + GV.JS_VERSION);
 	}
+<!--# } #-->
 <!--# } #-->
 });
 </script>
-<!--# } #-->
 <pw-end/>
 </body>
 </html>

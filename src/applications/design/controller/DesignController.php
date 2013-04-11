@@ -1,11 +1,11 @@
 <?php
 Wind::import('LIB:base.PwBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
+ * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: DesignController.php 23273 2013-01-07 09:10:11Z gao.wanggao $ 
+ * @version $Id: DesignController.php 24134 2013-01-22 06:19:24Z xiaoxia.xuxx $ 
  * @package 
  */
 class DesignController extends PwBaseController {
@@ -21,7 +21,7 @@ class DesignController extends PwBaseController {
     	$module = $bo->getModule();
     	if ($module['isused']) $this->setTemplate('');
     	$bo->setStdId();
-    	$key = Wekit::load('design.srv.display.PwDesignDisplay')->bindDataKey($moduleId);;
+    	$key = Wekit::load('design.srv.display.PwDesignDisplay')->bindDataKey($moduleId);
     	$data[$key] = $bo->getData(true, false);
     	$this->setOutput($data, '__design_data');
     	list($theme,)= $this->getForward()->getWindView()->getTheme();

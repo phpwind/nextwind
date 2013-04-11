@@ -11,6 +11,12 @@
 			<li><a href="{@url:admin/backup/backup/restore}">数据库还原</a></li>
 		</ul>
 	</div>
+	<div class="h_a">功能说明</div>
+	<div class="prompt_text">
+		<ul>
+			<li>推荐使用mysqldump、phpmyadmin、navicat等专业的mysql工具来备份还原。</li>
+		</ul>
+	</div>
 	<div class="h_a">数据表</div>
 	<form action="{@url:admin/backup/backup/doback}" method="post" class="J_ajaxForm" id="J_backup_form">
 	<div class="table_full">
@@ -23,7 +29,7 @@
 						<dl>
 							<dt>
 								<span class="span_1"><label><input type="checkbox" class="J_check_all" data-checklist="J_check_x" data-direction="x" checked>全选</label></span>
-								<span class="span_2">数据表</span>
+								<span class="span_2"><a href="{@url:admin/backup/backup/run}">全部数据表</a> | <a href="{@url:admin/backup/backup/run?system=1}">系统数据表（{$count}）</a></span>
 								<span class="span_3">描述</span>
 							</dt>
 							<dd>
@@ -76,10 +82,10 @@
 	</div>
 	<div class="btn_wrap">
 		<div class="btn_wrap_pd">
-		<button class="btn btn_submit J_ajax_submit_btn" id="J_backup_btn" type="submit">备份</button>
-		<button class="btn J_ajax_submit_btn" type="submit" data-action="{@url:admin/backup/backup/repair}">修复</button>
-		<button class="btn J_ajax_submit_btn" type="submit" data-action="{@url:admin/backup/backup/optimize}">优化</button>
-		<div id="J_backup_tip"></div>
+			<button class="btn btn_submit J_ajax_submit_btn" id="J_backup_btn" type="submit">备份</button>
+			<button class="btn J_ajax_submit_btn" type="submit" data-action="{@url:admin/backup/backup/repair}">修复</button>
+			<button class="btn J_ajax_submit_btn" type="submit" data-action="{@url:admin/backup/backup/optimize}">优化</button>
+			<span id="J_backup_tip"></span>
 		</div>
 	</div>
 	</form>

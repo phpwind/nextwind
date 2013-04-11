@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwCacheUpdateService.php 22170 2012-12-19 12:19:22Z jieyin $
+ * @version $Id: PwCacheUpdateService.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package forum
  */
 
@@ -35,8 +35,8 @@ class PwCacheUpdateService {
 	 * @return array
 	 */
 	public function getConfigCacheValue() {
-		$vkeys = array('site', 'credit', 'bbs', 'attachment', 'components', 'seo', 'nav');
-		$array = Wekit::load('config.PwConfig')->fetchConfig($vkeys);
+		$vkeys = array('site', 'credit', 'bbs', 'attachment', 'components', 'seo', 'nav', 'windid');
+		$array = Wekit::C()->fetchConfig($vkeys);
 		$config = array();
 		foreach ($vkeys as $key => $value) {
 			$config[$value] = array();

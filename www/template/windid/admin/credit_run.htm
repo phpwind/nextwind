@@ -28,7 +28,7 @@
 				<td><input name="credits[{$key}][unit]" type="text" class="input" value="{$credit['unit']}"></td>
 				<!-- <td><input name="credits[{$key}][open]" type="checkbox" value="1"{@Pw::ifcheck($credit['open'])}></td> -->
 				<!--# if($key > 4) {#-->
-				<td><a href="{@url:windid/credit/doDeletecredit?creditId$key}" class="mr10 J_ajax_del">[删除]</a></td>
+				<td><a href="{@url:windid/credit/doDeletecredit?creditId=$key}" class="mr10 J_ajax_del">[删除]</a></td>
 				<!--#} else {#-->
 				<td>-- --</td>
 				<!--#}#-->
@@ -56,8 +56,6 @@ var last_credit_key = $('#J_credit_tbody > tr:last').data('key'),
 	root_tr_html = '<tr class="ct">\
 				<td><input type="text" value="" class="input" name="newcredits[credit_key_][name]"></td>\
 				<td><input type="text" value="" class="input" name="newcredits[credit_key_][unit]"></td>\
-				<td><input type="checkbox" checked="" value="1" name="newcredits[credit_key_][open]"></td>\
-				<!--td><input type="checkbox" value="1" name="newcredits[credit_key_][log]"></td-->\
 							<td><a href="#" class="mr5 J_newRow_del">[删除]</a></td>\
 						</tr>';
 Wind.js(GV.JS_ROOT+ 'pages/admin/common/forumTree_table.js?v=' +GV.JS_VERSION);

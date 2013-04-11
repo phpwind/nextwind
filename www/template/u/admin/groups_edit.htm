@@ -9,11 +9,11 @@
 <div class="nav">
 	<div class="return"><a href="{@url:admin/u/groups/run?type=$group['type']}">返回上一级</a></div>
 	<ul class="cc J_tabs_nav">
-		<!--#foreach($topLevelCategories as $k=>$v): #-->
+		<!--#foreach($topLevelCategories as $k=>$v){ #-->
 		<li{$topLevelCategoryClasses[$k]|html} id="J_nav_{$k}" data-tab="nav_{$k}">
 			<a href="{@url:admin/u/groups/edit?category=$k&gid=$gid}&manage={$isManage?1:0}">{$v}</a>
 		</li>
-		<!--#endforeach;#-->
+		<!--# } #-->
 	</ul>
 </div>
 
@@ -40,9 +40,9 @@
 	</table>
 </div>
 <div class="J_tabs_contents">
-<!--# foreach($permissionConfigs as $key => $value): #-->
+<!--# foreach($permissionConfigs as $key => $value){ #-->
 	<div>
-		<!--# foreach($value as $k => $v): #-->
+		<!--# foreach($value as $k => $v){ #-->
 		<div class="h_a">{$v['name']}</div>
 		<div class="table_full">
 			<table width="100%">
@@ -50,27 +50,29 @@
 				<col width="400" />
 				<col />
 				<col width="44" />
-				<!--# foreach($v['items'] as $k2 => $v2): 
+				<!--# foreach($v['items'] as $k2 => $v2){ 
 					$type = $v2['config'][0];
 				#-->
 				<tr><!--  选中后效果 class="tr_checkbox" -->
-					<th>{$v2['config'][2]}</th>
+					<th><a href="{@url:u/groups/setright?rkey=$k2}">{$v2['config'][2]}</a></th>
 					<td>
 					<!--# if ($type == 'html') { #-->
-						<segment tpl='permission_html_segments' args='$k2,$v2' name="$k2" />
+						<segment tpl='permission_html_segments' alias='permission_html_segments' args='$k2,$v2' name="$k2" />
+					<!--# } elseif ($type == 'app') { #-->
+						<segment tpl="{$v2['config'][5]}" alias='permission_html_segments' args='$k2,$v2' name="$k2" />
 					<!--# } else { #-->
-						<segment tpl='permission_type_segments' args='$k2,$v2' name="$type" />
+						<segment tpl='permission_type_segments' alias='permission_html_segments' args='$k2,$v2' name="$type" />
 					<!--# } #-->
 					</td>
 					<td style="vertical-align:middle"><div class="fun_tips">{$v2['config'][3]|html}</div></td>
 					<td style="vertical-align:middle"><input type="checkbox" class="J_line_highlight" style="display:none;" name="copy_items[{$k2}]" value="1"></td>
 				</tr>
-				<!--# endforeach; #-->
+				<!--# } #-->
 			</table>
 		</div>
-		<!--# endforeach; #-->
+		<!--# } #-->
 	</div>
-<!--# endforeach; #-->
+<!--# } #-->
 </div>
 
 <div class="core_pop_wrap pop_expand" style="display:none;" id="J_copy_pop">
@@ -114,7 +116,7 @@
 <template source='TPL:admin.common.footer' />
 <script>
 Wind.use('ajaxForm', function(){
-	Wind.js(GV.JS_ROOT+ 'pages/admin/common/rightsCpoy.js?v=' +GV.JS_VERSION);
+	Wind.js(GV.JS_ROOT+ 'pages/pwadmin/rightsCpoy.js?v=' +GV.JS_VERSION);
 });
 </script>
 </body>

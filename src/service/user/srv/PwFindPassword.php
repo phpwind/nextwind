@@ -7,7 +7,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwFindPassword.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
+ * @version $Id: PwFindPassword.php 24177 2013-01-22 10:36:09Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwFindPassword {
@@ -30,33 +30,18 @@ class PwFindPassword {
 	public function __construct($username) {
 		/* @var $userDs PwUser */
 		$userDs = Wekit::load('user.PwUser');
-		if (!($info = $userDs->getUserByName($username, PwUser::FETCH_MAIN | PwUser::FETCH_DATA))) {
+		$info = $userDs->getUserByName($username, PwUser::FETCH_MAIN | PwUser::FETCH_DATA | PwUser::FETCH_INFO);
+		if (!$info) {
 			$info = $this->_getWindid()->getUser($username, 2);
 			if (!$info) return;
-			/* @var $loginS PwLoginService */
-			$loginS = Wekit::load('user.srv.PwLoginService');
-			$loginS->sysUser($info['uid']);
-			$info = $this->_getUserDs()->getUserByUid($info['uid'], PwUser::FETCH_MAIN + PwUser::FETCH_INFO);
+			Wind::import('SRV:user.srv.PwRegisterService');
+			$registerService = new PwRegisterService();
+			$info = $registerService->sysUser($info['uid']);
+			if ($info) {
+				$info = array_merge($info, $this->_getUserDs()->getUserByUid($info['uid'], PwUser::FETCH_INFO));
+			}
 		}
 		$this->info = $info;
-	}
-	
-	/**
-	 * 检查手机号码是否正确
-	 *
-	 * TODO 获得用户手机号码
-	 * @param string $mobile 手机号码
-	 * @return boolean|PwError
-	 */
-	public function checkMobile($mobile) {
-		return true;
-		if (!$this->info) return new PwError('USER:illegal.request');
-		if (true === $this->isOverByMobile()) return new PwError('USER:findpwd.over.limit.mobile');
-		if ($this->info['mobile'] != $mobile) {
-			return new PwError('USER:findpwd.error.mobile');
-		}
-		//TODO 更新用户检测次数
-		return true;
 	}
 	
 	/**
@@ -187,7 +172,7 @@ class PwFindPassword {
 	 * @return boolean
 	 */
 	public function isBindMail() {
-		return isset($this->info['email']);
+		return $this->info['email'] ? true : false;
 	}
 	
 	
@@ -197,8 +182,7 @@ class PwFindPassword {
 	 * @return boolean
 	 */
 	public function isBindMobile() {
-		/*TODO 用户没有绑定手机号码 */
-		return true;
+		return $this->info['mobile'] ? true : false;
 	}
 	
 	/**

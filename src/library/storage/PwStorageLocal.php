@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwStorageLocal.php 21376 2012-12-06 02:59:47Z jieyin $
+ * @version $Id: PwStorageLocal.php 24383 2013-01-29 10:09:39Z jieyin $
  * @package upload
  */
 
@@ -27,7 +27,7 @@ class PwStorageLocal {
 		} elseif ($ifthumb & 1) {
 			$dir = 'thumb/';
 		}
-		return Wekit::app()->attach . '/' . $dir . $path;
+		return Wekit::url()->attach . '/' . $dir . $path;
 	}
 	
 	/**

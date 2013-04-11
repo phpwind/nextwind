@@ -6,7 +6,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserBehavior.php 23205 2013-01-07 04:57:31Z jinlong.panjl $ 
+ * @version $Id: PwUserBehavior.php 23666 2013-01-14 08:34:43Z jinlong.panjl $ 
  * @package 
  */
 class PwUserBehavior {
@@ -33,7 +33,7 @@ class PwUserBehavior {
 	 */
 	public function fetchBehavior($uids) {
 		if (!is_array($uids) || count($uids) < 1) return array();
-		return $this->_getdao()->fecthInfo($uids);
+		return $this->_getdao()->fetchInfo($uids);
 	}
 	
 	/**
@@ -95,7 +95,7 @@ class PwUserBehavior {
 		if ($uid < 1 || !$behavior || $time < 0) return false;
 		$number = 1;
 		$yesterday = Pw::str2time(Pw::time2str($time,'Y-m-d'));
-		$expired = $yesterday + 86400*2;
+		$expired = $yesterday + 86400;
 		$info = $this->getBehavior($uid, $behavior);
 		if ($info) {
 			$_time = (int)$info['extend_info'];
@@ -114,6 +114,33 @@ class PwUserBehavior {
 		if ($this->_getdao()->replaceInfo($data)) return $number;
 	}
 	
+	/**
+	 * 用户(每天)的行为,次日重新计数 | $num幅度
+	 * 
+	 * @param int $uid
+	 * @param string $behavior
+	 * @param int $time
+	 */
+	public function replaceDayNumBehavior($uid, $behavior, $time, $num = 1) {
+		if ($uid < 1 || !$behavior || $time < 0) return false;
+		$number = $num ? $num : 1;
+		$yesterday = Pw::str2time(Pw::time2str($time,'Y-m-d'));
+		$expired = $yesterday + 86400;
+		$info = $this->getBehavior($uid, $behavior);
+		if ($info) {
+			$_time = (int)$info['extend_info'];
+			$number = (int)$info['number'];
+			if ($_time >= $yesterday) {
+				$number = $number + $num;
+			}
+		}
+		$data['uid'] = $uid;
+		$data['behavior'] = $behavior;
+		$data['number'] = $number;
+		$data['extend_info'] = $time;
+		$data['expired_time'] = $expired;
+		if ($this->_getdao()->replaceInfo($data)) return $number;
+	}
 	
 	/**
 	 * 单纯记录key-value信息

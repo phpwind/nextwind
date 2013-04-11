@@ -1,13 +1,13 @@
 <?php
 defined('WEKIT_VERSION') or exit(403);
-Wind::import('APPS:admin.library.AdminBaseController');
+Wind::import('ADMIN:library.AdminBaseController');
 /**
  * 应用的后台配置
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ManageController.php 21256 2012-12-03 09:20:14Z long.shi $
+ * @version $Id: ManageController.php 24202 2013-01-23 02:18:05Z jieyin $
  * @package admin
  */
 class ManageController extends AdminBaseController {

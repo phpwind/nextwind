@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: IndexController.php 18618 2012-09-24 09:31:00Z jieyin $
+ * @version $Id: IndexController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package src.products.task.controller
  */
 class IndexController extends PwBaseController {
@@ -48,8 +48,10 @@ class IndexController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:task.index.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:task.index.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -67,8 +69,10 @@ class IndexController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:task.index.applicable.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:task.index.applicable.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -93,8 +97,10 @@ class IndexController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:task.index.complete.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:task.index.complete.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**

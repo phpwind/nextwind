@@ -35,7 +35,7 @@
 					<span class="must_red">*</span>
 					<ul class="three_list cc">
 					<!--# foreach ($types as $value) { 
-							$checked = in_array($value['typeid'],$typeIds) ? 'checked' : '';
+							$checked = Pw::inArray($value['typeid'],$typeIds) ? 'checked' : '';
 					#-->
 						<li><label><input type="checkbox" name="typeids[]" value="{$value['typeid']}" {$checked}>{$value['typename']}</label></li>
 					<!--# } #-->

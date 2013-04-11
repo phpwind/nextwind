@@ -69,7 +69,7 @@ class PwUserMobileDm extends PwBaseDm {
 	 * @return PwUserMobileDm
 	 */
 	public function setCode($code){
-		$this->_data['code'] = intval($code);
+		$this->_data['code'] = $code;
 		return $this;
 	}
 	

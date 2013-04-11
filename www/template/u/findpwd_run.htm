@@ -8,33 +8,31 @@
 <div class="wrap">
 <template source='TPL:common.header' suffix='htm'/>
 	<div class="main_wrap">
-		<div class="main">
-			<div class="box_wrap register cc">
-				<h2 class="reg_head">找回密码</h2>
-				<div class="reg_cont_wrap">
-					<div class="reg_cont">
-						<div class="reg_form">
-							<div class="tips">请输入您需要找回密码的用户名，以帮助您快速找回密码</div>
-							<form id="J_findpw_form" action="{@url:u/findPwd/checkUsername}" method="post">
-								<input type="hidden" name="step" id="J_step" value="do" />
-								<dl>
-									<dt><label>用户名：</label></dt>
-									<dd><input required id="J_findpw_username" data-id="username" type="text" class="input length_4" name="username" value=""></dd>
-									<dd id="J_findpw_tip_username" class="dd_r"></dd>
-								</dl>
-								<dl>
-									<dt>&nbsp;</dt>
-									<dd><button class="btn btn_big btn_submit mr20" type="submit">下一步</button><!--a href="{@url:u/findPwd/run}" class="s4">返回上一步</a--></dd>
-								</dl>
-							</form>
-						</div>
+		<div class="box_wrap register cc">
+			<h2 class="reg_head">找回密码</h2>
+			<div class="reg_cont_wrap">
+				<div class="reg_cont">
+					<div class="reg_form">
+						<div class="tips">请输入您需要找回密码的用户名，以帮助您快速找回密码</div>
+						<form id="J_findpw_form" action="{@url:u/findPwd/checkUsername}" method="post">
+							<input type="hidden" name="step" id="J_step" value="do" />
+							<dl>
+								<dt><label>用户名：</label></dt>
+								<dd><input required id="J_findpw_username" data-id="username" type="text" class="input length_4" name="username" value=""></dd>
+								<dd id="J_findpw_tip_username" class="dd_r"></dd>
+							</dl>
+							<dl>
+								<dt>&nbsp;</dt>
+								<dd><button class="btn btn_big btn_submit mr20" type="submit">下一步</button><!--a href="{@url:u/findPwd/run}" class="s4">返回上一步</a--></dd>
+							</dl>
+						</form>
 					</div>
 				</div>
-				<div class="reg_side">
-					<div class="reg_side_cont">
-						<p class="mb10">还记得密码？</p>
-						<p><a href="{@url:u/login/run}" class="btn btn_big">立即登录</a></p>
-					</div>
+			</div>
+			<div class="reg_side">
+				<div class="reg_side_cont">
+					<p class="mb10">还记得密码？</p>
+					<p><a href="{@url:u/login/run}" class="btn btn_big">立即登录</a></p>
 				</div>
 			</div>
 		</div>

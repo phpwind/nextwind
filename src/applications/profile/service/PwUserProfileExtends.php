@@ -6,13 +6,18 @@
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUserProfileExtends.php 22627 2012-12-26 03:54:26Z jieyin $
+ * @version $Id: PwUserProfileExtends.php 23702 2013-01-15 06:09:39Z xiaoxia.xuxx $
  * @package src.products.u.service
  */
 class PwUserProfileExtends extends PwBaseHookService {
 
 	public $current = '';
 	public $left = '';
+	/**
+	 * 当前登录用户
+	 *
+	 * @var PwUserBo
+	 */
 	public $user = null;
 	
 	public function __construct(PwUserBo $userBo) {

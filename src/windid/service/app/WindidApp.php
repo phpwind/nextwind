@@ -6,19 +6,10 @@ Wind::import('WIND:http.transfer.WindHttpSocket');
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidApp.php 21570 2012-12-11 07:59:27Z gao.wanggao $
+ * @version $Id: WindidApp.php 24398 2013-01-30 02:45:05Z jieyin $
  * @package windid.service.app
  */
 class WindidApp {
-
-	/**
-	 * 获取应用列表
-	 *
-	 * @return array
-	 */
-	public function getList() {
-		return $this->_getDao()->getList();
-	}
 
 	/**
 	 * 获取单个应用
@@ -32,6 +23,15 @@ class WindidApp {
 	public function fetchApp($ids) {
 		if (!is_array($ids)  || !$ids) return array();
 		return $this->_getDao()->fetch($ids);
+	}
+
+	/**
+	 * 获取应用列表
+	 *
+	 * @return array
+	 */
+	public function getList() {
+		return $this->_getDao()->getList();
 	}
 
 	/**
@@ -74,6 +74,6 @@ class WindidApp {
 	 * @return WindidAppDao
 	 */
 	private function _getDao() {
-		return Windid::loadDao('app.dao.WindidAppDao');
+		return Wekit::loadDao('WSRV:app.dao.WindidAppDao');
 	}
 }

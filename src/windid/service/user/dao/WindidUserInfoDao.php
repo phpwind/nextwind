@@ -1,20 +1,20 @@
 <?php
-Wind::import('WINDID:service.user.dao.WindidUserInterface');
+Wind::import('WSRV:user.dao.WindidUserInterface');
 
 /**
  * 用户基本资料数据访问层
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidUserInfoDao.php 22297 2012-12-21 05:41:45Z gao.wanggao $
+ * @version $Id: WindidUserInfoDao.php 24702 2013-02-06 03:44:49Z jieyin $
  * @package windid.service.user.dao
  */
 class WindidUserInfoDao extends WindidBaseDao implements WindidUserInterface {
 	
-	protected $_table = 'windid_user_info';
+	protected $_table = 'user_info';
 	protected $_pk = 'uid';
 	protected $_dataStruct = array('uid', 'realname','gender', 'byear', 'bmonth', 'bday', 'hometown', 'location', 'homepage', 'qq', 'msn', 'aliww', 'mobile', 'alipay', 'profile');
-	protected $_defaultbaseInstance = 'user.dao.WindidUserDefaultDao';
+	protected $_defaultBaseInstance = 'WSRV:user.dao.WindidUserDefaultDao';
 
 	/* (non-PHPdoc)
 	 * @see WindidUserInterface::getUserByUid()
@@ -88,8 +88,9 @@ class WindidUserInfoDao extends WindidBaseDao implements WindidUserInterface {
 	 * @see WindidUserInterface::editUser()
 	 */
 	public function editUser($uid, $fields, $increaseFields = array()) {
-		$this->getBaseInstance()->editUser($uid, $fields, $increaseFields);
-		return $this->_update($uid, $fields);
+		$result = $this->getBaseInstance()->editUser($uid, $fields, $increaseFields);
+		$this->_update($uid, $fields);
+		return $result;
 	}
 
 	/**

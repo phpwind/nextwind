@@ -78,7 +78,7 @@ class ManageController extends AdminBaseController {
 			->setTagLogo($logo)
 			->setTypeId(PwTag::TYPE_THREAD_TOPIC)
 			->setIfhot(1)
-			->setCreateUid($this->adminUser->getUid())
+			->setCreateUid($this->loginUser->uid)
 			->setExcerpt($tag['excerpt'])
 			->setSeoTitle($tag['seo_title'])
 			->setSeoDescript($tag['seo_description'])
@@ -133,6 +133,10 @@ class ManageController extends AdminBaseController {
 	public function doeditAction(){
 		$tag = $this->getInput('tag');
 		if (!$tag['name']) $this->showError('Tag:tagname.empty');
+		$tagInfo = $this->_getTagDs()->getTag($tag['tag_id']);
+		if (!$tagInfo) {
+			$this->showError('话题不存在！');
+		}
 		$logo = $this->uploadLogo();
 		$dm = new PwTagDm($tag['tag_id']);
 		$dm->setName($tag['name'])
@@ -143,6 +147,9 @@ class ManageController extends AdminBaseController {
 		if ($logo) {
 			$dm->setTagLogo($logo)
 				->setIflogo(1);
+		}
+		if ($logo && $logo != $tagInfo['tag_logo']) {
+			Pw::deleteAttach($tagInfo['tag_logo']);
 		}
 		//取消原关联话题
 		
@@ -355,7 +362,9 @@ class ManageController extends AdminBaseController {
 				$dm->setCategoryName($v['category_name'])
 					->setCategoryAlias($v['alias'])
 					->setVieworder($v['vieworder']);
-				$this->_getTagCateGoryDs()->updateTagCategory($dm);
+				if (($result = $this->_getTagCateGoryDs()->updateTagCategory($dm)) instanceof PwError) {
+					$this->showError($result->getError());
+				}
 			}
 		}
 		if ($newdata) {
@@ -369,7 +378,9 @@ class ManageController extends AdminBaseController {
 				$dm->setCategoryName($v['category_name'])
 					->setCategoryAlias($v['alias'])
 					->setVieworder($v['vieworder']);
-				$this->_getTagCateGoryDs()->addTagCategory($dm);
+				if (($result = $this->_getTagCateGoryDs()->addTagCategory($dm)) instanceof PwError) {
+					$this->showError($result->getError());
+				}
 			}
 		}
 		$this->showMessage('success');
@@ -412,12 +423,8 @@ class ManageController extends AdminBaseController {
 	
 	private function _checkWork($str) {
 		if (!$str) return true;
-		$len = strlen($str);
-		for ($i = 0; $i < $len; $i++) {
-			$ch = ord($str[$i]);
-			if (!($ch > 64 && $ch < 91) && !($ch > 96 && $ch < 122)) {
-				return 'TAG:charset.error';
-			}
+		if (0 >= preg_match('/^[A-Za-z]+$/', $str)) {
+			return 'TAG:charset.error';
 		}
 		return true;
 	}
@@ -437,7 +444,7 @@ class ManageController extends AdminBaseController {
 		if (!$relateTag) {
 			$dm = new PwTagDm();
 			$dm->setName($tagName)
-				->setCreateUid($this->adminUser->getUid())
+				->setCreateUid($this->loginUser->uid)
 				->setParent($tagId);
 			$this->_getTagDs()->addTag($dm);
 		} else {
@@ -478,7 +485,7 @@ class ManageController extends AdminBaseController {
 	 */
 	private function uploadLogo() {
 		Wind::import("SRV:upload.action.PwTagUpload");
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$tagUpload = new PwTagUpload(156, 156);
 		$upload = new PwUpload($tagUpload);
 		if (($result = $upload->check()) === true) {

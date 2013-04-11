@@ -6,7 +6,7 @@ Wind::import('SRV:task.dm.PwTaskDmFactory');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwTaskService.php 22594 2012-12-25 11:46:33Z long.shi $
+ * @version $Id: PwTaskService.php 24025 2013-01-21 03:18:31Z xiaoxia.xuxx $
  * @package src.service.task.srv
  */
 class PwTaskService {
@@ -78,6 +78,9 @@ class PwTaskService {
 	 * @return PwError|boolean
 	 */
 	public function deleteTask($id) {
+		$task = $this->_taskDs()->get($id);
+		if (!$task) return true;
+		Pw::deleteAttach($task['icon']);
 		$this->_taskUserDs()->delete($id);
 		$r = $this->_taskDs()->deleteTask($id);
 		if ($r instanceof PwError) return $r;

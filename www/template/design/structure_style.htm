@@ -7,9 +7,9 @@
 						<dt>展示效果：</dt>
 						<dd>
 						<select class="select_2 mr10" name="styleclass">
-						<!--# foreach ($sysstyle as $k=>$v): #-->
+						<!--# foreach ($sysstyle as $k=>$v){ #-->
 							<option value="{$v}" {@Pw::isSelected($style['styleclass'] == $v)}>{$k}</option>
-						<!--# endforeach; #-->
+						<!--# } #-->
 						</select>
 							<!-- <span class="tips_icon">提交后才能看到实际效果。</span> -->
 						</dd>
@@ -19,9 +19,9 @@
 						<dd>
 						<select class="mr10" name="font[size]">
 							<option value="">大小</option>
-						<!--# foreach ($sysfontsize as $v): #-->
+						<!--# foreach ($sysfontsize as $v){ #-->
 							<option value="{$v}" {@Pw::isSelected($style['font']['size'] == $v)}>{$v}px</option>
-						<!--# endforeach; #-->
+						<!--# } #-->
 						</select>
 						<span class="color_pick J_color_pick mr10"><em class="J_bg" style="<!--# if ($style['font']['color']) { #-->background:{$style['font']['color']};<!--# } #-->"></em></span>
 						<input class="J_hidden_color" name="font[color]" type="hidden" value="{$style['font']['color']}">
@@ -33,9 +33,9 @@
 						<dd>
 						<select class="mr10" name="link[size]">
 							<option value="">大小</option>
-						<!--# foreach ($sysfontsize as $v): #-->
+						<!--# foreach ($sysfontsize as $v){ #-->
 							<option value="{$v}"{@Pw::isSelected($style['link']['size'] == $v)}>{$v}px</option>
-						<!--# endforeach; #-->
+						<!--# } #-->
 						</select>
 						<span class="color_pick J_color_pick mr10"><em class="J_bg" style="<!--# if ($style['link']['color']) { #-->background:{$style['link']['color']};<!--# } #-->"></em></span>
 						<input class="J_hidden_color" name="link[color]" type="hidden" value="{$style['link']['color']}">
@@ -56,15 +56,15 @@
 							<div style="{$both}">
 								<select class="mr10" name="border[linewidth]">
 									<option value="" {@Pw::isSelected($style['border']['linewidth'] == '')}>大小</option>
-								<!--# foreach ($syslinewidth as $v): #-->
+								<!--# foreach ($syslinewidth as $v){ #-->
 									<option value="{$v}" {@Pw::isSelected($style['border']['linewidth'] === $v)}>{$v}px</option>
-								<!--# endforeach; #-->
+								<!--# } #-->
 								</select>
 								<select class="mr10" name="border[style]">
 									<option value="">样式</option>
-								<!--# foreach ($sysborder as $k=>$v): #-->
+								<!--# foreach ($sysborder as $k=>$v){ #-->
 									<option value="{$k}" {@Pw::isSelected($style['border']['style'] == $k)}>{$v}</option>
-								<!--# endforeach; #-->
+								<!--# } #-->
 								</select>
 								<span class="color_pick J_color_pick"><em class="J_bg" style="<!--# if ($style['border']['color']) { #-->background:{$style['border']['color']};<!--# } #-->"></em></span>
 								<input class="J_hidden_color" name="border[color]" type="hidden" value="{$style['border']['color']}">
@@ -73,15 +73,15 @@
 								<div class="mb10">上：
 									<select class="mr10" name="border[top][linewidth]">
 										<option value="" {@Pw::isSelected($style['border']['top']['linewidth'] == '')}>大小</option>
-									<!--# foreach ($syslinewidth as $v): #-->
+									<!--# foreach ($syslinewidth as $v){ #-->
 										<option value="{$v}" {@Pw::isSelected($style['border']['top']['linewidth'] === $v)}>{$v}px</option>
-									<!--# endforeach; #-->
+									<!--# } #-->
 									</select>
 									<select class="mr10" name="border[top][style]">
 										<option value="">样式</option>
-									<!--# foreach ($sysborder as $k=>$v): #-->
+									<!--# foreach ($sysborder as $k=>$v){ #-->
 										<option value="{$k}" {@Pw::isSelected($style['border']['top']['style'] == $k)}>{$v}</option>
-									<!--# endforeach; #-->
+									<!--# } #-->
 									</select>
 									<span class="color_pick J_color_pick"><em class="J_bg" style="<!--# if ($style['border']['top']['color']) { #-->background:{$style['border']['top']['color']};<!--# } #-->"></em></span>
 									<input class="J_hidden_color" name="border[top][color]" type="hidden" value="{$style['border']['top']['color']}">
@@ -89,15 +89,15 @@
 								<div class="mb10">右：
 									<select class="mr10" name="border[right][linewidth]">
 										<option value="" {@Pw::isSelected($style['border']['right']['linewidth'] == '')}>大小</option>
-									<!--# foreach ($syslinewidth as $v): #-->
+									<!--# foreach ($syslinewidth as $v){ #-->
 										<option value="{$v}" {@Pw::isSelected($style['border']['right']['linewidth'] === $v)}>{$v}px</option>
-									<!--# endforeach; #-->
+									<!--# } #-->
 									</select>
 									<select class="mr10" name="border[right][style]">
 										<option value="">样式</option>
-									<!--# foreach ($sysborder as $k=>$v): #-->
+									<!--# foreach ($sysborder as $k=>$v){ #-->
 										<option value="{$k}" {@Pw::isSelected($style['border']['right']['style'] == $k)}>{$v}</option>
-									<!--# endforeach; #-->
+									<!--# } #-->
 									</select>
 									<span class="color_pick J_color_pick"><em class="J_bg" style="<!--# if ($style['border']['right']['color']) { #-->background:{$style['border']['right']['color']};<!--# } #-->"></em></span>
 									<input class="J_hidden_color" name="border[right][color]" type="hidden" value="{$style['border']['right']['color']}">
@@ -105,15 +105,15 @@
 								<div class="mb10">下：
 									<select class="mr10" name="border[bottom][linewidth]">
 										<option value="" {@Pw::isSelected($style['border']['bottom']['linewidth'] == '')}>大小</option>
-									<!--# foreach ($syslinewidth as $v): #-->
+									<!--# foreach ($syslinewidth as $v){ #-->
 										<option value="{$v}" {@Pw::isSelected($style['border']['bottom']['linewidth'] === $v)}>{$v}px</option>
-									<!--# endforeach; #-->
+									<!--# } #-->
 									</select>
 									<select class="mr10" name="border[bottom][style]">
 										<option value="">样式</option>
-									<!--# foreach ($sysborder as $k=>$v): #-->
+									<!--# foreach ($sysborder as $k=>$v){ #-->
 										<option value="{$k}" {@Pw::isSelected($style['border']['bottom']['style'] == $k)}>{$v}</option>
-									<!--# endforeach; #-->
+									<!--# } #-->
 									</select>
 									<span class="color_pick J_color_pick"><em class="J_bg"  style="<!--# if ($style['border']['bottom']['color']) { #-->background:{$style['border']['bottom']['color']};<!--# } #-->"></em></span>
 									<input class="J_hidden_color" name="border[bottom][color]" type="hidden" value="{$style['border']['bottom']['color']}">
@@ -121,15 +121,15 @@
 								<div class="mb10">左：
 									<select class="mr10" name="border[left][linewidth]">
 										<option value="" {@Pw::isSelected($style['border']['left']['linewidth'] == '')}>大小</option>
-									<!--# foreach ($syslinewidth as $v): #-->
+									<!--# foreach ($syslinewidth as $v){ #-->
 										<option value="{$v}" {@Pw::isSelected($style['border']['left']['linewidth'] === $v)}>{$v}px</option>
-									<!--# endforeach; #-->
+									<!--# } #-->
 									</select>
 									<select class="mr10" name="border[left][style]">
 										<option value="">样式</option>
-									<!--# foreach ($sysborder as $k=>$v): #-->
+									<!--# foreach ($sysborder as $k=>$v){ #-->
 										<option value="{$k}" {@Pw::isSelected($style['border']['left']['style'] == $k)}>{$v}</option>
-									<!--# endforeach; #-->
+									<!--# } #-->
 									</select>
 									<span class="color_pick J_color_pick"><em class="J_bg"  style="<!--# if ($style['border']['left']['color']) { #-->background:{$style['border']['left']['color']};<!--# } #-->"></em></span>
 									<input class="J_hidden_color" name="border[left][color]" type="hidden" value="{$style['border']['left']['color']}">

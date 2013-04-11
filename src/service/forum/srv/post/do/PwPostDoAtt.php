@@ -2,7 +2,7 @@
 defined('WEKIT_VERSION') || exit('Forbidden');
 
 Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
-Wind::import('SRV:upload.PwUpload');
+Wind::import('LIB:upload.PwUpload');
 Wind::import('SRV:upload.action.PwAttUpload');
 Wind::import('SRV:attach.dm.PwThreadAttachDm');
 
@@ -12,7 +12,7 @@ Wind::import('SRV:attach.dm.PwThreadAttachDm');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostDoAtt.php 19581 2012-10-16 05:36:21Z jieyin $
+ * @version $Id: PwPostDoAtt.php 23975 2013-01-17 10:20:11Z jieyin $
  * @package forum
  */
 

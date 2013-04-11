@@ -9,7 +9,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: RecycleController.php 18770 2012-09-27 07:39:58Z xiaoxia.xuxx $
+ * @version $Id: RecycleController.php 23742 2013-01-15 09:22:58Z jieyin $
  * @package admin
  * @subpackage controller
  */
@@ -88,7 +88,7 @@ class RecycleController extends AdminBaseController {
 		
 		Wind::import('SRV:forum.srv.operation.PwDeleteTopic');
 		Wind::import('SRV:forum.srv.dataSource.PwFetchTopicByTid');
-		$srv = new PwDeleteTopic(new PwFetchTopicByTid($tids), new PwUserBo($this->adminUser->getUid()));
+		$srv = new PwDeleteTopic(new PwFetchTopicByTid($tids), new PwUserBo($this->loginUser->uid));
 		$srv->execute();
 
 		$this->showMessage('删除成功了');
@@ -99,7 +99,7 @@ class RecycleController extends AdminBaseController {
 		if (!$tids) $this->showError('operate.select');
 
 		Wind::import('SRV:forum.srv.operation.PwRevertTopic');
-		$srv = new PwRevertTopic($tids, new PwUserBo($this->adminUser->getUid()));
+		$srv = new PwRevertTopic($tids, new PwUserBo($this->loginUser->uid));
 		$srv->execute();
 
 		$this->showMessage('还原成功了');
@@ -171,7 +171,7 @@ class RecycleController extends AdminBaseController {
 		
 		Wind::import('SRV:forum.srv.operation.PwDeleteReply');
 		Wind::import('SRV:forum.srv.dataSource.PwFetchReplyByPid');
-		$srv = new PwDeleteReply(new PwFetchReplyByPid($pids), new PwUserBo($this->adminUser->getUid()));
+		$srv = new PwDeleteReply(new PwFetchReplyByPid($pids), new PwUserBo($this->loginUser->uid));
 		$srv->execute();
 
 		$this->showMessage('删除成功了');
@@ -181,7 +181,7 @@ class RecycleController extends AdminBaseController {
 		$pids = $this->getInput('pids');
 		if (!$pids) $this->showError('operate.select');
 		Wind::import('SRV:forum.srv.operation.PwRevertReply');
-		$srv = new PwRevertReply($pids, new PwUserBo($this->adminUser->getUid()));
+		$srv = new PwRevertReply($pids, new PwUserBo($this->loginUser->uid));
 		$srv->execute();
 		$this->showMessage('还原成功了');
 	}

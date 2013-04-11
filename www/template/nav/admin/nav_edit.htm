@@ -38,7 +38,15 @@ body{width:440px;}
 				<div class="gray">以http://开头</div>
 			</td>
 		</tr>
-
+		<!--# if($navInfo['type'] == 'my') {#-->
+		<tr>
+			<th>图标</th>
+			<td>
+				<div class="mb5"><input type="text" name="image" class="input length_5" value="{$navInfo['image']}"></div>
+				<div class="gray">以http://开头,需要导航html支持</div>
+			</td>
+		</tr>
+		<!--# } #-->
 		<tr>
 			<th>名称样式</th>
 			<td>

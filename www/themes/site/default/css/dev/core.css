@@ -3,7 +3,7 @@
 @explain: 初始化/全局的公用控件
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: core.css 23210 2013-01-07 05:38:39Z yanchixia $
+$Id: core.css 24871 2013-02-25 06:15:47Z hao.lin $
 ===================
 #*/
 
@@ -58,6 +58,7 @@ $Id: core.css 23210 2013-01-07 05:38:39Z yanchixia $
 >>用户下拉选择
 >>弹窗选择好友
 >>帮Ta打卡弹窗
+>>全局数字数量提示效果
 >>钩子样式
 ===================
 */
@@ -69,7 +70,7 @@ $Id: core.css 23210 2013-01-07 05:38:39Z yanchixia $
 ===================
 */
 html,body,
-dl, dt, dd, ul, p, th, td,
+dl, dt, dd, ul, p, 
 h1, h2, h3, h4, h5, h6,
 pre, code, form,
 fieldset, legend{
@@ -350,7 +351,8 @@ html{
 .user_select_input .input_down/*私信用户选择*/,
 .pop_help_punch .select_box dd,
 .pop_help_punch .select_box dt/*打卡弹窗*/,
-.tmode_waterfall .num span/*瀑布流小图标*/{
+.tmode_waterfall .num span/*瀑布流小图标*/,
+.design_layout_search button span/*搜索放大镜*/{
 	background:url(../../images/common/core_icon.png) no-repeat;
 }
 
@@ -1103,14 +1105,20 @@ loading加载
 }
 /*弹窗提示*/
 .not_content_mini{
-	padding:0 20px 0 85px;
-	background:url(../../images/tips/gray_middle.png) 40px 0 no-repeat;
+	padding:15px 20px;
+	text-align:center;
 	color:#666;
 	font-size:14px;
-	line-height:34px;
-	height:34px;
+	line-height:32px;
 	margin-bottom:10px;
-	white-space:nowrap;
+}
+.not_content_mini i{
+	display:inline-block;
+	width:32px;
+	height:32px;
+	background:url(../../images/tips/gray_middle.png) no-repeat;
+	vertical-align:middle;
+	margin-right:10px;
 }
 
 /*
@@ -1124,8 +1132,7 @@ loading加载
 	border-radius:3px;
 	padding:12px 40px;
 	text-align:center;
-	position:fixed;
-	_position:absolute;
+	position:absolute;
 	left:50%;
 	top:30%;
 	color:#333;
@@ -1564,13 +1571,6 @@ div.pop_show_mini{
 	padding-bottom:5000px;
 	margin-bottom:-5000px;
 }
-.aPre{
-	cursor:url(../../images/common/pre.cur),auto;
-}
-.aNext{
-	cursor:url(../../images/common/next.cur),auto;
-	right:0;
-}
 
 /*
 ===================
@@ -1761,7 +1761,6 @@ div.pop_show_mini{
 }
 .core_menu_list li{
 	float:none !important;
-	padding:1px 0;
 	margin:0;
 	width:100% !important;
 	padding:0 !important;
@@ -1785,7 +1784,7 @@ div.pop_show_mini{
 }
 .core_menu_list li a:hover{
 	border:0 none;
-	background:#f5f5f5;
+	background-color:#f5f5f5;
 	text-decoration:none;
 	color:#333;
 }
@@ -1975,7 +1974,14 @@ div.pop_show_mini{
 .core_unfollow:hover{
 	text-decoration:none;
 }
-
+/*退出*/
+.core_unfollow span{
+	display:none;
+	cursor:pointer;
+}
+.core_unfollow:hover span{
+	display:inline;
+}
 
 
 /*
@@ -2749,7 +2755,7 @@ div.pop_show_mini{
 	height:30px;
 	overflow:hidden;
 	line-height:normal;
-	color:#666;
+	color:#999;
 	line-height:30px;
 }
 .tmode_waterfall .user img{
@@ -2758,7 +2764,7 @@ div.pop_show_mini{
 }
 .tmode_waterfall .user a{
 	color:#333;
-	margin-right:5px;
+	margin-right:10px;
 }
 .tmode_waterfall .num{
 	padding:10px 0 10px 15px;
@@ -2808,10 +2814,23 @@ div.pop_show_mini{
 	right:0;
 	top:0;
 	border:0 none;
-	padding:2px 0 0;
+	padding:0;
 	background:#fff;
 	width:30px;
 	height:33px;
+	cursor:pointer;
+}
+.design_layout_search button span{
+	width:20px;
+	height:20px;
+	display:inline;
+	font:0/0 Arial;
+	overflow:hidden;
+	padding:0;
+	margin:0 0 0;
+	background-position:0 -530px;
+	float:left;
+	text-indent:-2000em;
 	cursor:pointer;
 }
 
@@ -3202,6 +3221,24 @@ ul.at_user_list{
 /*底部*/
 .pop_help_punch .pop_bottom{
 	background:#f5f5f5;
+}
+
+/*
+===================
+全局数字数量提示效果
+>>必须用em或者span来做标签
+>>例：头部消息后面的数字
+===================
+*/
+.core_num{
+	padding:0 4px;
+	background:#ff9000;
+	color:#fff !important;
+	border-radius:3px;
+	font-size:12px;
+	overflow:hidden;
+	text-indent:0;
+	white-space:nowrap;
 }
 
 /*

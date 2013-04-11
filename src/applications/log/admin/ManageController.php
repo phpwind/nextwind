@@ -8,7 +8,7 @@ Wind::import('SRV:log.so.PwLogSo');
  * @author xiaoxia.xu<xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ManageController.php 22264 2012-12-21 02:33:07Z xiaoxia.xuxx $
+ * @version $Id: ManageController.php 23742 2013-01-15 09:22:58Z jieyin $
  * @package src.applications.log.admin
  */
 class ManageController extends AdminBaseController {
@@ -49,14 +49,14 @@ class ManageController extends AdminBaseController {
 		$this->setOutput($page, 'page');
 		$this->setOutput($logSo->getSearchData(), 'searchData');
 		$this->_getForumList();
-		$this->setOutput($this->isFounder($this->adminUser->getUsername()), 'canClear');
+		$this->setOutput($this->isFounder($this->loginUser->username), 'canClear');
 	}
 	
 	/**
 	 * 清除三个月前操作
 	 */
 	public function clearAction() {
-		if (!$this->isFounder($this->adminUser->getUsername())) $this->showError('fail');
+		if (!$this->isFounder($this->loginUser->username)) $this->showError('fail');
 		$step = $this->getInput('step', 'post');
 		if ($step != 2) $this->showError('fail');
 		list($year, $month) = explode('-', Pw::time2str(Pw::getTime(), 'Y-n'));

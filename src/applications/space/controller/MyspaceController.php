@@ -3,11 +3,11 @@ Wind::import('LIB:base.PwBaseController');
 Wind::import('SRV:space.bo.PwSpaceBo');
 /**
  * 我的空间
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: MyspaceController.php 22614 2012-12-26 01:50:03Z gao.wanggao $ 
+ * @version $Id: MyspaceController.php 24585 2013-02-01 04:02:37Z jieyin $ 
  * @package 
  */
 class MyspaceController extends PwBaseController {
@@ -28,7 +28,7 @@ class MyspaceController extends PwBaseController {
 		$page = 1;
 		$this->spaceBo = new PwSpaceBo($this->loginUser->uid);
 		$list = $this->_getStyleDs()->getAllStyle('space');
-		$addons = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig('style-type');
+		$addons = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig('style-type');
 		
 		//个性域名
 		$domain_isopen = Wekit::C('domain', 'space.isopen');
@@ -42,7 +42,7 @@ class MyspaceController extends PwBaseController {
 		$this->setOutput($list, 'list');
 		$this->setOutput($perpage, 'perpage');
 		$this->setOutput(ceil(count($list) / $perpage), 'totalpage');
-		$this->setOutput(Wekit::app()->themes . '/' . $addons['space'][1], 'themeUrl');
+		$this->setOutput(Wekit::url()->themes . '/' . $addons['space'][1], 'themeUrl');
 		$this->setOutput($this->spaceBo, 'space');
 	}
 	
@@ -177,7 +177,7 @@ class MyspaceController extends PwBaseController {
 	
  	private function _uploadImage() {
  		Wind::import('SRV:upload.action.PwSpaceUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
  		$bhv = new PwSpaceUpload($this->loginUser->uid);
 		$upload = new PwUpload($bhv);
 		if (($result = $upload->check()) === true) {
@@ -197,7 +197,7 @@ class MyspaceController extends PwBaseController {
 	 * @return PwStyle
 	 */
 	private function _getStyleDs() {
-		return Wekit::load('APPS:appcenter.service.PwStyle');
+		return Wekit::load('APPCENTER:service.PwStyle');
 	}
 	
 	/**

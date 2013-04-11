@@ -22,7 +22,7 @@ class PunchController extends PwBaseController {
 		if ($this->loginUser->uid < 1) {
 			$this->showError('USER:user.not.login');
 		}
-		$this->config = $this->_getconfigDs()->getValues('site');
+		$this->config = Wekit::C()->getValues('site');
 		$this->_creditBo = PwCreditBo::getInstance();
 		
 		// 是否开启
@@ -204,7 +204,7 @@ class PunchController extends PwBaseController {
 				'affect' => $this->config['punch.friend.reward']['rewardMeNum'])
 			);
 			$this->_creditBo->execute($creditUids);
-			$this->_getUserBehaviorDs()->replaceBehavior($this->loginUser->uid,'punch_num',Pw::getTime());
+			$this->_getUserBehaviorDs()->replaceDayBehavior($this->loginUser->uid,'punch_num',Pw::getTime());
 			$punchUsers[] = $userBo->username;
 		}
 		if ($punchUsers) {
@@ -305,6 +305,7 @@ class PunchController extends PwBaseController {
 	 */
 	private function _checkPunchNum() {
 		$behavior = $this->_getUserBehaviorDs()->getBehavior($this->loginUser->uid,'punch_num');
+		
 		$allowNum = $this->config['punch.friend.reward']['friendNum'] - $behavior['number'];
 		if ($allowNum < 1) {
 			return new PwError('SPACE:punch.friend.num.error',array('{num}'=>$this->config['punch.friend.reward']['friendNum']));
@@ -319,15 +320,6 @@ class PunchController extends PwBaseController {
 	 */
 	private function _getUserBehaviorDs() {
 		return Wekit::load('user.PwUserBehavior');
-	}
-
-	/**
-	 * ConfigDS
-	 * 
-	 * @return PwConfig
-	 */
-	private function _getconfigDs() {
-		return Wekit::load('config.PwConfig');
 	}
 	
 	/**

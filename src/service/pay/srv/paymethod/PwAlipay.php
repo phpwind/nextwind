@@ -9,14 +9,11 @@ Wind::import('SRV:pay.srv.paymethod.PwPayAbstract');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwAlipay.php 18618 2012-09-24 09:31:00Z jieyin $
+ * @version $Id: PwAlipay.php 24975 2013-02-27 09:24:54Z jieyin $
  * @package forum
  */
 
 class PwAlipay extends PwPayAbstract {
-	
-	public $charset = 'utf-8';
-	public $baseurl;
 	
 	public $alipay;
 	public $alipay_url = '';
@@ -25,6 +22,7 @@ class PwAlipay extends PwPayAbstract {
 	public $alipay_interface;
 
 	public function __construct() {
+		parent::__construct();
 		$config = Wekit::C('pay');
 		$this->alipay = $config['alipay'];
 		$this->alipay_key = $config['alipaykey'];

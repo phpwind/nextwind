@@ -1,13 +1,13 @@
 <?php
 Wind::import('ADMIN:library.AdminBaseController');
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
 /**
  * 后台 - 我的模板
  *
  * @author Zhu Dong <zhudong0808@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: StyleController.php 21540 2012-12-11 05:55:11Z long.shi $
+ * @version $Id: StyleController.php 24598 2013-02-01 06:44:48Z long.shi $
  * @package appcenter.admin
  */
 class StyleController extends AdminBaseController {
@@ -20,12 +20,12 @@ class StyleController extends AdminBaseController {
 	 */
 	public function run() {
 		$type = $this->getInput('type');
-		$addons = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig(
+		$addons = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig(
 			'style-type');
 		$type || $type = key($addons);
 		
 		$count = $this->_styleDs()->countByType($type);
-		$styles = array();
+		$results = array();
 		if ($count > 0) {
 			$page = (int) $this->getInput('page');
 			$page < 1 && $page = 1;
@@ -46,7 +46,7 @@ class StyleController extends AdminBaseController {
 	 * 界面管理
 	 */
 	public function manageAction() {
-		$addons = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig(
+		$addons = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig(
 			'style-type');
 		$this->setOutput($addons, 'addons');
 		
@@ -182,7 +182,7 @@ class StyleController extends AdminBaseController {
 	public function deleteAction() {
 		list($type, $path) = $this->getInput(array('type', 'path'));
 		Pw::deleteAttach($path);
-		Wekit::load('config.PwConfig')->setConfig('css', $type, '');
+		Wekit::C()->setConfig('css', $type, '');
 		$this->_compilerService()->doCompile();
 		$this->showMessage('success');
 	}
@@ -212,7 +212,7 @@ class StyleController extends AdminBaseController {
 	 * 风格 - 扫描未安装的风格
 	 */
 	public function installAction() {
-		$addons = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig(
+		$addons = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig(
 			'style-type');
 		$themes = $this->_styleService()->getUnInstalledThemes();
 		$this->setOutput($themes, 'themes');
@@ -225,7 +225,7 @@ class StyleController extends AdminBaseController {
 	 */
 	public function exportAction() {
 		list($type, $alias) = $this->getInput(array('type', 'alias'), 'get');
-		$conf = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig(
+		$conf = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig(
 			'style-type', $type);
 		if (!$conf) $this->showMessage('fail');
 		Wind::import('LIB:utility.PwZip');
@@ -248,13 +248,13 @@ class StyleController extends AdminBaseController {
 	 */
 	public function previewAction() {
 		$id = $this->getInput("styleid");
-		$addons = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig(
+		$addons = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig(
 			'style-type');
 		$style = $this->_styleDs()->getStyle($id);
 		Pw::setCookie('style_preview', $style['alias'] . '|' . $style['style_type'], 20);
 		$url = $addons[$style['style_type']][2];
 		if ($style['style_type'] == 'space') {
-			$url .= '?username=' . $this->adminUser->getUsername();
+			$url .= '?username=' . $this->loginUser->username;
 		} /* else if ($style['style_type'] == 'forum') {
 			$forums = Wekit::load('forum.PwForum')->getForumOrderByType(false);
 			$url .= '?fid=' . key($forums);
@@ -274,7 +274,7 @@ class StyleController extends AdminBaseController {
 			if (($result = $this->_install(Wind::getRealDir($theme, true))) instanceof PwError) $this->showError(
 				$result->getError());
 		}
-		$this->showMessage('success', 'appcenter/style/run');
+		$this->showMessage('success', 'appcenter/style/install');
 	}
 
 	/**
@@ -292,7 +292,7 @@ class StyleController extends AdminBaseController {
 			else
 				$this->showMessage('success');
 		} else {
-			$uninstall = Wekit::load('APPS:appcenter.service.srv.PwUninstallApplication');
+			$uninstall = Wekit::load('APPCENTER:service.srv.PwUninstallApplication');
 			$r = $uninstall->uninstall($styleid);
 			if ($r === true) $this->showMessage('success');
 			$this->showError($r->getError());
@@ -300,7 +300,7 @@ class StyleController extends AdminBaseController {
 	}
 	
 	public function generateAction() {
-		$addons = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig(
+		$addons = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig(
 			'style-type');
 		$this->setOutput($addons, 'addons');
 		unset($addons['portal']);
@@ -314,7 +314,7 @@ class StyleController extends AdminBaseController {
 		if (!preg_match('/^[a-z][a-z0-9]+$/i', $alias)) $this->showError('APPCENTER:illegal.alias');
 		list($author, $email) = $this->getInput(array('author', 'email'), 'post');
 		/* @var $srv PwGenerateStyle */
-		$srv = Wekit::load('APPS:appcenter.service.srv.PwGenerateStyle');
+		$srv = Wekit::load('APPCENTER:service.srv.PwGenerateStyle');
 		$srv = new PwGenerateStyle();
 		$srv->setStyle_type($style_type);
 		$srv->setAlias($alias);
@@ -338,10 +338,10 @@ class StyleController extends AdminBaseController {
 	 */
 	private function _install($pack) {
 		/* @var $install PwInstallApplication */
-		Wind::import('APPS:appcenter.service.srv.PwInstallApplication');
+		Wind::import('APPCENTER:service.srv.PwInstallApplication');
 		$install = new PwInstallApplication();
 		/* @var $_install PwStyleInstall */
-		$_install = Wekit::load('APPS:appcenter.service.srv.do.PwStyleInstall');
+		$_install = Wekit::load('APPCENTER:service.srv.do.PwStyleInstall');
 		$conf = $install->getConfig('install-type', 'style');
 		$manifest = $pack . '/Manifest.xml';
 		if (!is_file($manifest)) $this->showError('APPCENTER:install.mainfest.not.exist');
@@ -363,7 +363,7 @@ class StyleController extends AdminBaseController {
 				'modified_time' => Pw::getTime());
 			$fields[] = $_tmp;
 		}
-		Wekit::load('APPS:appcenter.service.PwApplicationLog')->batchAdd($fields);
+		Wekit::load('APPCENTER:service.PwApplicationLog')->batchAdd($fields);
 	}
 
 	/**
@@ -374,7 +374,7 @@ class StyleController extends AdminBaseController {
 	 */
 	private function _upload($key) {
 		Wind::import('SRV:upload.action.PwIconUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwIconUpload($key, 'background/');
 		$upload = new PwUpload($bhv);
 		$r = $upload->execute();
@@ -387,7 +387,7 @@ class StyleController extends AdminBaseController {
 	 * @return PwApplication
 	 */
 	private function _appDs() {
-		return Wekit::load('APPS:appcenter.service.PwApplication');
+		return Wekit::load('APPCENTER:service.PwApplication');
 	}
 
 	/**
@@ -395,7 +395,7 @@ class StyleController extends AdminBaseController {
 	 * @return PwStyle
 	 */
 	private function _styleDs() {
-		return Wekit::load('APPS:appcenter.service.PwStyle');
+		return Wekit::load('APPCENTER:service.PwStyle');
 	}
 
 	/**
@@ -403,14 +403,14 @@ class StyleController extends AdminBaseController {
 	 * @return PwStyleService
 	 */
 	private function _styleService() {
-		return Wekit::load("APPS:appcenter.service.srv.PwStyleService");
+		return Wekit::load("APPCENTER:service.srv.PwStyleService");
 	}
 	
 	/**
 	 * @return PwCssCompile
 	 */
 	private function _compilerService() {
-		return Wekit::load('APPS:appcenter.service.srv.PwCssCompile');
+		return Wekit::load('APPCENTER:service.srv.PwCssCompile');
 	}
 }
 

@@ -1,9 +1,9 @@
 <?php
 define('WEKIT_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('WEKIT_VERSION', '0.3.9');
-define('WINDID_VERSION', '0.0.2');
 define('NEXT_VERSION', '9.0');
-define('NEXT_RELEASE', '20130107');
+define('NEXT_RELEASE', '20130227');
+define('NEXT_FIXBUG','9000001');
 defined('WIND_DEBUG') || define('WIND_DEBUG', 0);
 
 require WEKIT_PATH . '../wind/Wind.php';
@@ -13,15 +13,14 @@ require WEKIT_PATH . '../wind/Wind.php';
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: wekit.php 23388 2013-01-09 07:23:34Z liusanbian $
+ * @version $Id: wekit.php 26482 2013-04-10 02:35:19Z jieyin $
  * @package wekit
  */
 class Wekit {
 
-	protected static $_config;
-	protected static $_cache;
-	protected static $_var = array();
-	protected static $_app;
+	protected static $_sc;				//系统配置
+	protected static $_var;				//全局配置变量
+	protected static $_app = array();	//应用对象
 
 	/**
 	 * 运行当前应用
@@ -30,12 +29,11 @@ class Wekit {
 	 * @param array $components 组建配置信息 该组建配置将会覆盖原组建配置，默认为空
 	 */
 	public static function run($name = 'phpwind', $components = array()) {
-		$config = WindUtility::mergeArray(include WEKIT_PATH . '../conf/application/default.php', 
-			include WEKIT_PATH . '../conf/application/' . $name . '.php');
-		if (!empty($components)) $config['components'] = (array) $components + $config['components'];
-		
+		self::init($name);
+		if (!empty($components)) self::$_sc['components'] = (array)$components + self::$_sc['components'];
+
 		/* @var $application WindWebFrontController */
-		$application = Wind::application($name, $config);
+		$application = Wind::application($name, self::$_sc);
 		$application->registeFilter(new PwFrontFilters($application));
 		$application->run();
 	}
@@ -45,9 +43,11 @@ class Wekit {
 	 *
 	 * @return void
 	 */
-	public static function init() {
+	public static function init($name) {
 		function_exists('set_magic_quotes_runtime') && @set_magic_quotes_runtime(0);
-		$_conf = include WEKIT_PATH . '../conf/directory.php';
+		self::_loadSystemConfig($name);
+
+		$_conf = include WEKIT_PATH . self::S('directory');
 		foreach ($_conf as $namespace => $path) {
 			$realpath = realpath(WEKIT_PATH . $path);
 			Wind::register($realpath, $namespace);
@@ -55,32 +55,7 @@ class Wekit {
 		}
 		Wind::register(WEKIT_PATH, 'WEKIT');
 		self::_loadBase();
-	}
-
-	/**
-	 * 获取当前应用
-	 *
-	 * @return phpwindBoot
-	 */
-	public static function app() {
-		return self::$_app;
-	}
-
-	/**
-	 * 创建当前应用实例
-	 */
-	public static function createapp($appName) {
-		if (!is_object(self::$_app)) {
-			self::$_var = include CONF_PATH . 'baseconfig.php';
-			self::$_cache = new PwCache();
-			if (self::$_var['dbcache'] && self::$_cache->isDbCache()) {
-				PwLoader::importCache(include CONF_PATH . 'cacheService.php');
-			}
-			$class = Wind::import('SRC:bootstrap.' . $appName . 'Boot');
-			self::$_app = new $class();
-			self::$_config = self::$_app->getConfig();
-			define('WEKIT_TIMESTAMP', self::$_app->getTime());
-		}
+		self::$_var = self::S('global-vars');
 	}
 
 	/**
@@ -94,9 +69,9 @@ class Wekit {
 	public static function getInstance($path, $loadway = '', $args = array()) {
 		switch ($loadway) {
 			case 'loadDao':
-				return Wekit::loadDao($path);
+				return self::loadDao($path);
 			case 'load':
-				return Wekit::load($path);
+				return self::load($path);
 			case 'static':
 				return Wind::import($path);
 			default:
@@ -167,22 +142,70 @@ class Wekit {
 	}
 
 	/**
+	 * 获取当前应用
+	 *
+	 * @return phpwindBoot
+	 */
+	public static function app($re = 'global') {
+		return self::$_app[$re];
+	}
+
+	/**
+	 * 创建当前应用实例
+	 *
+	 * @param string $appName 应用名称
+	 * @param string $re 运行环境名称(多应用环境场景下可用)
+	 */
+	public static function createapp($appName, $re = 'global') {
+		if (isset(self::$_app[$re])) {
+			return;
+		}
+		$class = Wind::import('SRC:bootstrap.' . $appName . 'Boot');
+		self::$_app[$re] = new $class($re);
+		self::$_app[$re]->cache = self::$_app[$re]->getCache();
+		self::$_app[$re]->config = self::$_app[$re]->getConfigBo();
+		self::$_app[$re]->config->sets(self::$_app[$re]->getConfig());
+		self::$_app[$re]->time = self::$_app[$re]->getTime();
+		self::$_app[$re]->charset = self::$_app[$re]->getCharset();
+		self::$_app[$re]->url = self::$_app[$re]->getUrl();
+
+		if ($re == 'global') {
+			define('WEKIT_TIMESTAMP', self::$_app[$re]->time);
+			self::setV('charset', self::$_app[$re]->charset);
+		}
+	}
+
+	public static function setapp($re, $app) {
+		self::$_app[$re] = $app;
+	}
+
+	/**
 	 * 获取当前登录用户
 	 *
 	 * @return PwUserBo
 	 */
 	public static function getLoginUser() {
-		return self::$_app->getLoginUser();
+		return self::$_app['global']->getLoginUser();
 	}
 
 	/**
 	 * 获取全局基本配置
 	 *
-	 * @param string $var
+	 * @param string $key
 	 * @return mixed
 	 */
-	public static function V($var) {
-		return self::$_var[$var];
+	public static function V($key) {
+		return self::$_var[$key];
+	}
+	
+	/**
+	 * 设置全局基本配置
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public static function setV($key, $value) {
+		self::$_var[$key] = $value;
 	}
 
 	/**
@@ -193,10 +216,7 @@ class Wekit {
 	 * @return mixted
 	 */
 	public static function C($namespace = '', $key = '') {
-		if ($namespace) {
-			return $key ? self::$_config->$namespace->get($key) : self::$_config->$namespace->toArray();
-		}
-		return self::$_config;
+		return self::$_app['global']->config->C($namespace, $key);
 	}
 
 	/**
@@ -205,7 +225,45 @@ class Wekit {
 	 * @return object
 	 */
 	public static function cache() {
-		return self::$_cache;
+		return self::$_app['global']->cache;
+	}
+
+	public static function url() {
+		return self::$_app['global']->url;
+	}
+
+	/**
+	 * 获取系统配置
+	 */
+	public static function S($key = 'ALL') {
+		if ($key == 'ALL') {
+			return self::$_sc;
+		}
+		$var = self::$_sc[$key];
+		if (is_array($var) && isset($var['resource'])) {
+			$resource = $var['resource'];
+			unset($var['resource']);
+			if (is_array($resource)) {
+				$tmp = array();
+				foreach ($resource as $key => $value) {
+					$tmp = array_merge($tmp, include(Wind::getRealPath($value, true)));
+				}
+			} else {
+				$tmp = include(Wind::getRealPath($resource, true));
+			}
+			$var = WindUtility::mergeArray($var, $tmp);
+		}
+		return $var;
+	}
+	
+	/**
+	 * 加载系统配置
+	 */
+	protected static function _loadSystemConfig($name) {
+		self::$_sc = WindUtility::mergeArray(
+			include WEKIT_PATH . '../conf/application/default.php', 
+			include WEKIT_PATH . '../conf/application/' . $name . '.php'
+		);
 	}
 
 	/**
@@ -229,16 +287,13 @@ class Wekit {
 		Wind::import('LIB:engine.error.*');
 		Wind::import('LIB:engine.exception.*');
 		Wind::import('LIB:engine.hook.*');
+		Wind::import('LIB:engine.PwCache');
+		Wind::import('LIB:engine.PwConfigBo');
+		Wind::import('LIB:engine.PwConfigSet');
 		Wind::import('LIB:Pw');
 		Wind::import('LIB:PwLoader');
 		Wind::import('LIB:filter.PwFrontFilters');
 		
-		Wind::import('SRV:cache.PwCache');
-		Wind::import('SRV:config.bo.PwConfigBo');
-		Wind::import('SRV:config.srv.PwConfigSet');
-		Wind::import('WINDID:library.Windid');
 		Wind::import('WINDID:WindidApi');
-		Wind::import('SRV:user.bo.PwUserBo');
 	}
 }
-Wekit::init();

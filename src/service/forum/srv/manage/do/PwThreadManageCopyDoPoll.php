@@ -29,7 +29,7 @@ class PwThreadManageCopyDoPoll extends PwThreadManageCopyDoBase {
 		
 		$pollid = $threadPollInfo['poll_id'];
 		$poll = $this->_getPollDs()->getPoll($pollid);
-		if (empty($poll) || !is_array($poll)) return array($poll, $pollOption, $pollVoter);;
+		if (empty($poll) || !is_array($poll)) return array($poll, $pollOption, $pollVoter);
 		
 		$pollOption = $this->_getPollOptionDs()->getByPollid($pollid);
 		$pollVoter = $this->_getPollVoterDs()->getByPollid($pollid);

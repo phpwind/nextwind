@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwApplicationHelper.php 23300 2013-01-08 05:22:09Z long.shi $
+ * @version $Id: PwApplicationHelper.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package wind
  */
 class PwApplicationHelper {
@@ -38,7 +38,7 @@ class PwApplicationHelper {
 			$_tablename = preg_replace('/(pw_)(.*?)/i', $dbprefix . '\2', $tablename);
 			if ($sql_key == 'CREATE') {
 				$query = preg_replace(
-					array('/CREATE\s+TABLE(\s+IF\s+NOT\s+EXISTS)?/i', '/\)([\w\s=]*);/i'), 
+					array('/CREATE\s+TABLE(\s+IF\s+NOT\s+EXISTS)?/i', '/\)([\w\s=\x7f-\xff\']*);/i'), 
 					array(
 						'CREATE TABLE IF NOT EXISTS', 
 						')ENGINE=' . $engine . ' DEFAULT CHARSET=' . $charset), $query);
@@ -87,14 +87,55 @@ class PwApplicationHelper {
 	 * @return string
 	 */
 	static public function acloudUrl($args) {
-		require_once Wind::getRealPath ( 'ACLOUD:aCloud' );
-		$_extrasService = ACloudSysCoreCommon::loadSystemClass ( 'extras', 'config.service' );
-		ACloudSysCoreCommon::setGlobal ( 'g_ips', explode ( "|", ACloudSysCoreDefine::ACLOUD_APPLY_IPS ) );
-		ACloudSysCoreCommon::setGlobal ( 'g_siteurl', ACloudSysCoreDefine::ACLOUD_APPLY_SITEURL ? ACloudSysCoreDefine::ACLOUD_APPLY_SITEURL : $_extrasService->getExtra ( 'ac_apply_siteurl' ) );
-		ACloudSysCoreCommon::setGlobal ( 'g_charset', ACloudSysCoreDefine::ACLOUD_APPLY_CHARSET ? ACloudSysCoreDefine::ACLOUD_APPLY_CHARSET : $_extrasService->getExtra ( 'ac_apply_charset' ) );
+		require_once Wind::getRealPath('ACLOUD:aCloud');
+		$_extrasService = ACloudSysCoreCommon::loadSystemClass('extras', 'config.service');
+		ACloudSysCoreCommon::setGlobal('g_ips', 
+			explode("|", ACloudSysCoreDefine::ACLOUD_APPLY_IPS));
+		ACloudSysCoreCommon::setGlobal('g_siteurl', 
+			ACloudSysCoreDefine::ACLOUD_APPLY_SITEURL ? ACloudSysCoreDefine::ACLOUD_APPLY_SITEURL : $_extrasService->getExtra(
+				'ac_apply_siteurl'));
+		ACloudSysCoreCommon::setGlobal('g_charset', 
+			ACloudSysCoreDefine::ACLOUD_APPLY_CHARSET ? ACloudSysCoreDefine::ACLOUD_APPLY_CHARSET : $_extrasService->getExtra(
+				'ac_apply_charset'));
 		Wind::import('ACLOUD:system.bench.service.ACloudSysBenchServiceAdministor');
 		$administor = new ACloudSysBenchServiceAdministor();
 		return $administor->getLink($args);
+	}
+
+	/**
+	 * 使用socket请求
+	 *
+	 * @param unknown_type $url
+	 * @param unknown_type $tmpdir
+	 * @return Ambigous <multitype:boolean string , mixed, boolean, NULL, string, string>
+	 */
+	static public function requestAcloudUseSocket($url, $tmpdir = '') {
+		Wind::import('WIND:http.transfer.WindHttpSocket');
+		$http = new WindHttpSocket($url);
+		if ($tmpdir !== '') {
+			WindFolder::mkRecur($tmpdir);
+			$_tmp = $tmpdir . '/tmp.' . Pw::getTime();
+			$data = $http->send();
+			WindFile::write($_tmp, $data);
+			$realname = basename($url);
+			$http->close();
+			chmod($_tmp, 0766);
+			if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+				copy($_tmp, $tmpdir . DIRECTORY_SEPARATOR . $realname);
+			} else {
+				rename($_tmp, $tmpdir . DIRECTORY_SEPARATOR . $realname);
+			}
+			$result = array(true, $tmpdir . '/' . $realname);
+		} else {
+			$http->setRedirects(true);
+			$result = $http->send();
+			$result = trim(stristr($result, "\r\n"), "\r\n");
+			if (false !== ($pos = strpos($result, "\r\n"))) {
+				$result = substr($result, 0, $pos);
+			}
+			$result && $result = WindJson::decode($result);
+		}
+		return $result;
 	}
 
 	/**
@@ -103,7 +144,8 @@ class PwApplicationHelper {
 	 * @param array $args        	
 	 * @param string $tmpdir        	
 	 */
-	static public function requestAcloudData($url, $tmpdir = '') {
+	static public function requestAcloudData($url, $tmpdir = '', $useSocket = false) {
+		if ($useSocket) return self::requestAcloudUseSocket($url, $tmpdir);
 		Wind::import('WIND:http.transfer.WindHttpCurl');
 		$http = new WindHttpCurl($url);
 		if ($tmpdir !== '') {
@@ -132,7 +174,12 @@ class PwApplicationHelper {
 			$result = array(true, $tmpdir . '/' . $realname);
 		} else {
 			$result = $http->send('GET', array(CURLOPT_FOLLOWLOCATION => true));
-			$result && $result = WindJson::decode($result);
+			if (function_exists('json_decode')) {
+				$result = json_decode($result, true);
+			} else {
+				ini_set('pcre.backtrack_limit', 1000000);
+				$result && $result = WindJson::decode($result);
+			}
 		}
 		return $result;
 	}
@@ -141,7 +188,7 @@ class PwApplicationHelper {
 	 * 将原安装包中的文件目录，移动到指定位置
 	 *
 	 * 将原安装包中的文件目录移动到指定位置
-	 * 
+	 *
 	 * @param 原位置 $source        	
 	 * @param 目标位置 $target        	
 	 * @return boolean PwError
@@ -153,8 +200,8 @@ class PwApplicationHelper {
 	/**
 	 * 复制文件夹及文件夹内容
 	 *
-	 * @param string $source
-	 * @param string $target
+	 * @param string $source        	
+	 * @param string $target        	
 	 * @return boolean
 	 */
 	static public function copyRecursive($source, $target, $ignore = array()) {
@@ -162,12 +209,14 @@ class PwApplicationHelper {
 			WindFolder::mkRecur($target);
 			$objects = WindFolder::read($source);
 			foreach ($objects as $file) {
-				if ($file[0] == ".") continue;
+				if ('.' === $file || '..' === $file) continue;
 				if (in_array($file, $ignore)) continue;
 				if (is_dir($source . DIRECTORY_SEPARATOR . $file)) {
-					self::copyRecursive($source . DIRECTORY_SEPARATOR . $file, $target . DIRECTORY_SEPARATOR . $file);
+					self::copyRecursive($source . DIRECTORY_SEPARATOR . $file, 
+						$target . DIRECTORY_SEPARATOR . $file);
 				} else {
-					@copy($source . DIRECTORY_SEPARATOR . $file, $target . DIRECTORY_SEPARATOR . $file);
+					@copy($source . DIRECTORY_SEPARATOR . $file, 
+						$target . DIRECTORY_SEPARATOR . $file);
 				}
 			}
 			return true;
@@ -210,7 +259,7 @@ class PwApplicationHelper {
 	 * @return string
 	 */
 	static public function extract($source, $target) {
-		Wind::import('APPS:appcenter.service.srv.helper.PwExtractZip');
+		Wind::import('APPCENTER:service.srv.helper.PwExtractZip');
 		$zip = new PwExtractZip();
 		if (!$data = $zip->extract($source)) return false;
 		$_tmp = '';
@@ -222,7 +271,7 @@ class PwApplicationHelper {
 		}
 		return $_tmp ? $target . '/' . $_tmp : false;
 	}
-	
+
 	static public function zip($dir, $target) {
 		$files = self::readRecursive($dir);
 		Wind::import('LIB:utility.PwZip');
@@ -233,7 +282,7 @@ class PwApplicationHelper {
 		}
 		return WindFile::write($target, $zip->getCompressedFile());
 	}
-	
+
 	static public function readRecursive($dir) {
 		static $files = array();
 		$objects = WindFolder::read($dir);

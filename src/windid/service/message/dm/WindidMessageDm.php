@@ -1,15 +1,14 @@
 <?php
-Wind::import('WINDID:library.base.WindidBaseDm');
 
 /**
  *
  * @author peihong.zhangph
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageDm.php 23072 2013-01-06 02:12:11Z gao.wanggao $
+ * @version $Id: WindidMessageDm.php 24834 2013-02-22 06:43:43Z jieyin $
  */
 
-class WindidMessageDm extends WindidBaseDm {
+class WindidMessageDm extends PwBaseDm {
 	
 	public $id;
 
@@ -195,7 +194,7 @@ class WindidMessageDm extends WindidBaseDm {
 	}
 	
 	private function _setModifiedTime(){
-		$this->_data['modified_time'] = Windid::getTime();
+		$this->_data['modified_time'] = Pw::getTime();
 	}
 	
 
@@ -204,7 +203,7 @@ class WindidMessageDm extends WindidBaseDm {
 	 *
 	 */
 	private function _setCreatedTime() {
-		$this->_data['created_time'] = Windid::getTime();
+		$this->_data['created_time'] = Pw::getTime();
 	}
 	
 	private function _serializeLastMessage(){
@@ -221,7 +220,7 @@ class WindidMessageDm extends WindidBaseDm {
 	private function checkContent(){
 		$len = WindString::strlen($this->_data['content']);
 		if (!$this->_data['content'] || $len > 500) {
-			return new WindidError(WindidError::CONTENT_LENGTH_ERROR);
+			return new WindidError(WindidError::MESSAGE_CONTENT_LENGTH_ERROR);
 		}
 		return true;
 	}

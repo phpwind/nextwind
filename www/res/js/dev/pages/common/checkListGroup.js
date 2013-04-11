@@ -78,15 +78,6 @@
 						GRROUP_DATA[index]['items'][_id] = $(this).data('value');
 					});
 				}
-
-				//判断分组是否修改
-				/*if(id_arr.join(',') === _id_arr.join(',')) {
-					return false;
-				}*/
-
-				//保存列表，页面定义
-				//var saveList = group_check_ul.data('saveList');
-				//saveList(elem, elem.data('id'), id_arr);
 			}
 		});
 	});
@@ -250,19 +241,6 @@
 		var group_edit_input = $('#J_group_edit_input');
 
 		sideSave(group_edit_input, sub_url);
-		
-		/*$.post(sub_url, { id : group_edit_input.data('id'), name : group_edit_input.val() }, function(data){
-			if(data.state === 'success') {
-				//window.location.reload();
-			}else if(data.state === 'fail'){
-				Wind.Util.resultTip({
-					error : true,
-					elem : group_edit_input,
-					follow : true,
-					msg : data.message
-				});
-			}
-		}, 'json');*/
 	}).on('click', 'a.J_group_del', function(e){
 		//删除分组
 		e.preventDefault();

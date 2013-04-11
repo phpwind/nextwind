@@ -62,7 +62,7 @@ class WindWebError extends WindError {
 		$this->getResponse()->setStatus($errorcode);
 		$this->getResponse()->sendHeaders();
 		require $errDir . '/' . $errPage . '.htm';
-		exit(ob_get_clean());
+		exit();
 	}
 }
 

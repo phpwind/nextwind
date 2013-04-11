@@ -7,7 +7,7 @@ Wind::import('APPS:manage.controller.BaseManageController');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ContentController.php 20560 2012-10-31 05:32:43Z jieyin $
+ * @version $Id: ContentController.php 24023 2013-01-21 03:04:37Z xiaoxia.xuxx $
  * @package forum
  */
 
@@ -67,8 +67,10 @@ class ContentController extends BaseManageController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:manage.content.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:manage.content.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	public function doPassThreadAction() {
@@ -157,8 +159,10 @@ class ContentController extends BaseManageController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:manage.content.reply.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:manage.content.reply.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	public function doPassPostAction() {

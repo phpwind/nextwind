@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ThreadController.php 23266 2013-01-07 08:46:40Z long.shi $
+ * @version $Id: ThreadController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package forum
  */
 
@@ -108,20 +108,22 @@ class ThreadController extends PwBaseController {
 		
 		//seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
 		if ($threadList->page <=1) {
 			if ($type)
-				PwSeoBo::setDefaultSeo($lang->getMessage('SEO:bbs.thread.run.type.title'), '', $lang->getMessage('SEO:bbs.thread.run.type.description'));
+				$seoBo->setDefaultSeo($lang->getMessage('SEO:bbs.thread.run.type.title'), '', $lang->getMessage('SEO:bbs.thread.run.type.description'));
 			else 
-				PwSeoBo::setDefaultSeo($lang->getMessage('SEO:bbs.thread.run.title'), '', $lang->getMessage('SEO:bbs.thread.run.description'));
+				$seoBo->setDefaultSeo($lang->getMessage('SEO:bbs.thread.run.title'), '', $lang->getMessage('SEO:bbs.thread.run.description'));
 		}
-		PwSeoBo::init('bbs', 'thread', $fid);
-		PwSeoBo::set(array(
+		$seoBo->init('bbs', 'thread', $fid);
+		$seoBo->set(array(
 			'{forumname}' => $pwforum->foruminfo['name'],
 			'{forumdescription}' => Pw::substrs($pwforum->foruminfo['descrip'], 100, 0, false),
 			'{classification}' => $this->_getSubTopictypeName($type),
 			'{page}' => $threadList->page
 		));
+		Wekit::setV('seo', $seoBo);
 		Pw::setCookie('visit_referer', 'fid_' . $fid . '_page_' . $threadList->page, 300);
 	}
 

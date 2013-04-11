@@ -32,7 +32,8 @@
 		<dl class="cc">
 			<dt>电子邮箱：</dt>
 			<dd>
-			<input type="text" name="email" value="{$loginUser->info['email']}" class="input length_5 mr15 J_email_match" auto><span id="J_tip_email"></span>
+			<input type="hidden" name="email">
+			{$loginUser->info['email']} &nbsp;<a name="email" href="{@url:profile/index/editemail?_tab=contact}" >修改</a>
 			</dd>
 		</dl>
 		<dl class="cc">

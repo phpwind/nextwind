@@ -7,7 +7,7 @@ Wind::import("WIND:utility.WindFolder");
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwCssCompress.php 15168 2012-08-01 06:05:40Z long.shi $
+ * @version $Id: PwCssCompress.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package wekit.compile.compiler
  */
 class PwCssCompress extends AbstractPwCompiler {
@@ -20,7 +20,7 @@ class PwCssCompress extends AbstractPwCompiler {
 	 * @see AbstractPwCompiler::doCompile()
 	 */
 	public function doCompile() {
-		$config = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig('style-type');
+		$config = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig('style-type');
 		foreach ($config as $k => $v) {
 			$dir = Wind::getRealDir('THEMES:' . $v[1]);
 			$files = WindFolder::read($dir, WindFolder::READ_DIR);

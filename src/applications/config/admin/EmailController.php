@@ -68,7 +68,8 @@ class EmailController extends AdminBaseController {
 		if ($result === true) {
 			$this->showMessage('ADMIN:email.test.success');
 		}
-		$this->showError(array('ADMIN:email.test.error', array('{error}' => $result->getError())));
+		$i18n = Wind::getComponent('i18n');
+		$this->showError(array('ADMIN:email.test.error', array('{error}' => $i18n->getMessage($result->getError()))));
 	}
 	
 	/**
@@ -77,7 +78,6 @@ class EmailController extends AdminBaseController {
 	 * @return array
 	 */
 	private function _getConfig() {
-		$pwConfig = Wekit::load('config.PwConfig');
-		return $pwConfig->getValues('email');
+		return Wekit::C()->getValues('email');
 	}
 }

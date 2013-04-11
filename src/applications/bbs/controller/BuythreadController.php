@@ -6,7 +6,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: BuythreadController.php 19893 2012-10-19 06:55:44Z long.shi $
+ * @version $Id: BuythreadController.php 24066 2013-01-21 07:30:33Z jinlong.panjl $
  * @package forum
  */
 
@@ -19,14 +19,13 @@ class BuythreadController extends PwBaseController {
 
 	public function recordAction() {
 		list($tid, $pid, $page) = $this->getInput(array('tid', 'pid', 'page'));
-		$perpage = 20;
+		$perpage = 10;
 		$page < 1 && $page = 1;
 		list($offset, $limit) = Pw::page2limit($page, $perpage);
-		$count = Wekit::load('forum.PwThreadBuy')->sumCost($tid, $pid);
+		$count = Wekit::load('forum.PwThreadBuy')->countByTidAndPid($tid, $pid);
 		if (!$count) {
 			$this->showError('BBS:thread.buy.error.norecord');
 		}
-		
 		Wind::import('SRV:credit.bo.PwCreditBo');
 		$record = Wekit::load('forum.PwThreadBuy')->getByTidAndPid($tid, $pid, $limit, $offset);
 		$users = Wekit::load('user.PwUser')->fetchUserByUid(array_keys($record));

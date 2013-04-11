@@ -45,5 +45,7 @@ return array(
 	'task_reward' => array('完成任务奖励', 'global', '{$username}完成任务{$taskname}获得奖励;积分变化【{$cname}:{$affect}】', false),
 	'invite_reward' => array('成功邀请好友', 'global', '成功邀请好友{$friend}入驻;积分变化【{$cname}:{$affect}】', false),
 	'admin_set' => array('后台用户设置积分', 'global', '后台用户{$username}重置用户积分;积分变化：【{$cname}:{$affect}】', false),
+	'app' => array('应用', '', '', true),
+	'app_default' => array('在线应用', 'app', '{$appname};积分变化：【{$cname}:{$affect}】', false),
 );
 /**=====配置结束于此=====**/

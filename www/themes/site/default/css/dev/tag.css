@@ -3,7 +3,7 @@
 @explain: 话题
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: tag.css 20308 2012-10-25 09:46:00Z yanchixia $
+$Id: tag.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 #*/
 
@@ -13,7 +13,6 @@ $Id: tag.css 20308 2012-10-25 09:46:00Z yanchixia $
 ===================
 */
 .tag_page{
-	padding:10px;
 }
 
 /*
@@ -77,9 +76,6 @@ $Id: tag.css 20308 2012-10-25 09:46:00Z yanchixia $
 .tag_page .hover .fr{
 	display:block;
 }
-.feed_lists{
-	padding:0 10px;
-}
 
 /*
 ===================
@@ -88,7 +84,6 @@ $Id: tag.css 20308 2012-10-25 09:46:00Z yanchixia $
 */
 .tag_info_box{
 	margin-bottom:20px;
-	padding:15px;
 	position:relative;
 }
 .tag_info_box .banner{
@@ -380,6 +375,105 @@ $Id: tag.css 20308 2012-10-25 09:46:00Z yanchixia $
 	padding-left:15px;
 }
 
+/*
+===================
+话题独立页面
+===================
+*/
+.tag_page_view .content_nav{
+	margin-bottom:10px;
+}
 
 
+/*
+===================
+话题内容列表
+===================
+*/
+.tag_lists_wrap{
+	color:#444;
+}
+.tag_lists_wrap dl{
+	border-bottom:1px dashed #e6e6e6;
+	padding:0 0 10px;
+	margin:0 0 10px;
+}
+/*头像*/
+.tag_lists_wrap .face{
+	float: left;
+	width: 64px;
+	padding:3px 0;
+}
+.tag_lists_wrap .face a{
+	display:block;
+}
+/*右侧内容*/
+.tag_lists_wrap .text_content{
+	margin:0 0 0 65px;
+}
+.tag_lists_wrap .content{
+	margin-bottom:5px;
+	overflow:hidden;
+}
+.tag_lists_wrap .content img{
+	vertical-align:top;
+}
+/*用户名*/
+.tag_lists_wrap .content .name{
+	font-weight:700;
+	font-size:14px;
+}
+/*标题*/
+.tag_lists_wrap .content .title{
+	font-weight:700;
+	font-size:14px;
+	color:#333;
+}
+/*简介*/
+.tag_lists_wrap .descrip{
+	padding:5px 0 0;
+}
+.tag_lists_wrap .descrip img{
+	vertical-align:top;
+}
+/*独立信息*/
+.tag_lists_wrap .text{
+	margin-bottom:5px;
+	font-size:14px;
+}
+/*更多*/
+.tag_lists_wrap .more{
+	margin-left:5px;
+	white-space:nowrap;
+}
+/*底部信息*/
+.tag_lists_wrap .info{
+	color:#999;
+	padding-top:5px;
+}
+.tag_lists_wrap .info a{
+	color:#999;
+}
+.tag_lists_wrap .info i{
+	font-style:normal;
+	margin:0 5px;
+	color:#E6E6E6;
+}
+.tag_lists_wrap .info .right{
+	float:right;
+}
+.tag_lists_wrap .info .right a{
+	color:#568cca;
+}
+
+/*屏蔽*/
+.tag_lists_wrap .shield{
+	float:right;
+	color:#568cca;
+	visibility:hidden;
+}
+.tag_lists_wrap dl:hover .shield,
+.tag_lists_wrap dl.current .shield{
+	visibility:inherit;
+}
 

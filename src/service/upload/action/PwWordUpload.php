@@ -1,7 +1,7 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-Wind::import('SRV:upload.action.PwUploadAction');
+Wind::import('LIB:upload.PwUploadAction');
 
 
 class PwWordUpload extends PwUploadAction {

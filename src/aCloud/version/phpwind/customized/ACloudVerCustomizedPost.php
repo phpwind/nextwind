@@ -65,7 +65,7 @@ class ACloudVerCustomizedPost extends ACloudVerCustomizedBase {
 		list ( $uid, $offset, $limit ) = array (intval ( $uid ), intval ( $offset ), intval ( $limit ) );
 		$user = PwUserBo::getInstance ( $uid );
 		if (! $user->username)
-			return $this->buildResponse ( THREAD_USER_NOT_EXIST );
+			return $this->buildResponse ( THREAD_USER_NOT_EXIST,"用户不存在" );
 		$postResult = $this->_getThread ()->getPostByUid ( $uid, $limit, $offset );
 		if ($postResult instanceof PwError)
 			return $this->buildResponse ( - 1, $postResult->getError () );
@@ -109,7 +109,7 @@ class ACloudVerCustomizedPost extends ACloudVerCustomizedBase {
 		list ( $uid, $tid, $offset, $limit ) = array (intval ( $uid ), intval ( $tid ), intval ( $offset ), intval ( $limit ) );
 		$user = PwUserBo::getInstance ( $uid );
 		if (! $user->username)
-			return $this->buildResponse ( THREAD_USER_NOT_EXIST );
+			return $this->buildResponse ( THREAD_USER_NOT_EXIST,"用户不存在" );
 		$postResult = $this->_getThread ()->getPostByTidAndUid ( $tid, $uid, $limit, $offset );
 		if ($postResult instanceof PwError)
 			return $this->buildResponse ( - 1, $postResult->getError () );
@@ -165,9 +165,9 @@ class ACloudVerCustomizedPost extends ACloudVerCustomizedBase {
 	public function sendPost($tid, $uid, $title, $content) {
 		list ( $uid, $tid, $title, $content ) = array (intval ( $uid ), intval ( $tid ), trim ( $title ), trim ( $content ) );
 		if ($uid < 1 || $tid < 1 || ! $content)
-			return $this->buildResponse ( THREAD_INVALID_PARAMS );
+			return $this->buildResponse ( THREAD_INVALID_PARAMS,"参数错误" );
 		if ($this->_getOnline ()->isOnline ( $uid ) !== true)
-			$this->buildResponse ( USER_NOT_LOGIN );
+			$this->buildResponse ( USER_NOT_LOGIN,"用户没有登录" );
 		
 		Wind::import ( 'SRV:forum.srv.PwPost' );
 		Wind::import ( 'SRV:forum.srv.post.PwReplyPost' );
@@ -188,7 +188,7 @@ class ACloudVerCustomizedPost extends ACloudVerCustomizedBase {
 		if(empty($word)||is_array($word)) return $this->buildResponse(- 1,'传入参数不合法');
 		$result = $this->_loadPwWordFilter()->filter($word);
 		if($result){
-			return $this->buildResponse(500);
+			return $this->buildResponse(500,"帖子被锁定");
 		}
 		return $this->buildResponse(0);
 	}

@@ -1,114 +1,97 @@
 <?php
-Wind::import('WINDID:service.notify.dm.WindidNotifyLogDm');
+Wind::import('WSRV:notify.dm.WindidNotifyLogDm');
+
 /**
  * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidNotifyServer.php 22632 2012-12-26 05:27:26Z gao.wanggao $ 
+ * @version $Id: WindidNotifyServer.php 25306 2013-03-12 02:48:37Z gao.wanggao $ 
  * @package 
  */
 class WindidNotifyServer {
 
-	public $notify = array(
-		'101'=>'register',
-		'111'=>'synLogin',
-		'112'=>'synLogout',
-	
-		'201'=>'editUser',
-		'202'=>'editUserInfo',
-		'203'=>'uploadAvatar',
-		'211'=>'editCredit',
-		'222'=>'editMessageNum',
-	
-		'301'=>'deleteUser',
-
-	);
-
 	protected $logId = array();
 	
 	public function send() {
-		$this->queueSend();
-		$this->updateLog();
+		$this->logId = array();
+		$i = 0;
+		do {
+			$result = $this->_queueSend($i);
+		} while($result && ++$i < 5);
+
+		$this->_updateLog($this->logId);
+		return true;
+	}
+
+	public function sendByNid($nid) {
+		$logDs = $this->_getNotifyLogDs();
+		if (!$queue = $logDs->getList(0, $nid, 0, 0, 0)) {
+			return false;
+		}
+		$result = $this->_request($queue);
+		$this->_updateLog($result);
 		return true;
 	}
 	
+	
 	public function logSend($logid) {
-		$time = Windid::getTime();
 		$logDs = $this->_getNotifyLogDs();
-		$log = $logDs->getLog($logid);
-		if (!$log) return false;
-		$app = $this->_getAppDs()->getApp($log['appid']);
-		$notify = $this->_getNotifyDs()->getNotify($log['nid']);
-		$array = array(
-			'windidkey'=>WindidUtility::appKey($log['appid'],$time, $app['secretkey']),
-			'operation'=>$notify['operation'],
-			'uid'=>(int)$notify['param'],
-			'clientid'=>$log['appid'],
-			'time'=>$time
-		);
-		
-		$url = WindidUtility::buildClientUrl($app['siteurl'], $app['apifile']).http_build_query($array);
-		$result = WindidUtility::buildRequest($url);
-		$dm = new WindidNotifyLogDm($logid);
-		if ($result == 'seccess') {
-			$dm->setComplete(1)->setIncreaseSendNum(1);
-			$logDs->updateLog($dm);
-			return true;
-		} else {
-			$dm->setComplete(0)->setIncreaseSendNum(1)->setReason('fail');
-			$logDs->updateLog($dm);
+		if (!$log = $logDs->getLog($logid)) {
 			return false;
 		}
+		$result = $this->_request(array($logid => $log));
+		$this->_updateLog($result);
+		return trim(current($result)) == 'success' ? true : false;
 	}
-	
 
 	/**
 	 * 通知客户端
-	 * Enter description here ...
-	 * @param unknown_type $operation
-	 * @param unknown_type $data
+	 *
+	 * @param int $i 通知次数
+	 * @return bool
 	 */
-	protected function queueSend($start = 0) {
-		$time = Windid::getTime();
-		$appids = $nids = array();
+	protected function _queueSend($nums) {
 		$logDs = $this->_getNotifyLogDs();
-		$queue = $logDs->getList(0, 0, 10, $start, 0);
-		if (!$queue) return false;
-		foreach ($queue AS $v) {
+		if (!$queue = $logDs->getUncomplete(10, $nums * 10)) {
+			return false;
+		}
+		if ($nums > 0) sleep(3);
+		$this->logId += $this->_request($queue);
+		return true;
+	}
+
+	protected function _request($queue) {
+		$time = Pw::getTime();
+		$appids = $nids = array();
+		foreach ($queue as $v) {
 			$appids[] = $v['appid'];
 			$nids[] = $v['nid'];
 		}
 		$apps = $this->_getAppDs()->fetchApp(array_unique($appids));
 		$notifys = $this->_getNotifyDs()->fetchNotify(array_unique($nids));
 
-		$postData = $urls = array();
-		foreach ($queue AS $k=>$v) {
+		$post = $urls = array();
+		foreach ($queue as $k => $v) {
 			$appid = $v['appid'];
 			$nid = $v['nid'];
 			$array = array(
-				'windidkey'=>WindidUtility::appKey($v['appid'],$time, $apps[$appid]['secretkey']),
-				'operation'=>$notifys[$nid]['operation'],
-				'uid'=>(int)$notifys[$nid]['param'],
-				'clientid'=>$v['appid'],
-				'time'=>$time
+				'windidkey' => WindidUtility::appKey($v['appid'], $time, $apps[$appid]['secretkey']),
+				'operation' => $notifys[$nid]['operation'],
+				'clientid' => $v['appid'],
+				'time' => $time
 			);
-			$urls[$k] = WindidUtility::buildClientUrl($apps[$appid]['siteurl'] , $apps[$appid]['apifile']).http_build_query($array);
-		
+			$post[$k] = unserialize($notifys[$nid]['param']);
+			$urls[$k] = WindidUtility::buildClientUrl($apps[$appid]['siteurl'] , $apps[$appid]['apifile']) . http_build_query($array);
 		}
-		if (!$urls) return false;
-		$result = WindidUtility::buildMultiRequest($urls);
-		sleep(3);
-		$this->logId = $this->logId + $result;
-		$start += 10;
-		$this->queueSend($start);
+		return WindidUtility::buildMultiRequest($urls, $post);
 	}
 	
-	protected function updateLog() {
+	protected function _updateLog($logs) {
 		$logDs = $this->_getNotifyLogDs();
-		foreach ($this->logId AS $k=>$v){
+		foreach ($logs as $k => $v){
 			$dm = new WindidNotifyLogDm($k);
-			if ($v == 'seccess'){
+			if (trim($v) == 'success') {
 				$dm->setComplete(1)->setIncreaseSendNum(1);
 			} else {
 				$dm->setComplete(0)->setIncreaseSendNum(1)->setReason('fail');
@@ -119,19 +102,19 @@ class WindidNotifyServer {
 	}
 
 	private function _getUserDs() {
-		return Windid::load('user.WindidUser');
+		return Wekit::load('WSRV:user.WindidUser');
 	}
 	
 	private function _getAppDs() {
-		return Windid::load('app.WindidApp');
+		return Wekit::load('WSRV:app.WindidApp');
 	}
 	
 	private function _getNotifyDs() {
-			return Windid::load('notify.WindidNotify');
+		return Wekit::load('WSRV:notify.WindidNotify');
 	}
 	
 	private function _getNotifyLogDs() {
-			return Windid::load('notify.WindidNotifyLog');
+		return Wekit::load('WSRV:notify.WindidNotifyLog');
 	}
 }
 ?>

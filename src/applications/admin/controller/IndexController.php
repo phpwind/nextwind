@@ -11,7 +11,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-13
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: IndexController.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: IndexController.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package admin
  * @subpackage controller
  */
@@ -25,17 +25,17 @@ class IndexController extends AdminBaseController {
 	public function run() {
 		/* @var $menuService AdminMenuService */
 		$menuService = Wekit::load('ADMIN:service.srv.AdminMenuService');
-		$menus = $menuService->getMyMenus($this->adminUser);
+		$menus = $menuService->getMyMenus($this->loginUser);
 		//常用菜单
 		if (isset($menus['custom']['items']) && is_array($menus['custom']['items'])) {
-			$menus['custom']['items'] += $menuService->getCustomMenus($this->adminUser);
+			$menus['custom']['items'] += $menuService->getCustomMenus($this->loginUser);
 		}
 		
 		$this->setOutput($menus, 'menus');
 	}
 	
 	public function noticeAction() {
-		$notice = Wekit::load('APPS:appcenter.service.srv.PwSystemInstallation')->getNotice($this->adminUser);
+		$notice = Wekit::load('APPCENTER:service.srv.PwSystemInstallation')->getNotice($this->loginUser);
 		$this->setOutput($notice, 'data');
 		$this->showMessage('success');
 	}
@@ -87,14 +87,14 @@ class IndexController extends AdminBaseController {
 			}
 			$this->forwardRedirect(WindUrlHelper::createUrl('index/run'));
 		}
-		$this->setOutput(in_array('adminlogin', Wekit::C('verify', 'showverify')), 'showVerify');
+		$this->setOutput(in_array('adminlogin', Wekit::C()->verify->get('showverify', array())), 'showVerify');
 	}
 
 	/**
 	 * 检测用户的验证码是否正确
 	 */
 	private function checkVerify() {
-		if (!in_array('adminlogin', Wekit::C('verify', 'showverify'))) 
+		if (!in_array('adminlogin', Wekit::C()->verify->get('showverify', array()))) 
 			return true;
 		/* @var $verifySrv PwCheckVerifyService */
 		$verifySrv = Wekit::load("verify.srv.PwCheckVerifyService");
@@ -174,7 +174,7 @@ class IndexController extends AdminBaseController {
 			}
 			$html .= '<a id="J_verify_update_a" href="#" role="button">换一个</a>';
 		} else {
-			$html = '';
+			$html = $srv->getVerify($config['type']);
 		}
 		$this->setOutput($html, 'data');
 		$this->showMessage("operate.success");

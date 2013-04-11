@@ -33,13 +33,13 @@
 					<td>操作</td>
 				</tr>
 			</thead>
-			<!--# foreach ($list as $v): #-->
+			<!--# foreach ($list as $v){ #-->
 			<tr>
 				<td><input data-yid="J_check_y" data-xid="J_check_x" class="J_check" type="checkbox" name="shieldids[]" value="{$v['shield_id']}"></td>
 				<td><a href="{$v['shield_url']}" target="_blank">{$v['shield_title']}</a></td>
 				<td><a href="{@url:design/push/doshielddelete?shieldid=$v['shield_id']}" class="mr10 J_ajax_refresh">[取消屏蔽]</a></td>
 			</tr>
-		<!--# endforeach; #-->
+		<!--# } #-->
 		</table>
 		<page tpl='TPL:common.page'  total="$totalpage" page="$page" per="$perpage" count="$count" url="design/push/shield"/>
 	</div>

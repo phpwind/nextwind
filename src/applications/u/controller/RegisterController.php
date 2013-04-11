@@ -9,7 +9,7 @@ Wind::import('SRV:user.validator.PwUserValidator');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: RegisterController.php 22491 2012-12-25 03:12:23Z xiaoxia.xuxx $
+ * @version $Id: RegisterController.php 24493 2013-01-31 03:40:55Z jieyin $
  * @package src.products.u.controller
  */
 class RegisterController extends PwBaseController {
@@ -22,7 +22,7 @@ class RegisterController extends PwBaseController {
 		$this->setOutput('用户注册', 'title');
 		$config = Wekit::C('register');
 		if (0 == $config['type'] && ('close' != $handlerAdapter->getAction())) {
-			$this->forwardAction('u/register/close');
+			$this->forwardRedirect(WindUrlHelper::createUrl('u/register/close'));
 		}
 	}
 	
@@ -38,8 +38,10 @@ class RegisterController extends PwBaseController {
 		$this->setTemplate('register');
 		
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:u.register.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:u.register.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -172,7 +174,7 @@ class RegisterController extends PwBaseController {
 		//激活成功登录
 		Wind::import('SRV:user.srv.PwLoginService');
 		$login = new PwLoginService();
-		$login->welcome($this->loginUser, $this->getRequest()->getClientIp());
+		$login->setLoginCookie($this->loginUser, $this->getRequest()->getClientIp());
 		/* @var $guideService PwUserRegisterGuideService */
 		$guideService = Wekit::load('APPS:u.service.PwUserRegisterGuideService');
 		$this->setOutput($guideService->hasGuide(), 'goGuide');
@@ -192,7 +194,7 @@ class RegisterController extends PwBaseController {
 		}
 		Wind::import('SRV:user.srv.PwLoginService');
 		$login = new PwLoginService();
-		$login->welcome($this->loginUser, $this->getRequest()->getClientIp());
+		$login->setLoginCookie($this->loginUser, $this->getRequest()->getClientIp());
 		
 		$this->forwardRedirect(WindUrlHelper::createUrl('u/register/guide'));
 	}
@@ -202,7 +204,7 @@ class RegisterController extends PwBaseController {
 	 *
 	 */
 	public function guideAction() {
-		if (!$this->loginUser->isExists()) $this->forwardRedirect(Wekit::app()->baseUrl);
+		if (!$this->loginUser->isExists()) $this->forwardRedirect(Wekit::url()->base);
 		$key = $this->getInput('key');
 		/* @var $guideService PwUserRegisterGuideService */
 		$guideService = Wekit::load('APPS:u.service.PwUserRegisterGuideService');
@@ -211,7 +213,7 @@ class RegisterController extends PwBaseController {
 			if (Wekit::C('register', 'active.check')) {
 				$this->setOutput(1, 'check');
 				if (!Pw::getstatus($this->loginUser->info['status'], PwUser::STATUS_UNCHECK)) {
-					$this->forwardRedirect(Wekit::app()->baseUrl);
+					$this->forwardRedirect(Wekit::url()->base);
 				}
 			}
 			$synLogin = $this->_getWindid()->synLogin($this->loginUser->uid);
@@ -348,6 +350,9 @@ class RegisterController extends PwBaseController {
 	 */
 	public function closeAction() {
 		$config = Wekit::C('register');
+		if ($config['type']) {
+			$this->forwardRedirect(WindUrlHelper::createUrl('u/register/run'));
+		}
 		$this->setOutput($config['close.msg'], 'close');
 		$this->setTemplate('register_close');
 	}
@@ -408,7 +413,7 @@ class RegisterController extends PwBaseController {
 		$userDm->setEmail($email);
 		$userDm->setRegdate(Pw::getTime());
 		$userDm->setLastvisit(Pw::getTime());
-		$userDm->setRegip(Wekit::app()->clientIp);
+		$userDm->setRegip(Wind::getComponent('request')->getClientIp());
 		
 		$userDm->setAliww($aliww);
 		$userDm->setQq($qq);
@@ -420,8 +425,7 @@ class RegisterController extends PwBaseController {
 		
 		$areaids = array($hometown, $location);
 		if ($areaids) {
-			/* @var $srv PwAreaService */
-			$srv = Wekit::load('area.srv.PwAreaService');
+			$srv = WindidApi::api('area');
 			$areas = $srv->fetchAreaInfo($areaids);
 			$userDm->setHometown($hometown, isset($areas[$hometown]) ? $areas[$hometown] : '');
 			$userDm->setLocation($location, isset($areas[$location]) ? $areas[$location] : '');

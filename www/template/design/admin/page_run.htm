@@ -24,7 +24,7 @@
 					<td>操作</td>
 				</tr>
 			</thead>
-			<!--# foreach ($list as $v): #-->
+			<!--# foreach ($list as $v){ #-->
 			<tr>
 				<td><a href="{$v['url']}" target="_blank">{$v['page_name']}</a></td>
 				<td>
@@ -35,7 +35,7 @@
 					
 				</td>
 			</tr>
-			<!--# endforeach; #-->
+			<!--# } #-->
 		</table>
 	</div>
 	<div style="padding:0 10px 15px;"><page tpl='TPL:common.page'  total="$totalpage" page="$page" per="$perpage" count="$count" url="design/page/run" args="$args"/></div>

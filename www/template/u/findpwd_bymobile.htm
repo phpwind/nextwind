@@ -8,52 +8,50 @@
 <div class="wrap">
 <template source='TPL:common.header' suffix='htm'/>
 	<div class="main_wrap">
-		<div class="main cc">
-			<div class="box_wrap register cc">
-				<h2 class="reg_head">您选择通过手机找回密码</h2>
-				<div class="reg_cont_wrap">
-		<!--#if ($step == 2) {#-->
-					<div class="reg_cont">
-						<div class="reg_form">
-							<div class="tips">请输入绑定的手机号码，系统会发送一条带有验证码的短信到您的手机</div>
-							<form id="J_bymobile_form" action="{@url:u/findPwd/checkmobilecode}" method="post">
-								<input type="hidden" id="J_pwd_username" name="username" value="{$username}" />
-								<dl>
-									<dt><label>用户名：</label></dt>
-									<dd><span class="username">{$username}</span></dd>
-								</dl>
-								<dl>
-									<dt><label>手机号码：</label></dt>
-									<dd><span class="must_red">*</span><input type="hidden" id="J_reg_mobile_hide" name="mobile"><input required id="J_reg_mobile" data-counttime="90" type="text" class="input length_4" value=""></dd>
-									<dd class="dd_r"><button style="display:none;" id="J_show_mcode" name="mobile" type="button" class="btn mr5">获取验证码</button><span class="dd_r" id="J_reg_tip__mobile" role="tooltip" aria-hidden="true"></span><span id="J_mcode_tip" class="reg_tips" style="display:none;">验证码已发送到<span id="J_send_mobile"></span><a href="" id="J_mobile_change" class="s4">（修改号码）</a>超过90秒未收到验证码，请点击重新发送。<button id="J_mcode_resend" class="btn disabled" type="button" disabled>90秒后重新发送</button></span></dd>
-								</dl>
-								<dl id="J_mcode_dl">
-									<dt><label for="">手机验证码：</label></dt>
-									<dd><span class="must_red">*</span><input id="J_reg_mobileCode" name="mobileCode" type="text" class="input length_4" value=""></dd>
-									<dd class="dd_r"><span class="dd_r" id="J_reg_tip_mobileCode" role="tooltip" aria-hidden="true"></span></dd>
-								</dl>
-								<!--#if ($verify) {#-->
-								<dl class="dl_cd">
-									<dt><label>验证码：</label></dt>
-									<dd><span class="must_red">*</span><input data-id="code" id="J_findpw_code" name="code" type="text" class="input length_4 mb5">
-										<div id="J_verify_code"></div>
-									</dd>
-									<dd class="dd_r">
-										<div id="J_findpw_tip_code"></div>
-									</dd>
-								</dl>
-								<!--#}#-->
-								<dl>
-									<dt>&nbsp;</dt>
-									<dd><button class="btn btn_big btn_submit mr20" type="submit">下一步</button><a href="javascript:window.history.go(-1);">返回上一步</a></dd>
-								</dl>
-							</form>
-						</div>
+		<div class="box_wrap register cc">
+			<h2 class="reg_head">您选择通过手机找回密码</h2>
+			<div class="reg_cont_wrap">
+	<!--#if ($step == 2) {#-->
+				<div class="reg_cont">
+					<div class="reg_form">
+						<div class="tips">请输入绑定的手机号码，系统会发送一条带有验证码的短信到您的手机</div>
+						<form id="J_bymobile_form" action="{@url:u/findPwd/checkmobilecode}" method="post">
+							<input type="hidden" id="J_pwd_username" name="username" value="{$username}" />
+							<dl>
+								<dt><label>用户名：</label></dt>
+								<dd><span class="username">{$username}</span></dd>
+							</dl>
+							<dl>
+								<dt><label>手机号码：</label></dt>
+								<dd><span class="must_red">*</span><input type="hidden" id="J_reg_mobile_hide" name="mobile"><input required id="J_reg_mobile" data-counttime="90" type="text" class="input length_4" value=""></dd>
+								<dd class="dd_r"><button style="display:none;" id="J_show_mcode" name="mobile" type="button" class="btn mr5">获取验证码</button><span class="dd_r" id="J_reg_tip__mobile" role="tooltip" aria-hidden="true"></span><span id="J_mcode_tip" class="reg_tips" style="display:none;">验证码已发送到<span id="J_send_mobile"></span><a href="" id="J_mobile_change" class="s4">（修改号码）</a>超过90秒未收到验证码，请点击重新发送。<button id="J_mcode_resend" class="btn disabled" type="button" disabled>90秒后重新发送</button></span></dd>
+							</dl>
+							<dl id="J_mcode_dl">
+								<dt><label for="">手机验证码：</label></dt>
+								<dd><span class="must_red">*</span><input id="J_reg_mobileCode" name="mobileCode" type="text" class="input length_4" value=""></dd>
+								<dd class="dd_r"><span class="dd_r" id="J_reg_tip_mobileCode" role="tooltip" aria-hidden="true"></span></dd>
+							</dl>
+							<!--#if ($verify) {#-->
+							<dl class="dl_cd">
+								<dt><label>验证码：</label></dt>
+								<dd><span class="must_red">*</span><input data-id="code" id="J_findpw_code" name="code" type="text" class="input length_4 mb5">
+									<div id="J_verify_code"></div>
+								</dd>
+								<dd class="dd_r">
+									<div id="J_findpw_tip_code"></div>
+								</dd>
+							</dl>
+							<!--#}#-->
+							<dl>
+								<dt>&nbsp;</dt>
+								<dd><button class="btn btn_big btn_submit mr20" type="submit">下一步</button><a href="javascript:window.history.go(-1);">返回上一步</a></dd>
+							</dl>
+						</form>
 					</div>
-		<!--#} #-->
+				</div>
+	<!--#} #-->
 
-				</div>    
-			</div>
+			</div>    
 		</div>
 	</div>
 <template source='TPL:common.footer' suffix='htm'/>

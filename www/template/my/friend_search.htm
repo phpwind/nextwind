@@ -64,7 +64,7 @@
 							<dl class="cc J_friends_items">
 								<dt><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['username']}" /></a>
 								<!--# if ($loginUser->uid != $value['uid']) { #-->
-								<a href="{@url:message/message/pop?username=$value['username']}" class="called J_send_msg_pop">打招呼</a>
+								<a href="{@url:message/message/pop?username=$value['username']}" class="called J_send_msg_pop" data-name="{$value['username']}">打招呼</a>
 								<!--# } #-->
 								</dt>
 								<dd>
@@ -79,7 +79,7 @@
 										关注<a href="{@url:space/follows/run?uid=$value['uid']}">{$value['follows']}</a><span>|</span>粉丝<a href="{@url:space/fans/run?uid=$value['uid']}">{$value['fans']}</a><span>|</span>帖子<a href="{@url:space/thread/run?uid=$value['uid']}">{$value['postnum']}</a>
 									</div>
 									<!--# if ($loginUser->uid != $value['uid']) {
-										$isfan = in_array($value['uid'],array_keys((array)$fans)) ? 'true' : 'false';
+										$isfan = Pw::inArray($value['uid'],array_keys((array)$fans)) ? 'true' : 'false';
 									#-->
 									<div class="attribute">
 										<!--# if (isset($friends[$value['uid']])) { #-->
@@ -87,7 +87,7 @@
 										<!--# } if (isset($follows[$value['uid']])) { #-->
 										<a href="{@url:my/follow/delete?uid=$value['uid']&csrf_token=$csrf_token}" class="core_unfollow J_fans_follow J_unfollow_btn" data-role="unfollow" data-uid="{$value['uid']}" data-role="unfollow" style="display:none;" data-followed="{$isfan}">取消关注</a>
 										<!--# } else { #-->
-										<a href="{@url:my/follow/add?uid=$value['uid']&csrf_token=$csrf_token}" class="core_follow J_fans_follow" data-role="follow" data-uid="{$value['uid']}" data-role="follow" data-followed="{$isfan}">加关注</a>
+										<a href="{@url:my/follow/add?csrf_token=$csrf_token}" class="core_follow J_fans_follow" data-role="follow" data-uid="{$value['uid']}" data-role="follow" data-followed="{$isfan}">加关注</a>
 										<!--# } #-->
 									</div>
 									<!--# } #-->
@@ -113,7 +113,7 @@
 <script>
 var URL_UNFOLLOW = "{@url:my/follow/delete/}",
 		URL_FOLLOW = "{@url:my/follow/add/}";
-Wind.use('jquery', 'global', GV.JS_ROOT +'pages/bbs/fansFollow_index.js?v='+ GV.JS_VERSION, function(){
+Wind.use('jquery', 'global', GV.JS_ROOT +'pages/my/fansFollow.js?v='+ GV.JS_VERSION, function(){
 	$('input.J_friends_search_input').each(function(){
 		Wind.Util.buttonStatus($(this), $(this).next('.J_friends_search_btn'));
 	});

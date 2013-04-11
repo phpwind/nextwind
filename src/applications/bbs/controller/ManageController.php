@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadManage');
  * @author peihong <jhqblxt@gmail.com> Dec 2, 2011
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ManageController.php 22328 2012-12-21 08:46:57Z xiaoxia.xuxx $
+ * @version $Id: ManageController.php 24747 2013-02-20 03:13:43Z jieyin $
  * @package src.applications.bbs.controller
  */
 class ManageController extends PwBaseController {
@@ -142,9 +142,10 @@ class ManageController extends PwBaseController {
 			$do[] = $this->$method($manage);
 			$others = $this->_getOtherActions($this->action);
 			foreach ($others as $key => $value) {
-				if ($operateThread[$value]) {
-					$method = sprintf('_get%sManage', ucfirst($value));
-					$do[] = $this->$method($manage);
+				$method = sprintf('_get%sManage', ucfirst($value));
+				$op = $this->$method($manage);
+				if ($op->check($operateThread) !== true) {
+					unset($operateThread[$value]);
 				}
 			}
 			$this->setOutput($operateThread, 'operateThread');
@@ -357,7 +358,6 @@ class ManageController extends PwBaseController {
 		if ($this->doAction) {
 			$banInfo = new stdClass();
 			$banInfo->types = $this->getInput('types', 'post');
-			$banInfo->ban_others = $this->getInput('ban_others', 'post');
 			$banInfo->end_time = $this->getInput('end_time', 'post');
 			$banInfo->reason = $this->getInput('reason', 'post');
 			$banInfo->ban_range = intval($this->getInput('ban_range', 'post'));

@@ -303,7 +303,9 @@ class IndexController extends WindController {
 	 * 安装完成
 	 */
 	public function finishAction() {
-		Wekit::createapp('phpwind');
+		//Wekit::createapp('phpwind');
+		Wekit::C()->reload('windid');
+		WindidApi::api('user');
 		$db = $this->_checkDatabase();
 		//更新HOOK配置数据
 
@@ -317,9 +319,15 @@ class IndexController extends WindController {
 		Wekit::load('config.PwConfig')->setConfig('site', 'info.mail', $db['founder']['manager_email']);
 		Wekit::load('config.PwConfig')->setConfig('site', 'info.url', PUBLIC_URL);
 		Wekit::load('nav.srv.PwNavService')->updateConfig();
-	
+		
+		Wind::import('WINDID:service.config.srv.WindidConfigSet');
+		$windidConfig = new WindidConfigSet('site');
+		$windidConfig->set('hash', $site_hash)
+		->set('cookie.pre', $cookie_pre)
+		->flush();
+		
 		//风格默认数据
-		Wekit::load('APPS:appcenter.service.srv.PwStyleInit')->init();
+		Wekit::load('APPCENTER:service.srv.PwStyleInit')->init();
 
 		//计划任务默认数据
 		Wekit::load('cron.srv.PwCronService')->updateSysCron();
@@ -422,7 +430,7 @@ class IndexController extends WindController {
 			if (!$value || substr($value, 0, 2) === '--') continue;
 			$query .= $value;
 			if (substr($query, -7) != ';<wind>') continue;
-			$query = preg_replace('/([ `]+)pw_/', '$1'.$dbprefix, $query, 1);
+			$query = preg_replace('/([ `]+)pw_/', "\${1}$dbprefix", $query, 1);
 			$sql_key = strtoupper(substr($query, 0, strpos($query, ' ')));
 			if ($sql_key == 'CREATE') {
 				$tablename = trim(strrchr(trim(substr($query, 0, strpos($query, '('))), ' '), '` ');
@@ -559,17 +567,27 @@ class IndexController extends WindController {
 		$files_writeble[] = THEMES_PATH . 'portal/';
 		$files_writeble[] = THEMES_PATH . 'site/';
 		$files_writeble[] = THEMES_PATH . 'space/';
+		$files_writeble[] = PUBLIC_PATH . 'windid/attachment/';
 		
 		$files_writeble[] = $this->_getDatabaseFile();
 		$files_writeble[] = $this->_getFounderFile();
-		$files_writeble[] = $this->_getWindidFile();
+		//$files_writeble[] = $this->_getWindidFile();
 		
 		$files_writeble = array_unique($files_writeble);
 		sort($files_writeble);
 		$writable = array();
 		foreach ($files_writeble as $file) {
 			$key = str_replace($rootdir, '', $file);
-			$writable[$key] = $this->_checkWriteAble($file) ? true : false;
+			$isWritable = $this->_checkWriteAble($file) ? true : false;
+			if ($isWritable) {
+				$flag = false;
+				foreach ($writable as $k=>$v) {
+					if (0 === strpos($key, $k)) $flag = true;
+				}
+				$flag || $writable[$key] = $isWritable;
+			} else {
+				$writable[$key] = $isWritable;
+			}
 		}
 		return $writable;
 	}
@@ -610,7 +628,7 @@ class IndexController extends WindController {
 	 * @return PwError
 	 */
 	private function _writeFounder($manager, $manager_pwd, $manager_email) {
-		
+		Wekit::C()->reload('windid');
 		Wind::import('SRV:user.dm.PwUserInfoDm');
 		$data = array($manager => md5($manager_pwd));
 		WindFile::savePhpData($this->_getFounderFile(), $data);
@@ -632,13 +650,33 @@ class IndexController extends WindController {
 			->set('security.username.max', 15)
 			->set('security.username.min', 1)
 			->flush();
-	
+		Wekit::C()->reload('register');
+		WindidApi::C()->reload('reg');
 		//TODO结束
 		$userDm = new PwUserInfoDm();
 		$userDm->setUsername($manager)->setPassword($manager_pwd)->setEmail($manager_email)->setGroupid(3)->setRegdate(
 			Pw::getTime())->setLastvisit(Pw::getTime())->setRegip(Wind::getApp()->getRequest()->getClientIp())->setGroups(array('3'=>'0'));
-		$uid = Wekit::load('user.PwUser')->addUser($userDm);
-
+		
+		//特殊操作  gao.wanggao
+		if (true !== ($result = $userDm->beforeAdd())) {
+			$this->showError($result->getError());
+		}
+		if (($uid = Wekit::load('WSRV:user.WindidUser')->addUser($userDm->dm)) < 1) {
+			$this->showError('WINDID:code.' . $uid);
+		}
+		
+		$userDm->setUid($uid);
+		
+		Wind::import('SRV:user.PwUser');
+		$daoMap = array();
+		$daoMap[PwUser::FETCH_MAIN] = 'user.dao.PwUserDao';
+		$daoMap[PwUser::FETCH_DATA] = 'user.dao.PwUserDataDao';
+		$daoMap[PwUser::FETCH_INFO] = 'user.dao.PwUserInfoDao';
+		Wekit::loadDaoFromMap(PwUser::FETCH_ALL, $daoMap, 'PwUser')->addUser($userDm->getSetData());
+		//特殊操作  
+			
+			
+		//$uid = Wekit::load('user.PwUser')->addUser($userDm);
 		//TODO 创始人添加完成：恢复默认数据：开始
 		$config = new PwConfigSet('register');
 		$config->set('security.username.max', 15)
@@ -659,19 +697,53 @@ class IndexController extends WindController {
 		//TODO 结束
 		
 		if ($uid instanceof PwError) {
-			$this->showError('INSTALL:founder.init.fail');
+			$this->showError($uid->getError());
 		}
-		Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($uid);//用户的默认头像需要设置
-		Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar(0);//游客的默认头像需要设置
+		
+		//特殊操作  gao.wanggao
+        $this->_defaultAvatar($uid);
+        $this->_defaultAvatar(0);
+        //特殊操作  
+		//Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($uid);//用户的默认头像需要设置
+		//Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar(0);//游客的默认头像需要设置
+		
+		//站点统计信息
+		Wind::import('SRV:site.dm.PwBbsinfoDm');
+		$dm = new PwBbsinfoDm();
+		$dm->setNewmember($manager)->addTotalmember(1);
+		Wekit::load('site.PwBbsinfo')->updateInfo($dm);
 		return $uid;
 	}
 	
+	private function _defaultAvatar($uid, $type = 'face') {
+		Wind::import('LIB:upload.PwUpload');
+		$_avatar = array('.jpg' => '_big.jpg', '_middle.jpg' => '_middle.jpg', '_small.jpg' => '_small.jpg');
+		$defaultBanDir = Wind::getRealDir('ROOT:')  . 'res/images/face/';
+		$fileDir =  'avatar/' . Pw::getUserDir($uid) . '/';
+		$attachPath = Wind::getRealDir('ROOT:') . 'windid/attachment/';
+		foreach ($_avatar as $des => $org) {
+			$toPath = $attachPath . $fileDir . $uid . $des;
+			$fromPath = $defaultBanDir . $type . $org;
+			PwUpload::createFolder(dirname($toPath));
+			PwUpload::copyFile($fromPath, $toPath);
+		}
+		return true;
+	}
+	
 	private function _writeWindid() {
-		$baseUrl = Wind::getApp()->getRequest()->getBaseUrl(true);
+		$baseUrl = Wekit::url()->base;
 		$key = md5(WindUtility::generateRandStr(10));
-		$charset = Wind::getApp()->getResponse()->getCharset();
+		$charset = Wekit::V('charset');
 		$charset = str_replace('-', '', strtolower($charset));
 		if (!in_array($charset, array('gbk', 'utf8', 'big5'))) $charset = 'utf8';
+		
+		$config = new PwConfigSet('windid');
+		$config->set('windid', 'local')
+		->set('serverUrl', $baseUrl . '/windid')
+		->set('clientId', 1)
+		->set('clientKey', $key)
+		->set('connect', 'db')->flush();
+		Wekit::C()->reload('windid');
 		
 		Wind::import('WINDID:service.app.dm.WindidAppDm');
 		$dm = new WindidAppDm();
@@ -683,17 +755,13 @@ class IndexController extends WindController {
 			->setAppUrl($baseUrl)
 			->setCharset($charset)
 			->setAppIp('');
-		$result = Windid::load('app.WindidApp')->addApp($dm);
+		$result = WindidApi::api('app')->addApp($dm);
 		if ($result instanceof WindidError) $this->showError('INSTALL:windid.init.fail');
-		$config = array(
-			'windid'  => 'local',
-			'serverUrl' => $baseUrl,
-			'clientId'  => (int)$result,
-			'clientKey'  => $key,
-			'clientDb'  => 'mysql',
-			'clientCharser'  => $charset,
-		);
-		WindFile::savePhpData($this->_getWindidFile(),$config);
+		WindidApi::api('avatar')->setStorages('local');
+		Wekit::load('config.PwConfig')->setConfig('site', 'avatarUrl', $baseUrl . '/windid/attachment');
+		Wind::import('WINDID:service.config.srv.WindidConfigSet');
+		$windidConfig = new WindidConfigSet('site');
+		$windidConfig->set('avatarUrl', $baseUrl . '/windid/attachment')->flush();
 		return true;
 	}
 
@@ -713,9 +781,9 @@ class IndexController extends WindController {
 			$this->showError('INSTALL:error_777_founder');
 		}
 		
-		if (!$this->_checkWriteAble($this->_getWindidFile())) {
+		/*if (!$this->_checkWriteAble($this->_getWindidFile())) {
 			$this->showError('INSTALL:error_777_windid');
-		}
+		}*/
 		
 		$database = include $this->_getTempFile();
 		if (!$database['founder']) {
@@ -729,9 +797,9 @@ class IndexController extends WindController {
 		return $data;
 	}
 	
-	private function _getWindidFile() {
+	/*private function _getWindidFile() {
 		return Wind::getRealPath('ROOT:conf.windidconfig.php', true);
-	}
+	}*/
 
 	private function _getFounderFile() {
 		return Wind::getRealPath('ROOT:conf.founder.php', true);

@@ -7,7 +7,7 @@ Wind::import('SRC:library.base.PwBaseDao');
  * @author xiaoxia.xu<xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwLogDao.php 21269 2012-12-03 11:25:07Z xiaoxia.xuxx $
+ * @version $Id: PwLogDao.php 24747 2013-02-20 03:13:43Z jieyin $
  * @package src.service.log.dao
  */
 class PwLogDao extends PwBaseDao {
@@ -16,6 +16,26 @@ class PwLogDao extends PwBaseDao {
 	protected $_pk = 'id';
 	protected $_dataStruct = array('id', 'typeid', 'created_userid', 'created_time', 'operated_uid', 'created_username', 'operated_username', 'ip', 'fid', 'tid', 'pid', 'extends', 'content');
 	
+	/**
+	 * 根据tid获得该帖子的相关管理日志
+	 *
+	 * @param int $tid
+	 * @param int $pid 
+	 * @param int $limit
+	 * @param int $start
+	 * @return array
+	 */
+	public function getLogByTid($tid, $pid, $limit, $start = 0) {
+		$sql = $this->_bindSql('SELECT * FROM %s WHERE tid = ? AND pid = ? ORDER BY id DESC %s', $this->getTable(), $this->sqlLimit($limit, $start));
+		return $this->getConnection()->createStatement($sql)->queryAll(array($tid, $pid), 'id');
+	}
+
+	public function fetchLogByTid($tids, $typeid) {
+		$sql = $this->_bindSql('SELECT * FROM %s WHERE tid IN %s AND pid=0 AND typeid IN %s', $this->getTable(), $this->sqlImplode($tids), $this->sqlImplode($typeid));
+		$rst = $this->getConnection()->query($sql);
+		return $rst->fetchAll();
+	}
+
 	/**
 	 * 添加日志
 	 *
@@ -57,12 +77,13 @@ class PwLogDao extends PwBaseDao {
 	}
 	
 	/**
+
 	 * 根据日志ID删除某条日志
-	 *
 	 * @param int $id
 	 * @return int
 	 */
 	public function deleteLog($id) {
+
 		return $this->_delete($id);
 	}
 	
@@ -113,20 +134,6 @@ class PwLogDao extends PwBaseDao {
 	}
 	
 	/**
-	 * 根据tid获得该帖子的相关管理日志
-	 *
-	 * @param int $tid
-	 * @param int $pid 
-	 * @param int $limit
-	 * @param int $start
-	 * @return array
-	 */
-	public function getLogByTid($tid, $pid, $limit, $start = 0) {
-		$sql = $this->_bindSql('SELECT * FROM %s WHERE tid = ? AND pid = ? ORDER BY id DESC %s', $this->getTable(), $this->sqlLimit($limit, $start));
-		return $this->getConnection()->createStatement($sql)->queryAll(array($tid, $pid), 'id');
-	}
-	
-	/**
 	 * 后台搜索
 	 *
 	 * @param array $condition
@@ -155,15 +162,19 @@ class PwLogDao extends PwBaseDao {
 					break;
 				case 'start_time':
 					$where[] = "created_time >= ?";
+
 					$params[] = $_v;
 					break;
 				case 'end_time':
 					$where[] = "created_time <= ?";
 					$params[] = $_v;
+
 					break;
 				case 'keywords':
 					$where[] = "content LIKE ?";
+
 					$params[] = '%' . $_v . '%';
+
 					break;
 				default:
 					break;

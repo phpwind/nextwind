@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author JianMin Chen <sky_hold@163.com> 2011-12-19
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwHook.php 22215 2012-12-19 18:28:49Z jieyin $
+ * @version $Id: PwHook.php 24919 2013-02-26 11:36:12Z jieyin $
  * @package wekit
  * @subpackage engine
  */
@@ -221,10 +221,13 @@ class PwHook {
 						$call = array($service, 'getAttribute');
 						break;
 					case 'config':
-						$call = 'PwHook::_getConfig';
+						$call = array(self, '_getConfig');
+						break;
+					case 'global':
+						$call = array('Wekit', 'getGlobal');
 						break;
 					default:
-						$call = 'PwHook::_getRequest';
+						$call = array(self, '_getRequest');
 						break;
 				}
 				$v1 = call_user_func_array($call, explode('.', $p));
@@ -293,8 +296,7 @@ class PwHook {
 			array('{parm1}' => 'wekit.engine.hook.PwHook._resolveTemplate', '{parm2}' => $template));
 		
 		self::$methods = array();
-		$content = preg_replace_callback('/<(\/)?hook-action[=,\w\s\'\"]*>(\n)*/i', 
-			'PwHook::_pregContent', $content);
+		$content = preg_replace_callback('/<(\/)?hook-action[=,\w\s\'\"]*>(\n)*/i', array(self, '_pregContent'), $content);
 		$content = explode("</hook-action>", $content);
 		$_content = array();
 		$_i = 0;
@@ -331,6 +333,7 @@ class PwHook {
 		preg_match('/(?<=name=([\'\"]))(.*?)(?=\1)/ie', $content[0], $match1);
 		preg_match('/(?<=args=([\'\"]))(.*?)(?=\1)/ie', $content[0], $match2);
 		self::$methods[] = array('name' => $match1[0], 'args' => $match2[0]);
+		return '';
 	}
 }
 ?>

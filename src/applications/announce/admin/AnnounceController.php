@@ -8,7 +8,7 @@ Wind::import('SRC:service.announce.dm.PwAnnounceDm');
  * @author MingXing Sun <mingxing.sun@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AnnounceController.php 21282 2012-12-04 03:25:54Z xiaoxia.xuxx $
+ * @version $Id: AnnounceController.php 23742 2013-01-15 09:22:58Z jieyin $
  * @package modules.admin
  */
 class AnnounceController extends AdminBaseController {
@@ -38,11 +38,17 @@ class AnnounceController extends AdminBaseController {
 	 */
 	public function addAction(){}
 
+
 	/**
+
 	 * 添加公告处理
+
 	 *
+
 	 * @return void
+
 	 */
+	
 	public function doAddAction(){
 		$url = $this->getInput('url', 'post');
 		$dm = new PwAnnounceDm();
@@ -50,14 +56,18 @@ class AnnounceController extends AdminBaseController {
 		$dm->setContent($this->getInput('content', 'post'))
 			->setEndDate($this->getInput('end_date', 'post'))
 			->setStartDate($this->getInput('start_date', 'post'))
+
 			->setSubject($this->getInput('subject', 'post'))
+
 			->setTypeid($this->getInput('typeid', 'post'))
 			->setUrl($url)
-			->setUid($this->adminUser->getUid())
+			->setUid($this->loginUser->uid)
 			->setVieworder($this->getInput('vieworder', 'post'));
 		
 		if (($result = $this->_getPwAnnounceDs()->addAnnounce($dm)) instanceof PwError){
+
 			$this->showError($result->getError());
+
 		}
 		$this->showMessage('operate.success', 'announce/announce/run', true);
 	}
@@ -117,7 +127,7 @@ class AnnounceController extends AdminBaseController {
 		   ->setSubject($this->getInput('subject', 'post'))
 		   ->setTypeid($this->getInput('typeid', 'post'))
 		   ->setUrl($url)
-		   ->setUid($this->adminUser->getUid())
+		   ->setUid($this->loginUser->uid)
 		   ->setVieworder($this->getInput('vieworder', 'post'));
 		if (($result = $this->_getPwAnnounceDs()->updateAnnounce($dm)) instanceof PwError){
 			$this->showError($result->getError());

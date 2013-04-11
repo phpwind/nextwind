@@ -6,7 +6,7 @@ Wind::import('ADMIN:service.srv.helper.AdminMenuHelper');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminMenuService.php 21801 2012-12-13 09:31:09Z yishuo $
+ * @version $Id: AdminMenuService.php 23734 2013-01-15 09:10:00Z jieyin $
  * @package admin
  * @subpackage service.srv
  */
@@ -69,7 +69,7 @@ class AdminMenuService {
 	 * @param AdminUserBo $user
 	 * @return array
 	 */
-	public function getCustomMenus(PwUserBo $user) {
+	public function getCustomMenus(AdminUserBo $user) {
 		$menuTables = $this->getMenuTable();
 		/* @var $adminCustom AdminCustom */
 		$adminCustom = Wekit::load('ADMIN:service.AdminCustom');

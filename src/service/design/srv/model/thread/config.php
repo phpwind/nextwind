@@ -1,6 +1,6 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: yanchixia $>
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
  * <note>
  * 1.type为'bbs''user''space''other''api'之一
  * 2.refresh 是否需要设置数据更新
@@ -14,10 +14,10 @@
  * 					2)在template\design\property\目录，新建模板文件, 定义'key1'的模板勾子
  * 					3)<input name="property[abc]" value="{$property[abc]}">',表单name必须以property命名
  * </note>
- * @author $Author: yanchixia $ Foxsee@aliyun.com
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: config.php 22091 2012-12-19 06:22:54Z yanchixia $ 
+ * @version $Id: config.php 25436 2013-03-15 08:45:34Z gao.wanggao $ 
  * @package 
  */
 return array(
@@ -30,7 +30,7 @@ return array(
 		'titlenum'	=>array('text','标题长度','0为不限制','','short'),
 		'desnum'	=>array('text','内容长度','0为不限制','','short'),
 		'limit'		=>array('text','显示条数','默认10条','','short'),
-		'timefmt'	=>array('select','时间格式','',array('m-d'=>'04-26', 'Y-m-d'=>'2012-04-26', 'Y-m-d H:i:s'=>'2012-04-26 11:30', 'H:i:s'=>'11:30:59', 'auto'=>'几天前')),
+		'timefmt'	=>array('select','时间格式','',array('m-d'=>'04-26', 'Y-m-d'=>'2012-04-26', 'Y-m-d H:i:s'=>'2012-04-26 11:30', 'H:i:s'=>'11:30:59', 'n月j日'=>'4月26日', 'y年n月j日'=>'12年4月26日','auto'=>'几天前')),
 		'isblank'	=>array('radio','链接打开方式','',array('0'=>'当前窗口', '1'=>'新窗口'),''),
 	),
 	
@@ -63,6 +63,7 @@ return array(
 		array('{hits}', '浏览数','hits'),
 		array('{like}', '喜欢数','like_count'),
 		array('{tType}', '主题分类','tType'),
+		array('{tTypeUrl}', '主题分类链接','tType_url'),
 		
 	),
 	

@@ -12,11 +12,11 @@
 	<div class="nav">
 		<div class="return"><a href="{@url:design/module/run?type=$isapi}">返回上一级</a></div>
 		<ul class="cc">
-			<!--# if (!$isscript):#-->
+			<!--# if (!$isscript){ #-->
 			<li><a href="{@url:design/data/run?moduleid=$moduleid}">显示数据</a></li>
 			<li><a href="{@url:design/data/push?moduleid=$moduleid}">推送审核</a></li>
 			<li><a href="{@url:design/property/edit?moduleid=$moduleid}">属性</a></li>
-			<!--# endif; #-->
+			<!--# } #-->
 			<li  class="current"><a href="{@url:design/template/edit?moduleid=$moduleid}">模板</a></li>
 		</ul>
 	</div>

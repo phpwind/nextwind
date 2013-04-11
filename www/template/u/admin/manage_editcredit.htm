@@ -8,7 +8,7 @@
 	<div class="nav">
 		<div class="return"><a href="{@url:u/manage/run}">返回上一级</a></div>
 		<ul class="cc">
-			<li><a href="{@url:admin/u/manage/edit?uid=$uid}">编辑</a></li>
+			<li><a href="{@url:admin/u/manage/edit?uid=$uid}">用户信息</a></li>
 			<li class="current"><a href="{@url:admin/u/manage/editCredit?uid=$uid}">积分</a></li>
 			<li><a href="{@url:admin/u/manage/editGroup?uid=$uid}">用户组</a></li>
 		</ul>
@@ -29,12 +29,12 @@
 			</td>
 		</tr>
 		</thead>
-		<!--#foreach($credits as $key => $credit):#-->
+		<!--#foreach($credits as $key => $credit){ #-->
 		<tr>
 			<th>{$credit['name']}</th>
 			<td><input name="credit[{$key}]" type="text" class="input length_5" value="{$credit['num']}"></td>
 		</tr>
-		<!--#endforeach;#-->
+		<!--# } #-->
 	</table>
 </div>
 	<div class="btn_wrap">

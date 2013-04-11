@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: CateController.php 23266 2013-01-07 08:46:40Z long.shi $
+ * @version $Id: CateController.php 24758 2013-02-20 06:55:42Z jieyin $
  * @package forum
  */
 
@@ -65,7 +65,7 @@ class CateController extends PwBaseController {
 		} else {
 			Wind::import('SRV:forum.srv.threadList.PwCateThread');
 			$srv = Wekit::load('forum.srv.PwForumService');
-			$forbidFids =  $srv->getForbidVisitForum($this->loginUser, $srv->getForumsByLevel($fid, $srv->getForumMap()));
+			$forbidFids =  $srv->getForbidVisitForum($this->loginUser, $srv->getForumsByLevel($fid, $srv->getForumMap()), true);
 			$dataSource = new PwCateThread($pwforum, $forbidFids);
 			$dataSource->setOrderby($orderby);
 			$isCommon = 1;
@@ -96,24 +96,29 @@ class CateController extends PwBaseController {
 		
 		//版块风格
 		if ($pwforum->foruminfo['style']) {
+
 			$this->setTheme('forum', $pwforum->foruminfo['style']);
+
 			//$this->addCompileDir($pwforum->foruminfo['style']);
+
 		}
 
 		
 		//seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
 		if ($threadList->page <=1) {
-			PwSeoBo::setDefaultSeo($lang->getMessage('SEO:bbs.thread.run.title'), '', $lang->getMessage('SEO:bbs.thread.run.description'));
+			$seoBo->setDefaultSeo($lang->getMessage('SEO:bbs.thread.run.title'), '', $lang->getMessage('SEO:bbs.thread.run.description'));
 		}
-		PwSeoBo::init('bbs', 'thread', $fid);
-		PwSeoBo::set(array(
+		$seoBo->init('bbs', 'thread', $fid);
+		$seoBo->set(array(
 			'{forumname}' => $pwforum->foruminfo['name'],
 			'{forumdescription}' => Pw::substrs($pwforum->foruminfo['descrip'], 100, 0, false),
 			'{classification}' => '',
 			'{page}' => $threadList->page
 		));
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**

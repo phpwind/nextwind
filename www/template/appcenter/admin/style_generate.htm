@@ -12,7 +12,7 @@
 			<!--# } #-->
 			<li><a href="{@url:appcenter/style/install}">本地安装</a></li>
 			<li><a href="{@url:appcenter/style/manage}">界面管理</a></li>
-			<!--# if(Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->inDevMode1()){ #-->
+			<!--# if(Wekit::load('APPCENTER:service.srv.PwDebugApplication')->inDevMode1()){ #-->
 			<li class="current"><a href="{@url:appcenter/style/generate}">开发助手</a></li>
 			<!--# } #-->
 		</ul>
@@ -31,26 +31,26 @@
 <div class="table_full">
 	<table width="100%">
 		<col class="th" />
-		<col width="400" />
+		<col width="320" />
 		<col />
+		<tr>
+			<th>模板名称</th>
+			<td><span class="must_red">*</span>
+				<input type="text" class="input length_5" name="name" value="" required>
+			</td>
+			<td><div class="fun_tips"></div></td>
+		</tr>
 		<tr>
 			<th>模板标识(alias)</th>
 			<td>
-				<input type="text" class="input length_3" name="alias" value="" required>
+				<input type="text" class="input length_5" name="alias" value="" required>
 			</td>
-			<td><div class="fun_tips">请先至<a href="http://open.phpwind.com" target="_blank">phpwind云平台</a>创建应用，获取应用标识</div></td>
-		</tr>
-		<tr>
-			<th>模板名称</th>
-			<td>
-				<input type="text" class="input length_3" name="name" value="" required>
-			</td>
-			<td><div class="fun_tips">必填</div></td>
+			<td><div class="fun_tips">请先至 <a href="http://open.phpwind.com" target="_blank">phpwind云平台</a> 创建应用，获取应用标识</div></td>
 		</tr>
 		<tr>
 			<th>模板类型</th>
-			<td>
-			<select size="1" name="style_type">
+			<td><span class="must_red">*</span>
+			<select size="1" name="style_type" class="select_5">
 				<!--# foreach($support as $k => $v){ #-->
 				<option value="{$k}">{$v[0]}</option>
 				<!--# } #-->
@@ -61,49 +61,49 @@
 				# } #
 			</ul> -->
 			</td>
-			<td><div class="fun_tips">必填</div></td>
+			<td><div class="fun_tips"></div></td>
 		</tr>
 		<tr>
 			<th>模板描述</th>
 			<td>
 				<textarea name="description" class="length_5"></textarea>
 			</td>
-			<td><div class="fun_tips">应用简要介绍</div></td>
+			<td><div class="fun_tips"></div></td>
 		</tr>
 		<tr>
 			<th>模板版本号</th>
-			<td>
-				<input type="text" class="input length_3" name="version" value="1.0" required>
+			<td><span class="must_red">*</span>
+				<input type="text" class="input length_5" name="version" value="1.0" required>
 			</td>
-			<td><div class="fun_tips">必填</div></td>
+			<td><div class="fun_tips"></div></td>
 		</tr>
 		<tr>
 			<th>适用phpwind版本</th>
-			<td>
-				<input type="text" class="input length_3" name="pwversion" value="{@NEXT_VERSION}" required>
+			<td><span class="must_red">*</span>
+				<input type="text" class="input length_5" name="pwversion" value="{@NEXT_VERSION}" required>
 			</td>
-			<td><div class="fun_tips">必填</div></td>
+			<td><div class="fun_tips"></div></td>
 		</tr>
 		<tr>
 			<th>作者名称</th>
 			<td>
-				<input type="text" class="input length_3" name="author" value="">
+				<input type="text" class="input length_5" name="author" value="">
 			</td>
-			<td><div class="fun_tips">应用作者名称</div></td>
+			<td><div class="fun_tips"></div></td>
 		</tr>
 		<tr>
 			<th>作者email</th>
 			<td>
-				<input type="text" class="input length_3" name="email" value="">
+				<input type="text" class="input length_5" name="email" value="">
 			</td>
 			<td><div class="fun_tips"></div></td>
 		</tr>
 		<tr>
 			<th>网站地址</th>
 			<td>
-				<input type="text" class="input length_3" name="website" value="">
+				<input type="text" class="input length_5" name="website" value="">
 			</td>
-			<td><div class="fun_tips">官方网站</div></td>
+			<td><div class="fun_tips"></div></td>
 		</tr>
 	</table>
 </div>

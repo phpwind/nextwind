@@ -23,14 +23,14 @@
 	<table width="100%">
 		<col class="th" />
 		<col />
-<!--#foreach($list as $user): #-->
+<!--# foreach($list as $user){ #-->
 		<tr>
 			<th>{$user}</th>
 			<td>
 			<a class="J_dialog mr5" href="{@url:founder/edit?username=$user}" title="编辑">[编辑]</a>
-			<a class="J_ajax_del" href="{@url:founder/del?username=$user}">[删除]</a></td>
+			<a class="J_ajax_del" href="{@url:founder/del?username=$user}">[取消创始人权限]</a></td>
 		</tr>
-<!--#endforeach;#-->
+<!--# } #-->
 
 		<tr>
 			<th><input name="username" type="text" class="input length_2"></th>

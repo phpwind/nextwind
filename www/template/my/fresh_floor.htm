@@ -6,7 +6,12 @@
 										<!--# if ($fresh['title']) { #-->
 										<a data-uid="{$fresh['created_userid']}" href="{@url:space/index/run?uid=$fresh['created_userid']}" class="J_user_card_show name">{$fresh['created_username']}</a>：
 										<em><a href="{@url:bbs/read/run?tid=$fresh['src_id']}" class="title">{$fresh['title']}</a></em>
-										<div class="descrip" id="J_feed_content_{$fresh['id']}">{$fresh['content']|html}</div>
+										<div class="descrip" id="J_feed_content_{$fresh['id']}">{$fresh['content']|html}
+										<!--# if ($fresh['is_read_all']) { #-->
+											<!--em class="J_content_all" style="display:none;"></em-->
+											<a target="_blank" href="{@url:bbs/read/run?tid=$fresh['src_id']}">全文</a>
+										<!--# } #-->
+										</div>
 										<!--# } else { #-->
 										<div class="text"><a data-uid="{$fresh['created_userid']}" href="{@url:space/index/run?uid=$fresh['created_userid']}" class="J_user_card_show name">{$fresh['created_username']}</a>：
 										<em id="J_feed_content_{$fresh['id']}">{$fresh['content']|html}</em></div>
@@ -21,7 +26,7 @@
 											<!--# foreach ($fresh['pic'] as $v) {
 												$_isDisplay = $k++ >= 4 ? 'dn' : '';
 											#-->
-											<li class="fl J_gallery_items {@$_isDisplay}"><a href="javascript:;" data-big="{@Pw::getPath($v['path'])}"><img onerror="this.onerror=null;this.className='J_error';" src="{@Pw::getPath($v['path'], $v['ifthumb'])}" alt="" width="100" height="100" /></a></li>
+											<li class="fl J_gallery_items {@$_isDisplay}"><a href="javascript:;" data-big="{@Pw::getPath($v['path'])}"><img onerror="this.onerror=null;this.className='J_error';" src="{@Pw::getPath($v['path'], $v['ifthumb'])}" alt="" width="120" /></a></li>
 											<!--# } #-->
 											<!--#if($_picCount > 4) {#--><li class="fl">共{$_picCount}张图片</li><!--#}#-->
 										</ul>
@@ -34,15 +39,12 @@
 											<span>◆</span>
 										</div>
 										<div class="content"><a href="{@url:space/index/run?uid=$fresh['quote']['created_userid']}" class="name">{$fresh['quote']['created_username']}</a>：
-										<!--# if ($fresh['quote']['subject']) { #--><a href="{@url:bbs/read/run?tid=$fresh['quote']['tid']}" class="title">{$fresh['quote']['subject']}</a><br><!--# } #--><em>{$fresh['quote']['content']|html}</em></div>
+										<!--# if ($fresh['quote']['subject']) { #--><a href="{@url:bbs/read/run?tid=$fresh['quote']['tid']}" class="title">{$fresh['quote']['subject']}</a><br><!--# } #--><em>{$fresh['quote']['content']|html}</em>
+										</div>
 										<div class="info">
 											<span class="time">{@Pw::time2str($fresh['quote']['created_time'], 'auto')}</span>&nbsp;&nbsp;<a href="{$fresh['quote']['url']}">回复<!--# if ($fresh['quote']['replies']) { #-->({$fresh['quote']['replies']})<!--# } #--></a>
 										</div>
 									</div>
-									<!--# } #-->
-									<!--# if ($fresh['is_read_all']) { #-->
-										<em class="J_content_all" style="display:none;"></em>
-										<p class="more"><a data-dir="down" class="J_read_all_none" data-id="J_feed_content_{$fresh['id']}" href="{@url:bbs/read/run?tid=$fresh['src_id']}">阅读全部&darr;</a></p>
 									<!--# } #-->
 									<div class="info">
 										<span class="right"><a data-id="{$fresh['id']}" class="J_feed_toggle" href="{@url:my/fresh/reply?id=$fresh['id']}">回复<span style="{@$fresh['replies'] ? '' : 'display:none'}">(<em id="J_feed_count_{$fresh['id']}">{$fresh['replies']}</em>)</span></a></span>

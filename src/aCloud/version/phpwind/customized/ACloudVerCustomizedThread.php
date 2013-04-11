@@ -30,7 +30,7 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 	public function getByTid($tid) {
 		$tid = intval ( $tid );
 		if ($tid < 1)
-			return $this->buildResponse ( THREAD_INVALID_PARAMS );
+			return $this->buildResponse ( THREAD_INVALID_PARAMS ,"参数不存在");
 			//TODO 权限
 		
 
@@ -82,7 +82,7 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 	public function getByUid($uid, $offset = 0, $limit = 20) {
 		$user = PwUserBo::getInstance ( $uid );
 		if (! $user->username)
-			return $this->buildResponse ( THREAD_USER_NOT_EXIST );
+			return $this->buildResponse ( THREAD_USER_NOT_EXIST,"用户不存在" );
 		$thread = $this->_getThread ()->getThreadByUid ( $uid, $limit, $offset );
 		if ($thread instanceof PwError)
 			return $this->buildResponse ( - 1, $thread->getError () );
@@ -117,7 +117,7 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 			$thread = array_values($this->_getThread()->searchThread($so, 1, 0));
 			$threaddb[$fid] = $thread[0];
 		}
-		if(!$threaddb) return $this->buildResponse (THREAD_NOT_EXIST );
+		if(!$threaddb) return $this->buildResponse (THREAD_NOT_EXIST,"帖子不存在" );
 		foreach ($threaddb as $key => $value){
 			if(!$value) continue;
 			$result[$key]['fid']		= $value['fid'];
@@ -133,9 +133,9 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 	
 	public function getLatestThreadByFavoritesForum($uid, $offset, $limit) {
 		list ( $uid, $offset, $limit ) = array (intval ( $uid ), intval ( $offset ), intval ( $limit ) );
-		if ($uid <= 0) return $this->buildResponse ( THREAD_INVALID_PARAMS );
+		if ($uid <= 0) return $this->buildResponse ( THREAD_INVALID_PARAMS,"参数错误" );
 		$userBo = new PwUserBo($uid);
-		if (! $userBo->isExists ()) return $this->buildResponse ( USER_NOT_EXISTS );
+		if (! $userBo->isExists ()) return $this->buildResponse ( USER_NOT_EXISTS,"用户不存在" );
 		$fids = array_keys($this->_getForumUser()->getFroumByUid($uid));
 		if(!$fids) return $this->buildResponse ( 0, array () );
 		return $this->getLatestThreadsByFids($fids, $offset, $limit);
@@ -151,7 +151,7 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 	
 	public function getThreadImgs($tid) {
 		$tid = intval($tid);
-		if ($tid < 1) return $this->buildResponse ( THREAD_INVALID_PARAMS );
+		if ($tid < 1) return $this->buildResponse ( THREAD_INVALID_PARAMS,"参数错误" );
 		$_attaches = $this->_getThreadAttach()->getAttachByTid($tid,(array)0);
 		$attaches = array();
 		foreach ($_attaches as $v){
@@ -173,13 +173,13 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 	public function getToppedThreadByFid($fid, $offset, $limit) {
 		list ( $fid, $offset, $limit ) = array (intval ( $fid ), intval ( $offset ), intval ( $limit ) );
 		if ($fid < 1)
-			return $this->buildResponse ( THREAD_FORUM_NOT_EXIST );
+			return $this->buildResponse ( THREAD_FORUM_NOT_EXIST,"版块不存在" );
 		$tops = $this->_getSpecialSortDs ()->getSpecialSortByFid ( $fid );
 		if ($tops instanceof PwError)
 			return $this->buildResponse ( - 1, $tops->getError () );
 		$forum = $this->_getForum ()->getForum ( $fid );
 		if (! $forum)
-			return $this->buildResponse ( THREAD_FORUM_NOT_EXIST );
+			return $this->buildResponse ( THREAD_FORUM_NOT_EXIST,"版块不存在");
 		
 		$specialCount = count ( $tops );
 		$topThreads = array ();
@@ -224,7 +224,7 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 	public function getThreadByFid($fid, $offset, $limit) {
 		$fid = intval ( $fid );
 		if ($fid < 1)
-			return $this->buildResponse ( THREAD_FORUM_NOT_EXIST );
+			return $this->buildResponse ( THREAD_FORUM_NOT_EXIST,"版块不存在" );
 		$result = $this->_getThread ()->getThreadByFid ( $fid, $limit, $offset );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );
@@ -266,9 +266,9 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 	 */
 	public function getByTidAndUid($tid,$uid,$page,$offset=0,$limit=10){
 		list($tid,$uid,$page,$offset,$limit) = array(intval($tid),intval($uid),intval($page),intval($offset),intval($limit));
-		if($tid < 1 || $uid < 1) return $this->buildResponse ( THREAD_INVALID_PARAMS );
+		if($tid < 1 || $uid < 1) return $this->buildResponse ( THREAD_INVALID_PARAMS,"参数错误" );
 		$user = PwUserBo::getInstance ( $uid );
-		if (! $user->isExists ()) return $this->buildResponse ( USER_NOT_EXISTS );
+		if (! $user->isExists ()) return $this->buildResponse ( USER_NOT_EXISTS,"用户不存在" );
 		list($start, $limit) = Pw::page2limit($page, $limit);
 		$postResult = $this->_getThread()->getPostByTidAndUid($tid,$uid,$limit,$start);
 		if(!$postResult) return $this->buildResponse(-1,$postResult->getError ());
@@ -292,10 +292,10 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 	public function postThread($uid, $fid, $subject, $content) {
 		list ( $uid, $fid, $subject, $content ) = array (intval ( $uid ), intval ( $fid ), trim ( $subject ), trim ( $content ) );
 		if ($uid < 1 || $fid < 1 || ! $subject || ! $content)
-			return $this->buildResponse ( THREAD_INVALID_PARAMS );
+			return $this->buildResponse ( THREAD_INVALID_PARAMS,"参数错误" );
 		$user = PwUserBo::getInstance ( $uid );
 		if (! $user->isExists ())
-			return $this->buildResponse ( USER_NOT_EXISTS );
+			return $this->buildResponse ( USER_NOT_EXISTS,"用户不存在" );
 		Wind::import ( 'SRV:forum.srv.PwPost' );
 		Wind::import ( 'SRV:forum.srv.post.PwTopicPost' );
 		$postAction = new PwTopicPost ( $fid );
@@ -319,7 +319,7 @@ class ACloudVerCustomizedThread extends ACloudVerCustomizedBase {
 			->setDisabled(0)
 		    ->orderbyCreatedTime(0);
 		$threaddb = $this->_getThread()->searchThread($so, $limit, $offset);
-		if(!$threaddb) return $this->buildResponse (THREAD_NOT_EXIST );
+		if(!$threaddb) return $this->buildResponse (THREAD_NOT_EXIST ,"帖子不存在");
 		$forums = $this->_getForum()->fetchForum($fids,PwForum::FETCH_MAIN);
 		$result = array();
 		foreach ($threaddb as $key => $value){

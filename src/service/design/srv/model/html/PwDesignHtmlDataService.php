@@ -4,7 +4,7 @@ Wind::import('SRV:design.srv.model.PwDesignModelBase');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignHtmlDataService.php 22107 2012-12-19 08:04:08Z gao.wanggao $ 
+ * @version $Id: PwDesignHtmlDataService.php 24726 2013-02-18 06:15:04Z gao.wanggao $ 
  * @package 
  */
 class PwDesignHtmlDataService extends PwDesignModelBase{
@@ -17,7 +17,7 @@ class PwDesignHtmlDataService extends PwDesignModelBase{
 		return array();
 	}
 	
-	public function decorateSaveProperty($property) {
+	public function decorateSaveProperty($property, $moduleid) {
 		if(Pw::strlen($property['html']) > 10000) return new PwError('DESIGN:html.length.error');
 		$property['html_tpl'] = $property['html'];
 		$property['limit'] = 1;

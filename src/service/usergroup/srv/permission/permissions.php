@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: permissions.php 21248 2012-12-03 08:23:37Z xiaoxia.xuxx $
+ * @version $Id: permissions.php 24890 2013-02-25 08:36:04Z jieyin $
  */
 
 /**
@@ -39,8 +39,8 @@ return array(
 	'remind_open'			=> array('radio', 'basic', '@提醒功能', ''),
 	'remind_max_num'		=> array('input', 'basic', '每次最多能@人数', '0或留空代表不限制 ', ''),
 
-	'invite_allow_buy'		=> array('radio', 'basic', '购买邀请码', '当<a href="' . WindUrlHelper::createUrl('config/regist/run'). '">【注册登录设置】</a>开启邀请注册后设置生效'),
-	'invite_buy_credit_num' => array('input', 'basic', '消耗积分', '0或留空为免费，消耗积分类型，请前往<a href="' . WindUrlHelper::createUrl('config/regist/run'). '">【注册登录设置】</a>中设置', ''),
+	'invite_allow_buy'		=> array('radio', 'basic', '购买邀请码', '当<a href="' . WindUrlHelper::createUrl('config/regist/run'). '" class="J_linkframe_trigger">【注册登录设置】</a>开启邀请注册后设置生效'),
+	'invite_buy_credit_num' => array('input', 'basic', '消耗积分', '0或留空为免费，消耗积分类型，请前往<a href="' . WindUrlHelper::createUrl('config/regist/run'). '" class="J_linkframe_trigger">【注册登录设置】</a>中设置', ''),
 	'invite_limit_24h'		=> array('input', 'basic', '24小时购买数量限制', '控制24小时内最多可以购买的邀请码数量', '个'),
 
 	/* 论坛权限 */
@@ -52,9 +52,10 @@ return array(
 	'thread_award'			=> array('radio', 'basic', '设置回帖奖励', ''),
 	'remote_download'		=> array('radio', 'basic', '下载远程图片', ''),
 	'threads_perday'		=> array('input', 'basic', '每日最多发帖', '', ''),
-	'thread_edit_time'		=> array('html', 'basic', '编辑控制', '', ''),
+	'thread_edit_time'		=> array('html', 'basic', '编辑控制', '用户发帖成功后，可以在设定的时间段内重新编辑帖子，0或留空表示不限制', ''),
 	'post_pertime'			=> array('html', 'basic', '连续发帖时间间隔', '设定的时间间隔内用户不可连续发帖，0或留空表示不限制，此功能原名为：灌水预防', ''),
 	'post_modify_time'		=> array('html', 'basic', '帖子编辑记录时间', '超过该时间后，帖子编辑将留下编辑记录', ''),
+	'look_thread_log'		=> array('radio', 'basic', '查看帖子操作记录', '', ''),
 	'post_url_num'			=> array('input', 'basic', '链接帖发帖数限制', '', ''),
 
 	'allow_upload'			=> array('radio', 'basic', '上传附件权限', '', array('0' => '不允许上传附件', '1' => '允许上传附件，按照版块设置奖励或扣除积分', '2' => '允许上传附件，不奖励或扣除积分'), 'vertical'),
@@ -82,6 +83,7 @@ return array(
 	/*  ============================= 管理权限点 ================================== */
 
 	'force_operate_reason'	=> array('radio', 'system', '强制输入操作理由', ''),
+	'manage_level'			=> array('input', 'system', '权限等级', '请输入数字，数字越大权限越高，权限高的用户能够操作权限低的用户<br />涉及范围有：移动、编辑、删除、锁定、压帖、屏蔽、禁止、置顶'),
 	'operate_thread'		=> array('html', 'systemforum', '帖子操作', ''),
 	
 	'fresh_delete'			=> array('radio', 'system', '删除新鲜事', '开启后，用户可以删除单条新鲜事'),
@@ -103,6 +105,4 @@ return array(
 	'some_radio_permission'	=> array('radio', 'system', 'name text', 'description text',array('v1'=>'label 1','v2'=>'label 2')),
 	'some_checkbox_permission' => array('checkbox', 'system', 'name text', 'description text',array('v1'=>'label 1','v2'=>'label 2')),
 	'some_html_permission'	=> array('html', 'system', 'name text', 'description text'),
-	
-	'look_thread_log' => array('radio', 'basic', '查看帖子操作记录', '', array(1 => '开启', 0 => '关闭')),
 );

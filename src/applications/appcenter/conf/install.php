@@ -17,7 +17,7 @@ return array(
 	
 	'install-type' => array(
 		'app' => array(
-			'class' => 'APPS:appcenter.service.srv.do.PwInstall', 
+			'class' => 'APPCENTER:service.srv.do.PwInstall', 
 			'message' => '默认应用安装', 
 			'step' => array(
 				'after' => array(
@@ -31,7 +31,7 @@ return array(
 				'before' => array(array('method' => 'install', 'message' => 'APPCENTER:install.step.install')))), 
 		
 		'style' => array(
-			'class' => 'APPS:appcenter.service.srv.do.PwStyleInstall', 
+			'class' => 'APPCENTER:service.srv.do.PwStyleInstall', 
 			'message' => '风格安装',
 			'step' => array(
 				'after' => array(

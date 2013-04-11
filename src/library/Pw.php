@@ -9,7 +9,7 @@ Wind::import('WIND:utility.WindCookie');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: Pw.php 22898 2012-12-28 08:08:00Z long.shi $
+ * @version $Id: Pw.php 24747 2013-02-20 03:13:43Z jieyin $
  * @package library
  */
 class Pw {
@@ -38,8 +38,11 @@ class Pw {
 	 * @return boolean
 	 */
 	public static function setCookie($name, $value = null, $expires = null, $httponly = false) {
-		$domain = Wekit::C('site', 'cookie.domain');
-		$path = Wekit::C('site', 'cookie.path');
+		$path = $domain = null;
+		if ('AdminUser' != $name) {
+			$path = Wekit::C('site', 'cookie.path');
+			$domain = Wekit::C('site', 'cookie.domain');
+		}
 		$pre = Wekit::C('site', 'cookie.pre');
 		$pre && $name = $pre . '_' . $name;
 		$expires && $expires += self::getTime();
@@ -91,7 +94,7 @@ class Pw {
 	 * @return string
 	 */
 	public static function strlen($string) {
-		return WindString::strlen($string, Wekit::app()->charset);
+		return WindString::strlen($string, Wekit::V('charset'));
 	}
 
 	/**
@@ -103,7 +106,8 @@ class Pw {
 	 * @param bool $dot
 	 */
 	public static function substrs($string, $length, $start = 0, $dot = true) {
-		return WindString::substr($string, $start, $length, Wekit::app()->charset, $dot);
+		if (self::strlen($string) <= $length) return $string;
+		return WindString::substr($string, $start, $length, Wekit::V('charset'), $dot);
 	}
 	
 	/**
@@ -142,7 +146,7 @@ class Pw {
 	 * @return string 加密后的数据
 	 */
 	public static function jsonEncode($value) {
-		return WindJson::encode($value, Wekit::app()->charset);
+		return WindJson::encode($value, Wekit::V('charset'));
 	}
 
 	/**
@@ -153,7 +157,7 @@ class Pw {
 	 * @return mixed 解密后的数据
 	 */
 	public static function jsonDecode($value) {
-		return WindJson::decode($value, true, Wekit::app()->charset);
+		return WindJson::decode($value, true, Wekit::V('charset'));
 	}
 	
 	/**
@@ -281,20 +285,8 @@ class Pw {
 	 * @return string
 	 */
 	public static function getAvatar($uid, $size = 'middle') {
-		$config = Wekit::C('site', 'windid');
-		if ($config == 'client') {
-			return WindidApi::api('avatar')->getAvatar($uid, $size);
-		}
 		$file = $uid . (in_array($size, array('middle', 'small')) ? '_' . $size : '') . '.jpg';
-		$storage = Wekit::C('site', 'avatar.storage');
-		if (!$storage || $storage == 'local') {
-			return Wekit::app()->attach . '/avatar/' . self::getUserDir($uid) . '/' . $file;
-		} else {
-			return Wekit::C('site', 'avatar.url'). '/avatar/'. self::getUserDir($uid) . '/' . $file;
-		}
-		//return WindidApi::api('avatar')->getAvatar($uid, $size);
-		/*$file = $uid . (in_array($size, array('middle', 'small')) ? '_' . $size : '') . '.jpg';
-		return Wekit::app()->attach . '/avatar/' . self::getUserDir($uid) . '/' . $file;*/
+		return Wekit::C('site', 'avatarUrl') . '/avatar/' . self::getUserDir($uid) . '/' . $file;
 	}
 	
 	/**
@@ -369,7 +361,7 @@ class Pw {
 	 * @return string
 	 */
 	public static function convert($string, $toEncoding, $fromEncoding = '') {
-		!$fromEncoding && $fromEncoding = Wekit::app()->charset;
+		!$fromEncoding && $fromEncoding = Wekit::V('charset');
 		return WindConvert::convert($string, $toEncoding, $fromEncoding);
 	}
 
@@ -398,7 +390,6 @@ class Pw {
 	public static function getstatus($status, $b, $len = 1) {
 		return $status >> --$b & (1 << $len) - 1;
 	}
-
 	
 	public static function windid($api) {
 		if (defined('WINDID_IS_NOTIFY')) {
@@ -408,7 +399,6 @@ class Pw {
 		}
 		return $cls[$api];
 	}
-
 	
 	/**
 	 * 根据指定的KEY收集二维列表中该key的值
@@ -485,5 +475,16 @@ class Pw {
 			}
 		}
 		return $_newData;
+	}
+	
+	/**
+	 * 重写in_array
+	 *
+	 * @param int|string $value
+	 * @param array $array
+	 * @return bool
+	 */
+	public static function inArray($value, $array) {
+		return is_array($array) && in_array($value, $array);
 	}
 }

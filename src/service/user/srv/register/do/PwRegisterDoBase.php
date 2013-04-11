@@ -5,7 +5,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRegisterDoBase.php 15637 2012-08-09 09:20:55Z xiaoxia.xuxx $
+ * @version $Id: PwRegisterDoBase.php 24134 2013-01-22 06:19:24Z xiaoxia.xuxx $
  * @package src.service.user.srv.register.do
  */
 abstract class PwRegisterDoBase {
@@ -26,7 +26,7 @@ abstract class PwRegisterDoBase {
 	 * @param PwUserInfoDm $userDm
 	 * @return true|PwError
 	 */
-	public function beforeRegister($userDm) {
+	public function beforeRegister(PwUserInfoDm $userDm) {
 		return true;
 	}
 	
@@ -36,7 +36,7 @@ abstract class PwRegisterDoBase {
 	 * @param PwUserInfoDm $userDm
 	 * @return true|PwError
 	 */
-	public function afterRegister($userDm) {
+	public function afterRegister(PwUserInfoDm $userDm) {
 		return true;
 	}
 }

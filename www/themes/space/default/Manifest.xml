@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
 	<application>
-		<name>default</name>
+		<name>默认模板</name>
 		<alias>default</alias>
 		<version>1.0</version>
 		<pw-version>9.0</pw-version>

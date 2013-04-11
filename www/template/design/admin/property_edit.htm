@@ -12,14 +12,14 @@
 	<div class="nav">
 		<div class="return"><a href="{@url:design/module/run?type=$isapi}">返回上一级</a></div>
 		<ul class="cc">
-		<!--# if ($isdata): #-->
+		<!--# if ($isdata){ #-->
 			<li><a href="{@url:design/data/run?moduleid=$moduleid}">显示数据</a></li>
 			<li><a href="{@url:design/data/push?moduleid=$moduleid}">推送审核</a></li>
-		<!--# endif; #-->
+		<!--# } #-->
 			<li class="current"><a href="{@url:design/property/edit?moduleid=$moduleid}">属性</a></li>
-		<!--# if ($isdata): #-->
+		<!--# if ($isdata){ #-->
 			<li><a href="{@url:design/template/edit?moduleid=$moduleid}">模板</a></li>
-		<!--# endif; #-->
+		<!--# } #-->
 		</ul>
 	</div>
 	<div class="h_a">属性</div>
@@ -29,18 +29,18 @@
 			<dt>数据模型：</dt>
 			<dd>
 				<select class="select_2 mr10" name="model_type" id="J_select_model_type">
-				<!--# foreach ($types as $k=>$v):#-->
+				<!--# foreach ($types as $k=>$v){#-->
 					<option value="{$k}" {@Pw::isSelected($modelInfo['type'] == $k)}>{$v}</option>
-				<!--# endforeach; #-->
+				<!--# } #-->
 				</select>
 				<select class="select_2 mr10" name="model" id="J_select_model">
-				<!--# foreach ($models[$modelInfo['type']] as $v):	#-->
+				<!--# foreach ($models[$modelInfo['type']] as $v){	#-->
 						<option value="{$v['model']}" {@Pw::isSelected($model == $v['model'])}>{$v['name']}</option>
-				<!--# endforeach; #-->
+				<!--# } #-->
 				</select>
-				<!--# if ($isedit): #-->
+				<!--# if ($isedit){ #-->
 					<p class="red">切换数据模型可能导致当前模板不可用，请重新设置模板</p>
-				<!--# endif; #-->
+				<!--# } #-->
 			</dd>
 		</dl>
 

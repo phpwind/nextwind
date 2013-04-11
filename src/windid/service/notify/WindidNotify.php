@@ -5,7 +5,7 @@
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidNotify.php 21781 2012-12-13 08:13:03Z gao.wanggao $
+ * @version $Id: WindidNotify.php 24398 2013-01-30 02:45:05Z jieyin $
  * @package windid.notify
  */
 class WindidNotify {
@@ -54,7 +54,8 @@ class WindidNotify {
 		if (!$nids) return $this->_getDao()->deleteAll();
 		return $this->_getDao()->batchNotDelete($nids);
 	}
+
 	private function _getDao() {
-		return Windid::loadDao('notify.dao.WindidNotifyDao');
+		return Wekit::loadDao('WSRV:notify.dao.WindidNotifyDao');
 	}
-}        
+}

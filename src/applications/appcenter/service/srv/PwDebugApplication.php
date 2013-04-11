@@ -1,13 +1,13 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
-Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwManifest');
 /**
  * 开发者调试应用
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwDebugApplication.php 23214 2013-01-07 06:04:01Z long.shi $
+ * @version $Id: PwDebugApplication.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package wind
  */
 class PwDebugApplication {
@@ -59,7 +59,7 @@ class PwDebugApplication {
 	 */
 	private function _upgrade($alias, $manifest) {
 		// 更新基本信息
-		Wind::import('APPS:appcenter.service.dm.PwApplicationDm');
+		Wind::import('APPCENTER:service.dm.PwApplicationDm');
 		$man_array = $this->manifest->getManifest();
 		$dm = new PwApplicationDm();
 		$dm->setAppId($this->app_id);
@@ -71,7 +71,7 @@ class PwDebugApplication {
 		$dm->setAuthorEmail($man_array['application']['author-email']);
 		$dm->setWebsite($man_array['application']['website']);
 		$dm->setLogo($man_array['application']['logo']);
-		Wekit::load('APPS:appcenter.service.PwApplication')->update($dm);
+		Wekit::load('APPCENTER:service.PwApplication')->update($dm);
 		
 		$this->_loadPwHooks()->delByAppId($this->app_id);
 		$this->_loadPwHookInject()->deleteByAppId($alias);
@@ -175,19 +175,17 @@ class PwDebugApplication {
 	 * @param unknown_type $pack        	
 	 */
 	public function installPack($pack) {
-		Wind::import('APPS:appcenter.service.srv.PwInstallApplication');
+		Wind::import('APPCENTER:service.srv.PwInstallApplication');
 		$install = new PwInstallApplication();
 		/* @var $_install PwInstall */
-		$_install = Wekit::load('APPS:appcenter.service.srv.do.PwInstall');
+		$_install = Wekit::load('APPCENTER:service.srv.do.PwInstall');
 		$conf = $install->getConfig('install-type', 'app');
 		$manifest = $pack . '/Manifest.xml';
 		if (!is_file($manifest)) return $this->_e(null, 
 			new PwError('file.not.exist - ' . $manifest));
-		;
 		$install->setTmpPackage($pack);
 		$r = $install->initInstall($manifest);
 		if ($r instanceof PwError) return $this->_e(null, $r);
-		;
 		
 		try {
 			$r = $_install->install($install);
@@ -241,7 +239,7 @@ class PwDebugApplication {
 				'modified_time' => time());
 			$fields[] = $_tmp;
 		}
-		Wekit::load('APPS:appcenter.service.PwApplicationLog')->batchAdd($fields);
+		Wekit::load('APPCENTER:service.PwApplicationLog')->batchAdd($fields);
 	}
 
 	private function _e($install, $r) {
@@ -278,7 +276,7 @@ class PwDebugApplication {
 	 * @return PwApplication
 	 */
 	private function _appDs() {
-		return Wekit::load('APPS:appcenter.service.PwApplication');
+		return Wekit::load('APPCENTER:service.PwApplication');
 	}
 
 	/**
@@ -286,7 +284,7 @@ class PwDebugApplication {
 	 * @return PwApplicationLog
 	 */
 	private function _loadInstallLog() {
-		return Wekit::load('APPS:appcenter.service.PwApplicationLog');
+		return Wekit::load('APPCENTER:service.PwApplicationLog');
 	}
 }
 

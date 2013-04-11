@@ -97,7 +97,7 @@ class PwGenerateStyle {
 	}
 
 	public function generate() {
-		$addons = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication')->getConfig(
+		$addons = Wekit::load('APPCENTER:service.srv.PwInstallApplication')->getConfig(
 			'style-type');
 		$base = str_replace('/', '.', $addons[$this->style_type][1]);
 		$this->defaultDir = Wind::getRealDir('THEMES:' . $base . '.default');
@@ -105,7 +105,7 @@ class PwGenerateStyle {
 		$this->baseDir = Wind::getRealDir('THEMES:' . $base . '.' . $this->alias);
 		if (is_dir($this->baseDir)) return new PwError('APPCENTER:alias.exist');
 		WindFolder::mkRecur($this->baseDir);
-		Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
+		Wind::import('APPCENTER:service.srv.helper.PwSystemHelper');
 		$writable = PwSystemHelper::checkWriteAble($this->baseDir . '/');
 		if (!$writable) {
 			return new PwError('APPCENTER:generate.copy.fail');

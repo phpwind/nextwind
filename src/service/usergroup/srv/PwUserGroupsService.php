@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserGroupsService.php 21135 2012-11-29 02:10:03Z jieyin $
+ * @version $Id: PwUserGroupsService.php 24736 2013-02-19 09:24:40Z jieyin $
  * @package src.service.user.srv
  */
 
@@ -24,10 +24,12 @@ class PwUserGroupsService {
 	 */
 	public function calculateCredit($strategy, $user) {
 		$credit = 0;
-		foreach ($strategy as $key => $value) {
-			if (!$value || !$user[$key]) continue;
-			if ($key == 'onlinetime') $user[$key] = (int)($user[$key]/3600);
-			$credit += $user[$key] * $value;
+		if (is_array($strategy) && $strategy) {
+			foreach ($strategy as $key => $value) {
+				if (!$value || !$user[$key]) continue;
+				if ($key == 'onlinetime') $user[$key] = (int)($user[$key]/3600);
+				$credit += $user[$key] * $value;
+			}
 		}
 		return (int)$credit;
 	}
@@ -164,7 +166,7 @@ class PwUserGroupsService {
 	 */
 	public function getGroupRightCacheValue() {
 		$cache = array();
-		$pm = $this->_getUserPermission()->getPermissionsByRkey($this->_nkey);
+		$pm = $this->_getUserPermission()->fetchPermissionByRkey($this->_nkey);
 		foreach ($pm as $key => $value) {
 			$cache[$value['gid']][$value['rkey']] = $value['rvalue'];
 		}

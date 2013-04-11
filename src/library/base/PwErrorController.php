@@ -11,6 +11,7 @@ Wind::import('WIND:utility.WindJson');
  * @package library.base
  */
 class PwErrorController extends WindErrorHandler {
+
 	protected $state = 'fail';
 	
 	/*
@@ -40,12 +41,9 @@ class PwErrorController extends WindErrorHandler {
 		// set layout for common request
 		if (!$this->getRequest()->getIsAjaxRequest()) {
 			$this->setLayout('TPL:common.layout_error');
-			Wind::import('SRV:seo.bo.PwSeoBo');
 			$lang = Wind::getComponent('i18n');
-			PwSeoBo::setCustomSeo($lang->getMessage('SEO:' . $this->state . '.page.title'), '', '');
-			PwSeoBo::set('{sitename}', Wekit::C('site', 'info.name'));
 			Wekit::setGlobal(NEXT_VERSION, 'version');
-			Wekit::setGlobal(PwSeoBo::getData(), 'seo');
+			Wekit::setGlobal(array('title' => strtr($lang->getMessage('SEO:' . $this->state . '.page.title'), array('{sitename}' => Wekit::C('site', 'info.name')))), 'seo');
 		}
 	}
 	
@@ -77,12 +75,11 @@ class PwErrorController extends WindErrorHandler {
 		$type = $this->getRequest()->getAcceptTypes();
 		// 如果是含有上传的递交，不能采用ajax的方式递交，需要以html的方式递交，并且返回的结果需要是json格式，将以json=1传递过来标志
 		$json = $this->getInput('_json');
-		$requestJson = $this->getRequest()->getIsAjaxRequest() && strpos(strtolower($type), 
-			"application/json") !== false;
+		$requestJson = $this->getRequest()->getIsAjaxRequest() && strpos(strtolower($type), "application/json") !== false;
 		if ($requestJson || $json == 1) {
-			$this->getResponse()->setHeader('Content-type', 
-				'application/json; charset=' . Wekit::app()->charset);
-			exit(Pw::jsonEncode($this->getForward()->getVars()));
+			$this->getResponse()->setHeader('Content-type', 'application/json; charset=' . Wekit::V('charset'));
+			echo Pw::jsonEncode($this->getForward()->getVars());
+			exit();
 		}
 	}
 
@@ -92,10 +89,8 @@ class PwErrorController extends WindErrorHandler {
 	 * 设置当前页面风格，需要两个参数，$type风格类型，$theme该类型下风格
 	 * 
 	 * @see WindSimpleController::setTheme()
-	 * @param string $type
-	 *        	风格类型(site,space,area...)
-	 * @param string $theme
-	 *        	风格别名
+	 * @param string $type 风格类型(site,space,area...)
+	 * @param string $theme 风格别名
 	 */
 	protected function setTheme($type, $theme) {
 		$themePack = Wekit::C('site', 'theme.' . $type . '.pack');

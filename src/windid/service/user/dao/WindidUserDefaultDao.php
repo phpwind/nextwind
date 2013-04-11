@@ -1,13 +1,13 @@
 <?php
 
-Wind::import('WINDID:service.user.dao.WindidUserInterface');
+Wind::import('WSRV:user.dao.WindidUserInterface');
 
 /**
  * 空用户信息数据访问层
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidUserDefaultDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidUserDefaultDao.php 24398 2013-01-30 02:45:05Z jieyin $
  * @package windid.service.user.dao
  */
 class WindidUserDefaultDao extends WindidBaseDao implements WindidUserInterface {
@@ -87,6 +87,6 @@ class WindidUserDefaultDao extends WindidBaseDao implements WindidUserInterface 
 	}
 
 	protected function _getDao() {
-		return Windid::loadDao('user.dao.WindidUserDao');
+		return Wekit::loadDao('WSRV:user.dao.WindidUserDao');
 	}
 }

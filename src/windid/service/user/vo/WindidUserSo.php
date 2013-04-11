@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidUserSo.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidUserSo.php 23620 2013-01-14 02:44:14Z jieyin $
  * @package service.user.vo
  */
 class WindidUserSo {

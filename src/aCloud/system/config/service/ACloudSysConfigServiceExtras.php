@@ -14,6 +14,10 @@ class ACloudSysConfigServiceExtras {
 		return $this->getExtrasDao ()->getsByKeys ( $keys );
 	}
 	
+	public function deleteAllExtras() {
+		return $this->getExtrasDao ()->deleteAll ();
+	}
+	
 	public function getExtra($key) {
 		static $acloudExtrasConfig = array();
 		if($acloudExtrasConfig[$key]){

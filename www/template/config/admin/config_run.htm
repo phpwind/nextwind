@@ -67,9 +67,9 @@
 		<th>站点状态</th>
 		<td>
 			<ul id="J_status_type" class="single_list cc">
-				<li><label><input data-title="s1" data-type="" name="visitState" type="radio" value="0"{@Pw::ifcheck(!$config['visit.state'])}>完全开放</label></li>
-				<li><label><input data-title="s2" data-type="J_status_s1,J_status_s2" name="visitState" type="radio" value="1"{@Pw::ifcheck($config['visit.state']==1)}>内部开放</label></li>
-				<li><label><input data-title="s3" data-type="J_status_s2" name="visitState" type="radio" value="2"{@Pw::ifcheck($config['visit.state']==2)}>完全关闭</label></li>
+				<li><label><input data-title="s1" data-type="" name="visitState" type="radio" value="0"{@Pw::ifcheck(!$config['visit.state'])}><span>完全开放</span></label></li>
+				<li><label><input data-title="s2" data-type="J_status_s1,J_status_s2" name="visitState" type="radio" value="1"{@Pw::ifcheck($config['visit.state']==1)}><span>内部开放</span></label></li>
+				<li><label><input data-title="s3" data-type="J_status_s2" name="visitState" type="radio" value="2"{@Pw::ifcheck($config['visit.state']==2)}><span>完全关闭</span></label></li>
 			</ul>
 		</td>
 		<td><div id="J_status_tip" class="fun_tips">完全关闭:除站点创始人，其他人都不允许访问站点，一般用于站点关闭、系统维护等情况</div></td>
@@ -85,19 +85,22 @@
 			<th>允许访问的用户组</th>
 			<td>
 				<div class="user_group J_check_wrap">
-		<!--#foreach($groupTypes as $type => $typeName): 
-			$checked = in_array($type,$config['visit.group']);#-->
+		<!--#foreach($groupTypes as $type => $typeName){ 
+			if (!is_array($config['visit.group'])) $config['visit.group'] = array();
+			$checked = Pw::inArray($type,$config['visit.group']);#-->
 					<dl>
 						<dt><label><input data-direction="y" data-checklist="J_check_{$type}" type="checkbox" class="checkbox J_check_all" name="visitGroup[]" value="{$type}"{@Pw::ifcheck($checked)}>{$typeName}</label></dt>
 						<dd>
-			<!--#foreach($groups as $group): 
-		if($group['type'] == $type):
-		$checked = in_array($group['gid'],$config['visit.gid']);#-->
+			<!--#foreach($groups as $group){  
+		if($group['type'] == $type){
+			if (!is_array($config['visit.gid'])) $config['visit.gid'] = array();
+			$checked = Pw::inArray($group['gid'],$config['visit.gid']);#-->
 							<label><input class="J_check" data-yid="J_check_{$type}" type="checkbox" name="visitGid[]" value="{$group['gid']}"{@Pw::ifcheck($checked)}><span>{$group['name']}</span></label>
-			<!--#endif;endforeach; #-->
+			<!--# } #-->
+			<!--# } #-->
 						</dd>
 					</dl>
-		<!--#endforeach; #-->
+		<!--# } #-->
 				</div>
 			</td>
 			<td><div class="fun_tips">站点内部开放状态下，允许访问站点的特定用户组。<br>留空表示不使用此功能</div></td>

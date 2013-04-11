@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwApplicationService.php 13652 2012-07-10 09:33:25Z yishuo $
+ * @version $Id: PwApplicationService.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package products
  * @subpackage appcenter.service.srv
  */
@@ -57,14 +57,14 @@ class PwApplicationService {
 	 * @return PwApplication
 	 */
 	private function _loadAppDs() {
-		return Wekit::load('APPS:appcenter.service.PwApplication');
+		return Wekit::load('APPCENTER:service.PwApplication');
 	}
 
 	/**
 	 * @return PwApplicationLog
 	 */
 	private function _loadAppLogDs() {
-		return wekit::load('APPS:appcenter.service.PwApplicationLog');
+		return wekit::load('APPCENTER:service.PwApplicationLog');
 	}
 }
 

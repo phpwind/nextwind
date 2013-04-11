@@ -3,9 +3,6 @@
 <head>
 <template source='TPL:common.head' load='true' />
 <link href="{@theme:css}/forum.css?v={@NEXT_RELEASE}" rel="stylesheet" />
-<!--# if ($operateThread) { #-->
-<link href="{@theme:css}/management.css?v={@NEXT_RELEASE}" rel="stylesheet" />
-<!--# } #-->
 </head>
 <body>
 <pw-start/>
@@ -33,7 +30,7 @@
 					<div id="cloudwind_threadleft_content"></div>
 					<advertisement id='Thread.Top' sys='1'/>
 					<pw-tpl id="thread_middle"/>
-					<div class="mb10 cc">
+					<div class="pages_wrap cc">
 						<a href="{@url:bbs/post/run?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_1">发帖</a>
 						<template source="widget_thread_page" />
 					</div>
@@ -104,30 +101,30 @@
 							</table>
 						</div>
 							<!--# if ($operateThread) { #-->
-						<div class="management J_post_manage_col" data-role="list">
-							<label class="mr5"><input class="J_check_all" type="checkbox">全选</label>
-							<!--# 
-								$hasFirstPart = $operateThread['topped'] || $operateThread['digest'] || $operateThread['highlight'] || $operateThread['up'];
-								$hasSecondPart = $operateThread['type'] || $operateThread['move'] || $operateThread['copy'] || $operateThread['unite'];
-								$hasThirdPart = $operateThread['lock'] || $operateThread['down'];
-								$hasFirthPart = $operateThread['delete'] || $operateThread['ban'];
-							#-->
-							<!--# if ($operateThread['topped']){ #--><a href="{@url:bbs/manage/topped}">置顶</a><!--# } #-->
-							<!--# if ($operateThread['digest']){ #--><a href="{@url:bbs/manage/digest}">精华</a><!--# } #-->
-							<!--# if ($operateThread['highlight']){ #--><a href="{@url:bbs/manage/highlight}">加亮</a><!--# } #-->
-							<!--# if ($operateThread['up']){ #--><a href="{@url:bbs/manage/up}">提前</a><!--# } #-->
-							<!--# if ($hasFirstPart && $hasSecondPart){ #--><i>|</i><!--# } #-->
-							<!--# if ($operateThread['type']){ #--><a href="{@url:bbs/manage/type}">分类</a><!--# } #-->
-							<!--# if ($operateThread['move']){ #--><a href="{@url:bbs/manage/move}">移动</a><!--# } #-->
-							<!--# if ($operateThread['copy']){ #--><a href="{@url:bbs/manage/copy}">复制</a><!--# } #-->
-							<!--# if ($operateThread['unite']){ #--><a href="{@url:bbs/manage/unite}">合并</a><!--# } #-->
-							<!--# if ($hasThirdPart && ($hasFirstPart ^ $hasSecondPart || $hasFirstPart && $hasSecondPart)){ #--><i>|</i><!--# } #-->
-							<!--# if ($operateThread['lock']){ #--><a href="{@url:bbs/manage/lock}">锁定</a><!--# } #-->
-							<!--# if ($operateThread['down']){ #--><a href="{@url:bbs/manage/down}">压帖</a><!--# } #-->
-							<!--# if (($hasFirstPart || $hasSecondPart || $hasThirdPart) && $hasFirthPart){ #--><i>|</i><!--# } #-->
-							<!--# if ($operateThread['delete']){ #--><a href="{@url:bbs/manage/delete}">删除</a><!--# } #-->
-							<!--# if ($operateThread['ban']){ #--><a href="{@url:bbs/manage/ban}">禁止</a><!--# } #-->
-						</div>
+							<div class="management J_post_manage_col" data-role="list">
+								<label class="mr5"><input class="J_check_all" type="checkbox">全选</label>
+								<!--# 
+									$hasFirstPart = $operateThread['topped'] || $operateThread['digest'] || $operateThread['highlight'] || $operateThread['up'];
+									$hasSecondPart = $operateThread['type'] || $operateThread['move'] || $operateThread['copy'] || $operateThread['unite'];
+									$hasThirdPart = $operateThread['lock'] || $operateThread['down'];
+									$hasFirthPart = $operateThread['delete'] || $operateThread['ban'];
+								#-->
+								<!--# if ($operateThread['topped']){ #--><a href="{@url:bbs/manage/topped}">置顶</a><!--# } #-->
+								<!--# if ($operateThread['digest']){ #--><a href="{@url:bbs/manage/digest}">精华</a><!--# } #-->
+								<!--# if ($operateThread['highlight']){ #--><a href="{@url:bbs/manage/highlight}">加亮</a><!--# } #-->
+								<!--# if ($operateThread['up']){ #--><a href="{@url:bbs/manage/up}">提前</a><!--# } #-->
+								<!--# if ($hasFirstPart && $hasSecondPart){ #--><i>|</i><!--# } #-->
+								<!--# if ($operateThread['type']){ #--><a href="{@url:bbs/manage/type}">分类</a><!--# } #-->
+								<!--# if ($operateThread['move']){ #--><a href="{@url:bbs/manage/move}">移动</a><!--# } #-->
+								<!--# if ($operateThread['copy']){ #--><a href="{@url:bbs/manage/copy}">复制</a><!--# } #-->
+								<!--# if ($operateThread['unite']){ #--><a href="{@url:bbs/manage/unite}">合并</a><!--# } #-->
+								<!--# if ($hasThirdPart && ($hasFirstPart ^ $hasSecondPart || $hasFirstPart && $hasSecondPart)){ #--><i>|</i><!--# } #-->
+								<!--# if ($operateThread['lock']){ #--><a href="{@url:bbs/manage/lock}">锁定</a><!--# } #-->
+								<!--# if ($operateThread['down']){ #--><a href="{@url:bbs/manage/down}">压帖</a><!--# } #-->
+								<!--# if (($hasFirstPart || $hasSecondPart || $hasThirdPart) && $hasFirthPart){ #--><i>|</i><!--# } #-->
+								<!--# if ($operateThread['delete']){ #--><a href="{@url:bbs/manage/delete}">删除</a><!--# } #-->
+								<!--# if ($operateThread['ban']){ #--><a href="{@url:bbs/manage/ban}">禁止</a><!--# } #-->
+							</div>
 							<!--# } #-->
 						<!--# } else { #-->
 						<div class="not_content">
@@ -141,7 +138,7 @@
 						</div>
 						<!--# } #-->
 					</div>
-					<div class="mb10 cc">
+					<div class="pages_wrap cc">
 						<a href="{@url:bbs/post/run?fid=$pwforum->fid}" class="btn_post J_thread_post_btn{$postNeedLogin}" data-rel="J_thread_post_types_2">发帖</a>
 						<template source="widget_thread_page" />
 					</div>
@@ -161,18 +158,6 @@
 				<template source='TPL:common.sidebar_2' load='true' />
 				<div id="cloudwind_threadright_content"></div>
 			</div>
-			<section class="face_list" style="display:none;">
-				<h2 class="hd"><a href="#" class="fr fn">查看更多&gt;&gt;</a>当前在线</h2>
-				<article class="ct">
-					<ul class="cc">
-						<!--#$online = Wekit::load('SRV:online.srv.PwOnlineCountService');#-->
-						<!--#$list = $online->getLastVisitor($pwforum->fid);#-->
-						<!--#foreach ($list as $value) :#-->
-						<li><a href="#"><img src="{@G:url.images}/face/face_small.jpg" width="48" height="48" alt="{$value['username']}"><br />{$value['username']}</a></li>
-						<!--#endforeach#-->
-					</ul>
-				</article>
-			</section>
 		</div>
 		<div id="cloudwind_thread_bottom"></div>
 	</div>
@@ -206,13 +191,21 @@
 <!--# } #-->
 <template source='TPL:common.footer' load='true' />
 </div>
-<!--# if(!$is_design) { #-->
+
 <script>
 var FID = '{$pwforum->fid}';
 Wind.use('jquery', 'global', function(){
+	//主题分类下拉
+	$('li.J_menu_drop').on('mouseenter', function(e){
+		$(this).children('div.J_menu_drop_list').show();
+	}).on('mouseleave', function(e){
+		$(this).children('div.J_menu_drop_list').hide();
+	});
+
+<!--# if(!$is_design) { #-->
 <!--# if ($operateThread) { #-->
 	//管理
-	Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v='+ GV.JS_VERSION);
+	Wind.js(GV.JS_ROOT +'pages/bbs/threadManage.js?v='+ GV.JS_VERSION);
 <!--# } #-->
 
 <!--# if ($loginUser->isExists()) { #-->
@@ -302,9 +295,10 @@ Wind.use('jquery', 'global', function(){
 		});
 	});
 
+<!--# } #-->
 });
 </script>
-<!--# } #-->
+
 <pw-end/>
 </body>
 </html>

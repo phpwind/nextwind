@@ -7,7 +7,7 @@ Wind::import('SRV:forum.srv.manage.PwThreadManageDo');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadManageDoBan.php 22504 2012-12-25 05:14:04Z xiaoxia.xuxx $
+ * @version $Id: PwThreadManageDoBan.php 23904 2013-01-17 05:27:48Z xiaoxia.xuxx $
  * @package src.service.forum.srv.manage
  */
 class PwThreadManageDoBan extends PwThreadManageDo {
@@ -198,7 +198,6 @@ class PwThreadManageDoBan extends PwThreadManageDo {
 			foreach ($this->selectBanUsers as $uid => $_item) {
 				$dm = new PwUserBanInfoDm();
 				$dm->setUid($uid)
-					->setBanAllAccount($this->banInfo->ban_others)
 					->setCreateTime(Pw::getTime())
 					->setCreatedUid($this->loginUser->uid)
 					->setOperator($this->loginUser->username)

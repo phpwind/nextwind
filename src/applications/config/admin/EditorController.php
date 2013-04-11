@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author JianMin Chen <sky_hold@163.com> 2012-7-17
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: EditorController.php 20869 2012-11-14 07:43:49Z xiaoxia.xuxx $
+ * @version $Id: EditorController.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package admin
  * @subpackage controller.config
  */
@@ -16,8 +16,7 @@ class EditorController extends AdminBaseController {
 	 * @see WindController::run()
 	 */
 	public function run() {
-		$configDs = Wekit::load('config.PwConfig');
-		$config = $configDs->getValues('bbs');
+		$config = Wekit::C()->getValues('bbs');
 		$this->setOutput($config, 'config');
 	}
 

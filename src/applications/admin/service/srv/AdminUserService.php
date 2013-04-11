@@ -11,7 +11,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-17
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminUserService.php 22327 2012-12-21 08:46:56Z yishuo $
+ * @version $Id: AdminUserService.php 24131 2013-01-22 05:55:40Z yishuo $
  * @package admin
  * @subpackage library.service
  */
@@ -20,6 +20,19 @@ class AdminUserService {
 	const USER = 'user';
 	protected $cookieName = 'AdminUser';
 	private $_founder = null;
+
+	/**
+	 * 根据用户ID获取用户列表,支持数组或者int
+	 *
+	 * @param array|int $uids
+	 * @return array|PwError
+	 */
+	public function getUserByUids($uids) {
+		if (is_array($uids))
+			return $this->loadUserService()->getUserByUids($uids);
+		else
+			return $this->loadUserService()->getUserByUid($uids);
+	}
 
 	/**
 	 * 根据用户名来判断用户的合法性
@@ -104,27 +117,29 @@ class AdminUserService {
 	 * @return boolean
 	 */
 	public function login($username, $password) {
-		$conf = $this->loadFounderService()->getFounders();
-		if (isset($conf[$username])) {
-			$r = $this->loadFounderService()->checkPwd($conf[$username], $password);
-			if (!$r) return new PwError('ADMIN:login.fail.user.illegal');
-			$cookie = Pw::encrypt(self::FOUNDER . "\t" . $username . "\t" . Pw::getPwdCode($r));
-		} else {
-			if (!$this->loadSafeService()->ipLegal(Wekit::app()->clientIp)) {
-				return new PwError('ADMIN:login.fail.ip');
-			}
-			$user = $this->loadUserService()->verifyUser($username, $password);
-			if ($user instanceof PwError) return new PwError('ADMIN:login.fail.user.illegal');
-			/* @var $auth AdminAuth */
-			$auth = Wekit::load('ADMIN:service.AdminAuth');
-			if (!$auth->findByUid($user['uid'])) return new PwError('ADMIN:login.fail.allow');
-			
-			$u = $this->loadUserService()->getUserByUid($user['uid']);
-			$cookie = Pw::encrypt(
-				self::USER . "\t" . $user['uid'] . "\t" . Pw::getPwdCode($u['password']));
+		$srv = $this->loadFounderService();
+		if (!$srv->isFounder($username)) {
+			$srv = $this->loadManagerService();
 		}
-		Pw::setCookie($this->cookieName, $cookie, 1800);
+		if (($result = $srv->login($username, $password)) instanceof PwError) {
+			return $result;
+		}
+		Pw::setCookie($this->cookieName, Pw::encrypt(implode("\t", $result)), 1800);
 		return true;
+	}
+
+	public function isLogin() {
+		if (!($userCookie = Pw::getCookie('AdminUser'))) {
+			return array();
+		}
+		list($type, $uid, $password) = explode("\t", Pw::decrypt($userCookie));
+		if ($type == AdminUserService::FOUNDER) {
+			$srv = $this->loadFounderService();
+		} else {
+			$srv = $this->loadManagerService();
+		}
+		Pw::setCookie('AdminUser', $userCookie, 1800);
+		return $srv->isLogin($uid, $password);
 	}
 
 	/**
@@ -153,11 +168,8 @@ class AdminUserService {
 		return Wekit::load('ADMIN:service.srv.AdminFounderService');
 	}
 
-	/**
-	 * @return AdminSafeService
-	 */
-	private function loadSafeService() {
-		return Wekit::load('ADMIN:service.srv.AdminSafeService');
+	private function loadManagerService() {
+		return Wekit::load('ADMIN:service.srv.AdminManagerService');
 	}
 }
 ?>

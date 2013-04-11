@@ -1,17 +1,17 @@
 <?php
-defined('WINDID_VERSION') || exit('Forbidden');
+defined('WEKIT_VERSION') || exit('Forbidden');
 
 /**
  * 配置信息数据访问层
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidConfigDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidConfigDao.php 24445 2013-01-30 09:06:32Z jieyin $
  * @package config
  */
 class WindidConfigDao extends WindidBaseDao {
 
-	protected $_table = 'windid_config';
+	protected $_table = 'config';
 
 	/**
 	 * 根据空间名字获得该配置信息
@@ -75,7 +75,7 @@ class WindidConfigDao extends WindidBaseDao {
 	public function storeConfig($namespace, $name, $value, $descrip = null) {
 		$array = array();
 		list($array['vtype'], $array['value']) = $this->_toString($value);
-		isset($descrip) && $array['description'] = $descrip;
+		isset($descrip) && $array['descrip'] = $descrip;
 		if ($this->getConfigByName($namespace, $name)) {
 			$sql = $this->_bindSql('UPDATE %s SET %s WHERE namespace=? AND name=?', $this->getTable(), $this->sqlSingle($array));
 			$smt = $this->getConnection()->createStatement($sql);

@@ -5,7 +5,7 @@
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AlipayController.php 20924 2012-11-19 11:17:04Z xiaoxia.xuxx $
+ * @version $Id: AlipayController.php 24284 2013-01-25 03:28:25Z xiaoxia.xuxx $
  * @package forum
  */
 
@@ -90,6 +90,9 @@ class AlipayController extends PwBaseController {
 	 */
 	protected function paymsg($msg, $notify = 'success') {
 		if (empty($_POST)) {
+			if ('onlinepay.success' == $msg) {
+				$this->showMessage($msg, 'profile/credit/order', 2);
+			}		
 			$this->showError($msg, 'profile/credit/order', 2);
 		}
 		exit($notify);

@@ -45,19 +45,20 @@
 						<th>可领用户组</th>
 						<td>
 							<div class="user_group J_check_wrap">
-									<!--# foreach($groupTypes as $type => $typeName): #-->
+									<!--# foreach($groupTypes as $type => $typeName){ #-->
 								<dl>
 									<dt><label><input data-direction="y" data-checklist="J_check_{$type}" type="checkbox" class="checkbox J_check_all" name="visitGroup[]" value="{$type}">{$typeName}</label></dt>
 									<dd>
-										<!--# foreach($groups as $group): 
-					if($group['type'] == $type):
-					$checked = in_array($group['gid'],explode(',', $info['medal_gids']));
+										<!--# foreach($groups as $group){ 
+					if($group['type'] == $type){
+					$checked = Pw::inArray($group['gid'],explode(',', $info['medal_gids']));
 										#-->
 										<label><input class="J_check" data-yid="J_check_{$type}" type="checkbox" name="visitGid[]" value="{$group['gid']}"><span>{$group['name']}</span></label>
-										<!--# endif;endforeach; #-->
+										<!--# } #-->
+									<!--# } #-->
 									</dd>
 								</dl>
-									<!--# endforeach; #-->
+									<!--# } #-->
 							</div>
 						</td>
 						</tr>
@@ -68,9 +69,9 @@
 								<div class="medal_term">
 									<div class="hd">
 										<select id="J_awardtype_select" name="awardtype">
-										<!--#foreach($awardTypes as $key => $awardType): #-->
+										<!--#foreach($awardTypes as $key => $awardType){ #-->
 											<option value="{$key}">{$awardType}</option>
-										<!--#endforeach; #-->
+										<!--# } #-->
 										</select>
 										<span>&ge;</span><input type="text" class="input length_1"  name="awardcondition" value="0"/></div>
 									<div id="J_awardtype_warp" class="ct">
@@ -81,7 +82,7 @@
 											<dd class="title">勋章名称</dd>
 										</dl>
 										<div id="J_awardtype_list">
-										<!--#foreach($medalList as $key => $medal): 
+										<!--#foreach($medalList as $key => $medal){ 
 											$i = $key + 1;#-->
 											
 											<dl>
@@ -93,7 +94,7 @@
 												<dd class="title">{$medal['name']}</dd>
 											
 											</dl>
-										<!--#endforeach; #-->
+										<!--# } #-->
 										</div>
 									</div>
 								</div>

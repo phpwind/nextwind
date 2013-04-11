@@ -4,16 +4,12 @@ Wind::import('SRV:forum.srv.manage.PwThreadManageDo');
 Wind::import('SRV:forum.dm.PwTopicDm');
 
 /**
- * 帖子发布流程
- *
- * -> 1.check 检查帖子发布运行环境
- * -> 2.appendDo(*) 增加帖子发布时的行为动作,例:投票、附件等(可选)
- * -> 3.execute 发布
+ * 帖子管理操作-压帖
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadManageDoDown.php 21170 2012-11-29 12:05:09Z xiaoxia.xuxx $
+ * @version $Id: PwThreadManageDoDown.php 24736 2013-02-19 09:24:40Z jieyin $
  * @package forum
  */
 
@@ -25,7 +21,13 @@ class PwThreadManageDoDown extends PwThreadManageDo {
 	protected $tids;
 
 	public function check($permission) {
-		return (isset($permission['down']) && $permission['down']) ? true : false;
+		if (!isset($permission['down']) || !$permission['down']) {
+			return false;
+		}
+		if (!$this->srv->user->comparePermission(Pw::collectByKey($this->srv->data, 'created_userid'))) {
+			return new PwError('permission.level.down', array('{grouptitle}' => $this->srv->user->getGroupInfo('name')));
+		}
+		return true;
 	}
 	
 	public function setDowntime($time) {

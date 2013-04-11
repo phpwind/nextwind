@@ -6,7 +6,7 @@
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: VisitorController.php 19677 2012-10-17 03:36:26Z jinlong.panjl $
+ * @version $Id: VisitorController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package wind
  */
 class VisitorController extends PwBaseController {
@@ -51,8 +51,10 @@ class VisitorController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.visitor.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.visitor.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**

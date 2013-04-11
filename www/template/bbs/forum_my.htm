@@ -37,7 +37,7 @@
 									<td class="author"><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run?uid=$value['created_userid']}"><img src="{@Pw::getAvatar($value['created_userid'], 'small')}" onerror="this.onerror=null;this.src='{@G:url.images}/face/face_small.jpg'" width="45" height="45" alt="{$value['created_username']}的头像" /></a></td>
 									<td class="subject">
 										<p class="title">
-											<span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}"></i></span>
+											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" target="_blank"><span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}  新窗口打开"></i></span></a>
 											<!--# if ($forums[$value['fid']]) { #-->
 											<a href="{@url:bbs/thread/run?fid=$value['fid']}" class="st">[{@$forums[$value['fid']]['name']|html}]</a>
 											<!--# } #-->
@@ -62,10 +62,8 @@
 							<!--# } #-->
 						</div>
 					</div>
-					<div class="cc">
-						<div class="J_page_wrap" data-key="true">
-							<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/forum/my" args="$urlargs"/>
-						</div>
+					<div class="J_page_wrap cc" data-key="true">
+						<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/forum/my" args="$urlargs"/>
 					</div>
 					<advertisement id='Thread.Btm' sys='1'/>
 				</div>

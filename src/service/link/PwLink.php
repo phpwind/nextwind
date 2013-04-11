@@ -42,7 +42,7 @@ class PwLink {
 	 */
 	public function getLink($lid) {
 		$lid = intval($lid);
-		if ($lid < 1) return false;;
+		if ($lid < 1) return false;
 		return $this->_getLinkDao()->getLink($lid);
 	}
 	

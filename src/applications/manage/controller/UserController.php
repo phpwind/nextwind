@@ -7,7 +7,7 @@ Wind::import('APPS:manage.controller.BaseManageController');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: UserController.php 22361 2012-12-21 11:50:28Z xiaoxia.xuxx $
+ * @version $Id: UserController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package 
  */
 class UserController extends BaseManageController {
@@ -51,8 +51,10 @@ class UserController extends BaseManageController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:manage.user.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:manage.user.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/** 
@@ -81,8 +83,10 @@ class UserController extends BaseManageController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:manage.user.email.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:manage.user.email.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/** 

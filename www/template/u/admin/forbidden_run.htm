@@ -26,8 +26,8 @@
 			<th>禁止对象</th>
 			<td>
 				<ul class="three_list cc mb5">
-					<li><label><input type="radio" name="key" value="2" checked>用户名</label></li>
-					<li><label><input type="radio" name="key" value="1">UID</label></li>
+					<li><label><input type="radio" name="key" value="2" checked><span>用户名</span></label></li>
+					<li><label><input type="radio" name="key" value="1"><span>UID</span></label></li>
 				</ul>
 				<input type="text" class="input length_5" name="value" value="{$value}">
 			</td>
@@ -43,7 +43,7 @@
 			<td>
 				<ul class="single_list cc">
 <!--#foreach ($types as $key => $value) {#-->
-					<li><label><input type="checkbox" name="type[]" value="{$key}">{$value['title']}</label></li>
+					<li><label><input type="checkbox" name="type[]" value="{$key}"><span>{$value['title']}</span></label></li>
 <!--#}#-->
 				</ul>
 			</td>
@@ -52,16 +52,6 @@
 					<p>禁止头像：将清空用户当前的头像，并默认显示已禁止的头像，超过设定的期限后，显示网站默认头像</p>
 					<p>禁止签名：禁止用户签名后，签名栏显示管理员设置的禁止理由，超过设定的期限后，签名栏默认为空</p>
 			</div></td>
-		</tr>
-		<tr>
-			<th>禁止多帐号</th>
-			<td>
-				<ul class="switch_list cc">
-				<li><label><input type="radio" name="ban_others" value="1"><span>禁止</span></label></li>
-				<li><label><input type="radio" name="ban_others" value="0" checked><span>不禁止</span></label></li>
-				</ul>
-			</td>
-			<td><div class="fun_tips">同时禁止此帐号绑定的所有帐号。</div></td>
 		</tr>
 		<tr>
 			<th>禁止理由</th>

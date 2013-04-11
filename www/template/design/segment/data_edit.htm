@@ -16,15 +16,15 @@
 		<!--component tpl='TPL:common.widgets.font' args='$data'/>-->
 	</dd>
 </dl>
-<!--# if ($intro): #-->
+<!--# if ($intro){ #-->
 	<dl class="cc">
 		<dt>{$intro['name']}：</dt>
 		<dd>
 			<textarea name="data[{$intro['key']}]" class="length_6">{$intro['data']}</textarea>
 		</dd>
 	</dl>
-<!--# endif; #-->
-<!--# foreach ($threeSign as $v):
+<!--# } #-->
+<!--# foreach ($threeSign as $v){
 	$display = 'display:none;';
 	if ($data['extend_info'][$v['sign']]){
 		$display = '';
@@ -39,21 +39,21 @@
 		<input type="hidden"  name="images[{$v['sign']}]" value="{$data['extend_info'][$v['sign']]}">
 	</dd>
 </dl>
-<!--# endforeach; #-->
+<!--# } #-->
 
-<!--# foreach ($twoSign as $v): #-->
+<!--# foreach ($twoSign as $v){ #-->
 <dl class="cc">
 	<dt>{$allSign[$v]}：</dt>
 	<dd><input type="text" class="input length_6" name="data[{$v}]" value="{$data['extend_info'][$v]}"></dd>
 </dl>
-<!--# endforeach; #-->
+<!--# } #-->
 
-<!--# foreach ($oneSign as $v): #-->
+<!--# foreach ($oneSign as $v){ #-->
 <dl class="cc">
 	<dt>{$allSign[$v]}：</dt>
 	<dd><input type="text" class="input length_6" name="data[{$v}]" value="{$data['extend_info'][$v]}"></dd>
 </dl>
-<!--# endforeach; #-->
+<!--# } #-->
 
 <dl class="cc">
 	<dt>开始时间：</dt>

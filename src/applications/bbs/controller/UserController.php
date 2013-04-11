@@ -8,7 +8,7 @@ Wind::import('SRV:forum.bo.PwForumBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: UserController.php 23266 2013-01-07 08:46:40Z long.shi $
+ * @version $Id: UserController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package forum
  */
 
@@ -55,9 +55,11 @@ class UserController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo(
+		$seoBo->setCustomSeo(
 			$lang->getMessage('SEO:bbs.user.run.title', array($pwforum->foruminfo['name'])), '', 
 			$lang->getMessage('SEO:bbs.user.run.description', array($pwforum->foruminfo['name'])));
+		Wekit::setV('seo', $seoBo);
 	}
 }

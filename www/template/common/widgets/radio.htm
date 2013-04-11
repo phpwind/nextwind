@@ -6,7 +6,7 @@ isset($__tpl_data['items']) || $__tpl_data['items'] = array( array('value' => '0
 isset($__tpl_data['value']) || $__tpl_data['value'] = '0';  #-->
 
 <ul class="switch_list cc">
-<!--#foreach($__tpl_data['items'] as $__v):#-->
+<!--# foreach($__tpl_data['items'] as $__v){#-->
 	<li><label><input type="radio" name="{$__tpl_data['name']}" value="{$__v['value']}" {@Pw::ifcheck($__v['value'] == $__tpl_data['value'])}><span>{$__v['text']}</span></label></li>
-<!--#endforeach; #-->
+<!--# } #-->
 </ul>

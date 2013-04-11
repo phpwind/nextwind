@@ -24,9 +24,18 @@ class RegistController extends AdminBaseController {
 		Wind::import('SRV:credit.bo.PwCreditBo');
 		/* @var $pwCreditBo PwCreditBo */
 		$pwCreditBo = PwCreditBo::getInstance();
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('register');
-		
+
+		$config = Wekit::C()->getValues('register');
+		if (!$config['active.field']) $config['active.field'] = array();
+
+		$wconfig = WindidApi::C('reg');
+		$config['security.username.min'] = $wconfig['security.username.min'];
+		$config['security.username.max'] = $wconfig['security.username.max'];
+		$config['security.password.min'] = $wconfig['security.password.min'];
+		$config['security.password.max'] = $wconfig['security.password.max'];
+		$config['security.password'] = $wconfig['security.password'];
+		$config['security.ban.username'] = $wconfig['security.ban.username'];
+
 		$this->setOutput($config, 'config');
 		$this->setOutput($pwCreditBo->cType, 'credits');
 		$this->setOutput($groups, 'groups');
@@ -103,9 +112,9 @@ class RegistController extends AdminBaseController {
 		$userGroup = Wekit::load('usergroup.PwUserGroups');
 		$groups = $userGroup->getAllGroups();
 		$groupTypes = $userGroup->getTypeNames();
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('login');
-		
+
+		$config = Wekit::C()->getValues('login');
+		if (!$config['question.groups']) $config['question.groups'] = array();
 		$this->setOutput($config, 'config');
 		$this->setOutput($groups, 'groups');
 		$this->setOutput($groupTypes, 'groupTypes');
@@ -150,17 +159,6 @@ class RegistController extends AdminBaseController {
 		$guideService = Wekit::load('APPS:u.service.PwUserRegisterGuideService');
 		$guideService->setConfig($config);
 		$this->showMessage('ADMIN:success', 'config/regist/guide');
-	}
-	
-	/**
-	 * 加载Config DS 服务
-	 * 
-	 * @return PwConfig
-	 */
-	private function _loadConfigService() {
-
-		return Wekit::load('config.PwConfig');
-
 	}
 	
 	protected function _getWindid() {

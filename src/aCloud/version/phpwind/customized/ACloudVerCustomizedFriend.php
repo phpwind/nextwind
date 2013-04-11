@@ -30,7 +30,7 @@ class ACloudVerCustomizedFriend extends ACloudVerCustomizedBase {
 		$uid = intval ( $uid );
 		$user = PwUserBo::getInstance ( $uid );
 		if (! $user->isExists ())
-			return $this->buildResponse ( Friend_NOT_EXISTS );
+			return $this->buildResponse ( Friend_NOT_EXISTS,"好友不存在" );
 		$attentionResult = $this->getAttention ()->getFollows ( $uid, intval ( $offset ), intval ( $limit ) );
 		if ($attentionResult instanceof PwError)
 			return $this->buildResponse ( - 1, $attentionResult->getError () );
@@ -57,7 +57,7 @@ class ACloudVerCustomizedFriend extends ACloudVerCustomizedBase {
 	public function addFollowByUid($uid, $touid) {
 		list ( $uid, $touid ) = array (intval ( $uid ), intval ( $touid ) );
 		if ($touid < 1 || $uid < 1)
-			return $this->buildResponse ( Friend_INVALID_PARAMS );
+			return $this->buildResponse ( Friend_INVALID_PARAMS,"参数错误" );
 		$result = $this->getAttentionService ()->addFollow ( $uid, $touid );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );
@@ -75,7 +75,7 @@ class ACloudVerCustomizedFriend extends ACloudVerCustomizedBase {
 	public function deleteFollowByUid($uid, $touid) {
 		list ( $uid, $touid ) = array (intval ( $uid ), intval ( $touid ) );
 		if ($uid < 1 || $touid < 1)
-			return $this->buildResponse ( Friend_INVALID_PARAMS );
+			return $this->buildResponse ( Friend_INVALID_PARAMS,"参数错误" );
 		$result = $this->getAttentionService ()->deleteFollow ( $uid, $touid );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );
@@ -95,7 +95,7 @@ class ACloudVerCustomizedFriend extends ACloudVerCustomizedBase {
 	public function getFanByUid($uid, $offset, $limit) {
 		list ( $uid, $offset, $limit ) = array (intval ( $uid ), intval ( $offset ), intval ( $limit ) );
 		if ($uid < 1)
-			$this->buildResponse ( Friend_INVALID_PARAMS );
+			$this->buildResponse ( Friend_INVALID_PARAMS,"参数错误" );
 		$fansResult = $this->getAttention ()->getFans ( $uid,$limit,$offset );
 		if ($fansResult instanceof PwError)
 			return $this->buildResponse ( - 1, $fansResult->getError () );

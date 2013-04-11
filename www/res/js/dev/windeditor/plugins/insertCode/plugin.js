@@ -80,9 +80,21 @@
 	                dialog.find('textarea').val(code);
 				});
     		}else {
-    			dialog.find('textarea').val('');
+    			var html = _self.getRangeHTML();
+    			if(!html) {
+    				dialog.find('textarea').val('');
+    			}else{
+    				//转换选择的代码
+    				var formathtml = _self.formatXHTML(html);
+
+					_self.codeContainer.val(formathtml);
+					$(_self).trigger('afterSetValue');
+    				dialog.find('textarea').val(_self.codeContainer.val());
+    			}
+					
     		}
 			_self.showDialog(dialog);
+
 		});
 
 		//弹窗的关闭事件
@@ -269,6 +281,7 @@
 				var text = container.text();
 				if(text.replace(/\s+/,'') === ''){
 					$(element).closest(".syntaxhighlighter").remove();
+					_self.enableToolbar();
 				}
 			}
     	});

@@ -71,7 +71,7 @@ class PwApplicationLog {
 	 * @return PwApplicationLogDao
 	 */
 	private function _load() {
-		return Wekit::loadDao('APPS:appcenter.service.dao.PwApplicationLogDao');
+		return Wekit::loadDao('APPCENTER:service.dao.PwApplicationLogDao');
 	}
 }
 

@@ -4,7 +4,7 @@
  * @author jinling.su<emily100813@gmail.com> 2012-5-28
  * @link http://www.phpwind.com
  * @copyright Copyright &copy; 2003-2010 phpwind.com
- * @version $Id: IndexController.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: IndexController.php 24585 2013-02-01 04:02:37Z jieyin $
  */
 class IndexController extends PwBaseController {
 	private $perpage = 10;
@@ -18,7 +18,7 @@ class IndexController extends PwBaseController {
 		if (!$orderBy || !isset($this->orderBy[$orderBy])) {
 			$orderBy = key($this->orderBy);
 		}
-		$count = $this->_appDs()->countByStatus(1);
+		$count = $this->_appDs()->countByStatus(9);
 		$apps = $this->_appDs()->fetchListByStatus($num, $start, 9, $this->orderBy[$orderBy]);
 		$return = array();
 		foreach ($apps as $k => $v) {
@@ -41,8 +41,10 @@ class IndexController extends PwBaseController {
 		$this->setTemplate('app_index_run');
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:appcenter.appindex.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:appcenter.appindex.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	/**
@@ -50,6 +52,6 @@ class IndexController extends PwBaseController {
 	 * @return PwApplication
 	 */
 	private function _appDs() {
-		return Wekit::load('APPS:appcenter.service.PwApplication');
+		return Wekit::load('APPCENTER:service.PwApplication');
 	}
 }

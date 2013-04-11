@@ -26,6 +26,7 @@ return array(
 'WINDID'	 => '../src/windid',
 'ACLOUD'	 => '../src/aCloud',
 'ADMIN'		 => '../src/applications/admin',
+'APPCENTER'	 => '../src/applications/appcenter',
 
 /**
  * 可访问目录
@@ -33,6 +34,7 @@ return array(
 
 'PUBLIC'     => '../www',
 'THEMES'     => '../www/themes',
+'RES'		 => '../www/res',
 'TPL'        => '../www/template',
 'ATTACH'	 => '../www/attachment',
 'HTML'       => '../www/html',

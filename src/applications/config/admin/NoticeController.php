@@ -19,16 +19,5 @@ class NoticeController extends AdminBaseController {
 	public function run() {
 
 	}
-
-	/**
-	 * 加载Config DS 服务
-	 * 
-	 * @return PwConfig
-	 */
-	private function _loadConfigService() {
-		return Wekit::load('config.PwConfig');
-	}
-
 }
-
 ?>

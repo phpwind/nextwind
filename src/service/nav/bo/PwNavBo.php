@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: yanchixia $>
+ * @author $Author: yanchixia $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwNavBo.php 23013 2013-01-05 02:23:30Z gao.wanggao $ 
+ * @version $Id: PwNavBo.php 24273 2013-01-24 03:24:52Z yanchixia $ 
  * @package 
  */
 class PwNavBo {
@@ -193,8 +193,14 @@ class PwNavBo {
 		}
 		$html .= '>';
 		if ($data['type'] == 'my') {
-			$icon = $data['sign'] ? 'icon_'.$data['sign'] : 'icon_default';
-			$html .= '<em class="'.$icon.'"></em>';
+			if (!$data['image']) {
+				$icon = $data['sign'] ? 'icon_'.$data['sign'] : 'icon_default';
+				$html .= '<em class="'.$icon.'"></em>';
+			} else {
+				//$icon = $data['sign'] ? $data['sign'] : 'default';
+				//$icon = WindUrlHelper::checkUrl(PUBLIC_RES . '/images/nav/', PUBLIC_URL) . '/' .  $icon . '.png';
+				$html .= '<em style="background:url('.$data['image'].') 0 bottom no-repeat;margin-top:7px;"></em>';
+			}
 		}
 		$html .= $data['name'].'</a>';
 		return $html;

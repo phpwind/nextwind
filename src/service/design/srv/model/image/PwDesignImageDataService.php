@@ -4,7 +4,7 @@ Wind::import('SRV:design.srv.model.PwDesignModelBase');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImageDataService.php 21979 2012-12-17 12:36:08Z gao.wanggao $ 
+ * @version $Id: PwDesignImageDataService.php 24831 2013-02-22 04:39:08Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImageDataService extends PwDesignModelBase{
@@ -17,7 +17,7 @@ class PwDesignImageDataService extends PwDesignModelBase{
 		return array();
 	}
 	
-	public function decorateSaveProperty($property) {
+	public function decorateSaveProperty($property, $moduleid) {
 		//if ($property['isblank']) $blak = 
 		
 		$property['limit'] = 1;
@@ -25,7 +25,8 @@ class PwDesignImageDataService extends PwDesignModelBase{
 		$property['height'] = (int)$property['height'];
 		$property['intro'] = Pw::substrs($property['intro'],50);
 		if ($property['cover'] == 2 ) {
-			$result = $this->_uploadFile();
+			Wekit::load('design.srv.PwDesignImage')->clearFolder($moduleid);
+			$result = $this->_uploadFile($moduleid);
 			if ($result  instanceof PwError ) return $result;
 			$property['image'] = $result;
 		}
@@ -46,10 +47,10 @@ class PwDesignImageDataService extends PwDesignModelBase{
 		return $data;
 	}
 	
-	private function _uploadFile() {
+	private function _uploadFile($moduleid = 0) {
  		Wind::import('SRV:upload.action.PwDesignImageUpload');
-		Wind::import('SRV:upload.PwUpload');
-		$bhv = new PwDesignImageUpload();
+		Wind::import('LIB:upload.PwUpload');
+		$bhv = new PwDesignImageUpload($moduleid);
 		$upload = new PwUpload($bhv);
 		if (($result = $upload->check()) === true) $result = $upload->execute();
 		if ($result !== true) return $result;

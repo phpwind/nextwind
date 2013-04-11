@@ -3,11 +3,7 @@
 Wind::import('SRV:forum.srv.manage.PwThreadManageDo');
 
 /**
- * 帖子发布流程
- *
- * -> 1.check 检查帖子发布运行环境
- * -> 2.appendDo(*) 增加帖子发布时的行为动作,例:投票、附件等(可选)
- * -> 3.execute 发布
+ * 帖子管理操作-屏蔽
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
@@ -24,7 +20,13 @@ class PwThreadManageDoShield extends PwThreadManageDo {
 	protected $threads = array('t' => array(), 'p' => array());
 
 	public function check($permission) {
-		return (isset($permission['shield']) && $permission['shield']) ? true : false;
+		if (!isset($permission['shield']) || !$permission['shield']) {
+			return false;
+		}
+		if (!$this->srv->user->comparePermission(Pw::collectByKey($this->srv->data, 'created_userid'))) {
+			return new PwError('permission.level.shield', array('{grouptitle}' => $this->srv->user->getGroupInfo('name')));
+		}
+		return true;
 	}
 
 	public function gleanData($value) {
@@ -39,8 +41,10 @@ class PwThreadManageDoShield extends PwThreadManageDo {
 	
 	public function run() {
 		if (1 == $this->ifShield) {
+
 			$type = 'shield';
 		} else {
+
 			$type = 'unshield';
 		}
 		if ($this->pids) {

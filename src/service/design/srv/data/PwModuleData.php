@@ -5,7 +5,7 @@ Wind::import('SRV:design.bo.PwDesignModuleBo');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwModuleData.php 23371 2013-01-09 06:18:14Z gao.wanggao $ 
+ * @version $Id: PwModuleData.php 24340 2013-01-29 03:08:31Z gao.wanggao $ 
  * @package 
  */
 class PwModuleData {
@@ -159,7 +159,7 @@ class PwModuleData {
 			}
 			$_data['standard_image'] = $data['standard_image'];
 			isset($data['__asyn']) && $_data['__asyn'] = $data['__asyn'];
-		}		
+		}
 		return $_data;
 	}
 	

@@ -27,14 +27,14 @@
 					<td>操作</td>
 				</tr>
 			</thead>
-	<!--#foreach($roles as $role): #-->
+	<!--#foreach($roles as $role){ #-->
 			<tr>
 				<td>{$role['name']}</td>
 				<td>
 					<a href="{@url:role/edit?rid=$role['id']}" class="mr10">[编辑]</a>
 					<a href="{@url:role/del?rid=$role['id']}" class="mr10 J_ajax_del">[删除]</a></td>
 			</tr>
-	<!--#endforeach; #-->
+	<!--# } #-->
 		</table>
 	</div>
 </div>

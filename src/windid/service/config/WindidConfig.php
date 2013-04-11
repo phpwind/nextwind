@@ -1,5 +1,5 @@
 <?php
-defined('WINDID_VERSION') || exit('Forbidden');
+defined('WEKIT_VERSION') || exit('Forbidden');
 
 /**
  * 配置服务接口
@@ -7,7 +7,7 @@ defined('WINDID_VERSION') || exit('Forbidden');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidConfig.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidConfig.php 24443 2013-01-30 08:08:06Z jieyin $
  * @package config
  */
 class WindidConfig {
@@ -119,6 +119,6 @@ class WindidConfig {
 	 * @return PwConfigDao
 	 */
 	private function _getDao() {
-		return Windid::loadDao('config.dao.WindidConfigDao');
+		return Wekit::loadDao('WSRV:config.dao.WindidConfigDao');
 	}
 }

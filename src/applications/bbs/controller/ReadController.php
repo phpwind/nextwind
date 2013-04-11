@@ -8,7 +8,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ReadController.php 23266 2013-01-07 08:46:40Z long.shi $
+ * @version $Id: ReadController.php 24888 2013-02-25 08:12:54Z jieyin $
  * @package forum
  */
 class ReadController extends PwBaseController {
@@ -101,8 +101,6 @@ class ReadController extends PwBaseController {
 		$this->setOutput($threadDisplay->getUrlArgs(), 'urlargs');
 		$this->setOutput($threadDisplay->getUrlArgs('desc'), 'urlDescArgs');
 		$this->setOutput($this->loginUser->getPermission('look_thread_log', $isBM, array()), 'canLook');
-		$logs = Wekit::load('log.srv.PwLogService')->getThreadLog($tid, 1, 0);
-		$this->setOutput($logs ? array_shift($logs) : array(), 'log');
 		$this->setOutput($this->_getFpage($threadDisplay->fid), 'fpage');
 		
 		//版块风格
@@ -113,10 +111,11 @@ class ReadController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		$threadDisplay->page <=1 && PwSeoBo::setDefaultSeo($lang->getMessage('SEO:bbs.read.run.title'), '', $lang->getMessage('SEO:bbs.read.run.description'));
-		PwSeoBo::init('bbs', 'read');
-		PwSeoBo::set(
+		$threadDisplay->page <=1 && $seoBo->setDefaultSeo($lang->getMessage('SEO:bbs.read.run.title'), '', $lang->getMessage('SEO:bbs.read.run.description'));
+		$seoBo->init('bbs', 'read');
+		$seoBo->set(
 			array(
 				'{forumname}' => $threadDisplay->forum->foruminfo['name'], 
 				'{title}' => $threadDisplay->thread->info['subject'], 
@@ -126,7 +125,7 @@ class ReadController extends PwBaseController {
 				'{page}' => $threadDisplay->page
 			)
 		);
-		
+		Wekit::setV('seo', $seoBo);
 		//是否显示回复
 		$showReply = true;
 		//锁定时间

@@ -9,7 +9,7 @@ Wind::import('WIND:mail.WindMail');
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwMail.php 23438 2013-01-09 11:01:06Z xiaoxia.xuxx $
+ * @version $Id: PwMail.php 24044 2013-01-21 05:33:26Z xiaoxia.xuxx $
  * @package Lib:utility.PwMail
  */
 class PwMail {
@@ -33,7 +33,7 @@ class PwMail {
 			'password' => $config['mail.password'],
 			'timeout' => 20);//尝试链接超时时间
 		$this->_mail = new WindMail();
-		$this->_mail->setCharset(Wekit::app()->charset);
+		$this->_mail->setCharset(Wekit::V('charset'));
 		$this->_mail->setDate(date('r', Pw::getTime()));
 		$this->_mail->setContentEncode(WindMail::ENCODE_BASE64);
 		$this->_mail->setContentType(WindMail::MIME_HTML);
@@ -59,9 +59,13 @@ class PwMail {
 				return new PwError('ADMIN:email.server.error');
 			}
 		} catch(Exception $e) {
-			//TODO 邮件发送失败
-// 			return new PwError($e->getMessage());
-			return new PwError('ADMIN:email.server.error');
+			$message = $e->getMessage();
+			if (strpos($message, 'Initiates a socket connection fail')) {
+				$message = 'ADMIN:email.server.config.error';
+			} elseif (strpos($message, '[mail.protocol.WindSmtp.checkResponse]')) {
+				$message = 'ADMIN:email.server.response.error';
+			}
+			return new PwError($message);
 		}
 		return true;
 	}

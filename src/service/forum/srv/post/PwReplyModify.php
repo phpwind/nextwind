@@ -10,7 +10,7 @@ Wind::import('SRV:forum.dm.PwReplyDm');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwReplyModify.php 21170 2012-11-29 12:05:09Z xiaoxia.xuxx $
+ * @version $Id: PwReplyModify.php 24736 2013-02-19 09:24:40Z jieyin $
  * @package forum
  */
 
@@ -41,8 +41,13 @@ class PwReplyModify extends PwPostAction {
 		if (!$this->user->isExists()) {
 			return new PwError('login.not');
 		}
-		if ($this->info['created_userid'] != $this->user->uid && !$this->user->getPermission('operate_thread.edit', $this->isBM)) {
-			return new PwError('BBS:post.modify.error.self');
+		if ($this->info['created_userid'] != $this->user->uid) {
+			if (!$this->user->getPermission('operate_thread.edit', $this->isBM)) {
+				return new PwError('BBS:post.modify.error.self');
+			}
+			if (!$this->user->comparePermission($this->info['created_userid'])) {
+				return new PwError('permission.level.edit', array('{grouptitle}' => $this->user->getGroupInfo('name')));
+			}
 		}
 		if ($this->forum->forumset['edittime'] && (Pw::getTime() - $this->info['created_time'] > $this->forum->forumset['edittime'] * 60) && !$this->user->getPermission('operate_thread.edit', $this->isBM)) {
 			return new PwError('BBS:post.modify.timelimit', array('{minute}' => $this->forum->forumset['edittime']));

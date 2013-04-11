@@ -139,6 +139,32 @@ class PwDomain {
 	}
 	
 	/**
+	 * 根据Id和类型查询
+	 * 
+	 * @param string $type
+	 * @param int $id
+	 * @return array
+	 */
+	public function getByTypeAndId($type,$id){
+		list($type,$id) = array(trim($type),intval($id));
+		if(!$type || $id < 1) return array();
+		return $this->_domainDao()->getByTypeAndId($type,$id);
+	}
+	
+	/**
+	 * 根据某一类型和id批量查询
+	 * 
+	 * @param string $type
+	 * @param array $ids
+	 * @return array
+	 */
+	public function fetchByTypeAndId($type,$ids){
+		$type = trim($type);
+		if(!$type || !is_array($ids) || count($ids) < 1) return array();
+		return $this->_domainDao()->fetchByTypeAndId($type,$ids);
+	}
+	
+	/**
 	 * @return PwDomainDao
 	 */
 	private function _domainDao() {

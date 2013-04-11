@@ -152,6 +152,7 @@ return array(
 			'like' => array(
 				'class' => 'SRV:like.srv.threadDisplay.injector.PwThreadDisplayDoLikeInjector', 
 				'method' => 'run',
+				'expression' => 'service:thread.info.like_count!=0',
 				'description' => '帖子阅读页 - 喜欢'
 			),
 			'medal' => array(
@@ -219,6 +220,17 @@ return array(
 			'inviteFriend' => array(
 				'class' => 'SRV:user.srv.login.injector.PwLoginDoInviteFriendInjector',
 				'method' => 'run'
+			),
+		)
+	),
+	'm_PwRegisterService' => array(
+		'description' => '注册Service钩子',
+		'param' => array(),
+		'interface' => 'SRV:user.srv.register.do.PwRegisterDoBase',
+		'list' => array(
+			'bbsinfo' => array(
+				'class' => 'SRV:user.srv.register.do.PwRegisterDoUpdateBbsInfo',
+				'description' => '注册后期：更新站点信息'
 			),
 		)
 	),
@@ -339,7 +351,7 @@ return array(
 			)
 		)
 	),
-	'm_login_welcome' => array(
+	'm_PwLoginService' => array(
 		'description' => '用户登录之后的操作',
 		'param' => array('@param PwUserBo $userBo 登录用户的对象', '@param string $ip 登录的IP'),
 		'interface' => 'SRV:user.srv.login.PwUserLoginDoBase',
@@ -347,6 +359,10 @@ return array(
 			'autotask' => array(
 				'expression' => 'config:site.task.isOpen==1',
 				'class' => 'SRV:task.srv.condition.PwAutoTaskLoginDo',
+				'loadway' => 'load'
+			),
+			'userbelong' => array(
+				'class' => 'HOOK:PwUser.PwUserLoginDoBelong',
 				'loadway' => 'load'
 			),
 			'behavior' => array(
@@ -359,6 +375,10 @@ return array(
 			),
 			'updateOnline' => array(
 				'class' => 'SRV:online.srv.do.PwLoginDoUpdateOnline',
+				'loadway' => 'load'
+			),
+			'autounbancheck' => array(
+				'class' => 'SRV:user.srv.login.do.PwLoginDoUnbanCheck',
 				'loadway' => 'load'
 			),
 			/*
@@ -941,10 +961,15 @@ return array(
 		)
 	),
 	/*扩展存储类型*/
-	's_PwAttacmentService_getStorages' => array( //todo
+	's_PwStorage_getStorages' => array( //todo
+		'description' => '获取附件存储类型',
+		'param' => array('@param array $storages', '@return array'),
+		'interface' => '',
+		'list' => array(
+		)
 	),
 	's_PwThreadManageDoCopy' => array( //todo
-		'description' => '退出登录',
+		'description' => '帖子复制',
 		'param' => array('@param PwThreadManage $srv', '@return void'),
 		'interface' => 'PwThreadManageCopyDoBase',
 		'list' => array(
@@ -1052,6 +1077,12 @@ return array(
 		'list' => array(
 		)
 	),
+	's_header_my' => array(
+		'description' => '头部帐号的下拉',
+		'param' => array(),
+		'list' => array(
+		)
+	),
 	's_footer' => array(
 		'description' => '全局底部',
 		'param' => array(),
@@ -1082,6 +1113,26 @@ return array(
 	's_profile_menus' => array (
 		'description' => '个人设置-菜单项扩展',
 		'param' => array('@param array $config 注册的菜单', '@return array'),
+		'list' => array(
+		),
+	),
+
+	's_attachment_watermark' => array(
+		'description' => '全局->水印设置->水印策略扩展',
+		'param' => array('@param array $config 已有的需要设置的策略,每一个扩展项格式:key=>title', '@return array'),
+		'list' => array(
+		),
+	),
+	's_verify_showverify' => array(
+		'description' => '全局->验证码->验证策略',
+		'param' => array('@param array $config 需要设置的策略,每一个扩展项格式:key=>title', '@return array'),
+		'list' => array(
+		),
+	),
+	/*手机短信扩展*/
+	's_PwMobileService_getPlats' => array(
+		'description' => '手机短信 - 平台选择',
+		'param' => array('@param array $config 配置文件，可参考SRV:mobile.config.plat.php', '@return array'),
 		'list' => array(
 		),
 	),

@@ -8,6 +8,7 @@ defined('WEKIT_VERSION') or exit(403);
 class IndexController extends PwBaseController {
 	
 	public function beforeAction($handlerAdapter) {
+		parent::beforeAction($handlerAdapter);
 		//TODO do something before all the action
 	}
 	

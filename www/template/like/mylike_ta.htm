@@ -12,7 +12,7 @@
 		<div class="bread_crumb">
 			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:like/like/run}">喜欢</a><em>&gt;</em><a href="{@url:ike/mylike/ta}">Ta的喜欢</a>
 		</div>
-		<div class="main cc">
+		<div class="like_page_ta cc">
 			<div class="like_nav cc">
 				<ul>
 					<li><a href="{@url:like/like/run}">热门喜欢</a></li>
@@ -82,25 +82,25 @@ Wind.use('jquery', 'global', function(){
 					//头像加载容错处理
 					var avatar = html.find('.J_avatar');
 					avatar && Wind.Util.avatarError(avatar);
-					//
+
 					html.css("opacity", 0);
 					try{
 						//这里当图片异常的时候会导致延迟显示
                         html.imagesLoaded(function(){
-							$("#loading").hide();
 							$("#J_loading").hide();
 							
-							html.animate({"opacity": 1},800);
+							
 							$("#container").append(html).masonry('appended', html, true);
+							html.animate({"opacity": 1},800);
 
 							//likePlus
-							likePlus(html.find('.J_like_btn'));
+							//likePlus(html.find('.J_like_btn'));
                         });
                    }catch(e){
                    }
 				},
 				loadFailed: function(){
-					$("#loading").hide();
+					$("#J_loading").hide();
 				}
 			});
 			fall.init();	

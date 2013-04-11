@@ -31,7 +31,7 @@
 				</tr>
 			</thead>
 		<!--# 
-			foreach ($list as $cron):
+			foreach ($list as $cron){
 			$modified = $cron['modified_time'] ? Pw::time2str($cron['modified_time']) : '-';
 			$next = $cron['next_time'] ? Pw::time2str($cron['next_time']) : '-';
 		#-->
@@ -42,12 +42,12 @@
 				<td>{$modified}</td>
 				<td>{$next}</td>
 				<td><a href="{@url:cron/cron/edit?id=$cron['cron_id']}" class="mr5">[编辑]</a>
-				<!--# if ($cron['isopen'] !=2): #-->
+				<!--# if ($cron['isopen'] !=2){ #-->
 				<a class="J_ajax_del" href="{@url:cron/cron/dodelete?id=$cron['cron_id']}">[删除]</a></td>
-				<!--# endif; #-->
+				<!--# } #-->
 			</tr>
 		<!--# 
-			endforeach; 
+			}
 		#-->
 		</table>
 	</div>

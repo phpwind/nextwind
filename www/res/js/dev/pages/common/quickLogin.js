@@ -86,7 +86,6 @@
 					Wind.Util.ajaxBtnDisable(qlogin_btn);
 				},
 				success : function(data, statusText, xhr, $form){
-					Wind.Util.ajaxBtnEnable(qlogin_btn);
 					if(data.state === 'success') {
 						if(data.message.check) {
 							//设置验证问题
@@ -98,17 +97,28 @@
 								//隐藏登录弹窗
 								qlogin_pop.hide();
 								
-								$('body').append(data);
-								var question_set_wrap = $('#J_login_question_set_wrap');
-								question_set_wrap.css({
-									left : ($(window).width() - question_set_wrap.outerWidth())/2,
-									top :  ($(window).height() - question_set_wrap.outerHeight())/2 + $(document).scrollTop()
-								}).find('input:text:visible').focus();
+								Wind.use('dialog', function (){
+									Wind.Util.ajaxBtnEnable(qlogin_btn);
+									Wind.dialog.html(data, {
+										id: 'J_login_question_wrap',
+										isDrag: true,
+										isMask: false,
+										callback: function(){
+											$('#J_login_question_wrap input:text:visible:first').focus();
+										}
+									});
+								});
+
 							}, 'html');
 						}else{
 							window.location.href = data.referer;
 						}
 					}else{
+						Wind.Util.ajaxBtnEnable(qlogin_btn);
+						if(data.message.qaE) {
+							//回答安全问题
+							return;
+						}
 						qlogin_tip.html('<span class="tips_icon_error"><span>' + data.message).slideDown();;
 					}
 				}

@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignCompile.php 23387 2013-01-09 07:14:36Z gao.wanggao $ 
+ * @version $Id: PwDesignCompile.php 23886 2013-01-17 03:06:19Z gao.wanggao $ 
  * @package 
  */
 class PwDesignCompile {
@@ -59,6 +59,11 @@ class PwDesignCompile {
     
     public function getPageBo() {
    	  	return $this->pageBo;
+    }
+    
+    public function getPageType() {
+    	$pageInfo = $this->pageBo->getPage();
+    	return $pageInfo['page_type'];
     }
     
     public function setPermission() {
@@ -402,7 +407,7 @@ class PwDesignCompile {
     		$srv = Wekit::load('design.srv.display.PwDesignDisplay');
     		$moduleName = $srv->bindDataKey($moduleid);
     	}
-    	
+    	$content = preg_replace('/\<for:(\d+)>/isU', '<for:>', $content, 1);
 		$in = array(
 			'/\<if:{(\w+)}>/iU',
 			'/\<if:!{(\w+)}>/iU',

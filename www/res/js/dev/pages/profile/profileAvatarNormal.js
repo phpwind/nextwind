@@ -21,11 +21,32 @@ Wind.use('ajaxForm', function(){
 			'-84' : '文件错误'
 		};
 
-	$('#J_avatgar_normal_form').ajaxForm({
+	var form = $('#J_avatgar_normal_form'),
+		action = form.attr('action');
+
+	var url_re = /^(((([^:\/#\?]+:)?(?:(\/\/)((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/;
+	var domain = url_re.exec( action ) || [];
+	if(domain[6] !== location.host) {
+		//不同域
+		$.ajaxSetup({
+			beforeSend: $.noop,
+			complete: function(jqXHR){
+				Wind.Util.ajaxBtnEnable(avatgar_normal_btn);
+				if(jqXHR.statusText == 'error') {
+					Wind.Util.formBtnTips({
+						wrap : avatgar_normal_btn.parent(),
+						msg : '上传成功'
+					});
+				}
+				
+			}
+		});
+	}
+
+	form.ajaxForm({
 		beforeSubmit : function(){
 			Wind.Util.ajaxBtnDisable(avatgar_normal_btn);
 		},
-		dataType : 'json',
 		success : function(data){
 			Wind.Util.ajaxBtnEnable(avatgar_normal_btn);
 			if(data == '1') {
@@ -51,4 +72,5 @@ Wind.use('ajaxForm', function(){
 			}
 		}
 	});
+
 });

@@ -7,7 +7,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: ForumController.php 22967 2013-01-04 05:55:28Z jinlong.panjl $
+ * @version $Id: ForumController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package forum
  */
 
@@ -60,10 +60,12 @@ class ForumController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		$threadList->page <=1 && PwSeoBo::setDefaultSeo($lang->getMessage('SEO:bbs.forum.run.title'), '', $lang->getMessage('SEO:bbs.forum.run.description'));
-		PwSeoBo::init('bbs', 'new');
-		PwSeoBo::set('{page}', $threadList->page);
+		$threadList->page <=1 && $seoBo->setDefaultSeo($lang->getMessage('SEO:bbs.forum.run.title'), '', $lang->getMessage('SEO:bbs.forum.run.description'));
+		$seoBo->init('bbs', 'new');
+		$seoBo->set('{page}', $threadList->page);
+		Wekit::setV('seo', $seoBo);
 	}
 
 	/**
@@ -109,8 +111,10 @@ class ForumController extends PwBaseController {
 
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.forum.my.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.forum.my.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	/**
@@ -143,6 +147,7 @@ class ForumController extends PwBaseController {
 			&& ($joinForum = Wekit::load('forum.PwForumUser')->getFroumByUid($this->loginUser->uid))) {
 			$tmp = array();
 			foreach ($joinForum as $key => $value) {
+				if (!$key) continue;
 				$tmp[] = array($key, strip_tags($forums[$key]['name']));
 			}
 			array_unshift($cate, array('my', '我的版块'));

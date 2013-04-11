@@ -25,10 +25,8 @@ class CreditController extends AdminBaseController {
 		$this->setCurrentTab('run');
 		$credits = $this->_getCreditService()->getCredit();
 		ksort($credits);
-		/* @var $configService PwConfig */
-		$configService = Wekit::load('config.PwConfig');
-		$creditConfig = $configService->getValues('credit');
-		
+
+		$creditConfig = Wekit::C()->getValues('credit');
 		$this->setOutput($credits, 'credits');
 		$this->setOutput($creditConfig['credits'] ? $creditConfig['credits'] : array(), 'localCredits');
 	}
@@ -65,9 +63,7 @@ class CreditController extends AdminBaseController {
 		// 所有的模块
 		/* @var $config PwCreditOperationConfig */
 		$config = PwCreditOperationConfig::getInstance();
-		/* @var $configService PwConfig */
-		$configService = Wekit::load('config.PwConfig');
-		$creditConfig = $configService->getValues('credit');
+		$creditConfig = Wekit::C()->getValues('credit');
 		
 		$this->setOutput($config->getMap(), 'allModules');
 		$this->setOutput($config->getData(), 'moduleConfig');
@@ -81,9 +77,7 @@ class CreditController extends AdminBaseController {
 	public function editStrategyAction() {
 		$info = $this->getInput('info');
 		
-		/* @var $configService PwConfig */
-		$configService = Wekit::load('config.PwConfig');
-		$creditConfig = $configService->getValues('credit');
+		$creditConfig = Wekit::C()->getValues('credit');
 		$strategy = $creditConfig['strategy'] ? $creditConfig['strategy'] : array();
 		if (is_array($info)) {
 			foreach ($info as $key => $value) {

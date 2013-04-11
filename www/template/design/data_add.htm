@@ -31,16 +31,16 @@
 				</dd>
 			</dl>
 
-			<!--# if ($intro): #-->
+			<!--# if ($intro){ #-->
 			<dl class="cc">
 				<dt>{$intro['name']}：</dt>
 				<dd>
 					<textarea name="data[{$intro['key']}]" class="length_6">{$intro['data']}</textarea>
 				</dd>
 			</dl>
-			<!--# endif; #-->
+			<!--# } #-->
 
-			<!--# foreach ($threeSign as $v): #-->
+			<!--# foreach ($threeSign as $v){ #-->
 			<dl class="cc">
 				<dt>{$allSign[$v['sign']]}：</dt>
 				<dd>
@@ -50,21 +50,21 @@
 					<input type="hidden"  name="images[{$v['sign']}]" value="">
 				</dd>
 			</dl>
-			<!--# endforeach; #-->
+			<!--# } #-->
 
-			<!--# foreach ($twoSign as $v): #-->
+			<!--# foreach ($twoSign as $v){ #-->
 			<dl class="cc">
 				<dt>{$allSign[$v]}：</dt>
 				<dd><input type="text" class="input length_6" name="data[{$v}]" value=""></dd>
 			</dl>
-			<!--# endforeach; #-->
+			<!--# } #-->
 
-			<!--# foreach ($oneSign as $v): #-->
+			<!--# foreach ($oneSign as $v){ #-->
 			<dl class="cc">
 				<dt>{$allSign[$v]}：</dt>
 				<dd><input type="text" class="input length_6" name="data[{$v}]" value=""></dd>
 			</dl>
-			<!--# endforeach; #-->
+			<!--# } #-->
 			<dl class="cc">
 				<dt>开始时间：</dt>
 				<dd><input type="text" class="input length_2 J_design_date" name="start_time" value="">

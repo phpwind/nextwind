@@ -6,11 +6,11 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidSchoolDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidSchoolDao.php 24011 2013-01-18 07:53:03Z jieyin $
  * @package service.school.dao
  */
 class WindidSchoolDao extends WindidBaseDao {
-	protected $_table = 'windid_school';
+	protected $_table = 'school';
 	protected $_pk = 'schoolid';
 	protected $_dataStruct = array('schoolid', 'name', 'areaid', 'first_char', 'typeid');
 	

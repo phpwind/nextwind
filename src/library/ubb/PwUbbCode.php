@@ -9,7 +9,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUbbCode.php 22763 2012-12-27 03:43:54Z jieyin $
+ * @version $Id: PwUbbCode.php 24383 2013-01-29 10:09:39Z jieyin $
  * @package lib.utility
  */
 
@@ -487,7 +487,7 @@ class PwUbbCode {
 		is_null(self::$_emotion) && self::$_emotion = Wekit::cache()->get('all_emotions');
 		isset(self::$_emotion['name'][$key]) && $key = self::$_emotion['name'][$key];
 		$emotion = isset(self::$_emotion['emotion'][$key]) ? self::$_emotion['emotion'][$key] : current(self::$_emotion['emotion']);
-		$html = "<img src=\"" . Wekit::app()->images . "/emotion/" . $emotion['emotion_folder'] . '/' . $emotion['emotion_icon'] . "\" />";
+		$html = "<img src=\"" . Wekit::url()->images . "/emotion/" . $emotion['emotion_folder'] . '/' . $emotion['emotion_icon'] . "\" />";
 		return self::_pushCode($html);
 	}
 
@@ -513,7 +513,7 @@ class PwUbbCode {
 	 */
 	public static function createImg($path, $maxWidth = 0, $maxHeight = 0, $original = '', $isLazy = false) {
 		if ($isLazy) {
-			$html = '<img class="J_post_img J_lazy" data-original="' . $path . '" src="' .  Wekit::app()->images . '/blank.gif" border="0"';
+			$html = '<img class="J_post_img J_lazy" data-original="' . $path . '" src="' .  Wekit::url()->images . '/blank.gif" border="0"';
 		} else {
 			$html = '<img class="J_post_img" src="' . $path . '" border="0"';
 		}
@@ -543,7 +543,7 @@ class PwUbbCode {
 	 * @return string
 	 */
 	public static function createImgLink($path) {
-		$html = "<img src=\"" . Wekit::app()->images . "/wind/file/img.gif\" align=\"absbottom\"> <a target=\"_blank\" href=\"$path \">$path</a>";
+		$html = "<img src=\"" . Wekit::url()->images . "/wind/file/img.gif\" align=\"absbottom\"> <a target=\"_blank\" href=\"$path \">$path</a>";
 		return self::_pushCode($html);
 	}
 
@@ -596,7 +596,7 @@ class PwUbbCode {
 		} else {
 			$html = "<div class=\"content_hidden\" id=\"J_need_reply\">本部分内容设定了隐藏,需要回复后才能看到</div>";
 		}
-		return self::_pushCode($html);
+		return $html;
 	}
 
 	/**
@@ -630,7 +630,7 @@ class PwUbbCode {
 				. '对不起!您没有登录,请先<a href="' . $_url . '" class="J_qlogin_trigger"><font color="red">登录论坛</font></a>.'
 				. "</blockquote>";
 		}
-		return self::_pushCode($html);
+		return $html;
 	}
 
 	/**
@@ -668,7 +668,7 @@ class PwUbbCode {
 					. "<h6>此段为出售的内容，购买后显示</h6>"
 					. "</div>";
 		}
-		return self::_pushCode($html);
+		return $html;
 	}
 
 	/**

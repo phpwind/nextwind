@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: yishuo $>
- * @author $Author: yishuo $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignModelBo.php 20272 2012-10-25 07:49:18Z yishuo $ 
+ * @version $Id: PwDesignModelBo.php 23901 2013-01-17 03:52:47Z gao.wanggao $ 
  * @package 
  */
 class PwDesignModelBo{
@@ -34,6 +34,7 @@ class PwDesignModelBo{
 		$sysSign = array(
 					array('<title>','模块标题'),
 					array('<for:>...</for>','foreach循环'),
+					array('<for:正整数>...</for>','指定条数循环'),
 					array('<if:odd>...</if>','奇数行'),
 					array('<if:even>...</if>','偶数行'),
 					array('<if:正整数>...</if>','指定数字行'),

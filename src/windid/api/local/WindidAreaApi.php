@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidAreaApi.php 21452 2012-12-07 10:18:33Z gao.wanggao $ 
+ * @version $Id: WindidAreaApi.php 24834 2013-02-22 06:43:43Z jieyin $ 
  * @package 
  */
 class WindidAreaApi {
@@ -24,9 +24,48 @@ class WindidAreaApi {
 	public function getAll(){
 		return $this->_getAreaDs()->fetchAll();
 	}
+
+	public function getAreaInfo($areaid) {
+		return $this->_getAreaService()->getAreaInfo($areaid);
+	}
+
+	public function fetchAreaInfo($areaids) {
+		return $this->_getAreaService()->fetchAreaInfo($areaid);
+	}
+
+	public function getAreaRout($areaid) {
+		return $this->_getAreaService()->getAreaRout($areaid);
+	}
+
+	public function fetchAreaRout($areaids) {
+		return $this->_getAreaService()->fetchAreaRout($areaids);
+	}
+
+	public function getAreaTree() {
+		return $this->_getAreaService()->getAreaTree();
+	}
+
+	public function updateArea(WindidAreaDm $dm) {
+		$result = $this->_getAreaDs()->updateArea($dm);
+		return WindidUtility::result($result);
+	}
+
+	public function batchAddArea($dms) {
+		$result = $this->_getAreaDs()->batchAddArea($dms);
+		return WindidUtility::result($result);
+	}
+
+	public function deleteArea($areaid) {
+		$result = $this->_getAreaDs()->deleteArea($areaid);
+		return WindidUtility::result($result);
+	}
 	
 	private function _getAreaDs() {
-		return Windid::load('area.WindidArea');
+		return Wekit::load('WSRV:area.WindidArea');
+	}
+
+	private function _getAreaService() {
+		return Wekit::load('WSRV:area.srv.WindidAreaService');
 	}
 }
 ?>

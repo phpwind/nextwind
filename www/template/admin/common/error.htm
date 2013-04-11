@@ -12,17 +12,17 @@
 		<h2>信息提示</h2>
 		<div class="error_cont">
 			<ul>
-				<!--#foreach ($message as $value):
+				<!--# foreach ($message as $value){
 					if(!WIND_DEBUG)
 						$value = str_replace(Wind::getRootPath(Wind::getAppName()), '~/', $value);#-->
 				<li>{$value}</li>
-				<!--#endforeach;#-->
+				<!--# } #-->
 			</ul>
-			<!--#if($referer):#-->
+			<!--# if($referer){ #-->
 			<div class="error_return"><a href="{$referer}" class="btn">返回</a></div>
-			<!--#else:#-->
+			<!--# }else{ #-->
 			<div class="error_return"><a href="javascript:window.history.go(-1);" class="btn">返回</a></div>
-			<!--#endif;#-->
+			<!--# } #-->
 		</div>
 	</div>
 </div>

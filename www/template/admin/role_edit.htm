@@ -10,10 +10,6 @@
 <!--角色管理: 编辑角色  -->
 <div class="nav">
 	<div class="return"><a href="{@url:role/run}">返回上一级</a></div>
-	<ul class="cc">
-		<li><a href="{@url:auth/run}">后台用户</a></li>
-		<li class="current"><a href="{@url:role/run}">管理角色</a></li>
-	</ul>
 </div>
 <form class="J_ajaxForm" data-role="list" action="{@url:role/doEdit}" method="post">
 <input type="hidden" value="{$role['id']}" name="rid" />
@@ -26,7 +22,7 @@
 		<tr>
 			<th>角色名称</th>
 			<td><span class="must_red">*</span>
-				<input name="rolename" readonly value="{$role['name']}" type="text" class="input input_hd length_5">
+				<input name="rolename" value="{$role['name']}" type="text" class="input input_hd length_5">
 			</td>
 			<td><div class="fun_tips"></div></td>
 		</tr>
@@ -36,26 +32,26 @@
 			<td>
 				<select id="J_role_select" name="roleid" class="select_5">
 					<option>请选择角色</option>
-<!--#foreach($roles as $var):#-->
+<!--# foreach($roles as $var){ #-->
 					<option value="{$var['id']}">{$var['name']}</option>
-<!--#endforeach;#-->
+<!--# } #-->
 				</select>
 			</td>
 			<td><div class="fun_tips"></div></td>
 		</tr>
-<!--#foreach($auths as $var):#-->
+<!--# foreach($auths as $var){ #-->
 		<tr>
-			<th><input name="menus" id="J_role_{$var['id']}" data-direction="x" data-checklist="J_check_{$var['id']}" type="checkbox" class="checkbox J_check_all" value="{$var['id']}">{$var['name']}</th>
+			<th><label><input name="menus" id="J_role_{$var['id']}" data-direction="x" data-checklist="J_check_{$var['id']}" type="checkbox" class="checkbox J_check_all" value="{$var['id']}"><span>{$var['name']}</span></label></th>
 			<td>
 				<ul data-name="{$var['id']}" id="J_check_{$var['id']}" class="three_list cc J_ul_check">
-<!--#foreach($var['items'] as $item):#-->
-					<li><label><input name="auths[]" data-xid="J_check_{$var['id']}" class="J_check" type="checkbox" value="{$item['id']}">{$item['name']}</label></li>
-<!--#endforeach;#-->
+<!--# foreach($var['items'] as $item){ #-->
+					<li><label><input name="auths[]" data-xid="J_check_{$var['id']}" class="J_check" type="checkbox" value="{$item['id']}"><span>{$item['name']}</span></label></li>
+<!--# } #-->
 				</ul>
 			</td>
 			<td><div class="fun_tips"></div></td>
 		</tr>
-<!--#endforeach;#-->
+<!--# } #-->
 	</table>
 </div>
 <div class="btn_wrap">
@@ -64,8 +60,6 @@
 	</div>
 </div>
 </form>
-
-<!-- 选中用列表变量 {$cAuths} -->
 
 </div>
 <template source='common.footer' />

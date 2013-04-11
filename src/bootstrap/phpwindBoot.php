@@ -1,37 +1,43 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
 
+Wind::import('SRC:bootstrap.bootstrap');
+Wind::import('SRV:user.bo.PwUserBo');
+
 /**
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: phpwindBoot.php 22985 2013-01-04 08:06:07Z jieyin $
+ * @version $Id: phpwindBoot.php 24569 2013-02-01 02:23:37Z jieyin $
  * @package wekit
  */
-class phpwindBoot {
-	public $charset; //程序编码
-	public $version = '9.0';
-	public $baseUrl; //网站地址
-	public $res; //res
-	public $css;
-	public $images;
-	public $js;
-	public $attach;
-	public $themes;
-	public $extres;
-	public $clientIp; //当前ip
-	public $requestUri;
-	public $lastRequestUri;
-	public $lastvisit;
+class phpwindBoot extends bootstrap {
+
+	public $charset;
+
 	private $_loginUser = null;
 
 	/**
 	 * 构造函数
 	 */
-	public function __construct() {
+	public function __construct($re) {
+		if (!is_file(Wind::getRealPath('DATA:install.lock', true))) {
+			Wind::getComponent('response')->sendRedirect("install.php");
+		}
+		parent::__construct($re);
+
+		//云应用监听sql执行
+		WindFactory::_getInstance()->loadClassDefinitions(
+			array(
+				'sqlStatement' => array(
+					'proxy' => 'WIND:filter.proxy.WindEnhancedClassProxy', 
+					'listeners' => array('LIB:compile.acloud.PwAcloudDbListener'))));
+		
 		$this->charset = Wind::getComponent('response')->getCharset();
-		$this->clientIp = Wind::getComponent('request')->getClientIp();
-		$this->requestUri = Wind::getComponent('request')->getRequestUri();
+	}
+
+	public function getConfigService() {
+		return Wekit::load('config.PwConfig');
 	}
 
 	/**
@@ -40,7 +46,7 @@ class phpwindBoot {
 	 * @return array
 	 */
 	public function getConfig() {
-		return new PwConfigBo(Wekit::cache()->get('config'));
+		return Wekit::cache()->get('config');
 	}
 
 	/**
@@ -54,16 +60,34 @@ class phpwindBoot {
 		return $timestamp;
 	}
 
+	/** 
+	 * 获得登录用户信息
+	 *
+	 * @return PwUserBo
+	 */
+	public function getLoginUser() {
+		if ($this->_loginUser === null) {
+			$user = $this->_getLoginUser();
+			$user->ip = Wind::getComponent('request')->getClientIp();
+			$this->_loginUser = $user->uid;
+			PwUserBo::pushUser($user);
+		}
+		return PwUserBo::getInstance($this->_loginUser);
+	}
+
+	public function getCharset() {
+		return $this->charset;
+	}
+
 	/**
 	 * 初始化应用信息
 	 * @param AbstractWindFrontController $front
 	 */
-	public function init($front = null) {
-		$this->_initUrl();
+	public function beforeStart($front = null) {
 		$this->_initUser();
 		$this->runApps($front);
 	}
-
+	
 	/**
 	 * 执行acloud的相关
 	 * 
@@ -77,28 +101,6 @@ class phpwindBoot {
 		require_once Wind::getRealPath('ACLOUD:aCloud');
 		ACloudAppGuiding::runApps($controller);
 	}
-
-	/** 
-	 * 获得登录用户信息
-	 *
-	 * @return PwUserBo
-	 */
-	public function getLoginUser() {
-		if ($this->_loginUser === null) {
-			$user = $this->_getLoginUser();
-			$user->ip = $this->clientIp;
-			$this->_loginUser = $user->uid;
-			PwUserBo::pushUser($user);
-		}
-		return PwUserBo::getInstance($this->_loginUser);
-	}
-
-	/**
-	 * 在frontBoot的onResponse时被调用
-	 * 
-	 * @return void
-	 */
-	public function beforeResponse($front = null) {}
 
 	/**
 	 * 获得大概年前登录用户对象
@@ -121,57 +123,43 @@ class phpwindBoot {
 	}
 
 	/**
-	 * 初始化模板中的各静态路径
-	 */
-	protected function _initUrl() {
-		$_consts = include (Wind::getRealPath('CONF:publish.php', true));
-		foreach ($_consts as $const => $value) {
-			if (defined($const)) continue;
-			if ($const === 'PUBLIC_URL' && !$value) {
-				$value = Wind::getComponent('request')->getBaseUrl(true);
-				if (defined('BOOT_PATH') && 0 === strpos(BOOT_PATH, PUBLIC_PATH)) {
-					$path = substr(BOOT_PATH, strlen(PUBLIC_PATH));
-					!empty($path) && $value = substr($value, 0, -strlen($path));
-				}
-			}
-			define($const, $value);
-		}
-		$this->baseUrl = PUBLIC_URL;
-		$this->res = WindUrlHelper::checkUrl(PUBLIC_RES, $this->baseUrl);
-		$this->css = WindUrlHelper::checkUrl(PUBLIC_RES . '/css/', $this->baseUrl);
-		$this->images = WindUrlHelper::checkUrl(PUBLIC_RES . '/images/', $this->baseUrl);
-		//$this->js = WindUrlHelper::checkUrl(PUBLIC_RES . '/js/' . (WIND_DEBUG ? 'dev/' : 'build/'), $this->baseUrl);
-		$this->js = WindUrlHelper::checkUrl(PUBLIC_RES . '/js/' . 'dev/', $this->baseUrl);
-		$this->attach = WindUrlHelper::checkUrl(PUBLIC_ATTACH, $this->baseUrl);
-		$this->themes = WindUrlHelper::checkUrl(PUBLIC_THEMES, $this->baseUrl);
-		$this->extres = WindUrlHelper::checkUrl(PUBLIC_THEMES . '/extres/', $this->baseUrl);
-	}
-
-	/**
 	 * 初始话当前用户
 	 */
 	protected function _initUser() {
+		$requestUri = Wind::getComponent('request')->getRequestUri();
 		$_cOnlinetime = Wekit::C('site', 'onlinetime') * 60;
 		if (!($lastvisit = Pw::getCookie('lastvisit'))) {
-			$this->onlinetime = 0;
-			$this->lastvisit = WEKIT_TIMESTAMP;
-			$this->lastRequestUri = '';
+			$onlinetime = 0;
+			$lastvisit = WEKIT_TIMESTAMP;
+			$lastRequestUri = '';
 		} else {
-			list($this->onlinetime, $this->lastvisit, $this->lastRequestUri) = explode("\t", $lastvisit);
-			($onlinetime = WEKIT_TIMESTAMP - $this->lastvisit) < $_cOnlinetime && $this->onlinetime += $onlinetime;
+			list($onlinetime, $lastvisit, $lastRequestUri) = explode("\t", $lastvisit);
+			($thistime = WEKIT_TIMESTAMP - $lastvisit) < $_cOnlinetime && $onlinetime += $thistime;
 		}
 		$user = $this->getLoginUser();
-		if ($user->isExists() && (WEKIT_TIMESTAMP - $user->info['lastvisit'] > min(1800, 
-			$_cOnlinetime))) {
-			Wind::import('SRV:user.dm.PwUserInfoDm');
-			$dm = new PwUserInfoDm($user->uid);
-			$dm->setLastvisit(WEKIT_TIMESTAMP)->setLastActiveTime(WEKIT_TIMESTAMP);
-			if ($this->onlinetime > 0) {
-				$dm->addOnline($this->onlinetime > $_cOnlinetime * 1.2 ? $_cOnlinetime : $this->onlinetime);
+		if ($user->isExists()) {
+			$today = Pw::str2time(Pw::time2str(Pw::getTime(), 'Y-m-d'));
+			if ($user->info['lastvisit'] && $today > $user->info['lastvisit']) {
+				/* @var $loginSrv PwLoginService */
+				$loginSrv = Wekit::load('SRV:user.srv.PwLoginService');
+				$loginSrv->welcome($user, Wind::getComponent('request')->getClientIp());
+			} elseif ((WEKIT_TIMESTAMP - $user->info['lastvisit'] > min(1800, $_cOnlinetime))) {
+				Wind::import('SRV:user.dm.PwUserInfoDm');
+				$dm = new PwUserInfoDm($user->uid);
+				$dm->setLastvisit(WEKIT_TIMESTAMP)->setLastActiveTime(WEKIT_TIMESTAMP);
+				if ($onlinetime > 0) {
+					$dm->addOnline($onlinetime > $_cOnlinetime * 1.2 ? $_cOnlinetime : $onlinetime);
+				}
+				Wekit::load('user.PwUser')->editUser($dm, PwUser::FETCH_DATA);
+				$onlinetime = 0;
 			}
-			Wekit::load('user.PwUser')->editUser($dm, PwUser::FETCH_DATA);
-			$this->onlinetime = 0;
 		}
-		Pw::setCookie('lastvisit', $this->onlinetime . "\t" . WEKIT_TIMESTAMP . "\t" . $this->requestUri, 31536000);
+		Pw::setCookie('lastvisit', $onlinetime . "\t" . WEKIT_TIMESTAMP . "\t" . $requestUri, 31536000);
+
+		$obj = new stdClass();
+		$obj->lastvisit = $lastvisit;
+		$obj->requestUri = $requestUri;
+		$obj->lastRequestUri = $lastRequestUri;
+		Wekit::setV('lastvist', $obj);
 	}
 }

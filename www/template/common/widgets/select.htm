@@ -6,7 +6,7 @@ isset($__tpl_data['options']) || $__tpl_data['options'] = array( array('value' =
 isset($__tpl_data['value']) || $__tpl_data['value'] = '0';  #-->
 
 <select class="select_2" name="{$__tpl_data['name']}">
-<!--#foreach($__tpl_data['options'] as $__v): #-->
+<!--#foreach($__tpl_data['options'] as $__v){ #-->
 	<option value="{$__v['value']}" {@Pw::isSelected($__v['value'] == $__tpl_data['value'])}>{$__v['text']}</option>
-<!--#endforeach; #-->
+<!--# } #-->
 </select>

@@ -4,7 +4,7 @@ Wind::import('WIND:http.transfer.AbstractWindHttp');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com/license.php
- * @version $Id: WindHttpCurl.php 3885 2013-01-06 11:21:34Z yishuo $
+ * @version $Id: WindHttpCurl.php 3928 2013-01-29 10:21:53Z yishuo $
  * @package http
  * @subpackage transfer
  */
@@ -69,8 +69,9 @@ final class WindHttpCurl extends AbstractWindHttp {
 					break;
 				case 'POST':
 					$this->request(CURLOPT_POST, 1);
-					$_url = WindUrlHelper::argsToUrl($this->data, false);
-					$this->request(CURLOPT_POSTFIELDS, $_url);
+					$data = array();
+					$this->_resolvedData($this->data, $data);
+					$this->request(CURLOPT_POSTFIELDS, $data);
 					break;
 				default:
 					break;
@@ -101,10 +102,28 @@ final class WindHttpCurl extends AbstractWindHttp {
 		$_header && $this->request(CURLOPT_HTTPHEADER, $_header);
 		$this->request(CURLOPT_URL, $this->url);
 		if (isset($options[CURLOPT_FOLLOWLOCATION])) $this->_redirects = $options[CURLOPT_FOLLOWLOCATION];
-		if (isset($options[CURLOPT_MAXREDIRS])) $this->_maxRedirs = intval(
-			$options[CURLOPT_MAXREDIRS]);
+		if (isset($options[CURLOPT_MAXREDIRS])) $this->_maxRedirs = intval($options[CURLOPT_MAXREDIRS]);
 		$this->followLocation();
 		return $this->response();
+	}
+
+	/**
+	 * 解析post data使其支持数组格式传递
+	 *
+	 * @param array $args
+	 * @param array $value
+	 * @param string $key
+	 * @return array
+	 */
+	private function _resolvedData($args, &$value, $key = null) {
+		foreach ((array) $args as $_k => $_v) {
+			if ($key !== null) $_k = $key . '[' . $_k . ']';
+			if (is_array($_v)) {
+				$this->_resolvedData($_v, $value, $_k);
+			} else
+				$value[$_k] = $_v;
+		}
+		return $value;
 	}
 	
 	/* (non-PHPdoc)

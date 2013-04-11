@@ -4,11 +4,11 @@ Wind::import('ADMIN:library.AdminBaseController');
 Wind::import('SRV:design.bo.PwDesignModuleBo');
 Wind::import('SRV:design.bo.PwDesignModelBo');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
+ * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PropertyController.php 19465 2012-10-15 06:39:24Z gao.wanggao $ 
+ * @version $Id: PropertyController.php 24134 2013-01-22 06:19:24Z xiaoxia.xuxx $ 
  * @package 
  */
 class PropertyController extends AdminBaseController {
@@ -22,7 +22,7 @@ class PropertyController extends AdminBaseController {
 		if ($moduleid){
 			$this->bo = new PwDesignModuleBo($moduleid);
 			$module = $this->bo->getModule();
-			if ($module && $module['module_type'] == PwDesignModule::TYPE_SCRIPT) $isapi = 'api';;
+			if ($module && $module['module_type'] == PwDesignModule::TYPE_SCRIPT) $isapi = 'api';
 			$modelBo = new PwDesignModelBo($module['model_flag']);
 			$model = $modelBo->getModel();
 			if ($model['tab'] && !in_array('data', $model['tab'])) $isdata = false;

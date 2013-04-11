@@ -40,7 +40,7 @@ class PwReplyDoWord extends PwPostDoBase {
 			case 2:
 				$this->_isVerified = 1;
 				if ($this->_confirm) {
-						return true;
+					return true;
 				}
 			case 3:	
 				$this->_word = 1;

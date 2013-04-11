@@ -2,19 +2,20 @@
 defined('WEKIT_VERSION') || exit('Forbidden');
 
 /**
- * Enter description here ...
+ * 用户权限服务
  * 
  * @author peihong.zhangph <peihong.zhangph@aliyun-inc.com> Nov 8, 2011
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: PwPermissionService.php 21226 2012-12-03 03:57:42Z jieyin $
+ * @version $Id: PwPermissionService.php 24736 2013-02-19 09:24:40Z jieyin $
  */
 
 class PwPermissionService {
-
-	private $_configCategory;
 	
+	private $_config;
+	private $_configCategory;
+
 	/**
 	 * 获取一级菜单项
 	 * 
@@ -24,7 +25,7 @@ class PwPermissionService {
 	public function getTopLevelCategories($manage = false){
 		$permissionCategory = $this->getPermissionCategoryConfig();
 		$topCategories = array();
-		foreach ($permissionCategory as $k=>$v) {
+		foreach ($permissionCategory as $k => $v) {
 			$isMangage = isset($v['manage']) && $v['manage'] == true;
 			if ($manage != $isMangage) continue;
 			$topCategories[$k] = $v['name'];
@@ -42,7 +43,7 @@ class PwPermissionService {
 	 * 
 	 * @param string $category
 	 */
-	public function getPermissionKeysByCategory($category){
+	public function getPermissionKeysByCategory($category) {
 		$permissionCategory = $this->getPermissionCategoryConfig();
 		$config = $permissionCategory[$category];
 		if (!$config['sub']) return array();
@@ -147,8 +148,6 @@ class PwPermissionService {
 			$type = $permissionConfigs[$_i][0];
 			switch ($type) {
 				case 'checkbox':
-					//$data = unserialize($groupValue);
-					//$data === false && $data = array();
 					$data = !empty($groupValue) ? $groupValue : array();
 					if (in_array($_i, array('allow_thread_extend'))) {
 						$data = array_keys($data);
@@ -180,8 +179,10 @@ class PwPermissionService {
 	 */
 	public function getPermissionCategoryConfig() {
 		if (!$this->_configCategory) {
+			/* @var $_configParser WindConfigParser */
 			$_configParser = Wind::getComponent('configParser');
-			$this->_configCategory = $_configParser->parse(Wind::getRealPath('SRV:usergroup.srv.permission.permissionCategory'));
+			$file = Wind::getRealPath('SRV:usergroup.srv.permission.permissionCategory');
+			$this->_configCategory = $_configParser->parse($file);
 			$this->_configCategory = PwSimpleHook::getInstance('permissionCategoryConfig')->runWithFilters($this->_configCategory);
 		}
 		return $this->_configCategory;
@@ -193,14 +194,21 @@ class PwPermissionService {
 	 * @return array
 	 */
 	public function getPermissionConfig() {
-		/* @var $_configParser WindConfigParser */
-		$_configParser = Wind::getComponent('configParser');
-		$permissionConfigFile = Wind::getRealPath('SRV:usergroup.srv.permission.permissions');
-		$permissionConfigFile = $_configParser->parse($permissionConfigFile);
-		return PwSimpleHook::getInstance('permissionConfig')->runWithFilters($permissionConfigFile);
+		if (!$this->_config) {
+			/* @var $_configParser WindConfigParser */
+			$_configParser = Wind::getComponent('configParser');
+			$file = Wind::getRealPath('SRV:usergroup.srv.permission.permissions');
+			$this->_config = $_configParser->parse($file);
+			$this->_config = PwSimpleHook::getInstance('permissionConfig')->runWithFilters($this->_config);
+		}
+		return $this->_config;
 	}
 	
 	private function _getPermissionDs() {
 		return Wekit::load('usergroup.PwUserPermission');
+	}
+
+	private function _getUserDs() {
+		return Wekit::load('user.PwUser');
 	}
 }

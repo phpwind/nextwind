@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: CustomController.php 21801 2012-12-13 09:31:09Z yishuo $
+ * @version $Id: CustomController.php 24202 2013-01-23 02:18:05Z jieyin $
  * @package admin.controller
  */
 class CustomController extends AdminBaseController {
@@ -17,7 +17,7 @@ class CustomController extends AdminBaseController {
 	public function run() {
 		$menuService = Wekit::load('ADMIN:service.srv.AdminMenuService');
 		$userService = Wekit::load('ADMIN:service.srv.AdminUserService');
-		$myMenus = $userService->getAuths($this->adminUser);
+		$myMenus = $userService->getAuths($this->loginUser);
 		$menuTables = $menuService->getMenuTable();
 		if ($myMenus !== '-1') {
 			foreach ($menuTables as $key => $value)
@@ -31,7 +31,7 @@ class CustomController extends AdminBaseController {
 			}
 		}
 		$this->setOutput($menus, 'menus');
-		$myMenu = $this->_loadCustomDs()->findByUsername($this->adminUser->getUsername());
+		$myMenu = $this->_loadCustomDs()->findByUsername($this->loginUser->username);
 		$this->setOutput($myMenu ? explode(',', $myMenu['custom']) : array(), 'myMenu');
 	}
 	
@@ -43,7 +43,7 @@ class CustomController extends AdminBaseController {
 		$customs = $this->getInput('customs', 'post');
 		$customs || $customs = array();
 		if (count($customs) > 15) $this->showError('ADMIN:custom.size');
-		$this->_loadCustomDs()->replace($this->adminUser->getUsername(), implode(',', $customs));
+		$this->_loadCustomDs()->replace($this->loginUser->username, implode(',', $customs));
 		$this->showMessage('success');
 	}
 	
@@ -51,7 +51,7 @@ class CustomController extends AdminBaseController {
 	 * @return AdminCustom
 	 */
 	private function _loadCustomDs() {
-		return Wekit::load('APPS:admin.service.AdminCustom');
+		return Wekit::load('ADMIN:service.AdminCustom');
 	}
 }
 

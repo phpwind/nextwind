@@ -6,7 +6,7 @@ Wind::import('SRV:invite.vo.PwInviteCodeSo');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: InviteController.php 20536 2012-10-31 02:44:59Z xiaoxia.xuxx $
+ * @version $Id: InviteController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package service.products.bbs.controller
  */
 class InviteController extends PwBaseController {
@@ -63,8 +63,10 @@ class InviteController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.invite.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.invite.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -151,15 +153,17 @@ class InviteController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.invite.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.invite.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
 	 * 列出用户拥有的邀请码
 	 */
 	private function listCode() {
-		$perpage = 6;
+		$perpage = 20;
 		list($type, $page) = $this->getInput(array('type', 'page'), 'get');
 		$vo = new PwInviteCodeSo();
 		$vo->setCreatedUid($this->loginUser->uid)

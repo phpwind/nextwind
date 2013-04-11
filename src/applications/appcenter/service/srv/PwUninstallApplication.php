@@ -1,13 +1,13 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
-Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwManifest');
 /**
  * 卸载应用
  *
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUninstallApplication.php 18098 2012-09-11 07:12:59Z long.shi $
+ * @version $Id: PwUninstallApplication.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package products
  * @subpackage appcenter.service.srv
  */
@@ -25,9 +25,14 @@ class PwUninstallApplication {
 			$this->_log[$value['log_type']] = $value['data'];
 		}
 		$service = $this->getInstallLog('service');
+		if (!$service) return $this->forceUninstall($appId);
 		foreach ($service as $key => $var) {
 			if (!isset($var['class'])) continue;
-			$_install = Wekit::load($var['class']);
+			try {
+				$_install = Wekit::load($var['class']);
+			} catch (PwException $e) {
+				continue;
+			}
 			if (!$_install instanceof iPwInstall) return new PwError('APPCENTER:install.classtype');
 			$r = $_install->unInstall($this);
 			if ($r instanceof PwError) return $r;
@@ -35,7 +40,23 @@ class PwUninstallApplication {
 		$this->_loadInstallLog()->delByAppId($this->_appId);
 		return true;
 	}
-
+	
+	/**
+	 * 强制清理
+	 *
+	 * @param unknown_type $appId
+	 * @return boolean
+	 */
+	public function forceUninstall($appId) {
+		$app = $this->_loadDs()->findByAppId($appId);
+		if (empty($app)) {
+			return true;
+		}
+		$this->_loadPwHookInject()->deleteByAppId($app['alias']);
+		$this->_loadDs()->delByAppId($appId);
+		return true;
+	}
+	
 	/**
 	 * $key 值:
 	 * service 安装服务
@@ -68,7 +89,22 @@ class PwUninstallApplication {
 	 * @return PwApplicationLog
 	 */
 	private function _loadInstallLog() {
-		return Wekit::load('APPS:appcenter.service.PwApplicationLog');
+		return Wekit::load('APPCENTER:service.PwApplicationLog');
+	}
+	
+	/**
+	 * @return PwApplication
+	 */
+	private function _loadDs() {
+		return Wekit::load('APPCENTER:service.PwApplication');
+	}
+	
+	/**
+	 *
+	 * @return PwHookInject
+	 */
+	private function _loadPwHookInject() {
+		return Wekit::load('SRV:hook.PwHookInject');
 	}
 }
 

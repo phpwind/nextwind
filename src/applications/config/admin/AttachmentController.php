@@ -16,8 +16,7 @@ class AttachmentController extends AdminBaseController {
 	 * @see WindController::run()
 	 */
 	public function run() {
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('attachment');
+		$config = Wekit::C()->getValues('attachment');
 		!($post_max_size = ini_get('post_max_size')) && $post_max_size = '2M';
 		!($upload_max_filesize = ini_get('upload_max_filesize')) && $upload_max_filesize = '2M';
 		$maxSize = min($post_max_size, $upload_max_filesize);
@@ -46,16 +45,26 @@ class AttachmentController extends AdminBaseController {
 	 */
 	public function storageAction() {
 		/* @var $attService PwAttacmentService */
-		$attService = Wekit::load('APPS:config.service.srv.PwAttacmentService');
+		$attService = Wekit::load('LIB:storage.PwStorage');
 		$storages = $attService->getStorages();
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('attachment');
+		$config = Wekit::C()->getValues('attachment');
 		$storageType = 'local';
 		if (isset($config['storage.type']) && isset($storages[$config['storage.type']])) {
 			$storageType = $config['storage.type'];
 		}
+
+		$windidStorages = WindidApi::api('avatar')->getStorages();
+		$windidStorageType = Wekit::app('windid')->config->attachment->get('storage.type');
+		foreach ($windidStorages as $key => $value) {
+			if ($value['managelink']) {
+				$windidStorages[$key]['managelink'] = str_replace(Wekit::url()->base, Wekit::app('windid')->url->base, WindUrlHelper::createUrl($value['managelink']));
+			}
+		}
+
 		$this->setOutput($storages, 'storages');
 		$this->setOutput($storageType, 'storageType');
+		$this->setOutput($windidStorages, 'windidStorages');
+		$this->setOutput($windidStorageType, 'windidStorageType');
 	}
 
 	/**
@@ -63,37 +72,22 @@ class AttachmentController extends AdminBaseController {
 	 */
 	public function dostroageAction() {
 		$att_storage = $this->getInput('att_storage', 'post');
+		$avatar_storage = $this->getInput('avatar_storage', 'post');
+
 		/* @var $attService PwAttacmentService */
-		$attService = Wekit::load('APPS:config.service.srv.PwAttacmentService');
+		$attService = Wekit::load('LIB:storage.PwStorage');
 		$_r = $attService->setStoragesComponents($att_storage);
-		
-		if ($_r === true) $this->showMessage('ADMIN:success');
-		/* @var $_r PwError  */
-		$this->showError($_r->getError());
-	}
-
-	/**
-	 * 后台设置-ftp设置
-	 */
-	public function ftpAction() {
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('attachment');
-		$this->setOutput($config, 'config');
-	}
-
-	/**
-	 * 后台设置-ftp设置
-	 */
-	public function doftpAction() {
+		if ($_r !== true) {
+			$this->showError($_r->getError());
+		}
 		$config = new PwConfigSet('attachment');
-		$config->set('ftp.url', $this->getInput('ftpUrl', 'post'))
-			->set('ftp.server', $this->getInput('ftpServer', 'post'))
-			->set('ftp.port', $this->getInput('ftpPort', 'post'))
-			->set('ftp.dir', $this->getInput('ftpDir', 'post'))
-			->set('ftp.user', $this->getInput('ftpUser', 'post'))
-			->set('ftp.pwd', $this->getInput('ftpPwd', 'post'))
-			->set('ftp.timeout', abs(intval($this->getInput('ftpTimeout', 'post'))))
-			->flush();
+		$config->set('storage.type', $att_storage)->flush();
+		
+		$result = WindidApi::api('avatar')->setStorages($avatar_storage);
+		if ($result == '1') {
+			Wekit::C()->setConfig('site', 'avatarUrl', WindidApi::api('avatar')->getAvatarUrl());
+		}
+
 		$this->showMessage('ADMIN:success');
 	}
 
@@ -101,7 +95,7 @@ class AttachmentController extends AdminBaseController {
 	 * 后台设置-附件缩略设置
 	 */
 	public function thumbAction() {
-		$config = $this->_loadConfigService()->getValues('attachment');
+		$config = Wekit::C()->getValues('attachment');
 		$this->setOutput($config, 'config');
 // 		$this->setOutput(Wekit::C('attachment'), 'config');
 	}
@@ -130,18 +124,9 @@ class AttachmentController extends AdminBaseController {
 		$thumburl = Wind::getRealDir('PUBLIC:attachment', false) . '/demo_thumb.jpg';
 		$image->makeThumb($thumburl, $thumbsize_width, $thumbsize_height, $quality, $thumb);
 		
-		$data = array('img' => Wekit::app()->attach . '/demo_thumb.jpg?' . time());
+		$data = array('img' => Wekit::url()->attach . '/demo_thumb.jpg?' . time());
 		$this->setOutput($data, 'data');
 		$this->showMessage('ADMIN:success');
-	}
-
-	/**
-	 * 加载Config DS 服务
-	 * 
-	 * @return PwConfig
-	 */
-	private function _loadConfigService() {
-		return Wekit::load('config.PwConfig');
 	}
 }
 

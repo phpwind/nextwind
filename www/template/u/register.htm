@@ -8,117 +8,115 @@
 <div class="wrap">
 <template source='TPL:common.header' suffix='htm'/>
 	<div class="main_wrap">
-		<div class="main cc">
-			<div class="box_wrap register cc">
-				<h2 class="reg_head">欢迎注册成为 {@Wekit::C('site','info.name')} 会员</h2>
-				<div class="reg_cont_wrap">
-					<div class="reg_cont">
-						<form id="J_register_form" action="{@url:u/register/dorun}" method="POST">
-						<div class="reg_form">
-							<!--#if ($config['type'] == 2) {#-->
-							<dl>
-								<dt><label for="J_reg_invitecode">邀请码：</label></dt>
-								<dd><span class="must_red">*</span><input id="J_reg_invitecode" name='invitecode' type="text" aria-required="true" class="input length_4" value="{$invitecode}"><br/>
-							<!--#if ($config['invite.pay.open']) {#--><a href="index.php?m=bbs&c=invite">购买邀请码</a> <!--#}#-->
-								</dd>
-								<dd class="dd_r" id="J_reg_tip_invitecode">本站开启邀请注册，请填写邀请码</dd>
-							</dl>
-							<div class="invite_box_wrap" style="display:none">
-								<div class="invite_box">
-									<div class="hd"><a href="" class="fr">收起&uarr;</a><strong class="b">购买邀请码</strong></div>
-									<div class="tips">在线支付成功后将自动返回至注册页面并显示邀请码。<br>如果返回后没有显示邀请码，请到电子邮箱查收或联系站长。</div>
-									<div class="ct">
-										<ul>
-											<li><em>电子邮箱：</em><span><input type="email" class="input"></span><span class="tips_icon_error">电子邮箱格式错误</span></li>
-											<li><em>支付金额：</em><span class="s2 mr10">1元</span>有效期1天</li>
-											<li><em>&nbsp;</em><button type="button" class="btn btn_submit">立即付款</button></li>
-										</ul>
-									</div>
+		<div class="box_wrap register cc">
+			<h2 class="reg_head">欢迎注册成为 {@Wekit::C('site','info.name')} 会员</h2>
+			<div class="reg_cont_wrap">
+				<div class="reg_cont">
+					<form id="J_register_form" action="{@url:u/register/dorun}" method="POST">
+					<div class="reg_form">
+						<!--#if ($config['type'] == 2) {#-->
+						<dl>
+							<dt><label for="J_reg_invitecode">邀请码：</label></dt>
+							<dd><span class="must_red">*</span><input id="J_reg_invitecode" name='invitecode' type="text" aria-required="true" class="input length_4" value="{$invitecode}"><br/>
+						<!--#if ($config['invite.pay.open']) {#--><a href="index.php?m=my&c=invite">购买邀请码</a> <!--#}#-->
+							</dd>
+							<dd class="dd_r" id="J_reg_tip_invitecode">本站开启邀请注册，请填写邀请码</dd>
+						</dl>
+						<div class="invite_box_wrap" style="display:none">
+							<div class="invite_box">
+								<div class="hd"><a href="" class="fr">收起&uarr;</a><strong class="b">购买邀请码</strong></div>
+								<div class="tips">在线支付成功后将自动返回至注册页面并显示邀请码。<br>如果返回后没有显示邀请码，请到电子邮箱查收或联系站长。</div>
+								<div class="ct">
+									<ul>
+										<li><em>电子邮箱：</em><span><input type="email" class="input"></span><span class="tips_icon_error">电子邮箱格式错误</span></li>
+										<li><em>支付金额：</em><span class="s2 mr10">1元</span>有效期1天</li>
+										<li><em>&nbsp;</em><button type="button" class="btn btn_submit">立即付款</button></li>
+									</ul>
 								</div>
 							</div>
-							<!--#}elseif ($invite) {#-->
-							<input type="hidden" name="invite" value="{$invite}" />
-							<!--#}#-->
-							<dl>
-								<dt><label for="J_reg_username">用户名：</label></dt>
-								<dd><span class="must_red">*</span><input aria-required="true" id="J_reg_username" data-id="username" name="username" type="text" class="input length_4 J_reg_input" value="{$data['username']}"></dd>
-								<dd class="dd_r" id="J_reg_tip_username" role="tooltip" aria-hidden="true"></dd>
-							</dl>
-							<dl>
-								<dt><label for="J_reg_password">密码：</label></dt>
-								<dd><span class="must_red">*</span><input aria-required="true" id="J_reg_password" data-id="password" name="password" type="password" class="input length_4" value="{$data['password']}"></dd>
-								<dd class="dd_r" id="J_reg_tip_password" role="tooltip" aria-hidden="true"></dd>
-							</dl>
-							<dl>
-								<dt><label for="J_reg_repassword">确认密码：</label></dt>
-								<dd><span class="must_red">*</span><input aria-required="true" id="J_reg_repassword" data-id="repassword" name="repassword" type="password" class="input length_4" value="{$data['repassword']}"></dd>
-								<dd class="dd_r" id="J_reg_tip_repassword" role="tooltip" aria-hidden="true"></dd>
-							</dl>
-							<dl>
-								<dt><label for="J_reg_email">电子邮箱：</label></dt>
-								<dd>
-									<div id="J_email_list" class="fl mail_down" style="display:;margin-top:27px;"></div>
-									<span class="must_red">*</span><input aria-required="true" autocomplete="off" id="J_reg_email" data-id="email" name="email" type="text" class="input length_4" value="{$data['email']}">
-								</dd>
-								<dd class="dd_r" id="J_reg_tip_email" role="tooltip" aria-hidden="true"></dd>
-							</dl>
-							
-							<!--#if ($config['active.phone']) {#-->
-							<dl id="J_moblie_dl">
-								<dt><label for="">手机号码：</label></dt>
-								<dd><span class="must_red">*</span><input type="hidden" id="J_reg_mobile_hide" name="mobile"><input id="J_reg_mobile" data-counttime="90" type="text" aria-required="true" class="input length_4" value=""></dd>
-								<dd class="dd_r"><button style="display:none;" id="J_show_mcode" name="mobile" type="button" class="btn mr5">获取验证码</button><span class="dd_r" id="J_reg_tip__mobile" role="tooltip" aria-hidden="true"></span><span id="J_mcode_tip" class="reg_tips" style="display:none;">验证码已发送到<span id="J_send_mobile"></span><a href="" id="J_mobile_change" class="s4">（修改号码）</a>超过90秒未收到验证码，请点击重新发送。<button id="J_mcode_resend" class="btn disabled" type="button" disabled>90秒后重新发送</button></span></dd>
-							</dl>
-							<dl id="J_mcode_dl">
-								<dt><label for="">手机验证码：</label></dt>
-								<dd><span class="must_red">*</span><input id="J_reg_mobileCode" name="mobileCode" type="text" class="input length_4" value=""></dd>
-								<dd class="dd_r"><span class="dd_r" id="J_reg_tip_mobileCode" role="tooltip" aria-hidden="true"></span></dd>
-							</dl>
-							<!--#}#-->
-							
-							<!--#if ($config['active.check']) {#-->
-							<dl class="cc">
-								<dt><label for="J_reg_regreason">注册原因：</label></dt>
-								<dd><span class="must_red">*</span><textarea id="J_reg_regreason" data-id="regreason" name="regreason" class="length_4"></textarea></dd>
-								<dd id="J_reg_tip_regreason" class="dd_r"></dd>
-							</dl>
-							<!--#}#-->
-							
-							<!--#foreach ($config['active.field'] as $field) {
-								//if ($config['active.phone'] && $field == 'mobile') continue;
-								$fieldsInfo = $needFields[$field];
-							#-->
-							<segment tpl="TPL:u.register_segment_needfields" args='$field, $fieldsInfo' alias="register_segment_needfields" name="{$fieldsInfo['segment']}"/>
-							
-							<!--#}#-->
-							
-							<!--#if ($verify) {#-->
-							<dl class="cc dl_cd">
-								<dt><label for="J_reg_code">验证码：</label></dt>
-								<dd>
-									<span class="must_red">*</span>
-									<div class="cc mb5" style="height:30px;"><input id="J_reg_code" data-id="code" name="code" type="text" class="input length_4 fl"></div>
-									<div id="J_register_verify"></div>
-								</dd>
-								<dd class="dd_r"><div id="J_reg_tip_code"></div></dd>
-							</dl>
-							<!--#}#-->
-							<dl>
-								<dt>&nbsp;</dt>
-								<dd><button class="btn btn_big btn_submit mr20" type="submit">同意以下协议并注册</button></dd>
-							</dl>
-							<div class="agreements">
-							<div><a id="J_agreements_btn" href="" class="s4" title="点击显示本协议">《本站协议规章内容》</a></div>
-							<pre id="J_agreements_content" style="display:none;">{$config['protocol']|html}</pre></div>
 						</div>
-						</form>
+						<!--#}elseif ($invite) {#-->
+						<input type="hidden" name="invite" value="{$invite}" />
+						<!--#}#-->
+						<dl>
+							<dt><label for="J_reg_username">用户名：</label></dt>
+							<dd><span class="must_red">*</span><input aria-required="true" id="J_reg_username" data-id="username" name="username" type="text" class="input length_4 J_reg_input" value="{$data['username']}"></dd>
+							<dd class="dd_r" id="J_reg_tip_username" role="tooltip" aria-hidden="true"></dd>
+						</dl>
+						<dl>
+							<dt><label for="J_reg_password">密码：</label></dt>
+							<dd><span class="must_red">*</span><input aria-required="true" id="J_reg_password" data-id="password" name="password" type="password" class="input length_4" value="{$data['password']}"></dd>
+							<dd class="dd_r" id="J_reg_tip_password" role="tooltip" aria-hidden="true"></dd>
+						</dl>
+						<dl>
+							<dt><label for="J_reg_repassword">确认密码：</label></dt>
+							<dd><span class="must_red">*</span><input aria-required="true" id="J_reg_repassword" data-id="repassword" name="repassword" type="password" class="input length_4" value="{$data['repassword']}"></dd>
+							<dd class="dd_r" id="J_reg_tip_repassword" role="tooltip" aria-hidden="true"></dd>
+						</dl>
+						<dl>
+							<dt><label for="J_reg_email">电子邮箱：</label></dt>
+							<dd>
+								<div id="J_email_list" class="fl mail_down" style="display:;margin-top:27px;"></div>
+								<span class="must_red">*</span><input aria-required="true" autocomplete="off" id="J_reg_email" data-id="email" name="email" type="text" class="input length_4" value="{$data['email']}">
+							</dd>
+							<dd class="dd_r" id="J_reg_tip_email" role="tooltip" aria-hidden="true"></dd>
+						</dl>
+						
+						<!--#if ($config['active.phone']) {#-->
+						<dl id="J_moblie_dl">
+							<dt><label for="">手机号码：</label></dt>
+							<dd><span class="must_red">*</span><input type="hidden" id="J_reg_mobile_hide" name="mobile"><input id="J_reg_mobile" data-counttime="90" type="text" aria-required="true" class="input length_4" value=""></dd>
+							<dd class="dd_r"><button style="display:none;" id="J_show_mcode" name="mobile" type="button" class="btn mr5">获取验证码</button><span class="dd_r" id="J_reg_tip__mobile" role="tooltip" aria-hidden="true"></span><span id="J_mcode_tip" class="reg_tips" style="display:none;">验证码已发送到<span id="J_send_mobile"></span><a href="" id="J_mobile_change" class="s4">（修改号码）</a>超过90秒未收到验证码，请点击重新发送。<button id="J_mcode_resend" class="btn disabled" type="button" disabled>90秒后重新发送</button></span></dd>
+						</dl>
+						<dl id="J_mcode_dl">
+							<dt><label for="">手机验证码：</label></dt>
+							<dd><span class="must_red">*</span><input id="J_reg_mobileCode" name="mobileCode" type="text" class="input length_4" value=""></dd>
+							<dd class="dd_r"><span class="dd_r" id="J_reg_tip_mobileCode" role="tooltip" aria-hidden="true"></span></dd>
+						</dl>
+						<!--#}#-->
+						
+						<!--#if ($config['active.check']) {#-->
+						<dl class="cc">
+							<dt><label for="J_reg_regreason">注册原因：</label></dt>
+							<dd><span class="must_red">*</span><textarea id="J_reg_regreason" data-id="regreason" name="regreason" class="length_4"></textarea></dd>
+							<dd id="J_reg_tip_regreason" class="dd_r"></dd>
+						</dl>
+						<!--#}#-->
+						
+						<!--#foreach ($config['active.field'] as $field) {
+							//if ($config['active.phone'] && $field == 'mobile') continue;
+							$fieldsInfo = $needFields[$field];
+						#-->
+						<segment tpl="TPL:u.register_segment_needfields" args='$field, $fieldsInfo' alias="register_segment_needfields" name="{$fieldsInfo['segment']}"/>
+						
+						<!--#}#-->
+						
+						<!--#if ($verify) {#-->
+						<dl class="cc dl_cd">
+							<dt><label for="J_reg_code">验证码：</label></dt>
+							<dd>
+								<span class="must_red">*</span>
+								<div class="cc mb5" style="height:30px;"><input id="J_reg_code" data-id="code" name="code" type="text" class="input length_4 fl"></div>
+								<div id="J_register_verify"></div>
+							</dd>
+							<dd class="dd_r"><div id="J_reg_tip_code"></div></dd>
+						</dl>
+						<!--#}#-->
+						<dl>
+							<dt>&nbsp;</dt>
+							<dd><button class="btn btn_big btn_submit mr20" type="submit">同意以下协议并注册</button></dd>
+						</dl>
+						<div class="agreements">
+						<div><a id="J_agreements_btn" href="" class="s4" title="点击显示本协议">《本站协议规章内容》</a></div>
+						<pre id="J_agreements_content" style="display:none;">{$config['protocol']|html}</pre></div>
 					</div>
+					</form>
 				</div>
-				<div class="reg_side">
-					<div class="reg_side_cont">
-						<p class="mb10">已经有帐号？</p>
-						<p><a rel="nofollow" href="{@url:u/login/run?backurl=$backurl}<!--#if ($invite) {#-->&invite={$invite}<!--#}#-->" class="btn btn_big">立即登录</a></p>
-					</div>
+			</div>
+			<div class="reg_side">
+				<div class="reg_side_cont">
+					<p class="mb10">已经有帐号？</p>
+					<p><a rel="nofollow" href="{@url:u/login/run?backurl=$backurl}<!--#if ($invite) {#-->&invite={$invite}<!--#}#-->" class="btn btn_big">立即登录</a></p>
 				</div>
 			</div>
 		</div>

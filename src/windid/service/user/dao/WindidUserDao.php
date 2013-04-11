@@ -1,18 +1,18 @@
 <?php
 
-Wind::import('WINDID:service.user.dao.WindidUserInterface');
+Wind::import('WSRV:user.dao.WindidUserInterface');
 
 /**
  * 用户积分基本信息数据访问层
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidUserDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidUserDao.php 23820 2013-01-16 06:14:07Z jieyin $
  * @package windid.service.user.dao
  */
 class WindidUserDao extends WindidBaseDao implements WindidUserInterface {
 
-	protected $_table = 'windid_user';
+	protected $_table = 'user';
 	protected $_pk = 'uid';
 	protected $_dataStruct = array('uid', 'username', 'email', 'password', 'salt', 'safecv', 'regdate', 'regip');
 

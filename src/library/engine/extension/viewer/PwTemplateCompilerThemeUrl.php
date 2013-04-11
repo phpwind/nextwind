@@ -16,7 +16,7 @@ class PwTemplateCompilerThemeUrl extends AbstractWindTemplateCompiler {
 	public function compile($key, $content) {
 		$content = substr($content, 8, -1);
 		if (!$content) return '';
-		$themeBaseUrl = 'Wekit::app()->themes';
+		$themeBaseUrl = 'Wind::getComponent(\'response\')->getData(\'G\', \'url\', \'themes\')';
 		preg_match('/(\w*.)?(\w*.)?(css|js|images)(.\w*)?/i', $content, $matchs);
 		if (!$matchs) return '';
 		if (empty($matchs[3])) return '';

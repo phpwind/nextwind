@@ -12,13 +12,15 @@
 		</ul>
 	</div>
 	<!--# if(isset($connect_fail)){ #-->
-		<div class="tips">
+	<div class="upgrade_page">
+		<div class="not_content_mini">
 		<!--# if($connect_fail){ #-->
-			{$connect_fail}
+			<i></i>{$connect_fail}
 		<!--# } else { #-->
-		无法连接云平台，请尝试申请云服务。或选择手动升级。
+			<i></i>无法连接云平台，请尝试申请云服务。或选择手动升级。
 		<!--# } #-->
 		</div>
+	</div>
 	<!--# } else { #-->
 		<!--# if($result){ #-->
 			<div class="table_list">
@@ -52,7 +54,9 @@
 			</table>
 		</div>
 		<!--# } else { #-->
-		<div class="tips"><b>恭喜，您使用的是最新版本！</b></div>
+		<div class="upgrade_page">
+			<div class="not_content_mini"><i class="success"></i>恭喜，您使用的是最新版本！</div>
+		</div>
 		<!--# } #-->
 	<!--# } #-->
 	</div>

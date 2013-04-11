@@ -1,15 +1,16 @@
 <?php
-Wind::import('WINDID:service.config.WindidConfig');
+Wind::import('WSRV:config.WindidConfig');
 
 /**
  * 用户信息合法性校验器
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidUserValidator.php 21744 2012-12-13 03:21:00Z gao.wanggao $
+ * @version $Id: WindidUserValidator.php 24943 2013-02-27 03:52:21Z jieyin $
  * @package Windid.library
  */
 class WindidUserValidator {
+
 	private static $_illegalChar = array("\\", '&', ' ', "'", '"', '/', '*', ',', '<', '>', "\r", "\t", "\n", '#', '%', '?', '　');
 
 	/**
@@ -20,7 +21,7 @@ class WindidUserValidator {
 	 */
 	public static function checkName($username, $uid = 0, $checkUsername = '') {
 		if (!$username) return new WindidError(WindidError::NAME_EMPTY);
-		if (self::isNameLenValid($username, WINDID_CLIENT_CHARSET)) return new WindidError(WindidError::NAME_LEN);
+		if (self::isNameLenValid($username, Wekit::app('windid')->charset)) return new WindidError(WindidError::NAME_LEN);
 
 		if (self::hasIllegalChar($username)) return new WindidError(WindidError::NAME_ILLEGAL_CHAR);
 		if ($forbiddenname = self::getConfig('security.ban.username')) {
@@ -42,9 +43,16 @@ class WindidUserValidator {
 	
 	public static function checkPassword($password) {
 		$len = strlen($password);
-
 		if (self::getConfig('security.password.min') && $len < self::getConfig('security.password.min')) return new WindidError(WindidError::PASSWORD_LEN);
 		if (self::getConfig('security.password.max') && $len > self::getConfig('security.password.max')) return new WindidError(WindidError::PASSWORD_LEN);
+		return true;
+	}
+
+	public static function checkOldPassword($password, $uid) {
+		$user = self::_getUserService()->getUserByUid($uid, WindidUser::FETCH_MAIN);
+		if (WindidUtility::buildPassword($password, $user['salt']) != $user['password']) {
+			return new WindidError(WindidError::PASSWORD_ERROR);
+		}
 		return true;
 	}
 	
@@ -67,29 +75,6 @@ class WindidUserValidator {
 		return true;
 	}
 	
-
-	public static function addCheck(WindidUserDm $dm) {
-		$data = $dm->getData();
-		(($result = self::checkName($data['username'])) === true) &&
-			(($result = self::checkEmail($data['email'])) === true) &&
-			(($result = self::isPasswordValid($data['password'])) === true);
-		return $result;
-	}
-
-	public static function updateCheck(WindidUserDm $dm) {
-		if (!$user = self::_getUserService()->getUserByUid($dm->uid)) {
-			return new WindidError(WindidError::USER_NOT_EXISTS);
-		}
-		$data = $dm->getData();
-		if ($result = self::checkName($data['username'], $dm->uid) !== true) return $result;
-		if ($result = self::checkEmail($data['email'], $dm->uid) !== true) return $result;
-		
-		if (WindidUtility::buildPassword($data['password'], $user['salt']) != $user['password']) {
-			return new WindidError(WindidError::PASSWORD_ERROR);
-		}
-		return true;
-	}
-	
 	/**
 	 * 是否含有非法字符
 	 *
@@ -107,10 +92,10 @@ class WindidUserValidator {
 	 * @param string $charset
 	 * @return boolean
 	 */
-	private static function isNameLenValid($username, $charset = 'utf8') {		
+	private static function isNameLenValid($username, $charset = 'utf8') {
 		Wind::import('WIND:utility.WindString');
 		$len = WindString::strlen($username, $charset);
-		return $len >= self::getConfig('security.username.max') && $len <= self::getConfig('security.username.min');
+		return $len > self::getConfig('security.username.max') || $len < self::getConfig('security.username.min');
 	}
 
 	/**
@@ -135,8 +120,7 @@ class WindidUserValidator {
 	private static function getConfig($name = '') {
 		static $config = null;
 		if (null === $config) {
-			$ds = Windid::load('user.WindidConfig');
-			$config = $ds->getValues('reg');
+			$config = Wekit::app('windid')->config->reg->toArray();
 		}
 		return $name ? $config[$name] : $config;
 	}
@@ -170,10 +154,9 @@ class WindidUserValidator {
 	}
 
 	/** 
-	 *
 	 * @return WindidUser
 	 */
 	private static function _getUserService() {
-		return Windid::load('user.WindidUser');
+		return Wekit::load('WSRV:user.WindidUser');
 	}
 }

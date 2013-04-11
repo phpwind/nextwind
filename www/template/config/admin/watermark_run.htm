@@ -23,8 +23,8 @@
 			<tr>
 				<th>图片附件大小控制</th>
 				<td>
-					<div class="mb10">宽：<input name="markLimitwidth" type="number" class="input length_2 mr5" value="{$config['mark.limitwidth']}">像素</div>
-					<div>高：<input name="markLimitheight" type="number" class="input length_2 mr5"  value="{$config['mark.limitheight']}">像素</div>
+					<div class="mb10">宽：<input name="markLimitwidth" type="number" class="input length_2 mr5" value="{$config['mark.limitwidth']}"><span>像素</span></div>
+					<div>高：<input name="markLimitheight" type="number" class="input length_2 mr5"  value="{$config['mark.limitheight']}"><span>像素</span></div>
 				</td>
 				<td><div class="fun_tips">对超过设定值的图片附件加水印</div></td>
 			</tr>
@@ -62,8 +62,8 @@
 				<th>水印类型</th>
 				<td>
 					<ul class="single_list cc" id="J_watermark_type">
-						<li><label><input data-id="J_watermark_img" name="markType" value="1" type="radio" {@Pw::ifcheck($config['mark.type']==1)}>图片水印</label></li>
-						<li><label><input data-id="J_watermark_text" name="markType" value="2" type="radio" {@Pw::ifcheck($config['mark.type']==2)}>文字水印</label></li>
+						<li><label><input data-id="J_watermark_img" name="markType" value="1" type="radio" {@Pw::ifcheck($config['mark.type']==1)}><span>图片水印</span></label></li>
+						<li><label><input data-id="J_watermark_text" name="markType" value="2" type="radio" {@Pw::ifcheck($config['mark.type']==2)}><span>文字水印</span></label></li>
 					</ul>
 				</td>
 				<td><div class="fun_tips"></div></td>
@@ -83,9 +83,9 @@ $style = ($config['mark.type']==1) ? 'display:none' : '';
 					<th>水印字体</th>
 					<td>
 						<select name="markFontfamily" class="select_5">
-							<!--#foreach ($fontList as $value):#-->
+							<!--# foreach ($fontList as $value){ #-->
 							<option value="{$value}" {@Pw::isSelected($config['mark.fontfamily']==$value)}>{$value}</option>
-							<!--#endforeach;#-->
+							<!--# } #-->
 						</select>
 					</td>
 					<td><div class="fun_tips">字体文件存放在src/repository/font下</div></td>
@@ -93,12 +93,12 @@ $style = ($config['mark.type']==1) ? 'display:none' : '';
 				<tr>
 					<th>水印文字大小</th>
 					<td>
-						<select name="markFontsize" class="select_5">
+						<select name="markFontsize" class="select_5 mr5">
 							<option value="5" {@Pw::isSelected($config['mark.fontsize']==5)}>5</option>
 							<option value="8" {@Pw::isSelected($config['mark.fontsize']==8)}>8</option>
 							<option value="10" {@Pw::isSelected($config['mark.fontsize']==10)}>10</option>
 							<option value="20" {@Pw::isSelected($config['mark.fontsize']==20)}>20</option>
-						</select> 像素
+						</select><span>像素</span>
 					</td>
 					<td><div class="fun_tips"></div></td>
 				</tr>
@@ -124,9 +124,9 @@ $style = ($config['mark.type']==2) ? 'display:none' : '';
 					<th>水印文件</th>
 					<td>
 						<select name="markFile" class="select_5">
-							<!--#foreach ($markList as $value):#-->
+							<!--# foreach ($markList as $value){ #-->
 							<option value="{$value}" {@Pw::isSelected($config['mark.file']==$value)}>{$value}</option>
-							<!--#endforeach;#-->
+							<!--# } #-->
 						</select>
 					</td>
 					<td><div class="fun_tips">水印文件存放在src/repository/mark下</div></td>

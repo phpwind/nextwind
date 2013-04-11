@@ -7,7 +7,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ArticleController.php 21191 2012-11-30 06:22:06Z jieyin $
+ * @version $Id: ArticleController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package wind
  */
 class ArticleController extends PwBaseController {
@@ -53,10 +53,11 @@ class ArticleController extends PwBaseController {
 		// seo设置
 
 		Wind::import('SRV:seo.bo.PwSeoBo');
-
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
 
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.article.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.article.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -90,8 +91,10 @@ class ArticleController extends PwBaseController {
 		// seo设置
 
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.article.reply.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.article.reply.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**

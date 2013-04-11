@@ -35,6 +35,10 @@ class ACloudSysConfigServiceAppConfigs {
 		return $this->getAppConfigsDao ()->deleteAppConfigByAppId ( $appId );
 	}
 	
+	public function deleteAllAppConfig(){
+		return $this->getAppConfigsDao ()->deleteAll ();
+	}
+	
 	public function getAppConfigs() {
 		return $this->getAppConfigsDao ()->gets ();
 	}

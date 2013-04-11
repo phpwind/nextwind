@@ -25,14 +25,17 @@ class PwRegisterDoVerifyMobile extends PwRegisterDoBase {
 	/* (non-PHPdoc)
 	 * @see PwRegisterDoBase::afterRegister()
 	 */
-	public function afterRegister($userDm) {
+	public function afterRegister(PwUserInfoDm $userDm) {
 		if (($result = $this->_check($userDm)) !== true) return false;
 		$mobile = $userDm->getField('mobile');
 		$this->_getDs()->replaceMobile($userDm->uid,$mobile);
 		return true;
 	}
 	
-	protected function _check($userDm) {
+	/* (non-PHPdoc)
+	 * @see PwRegisterDoBase::afterRegister()
+	 */
+	protected function _check(PwUserInfoDm $userDm) {
 		if (!$userDm->uid) return false;
 		$config = Wekit::C('register');
 		if (!$config['active.phone']) return false;

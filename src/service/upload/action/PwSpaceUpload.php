@@ -1,7 +1,7 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-Wind::import('SRV:upload.action.PwUploadAction');
+Wind::import('LIB:upload.PwUploadAction');
 Wind::import('COM:utility.WindUtility');
 
 /**
@@ -9,7 +9,7 @@ Wind::import('COM:utility.WindUtility');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSpaceUpload.php 22614 2012-12-26 01:50:03Z gao.wanggao $ 
+ * @version $Id: PwSpaceUpload.php 24104 2013-01-21 10:21:10Z gao.wanggao $ 
  * @package 
  */
 
@@ -43,7 +43,7 @@ class PwSpaceUpload extends PwUploadAction {
 	 */
 	public function getSaveName(PwUploadFile $file) {
 		//$prename  = substr(md5(Pw::getTime() . WindUtility::generateRandStr(8)), 10, 15);
-		$this->filename = Pw::getTime() . '.' .$file->ext;
+		$this->filename = $this->uid . '.' .$file->ext;
 		return $this->filename;
 	}
 	

@@ -5,7 +5,7 @@
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: AttachController.php 23025 2013-01-05 03:49:26Z jieyin $
+ * @version $Id: AttachController.php 26520 2013-04-10 07:41:08Z jieyin $
  * @package forum
  */
 
@@ -18,7 +18,7 @@ class AttachController extends PwBaseController {
 	public function downloadAction() {
 		
 		$aid = (int)$this->getInput('aid', 'get');
-		$submit = (int)$this->getInput('submit', 'get');
+		$submit = (int)$this->getInput('submit', 'post');
 		$attach = Wekit::load('attach.PwThreadAttach')->getAttach($aid);
 		if (!$attach) {
 			$this->showError('BBS:thread.buy.attach.error');
@@ -97,12 +97,13 @@ class AttachController extends PwBaseController {
 			$attachment = 'attachment';
 		}
 		$attach['name'] = trim(str_replace('&nbsp;', ' ', $attach['name']));
-		if (strtoupper(Wekit::app()->charset) == 'UTF-8') {
+		if (strtoupper(Wekit::V('charset')) == 'UTF-8') {
 			$attach['name'] = Pw::convert($attach['name'], "gbk", 'utf-8');
 		}
 		
 		$filesize = 0;
 		$fgeturl = Wind::getComponent('storage')->getDownloadUrl($attach['path']);
+
 		if (strpos($fgeturl, 'http') !== 0) {
 			if (!is_readable($fgeturl)) {
 				$this->showError('BBS:thread.buy.attach.error');
@@ -172,7 +173,7 @@ class AttachController extends PwBaseController {
 		while (!@readfile($fgeturl)) {
 			if (++$i > 3) break;
 		}
-		$this->setTemplate('');
+		exit();
 	}
 
 	public function deleteAction() {
@@ -188,8 +189,13 @@ class AttachController extends PwBaseController {
 			$this->showError('data.error');
 		}
 		
-		if ($this->loginUser->uid != $attach['created_userid'] && !$this->loginUser->getPermission('operate_thread.deleteatt', $forum->isBM($this->loginUser->username))) {
-			$this->showError('permission.attach.delete.deny');
+		if ($this->loginUser->uid != $attach['created_userid']) {
+			if (!$this->loginUser->getPermission('operate_thread.deleteatt', $forum->isBM($this->loginUser->username))) {
+				$this->showError('permission.attach.delete.deny');
+			}
+			if (!$this->loginUser->comparePermission($attach['created_userid'])) {
+				$this->showError(array('permission.level.deleteatt', array('{grouptitle}' => $this->loginUser->getGroupInfo('name'))));
+			}
 		}
 
 		Wekit::load('attach.PwThreadAttach')->deleteAttach($aid);

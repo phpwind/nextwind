@@ -8,7 +8,7 @@ Wind::import('WIND:utility.WindSecurity');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PwForumBo.php 22798 2012-12-27 08:39:17Z long.shi $
+ * @version $Id: PwForumBo.php 25814 2013-03-25 05:42:52Z jieyin $
  * @package forum
  */
 
@@ -19,10 +19,11 @@ class PwForumBo {
 	public $forumset = array();
 
 	public function __construct($fid, $fetchAll = false) {
-		$this->fid = $fid;
+		$this->fid = intval($fid);
 		$forumService = $this->_getForumService();
 		$this->foruminfo = $forumService->getForum($fid, $fetchAll ? PwForum::FETCH_ALL : (PwForum::FETCH_MAIN | PwForum::FETCH_EXTRA));
 		$this->foruminfo['settings_basic'] && $this->forumset = unserialize($this->foruminfo['settings_basic']);
+		if (!is_array($this->forumset['allowtype'])) $this->forumset['allowtype'] = array();
 	}
 	
 	/**

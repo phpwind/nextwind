@@ -9,7 +9,7 @@ Wind::import('SRV:user.srv.PwClearUserService');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ManageController.php 23324 2013-01-08 08:47:13Z xiaoxia.xuxx $
+ * @version $Id: ManageController.php 24850 2013-02-25 02:20:12Z jieyin $
  * @package 
  */
 class ManageController extends AdminBaseController {
@@ -80,7 +80,7 @@ class ManageController extends AdminBaseController {
 				->setRegip($this->getRequest()->getClientIp());
 			$groupid = $this->getInput('groupid', 'post');
 			$dm->setGroupid($groupid);
-			if ($groupid != 0) {	
+			if ($groupid != 0) {
 				// 默认组不保存到groups
 				/* @var $groupDs PwUserGroups */
 				$groupDs = Wekit::load('usergroup.PwUserGroups');
@@ -98,6 +98,11 @@ class ManageController extends AdminBaseController {
 			if ($result instanceof PwError) {
 				$this->showError($result->getError());
 			}
+			//添加站点统计信息
+			Wind::import('SRV:site.dm.PwBbsinfoDm');
+			$bbsDm = new PwBbsinfoDm();
+			$bbsDm->setNewmember($dm->getField('username'))->addTotalmember(1);
+			Wekit::load('site.PwBbsinfo')->updateInfo($bbsDm);
 			//Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($result);
 			$this->showMessage('USER:add.success');
 		}
@@ -119,6 +124,8 @@ class ManageController extends AdminBaseController {
 		/* @var $pwUser PwUser */
 		$pwUser = Wekit::load('user.PwUser');
 		$_info = $pwUser->getUserByUid($info['uid'], PwUser::FETCH_ALL);
+		$_winfo = WindidApi::api('user')->getUser($info['uid']);
+		$_info['regip'] = $_winfo['regip'];
 		
 		$tYear = Pw::time2str(Pw::getTime(), 'Y');
 		$birMin = $tYear-100;
@@ -128,7 +135,7 @@ class ManageController extends AdminBaseController {
 		$this->setOutput($birMin . '-01-01', 'bmin');
 		$this->setOutput($birMax . '-12-31', 'bmax');
 		$this->setOutput($_info, 'info');
-		$this->setOutput($_info['onlinetime'] / 3600, 'online');
+		$this->setOutput(round($_info['onlinetime'] / 3600), 'online');
 		
 		//可能的扩展点
 		$work = Wekit::load('SRV:work.PwWork')->getByUid($info['uid']);
@@ -149,7 +156,7 @@ class ManageController extends AdminBaseController {
 		$dm = new PwUserInfoDm($info['uid']);
 		
 		//用户信息
-		$dm->setUsername($this->getInput('username', 'post'));
+		//$dm->setUsername($this->getInput('username', 'post'));
 		list($password, $repassword) = $this->getInput(array('password', 'repassword'), 'post');
 		if ($password) {
 			if ($password != $repassword) $this->showError('USER:user.error.-20');
@@ -169,7 +176,7 @@ class ManageController extends AdminBaseController {
 
 		$dm->setRegdate(Pw::str2time($this->getInput('regdate', 'post')));
 		$dm->setRegip($this->getInput('regip', 'post'));
-		$dm->setOnline($this->getInput('online', 'post'));
+		$dm->setOnline(intval($this->getInput('online', 'post')) * 3600);
 		
 		//基本资料
 		$dm->setRealname($this->getInput('realname', 'post'));
@@ -184,8 +191,8 @@ class ManageController extends AdminBaseController {
 			$dm->setBday('')->setByear('')->setBmonth('');
 		}
 		list($hometown, $location) = $this->getInput(array('hometown', 'location'), 'post');
-		/* @var $srv PwAreaService */
-		$srv = Wekit::load('area.srv.PwAreaService');
+
+		$srv = WindidApi::api('area');
 		$areas = $srv->fetchAreaInfo(array($hometown, $location));
 		$dm->setLocation($location, isset($areas[$location]) ? $areas[$location] : '');
 		$dm->setHometown($hometown, isset($areas[$hometown]) ? $areas[$hometown] : '');
@@ -259,7 +266,7 @@ class ManageController extends AdminBaseController {
 		Wind::import('SRV:credit.bo.PwCreditBo');
 		/* @var $creditBo PwCreditBo */
 		$creditBo = PwCreditBo::getInstance();
-		$creditBo->addLog('admin_set', $changes, new PwUserBo($this->adminUser->getUid()));
+		$creditBo->addLog('admin_set', $changes, new PwUserBo($this->loginUser->uid));
 		$creditBo->execute(array($info['uid'] => $credits), false);
 		$this->showMessage('USER:update.success', 'u/manage/editCredit?uid=' . $info['uid']);
 	}
@@ -388,7 +395,10 @@ class ManageController extends AdminBaseController {
 	 */
 	public function defaultAvatarAction() {
 		$info = $this->checkUser();
-		Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($info['uid']);
+		$p = Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($info['uid']);
+		if ($p === false) {
+			$this->showError('operate.fail');
+		}
 		$this->showMessage('success');
 	}
 	
@@ -412,7 +422,7 @@ class ManageController extends AdminBaseController {
 	public function doClearAction() {
 		$info = $this->checkUser();
 		/* @var $userSer PwClearUserService */
-		$userSer = new PwClearUserService($info['uid'], new PwUserBo($this->adminUser->getUid()));
+		$userSer = new PwClearUserService($info['uid'], new PwUserBo($this->loginUser->uid));
 		if (($result = $userSer->run($this->getInput('clear', 'post'))) instanceof PwError) {
 			$this->showError($result->getError(), 'admin/u/manage/run');
 		}
@@ -453,9 +463,7 @@ class ManageController extends AdminBaseController {
 		if (!$areaid) {
 			return $default;
 		}
-		/* @var $areaSrv PwAreaService */
-		$areaSrv = Wekit::load('area.srv.PwAreaService');
-		$rout = $areaSrv->getAreaRout($areaid);
+		$rout = WindidApi::api('area')->getAreaRout($areaid);
 		return WindUtility::mergeArray($default, $rout);
 	}
 }

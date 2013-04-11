@@ -6,7 +6,7 @@ Wind::import('WIND:http.transfer.AbstractWindHttp');
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindHttpSocket.php 3839 2012-11-26 10:51:19Z yishuo $
+ * @version $Id: WindHttpSocket.php 3918 2013-01-23 10:37:40Z yishuo $
  * @package http
  * @subpackage transfer
  */
@@ -42,10 +42,12 @@ final class WindHttpSocket extends AbstractWindHttp {
 	 * @see AbstractWindHttp::response()
 	 */
 	public function response() {
-		$response = '';
+		$response = $_body = '';
 		$_start = $_header = true;
+		$_chunked = false;
+		$_len = $num = 0;
 		while (!feof($this->httpHandler)) {
-			$line = fgets($this->httpHandler);
+			$line = fgets($this->httpHandler, 4096);
 			if ($_start) {
 				$_start = false;
 				if (!preg_match('/HTTP\/(\\d\\.\\d)\\s*(\\d+)\\s*(.*)/', $line, $matchs)) {
@@ -59,11 +61,40 @@ final class WindHttpSocket extends AbstractWindHttp {
 					if (!$this->_body) break;
 					$_header = false;
 				}
+				$_chunked || $_chunked = (strcasecmp(trim($line), 'Transfer-Encoding: chunked') == 0);
 				if (!$this->_header) continue;
+			} elseif ($_chunked) {
+				if ($_len >= $num) {
+					$num = hexdec(trim($line));
+					$line = '';
+					$_len = 0;
+				}
+				$_len += strlen($line);
 			}
 			$response .= $line;
 		}
 		return $response;
+	}
+
+	/**
+	 * 分块收取数据处理
+	 *
+	 * @param string $data
+	 * @return string
+	 */
+	private function _unchunk($data) {
+		$fp = 0;
+		$len = strlen($data);
+		$outData = "";
+		while ($fp < $len) {
+			$rawnum = substr($data, $fp, strpos(substr($data, $fp), "\r\n") + 2);
+			$num = hexdec(trim($rawnum));
+			$fp += strlen($rawnum);
+			$chunk = substr($data, $fp, $num);
+			$outData .= $chunk;
+			$fp += strlen($chunk);
+		}
+		return $outData;
 	}
 	
 	/* (non-PHPdoc)
@@ -129,7 +160,7 @@ final class WindHttpSocket extends AbstractWindHttp {
 		}
 		$_request && $this->request($_request . "\r\n");
 		isset($_body) && $this->request($_body);
-		return $this->response();
+		return $this->_waitResponse ? $this->response() : true;
 	}
 
 	/**

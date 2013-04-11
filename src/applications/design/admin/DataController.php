@@ -1,11 +1,11 @@
 <?php
 Wind::import('APPS:design.admin.DesignBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: DataController.php 22012 2012-12-18 06:32:48Z gao.wanggao $ 
+ * @version $Id: DataController.php 23975 2013-01-17 10:20:11Z jieyin $ 
  * @package 
  */
 class DataController extends DesignBaseController {	
@@ -278,7 +278,7 @@ class DataController extends DesignBaseController {
 	
 	private function _uploadFile($key, $moduleid = 0) {
  		Wind::import('SRV:upload.action.PwDesignDataUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwDesignDataUpload($key, $moduleid);
 		$upload = new PwUpload($bhv);
 		if (($result = $upload->check()) === true) $result = $upload->execute();

@@ -1,7 +1,7 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-Wind::import('SRV:upload.action.PwUploadAction');
+Wind::import('LIB:upload.PwUploadAction');
 Wind::import('COM:utility.WindUtility');
 
 /**
@@ -10,7 +10,7 @@ Wind::import('COM:utility.WindUtility');
  * @author Mingqu Luo<luo.mingqu@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwForumUpload.php 18058 2012-09-11 05:07:19Z xiaoxia.xuxx $
+ * @version $Id: PwForumUpload.php 23975 2013-01-17 10:20:11Z jieyin $
  * @package wind
  */
 

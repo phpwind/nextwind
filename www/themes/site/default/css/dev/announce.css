@@ -3,7 +3,7 @@
 @explain: 公告独立页
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: announce.css 11346 2012-06-06 08:54:42Z yanchixia $
+$Id: announce.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 #*/
 
@@ -13,13 +13,13 @@ $Id: announce.css 11346 2012-06-06 08:54:42Z yanchixia $
 ===================
 */
 .announce_page{
-	padding:15px 15px 40px
+
 }
 .announce_page dl{
 	border-bottom:1px dashed #d3d3d3;
 }
 .announce_page dt{
-	padding:10px;
+	padding:10px 0;
 	font-size:14px;
 	color:#666;
 }
@@ -33,7 +33,7 @@ $Id: announce.css 11346 2012-06-06 08:54:42Z yanchixia $
 	padding-left:20px;
 }
 .announce_page dd{
-	padding:0 10px 10px;
+	padding:0 0 10px;
 	color:#666;
 	line-height:1.8;
 	display:none;

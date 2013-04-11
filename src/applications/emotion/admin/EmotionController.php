@@ -14,14 +14,14 @@ class EmotionController extends AdminBaseController {
 		$folderList = $this->_getEmotionService()->getFolderList();
 		$catList = $this->_getEmotionCategoryDs()->getCategoryList();
 		foreach ($catList AS $k => $cat) {
-			$_apps = explode('|', $cat['emotion_apps']);
+			/*$_apps = explode('|', $cat['emotion_apps']);
 			$_appName = '';
 			foreach ((array)$_apps AS $_app) {
 				$_appName .= $this->_getEmotionService()->getAppcationList($_app) .',';
 			}
 			$catList[$k]['apps'] = $_apps;
-			$catList[$k]['appsname'] = $_appName;
-			if (in_array($cat['emotion_folder'], $folderList)) {
+			$catList[$k]['appsname'] = $_appName;*/
+			if (Pw::inArray($cat['emotion_folder'], $folderList)) {
 				foreach ($folderList AS $key=>$folder) {
 					if ($cat['emotion_folder'] == $folder) unset($folderList[$key]);
 				}
@@ -39,14 +39,14 @@ class EmotionController extends AdminBaseController {
 		is_int($catids) && $catids = array($catids);
 		$orderIds = $this->getInput('category_orderid','post');
 		$catnames = $this->getInput('category_name','post');
-		$apps = $this->getInput('apps','post');
+		//$apps = $this->getInput('apps','post');
 		if (!$catids)  $this->showError('ADMIN:fail');
 		Wind::import('SRV:emotion.dm.PwEmotionCategoryDm');
 		foreach ($catids AS $k=>$v) {
 			if (!$catnames[$v]) $this->showError('ADMIN:catname.empty');
 			$dm = new PwEmotionCategoryDm($v);
 			$dm->setCategoryMame($catnames[$v])
-				->setEmotionApps($apps[$v])
+				->setEmotionApps(array('bbs'))
 				->setOrderId($orderIds[$v])
 				->setIsopen($isopens[$v]);
 			$this->_getEmotionCategoryDs()->updateCategory($dm);
@@ -60,7 +60,8 @@ class EmotionController extends AdminBaseController {
  		$dm->setCategoryMame($this->getInput('catname','post'))
  			->setEmotionFolder($this->getInput('folder','post'))
  			->setEmotionApps(array('bbs'))
- 			->setOrderId((int)$this->getInput('orderid','post'));
+ 			->setOrderId((int)$this->getInput('orderid','post'))
+ 			->setIsopen(1);
  		$resource = $this->_getEmotionCategoryDs()->addCategory($dm);
  		if ($resource instanceof PwError) $this->showError($resource->getError());
 		$this->showMessage("MEDAL:success");

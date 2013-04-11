@@ -6,7 +6,7 @@ default.empty="需要先设置默认域名，例如www.phpwind.net"
 
 domain_type_null="域名类型不可为空"
 domain.hold="域名不能包含类似#0"
-domain.length="域名长度必须在3到20位之间"
+domain.length="域名长度必须在3到15位之间"
 domain.first.illegal="域名首位必须是字母"
 domain.char.num="域名只能由字母和数字组成"
 domain.exist="域名已存在"

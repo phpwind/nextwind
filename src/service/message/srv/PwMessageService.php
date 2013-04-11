@@ -356,11 +356,11 @@ class PwMessageService {
 		$message = current($this->_getWindid()->getUnreadDialogsByUid($uid, 1));
 		$last_message = $message['last_message'] ? unserialize($message['last_message']) : array();
 		//发件人通知
-		$params = array('from_uid' => $last_message['from_uid'],'to_uid' => $last_message['to_uid'],'content' => $last_message['content'],'is_send' => 1);
+		$params = array('from_uid' => $last_message['to_uid'],'to_uid' => $last_message['from_uid'],'content' => $last_message['content'],'is_send' => 1);
 		$this->_getNoticeService()->sendNotice($message['from_uid'],'message',$message['to_uid'],$params,false);
 	
 		//收件人通知
-		$params = array('from_uid' => $last_message['from_uid'],'to_uid' => $last_message['to_uid'],'content' => $last_message['content']);
+		$params = array('from_uid' => $last_message['to_uid'],'to_uid' => $last_message['from_uid'],'content' => $last_message['content']);
 		$this->_getNoticeService()->sendNotice($message['to_uid'],'message',$message['from_uid'],$params,false);
 		
 		return true;

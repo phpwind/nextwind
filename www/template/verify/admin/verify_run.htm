@@ -28,11 +28,11 @@
 				<th>验证码类型</th>
 				<td>
 					<ul class="single_list cc">
-						<!--# foreach($verifyType AS $k=>$v):
+						<!--# foreach($verifyType AS $k=>$v){
 							$msg .= $v['description'] . '<br/>';
 						#-->
-						<li><label><input name="type"  value="{$k}" type="radio" {@Pw::ifcheck($config['type']==$k)}>{$v['name']}</label></li>
-						<!--# endforeach; #-->
+						<li><label><input name="type"  value="{$k}" type="radio" {@Pw::ifcheck($config['type']==$k)}><span>{$v['name']}</span></label></li>
+						<!--# } #-->
 					</ul>
 				</td>
 				<td class="td_tips">
@@ -44,14 +44,14 @@
 				<th>识别难度</th>
 				<td>
 					<ul class="three_list cc">
-						<li><label><input name="randtype[]" type="checkbox" value="font" {@Pw::ifcheck(in_array('font',$config['randtype']))}>随机字体</label></li>
-						<li><label><input name="randtype[]" type="checkbox" value="size" {@Pw::ifcheck(in_array('size',$config['randtype']))}>随机字体大小</label></li>
-						<li><label><input name="randtype[]" type="checkbox" value="angle" {@Pw::ifcheck(in_array('angle',$config['randtype']))}>随机倾斜</label></li>
-						<li><label><input name="randtype[]" type="checkbox" value="background" {@Pw::ifcheck(in_array('background',$config['randtype']))}>随机背景</label></li>
-						<li><label><input name="randtype[]" type="checkbox" value="color" {@Pw::ifcheck(in_array('color',$config['randtype']))}>随机颜色</label></li>
-						<li><label><input name="randtype[]" type="checkbox" value="graph" {@Pw::ifcheck(in_array('graph',$config['randtype']))}>随机干扰图形</label></li>
-						<li><label><input name="randtype[]" type="checkbox" value="distortion" {@Pw::ifcheck(in_array('distortion',$config['randtype']))}>随机扭曲</label></li>
-						<li><label><input name="randtype[]" type="checkbox" value="gif" {@Pw::ifcheck(in_array('gif',$config['randtype']))}>gif动画</label></li>
+						<li><label><input name="randtype[]" type="checkbox" value="font" {@Pw::ifcheck(Pw::inArray('font',$config['randtype']))}><span>随机字体</span></label></li>
+						<li><label><input name="randtype[]" type="checkbox" value="size" {@Pw::ifcheck(Pw::inArray('size',$config['randtype']))}><span>随机字体大小</span></label></li>
+						<li><label><input name="randtype[]" type="checkbox" value="angle" {@Pw::ifcheck(Pw::inArray('angle',$config['randtype']))}><span>随机倾斜</span></label></li>
+						<li><label><input name="randtype[]" type="checkbox" value="background" {@Pw::ifcheck(Pw::inArray('background',$config['randtype']))}><span>随机背景</span></label></li>
+						<li><label><input name="randtype[]" type="checkbox" value="color" {@Pw::ifcheck(Pw::inArray('color',$config['randtype']))}><span>随机颜色</span></label></li>
+						<li><label><input name="randtype[]" type="checkbox" value="graph" {@Pw::ifcheck(Pw::inArray('graph',$config['randtype']))}><span>随机干扰图形</span></label></li>
+						<li><label><input name="randtype[]" type="checkbox" value="distortion" {@Pw::ifcheck(Pw::inArray('distortion',$config['randtype']))}><span>随机扭曲</span></label></li>
+						<li><label><input name="randtype[]" type="checkbox" value="gif" {@Pw::ifcheck(Pw::inArray('gif',$config['randtype']))}><span>gif动画</span></label></li>
 					</ul>
 				</td>
 				<td class="td_tips"><div>由于部分服务器对字体和gif功能支持不友好，如果您的站点开启验证码后出现服务器不稳定现象请关闭“随机字体”、“gif动画”</div></td>
@@ -60,8 +60,8 @@
 				<th class="th" rowspan="2">验证码内容</th>
 				<td class="td">
 					<ul class="single_list cc mb20">
-						<li><label><input name="contentType[]" type="checkbox" value="3" {@Pw::ifcheck(in_array('3',$config['content.type']))}>英文字符和数字</label></li>
-						<li><label><input name="contentType[]" type="checkbox" value="5" {@Pw::ifcheck(in_array('5',$config['content.type']))}>中文字符</label></li>
+						<li><label><input name="contentType[]" type="checkbox" value="3" {@Pw::ifcheck(Pw::inArray('3',$config['content.type']))}><span>英文字符和数字</span></label></li>
+						<li><label><input name="contentType[]" type="checkbox" value="5" {@Pw::ifcheck(Pw::inArray('5',$config['content.type']))}><span>中文字符</span></label></li>
 					</ul>
 					<div class="b mb5">验证码个数（建议设置为4个）</div>
 					<input name="contentLength" type="number" class="input" value="{$config['content.length']}">
@@ -71,17 +71,17 @@
 			<tr>
 				<td class="td">
 					<ul class="single_list cc mb20">
-						<li><label><input name="contentType[]" type="checkbox" value="4" {@Pw::ifcheck(in_array('4',$config['content.type']))}>100以内随机加减法</label></li>
-						<li><label><input name="contentType[]" type="checkbox" value="6" {@Pw::ifcheck(in_array('6',$config['content.type']))}>自定义验证问题</label></li>
+						<li><label><input name="contentType[]" type="checkbox" value="4" {@Pw::ifcheck(Pw::inArray('4',$config['content.type']))}><span>100以内随机加减法</span></label></li>
+						<li><label><input name="contentType[]" type="checkbox" value="6" {@Pw::ifcheck(Pw::inArray('6',$config['content.type']))}><span>自定义验证问题</span></label></li>
 					</ul>
 					<div class="b mb5">验证问题与答案</div>
 					<div class="cross">
 						<ul id="J_ul_list_verify" class="J_ul_list_public">
-<!--#foreach($config['content.questions'] as $key => $value): #-->
+<!--#foreach($config['content.questions'] as $key => $value){ #-->
 							<li>
 								<span class="span_3"><input name="contentQuestions[{$key}][ask]" type="text" class="input length_2" value="{$value['ask']}"></span>
 								<span class="span_4"><input name="contentQuestions[{$key}][answer]" type="text" class="input  length_2 mr15" value="{$value['answer']}"><a href="" class="J_ul_list_remove">[删除]</a></span></li>
-<!--#endforeach; #-->
+<!--# } #-->
 						</ul>
 					</div>
 					<div class="group_list">

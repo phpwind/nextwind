@@ -56,13 +56,14 @@ class HotController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
 		if ($this->page > 1) {
-			PwSeoBo::setCustomSeo($lang->getMessage('SEO:vote.hot.run.page.title', array($this->page)), $lang->getMessage('vote.hot.run.description'), '');
+			$seoBo->setCustomSeo($lang->getMessage('SEO:vote.hot.run.page.title', array($this->page)), $lang->getMessage('vote.hot.run.description'), '');
 		} else {
-			PwSeoBo::setCustomSeo($lang->getMessage('SEO:vote.hot.run.title'), '', $lang->getMessage('SEO:vote.hot.run.description'));
+			$seoBo->setCustomSeo($lang->getMessage('SEO:vote.hot.run.title'), '', $lang->getMessage('SEO:vote.hot.run.description'));
 		}
-		
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	private function _buildPoll($data) {

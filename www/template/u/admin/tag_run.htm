@@ -11,7 +11,7 @@
 		<input type="hidden" name="page" value="{$page}">
 		<label>标签名称：</label><input name="name" type="text" class="input length_2 mr10" value="{$args['name']}">
 		<label>热门标签状态：</label><select name="ifhot" class="mr10">
-			<option value="all" {@Pw::isSelected(!in_array($args['ifhot'], array('0', '1')))}>所有</option>
+			<option value="all" {@Pw::isSelected(!Pw::inArray($args['ifhot'], array('0', '1')))}>所有</option>
 			<option value="1" {@Pw::isSelected($args['ifhot'] == '1')}>允许</option>
 			<option value="0" {@Pw::isSelected($args['ifhot'] == '0')}>不允许</option>
 		</select>
@@ -20,6 +20,7 @@
 		</form>
 	</div>
 	<form action="{@url:u/tag/delete}" method="post" class="J_ajaxForm">
+<!--# if ($list) { #-->
 	<div class="table_list">
 		<table width="100%">
 			<thead>
@@ -30,7 +31,6 @@
 					<td>热门标签状态</td>
 				</tr>
 			</thead>
-<!--# if ($list) { #-->
 <!--#foreach ($list as $key => $item) {
 	$ifhot = $item['ifhot'] ? '允许' : '不允许';
 #-->
@@ -41,17 +41,15 @@
 				<td>{$ifhot}</td>
 			</tr>
 <!--#}#-->
-<!--# } else { #-->
-	<tbody>
-		<tr><td colspan="7" class="tac">啊哦，没有符合条件的内容！</td></tr>
-	</tbody>
-<!--# } #-->
 		</table>
-	</div>
-	<!--# if ($list) { #-->
 	<div class="p10">
 		<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='u/tag/run' args='$args'/>
 	</div>
+	</div>
+<!--# } else { #-->
+<div class="not_content_mini"><i></i>啊哦，没有符合条件的内容！</div>
+<!--# } #-->
+	<!--# if ($list) { #-->
 	<div class="btn_wrap">
 	 <div class="btn_wrap_pd">
 		<label class="mr20"><input type="checkbox" name="checkAll" value="" class="J_check_all" data-direction="x" data-checklist="J_check_user_x">全选</label>

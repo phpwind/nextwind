@@ -1,5 +1,4 @@
 <?php
-Wind::import('WINDID:library.base.WindidBaseDm');
 
 /**
  * 地区的DM
@@ -7,10 +6,11 @@ Wind::import('WINDID:library.base.WindidBaseDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidAreaDm.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidAreaDm.php 23673 2013-01-14 09:11:23Z jieyin $
  * @package windid.service.area.dm
  */
-class WindidAreaDm extends WindidBaseDm {
+class WindidAreaDm extends PwBaseDm {
+
 	public $areaid;
 	
 	/**
@@ -58,7 +58,7 @@ class WindidAreaDm extends WindidBaseDm {
 	}
 	
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::_beforeAdd()
+	 * @see PwBaseDm::_beforeAdd()
 	 */
 	protected function _beforeAdd() {
 		if (!isset($this->_data['name']) || !$this->_data['name']) return new WindidError(WindidError::FAIL);
@@ -68,7 +68,7 @@ class WindidAreaDm extends WindidBaseDm {
 	}
 
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::_beforeUpdate()
+	 * @see PwBaseDm::_beforeUpdate()
 	 */
 	protected function _beforeUpdate() {
 		if (!$this->areaid) return new WindidError(WindidError::FAIL);

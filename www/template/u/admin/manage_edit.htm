@@ -8,7 +8,7 @@
 	<div class="nav">
 		<div class="return"><a href="{@url:u/manage/run}">返回上一级</a></div>
 		<ul class="cc">
-			<li class="current"><a href="{@url:u/manage/edit?uid=$uid}">编辑</a></li>
+			<li class="current"><a href="{@url:u/manage/edit?uid=$uid}">用户信息</a></li>
 			<li><a href="{@url:u/manage/editCredit?uid=$uid}">积分</a></li>
 			<li><a href="{@url:u/manage/editGroup?uid=$uid}">用户组</a></li>
 		</ul>
@@ -29,7 +29,7 @@
 		</thead>
 		<tr>
 			<th>用户名</th>
-			<td><input name="username" type="text" class="input input_hd length_5" value="{$info['username']}"></td>
+			<td>{$info['username']}</td>
 		</tr>
 		<tr>
 			<th>头像</th>

@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
- * @author $Author: jieyin $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwSpaceBo.php 22678 2012-12-26 09:22:23Z jieyin $ 
+ * @version $Id: PwSpaceBo.php 25545 2013-03-19 05:51:44Z gao.wanggao $ 
  * @package 
  */
  class PwSpaceBo {
@@ -19,6 +19,7 @@
  	const MYSELF = 2;			//本人
  	const ATTENTION = 3;		//主人关注的
  	const FOLLOWED = 4;			//关注主人的
+ 	const FRIEND = 5;			//互相关注
 
  	
  	
@@ -112,13 +113,21 @@
 	
 	/**
 	 * 获取访问者和空间的关系
-	 * 0未登录,1未关注,2本人,3主人关注的, 4,关注主人的
+	 * 0未登录,1未关注,2本人,3主人关注的, 4,关注主人的 5互相关注
 	 */
  	private function _getTome($spaceUid, $visitUid) {
+ 		$attention = $followed = false;
  		if ($visitUid == 0) return self::VISITOR;  
  		if ($visitUid == $spaceUid) return self::MYSELF; 
- 		if (Wekit::load('attention.PwAttention')->isFollowed($spaceUid, $visitUid)) return self::ATTENTION; 
- 		if (Wekit::load('attention.PwAttention')->isFollowed($visitUid, $spaceUid)) return self::FOLLOWED; 
+ 		if (Wekit::load('attention.PwAttention')->isFollowed($spaceUid, $visitUid)) {
+ 			$attention = true; //self::ATTENTION; 
+ 		}
+ 		if (Wekit::load('attention.PwAttention')->isFollowed($visitUid, $spaceUid)) {
+ 			$followed = true; //self::FOLLOWED; 
+ 		}
+ 		if ($attention && $followed) return self::FRIEND;
+ 		if ($attention) return self::ATTENTION;
+ 		if ($followed) return self::FOLLOWED;
  		return self::STRANGER;
  	}
  	

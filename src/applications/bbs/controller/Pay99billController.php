@@ -5,7 +5,7 @@
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: Pay99billController.php 18618 2012-09-24 09:31:00Z jieyin $
+ * @version $Id: Pay99billController.php 24284 2013-01-25 03:28:25Z xiaoxia.xuxx $
  * @package forum
  */
 
@@ -73,6 +73,9 @@ class Pay99billController extends PwBaseController {
 
 	protected function paymsg($msg, $notify = 'success') {
 		if (empty($_POST)) {
+			if ('onlinepay.success' == $msg) {
+				$this->showMessage($msg, 'profile/credit/order', 2);
+			}
 			$this->showError($msg, 'profile/credit/order', 2);
 		}
 		exit($notify);

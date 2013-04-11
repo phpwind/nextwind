@@ -3,7 +3,7 @@
 @explain: 勋章
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: medal.css 20067 2012-10-23 05:59:30Z yanchixia $
+$Id: medal.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 #*/
 
@@ -16,7 +16,7 @@ $Id: medal.css 20067 2012-10-23 05:59:30Z yanchixia $
 	min-height:400px;
 }
 .medal_content{
-	padding:0 15px;
+	padding:0 0;
 }
 
 /*

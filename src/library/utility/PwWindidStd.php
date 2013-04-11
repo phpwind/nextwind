@@ -1,11 +1,11 @@
 <?php
 /**
  * windid虚拟类，用于windid的通知DS层兼容
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwWindidStd.php 21452 2012-12-07 10:18:33Z gao.wanggao $ 
+ * @version $Id: PwWindidStd.php 24765 2013-02-20 09:47:22Z jieyin $ 
  * @package 
  *
  */
@@ -35,6 +35,5 @@ class PwWindidStd {
 		$cls = WindidApi::api($this->api);
 		return call_user_func_array(array($cls, $method), $args);
 	}
-
 }
 ?>

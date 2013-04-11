@@ -99,7 +99,7 @@
 						});
 						_item.find('.J_loading').hide().siblings('.J_vote_u_list').show().html(u_arr.join(''));
 					}else{
-						_item.find('.J_loading').parent().html('<div class="not_content_mini">暂无参与人员</div>');
+						_item.find('.J_loading').parent().html('<div class="not_content_mini"><i></i>暂无参与人员</div>');
 					}
 				}else if(data.state == 'fail'){
 					Wind.Util.resultTip({

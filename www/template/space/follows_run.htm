@@ -47,7 +47,7 @@
 							<!--# } elseif ($loginUser->isExists() && $loginUser->uid != $value['uid']) {
 								$isfan = isset($fans[$value['uid']]) ? 'true' : 'false';
 							#-->
-							<a href="{@url:my/follow/add?uid=$value['touid']}" class="core_follow J_space_follow J_qlogin_trigger" data-followed="{$isfan}">加关注</a>
+							<a href="{@url:my/follow/add}" class="core_follow J_spaceta_follow J_qlogin_trigger" data-followed="{$isfan}" data-uid="{$value['touid']}">加关注</a>
 							<!--# } #-->
 						</div>
 					</dd>
@@ -102,6 +102,51 @@ var URL_UNFOLLOW = "{@url:my/follow/delete/}",
 //引入js组件
 Wind.use('jquery', 'global', 'dialog', 'ajaxForm', 'tabs', 'draggable', 'uploadPreview', function(){
 	Wind.js(GV.JS_ROOT +'pages/space/space_index.js?v='+ GV.JS_VERSION);
+
+	//关注 取消
+	var lock = false;
+	$('a.J_spaceta_follow').on('click', function(e){
+		if(!GV.U_ID) {
+			return false;
+		}
+		e.preventDefault();
+		var $this = $(this);
+
+		if(lock) {
+			return false;
+		}
+		lock = true;
+
+		Wind.Util.ajaxMaskShow();
+		$.post(this.href, {
+			uid: $this.data('uid')
+		}, function(data){
+			Wind.Util.ajaxMaskRemove();
+			lock = false;
+
+			if(data.state == 'success') {
+				var followed = $this.data('followed');
+				if(followed) {
+					//已关注我
+					$this.replaceWith('<span class="mnfollow">互相关注</span>');
+				}else{
+					$this.replaceWith('<span class="core_unfollow">已关注</span>');
+				}
+
+			}else if(data.state == 'fail') {
+				Wind.Util.resultTip({
+					elem : $this,
+					error : true,
+					follow : true,
+					msg : data.message[0]
+				});
+			}
+			
+		}, 'json').fail(function(){
+			lock = false;
+		});
+
+	});
 
 <!--# if (!$follows) { #-->
 	/*

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 	<head>
-		<meta charset="{@Wekit::app()->charset}" />
+		<meta charset="{@Wekit::V('charset')}" />
 		<title>系统后台 - {@Wekit::C('site', 'info.name')}</title>
 		<link href="{@G:url.css}/admin_layout.css?v{@NEXT_RELEASE}" rel="stylesheet" />
 		<style>
@@ -31,8 +31,8 @@ var GV = {
 	URL : {
 		LOGIN : '{@G:loginUrl}',																													//后台登录地址
 		IMAGE_RES: '{@G:url.images}',																										//图片目录
-		REGION : '{@url:bbs/webData/area|pw}',					//地区
-		SCHOOL : '{@url:bbs/webData/school|pw}'				//学校
+		REGION : '{@url:misc/webData/area|pw}',					//地区
+		SCHOOL : '{@url:misc/webData/school|pw}'				//学校
 	}
 };
 </script>
@@ -55,7 +55,7 @@ var GV = {
 						</ul>
 					</div>
 					<div class="login_info">
-						<a href="{@url:index/run|pw}" class="home" target="_blank">前台首页</a><span class="mr10">管理员： {$adminUser->username}</span><a href="{@url:index/logout}" class="mr10">[注销]</a>
+						<a href="{@url:index/run|pw}" class="home" target="_blank">前台首页</a><span class="mr10">管理员： {$loginUser->username}</span><a href="{@url:index/logout}" class="mr10">[注销]</a>
 					</div></td>
 				</tr>
 				<tr class="tab">
@@ -420,25 +420,105 @@ function showTab(li) {
 	}
 }
 
-//增强体验，如果支持全屏，则使用更完美的全屏方案
-/*Wind.use('requestFullScreen',function () {
-	if(fullScreenApi.supportsFullScreen) {
-		$('#J_fullScreen').unbind('click').one('click',function(e) {
-			e.preventDefault();
-			$('body').requestFullScreen();
+(function(){
+	//iframe内触发菜单
+
+	var par_menu_main = $('#J_B_main_block'),
+		par_menu_side = $('#B_menubar')
+	//查询导航数据
+	window.eachSubmenu = function (data, id, par, level, href){
+		for(i in data) {
+			if(level == 2) {
+				if(i == par) {
+					//一级
+					setMenuMain(par_menu_main.find('a[data-id='+ par +']'));
+					eachSubmenu(data[par]['items'], id, par, level, href);
+					break;
+				}else if(i == id){
+					//二级
+					setMenuSide(data, id, par, level, href);
+				}
+
+			}else if(level == 3) {
+				if(i == par) {
+					//匹配父导航
+					var root = data[i]['parent'];
+					setMenuMain(par_menu_main.find('a[data-id='+ data[i]['parent'] +']'));
+					setMenuSide(SUBMENU_CONFIG[root]['items'], id, par, level, href);
+					break;
+				}else{
+					//父导航不匹配
+					var items = data[i]['items'];
+					if(items) {
+						eachSubmenu(items, id, par, level, href)
+					}
+
+				}
+			}
+			
+			
+		}
+	};
+
+	//设置顶部导航
+	function setMenuMain(elem){
+		elem.parent().addClass('current').siblings().removeClass('current');
+	};
+
+	//设置左侧导航
+	function setMenuSide(data, id, par, level, href){
+
+		var arr  = [],			//左侧一级导航数据
+			child_arr = [];		//左侧二级导航数据
+
+		//循环数据
+		$.each(data, function(i, o){
+			var cls = (o.id == id ? 'current' : '');
+			
+			//添加一级数据
+			arr.push('<dt class="'+ cls +'"><a href="'+ o.url +'" data-id="'+ o.id +'">'+ o.name +'</a></dt>');
+
+			if(level == 3 && i == par){
+				//进入二级导航
+				$.each(o['items'], function(i, o){
+					child_arr.push('<li><a href="'+ o.url +'" data-id="'+ o.id +'">'+ o.name +'</a></li>');
+				});
+
+				var style = (o.id == par ? '' : 'display:none;');
+
+				//并入一级
+				arr.push('<dd style="'+ style +'"><ul>'+child_arr.join('')+'</ul></dd>');
+			}
+			
 		});
-	}
-})*/
+
+		//show_left_menu(data_list['items']);
+		par_menu_side.html(arr.join('')).attr('data-id', par);
+
+		////检查是否应该出现上一页、下一页
+		checkMenuNext();
+
+		var side_item = $('#B_menubar').find('a[data-id='+ id +']');
+
+		//点击导航展开iframe
+		iframeJudge({
+			elem : side_item,
+			href : href,
+			id : id
+		});
+		
+	};
+})();
 </script>
 
 <!--#
-$isFounder =  Wekit::load('APPS:admin.service.srv.AdminFounderService')->isFounder($adminUser->getUsername());
+$isFounder =  Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($loginUser->username);
 if ($isFounder) {
 $filePath = Wind::getRealPath('ADMIN:conf.openplatformurl.php', true);
 $openPlatformUrl = Wind::getComponent('configParser')->parse($filePath);
 $siteurl = rawurlencode(Wekit::C('site', 'info.url'));
 $version = rawurlencode(NEXT_VERSION);
-$uid = $adminUser->getUid();
+$uid = $loginUser->uid;
 $ts = PW::getTime();
 $sitehash = Wekit::C('site', 'hash');
 $sign = md5($siteurl.$version.$uid.$ts.$sitehash);

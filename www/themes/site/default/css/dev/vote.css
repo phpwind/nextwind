@@ -3,7 +3,7 @@
 @explain: 投票应用
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: vote.css 20308 2012-10-25 09:46:00Z yanchixia $
+$Id: vote.css 24492 2013-01-31 03:38:37Z yanchixia $
 ===================
 #*/
 
@@ -17,7 +17,7 @@ $Id: vote.css 20308 2012-10-25 09:46:00Z yanchixia $
 }
 
 .vote_list{
-	padding:15px;
+	padding:15px 0;
 }
 .vote_list dl.dl{
 	border-bottom:1px dashed #dcdcdc;
@@ -345,6 +345,9 @@ $Id: vote.css 20308 2012-10-25 09:46:00Z yanchixia $
 	padding:5px;
 	margin-right:7px;
 	height:125px;
+}
+.nofollow_list li a{
+	display:block;
 }
 .nofollow_list li img{
 	display:block;

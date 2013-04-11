@@ -24,7 +24,7 @@ class ServerController extends AdminBaseController {
 	public function run() {
 		require_once Wind::getRealPath ( 'ACLOUD:aCloud' );
 		ACloudSysCoreCommon::setGlobal ( 'g_siteurl', PUBLIC_URL );
-		ACloudSysCoreCommon::setGlobal ( 'g_sitename', 'phpwind' );
+		ACloudSysCoreCommon::setGlobal ( 'g_sitename', Wekit::C('site','info.name') );
 		ACloudSysCoreCommon::setGlobal ( 'g_charset', Wind::getApp ()->getResponse ()->getCharset () );
 		list ( $this->BenchService, $operate ) = array (ACloudSysCoreCommon::loadSystemClass ( 'administor', 'bench.service' ), strtolower ( $this->getInput ( "operate" ) ) );
 		if ($this->BenchService->isOpen ()) {
@@ -38,7 +38,7 @@ class ServerController extends AdminBaseController {
 	public function checkAction(){
 		require_once Wind::getRealPath ( 'ACLOUD:aCloud' );
 		ACloudSysCoreCommon::setGlobal ( 'g_siteurl', PUBLIC_URL );
-		ACloudSysCoreCommon::setGlobal ( 'g_sitename', 'phpwind' );
+		ACloudSysCoreCommon::setGlobal ( 'g_sitename', Wekit::C('site','info.name') );
 		ACloudSysCoreCommon::setGlobal ( 'g_charset', Wind::getApp ()->getResponse ()->getCharset () );
 		list ( $this->BenchService, $operate ) = array (ACloudSysCoreCommon::loadSystemClass ( 'administor', 'bench.service' ), strtolower ( $this->getInput ( "operate" ) ) );
 		return ($operate == 'reset') ? $this->reset () : $this->checkEnvironment ();
@@ -56,6 +56,7 @@ class ServerController extends AdminBaseController {
 		$this->setOutput ( $siteName, 'site_name' );
 		$this->setOutput ( $charset, 'site_charset' );
 		$this->setOutput ( $version, 'site_version' );
+		$this->setOutput ( NEXT_RELEASE, 'site_minor_version' );
 		$this->setOutput ( 'apply', 'ac_type' );
 		$this->setOutput ( $result, 'request_key' );
 		$this->setOutput ( $this->BenchService->getApplySubmitUrl (), 'ac_apply_url' );

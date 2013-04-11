@@ -1,22 +1,22 @@
 <!--# if (!$loginUser->isExists()) { #-->
 <div class="header_login">
-	<a rel="nofollow" href="{@url:u/login/run}">登录</a><a rel="nofollow" href="{@url:u/register/run}">注册</a>
+	<hook name="header_info_3"/><a rel="nofollow" href="{@url:u/login/run}">登录</a><a rel="nofollow" href="{@url:u/register/run}">注册</a>
 </div>
 <!--# } else {
 	if ($pwforum && $pwforum->isForum()) {
-		$ifJsFastPost = '';
 		$_tmpfid = $pwforum->fid;
+		$_tmpcid = $pwforum->getCateId();
 	} else {
-		$ifJsFastPost = "J_head_forum_post";
 		$_tmpfid = 0;
+		$_tmpcid = $pwforum ? $pwforum->getCateId() : '0';
 	}
 #-->
-	<a class="header_login_btn" id="{$ifJsFastPost}" role="button" aria-label="快速发帖" aria-haspopup="J_head_forum_pop" href="{@url:bbs/post/run?fid=$_tmpfid}" title="快速发帖" style="width:68px;" tabindex="-1"><span class="inside"><span class="header_post" >发帖</span></span></a>
-	<div id="J_head_forum_pop" tabindex="0" class="pop_select_forum" style="top:45px;left:50%;margin-left:100px;z-index:11;display:none;" aria-label="快速发帖菜单,按ESC键关闭菜单">
+	<a class="header_login_btn" id="J_head_forum_post" role="button" aria-label="快速发帖" aria-haspopup="J_head_forum_pop" href="#" title="快速发帖" tabindex="-1"><span class="inside"><span class="header_post" >发帖</span></span></a>
+	<div id="J_head_forum_pop" tabindex="0" class="pop_select_forum" style="display:none;" aria-label="快速发帖菜单,按ESC键关闭菜单">
 		<a id="J_head_forum_close" href="#" class="pop_close" role="button">关闭窗口</a>
 		<div class="core_arrow_top" style="left:310px;"><em></em><span></span></div>
 		<div class="hd">发帖到其他版块</div>
-		<div id="J_head_forum_ct" class="ct cc">
+		<div id="J_head_forum_ct" class="ct cc" data-fid="{$_tmpfid}" data-cid="{$_tmpcid}">
 			<div class="pop_loading"></div>
 		</div>
 		<div class="ft">
@@ -33,9 +33,9 @@
 		$messageCount = $loginUser->info['notices'] + $loginUser->info['messages'];
 		$messageClass = $messageCount ? 'header_message' : 'header_message header_message_none';
 	#-->
-	<a class="header_login_btn" id="J_head_msg_btn" tabindex="0" href="{@url:message/message/run}" aria-haspopup="J_head_msg_pop" style="width:37px;" aria-label="消息菜单,按pagedown打开菜单,tab键导航,esc键关闭"><span class="inside"><span class="{$messageClass}">消息<em class="core_num J_hm_num">{$messageCount}</em></span></span></a>
+	<a class="header_login_btn" id="J_head_msg_btn" tabindex="0" href="{@url:message/message/run}" aria-haspopup="J_head_msg_pop" aria-label="消息菜单,按pagedown打开菜单,tab键导航,esc键关闭"><span class="inside"><span class="{$messageClass}">消息<em class="core_num J_hm_num">{$messageCount}</em></span></span></a>
 	<!--消息下拉菜单-->
-	<div id="J_head_msg_pop" tabindex="0" aria-label="消息下拉菜单,按ESC键关闭菜单" class="header_menu_wrap my_message_menu" style="width:380px;display:none;">
+	<div id="J_head_msg_pop" tabindex="0" aria-label="消息下拉菜单,按ESC键关闭菜单" class="header_menu_wrap my_message_menu" style="display:none;">
 		<div class="header_menu cc">
 			<div class="header_menu_hd" id="J_head_pl_hm"><span class="{$messageClass} header_message_down">消息<em class="core_num J_hm_num">{$messageCount}</em></span></div>
 			<div id="J_head_msg" class="my_message_content"><div class="pop_loading"></div></div>
@@ -52,10 +52,10 @@
 				<ul class="ct cc">
 				<!--# $nav = Wekit::load('SRV:nav.bo.PwNavBo');
 					$myNav = $nav->getNavFromConfig('my');
-					foreach($myNav as $key=>$value):
+					foreach($myNav as $key=>$value){
 				#-->
 					<li>{$value['name']|html}</li>
-				<!--# endforeach; #-->
+				<!--# } #-->
 				<!--#
 				$_url = '';
 				$_panelManage = false;
@@ -78,12 +78,13 @@
 				if ($_panelManage) {
 				#-->
 					<li><a href="{@WindUrlHelper::createUrl($_url)|url}" rel="nofollow"><em class="icon_system"></em>前台管理</a></li>
-				<!--#} if (Pw::getstatus($loginUser->info['status'], PwUser::STATUS_ALLOW_LOGIN_ADMIN) || in_array(3, $loginUser->groups)) {#-->
+				<!--#} if (Pw::getstatus($loginUser->info['status'], PwUser::STATUS_ALLOW_LOGIN_ADMIN) || Pw::inArray(3, $loginUser->groups)) {#-->
 					<li><a href="{@Wind::getComponent('router')->getRoute('pw')->checkUrl('admin.php')}" target="_blank" rel="nofollow"><em class="icon_admin"></em>系统后台</a></li>
-				<!--#}#-->
+				<!--# } #-->
 				</ul>
 				<ul class="ft cc">
 					<li><a href="{@url:profile/index/run}"><em class="icon_profile"></em>个人设置</a></li>
+					<hook name="header_my" />
 					<li><a href="{@url:u/login/logout}" rel="nofollow"><em class="icon_quit"></em>退出</a></li>
 				</ul>
 			</div>

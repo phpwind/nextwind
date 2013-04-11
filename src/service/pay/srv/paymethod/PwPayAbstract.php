@@ -7,11 +7,18 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPayAbstract.php 7431 2012-04-06 01:54:39Z jieyin $
+ * @version $Id: PwPayAbstract.php 24975 2013-02-27 09:24:54Z jieyin $
  * @package forum
  */
 
 abstract class PwPayAbstract {
+
+	public $charset = 'utf-8';
+	public $baseurl;
+	
+	public function __construct() {
+		$this->charset = Wekit::V('charset');
+	}
 
 	public function check() {
 		return true;

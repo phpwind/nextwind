@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwApplicationDao.php 20132 2012-10-23 10:54:49Z long.shi $
+ * @version $Id: PwApplicationDao.php 23963 2013-01-17 08:40:39Z long.shi $
  * @package products
  * @subpackage appcenter.service.dao
  */
@@ -149,7 +149,7 @@ class PwApplicationDao extends PwBaseDao {
 	 * @return int
 	 */
 	public function countByStatus($status = 1) {
-		$sql = $this->_bindTable('SELECT COUNT(*) FROM %s WHERE status = ?');
+		$sql = $this->_bindTable('SELECT COUNT(*) FROM %s WHERE status & ?');
 		return $this->getConnection()->createStatement($sql)->getValue(array($status));
 	}
 

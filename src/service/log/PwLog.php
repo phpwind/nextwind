@@ -6,7 +6,7 @@
  * @author xiaoxia.xu<xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwLog.php 21259 2012-12-03 09:45:34Z xiaoxia.xuxx $
+ * @version $Id: PwLog.php 24747 2013-02-20 03:13:43Z jieyin $
  * @package src.service.log
  */
 class PwLog {
@@ -23,6 +23,11 @@ class PwLog {
 	public function getLogBytid($tid, $pid, $limit = 10, $start = 0) {
 		if (0 >= ($tid = intval($tid))) return array();
 		return $this->_getLogDao()->getLogByTid($tid, $pid, $limit, $start);
+	}
+
+	public function fetchLogByTid($tids, $typeid) {
+		if (empty($tids) || !is_array($tids) || empty($typeid) || !is_array($typeid)) return array();
+		return $this->_getLogDao()->fetchLogByTid($tids, $typeid);
 	}
 
 	/**

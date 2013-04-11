@@ -14,7 +14,7 @@
 				<td>操作</td>
 			</tr>
 		</thead>
-<!--# foreach ($list as $v): #-->
+<!--# foreach ($list as $v){ #-->
 		<tr>
 			<th><input class="J_design_check J_check" type="checkbox" value="{$v['push_id']}" name="pushid[]" data-yid="J_check_y" data-xid="J_check_x"></th>
 			<td><div class="subject"><a href="{$v['url']}" target="_blank">{$v['title']}</a></div></td>
@@ -24,6 +24,6 @@
 				<a href="{@url:design/data/delpush?pushid=$v['push_id']&moduleid=$v['module_id']}" class="J_data_push" data-role="refuse">[拒绝]</a>
 			</td>					
 		</tr>
-<!--# endforeach; #-->
+<!--# } #-->
 	</table>
 	<div class="J_pages_wrap"><page tpl='TPL:common.page'  total="$totalpage" page="$page" per="$perpage" count="$count" url="design/data/push" args="$args" /></div>

@@ -3,7 +3,7 @@
 @explain: 发帖页面
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: post.css 23210 2013-01-07 05:38:39Z yanchixia $
+$Id: post.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 */
 .header_wrap,
@@ -18,6 +18,9 @@ body {
 }
 .post_page{
 	padding-bottom:40px;
+}
+.post_page .content_nav{
+	margin:15px 15px 0;
 }
 .post_content{
 	padding:15px;
@@ -66,7 +69,7 @@ body {
 .post_page .sidebar dt{
 	border:1px solid #dddddd;
 	border-left:0 none;
-	background:#f6f6f6 url(../../images/common/arrow.png) 170px 9px no-repeat;
+	background:#f6f6f6 url(../../images/post/arrow.png) 170px 9px no-repeat;
 	line-height:30px;
 	height:30px;
 	padding:0 10px;
@@ -402,10 +405,10 @@ body {
 	width:300px;
 }
 .pop_sensitive .not_content_mini{
-	padding:0 20px 0 45px;
+	/*padding:0 20px 0 45px;
 	line-height:1.5;
 	height:auto;
 	background-position:0 0;
 	margin-bottom:0;
-	white-space:normal;
+	white-space:normal;*/
 }

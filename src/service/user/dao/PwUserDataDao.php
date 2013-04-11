@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserDataDao.php 21135 2012-11-29 02:10:03Z jieyin $
+ * @version $Id: PwUserDataDao.php 24810 2013-02-21 10:32:03Z jieyin $
  * @package src.service.user.dao
  */
 class PwUserDataDao extends PwBaseDao {
@@ -127,26 +127,12 @@ class PwUserDataDao extends PwBaseDao {
 		return $result;
 	}
 	
-	/* (non-PHPdoc)
-	 * @see PwBaseDao::_filterStruct()
-	 */
-	protected function _filterStruct($array, $allow = array()) {
-		if (empty($array) || !is_array($array)) return array();
-		empty($allow) && $allow = $this->_getStruct();
-		if (empty($allow) || !is_array($allow)) return $array;
-		$data = array();
-		foreach ($array as $key => $value) {
-			in_array($key, $allow) && $data[$key] = $value;
-		}
-		return $data;
-	}
-	
 	/**
 	 * 获得数据表结构
 	 *
 	 * @return array
 	 */
-	protected function _getStruct() {
+	public function getDataStruct() {
 		static $struct = array();
 		if (!$struct) {
 			$sql = $this->_bindTable('SHOW COLUMNS FROM %s');

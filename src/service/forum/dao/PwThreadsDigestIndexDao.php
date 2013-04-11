@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwThreadsDigestIndexDao.php 22320 2012-12-21 08:14:25Z xiaoxia.xuxx $
+ * @version $Id: PwThreadsDigestIndexDao.php 25506 2013-03-18 09:43:10Z jieyin $
  * @package src.service.forum.dao
  */
 class PwThreadsDigestIndexDao extends PwBaseDao {
@@ -97,8 +97,18 @@ class PwThreadsDigestIndexDao extends PwBaseDao {
 	public function batchAddDigest($data) {
 		$clear = array();
 		foreach ($data as $_tmp) {
-			$clear[] = array($_tmp['tid'], $_tmp['cid'], $_tmp['fid'], $_tmp['disabled'], $_tmp['topic_type'], $_tmp['created_time'], 
-					$_tmp['lastpost_time'], $_tmp['operator'], $_tmp['operator_userid'], $_tmp['operator_time']);
+			$clear[] = array(
+				intval($_tmp['tid']),
+				intval($_tmp['cid']),
+				intval($_tmp['fid']),
+				isset($_tmp['disabled']) ? $_tmp['disabled'] : 0,
+				intval($_tmp['topic_type']),
+				intval($_tmp['created_time']),
+				intval($_tmp['lastpost_time']),
+				$_tmp['operator'],
+				intval($_tmp['operator_userid']),
+				intval($_tmp['operator_time'])
+			);
 		}
 		$sql = $this->_bindSql('REPLACE INTO %s (`tid`, `cid`, `fid`, `disabled`, `topic_type`, `created_time`, `lastpost_time`, `operator`, `operator_userid`, `operator_time`) VALUES	%s', $this->getTable(), $this->sqlMulti($clear));
 		return $this->getConnection()->execute($sql);

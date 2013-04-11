@@ -7,7 +7,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: VerifyController.php 22570 2012-12-25 09:25:59Z gao.wanggao $
+ * @version $Id: VerifyController.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package 
  */
 class VerifyController extends AdminBaseController {
@@ -19,8 +19,8 @@ class VerifyController extends AdminBaseController {
 		Wind::import('SRV:verify.srv.PwVerifyService');
 		$srv =  new PwVerifyService('PwVerifyService_getVerifyType');
 		$verifyType = $srv->getVerifyType();
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('verify');
+
+		$config = Wekit::C()->getValues('verify');
 		$this->setOutput($config, 'config');
 		$this->setOutput($verifyType, 'verifyType');
 	}
@@ -33,6 +33,7 @@ class VerifyController extends AdminBaseController {
 	public function dorunAction() {
 		$questions = $this->getInput('contentQuestions', 'post');
 		$_questions = array();
+		!$questions && $questions = array();
 		foreach ($questions as $key => $value) {
 			if (empty($value['ask']) && empty($value['answer'])) continue;
 			if ($value['ask'] && empty($value['answer'])) $this->showError('ADMIN:verify.answer.empty');
@@ -63,9 +64,13 @@ class VerifyController extends AdminBaseController {
 	 * @return void
 	 */
 	public function setAction() {
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('verify');
+		$config = Wekit::C()->getValues('verify');
 		$this->setOutput($config, 'config');
+
+		//扩展：key => title
+		$verifyExt = array();
+		$verifyExt = PwSimpleHook::getInstance('verify_showverify')->runWithFilters($verifyExt);
+		$this->setOutput($verifyExt, 'verifyExt');
 	}
 			
 	/**
@@ -74,14 +79,16 @@ class VerifyController extends AdminBaseController {
 	 * @return void
 	 */
 	public function dosetAction() {
+		$ext = $this->getInput('ext', 'post');
+		$extConfig = array();
+		foreach ($ext as $key => $value) {
+			if ($value == 1) {
+				$extConfig[] = $key;
+			}
+		}
 		$config = new PwConfigSet('verify');
-		$verify = $this->getInput('showverify', 'post');
-		$config->set('showverify', $verify ? $verify : array())->flush();	
+		$config->set('showverify', $extConfig)->flush();	
 		$this->showMessage('ADMIN:success');
 	
-	}
-
-	private function _loadConfigService() {
-		 return Wekit::load('config.PwConfig');
 	}
 }

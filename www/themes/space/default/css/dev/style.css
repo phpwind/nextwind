@@ -3,7 +3,7 @@
 @explain: 我的空间
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: style.css 21761 2012-12-13 05:53:19Z yanchixia $
+$Id: style.css 24823 2013-02-22 03:25:52Z yanchixia $
 ===================
 #*/
 
@@ -21,6 +21,10 @@ body{
 }
 .main_wrap{
 	font-family:Arial, "Microsoft Yahei";
+}
+/**隐藏掉二级导航**/
+.nav_weak{
+	display:none;
 }
 .space_page{
 	width:850px;
@@ -377,26 +381,75 @@ body{
 	max-height:100px;
 	height:100px;
 }
-/*新鲜事回复*/
-.space_feed_repeat{
+/*引用*/
+.feed_quote{
+	margin-bottom:10px;
+}
+.feed_quote .content{
+	font-size:12px;
+	margin-bottom:0;
+}
+.feed_quote .feed_repeat_arrow{
+	float:left;
+}
+.feed_quote .info{
+	color:#999;
+	padding-top:5px;
+}
+.feed_quote .info a{
+	color:#999;
+}
+.feed_quote .info .right{
+	float:right;
+}
+.feed_quote .info span a{
+	color:#568cca;
+	margin:0 5px;
+}
+.feed_quote .info i{
+	font-style:normal;
+	margin:0 5px;
+	color:#ccc;
+}
+.feed_quote .title{
+	color:#333;
+	font-weight:700;
+}
+.feed_quote .name{
+	font-weight:700;
+}
+/*回复*/
+.feed_repeat{
+	border:1px solid #e0e4e5;
+	background:#fbfbfb;
+	line-height: 20px;
 	padding: 15px 20px 13px;
-	border:1px solid #e4e4e4;
-	box-shadow:0 1px 3px rgba(0,0,0,0.2);
-	background:#fff;
-	margin-bottom:30px;
-	margin-top:-15px;
+	font-size: 12px;
+	margin: 10px 0 7px;
+	border-radius: 3px;
 }
-.space_feed_repeat dl{
-	border-top:1px solid #eee;
+.feed_repeat_arrow{
+	width: 25px;
+	margin: -25px -20px 0 0;
+	_margin:-24px -10px 0 0;
+	height: 11px;
+	overflow: hidden;
+	float:right;
 }
-.space_feed_repeat .feed_repeat_arrow{
-	margin: -26px -13px 0 0;
+.feed_repeat_arrow span,
+.feed_repeat_arrow em{
+	font-family: "SimSun";
+	overflow: hidden;
+	font-size: 20px;
+	display: block;
+	height: 10px;
 }
-.space_feed_repeat .feed_repeat_arrow span{
-	color:#ffffff;
+.feed_repeat_arrow span{
+	margin: -9px 0 0;
+	color:#fbfbfb;
 }
-.space_feed_repeat textarea{
-	width:532px;
+.feed_repeat_arrow em{
+	color:#e0e4e5;
 }
 /*新鲜事独立页回复*/
 .feed_repeat_alone{
@@ -406,7 +459,6 @@ body{
 	display:none;
 }
 .feed_repeat_alone textarea{
-	width:532px;
 	margin-bottom:5px;
 }
 .feed_repeat_alone dl{
@@ -426,6 +478,114 @@ body{
 }
 .feed_repeat_alone dd span{
 	color:#999;
+}
+/*角*/
+.feed_repeat_arrow{
+	width: 25px;
+	margin: -26px -13px 0 0;
+	height: 11px;
+	overflow: hidden;
+	float:right;
+}
+.feed_repeat_arrow span,
+.feed_repeat_arrow em{
+	font-family: "SimSun";
+	overflow: hidden;
+	font-size: 20px;
+	display: block;
+	height: 10px;
+}
+.feed_repeat_arrow span{
+	margin: -9px 0 0;
+	color:#ffffff;
+}
+.feed_repeat_arrow em{
+	color:#e0e4e5;
+}
+
+/*回复_输入*/
+.space_feed_repeat{
+	padding: 15px 20px 13px;
+	border:1px solid #e4e4e4;
+	box-shadow:0 1px 3px rgba(0,0,0,0.2);
+	background:#fff;
+	margin-bottom:30px;
+	margin-top:-15px;
+}
+.space_feed_repeat dl{
+	border-top:1px solid #eee;
+}
+.feed_repeat_textarea{
+	margin-bottom:15px;
+}
+.input_area textarea{
+	resize:none;
+	width:532px;
+	height:18px;
+	margin-bottom:8px;
+	outline:0 none;
+	min-height:18px;
+}
+.feed_repeat_textarea .enter{
+	text-align:right;
+}
+.feed_repeat_textarea .addition{
+	float:left;
+	width:240px;
+}
+.feed_repeat_textarea .addition label{
+	float:left;
+}
+/*回复按钮*/
+.feed_repeat_textarea .btn{
+	padding-left:15px;
+	padding-right:15px;
+}
+/*表情*/
+.icon_face{
+	float:left;
+	display:block;
+	margin:2px 5px 0 0;
+	width:22px;
+	height:22px;
+	overflow:hidden;
+	text-indent:-2000em;
+	color:#999;
+	background-position:0 -429px;
+	position:relative;
+	z-index:1;
+}
+.icon_face:hover{
+	background-position:0 -489px;
+}
+/*回复_列表*/
+.feed_repeat_list dl{
+	padding:8px 0 0;
+	margin:8px 0 0;
+	border-bottom:0 none;
+	border-top:1px dashed #e6e6e6;
+}
+.feed_repeat_list dt{
+	float:left;
+	padding:3px 0;
+}
+.feed_repeat_list dd{
+	margin-left:40px;
+}
+.feed_repeat_list .repeat_btn{
+	text-align:right;
+}
+.feed_repeat_list .content{
+	font-size:12px;
+	line-height:18px;
+	margin-bottom:0;
+}
+.feed_repeat_list .content span{
+	white-space:nowrap;
+	padding-left:5px;
+}
+.feed_repeat_list .content img{
+	vertical-align:top;
 }
 
 /*

@@ -22,6 +22,10 @@ class ACloudSysConfigServiceApps {
 		return $this->getAppsDao ()->delete ( $appId );
 	}
 	
+	public function deleteAllApp() {
+		return $this->getAppsDao()->deleteAll();
+	}
+	
 	public function updateApp($fields, $appId) {
 		$fields ['modified_time'] = time ();
 		return $this->getAppsDao ()->update ( $fields, $appId );

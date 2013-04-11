@@ -29,7 +29,7 @@
 				<td>操作</td>
 			</tr>
 		</thead>
-<!--#foreach($list as $var): #-->
+<!--#foreach($list as $var) { #-->
 		<tr>
 			<td>{$var['username']}</td>
 			<td>{$var['roles']}</td>
@@ -38,7 +38,7 @@
 				<a href="{@url:auth/del?id=$var['id']}" class="mr10 J_ajax_del">[删除]</a>
 			</td>
 		</tr>
-<!--#endforeach; #-->
+<!--# } #-->
 	</table>
 </div>
 <page tpl='TPL:common.page' page='$page' count='$count' per='$per' url='auth/run' />

@@ -4,7 +4,7 @@
  * @Descript	: windeditor
  * @Author		: chaoren1641@gmail.com
  * @Depend		: jquery.js(1.7 or later)
- * $Id: windeditor.js 22610 2012-12-25 13:19:23Z hao.lin $			:
+ * $Id: windeditor.js 26578 2013-04-11 08:26:20Z hao.lin $			:
  */
 ;(function ( $, window, undefined ) {
 
@@ -85,7 +85,7 @@
 			return false;
 		}
 		tagName = tagName.toLowerCase();
-		var block_tag = toMap('address,applet,blockquote,body,center,dd,dir,div,dl,dt,fieldset,form,frameset,h1,h2,h3,h4,h5,h6,head,hr,html,iframe,ins,isindex,li,map,menu,meta,noframes,noscript,object,ol,p,pre,script,style,table,tbody,td,tfoot,th,thead,title,tr,ul');
+		var block_tag = toMap('address,applet,blockquote,body,center,dd,dir,div,dl,dt,fieldset,form,frameset,h1,h2,h3,h4,h5,h6,head,html,iframe,ins,isindex,li,map,menu,meta,noframes,noscript,object,ol,p,pre,script,style,table,tbody,td,tfoot,th,thead,title,tr,ul');
 		return block_tag[tagName];
 	}
 
@@ -252,9 +252,19 @@
 					elem.find('.edit_menu_select li').on('click',function(e) {
 						e.preventDefault();
 						var fontSize = $(this).data('value'),fontText = $(this).text();
-						_self.execCommand(control.command,false,fontSize);
-						//var html = _self.getRangeHTML();
-						//alert(html)
+
+						if(fontSize == 'normal' && !ie) {
+							//非ie 恢复默认
+							var rhtml = _self.getRangeHTML(),
+								rex = /(<font size="[1-7]{1}">)|(<\/font>)/g;
+							if(rex.test(rhtml)) {
+								rhtml = rhtml.replace(rex, '');
+								_self.insertHTML(rhtml);
+							}
+						}else{
+							_self.execCommand(control.command,false,fontSize);
+						}
+						
 						menu.hide();
 						select.find('span').text(fontText);
 					});
@@ -274,7 +284,10 @@
 			horizontal: {
 				command	: 'inserthorizontalrule',
 				tags: ['hr'],
-				tooltip: '分隔线'
+				tooltip: '分隔线',
+				exec: function(){
+					this.insertHTML('<hr>');
+				}
 			},
 
 			bold: {
@@ -331,7 +344,7 @@
 								_self.execCommand(control.command,null,color);
 								element.find('.edit_acolorlump').css('backgroundColor',color);
 							}else if(e.target.className === 'color_initialize') {
-								var color = 'none'; //默认颜色
+								var color = '#000000'; //默认颜色
 								_self.execCommand(control.command, null, color);
 								element.find('.edit_acolorlump').css('backgroundColor',color);
 							}
@@ -518,12 +531,23 @@
 						titleInput = form.find('.J_title'),
 						urlInput = form.find('.J_url');
 						//如果是链接编辑，则找到当前的链接
-					var node = $(_self.getRangeNode('a'));
+					var node = $(_self.getRangeNode('a')),
+						rhtml = _self.getRangeHTML();
 					if(node.length) {
+						/*if(node.find('img').length) {
+							titleInput.val(node.html());
+						}else{
+							titleInput.val(node.text());
+						}*/
 						titleInput.val(node.text());
 						var href = node.attr('href');
 						urlInput.val(href)
-					}else {
+					}/*else if(/<img /.test(rhtml)) {
+						TODO:图片加链接  后端解析 public function parsePicHtml($att)
+						//选中图片
+						form[0].reset();
+						titleInput.val(rhtml);
+					}*/else {
 						form[0].reset();
 						titleInput.val(_self.getRangeText());//否则取当前选中的文本
 					}
@@ -775,8 +799,10 @@
 						if(e.target.nodeName === 'STRONG') {
 							var color = e.target.style.backgroundColor;
 							$(input).val( uniform(color) );
-							colorPanel.hide();
+						}else if($(e.target).hasClass('color_initialize')) {
+							$(input).val('');
 						}
+						colorPanel.hide();
 					});
 			});
 			//拖拽
@@ -898,7 +924,7 @@
 							e.preventDefault();
 							contentTip.remove();
 							_self.focus();
-							editorDoc.body.innerHTML = local_draft;
+							$(_self).trigger('setContenting',[local_draft]);
 						});
 						//取消
 						$(_self.body).on('mousedown.restore', '.J_local_cancel', function(e){
@@ -911,7 +937,7 @@
 					//_self.setFocus($(editorDoc.body));
 				},1000);
 			}else {
-				editorDoc.body.innerHTML = val;
+				$(_self).trigger('setContenting',[val]);
 			}
 
 			if (options.css) {
@@ -1756,6 +1782,10 @@
 		* 获取选中的HTML
 		*/
 		getRangeHTML: function() {
+			if(ie) {
+				$(this.editorDoc.body).focus();
+			}
+			
             var r = this.getRange();
             var s = this.getSelection();
 			if(!r) {return null;}
@@ -1918,7 +1948,9 @@
 			}catch(e) {
 				//自定义事件中的事件有可能出错导致JS停止执行
 			}
-			this.editorDoc.body.innerHTML = html;
+
+			//chorme下<input onfocus="alert(1)" autofocus="" />触发alert，而且bbcode插件setContenting本身会写入html
+			//this.editorDoc.body.innerHTML = html;
 
 			this.codeContainer.val(html);//设置内容时应当把textarea里的值也赋予
 			//必须有一个after之前的事件，因为有可能被ubb影响，ubb转换要在其它任何事件之前，也就是说这个事件是专为UBB考虑的

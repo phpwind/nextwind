@@ -9,6 +9,9 @@ defined('WEKIT_VERSION') or exit(403);
  * @license
  */
 return array(
+	'error' => array(
+		'path' => 'LIB:base.PwErrorHandler',	
+	),
 	'pwWidget' => array(
 		'path' => 'LIB:engine.component.PwWidget',
 		'scope' => 'singleton'
@@ -54,11 +57,6 @@ return array(
 	'windCookie' => array(
 		'path' => 'WIND:http.cookie.WindNormalCookie',
 		'scope' => 'singleton',
-	),
-	'windiddb' => array(
-		'path' => 'WIND:db.WindConnection',
-		'scope' => 'singleton',
-		'config' => array('resource' => 'WINDID:conf.database.php')
 	),
 	'httptransfer' => array(
 		'path' => 'WIND:http.transfer.WindHttpSocket',

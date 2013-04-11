@@ -1,26 +1,88 @@
 <?php
 
-Wind::import('WINDID:service.message.dm.WindidMessageDm');
+Wind::import('WSRV:message.dm.WindidMessageDm');
 /**
  * 私信业务
  *
  * @author peihong <peihong.zhangph@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageService.php 23453 2013-01-09 12:17:30Z gao.wanggao $
+ * @version $Id: WindidMessageService.php 24834 2013-02-22 06:43:43Z jieyin $
  * @package windid.service.message.srv
  */
 class WindidMessageService {
 	
 	private $_blackList = array();
+	
 	/**
-	 * 
+	 * 获取未读消息数
+	 *
+	 * @param int $uid
+	 * @return int
+	 */
+	public function getUnRead($uid) {
+		$data = $this->_getUserDs()->getUserByUid($uid, WindidUser::FETCH_DATA);
+		return intval($data['messages']);
+	}
+
+	/**
+	 * 标记已读
+	 *
+	 * @param int $uid
+	 * @param int $dialogId
+	 * @param array $messageIds
+	 * @return 标记成功的条数    
+	 */
+	public function read($uid, $dialogId, $messageIds = array()) {
+		$dialog = $this->_getMessageDs()->getDialog($dialogId);
+		if (!$dialog || $dialog['to_uid'] != $uid) return 0;
+		if ($messageIds) {
+			$result = $this->_getMessageDs()->readMessages($dialogId, $messageIds);
+		} else {
+			$result =  $this->_getMessageDs()->readDialogMessages($dialogId);
+		}
+		$this->resetDialogMessages($dialogId);
+		$this->resetUserMessages($uid);
+		return $result;
+	}
+
+	public function readDialog($dialogIds) {
+		if (!is_array($dialogIds)) $dialogIds = array($dialogIds);
+		Wind::import('WSRV:message.dm.WindidMessageDm');
+		$ds = $this->_getMessageDs();
+		foreach ($dialogIds as $id) {
+			$dialog = $ds->getDialog($id);
+			$ds->readDialogMessages($id);
+			$dm = new WindidMessageDm();
+			$dm->setUnreadCount(0);
+			$ds->updateDialog($id, $dm);
+			$this->resetUserMessages($dialog['to_uid']);
+		}
+		return true;
+	}
+	
+	/**
+	 * 更新消息数
+	 *
+	 * @param int $uid
+	 * @param int $num
+	 */
+	public function editMessageNum($uid, $num) {
+		Wind::import('WSRV:user.dm.WindidUserDm');
+		$dm = new WindidUserDm($uid);
+		$dm->addMessages($num);
+		return $this->_getUserDs()->editUser($dm);
+		
+	}
+
+	/**
 	 * 发送私信
+	 * 
 	 * @param string $username
 	 * @param string $content
 	 * @param int $fromUid
 	 */
-	public function sendMessage($username,$content,$fromUid){
+	public function sendMessage($username, $content, $fromUid) {
 		$userInfo = $this->_getUserDs()->getUserByName($username);
 		if (!$userInfo) return new WindidError(WindidError::USER_NOT_EXISTS);
 		return $this->sendMessageByUid($userInfo['uid'], $content,$fromUid);
@@ -54,7 +116,7 @@ class WindidMessageService {
 		$dialog = $this->_getMessageDs()->getDialogByUid($fromUid,$uid);
 		if ($dialog) {
 			$dialogId = $dialog['dialog_id'];
-			$dm->increaseMessageCount()->setModifiedTime(Windid::getTime());
+			$dm->increaseMessageCount()->setModifiedTime(Pw::getTime());
 			$this->_getMessageDs()->updateDialog($dialogId,$dm);
 		} else {
 			$dm->setToUid($fromUid)
@@ -79,7 +141,7 @@ class WindidMessageService {
 		// 分组已存在更新数量
 		if ($dialog) {
 			$dialogId = $dialog['dialog_id'];
-			$dm->increaseUnreadCount()->increaseMessageCount()->setModifiedTime(Windid::getTime());
+			$dm->increaseUnreadCount()->increaseMessageCount()->setModifiedTime(Pw::getTime());
 			$this->_getMessageDs()->updateDialog($dialogId,$dm);
 		} else { 
 			// 分组不存在添加一条
@@ -95,7 +157,7 @@ class WindidMessageService {
 		$dm = new WindidMessageDm();
 		$dm->setDialogId($dialogId)->setMessageId($messageId);
 		$this->_getMessageDs()->addRelation($dm);
-		$this->resetUserMessages($uid);
+		$this->resetUserMessages($uid);//TODO后期要改掉
 		return true;
 	}
 	
@@ -128,19 +190,26 @@ class WindidMessageService {
 	 */
 	public function sendMessageByUids($uids,$content,$from_uid = 0){
 		if (!$content) {
-			return new WindidError(WindidError::CONTENT_LENGTH_ERROR);
+			return new WindidError(WindidError::MESSAGE_CONTENT_LENGTH_ERROR);
 		}
-		
 		$userInfos = $this->_getUserDs()->fetchUserByUid($uids);
 		if (!$userInfos) {
 			return new WindidError(WindidError::USER_NOT_EXISTS);
 		}
 		foreach ($userInfos as $userInfo) {
-			$this->sendMessageByUid($userInfo['uid'],$content,$from_uid);
+			$this->sendMessageByUid($userInfo['uid'], $content, $from_uid);
 		}
 		return true;
 	}
-	
+
+	public function delete($uid, $dialogId, $messageIds = array()) {
+		if (!is_array($messageIds)) $messageIds = array($messageIds);
+		$dialog = $this->_getMessageDs()->getDialog($dialogId);
+		if (!$dialog || $dialog['to_uid'] != $uid) {
+			return false;
+		}
+		return $this->deleteMessage($uid, $dialogId, $messageIds);
+	}
 	
 	public function deleteMessage($uid,$dialogId, $messageIds) {
 		$ds = $this->_getMessageDs();
@@ -149,7 +218,6 @@ class WindidMessageService {
 		$this->resetUserMessages($uid);
 		return true;
 	}
-
 
 	public function deleteByMessageIds($messageIds){
 		$relations = $this->_getMessageDs()->getRelationsByMessageIds($messageIds);
@@ -185,7 +253,7 @@ class WindidMessageService {
 	
 	public function deleteUserMessages($uid){
 		$dialogIds = $this->_getMessageDs()->getDialogIds($uid);
-		$dialogIds && $this->batchDeleteDialog($dialogIds);
+		$dialogIds && $this->batchDeleteDialog($uid, $dialogIds);
 		return true;
 	}
 	
@@ -213,8 +281,8 @@ class WindidMessageService {
 	}*/
 	
 	/**
-	 * 
 	 * 重新统计某会话的统计数
+	 * 
 	 * @param int $dialogId
 	 */
 	public function resetDialogMessages($dialogId){
@@ -229,21 +297,61 @@ class WindidMessageService {
 	}
 	
 	/**
-	 * 
 	 * 重新计算用户私信数
+	 * 
 	 * @param int $uid
 	 */
 	public function resetUserMessages($uid){
 		$uid = intval($uid);
 		if ($uid < 1) return false;
 		list($total,$unreads) = $this->_getMessageDs()->countUserMessages($uid);
-		return $this->updateUser($uid, $unreads);
+		return $this->_updateUser($uid, $unreads);
+	}
+
+	/**
+	 * 搜索消息
+	 * 
+	 * @param array $search array('fromuid', 'keyword', 'username', 'starttime', 'endtime')
+	 * @param int $start
+	 * @param int $limit
+	 * @return array(count, list)
+	 */
+	public function searchMessage($search, $start = 0, $limit = 10) {
+		if (!is_array($search)) return array(0, array());
+		$array = array('fromuid', 'keyword', 'username', 'starttime', 'endtime');
+		Wind::import('WSRV:message.srv.vo.WindidMessageSo');
+		$vo = new WindidMessageSo();
+		foreach ($search as $k => $v) {
+			if (!in_array($k, $array)) continue;
+			if ($k == 'username') {
+				$user = $this->_getUserDs()->getUserByName($v);
+				if (!$user['uid']) $user['uid'] = 0;
+				$vo->setFromUid($user['uid']);
+			}
+			$method = 'set'.ucfirst($k);
+			$vo->$method($v);
+		}
+		$count = $this->_getMessageDs()->countMessage($vo);
+		if ($count < 1) return array(0,array());
+		$messages = $this->_getMessageDs()->searchMessage($vo, $start,$limit);
+		$uids = $array = array();
+		foreach ($messages as $v) {
+			$uids[] = $v['from_uid'];
+		}
+		// 组装用户数据
+		$userInfos = $this->_getUserDs()->fetchUserByUid($uids);
+		if (!$userInfos) return array(0,array());
+		foreach ($messages as $v) {
+			$v['username'] = $userInfos[$v['from_uid']]['username'];
+			$array[] = $v;
+		}
+		return array($count,$array);
 	}
 	
-	protected function updateUser($uid, $unreads) {
+	protected function _updateUser($uid, $unreads) {
 		$uid = intval($uid);
 		if ($uid < 1) return false;
-		Wind::import('WINDID:service.user.dm.WindidUserDm');
+		Wind::import('WSRV:user.dm.WindidUserDm');
 		$dm = new WindidUserDm($uid);
 		$dm->setMessageCount($unreads);
 		return $this->_getUserDs()->editUser($dm);
@@ -269,24 +377,20 @@ class WindidMessageService {
 	}
 	
 	/**
-	 * 
 	 * @return WindidMessage
 	 */
-	private function _getMessageDs(){
-		return Windid::load('message.WindidMessage');
+	private function _getMessageDs() {
+		return Wekit::load('WSRV:message.WindidMessage');
 	}
 	
 	/**
-	 * 
 	 * @return WindidUser
 	 */
-	private function _getUserDs(){
-		return Windid::load('user.WindidUser');
+	private function _getUserDs() {
+		return Wekit::load('WSRV:user.WindidUser');
 	}
 	
-	private function _getUserBlackDs(){
-		return Windid::load('user.WindidUserBlack');
+	private function _getUserBlackDs() {
+		return Wekit::load('WSRV:user.WindidUserBlack');
 	}
-	
-
 }

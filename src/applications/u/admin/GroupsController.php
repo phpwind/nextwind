@@ -8,7 +8,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: GroupsController.php 22973 2013-01-04 06:27:52Z jieyin $
+ * @version $Id: GroupsController.php 24736 2013-02-19 09:24:40Z jieyin $
  */
 
 class GroupsController extends AdminBaseController {
@@ -41,7 +41,7 @@ class GroupsController extends AdminBaseController {
 		//level images
 		$imageDir = Wind::getRealDir('PUBLIC:res.images.level') . DIRECTORY_SEPARATOR;
 		//$imageDir = sprintf('%s/www/res/images/level/',dirname(rtrim(WEKIT_PATH,DIRECTORY_SEPARATOR)));
-		$imageUrl = sprintf('%s/level',Wekit::app()->images);
+		$imageUrl = sprintf('%s/level',Wekit::url()->images);
 		$imageFiles = array();
 		if (is_dir($imageDir)) {
 		    if (false !== ($dh = opendir($imageDir))) {
@@ -66,10 +66,11 @@ class GroupsController extends AdminBaseController {
 	public function editAction(){
 		list($gid, $category, $isManage) = $this->getInput(array('gid', 'category', 'manage'), 'get');
 		settype($isManage,'boolean');
+
 		//权限分类
 		$topLevelCategories = $this->_getPermissionService()->getTopLevelCategories($isManage);
 		$category or $category = key($topLevelCategories);
-		$topLevelCategoryClasses = array();
+		$permissionConfigs = $topLevelCategoryClasses = array();
 		foreach ($topLevelCategories as $k => $v) {
 			$topLevelCategoryClasses[$k] = $category == $k ? ' class="current"' : '';//TODO
 			$permissionConfigs[$k] = $this->_getPermissionService()->getPermissionConfigByCategory($gid, $k);
@@ -92,15 +93,13 @@ class GroupsController extends AdminBaseController {
 	}
 	
 	/**
-	 * 
 	 * 保存用户组权限设置
-	 *
 	 */
 	public function doeditAction(){
 		list($mainGid, $category, $gpermission, $groupname) = $this->getInput(array('gid', 'category', 'gpermission', 'groupname'), 'post');
 		$permissionService = Wekit::load('usergroup.PwUserPermission');
 		Wind::import('SRV:usergroup.dm.PwUserPermissionDm');
-		//$permissionKeys = $this->_getPermissionService()->getPermissionKeysByCategory($category);
+
 		$isManage = stripos($category, 'manage_') === 0;
 		$permissionKeys = $this->_getPermissionService()->getPermissionKeys($isManage);
 		//$deleteKeys = array();
@@ -108,7 +107,7 @@ class GroupsController extends AdminBaseController {
 		list($copyGroups,$copyItems) = $this->getInput(array('copy_groups','copy_items'), 'post');
 		$gids = array($mainGid);
 		$copyGroups && $gids = array_merge($gids, $copyGroups);
-		foreach($gids as $gid) {
+		foreach ($gids as $gid) {
 			$flag = $mainGid == $gid;
 			$permissionModel = new PwUserPermissionDm($gid);
 			foreach ($permissionKeys as $k) {
@@ -136,11 +135,53 @@ class GroupsController extends AdminBaseController {
 		//$deleteKeys && $permissionService->batchDeletePermissionByGidAndKeys($gid,$deleteKeys);
 		$this->showMessage('USER:groups.permission.edit.success','u/groups/edit/?gid=' . $mainGid . '&manage=' . intval($isManage),true);
 	}
+
+	public function setrightAction() {
+		$rkey = $this->getInput('rkey', 'get');
+		
+		$typeName = $this->_getGroupDs()->getTypeNames();
+		$configs = $this->_getPermissionService()->getPermissionConfig();
+		$permission = $configs[$rkey];
+		$groupPermissions = $this->_getPermissionDs()->getPermissionByRkey($rkey);
+		
+		$permissionConfigs = array();
+		$groups = $this->_getGroupDs()->getAllGroups();
+		foreach ($groups as $key => $value) {
+			if ($permission['1'] != 'basic' && in_array($value['type'], array('member', 'default'))) {
+				continue;
+			}
+			$defaultValue = isset($groupPermissions[$key]) ? $groupPermissions[$key]['rvalue'] : null;
+
+			$permissionConfigs[$value['type']][$value['gid']] = array(
+				'name' => $value['name'],
+				'default' => $defaultValue,
+				'config' => $permission
+			);
+		}
+
+		$this->setOutput($rkey, 'rkey');
+		$this->setOutput($permission, 'permission');
+		$this->setOutput($permission[1] == 'basic' ? 0 : 1, 'manage');
+		$this->setOutput($typeName, 'typeName');
+		$this->setOutput($permissionConfigs, 'permissionConfigs');
+	}
+
+	public function dosetrightAction() {
+		list($rkey, $gpermission) = $this->getInput(array('rkey', 'gpermission'), 'post');
+		
+		$permissionService = Wekit::load('usergroup.PwUserPermission');
+		Wind::import('SRV:usergroup.dm.PwUserPermissionDm');
+
+		foreach ($gpermission as $key => $value) {
+			$dm = new PwUserPermissionDm($key);
+			$dm->setPermission($rkey, $value);
+			$permissionService->setPermission($dm);
+		}
+		$this->showMessage('USER:groups.permission.edit.success','u/groups/setright/?rkey=' . $rkey, true);
+	}
 	
 	/**
-	 * 
 	 * 保存用户组信息
-	 *
 	 */
 	public function dosaveAction(){
 		list($groupType, $groupName, $groupPoints, $groupImage, $newGroupName, $newGroupPoints, $newGroupImage) = $this->getInput(array('grouptype', 'groupname', 'grouppoints', 'groupimage', 'newgroupname', 'newgrouppoints', 'newgroupimage'), 'post');
@@ -203,9 +244,7 @@ class GroupsController extends AdminBaseController {
 	}
 	
 	/**
-	 * 
 	 * 删除用户组
-	 *
 	 */
 	public function deleteAction(){
 		list($gid) = $this->getInput(array('gid'), 'get');
@@ -222,8 +261,6 @@ class GroupsController extends AdminBaseController {
 	}
 	
 	/**
-	 * 
-	 * Enter description here ...
 	 * @return PwPermissionService
 	 */
 	private function _getPermissionService(){
@@ -231,8 +268,6 @@ class GroupsController extends AdminBaseController {
 	}
 	
 	/**
-	 * 
-	 * Enter description here ...
 	 * @return PwUserPermission
 	 */
 	private function _getPermissionDs(){
@@ -240,8 +275,6 @@ class GroupsController extends AdminBaseController {
 	}
 	
 	/**
-	 * 
-	 * Enter description here ...
 	 * @return PwUserGroups
 	 */
 	private function _getGroupDs(){

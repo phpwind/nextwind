@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author MingXing Sun <mingxing.sun@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: VoteController.php 22451 2012-12-24 10:44:34Z jieyin $
+ * @version $Id: VoteController.php 24134 2013-01-22 06:19:24Z xiaoxia.xuxx $
  * @package poll
  */
 
@@ -99,6 +99,6 @@ class VoteController extends PwBaseController {
 	 * @return PwPollService
 	 */
 	private function _getPollService() {
-		return Wekit::load('poll.srv.PwPollService');;
+		return Wekit::load('poll.srv.PwPollService');
 	}
 }

@@ -1,12 +1,12 @@
 <?php
-Wind::import('APPS:appcenter.service.dm.PwStyleDm');
+Wind::import('APPCENTER:service.dm.PwStyleDm');
 /**
  * 风格安装初始化
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwStyleInit.php 21704 2012-12-12 08:34:04Z long.shi $
+ * @version $Id: PwStyleInit.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package src.applications.appcenter
  */
 class PwStyleInit {
@@ -16,7 +16,7 @@ class PwStyleInit {
 	 *
 	 */
 	public function init() {
-		$install = Wekit::load('APPS:appcenter.service.srv.PwInstallApplication');
+		$install = Wekit::load('APPCENTER:service.srv.PwInstallApplication');
 		$configBo = new PwConfigSet('site');
 		$config = $install->getConfig('style-type');
 		foreach ($config as $k => $v) {
@@ -36,10 +36,10 @@ class PwStyleInit {
 		$manifest = $pack . '/Manifest.xml';
 		if (!is_file($manifest)) return false;
 		/* @var $install PwInstallApplication */
-		Wind::import('APPS:appcenter.service.srv.PwInstallApplication');
+		Wind::import('APPCENTER:service.srv.PwInstallApplication');
 		$install = new PwInstallApplication();
 		/* @var $_install PwStyleInstall */
-		$_install = Wekit::load('APPS:appcenter.service.srv.do.PwStyleInstall');
+		$_install = Wekit::load('APPCENTER:service.srv.do.PwStyleInstall');
 		$conf = $install->getConfig('install-type', 'style');
 		$r = $install->initInstall($manifest);
 		if ($r instanceof PwError) return false;
@@ -59,7 +59,7 @@ class PwStyleInit {
 				'modified_time' => time());
 			$fields[] = $_tmp;
 		}
-		Wekit::load('APPS:appcenter.service.PwApplicationLog')->batchAdd($fields);
+		Wekit::load('APPCENTER:service.PwApplicationLog')->batchAdd($fields);
 		return $install->getAppId();
 	}
 	
@@ -68,7 +68,7 @@ class PwStyleInit {
 	 * @return PwStyle
 	 */
 	private function _styleDs() {
-		return Wekit::load('APPS:appcenter.service.PwStyle');
+		return Wekit::load('APPCENTER:service.PwStyle');
 	}
 }
 

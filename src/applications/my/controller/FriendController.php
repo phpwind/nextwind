@@ -6,7 +6,7 @@
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: FriendController.php 22660 2012-12-26 07:45:31Z jinlong.panjl $
+ * @version $Id: FriendController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package wind
  */
 class FriendController extends PwBaseController {
@@ -31,8 +31,10 @@ class FriendController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.friend.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.friend.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/** 

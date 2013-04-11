@@ -1,7 +1,7 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-Wind::import('SRV:upload.action.PwUploadAction');
+Wind::import('LIB:upload.PwUploadAction');
 Wind::import('SRV:attach.dm.PwThreadAttachDm');
 Wind::import('SRV:forum.bo.PwForumBo');
 Wind::import('COM:utility.WindUtility');
@@ -12,7 +12,7 @@ Wind::import('COM:utility.WindUtility');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwAvatarUpload.php 19823 2012-10-18 09:05:45Z jieyin $
+ * @version $Id: PwAvatarUpload.php 23975 2013-01-17 10:20:11Z jieyin $
  * @package upload
  */
 

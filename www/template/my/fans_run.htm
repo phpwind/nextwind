@@ -45,7 +45,7 @@
 										<span class="mnfollow" title="互相关注">互相关注</span>
 										<a href="{@url:my/follow/delete?uid=$value['uid']}" data-uid="{$value['uid']}" data-role="unfollow" class="core_unfollow J_unfollow_btn J_fans_follow" style="display:none;" data-followed="true">取消关注</a>
 										<!--# } else { #-->
-										<a href="{@url:my/follow/add?uid=$value['uid']}" data-uid="{$value['uid']}" data-role="follow" class="core_follow J_fans_follow" data-followed="true">加关注</a>
+										<a href="{@url:my/follow/add}" data-uid="{$value['uid']}" data-role="follow" class="core_follow J_fans_follow" data-followed="true">加关注</a>
 										<!--# } #-->
 									</div>
 								</dd>
@@ -76,7 +76,7 @@ var URL_UNFOLLOW = "{@url:my/follow/delete/}",
 		URL_FOLLOW = "{@url:my/follow/add/}";
 
 Wind.use('jquery', 'global', function(){
-	Wind.js(GV.JS_ROOT +'pages/bbs/fansFollow_index.js?v='+ GV.JS_VERSION);
+	Wind.js(GV.JS_ROOT +'pages/my/fansFollow.js?v='+ GV.JS_VERSION);
 });
 </script>
 </body>

@@ -10,7 +10,7 @@ Wind::import('SRV:user.PwUser');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserInfoDm.php 22985 2013-01-04 08:06:07Z jieyin $
+ * @version $Id: PwUserInfoDm.php 24943 2013-02-27 03:52:21Z jieyin $
  * @package src.service.user.dm
  */
 class PwUserInfoDm extends PwBaseDm {
@@ -761,7 +761,7 @@ class PwUserInfoDm extends PwBaseDm {
 	
 	/**
 	 * 勋章ID
-	 * Enter description here ...
+	 *
 	 * @param array $medalids 
 	 */
 	public function setMedalIds($medalids) {
@@ -769,10 +769,9 @@ class PwUserInfoDm extends PwBaseDm {
 		return $this;
 	}
 	
-	
 	/**
-	 * 
 	 * 更新通知数
+	 * 
 	 * @param int $num
 	 */
 	public function addNotice($num) {
@@ -781,8 +780,8 @@ class PwUserInfoDm extends PwBaseDm {
 	}
 	
 	/**
-	 * 
 	 * 更新消息数
+	 * 
 	 * @param int $num
 	 */
 	public function addMessages($num) {
@@ -803,42 +802,9 @@ class PwUserInfoDm extends PwBaseDm {
 	 */
 	protected function _beforeUpdate() {
 		if (0 >= $this->uid) return new PwError('USER:illegal.id');
-		if ($this->dm) {
-			if (($result =  $this->dm->beforeUpdate()) !== true) {
-				$errorCode = $result->getCode();
-				$var = array();
-				if ($errorCode == -2) {
-					$windid = WindidApi::api('config');
-					$config = $windid->getConfig('reg');
-					$var = array('{min}' => $config['namelength.min'], '{max}' => $config['namelength.max']);
-				}
-				if ($errorCode == -11) {
-					$windid = WindidApi::api('config');
-					$config = $windid->getConfig('reg');
-					$var = array('{min}' => $config['passwordlength.min'], '{max}' => $config['passwordlength.max']);
-				}
-				return new PwError('WINDID:code.' . $errorCode, $var);
-			}
-			/*$windidData = $this->getDm()->getData();
-			if (isset($windidData['username']) 
-				&& (($result = PwUserValidator::isUsernameHasIllegalChar($windidData['username'])) !== false)) {
-				return $result;
-			}
-			if (isset($windidData['password'])
-				&& (($result = PwUserValidator::isPwdValid($windidData['password'], $windidData['username'])) !== true)) {
-				return $result;
-			}
-			
-			if (true !== ($result = $this->dm->beforeUpdate())) {
-				$errorCode = $result->getCode();
-				$var = array();
-				if ($errorCode == -2) {
-					$config = Wekit::C('register');
-					$var = array('{min}' => $config['security.username.min'], '{max}' => $config['security.username.max']);
-				}
-				return new PwError('USER:user.error.' . $errorCode, $var);
-			}*/
-			}
+		if ($this->dm && WINDID_CONNECT == 'db' && ($result =  $this->dm->beforeUpdate()) !== true) {
+			return $this->_getWindidMsg($result);
+		}
 		if (true !== ($result = $this->check())) return $result;
 		return true;
 	}
@@ -856,20 +822,8 @@ class PwUserInfoDm extends PwBaseDm {
 		if (($result = PwUserValidator::isPwdValid($this->_password, $this->getField('username'))) !== true) {
 			return $result;
 		}
-		if (($result = $this->dm->beforeAdd()) !== true) {
-			$errorCode = $result->getCode();
-			$var = array();
-			if ($errorCode == -2) {
-				$windid = WindidApi::api('config');
-				$config = $windid->getConfig('reg');
-				$var = array('{min}' => $config['namelength.min'], '{max}' => $config['namelength.max']);
-			}
-			if ($errorCode == -11) {
-				$windid = WindidApi::api('config');
-				$config = $windid->getConfig('reg');
-				$var = array('{min}' => $config['passwordlength.min'], '{max}' => $config['passwordlength.max']);
-		}
-			return new PwError('WINDID:code.' . $errorCode, $var);
+		if (WINDID_CONNECT == 'db' && ($result = $this->dm->beforeAdd()) !== true) {
+			return $this->_getWindidMsg($result);
 		}
 		if (true !== ($result = $this->check())) return $result;
 		return true;
@@ -880,7 +834,7 @@ class PwUserInfoDm extends PwBaseDm {
 	 * 
 	 * @return boolean|PwError 
 	 */
-	private function check() {
+	protected function check() {
 		if ($this->_data['groups']) {
 			$this->_data['groups'] = implode(',', $this->_data['groups']);
 		}
@@ -913,5 +867,19 @@ class PwUserInfoDm extends PwBaseDm {
 		}
 		*/
 		return true;
+	}
+
+	protected function _getWindidMsg($result) {
+		$errorCode = $result->getCode();
+		$var = array();
+		if ($errorCode == -2) {
+			$config = WindidApi::C('reg');
+			$var = array('{min}' => $config['security.username.min'], '{max}' => $config['security.username.max']);
+		}
+		if ($errorCode == -11) {
+			$config = WindidApi::C('reg');
+			$var = array('{min}' => $config['security.password.min'], '{max}' => $config['security.password.max']);
+		}
+		return new PwError('WINDID:code.' . $errorCode, $var);
 	}
 }

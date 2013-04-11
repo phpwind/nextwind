@@ -10,7 +10,7 @@ Wind::import('SRV:credit.bo.PwCreditBo');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PostController.php 23445 2013-01-09 11:58:21Z jieyin $
+ * @version $Id: PostController.php 24630 2013-02-01 08:41:07Z long.shi $
  * @package forum
  */
 
@@ -40,7 +40,6 @@ class PostController extends PwBaseController {
 		$pwforum = $this->post->forum;
 		if ($pwforum->foruminfo['style']) {
 			$this->setTheme('forum', $pwforum->foruminfo['style']);
-			//$this->addCompileDir($pwforum->foruminfo['style']);
 		}
 		
 		$this->setOutput($action, 'action');
@@ -61,8 +60,10 @@ class PostController extends PwBaseController {
 		$this->_initVar();
 		// seo设置 
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.post.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.post.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -112,8 +113,10 @@ class PostController extends PwBaseController {
 		$this->setTemplate('post_run');
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.post.reply.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.post.reply.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -145,8 +148,8 @@ class PostController extends PwBaseController {
 		if ($rpid) {
 			$post = Wekit::load('thread.PwThread')->getPost($rpid);
 			if ($post && $post['tid'] == $tid && $post['ischeck']) {
-				$post['content'] = $post['ifshield'] ? '此帖已被屏蔽' : Pw::stripWindCode(preg_replace('/\[quote(=.+?\,\d+)?\].*?\[\/quote\]/is', '', $post['content']));
-				$content = '[quote=' . $post['created_username'] . ',' . $rpid . ']' . Pw::substrs($post['content'], 120) . '[/quote] ' . $content;
+				$post['content'] = $post['ifshield'] ? '此帖已被屏蔽' : trim(Pw::stripWindCode(preg_replace('/\[quote(=.+?\,\d+)?\].*?\[\/quote\]/is', '', $post['content'])));
+				$post['content'] && $content = '[quote=' . $post['created_username'] . ',' . $rpid . ']' . Pw::substrs($post['content'], 120) . '[/quote] ' . $content;
 			} else {
 				$rpid = 0;
 			}
@@ -234,8 +237,10 @@ class PostController extends PwBaseController {
 		$this->_initVar();
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.post.modify.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.post.modify.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -263,7 +268,7 @@ class PostController extends PwBaseController {
 			$data && $this->addMessage($data, 'data');
 			$this->showError($result->getError());
 		}
-		$this->showMessage('success', 'bbs/read/run/?tid=' . $tid . '&fid=' . $pwPost->forum->fid . '#' . $pid, true);
+		$this->showMessage('success', 'bbs/read/jump/?tid=' . $tid . '&pid=' . $pid, true);
 	}
 
 	private function _getPost($action) {

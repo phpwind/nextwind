@@ -67,7 +67,7 @@ $(function(){
 			var input = $(this).find('input.input');
 			if(input) {
 				var val = input.val();
-				if( val && parseInt(val,10) !== 0 ) {
+				if( val != '') {
 					var text = $(this).find('td:first').html();
 					arr.push(text + '*' + val);
 				}

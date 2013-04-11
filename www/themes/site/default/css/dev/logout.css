@@ -3,7 +3,7 @@
 @explain: 登陆或退出跳转页面
 @copyright: Copyright 2011,phpwind.com
 @author: longwenid@gmail.com
-$Id: logout.css 21723 2012-12-12 09:30:08Z yanchixia $
+$Id: logout.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 */
 
@@ -13,7 +13,7 @@ $Id: logout.css 21723 2012-12-12 09:30:08Z yanchixia $
 ===================
 */
 .logout_page{
-	margin-top:30px;
+	margin-top:20px;
 }
 
 /*

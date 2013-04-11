@@ -36,11 +36,11 @@
 				<td>
 					<select id="J_time_select" name="looptype" class="mr10">
 					<!--# 
-					foreach ($loopType as $k=>$v):
+					foreach ($loopType as $k=>$v){
 					#-->
 						<option value="{$k}">{$v}</option>
 					<!--# 
-					endforeach; 
+					}
 					#-->
 					</select>
 
@@ -211,12 +211,12 @@
 				<th>执行文件</th>
 				<td>
 					<select class="select_4 mr5" name="filename">
-						<!--# foreach ($fileList as $file): 
+						<!--# foreach ($fileList as $file){
 							 $basename = basename($file,".php");
 						#-->
 							<option value="{$basename}">{$file}</option>
 						<!--# 
-							endforeach; 
+							}
 						#-->
 					</select>
 				</td>

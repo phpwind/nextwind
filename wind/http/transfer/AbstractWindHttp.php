@@ -3,7 +3,7 @@
  * @author Qian Su <aoxue.1988.su.qian@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindHttp.php 3829 2012-11-19 11:13:22Z yishuo $
+ * @version $Id: AbstractWindHttp.php 3912 2013-01-22 06:36:30Z yishuo $
  * @package http
  * @subpackage transfer
  */
@@ -82,6 +82,12 @@ abstract class AbstractWindHttp {
 	 * @var boolean
 	 */
 	protected $_body = true;
+	/**
+	 * Enter description here ...
+	 *
+	 * @var unknown_type
+	 */
+	protected $_waitResponse = true;
 	
 	/**
 	 * http连接句柄
@@ -280,5 +286,14 @@ abstract class AbstractWindHttp {
 	 */
 	public function getUrl() {
 		return $this->url;
+	}
+
+	/**
+	 * 是否等待响应
+	 * 
+	 * @param boolean $_waitResponse
+	 */
+	public function setWaitResponse($_waitResponse) {
+		$this->_waitResponse = $_waitResponse;
 	}
 }

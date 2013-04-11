@@ -1,14 +1,14 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.do.PwInstall');
-Wind::import('APPS:appcenter.service.dm.PwStyleDm');
-Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
+Wind::import('APPCENTER:service.srv.do.PwInstall');
+Wind::import('APPCENTER:service.dm.PwStyleDm');
+Wind::import('APPCENTER:service.srv.helper.PwSystemHelper');
 /**
  * 风格安装流程bp
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwStyleInstall.php 22909 2012-12-28 09:01:30Z long.shi $
+ * @version $Id: PwStyleInstall.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package service.style.srv
  */
 class PwStyleInstall extends PwInstall {
@@ -182,7 +182,7 @@ class PwStyleInstall extends PwInstall {
 	 * @return PwStyle
 	 */
 	private function _load() {
-		return Wekit::load('APPS:appcenter.service.PwStyle');
+		return Wekit::load('APPCENTER:service.PwStyle');
 	}
 }
 

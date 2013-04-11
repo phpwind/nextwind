@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidNotifyLog.php 21452 2012-12-07 10:18:33Z gao.wanggao $ 
+ * @version $Id: WindidNotifyLog.php 24773 2013-02-21 02:59:06Z jieyin $ 
  * @package 
  */
 class WindidNotifyLog {
@@ -13,12 +13,14 @@ class WindidNotifyLog {
 		$id = (int)$id;
 		return $this->_getDao()->get($id);
 	}
+
+	public function getUncomplete($limit, $offset = 0) {
+		return $this->_getDao()->getUncomplete($limit, $offset);
+	}
 	
 	public function getList($appid = 0, $nid = 0, $limit = 10, $start = 0, $complete = null) {
 		return $this->_getDao()->getList($appid, $nid, $limit, $start, $complete);
 	}
-	
-	
 	
 	public function countList($appid = 0, $nid = 0, $complete = null) {
 		return $this->_getDao()->countList($appid, $nid, $complete);
@@ -65,6 +67,6 @@ class WindidNotifyLog {
 	}
 
 	private function _getDao() {
-		return Windid::loadDao('notify.dao.WindidNotifyLogDao');
+		return Wekit::loadDao('WSRV:notify.dao.WindidNotifyLogDao');
 	}
-}        
+}

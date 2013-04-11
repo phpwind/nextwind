@@ -63,6 +63,7 @@ class ACloudSysCoreProxyApi {
 	public function buildRequestArguments($arguments, $request) {
 		$result = array ();
 		$charset = ACloudSysCoreCommon::getGlobal ( 'g_charset' );
+		
 		foreach ( $arguments as $arg ) {
 			$result [] = isset ( $request [$arg] ) ? ACloudSysCoreCommon::convert ( $request [$arg], $charset, 'UTF-8' ) : null;
 		}

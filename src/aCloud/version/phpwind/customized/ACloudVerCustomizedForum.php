@@ -16,22 +16,27 @@ class ACloudVerCustomizedForum extends ACloudVerCustomizedBase {
 	public function getAllForum() {
 		$forumDs = $this->_getPwForum ();
 		$forumResult = $forumDs->getForumList ( PwForum::FETCH_MAIN | PwForum::FETCH_STATISTICS );
-		if ($forumResult instanceof PwError)
-			return $this->buildResponse ( - 1, $forumResult->getError () );
+		if ($forumResult instanceof PwError) return $this->buildResponse ( - 1, $forumResult->getError () );
+		$forumDomain = $this->_getDomainDs()->getByType('forum');
+		$key = Pw::collectByKey($forumDomain, 'id');
+		$forumDomain = array_combine($key, $forumDomain);
+		
 		$cates = $forums = $subForums = $secondSubForums = array ();
 		$count = 0;
-		foreach ( $forumResult as $v ) {
+		foreach ( $forumResult as $k => $v ) {
+			$v['domain'] = '';
+			if(isset($forumDomain[$k])) $v['domain'] = $forumDomain[$k]['domain'];
 			if ($v ['type'] == 'category') {
-				$cates [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => '' );
+				$cates [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => '','domain' => $v['domain']);
 			} elseif ($v ['type'] == 'forum') {
 				Wind::import('SRV:forum.bo.PwForumBo');
 				$pwforum = new PwForumBo($v['fid'], true);
 				if ($pwforum->allowVisit(Wekit::getLoginUser()) !== true) continue;
-				$forums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $v ['todayposts'] );
+				$forums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $v ['todayposts'],'domain' => $v['domain']);
 			} elseif ($v ['type'] == 'sub') {
-				$subForums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $v ['todayposts'] );
+				$subForums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $v ['todayposts'],'domain' => $v['domain'] );
 			} elseif ($v ['type'] == 'sub2') {
-				$secondSubForums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $v ['todayposts'] );
+				$secondSubForums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $v ['todayposts'],'domain' => $v['domain'] );
 			}
 			$count ++;
 		}
@@ -52,11 +57,11 @@ class ACloudVerCustomizedForum extends ACloudVerCustomizedBase {
 	public function getForumByFid($fid) {
 		$fid = intval ( $fid );
 		if ($fid < 1)
-			return $this->buildResponse ( FORUM_INVALID_PARAMS );
+			return $this->buildResponse ( FORUM_INVALID_PARAMS,"参数错误" );
 		$result = $this->_getPwForum ()->getForum ( $fid, PwForum::FETCH_MAIN | PwForum::FETCH_STATISTICS );
-		if (result instanceof PwError)
-			return $this->buildResponse ( - 1, $result->getError () );
-		return $this->buildResponse ( 0, array ('forum' => array ('fid' => $result ['fid'], 'forumname' => $result ['name'], 'todaypost' => $result ['todayposts'] ) ) );
+		if (result instanceof PwError) return $this->buildResponse ( - 1, $result->getError () );
+		$domain = $this->_getDomainDs()->getByTypeAndId('forum', $fid);
+		return $this->buildResponse ( 0, array ('forum' => array ('fid' => $result ['fid'], 'forumname' => $result ['name'], 'todaypost' => $result ['todayposts'] ),'todaythreads' => $result['todaythreads'],'domain' => $domain['domain']) );
 	}
 	
 	/**
@@ -68,23 +73,26 @@ class ACloudVerCustomizedForum extends ACloudVerCustomizedBase {
 	public function getChildForumByFid($fid) {
 		$fid = intval ( $fid );
 		if ($fid < 1)
-			return $this->buildResponse ( FORUM_INVALID_PARAMS );
+			return $this->buildResponse ( FORUM_INVALID_PARAMS,"参数错误" );
 		$forumService = $this->_getFroumService ();
 		$map = $forumService->getForumMap ();
 		$forumList = $forumService->getForumsByLevel ( $fid, $map );
-		if ($forumList instanceof PwError)
-			return $this->buildResponse ( - 1, $forumList->getError () );
+		if ($forumList instanceof PwError) return $this->buildResponse ( - 1, $forumList->getError () );
 		$forums = $subForums = $secondSubForums = array ();
 		$count = 0;
+		$fids = Pw::collectByKey($forumList, 'fid');
+		$domains = $this->_getDomainDs()->fetchByTypeAndId('forum', $fids);
 		foreach ( $forumList as $v ) {
+			$v['domain'] = '';
+			if(isset($domains[$v['fid']])) $v['domain'] = $domains[$v['fid']]['domain'];
 			$statistics = $this->_getPwForum ()->getForum ( $v ['fid'], PwForum::FETCH_STATISTICS );
 			if ($v ['type'] == 'forum') {
 				//TODO 用户版块访问权限
-				$forums [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $statistics ['todayposts'] );
+				$forums [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $statistics ['todayposts'],'domain' => $v['domain']);
 			} elseif ($v ['type'] == 'sub') {
-				$subForums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $statistics ['todayposts'] );
+				$subForums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $statistics ['todayposts'],'domain' => $v['domain'] );
 			} elseif ($v ['type'] == 'sub2') {
-				$secondSubForums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $statistics ['todayposts'] );
+				$secondSubForums [$v ['parentid']] [$v ['fid']] = array ('fid' => $v ['fid'], 'forumname' => strip_tags ( $v ['name'] ), 'type' => $v ['type'], 'todaypost' => $statistics ['todayposts'],'domain' => $v['domain'] );
 			}
 			$count ++;
 		}
@@ -151,5 +159,12 @@ class ACloudVerCustomizedForum extends ACloudVerCustomizedBase {
 	
 	private function _getTopictypeDs() {
 		return Wekit::load('forum.PwTopicType');
+	}
+	
+	/**
+	 * @return PwDomain
+	 */
+	private function _getDomainDs(){
+		return Wekit::load('domain.PwDomain');
 	}
 }

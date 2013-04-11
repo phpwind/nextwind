@@ -11,7 +11,7 @@ Wind::import('APPS:profile.service.PwUserProfileExtends');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
+ * @version $Id: IndexController.php 24841 2013-02-22 08:53:35Z jinlong.panjl $
  * @package src.products.u.controller.profile
  */
 class IndexController extends BaseProfileController {
@@ -68,8 +68,10 @@ class IndexController extends BaseProfileController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:profile.index.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:profile.index.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/** 
@@ -86,8 +88,8 @@ class IndexController extends BaseProfileController {
 		$userDm->setProfile($this->getInput('profile', 'post'));
 		
 		list($hometown, $location) = $this->getInput(array('hometown', 'location'), 'post');
-		/* @var $srv PwAreaService */
-		$srv = Wekit::load('area.srv.PwAreaService');
+
+		$srv = WindidApi::api('area');
 		$areas = $srv->fetchAreaInfo(array($hometown, $location));
 		$userDm->setHometown($hometown, isset($areas[$hometown]) ? $areas[$hometown] : '');
 		$userDm->setLocation($location, isset($areas[$location]) ? $areas[$location] : '');
@@ -139,7 +141,7 @@ class IndexController extends BaseProfileController {
 		$userDm->setAliww($this->getInput('aliww', 'post'));
 		$userDm->setQq($this->getInput('qq', 'post'));
 		$userDm->setMsn($this->getInput('msn', 'post'));
-		list($alipay, $mobile, $email) = $this->getInput(array('alipay', 'mobile', 'email'), 'post');
+		list($alipay, $mobile) = $this->getInput(array('alipay', 'mobile'), 'post');
 		if ($alipay) {
 			$r = PwUserValidator::isAlipayValid($alipay, $this->loginUser->username);
 			if ($r instanceof PwError) $this->showError($r->getError());
@@ -152,7 +154,6 @@ class IndexController extends BaseProfileController {
 			$r = PwUserValidator::isEmailValid($email, $this->loginUser->username);
 			if ($r instanceof PwError) $this->showError($r->getError());
 		}
-		$userDm->setEmail($email);
 		$userDm->setMobile($mobile);
 		$userDm->setAlipay($alipay);
 		$result = $this->_editUser($userDm, PwUser::FETCH_MAIN + PwUser::FETCH_INFO);
@@ -161,6 +162,46 @@ class IndexController extends BaseProfileController {
 		} else {
 			$this->loginUser->info = array_merge($this->loginUser->info, $userDm->getData());
 			$this->showMessage('USER:user.edit.contact.success');
+		}
+	}
+	
+	/** 
+	 * 密码验证
+	 */
+	public function editemailAction() {
+		$userInfo = Wekit::load('user.PwUser')->getUserByUid($this->loginUser->uid, PwUser::FETCH_MAIN);
+		$this->setOutput($userInfo, 'userinfo');
+	}
+	
+	/** 
+	 * 密码验证
+	 */
+	public function doeditemailAction() {
+		list($passwd, $email) = $this->getInput(array('passwd', 'email'), 'post');
+		if (!$passwd || !$email) $this->showError('USER:empty.error');
+		Wind::import('SRV:user.srv.PwTryPwdBp');
+		$tryPwdBp = new PwTryPwdBp();
+		if (($result = $tryPwdBp->checkPassword($this->loginUser->uid, $passwd, $this->getRequest()->getClientIp())) instanceof PwError) {
+			list($error,) = $result->getError();
+			if ($error == 'USER:login.error.pwd') {
+				$this->showError($result->getError());
+			} else {
+				Wind::import('SRC:service.user.srv.PwUserService');
+				$srv = new PwUserService();
+				$srv->logout();
+				$this->forwardAction('u/login/run', array('backurl' => WindUrlHelper::createUrl('profile/index/run')));
+			}
+		}
+		$userDm = new PwUserInfoDm($this->loginUser->uid);
+		$r = PwUserValidator::isEmailValid($email, $this->loginUser->username);
+		if ($r instanceof PwError) $this->showError($r->getError());
+		$userDm->setEmail($email);
+		$result = $this->_editUser($userDm, PwUser::FETCH_MAIN);
+		if ($result instanceof PwError) {
+			$this->showError($result->getError());
+		} else {
+			$this->loginUser->info = array_merge($this->loginUser->info, $userDm->getData());
+			$this->showMessage('USER:user.edit.contact.success', 'profile/index/contact?_tab=contact');
 		}
 	}
 	
@@ -198,9 +239,7 @@ class IndexController extends BaseProfileController {
 		if (!$areaid) {
 			return $default;
 		}
-		/* @var $areaSrv PwAreaService*/
-		$areaSrv = Wekit::load('area.srv.PwAreaService');
-		$rout = $areaSrv->getAreaRout($areaid);
+		$rout = WindidApi::api('area')->getAreaRout($areaid);
 		return WindUtility::mergeArray($default, $rout);
 	}
 }

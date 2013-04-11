@@ -43,7 +43,11 @@
 							<div class="title"><a href="{@url:space/index/run?uid=$value['created_userid']}" class="author J_user_card_show" data-uid="{$value['created_userid']}" target="_blank">{$value['created_username']}</a>：
 							<a href="{@url:bbs/read/run?tid=$value['src_id']}" class="subject" target="_blank">{$value['title']}</a>
 							</div>
-							<div id="J_feed_content_{$value['id']}" class="descrip">{@$value['content']|html}</div>
+							<div id="J_feed_content_{$value['id']}" class="descrip">{@$value['content']|html}
+							<!--# if ($value['is_read_all']) { #-->
+							<a target="_blank" href="{@url:bbs/read/run?tid=$value['src_id']}" class="more">全文</a>
+							<!--# } #-->
+							</div>
 							<!--# } else { #-->
 							<div class="title"><a href="{@url:space/index/run?uid=$value['created_userid']}" class="author J_user_card_show" data-uid="{$value['created_userid']}" target="_blank">{$value['created_username']}</a>：
 								<span id="J_feed_content_{$value['id']}" class="descrip fn">{@$value['content']|html}</span>
@@ -94,9 +98,6 @@
 										<span class="time">{@Pw::time2str($value['quote']['created_time'], 'auto')}</span>
 									</div>
 								</div>
-							<!--# } #-->
-							<!--# if ($value['is_read_all']) { #-->
-							<div class="more"><a class="J_read_all_none" data-dir="down" data-id="J_feed_content_{$value['id']}" href="{@url:bbs/read/run?tid=$value['src_id']}">阅读全部&darr;</a></div>
 							<!--# } #-->
 						</dd>
 					</dl>

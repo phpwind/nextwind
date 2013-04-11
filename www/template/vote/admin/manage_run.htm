@@ -18,7 +18,7 @@
 					<!--# if ($cateIds) { #-->
 					<div class="user_group mb5">
 						<!--# foreach($cateList as $cate) {
-							if (!in_array($cate['fid'], $cateIds)) continue;
+							if (!Pw::inArray($cate['fid'], $cateIds)) continue;
 						#-->
 						<dl>
 								<!--# if ($forumList[$cate['fid']]) { #-->
@@ -27,7 +27,7 @@
 								<!--# foreach ($forumList[$cate['fid']] as $forum) {
 									$forum['name'] = strip_tags($forum['name']);
 								 #-->
-									<!--# if (in_array($forum['fid'], array_keys($pollOpenForum))) { #-->
+									<!--# if (Pw::inArray($forum['fid'], array_keys($pollOpenForum))) { #-->
 									<label><span>{$forum['name']}</span></label>
 									<!--# } #-->
 								<!--# } #-->
@@ -63,7 +63,7 @@ $typeName = isset($groupsTypeName[$key]) ? $groupsTypeName[$key] : '';
 							<dt><label><input class="J_check_all" data-direction="y" data-checklist="add_J_check_{$key}" name="" type="checkbox" value="">{$typeName}</label></dt>
 							<dd>
 <!--# foreach($value as $k=>$val){ #-->
-<!--# $isChecked = in_array($val['gid'], $permission['allow_add_vote']) ? 'checked': ''; #-->
+<!--# $isChecked = Pw::inArray($val['gid'], $permission['allow_add_vote']) ? 'checked': ''; #-->
 <label><input class="J_check" data-yid="add_J_check_{$key}" type="checkbox" name="view[allow_add_vote][]" value="{$val['gid']}" {$isChecked}><span>{$val['name']}</span></label>
 <!--# } #-->
 							</dd>
@@ -87,7 +87,7 @@ $typeName = isset($groupsTypeName[$key]) ? $groupsTypeName[$key] : '';
 							<dt><label><input class="J_check_all" data-direction="y" data-checklist="participate_J_check_{$key}" name="" type="checkbox" value="">{$typeName}</label></dt>
 							<dd>
 <!--# foreach($value as $k=>$val){ #-->
-<!--# $isChecked = in_array($val['gid'], $permission['allow_participate_vote']) ? 'checked': ''; #-->
+<!--# $isChecked = Pw::inArray($val['gid'], $permission['allow_participate_vote']) ? 'checked': ''; #-->
 <label><input class="J_check" data-yid="participate_J_check_{$key}" type="checkbox" name="view[allow_participate_vote][]" value="{$val['gid']}" {$isChecked}><span>{$val['name']}</span></label>
 <!--# } #-->
 							</dd>
@@ -113,7 +113,7 @@ $typeName = isset($groupsTypeName[$key]) ? $groupsTypeName[$key] : '';
 							<dt><label><input class="J_check_all" data-direction="y" data-checklist="view_J_check_{$key}" name="" type="checkbox" value="">{$typeName}</label></dt>
 							<dd>
 <!--# foreach($value as $k=>$val){ #-->
-<!--# $isChecked = in_array($val['gid'], $permission['allow_view_vote']) ? 'checked': ''; #-->
+<!--# $isChecked = Pw::inArray($val['gid'], $permission['allow_view_vote']) ? 'checked': ''; #-->
 <label><input class="J_check" data-yid="view_J_check_{$key}" type="checkbox" name="view[allow_view_vote][]" value="{$val['gid']}" {$isChecked}><span>{$val['name']}</span></label>
 <!--# } #-->
 							</dd>

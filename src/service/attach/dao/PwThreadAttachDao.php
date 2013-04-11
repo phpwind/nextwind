@@ -5,7 +5,7 @@
  *
  * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
  * @author Jianmin Chen <sky_hold@163.com>
- * @version $Id: PwThreadAttachDao.php 23356 2013-01-09 03:20:51Z jieyin $
+ * @version $Id: PwThreadAttachDao.php 24314 2013-01-28 08:09:53Z jieyin $
  * @package attach
  */
 
@@ -80,6 +80,12 @@ class PwThreadAttachDao extends PwBaseDao {
 
 	public function batchUpdateAttach($aids, $fields, $increaseFields = array()) {
 		return $this->_batchUpdate($aids, $fields, $increaseFields);
+	}
+	
+	public function batchUpdateFidByTid($tids, $fid) {
+		$sql = $this->_bindSql('UPDATE %s SET fid=? WHERE tid IN %s', $this->getTable(), $this->sqlImplode($tids));
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->update(array($fid));
 	}
 
 	public function deleteAttach($aid) {

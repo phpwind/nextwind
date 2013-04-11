@@ -6,16 +6,12 @@ Wind::import('SRV:forum.dm.PwThreadSortDm');
 Wind::import('SRV:forum.PwThread');
 
 /**
- * 帖子发布流程
- *
- * -> 1.check 检查帖子发布运行环境
- * -> 2.appendDo(*) 增加帖子发布时的行为动作,例:投票、附件等(可选)
- * -> 3.execute 发布
+ * 帖子管理操作-置顶
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadManageDoTopped.php 21170 2012-11-29 12:05:09Z xiaoxia.xuxx $
+ * @version $Id: PwThreadManageDoTopped.php 24747 2013-02-20 03:13:43Z jieyin $
  * @package forum
  */
 
@@ -34,6 +30,12 @@ class PwThreadManageDoTopped extends PwThreadManageDo {
 	public function check($permission) {
 		if (!isset($permission['topped']) || !$permission['topped']) {
 			return false;
+		}
+		if (array_diff(Pw::collectByKey($this->srv->data, 'topped'), array('0'))) {
+			$log = Wekit::load('log.PwLog')->fetchLogByTid(array_keys($this->srv->data), array('19', '20', '21'));
+			if (!$this->srv->user->comparePermission(Pw::collectByKey($log, 'created_userid'))) {
+				return new PwError('permission.level.topped', array('{grouptitle}' => $this->srv->user->getGroupInfo('name')));
+			}
 		}
 		if ($this->topped) {
 			if ($this->topped > $permission['topped_type']) {

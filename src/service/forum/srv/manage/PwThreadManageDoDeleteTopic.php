@@ -3,16 +3,12 @@
 Wind::import('SRV:forum.srv.manage.PwThreadManageDo');
 
 /**
- * 帖子发布流程
- *
- * -> 1.check 检查帖子发布运行环境
- * -> 2.appendDo(*) 增加帖子发布时的行为动作,例:投票、附件等(可选)
- * -> 3.execute 发布
+ * 帖子管理操作-删除帖子
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadManageDoDeleteTopic.php 21170 2012-11-29 12:05:09Z xiaoxia.xuxx $
+ * @version $Id: PwThreadManageDoDeleteTopic.php 24736 2013-02-19 09:24:40Z jieyin $
  * @package forum
  */
 
@@ -22,7 +18,13 @@ class PwThreadManageDoDeleteTopic extends PwThreadManageDo {
 	protected $isDeductCredit = true;
 
 	public function check($permission) {
-		return (isset($permission['delete']) && $permission['delete']) ? true : false;
+		if (!isset($permission['delete']) || !$permission['delete']) {
+			return false;
+		}
+		if (!$this->srv->user->comparePermission(Pw::collectByKey($this->srv->data, 'created_userid'))) {
+			return new PwError('permission.level.delete', array('{grouptitle}' => $this->srv->user->getGroupInfo('name')));
+		}
+		return true;
 	}
 
 	public function gleanData($value) {

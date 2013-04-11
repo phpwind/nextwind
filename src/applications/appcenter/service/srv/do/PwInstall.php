@@ -1,13 +1,13 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.iPwInstall');
-Wind::import('APPS:appcenter.service.dm.PwApplicationDm');
-Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
+Wind::import('APPCENTER:service.srv.iPwInstall');
+Wind::import('APPCENTER:service.dm.PwApplicationDm');
+Wind::import('APPCENTER:service.srv.helper.PwSystemHelper');
 /**
  *
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwInstall.php 23309 2013-01-08 07:03:21Z long.shi $
+ * @version $Id: PwInstall.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package wind
  */
 class PwInstall implements iPwInstall {
@@ -91,9 +91,8 @@ class PwInstall implements iPwInstall {
 					}
 					foreach ($inject as $key => $value) {
 						$_hookName = $value['hook_name'];
-						if (in_array($value['alias'], $injects[$_hookName])) {
-							return new PwError('HOOK:inject.exit', 
-								array('{{error}}' => $value['alias']));
+						if (isset($injects[$_hookName]) && in_array($value['alias'], $injects[$_hookName])) {
+							return new PwError('HOOK:inject.exit', array('{{error}}' => $value['alias']));
 						}
 					}
 				}
@@ -243,43 +242,43 @@ class PwInstall implements iPwInstall {
 			$db = Wind::getComponent('db');
 			$sql = PwApplicationHelper::sqlParser($strSql, $db->getConfig('charset', '', 'utf8'), 
 				$db->getTablePrefix(), $db->getConfig('engine', '', 'MYISAM'));
-			if (!empty($sql['CREATE'])) {
+			if ($sql['CREATE']) {
 				foreach ($sql['CREATE'] as $table => $statement) {
 					$db->execute($statement);
 				}
-				$install->setInstallLog('table', $sql['CREATE']);
-				foreach ($sql as $option => $statements) {
-					if (!in_array($option, array('INSERT', 'UPDATE', 'REPLACE', 'ALTER'))) continue;
-					foreach ($statements as $table => $statement) {
-						if ($option == 'ALTER') {
-							if (preg_match(
-								'/^ALTER\s+TABLE\s+`?(\w+)`?\s+(DROP|ADD)\s+(KEY|INDEX|UNIQUE)\s+([\w\(\),`]+)?/i', 
-								$statement, $matches)) {
-								list($key, $fields) = explode('(', $matches[4]);
-								$fields = trim($fields, '),');
-								list($matches[3]) = explode(' ', $matches[3]);
-								$matches[3] = trim(strtoupper($matches[3]));
-								PwSystemHelper::alterIndex(
-									array(
-										$matches[1], 
-										$key, 
-										$fields ? $fields : '', 
-										$matches[3], 
-										$matches[2]), $db);
-							} elseif (preg_match(
-								'/^ALTER\s+TABLE\s+`?(\w+)`?\s+(CHANGE|DROP|ADD)\s+`?(\w+)`?/i', 
-								$statement, $matches)) {
-								PwSystemHelper::alterField(
-									array($matches[1], $matches[3], $statement), $db);
-							} else {
-								$db->execute($statement);
-							}
+			}
+			$install->setInstallLog('table', $sql['CREATE']);
+			foreach ($sql as $option => $statements) {
+				if (!in_array($option, array('INSERT', 'UPDATE', 'REPLACE', 'ALTER'))) continue;
+				foreach ($statements as $table => $statement) {
+					if ($option == 'ALTER') {
+						if (preg_match(
+							'/^ALTER\s+TABLE\s+`?(\w+)`?\s+(DROP|ADD)\s+(KEY|INDEX|UNIQUE)\s+([\w\(\),`]+)?/i', 
+							$statement, $matches)) {
+							list($key, $fields) = explode('(', $matches[4]);
+							$fields = trim($fields, '),');
+							list($matches[3]) = explode(' ', $matches[3]);
+							$matches[3] = trim(strtoupper($matches[3]));
+							PwSystemHelper::alterIndex(
+								array(
+									$matches[1], 
+									$key, 
+									$fields ? $fields : '', 
+									$matches[3], 
+									$matches[2]), $db);
+						} elseif (preg_match(
+							'/^ALTER\s+TABLE\s+`?(\w+)`?\s+(CHANGE|DROP|ADD)\s+`?(\w+)`?/i', 
+							$statement, $matches)) {
+							PwSystemHelper::alterField(array($matches[1], $matches[3], $statement), 
+								$db);
 						} else {
-							if ($option == 'INSERT') {
-								$statement = 'REPLACE' . substr($statement, 6);
-							}
 							$db->execute($statement);
 						}
+					} else {
+						if ($option == 'INSERT') {
+							$statement = 'REPLACE' . substr($statement, 6);
+						}
+						$db->execute($statement);
 					}
 				}
 			}
@@ -422,7 +421,7 @@ class PwInstall implements iPwInstall {
 	 * @return PwApplication
 	 */
 	private function _load() {
-		return Wekit::load('APPS:appcenter.service.PwApplication');
+		return Wekit::load('APPCENTER:service.PwApplication');
 	}
 }
 

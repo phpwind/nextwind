@@ -42,8 +42,10 @@ class NoticeController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:mess.notice.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:mess.notice.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**

@@ -25,7 +25,7 @@ Wind::import('WIND:viewer.AbstractWindTemplateCompiler');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwTemplateCompilerHook.php 23235 2013-01-07 07:09:15Z jieyin $
+ * @version $Id: PwTemplateCompilerHook.php 24895 2013-02-25 10:36:16Z jieyin $
  * @package wekit
  * @subpackage engine.extension.viewer
  */
@@ -58,6 +58,11 @@ class PwTemplateCompilerHook extends AbstractWindTemplateCompiler {
 	 * @var string
 	 */
 	protected $name = 'hook';
+	
+	/**
+	 * 是否需要显示页面提示，默认为true
+	 */
+	protected $display;
 
 	/* (non-PHPdoc)
 	 * @see AbstractWindTemplateCompiler::compile()
@@ -65,7 +70,7 @@ class PwTemplateCompilerHook extends AbstractWindTemplateCompiler {
 	public function compile($key, $content) {
 		$content = array();
 		$content[] = '<?php';
-		if (Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->inDevMode2()) {
+		if (Wekit::load('APPCENTER:service.srv.PwDebugApplication')->inDevMode2()) {
 			$_content = $this->_devHook();
 			$content[] = 'echo \'' . $_content . '\';';
 		}
@@ -101,10 +106,13 @@ class PwTemplateCompilerHook extends AbstractWindTemplateCompiler {
 	 * @see AbstractWindTemplateCompiler::getProperties()
 	 */
 	public function getProperties() {
-		return array('class', 'method', 'args', 'name', 'alias');
+		return array('class', 'method', 'args', 'name', 'alias', 'display');
 	}
 	
 	private function _devHook() {
+		if ($this->display && $this->display == 'false') {
+			return '';
+		}
 		if ($this->class) {
 			$_hookkey = '\',' . $this->class . '->getHookKey(),\'';
 			$_content = $_hookkey . '.' . $this->name;

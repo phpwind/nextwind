@@ -1,11 +1,11 @@
 <?php
 Wind::import('LIB:base.PwBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ImportController.php 23397 2013-01-09 08:12:23Z gao.wanggao $ 
+ * @version $Id: ImportController.php 24585 2013-02-01 04:02:37Z jieyin $ 
  * @package 
  */
 class ImportController extends PwBaseController {
@@ -49,7 +49,7 @@ class ImportController extends PwBaseController {
 		$ds = $this->_getPortalDs();
 		$portal = $ds->getPortal($portalid);
 		if (!$portal) $this->showError("operate.fail");
-		$styleDs = Wekit::load('APPS:appcenter.service.PwStyle');
+		$styleDs = Wekit::load('APPCENTER:service.PwStyle');
 		$style = $styleDs->getStyle($styleid);
 		if (!$style || $style['style_type'] !='portal') $this->showError("operate.fail");
 		$pageInfo = $this->_getPageDs()->getPageByTypeAndUnique(PwDesignPage::PORTAL, $portalid);
@@ -171,7 +171,7 @@ class ImportController extends PwBaseController {
 	
 	private function _uploadFile() {
  		Wind::import('SRV:upload.action.PwDesignImportUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwDesignImportUpload();
 		$upload = new PwUpload($bhv);
 		if (($result = $upload->check()) === true) $result = $upload->execute();

@@ -30,7 +30,7 @@ class PwRegisterDoInviteFriend extends PwRegisterDoBase {
 	 * @param PwUserInfoDm $userDm
 	 * @see PwRegisterDoBase::beforeRegister()
 	 */
-	public function beforeRegister($userDm) {
+	public function beforeRegister(PwUserInfoDm $userDm) {
 		if ($this->bp->config['type'] == 2 || !$this->code) return false;
 		/* @var $inviteService PwInviteFriendService */
 		$inviteService = Wekit::load('invite.srv.PwInviteFriendService');
@@ -44,7 +44,7 @@ class PwRegisterDoInviteFriend extends PwRegisterDoBase {
 	/* (non-PHPdoc)
 	 * @see PwRegisterDoBase::afterRegister()
 	 */
-	public function afterRegister($userDm) {
+	public function afterRegister(PwUserInfoDm $userDm) {
 		if ($this->bp->config['type'] == 2 || !$userDm->uid) return false;
 		/* @var $inviteService PwInviteFriendService */
 		$inviteService = Wekit::load('invite.srv.PwInviteFriendService');

@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImportZip.php 23397 2013-01-09 08:12:23Z gao.wanggao $ 
+ * @version $Id: PwDesignImportZip.php 24904 2013-02-26 04:01:46Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImportZip {
@@ -44,7 +44,7 @@ class PwDesignImportZip {
 		$_isTpl = false;
 		$extension = array('htm','js','gif','jpg','jpeg','txt','png','css','xml');
 		$zip = new PwZip();
-		$xml = new WindXmlParser();
+		$xml = new WindXmlParser('1.0', Wekit::app()->charset);
 		if (!$fileData = $zip->extract($filename)) return new PwError("DESIGN:upload.file.error");
 		foreach ($fileData AS &$file) {
 			$file['filename'] = str_replace('\\', '/', $file['filename']);
@@ -73,7 +73,7 @@ class PwDesignImportZip {
 				unset($file);
 			}
 		}
-		if (!$config) return new PwError("DESIGN:file.check.fail");
+		//if (!$config) return new PwError("DESIGN:file.check.fail");
 		
 		foreach ($fileData AS &$_file) {
 			$ext = strrchr($_file['filename'], ".");

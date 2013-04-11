@@ -8,7 +8,7 @@ require_once Wind::getRealPath('LIB:utility.phpseclib.Net.SFTP');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSftpSave.php 22002 2012-12-18 05:58:56Z long.shi $
+ * @version $Id: PwSftpSave.php 24739 2013-02-19 11:20:21Z long.shi $
  * @package wind
  */
 class PwSftpSave extends AbstractWindFtp {
@@ -109,7 +109,10 @@ class PwSftpSave extends AbstractWindFtp {
 	 * 重设当前目录为初始化目录信息
 	 */
 	protected function initRootPath() {
-		$this->changeDir($this->dir ? $this->dir : '.');
+		$r = $this->changeDir($this->dir ? $this->dir : '.');
+		if (!$r) {
+			throw new WindFtpException($this->dir, WindFtpException::COMMAND_FAILED_CWD);
+		}
 		$this->rootPath = $this->pwd();
 	}
 }

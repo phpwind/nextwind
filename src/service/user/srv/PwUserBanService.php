@@ -11,7 +11,7 @@ Wind::import('SRV:user.PwUserBan');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserBanService.php 20650 2012-11-01 09:10:44Z xiaoxia.xuxx $
+ * @version $Id: PwUserBanService.php 23904 2013-01-17 05:27:48Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwUserBanService {
@@ -27,9 +27,6 @@ class PwUserBanService {
 		foreach ($dmList as $_dm) {
 			if (!$_dm instanceof PwUserBanInfoDm) continue;
 			if (true !== ($r = $_dm->beforeAdd())) return $r;
-			if ($_dm->getBanAllAccount()) {
-				//TODO【用户禁止】禁止关联帐号
-			}
 			$r = $this->_getDs()->addBanInfo($_dm);
 			if ($r instanceof PwError) return $r;
 			
@@ -124,7 +121,6 @@ class PwUserBanService {
 			$banDm->setEndTime($endTime)
 				->setTypeid($type)
 				->setReason($config['autoForbidden.reason'])
-				->setBanAllAccount($config['autoForbidden.ban_others'])
 				->setCreatedUid(0)
 				->setUid($uid);
 			$dmList[] = $banDm;

@@ -1,6 +1,6 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
  * <note>
  * 1.type为'bbs''user''space''other''api'之一
  * 2.refresh 是否需要数据更新
@@ -14,7 +14,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: config.php 19293 2012-10-12 08:29:10Z xiaoxia.xuxx $
+ * @version $Id: config.php 23959 2013-01-17 08:36:09Z gao.wanggao $
  * @package src.service.design.srv.model.user
  */
 return array(
@@ -69,7 +69,7 @@ return array(
 	//以下为查询及显示条件
 	'special' => array(
 		'limit'	  =>array('text', '显示条数', '默认10条', '', 'short'),
-		'timefmt' => array('select', '时间格式', '', array('m-d' => '04-26', 'Y-m-d' => '2012-04-2', 'Y-m-d H:i:s' => '2012-04-26 11:30', 'H:i:s' => '11:30:59', 'auto' => '几天前')), 
+		'timefmt' => array('select', '时间格式', '', array('m-d' => '04-26', 'Y-m-d' => '2012-04-2', 'Y-m-d H:i:s' => '2012-04-26 11:30', 'H:i:s' => '11:30:59','n月j日'=>'4月26日', 'y年n月j日'=>'12年4月26日', 'auto' => '几天前')), 
 		'isblank' => array('radio', '链接打开方式', '', array('0' => '当前窗口', '1' => '新窗口'), ''),
 	), 
 	

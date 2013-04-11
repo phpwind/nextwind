@@ -39,7 +39,7 @@
 						<!--# foreach($cateList as $cate) { #-->
 								<!--# if ($forumList[$cate['fid']]) { #-->
 								<!--# foreach ($forumList[$cate['fid']] as $forum) { #-->
-									<!--# if (in_array($forum['fid'], array_keys($pollOpenForum))) {
+									<!--# if (Pw::inArray($forum['fid'], array_keys($pollOpenForum))) {
 									$forum['name'] = strip_tags($forum['name']);
 									 #-->
 									<p><a href="#" data-fid="{$forum['fid']}" id="J_forum_{$forum['fid']}">{$forum['name']}</a></p>
@@ -54,7 +54,7 @@
 				</div>
 			</div>
 	<!--# $forumids = $pollOpenForum ? implode(',', $pollOpenForum) : ''; #-->
-			<div class="pop_bottom"><input type="hidden" id="J_fids" name="fid" value="{$forumids}"/><button class="btn btn_submit J_ajax_submit_btn fr" type="submit">提交</button></div>
+			<div class="pop_bottom"><input type="hidden" id="J_fids" name="fid" value="{$forumids}"/><button class="btn fr" type="button" id="J_dialog_close">取消</button><button class="btn btn_submit J_ajax_submit_btn fr mr10" type="submit">提交</button></div>
 		</form>
 <template source='TPL:admin.common.footer' />
 <script>

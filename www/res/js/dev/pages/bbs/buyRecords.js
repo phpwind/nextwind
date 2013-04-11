@@ -49,6 +49,12 @@
 			</div>\
 		</div>';
 
+	//用于post提交 下载附件
+	var form = document.createElement('form'),
+		$form = $(form);
+	form.method = "post";
+	$form.append('<input type="hidden" name="csrf_token" value="'+ GV.TOKEN +'"/><input type="hidden" name="submit" value="1"/><input id="J_a_sub" type="submit" value="11">').hide();
+
 	//查看购买记录
 	$('a.J_buy_record').on('click', function(e){
 		e.preventDefault();
@@ -205,10 +211,19 @@
 					e.preventDefault();
 
 					Wind.Util.ajaxMaskShow();
-					$.post($this.attr('href')+'&submit=1', function(data){
+					$.post($this.attr('href'), {
+						'submit': '1'
+					}, function(data){
 						Wind.Util.ajaxMaskRemove();
 						if(data.state == 'success') {
-							location.href = data.referer;
+							var floorid = $this.parents('.J_read_floor').attr('id');
+							if(floorid !== 'read_0') {
+								//回复刷新，锚点不跳转
+								location.reload();
+							}else{
+								//主楼跳转
+								location.href = data.referer;
+							}
 						}else if(data.state == 'fail'){
 							Wind.Util.resultTip({
 								error : true,
@@ -264,13 +279,19 @@
 	$('a.J_attach_post_buy').on('click', function(e){
 		e.preventDefault();
 		var $this = $(this),
+			follow = $this,
 			countrel = $($this.data('countrel'));	//统计
 
 		if($this.data('bought')) {
 			//已购买
-			location.href = this.href+'&submit=1';
+			aFormSub($this.attr('href'));
 			countrel.text(parseInt(countrel[0].innerHTML)+1);
 			return false;
+		}
+
+		var insertid = $this.data('insertid');
+		if(insertid) {
+			follow = $('#J_attach_post_info_' +insertid).siblings('a.J_post_attachs');
 		}
 
 		$('#J_records_pop').remove();
@@ -294,13 +315,13 @@
 					$('#J_buy_pop').hide();
 				});
 
-				buyPopPos($this, buy_pop);
-				//fillData(buy_pop, my_credit, price, util, url);
-
+				buyPopPos(follow, buy_pop);
 				
 				buy_sub.on('click', function(e){
 					e.preventDefault();
-					location.href = $this.attr('href')+'&submit=1';
+
+					aFormSub($this.attr('href'));
+
 					buy_pop.remove();
 					
 					countrel.text(parseInt(countrel[0].innerHTML)+1);
@@ -364,8 +385,15 @@
 			top : top,
 			left : left,
 			position : 'absolute',
-			zIndex : 1
+			zIndex : 10
 		}).show();
+	}
+
+	//通过form post提交，用到了关键字 submit，只能按钮click
+	function aFormSub(href){
+		$form.attr('action', href).appendTo('body');
+		$('#J_a_sub').click();
+		$(form).remove();
 	}
 
 })();

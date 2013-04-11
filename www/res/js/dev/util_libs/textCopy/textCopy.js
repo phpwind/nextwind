@@ -166,37 +166,6 @@
 			
 		}
 		
-		
-		//获取复制的文本
-		/*function getTextArr() {
-			var text_arr = [],
-					container = $('#'+element.data('id')),
-					tagname = container[0].tagName.toLowerCase();
-			
-			if( tagname === 'li' ) {
-				//复制列表内容，循环存入数组
-				$.each( container.find('li'), function() {
-					text_arr.push($(this).text());
-				});
-							
-			}else{
-
-				if(tagname == 'input' || tagname == 'textarea') {
-					//来自表单
-					text_arr.push(container.val());
-				}else{
-					//来自其他
-					text_arr.push( $('#'+element.data('id')).text() );
-				}
-					
-			}
-			
-			//返回文本
-			return text_arr.join('\r\n');
-
-		}*/
-		
-		
     };
 
 		if(!$.isFunction(Wind.dialog)) {

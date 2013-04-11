@@ -5,7 +5,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidSchool.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidSchool.php 24834 2013-02-22 06:43:43Z jieyin $
  * @package service.school
  */
 class WindidSchool {
@@ -70,7 +70,7 @@ class WindidSchool {
 	public function batchAddSchool($schoolDms) {
 		$data = array();
 		foreach ($schoolDms as $_dm) {
-			if (!$_dm instanceof WindidSchoolDm) return new WindidError(-4);
+			if (!$_dm instanceof WindidSchoolDm) continue;
 			if (true !== ($r = $_dm->beforeAdd())) return $r;
 			$data[] = $_dm->getData();
 		}
@@ -136,6 +136,6 @@ class WindidSchool {
 	 * @return WindidSchoolDao
 	 */
 	private function _getDao() {
-		return Windid::loadDao('school.dao.WindidSchoolDao');
+		return Wekit::loadDao('WSRV:school.dao.WindidSchoolDao');
 	}
 }

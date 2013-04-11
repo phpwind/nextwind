@@ -1,15 +1,16 @@
 <?php
-Wind::import('WINDID:library.base.WindidBaseDm');
+
 /**
  * 学校DM
  *
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidSchoolDm.php 23087 2013-01-06 03:37:34Z jinlong.panjl $
+ * @version $Id: WindidSchoolDm.php 24834 2013-02-22 06:43:43Z jieyin $
  * @package service.school.dm
  */
-class WindidSchoolDm extends WindidBaseDm {
+class WindidSchoolDm extends PwBaseDm {
+
 	private $schoolid = 0;
 	
 	/**
@@ -77,17 +78,17 @@ class WindidSchoolDm extends WindidBaseDm {
 	}
 	
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::_beforeAdd()
+	 * @see PwBaseDm::_beforeAdd()
 	 */
 	protected function _beforeAdd() {
-		if (!isset($this->_data['name']) || !$this->_data['name']) return new WindidError(WindidError::FAIL);
-		if (!isset($this->_data['areaid']) || $this->_data['areaid'] < 1) return new WindidError(WindidError::FAIL);
-		if (!isset($this->_data['typeid'])) return new WindidError(WindidError::FAIL);
+		if (!isset($this->_data['name']) || !$this->_data['name']) return new WindidError(WindidError::SCHOOL_NAME_EMPTY);
+		if (!isset($this->_data['areaid']) || $this->_data['areaid'] < 1) return new WindidError(WindidError::SCHOOL_AREAID_EMPTY);
+		if (!isset($this->_data['typeid'])) return new WindidError(WindidError::SCHOOL_TYPEID_EMPTY);
 		return true;
 	}
 
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::_beforeUpdate()
+	 * @see PwBaseDm::_beforeUpdate()
 	 */
 	protected function _beforeUpdate() {
 		if ($this->schoolid < 1) return new WindidError(WindidError::FAIL);

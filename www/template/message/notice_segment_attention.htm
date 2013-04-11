@@ -44,7 +44,7 @@ $tmpSeparator='';
 				<a href="{@url:message/message/pop?uid=$value['uid']}" class="fr message J_send_msg_pop" data-name="{$value['username']}"><em></em>写私信</a>
 				<span class="core_unfollow">已关注</span>
 				<!--# } else { #-->
-				<a href="{@url:my/follow/add?uid=$value['uid']}" class="core_follow J_msg_follow">加关注</a>
+				<a href="{@url:my/follow/add}" class="core_follow J_msg_follow" data-uid="{$value['uid']}">加关注</a>
 				<!--# } #-->
 			</dd>
 		</dl>
@@ -97,7 +97,7 @@ $tmpSeparator='';
 				<a href="{@url:message/message/pop?uid=$value['uid']}" class="fr message J_send_msg_pop" data-name="{$value['username']}"><em></em>写私信</a>
 				<span class="core_unfollow">已关注</span>
 				<!--# } else { #-->
-				<a href="{@url:my/follow/add?uid=$value['uid']}" class="core_follow J_msg_follow">加关注</a>
+				<a href="{@url:my/follow/add}" class="core_follow J_msg_follow" data-uid="{$value['uid']}">加关注</a>
 				<!--# } #-->
 			</dd>
 		</dl>

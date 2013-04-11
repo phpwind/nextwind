@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PortalController.php 23397 2013-01-09 08:12:23Z gao.wanggao $ 
+ * @version $Id: PortalController.php 24103 2013-01-21 10:15:47Z gao.wanggao $ 
  * @package 
  */
 class PortalController extends PwBaseController {
@@ -38,19 +38,12 @@ class PortalController extends PwBaseController {
 		if (!$pagename)  $this->showError("DESIGN:pagename.is.empty");
 		if (!$this->_validator($pagename))  $this->showError("DESIGN:pagename.validator.fail");
 		if ($domain && !$this->_validator($domain))  $this->showError("DESIGN:domain.validator.fail");
-		if ($coverfrom == 2) {
-			$upload = $this->_upload();
-			$cover = Pw::getPath($upload['path'].$upload['filename']);
-		} else {
-			$cover = $this->getInput('webcover', 'post');
-			$cover =  (preg_match("/^http:\/\/(.*)$/", $cover)) ? $cover : ''; 
-		}
+		
 		if ($ds->countPortalByPagename($pagename)) $this->showError("DESIGN:pagename.already.exists");
 		Wind::import('SRV:design.dm.PwDesignPortalDm');
  		$dm = new PwDesignPortalDm();
  		$dm->setPageName($pagename)
  			->setTitle($title)
- 			->setCover($cover) 
  			->setDomain($domain) 
  			->setIsopen((int)$this->getInput('isopen', 'post'))
  			->setHeader((int)$this->getInput('isheader', 'post'))
@@ -65,6 +58,19 @@ class PortalController extends PwBaseController {
 		$resource = $ds->addPortal($dm);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
 		$id = (int)$resource;
+		if ($coverfrom == 2) {
+			$upload = $this->_upload($id);
+			$cover = Pw::getPath($upload['path'].$upload['filename']);
+		} else {
+			$cover = $this->getInput('webcover', 'post');
+			$cover =  (preg_match("/^http:\/\/(.*)$/", $cover)) ? $cover : ''; 
+		}
+		if ($cover) {
+			$dm = new PwDesignPortalDm($id);
+			$dm->setCover($cover);
+			$ds->updatePortal($dm);
+		}
+		
 		//二级域名start
 		list($domain, $root) = $this->getInput(array('domain', 'root'), 'post');
 		if ($root) {
@@ -167,7 +173,7 @@ class PortalController extends PwBaseController {
 		
 		if ($coverfrom == 2) {
 			$cover = '';
-			$upload = $this->_upload();
+			$upload = $this->_upload($id);
 			if ($upload['filename']) {
 				$cover = Pw::getPath($upload['path'].$upload['filename']);
 			}
@@ -216,10 +222,10 @@ class PortalController extends PwBaseController {
 		return false;
 	}
 	
-	private function _upload() {
+	private function _upload($portalId = 0) {
  		Wind::import('SRV:upload.action.PwPortalUpload');
-		Wind::import('SRV:upload.PwUpload');
-		$bhv = new PwPortalUpload();
+		Wind::import('LIB:upload.PwUpload');
+		$bhv = new PwPortalUpload($portalId);
 		$upload = new PwUpload($bhv);
 		if (($result = $upload->check()) === true) $result = $upload->execute();
 		if ($result !== true) $this->showError($result->getError());

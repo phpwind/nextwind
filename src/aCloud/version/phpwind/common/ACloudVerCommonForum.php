@@ -67,10 +67,18 @@ class ACloudVerCommonForum extends ACloudVerCommonBase {
 			return array ();
 		$sql = sprintf ( "SELECT * FROM %s WHERE isshow = 1 AND fid >= %s AND fid <= %s", ACloudSysCoreS::sqlMetadata ( '{{bbs_forum}}' ), ACloudSysCoreS::sqlEscape ( $startId ), ACloudSysCoreS::sqlEscape ( $endId ) );
 		$query = Wind::getComponent ( 'db' )->query ( $sql );
-		$result = $query->fetchAll ( null, PDO::FETCH_ASSOC );
-		if (! ACloudSysCoreS::isArray ( $result ))
+		$result = $query->fetchAll ( 'fid', PDO::FETCH_ASSOC );
+		$fids = array_keys($result);
+		$forumDomain = $this->_getDomainDs()->fetchByTypeAndId('forum', $fids);
+		$data = array();
+		foreach($result as $k => $v){
+			$v['domain'] = '';
+			if(isset($forumDomain[$k])) $v['domain'] = $forumDomain[$k]['domain'];
+			$data[] = $v;
+		}
+		if (! ACloudSysCoreS::isArray ( $data ))
 			return array ();
-		return $this->buildForumData ( $result );
+		return $this->buildForumData ( $data );
 	}
 	
 	private function buildForumData($data) {
@@ -88,5 +96,12 @@ class ACloudVerCommonForum extends ACloudVerCommonBase {
 	
 	private function getPwForumService() {
 		return wekit::load ( 'SRV:forum.srv.PwForumService' );
+	}
+	
+	/**
+	 * @return PwDomain
+	 */
+	private function _getDomainDs(){
+		return Wekit::load('domain.PwDomain');
 	}
 }

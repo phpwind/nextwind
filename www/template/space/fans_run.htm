@@ -42,7 +42,7 @@
 								<!--#} elseif ($loginUser->isExists() && $loginUser->uid != $value['uid']) {
 									$isfan = isset($fans[$value['uid']]) ? 'true' : 'false';
 								#-->
-									<a href="{@url:my/follow/add?uid=$value['uid']}" class="core_follow J_space_fans J_qlogin_trigger" data-followed="{$isfan}" data-uid="{$value['uid']}">加关注</a>
+									<a href="{@url:my/follow/add}" class="core_follow J_space_fans J_qlogin_trigger" data-followed="{$isfan}" data-uid="{$value['uid']}">加关注</a>
 								<!--# } #-->
 								
 							</div>
@@ -56,7 +56,7 @@
 					<div class="not_content J_check_wrap">啊哦，你还没有粉丝，试试关注几个争取点人气吧！</div>
 					<!--# } else { #-->
 					<!--看别人-->
-					<div class="not_content">啊哦，Ta还没有粉丝，我来第一个<a href="{@url:my/follow/add?uid=$space->spaceUid}" id="J_nofans_follow">关注Ta</a>！</div>
+					<div class="not_content">啊哦，Ta还没有粉丝，我来第一个<a href="{@url:my/follow/add}" id="J_nofans_follow" data-uid="{$space->spaceUid}">关注Ta</a>！</div>
 					<!--# } #-->
 				<!--# } #-->
 				</div>
@@ -91,7 +91,9 @@ Wind.use('jquery', 'global', 'dialog', 'ajaxForm', 'tabs', 'draggable', 'uploadP
 		lock = true;
 
 		Wind.Util.ajaxMaskShow();
-		$.post(this.href, function(data){
+		$.post(this.href, {
+			uid: $this.data('uid')
+		}, function(data){
 			Wind.Util.ajaxMaskRemove();
 			if(data.state == 'success') {
 				var followed = $this.data('followed');
@@ -129,7 +131,9 @@ Wind.use('jquery', 'global', 'dialog', 'ajaxForm', 'tabs', 'draggable', 'uploadP
 		
 		var $this = $(this);
 		Wind.Util.ajaxMaskShow();
-		$.post(this.href, function(data){
+		$.post(this.href, {
+			uid: $this.data('uid')
+		}, function(data){
 			Wind.Util.ajaxMaskRemove();
 			if(data.state == 'success') {
 				Wind.Util.resultTip({

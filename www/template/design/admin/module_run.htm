@@ -33,15 +33,16 @@
 		<span class="mr20">数据分类：
 			<select class="select_2" name="model">
 				<option  value="">不限制</option>
-				<!--# foreach ($models as $k=>$model): #-->
+				<!--# foreach ($models as $k=>$model){ #-->
 				<option value="{$k}" {@Pw::isSelected($k == $args['model'])}>{$model['name']}</option>
-				<!--# endforeach; #-->
+				<!--# } #-->
 			</select>
 		</span>
-		<button class="btn">搜索</button>
+		<button class="btn" type="submit">搜索</button>
 		</div>
 	</div>
 	</form>
+		<!--# if ($list) { #-->
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -59,8 +60,7 @@
 					<td>操作</td>
 				</tr>
 			</thead>
-		<!--# if ($list) { #-->
-		<!--# foreach ($list as $v): #-->
+		<!--# foreach ($list as $v){ #-->
 			<tr>
 				<td>{$v['module_id']}</td>
 				<td>{$v['module_name']}</td>
@@ -70,29 +70,30 @@
 				<td>{$models[$v['model_flag']]['name']}</td>
 
 				<td>
-				<!--# if ($v['isdata']): #-->
+				<!--# if ($v['isdata']){ #-->
 					<a href="{@url:design/data/run?moduleid=$v['module_id']}" class="mr10">[管理]</a>
-				<!--# else: #-->
+				<!--# }else{ #-->
 					<a href="{@url:design/property/edit?moduleid=$v['module_id']}" class="mr10">[管理]</a>
-				<!--# endif; #-->
+				<!--# } #-->
 					<!--a href="{@url:design/data/run?moduleid=$v['module_id']}" class="mr10">[数据]</a-->
 					<a href="{@url:design/permissions/module?moduleid=$v['module_id']}" class="mr10">[权限管理]</a>
 					<!-- <a href="{@url:design/module/script?moduleid=$v['module_id']}"  class="mr10">[调用代码]</a> -->
 					<!--a href="{@url:design/module/delete?moduleid=$v['module_id']}" class="mr10">[删除]</a-->
 				</td>
 			</tr>
-		<!--# endforeach; #-->
-		<!--# } else { #-->
-			<tr><td colspan="7" class="tac">啊哦，没有符合条件的内容！</td></tr>
 		<!--# } #-->
 		</table>
+		<div class="p10"><page tpl='TPL:common.page'  total="$totalpage" page="$page" per="$perpage" count="$count" url="design/module/run" args="$args"/></div>
 	</div>
-	<div class="mb20"><page tpl='TPL:common.page'  total="$totalpage" page="$page" per="$perpage" count="$count" url="design/module/run" args="$args"/></div>
 	<form class="J_ajaxForm"  action="{@url:design/module/clear}" method="post">
 	<div class="btn_wrap">
-		<div class="btn_wrap_pd"><button class="btn J_ajax_submit_btn" type="submit">清空未使用模块</button></div>
+		<div class="btn_wrap_pd"><button class="btn J_ajax_submit_btn" type="submit">清空前台已删除模块</button></div>
 	</div>
 	</form>
+		<!--# } else { #-->
+		<div class="not_content_mini"><i></i>啊哦，没有符合条件的内容！</div>
+		<!--# } #-->
+
 </div>
 <template source='TPL:admin.common.footer' />
 </body>

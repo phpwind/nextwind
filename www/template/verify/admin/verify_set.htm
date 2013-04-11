@@ -15,55 +15,95 @@
 	</div>
 	<div class="h_a">验证策略</div>
 	<form method="post" class="J_ajaxForm" action="{@url:/verify/verify/doset}" data-role="list">
-	<div class="table_purview mb10">
+	<div class="table_full mb10">
 		<table width="100%" class="J_check_wrap">
-			<col width="160">
-			<col width="120">
-			<tr class="hd">
-				<th>&nbsp;</th>
-				<td><label><input name="" class="J_check_all" data-checklist="J_check_verifyset" data-direction="y" type="checkbox" value="">启用验证码</label></td>
-				<td>&nbsp;</td>
-			</tr>
+			<colgroup>
+			<col class="th">
+			<col width="400">
+			<col>
+			</colgroup>
 			<tr>
 				<th>注册</th>
-				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="register" {@Pw::ifcheck(in_array('register',$config['showverify']))}></td>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[register]" value="1" {@Pw::ifcheck(Pw::inArray('register',$config['showverify']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[register]" value="0" {@Pw::ifcheck(!Pw::inArray('register',$config['showverify']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<th>登录</th>
-				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="userlogin" {@Pw::ifcheck(in_array('userlogin',$config['showverify']))}></td>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[userlogin]" value="1" {@Pw::ifcheck(Pw::inArray('userlogin',$config['showverify']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[userlogin]" value="0" {@Pw::ifcheck(!Pw::inArray('userlogin',$config['showverify']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<th>找回密码</th>
-				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="resetpwd" {@Pw::ifcheck(in_array('resetpwd',$config['showverify']))}></td>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[resetpwd]" value="1" {@Pw::ifcheck(Pw::inArray('resetpwd',$config['showverify']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[resetpwd]" value="0" {@Pw::ifcheck(!Pw::inArray('resetpwd',$config['showverify']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<th>发消息</th>
-				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="sendmsg" {@Pw::ifcheck(in_array('sendmsg',$config['showverify']))}></td>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[sendmsg]" value="1" {@Pw::ifcheck(Pw::inArray('sendmsg',$config['showverify']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[sendmsg]" value="0" {@Pw::ifcheck(!Pw::inArray('sendmsg',$config['showverify']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<th>发主题帖</th>
-				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="postthread" {@Pw::ifcheck(in_array('postthread',$config['showverify']))}></td>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[postthread]" value="1" {@Pw::ifcheck(Pw::inArray('postthread',$config['showverify']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[postthread]" value="0" {@Pw::ifcheck(!Pw::inArray('postthread',$config['showverify']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
 				<td>&nbsp;</td>
 			</tr>
-			<!-- <tr>
-				<th>发布日志</th>
-				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="postnote" {@Pw::ifcheck(in_array('postnote',$config['showverify']))}></td>
-				<td>&nbsp;</td>
-			<tr> -->
+			<tr>
 				<th>上传照片</th>
-				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="uploadpic" {@Pw::ifcheck(in_array('uploadpic',$config['showverify']))}></td>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[uploadpic]" value="1" {@Pw::ifcheck(Pw::inArray('uploadpic',$config['showverify']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[uploadpic]" value="0" {@Pw::ifcheck(!Pw::inArray('uploadpic',$config['showverify']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<th>后台登录</th>
-				<td><input class="J_check" data-yid="J_check_verifyset" name="showverify[]" type="checkbox" value="adminlogin" {@Pw::ifcheck(in_array('adminlogin',$config['showverify']))}></td>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[adminlogin]" value="1" {@Pw::ifcheck(Pw::inArray('adminlogin',$config['showverify']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[adminlogin]" value="0" {@Pw::ifcheck(!Pw::inArray('adminlogin',$config['showverify']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
 				<td>&nbsp;</td>
 			</tr>
+			<!--#foreach ($verifyExt as $name => $title) {#-->
+			<tr>
+				<th>{$title}</th>
+				<td>
+					<ul class="switch_list cc">
+						<li><label><input type="radio" name="ext[{$name}]" value="1" {@Pw::ifcheck(Pw::inArray($name,$config['showverify']))}><span>开启</span></label></li>
+						<li><label><input type="radio" name="ext[{$name}]" value="0" {@Pw::ifcheck(!Pw::inArray($name,$config['showverify']))}><span>关闭</span></label></li>
+					</ul>
+				</td>
+				<td>&nbsp;</td>
 			</tr>
+			<!--#}#-->
 		</table>
 	</div>
 	<div class="btn_wrap">

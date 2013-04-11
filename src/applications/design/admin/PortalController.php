@@ -5,7 +5,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PortalController.php 23193 2013-01-07 03:32:13Z gao.wanggao $ 
+ * @version $Id: PortalController.php 24103 2013-01-21 10:15:47Z gao.wanggao $ 
  * @package 
  */
 
@@ -38,7 +38,7 @@ class PortalController extends AdminBaseController {
 	
 	public function deleteAction() {
 		$portalid = (int)$this->getInput('id','get');
-		//TODO 删除数据
+		$portal = $this->_getPortalDs()->getPortal($portalid);
 		$pageInfo = $this->_getPageDs()->getPageByTypeAndUnique(PwDesignPage::PORTAL,$portalid);
 		Wind::import('SRV:design.bo.PwDesignPageBo');
 		$pageBo = new PwDesignPageBo($pageInfo['page_id']);
@@ -71,7 +71,14 @@ class PortalController extends AdminBaseController {
 			$this->_getPermissionsDs()->deleteByTypeAndDesignId(PwDesignPermissions::TYPE_PAGE, $pageInfo['page_id']);
 		}
 		$this->_getDesignService()->clearTemplate($pageBo->pageid, $pageBo->getTplPath());
-		if ($this->_getPortalDs()->deletePortal($portalid)) $this->showMessage("operate.success");
+		if ($this->_getPortalDs()->deletePortal($portalid)) {
+			if ($portal['cover']) {
+				$ext = strrchr($portal['cover'],".");
+				$filename = 'portal/'.$portalid . $ext;
+				Pw::deleteAttach($filename);
+			}
+			$this->showMessage("operate.success");
+		}
 		$this->showMessage("operate.fail");
 	}
 	

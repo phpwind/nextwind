@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ForumlistController.php 21328 2012-12-04 11:32:35Z jieyin $
+ * @version $Id: ForumlistController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package srcapplications.bbs.controller
  */
 class ForumListController extends PwBaseController {
@@ -34,7 +34,9 @@ class ForumListController extends PwBaseController {
 		
 		//seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
-		PwSeoBo::init('bbs', 'forumlist');
+		$seoBo = PwSeoBo::getInstance();
+		$seoBo->init('bbs', 'forumlist');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**

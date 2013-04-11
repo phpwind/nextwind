@@ -1,5 +1,5 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
 
 /**
  * 阿里云短信平台
@@ -14,7 +14,7 @@ class PwPlatAliyun {
 	public $platUrl = '';
 	
 	public function __construct() {
-		$filePath = Wind::getRealPath('APPS:admin.conf.openplatformurl.php', true);
+		$filePath = Wind::getRealPath('ADMIN:conf.openplatformurl.php', true);
 		$openPlatformUrl = Wind::getComponent('configParser')->parse($filePath);
 		$this->platUrl = $openPlatformUrl.'index.php?m=appcenter&c=SmsManage';
 	}

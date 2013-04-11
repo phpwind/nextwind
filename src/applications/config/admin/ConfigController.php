@@ -24,8 +24,7 @@ class ConfigController extends AdminBaseController {
 		$userGroup = Wekit::load('usergroup.PwUserGroups');
 		$groups = $userGroup->getAllGroups();
 		$groupTypes = $userGroup->getTypeNames();
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('site');
+		$config = Wekit::C()->getValues('site');
 
 		$this->setOutput($config, 'config');
 		$this->setOutput($groups, 'groups');
@@ -64,8 +63,7 @@ class ConfigController extends AdminBaseController {
 	 * @return void
 	 */
 	public function siteAction() {
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('site');
+		$config = Wekit::C()->getValues('site');
 		$this->setOutput($config, 'config');
 	
 	}
@@ -93,6 +91,7 @@ class ConfigController extends AdminBaseController {
 			->flush();
 		Wekit::load('domain.srv.PwDomainService')->refreshTplCache();
 		
+		/*
 		$service = $this->_loadConfigService();
 		$config = $service->getValues('site');
 		if ($config['windid'] != 'client') {
@@ -100,20 +99,12 @@ class ConfigController extends AdminBaseController {
 			$windid->setConfig('site', 'timezone', $this->getInput('timeTimezone', 'post'));
 			$windid->setConfig('site', 'timecv', (int)$this->getInput('timeCv', 'post'));
 		}
+		*/
 		$this->showMessage('ADMIN:success');
 
 	}
 	
 	protected function _getWindid() {
 		return WindidApi::api('config');
-	}
-	
-	/**
-	 * 加载Config DS 服务
-	 * 
-	 * @return PwConfig
-	 */
-	private function _loadConfigService() {
-		return Wekit::load('config.PwConfig');
 	}
 }

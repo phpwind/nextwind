@@ -72,7 +72,8 @@ class PwEmotionService {
 	 * @param string $select
 	 */
 	public function getAppcationList($select = 0) {
-		$apps = array('bbs'=>'论坛', 'weibo'=>'微博', 'cms'=>'门户' , 'face'=>'普通表情');
+		//$apps = array('bbs'=>'论坛', 'weibo'=>'微博', 'cms'=>'门户' , 'face'=>'普通表情');
+		$apps = array('bbs'=>'论坛');
 		return $select ? $apps[$select] : $apps;
 	}
 	

@@ -5,7 +5,7 @@
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: FansController.php 18754 2012-09-27 04:06:31Z xiaoxia.xuxx $
+ * @version $Id: FansController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package forum
  */
 
@@ -41,8 +41,10 @@ class FansController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.fans.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.fans.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**

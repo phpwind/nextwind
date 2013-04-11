@@ -112,7 +112,10 @@
 				var url;
 				
 				Wind.Util.ajaxMaskShow();
-				$.post(this.href, function (data) {
+				$.post(this.href, {
+					typeid: $this.data('typeid'),
+					fromid: $this.data('fromid')
+				},function (data) {
 					lock = false;
 					Wind.Util.ajaxMaskRemove();
 					if (data.state === 'success') {

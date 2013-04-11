@@ -1401,7 +1401,7 @@
 							current_content.html(data);
 
 							if(current_content.find('#J_design_temp_tpl').length) {
-								Wind.use('rangeInsert');
+								//Wind.use('rangeInsert');
 							}
 
 							//jquery.scrollFixed
@@ -2103,9 +2103,16 @@
 /*
  * 导出
 */
+	var design_export_pop = $('#J_design_export_pop');
 	$('#J_design_export').on('click', function(e){
 		e.preventDefault();
-		window.open(this.href +'&pageid='+ pageid);
+
+		Wind.Util.popPos(design_export_pop);
+	});
+	$('#J_design_export_btn').on('click', function(e){
+		e.preventDefault();
+		var v = design_export_pop.find('input:radio:checked').val();
+		window.open(this.href +'&pageid='+ pageid+'&charset='+v);
 	});
 
 

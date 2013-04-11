@@ -8,7 +8,7 @@ Wind::import('WIND:ftp.exception.WindFtpException');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindFtp.php 3876 2012-12-26 07:52:05Z yishuo $
+ * @version $Id: AbstractWindFtp.php 3930 2013-02-05 03:55:24Z yishuo $
  * @package ftp
  */
 abstract class AbstractWindFtp {
@@ -193,10 +193,11 @@ abstract class AbstractWindFtp {
 		$result = false;
 		$count = count($dir);
 		for ($i = 0; $i < $count; $i++) {
-			if (strpos($dir[$i], '.') === 0) continue;
-			$result = $this->mkdir($dir[$i], $permissions);
-			$this->changeDir($this->rootPath . $dirs . $dir[$i]);
-			$dirs .= "$dir[$i]/";
+			if ('.' !== $dir[$i] && '..' !== $dir[$i]) {
+				$result = $this->mkdir($dir[$i], $permissions);
+				$this->changeDir($this->rootPath . $dirs . $dir[$i]);
+				$dirs .= "$dir[$i]/";
+			}
 		}
 		$this->changeDir($this->rootPath);
 		return $result;

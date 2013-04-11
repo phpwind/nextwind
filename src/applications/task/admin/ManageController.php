@@ -9,7 +9,7 @@ Wind::import('SRV:task.dm.PwTaskDmFactory');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ManageController.php 19250 2012-10-12 05:49:04Z gao.wanggao $
+ * @version $Id: ManageController.php 24028 2013-01-21 03:22:10Z xiaoxia.xuxx $
  * @package src.modules.task
  */
 class ManageController extends AdminBaseController {
@@ -147,6 +147,9 @@ class ManageController extends AdminBaseController {
 		if (($r = $this->_taskDs()->updateTask($dm)) instanceof PwError) {
 			$this->showError($r->getError());
 		}
+		if (($dm->getField('icon') != $task['icon']) && $task['icon']) {
+			Pw::deleteAttach($task['icon']);
+		}
 		$this->showMessage('TASK:edittask.success', 'task/manage/run');
 	}
 
@@ -230,7 +233,7 @@ class ManageController extends AdminBaseController {
 	 */
 	private function saveIcon() {
 		Wind::import("SRV:upload.action.PwTaskIconUpload");
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$taskUpload = new PwTaskIconUpload(80, 80);
 		$upload = new PwUpload($taskUpload);
 		if (($result = $upload->check()) === true) {

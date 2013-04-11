@@ -9,7 +9,7 @@ Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
  * @author MingXing Sun <mingxing.sun@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPostDoPoll.php 22440 2012-12-24 09:17:41Z jieyin $
+ * @version $Id: PwPostDoPoll.php 23975 2013-01-17 10:20:11Z jieyin $
  * @package forum
  */
 
@@ -198,7 +198,7 @@ class PwPostDoPoll extends PwPostDoBase {
 	 */
 	public function uploadOptionImage() {
 		Wind::import('SRV:upload.action.PwPollUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwPollUpload($this->user);
 		
 		$upload = new PwUpload($bhv);

@@ -9,11 +9,12 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AuthController.php 14889 2012-07-27 08:08:42Z xiaoxia.xuxx $
+ * @version $Id: AuthController.php 24805 2013-02-21 09:14:12Z jieyin $
  * @package admin
  * @subpackage controller
  */
 class AuthController extends AdminBaseController {
+
 	private $perpage = 10;
 
 	/**
@@ -23,7 +24,9 @@ class AuthController extends AdminBaseController {
 	 */
 	public function run() {
 		list($page) = $this->getInput(array('page'), 'get');
-		list($count, $list, $page) = $this->_loadAuthService()->findByPage($page, $this->perpage);
+		/* @var $service AdminAuthService */
+		$service = Wekit::load('ADMIN:service.srv.AdminAuthService');
+		list($count, $list, $page) = $service->fetchByPage($page, $this->perpage);
 		
 		$this->setOutput($list, 'list');
 		$this->setOutput($page, 'page');
@@ -54,6 +57,12 @@ class AuthController extends AdminBaseController {
 		if (!$id) $this->showError('ADMIN:auth.edit.fail.id.illegal');
 		$user = $this->_loadAuthService()->findById($id);
 		if ($user instanceof PwError) $this->showError('ADMIN:auth.edit.fail.user.exist');
+		/* @var $userService AdminUserService */
+		$userService = Wekit::load('ADMIN:service.srv.AdminUserService');
+		$_user = $userService->getUserByUids($user['uid']);
+		if ($_user) {
+			$user['username'] = $_user['username'];
+		}
 		$roles = Wekit::load('ADMIN:service.AdminRole')->findRoles();
 		$_tmp = array();
 		foreach ($roles as $role) {
@@ -72,7 +81,9 @@ class AuthController extends AdminBaseController {
 	 */
 	public function doEditAction() {
 		list($id, $roles) = $this->getInput(array('id', 'userRoles'), 'post');
-		$result = $this->_loadAuthService()->edit($id, $roles);
+		/* @var $service AdminAuthService */
+		$service = Wekit::load('ADMIN:service.srv.AdminAuthService');
+		$result = $service->edit($id, $roles);
 		if ($result instanceof PwError) $this->showError($result->getError());
 		$this->showMessage('ADMIN:auth.edit.success');
 	}
@@ -111,7 +122,6 @@ class AuthController extends AdminBaseController {
 	private function _loadAuthService() {
 		return Wekit::load('ADMIN:service.AdminAuth');
 	}
-
 }
 
 ?>

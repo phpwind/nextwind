@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignImportTxt.php 23387 2013-01-09 07:14:36Z gao.wanggao $ 
+ * @version $Id: PwDesignImportTxt.php 23476 2013-01-10 05:10:23Z gao.wanggao $ 
  * @package 
  */
 class PwDesignImportTxt {
@@ -127,11 +127,11 @@ class PwDesignImportTxt {
 		$srv = $this->_getCompileService();
 		$ds = $this->_getSegmentDs();
 		//兼容template的怪异编译方式
-		foreach ($segments AS $k=>$segment) {
+		/*foreach ($segments AS $k=>$segment) {
 			if ($k != 'footer_segment') continue;
 			$segments['segment_drag'] .= $segment;
 			unset($segments['footer_segment']);
-		}
+		}*/
 		
 		foreach ($segments AS $k=>$segment) {
 			$struct = $this->replaceStruct($segment);

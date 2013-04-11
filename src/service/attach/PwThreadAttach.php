@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadAttach.php 23356 2013-01-09 03:20:51Z jieyin $
+ * @version $Id: PwThreadAttach.php 24314 2013-01-28 08:09:53Z jieyin $
  * @package attach
  */
 
@@ -165,6 +165,18 @@ class PwThreadAttach {
 		return $this->_getDao()->batchUpdateAttach($aids, $dm->getData(), $dm->getIncreaseData());
 	}
 	
+	/**
+	 * 更新多个帖子的所属版块
+	 *
+	 * @param array $tids
+	 * @param int $fid
+	 * @return bool
+	 */
+	public function batchUpdateFidByTid($tids, $fid) {
+		if (!$tids || !is_array($tids)) return false;
+		return $this->_getDao()->batchUpdateFidByTid($tids, $fid);
+	}
+
 	/**
 	 * 删除单个附件
 	 *

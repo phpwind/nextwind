@@ -5,7 +5,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserValidator.php 22007 2012-12-18 06:23:13Z gao.wanggao $
+ * @version $Id: PwUserValidator.php 24943 2013-02-27 03:52:21Z jieyin $
  * @package  src.service.user.validator
  */
 class PwUserValidator {
@@ -70,8 +70,8 @@ class PwUserValidator {
 	 * @param string $username  待检查的用户名
 	 * @return boolean|PwError
 	 */
-	public static function isEmailValid($email, $username = '') {
-		$result = self::_getWindid()->checkUserInput($email, 3, $username);
+	public static function isEmailValid($email, $username = '', $uid = 0) {
+		$result = self::_getWindid()->checkUserInput($email, 3, $username, $uid);
 		if ($result < 1) {
 			return new PwError('USER:user.error.' . $result);
 		}
@@ -88,32 +88,21 @@ class PwUserValidator {
 	public static function isUsernameValid($username, $uid = 0) {
 		if (!$username) return new PwError('USER:user.error.-1');
 		$result = self::_getWindid()->checkUserInput($username, 1, '', $uid);
-		if ($result < 1) return new PwError('WINDID:code.'. $result);
-		
+		if ($result < 1) {
+			if ($result == -2) {
+				$config = WindidApi::C('reg');
+				return new PwError('WINDID:code.-2', array('{min}' => $config['security.username.min'], '{max}' => $config['security.username.max']));
+			}
+			return new PwError('WINDID:code.' . $result);
+		}
 		if (false !== ($r = self::isUsernameHasIllegalChar($username))) {
 			return $r;
-		}
-		$len = Pw::strlen($username);
-		$config = Wekit::C('register');
-		if ($len < $config['security.username.min'] || $len > $config['security.username.max']) {
-			return new PwError('USER:user.error.-2',  array('{min}' => $config['security.username.min'], '{max}' => $config['security.username.max']));
-		}
-		if ($config['security.ban.username']) {
-			$_ban = explode(',', $config['security.ban.username']);
-			foreach ($_ban as $value) {
-				if ($value !== '' && strpos($username, $value) !== false) {
-					return new PwError('USER:user.error.-4');
-				}
-			}
-		}
-		if (self::checkUsernameExist($username, $uid) === true) {
-			return new PwError('USER:user.error.-5');
 		}
 		return true;
 	}
 	
 	/** 
-	 * 检查用户的email是否存在 
+	 * 检查用户的username是否存在 
 	 *
 	 * @param string $username  待检查的用户名
 	 * @param int $exceptUid 排除的用户ID
@@ -123,14 +112,14 @@ class PwUserValidator {
 		$result = self::_getWindid()->checkUserInput($username, 1, '', $exceptUid);
 		if ($result < 1) return new PwError('WINDID:code.'. $result);
 		/* @var $userDs PwUser */
-		$userDs = Wekit::load('user.PwUser');
+	/*	$userDs = Wekit::load('user.PwUser');
 		$info = $userDs->getUserByName($username, PwUser::FETCH_MAIN);
 		if (!$info) return false;
 		$exceptUid = intval($exceptUid);
-		if ($exceptUid && $info['uid'] == $exceptUid) return false;
+		if ($exceptUid && $info['uid'] == $exceptUid) return false;*/
 		return true;
 	}
-	
+
 	/** 
 	 * 检查用户的密码是否合法
 	 *
@@ -141,15 +130,9 @@ class PwUserValidator {
 	public static function isPwdValid($password, $username) {
 		$result = self::_getWindid()->checkUserInput($password, 2, $username);
 		if ($result < 1) {
-			$windid = WindidApi::api('config');
-			$config = $windid->getConfig('reg');
+			$config = WindidApi::C('reg');
 			$var = array('{min}' => $config['security.password.min'], '{max}' => $config['security.password.max']);
 			return new PwError('WINDID:code.'. $result, $var);
-		}
-		$config = Wekit::C('register');
-		$len = strlen($password);
-		if ($config['security.password.min'] > $len || $config['security.password.max'] < $len) {
-			return new PwError('USER:user.error.-11', array('{min}' => $config['security.password.min'], '{max}' => $config['security.password.max']));
 		}
 		$result = self::checkPwdComplex($password, $username);
 		if ($result instanceof PwError) return $result;
@@ -168,7 +151,7 @@ class PwUserValidator {
 	 * @return boolean|PwError
 	 */
 	public static function checkPwdComplex($password, $username) {
-		$register = Wekit::C('register');
+		$register = WindidApi::C('reg');
 		if (!($pwdConfig = $register['security.password'])) return true;
 		$config = array_sum($pwdConfig);
 		if (in_array(9, $pwdConfig)) {
@@ -186,7 +169,7 @@ class PwUserValidator {
 	 * @return array(string, args)
 	 */
 	public static function buildPwdShowMsg() {
-		$config = Wekit::C('register');
+		$config = WindidApi::C('reg');
 		$_min = $config['security.password.min']; 
 		$_max = $config['security.password.max'];
 		$_complex = $config['security.password'];
@@ -213,7 +196,7 @@ class PwUserValidator {
 	 * @return array(string, args)
 	 */
 	public static function buildNameShowMsg() {
-		$config = Wekit::C('register');
+		$config = WindidApi::C('reg');
 		$_name = 'USER:user.error.username';
 		$_min = $config['security.username.min'];
 		$_max = $config['security.username.max'];
@@ -273,6 +256,6 @@ class PwUserValidator {
 	
 	private static function _getWindid() {
 		return WindidApi::api('user');
-}
+	}
 }
 ?>

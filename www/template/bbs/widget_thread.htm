@@ -10,7 +10,7 @@
 			<!--# if ($operateThread) { #-->
 			<input class="J_check" name="" type="checkbox" value="{$value['tid']}" autocomplete="off" />
 			<!--# } #-->
-			<span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}"></i></span>
+			<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" target="_blank"><span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}  新窗口打开"></i></span></a>
 			<!--# if ($value['topic_type'] && $pwforum->forumset['topic_type_display'] && isset($topictypes['all_types'][$value['topic_type']])) { #-->
 				<!--# if ($_parentid = $topictypes['all_types'][$value['topic_type']]['parentid']) { #-->
 			<a href="{@url:bbs/thread/run?fid=$pwforum->fid&type=$_parentid}" class="st">[{$topictypes['all_types'][$_parentid]['name']|html}]</a>

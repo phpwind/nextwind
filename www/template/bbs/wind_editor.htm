@@ -92,7 +92,7 @@
 				mini		: mini.join(' '),
 				theme		: 'buyiui',
 				localSave	: POST_TYPE === Post_Type_Enum.NEW_POST ? true : false,// 发新帖才保存本地，IE本地存储还有问题
-				iframeCss	: ['{@theme:css}/editor_content.css?v={@G:c.version}'],//为了更好的可见即所得，加载阅读页的css文件
+				iframeCss	: ['{@G:url.css}/editor_content.css?v={@G:c.version}'],//为了更好的可见即所得，加载阅读页的css文件
 				onInit		: function () {
 					$(this.editorDoc.body).addClass('editor_content');
 					var editor = this,

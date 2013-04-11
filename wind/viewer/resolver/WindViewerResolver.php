@@ -22,7 +22,7 @@ Wind::import('WIND:viewer.exception.WindViewException');
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindViewerResolver.php 3905 2013-01-09 11:13:36Z liusanbian $
+ * @version $Id: WindViewerResolver.php 3908 2013-01-18 03:37:53Z yishuo $
  * @package viewer
  */
 class WindViewerResolver extends WindNormalViewerResolver implements IWindViewerResolver {
@@ -98,7 +98,7 @@ class WindViewerResolver extends WindNormalViewerResolver implements IWindViewer
 	 * @return boolean
 	 */
 	private function checkReCompile($templateFilePath, $compileFilePath) {
-		if (isset(Wind::$isDebug) && Wind::$isDebug) return true;
+		if (Wind::$isDebug) return true;
 		if ($this->getWindView()->isCompile) {
 			if (!is_file($compileFilePath)) return true;
 			$_c_m_t = filemtime($compileFilePath);

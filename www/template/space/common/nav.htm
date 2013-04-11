@@ -11,11 +11,11 @@
 			<li class="{@Pw::isCurrent($src == 'profile')}"><a href="{@url:space/profile/run?uid=$space->spaceUid}">资料</a></li>
 		</ul>
 	</div>
-	<!--# if ($space->tome == 2): #-->
+	<!--# if ($space->tome == 2){ #-->
 	<!--div class="fr"><div class="space_set_tip"></div></div-->
-	<!--# endif; #-->
+	<!--# } #-->
 	<div class="url"><a href="{$space->space['domain']}">{$space->space['domain']}</a></div>
 </div>
-	<!--# if ($space->tome == 2): #-->
+	<!--# if ($space->tome == 2){ #-->
 		<a id="J_space_set" href="{@url:space/myspace/run}" class="design_space_edit">模块管理</a>
-	<!--# endif; #-->
+	<!--# } #-->

@@ -7,7 +7,7 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindApplication.php 3904 2013-01-08 07:01:26Z yishuo $
+ * @version $Id: AbstractWindApplication.php 3919 2013-01-25 03:09:56Z yishuo $
  * @package base
  */
 abstract class AbstractWindApplication extends WindModule {
@@ -76,16 +76,13 @@ abstract class AbstractWindApplication extends WindModule {
 	public function run($handlerAdapter = null) {
 		$handlerAdapter !== null && $this->handlerAdapter = $handlerAdapter;
 		$module = $this->getModules();
-		$handlerPath = $module['controller-path'] . '.' . ucfirst(
-			$this->handlerAdapter->getController()) . $module['controller-suffix'];
+		$handlerPath = $module['controller-path'] . '.' . ucfirst($this->handlerAdapter->getController()) . $module['controller-suffix'];
 		$className = Wind::import($handlerPath);
 		if (!class_exists($className)) throw new WindException(
 			'Your requested \'' . $handlerPath . '\' was not found on this server.', 404);
 		$handler = new $className();
 		$handler->setDelayAttributes(
-			array(
-				'errorMessage' => array('ref' => 'errorMessage'), 
-				'forward' => array('ref' => 'forward')));
+			array('errorMessage' => array('ref' => 'errorMessage'), 'forward' => array('ref' => 'forward')));
 		
 		$handlerAdapter !== null && $this->resolveActionFilters($handler);
 		
@@ -95,8 +92,9 @@ abstract class AbstractWindApplication extends WindModule {
 		} catch (WindForwardException $e) {
 			$this->doDispatch($e->getForward());
 		} catch (WindActionException $e) {
-			$this->sendErrorMessage(($e->getError() ? $e->getError() : $e->getMessage()), 
-				$e->getCode());
+			$this->sendErrorMessage(($e->getError() ? $e->getError() : $e->getMessage()), $e->getCode());
+		} catch (WindException $e) {
+			$this->sendErrorMessage($e->getMessage(), $e->getCode());
 		}
 	}
 
@@ -144,17 +142,13 @@ abstract class AbstractWindApplication extends WindModule {
 	public function getModules($name = '') {
 		if ($name === '') $name = $this->handlerAdapter->getModule();
 		if ($name === 'pattern') $name = $this->handlerAdapter->getDefaultModule();
-		if ($name === 'default') return $this->_config['modules']['default'];
 		$_module = $this->getConfig('modules', $name, array());
 		if (!isset($_module['_verified']) || $_module['_verified'] !== true) {
 			if (empty($_module) && !empty($this->_config['modules']['pattern'])) {
 				$_module = $this->_config['modules']['pattern'];
 			}
-			if ($_module) {
-				$_module = WindUtility::mergeArray($this->_config['modules']['default'], $_module);
-			} else
-				throw new WindException('Your request was not found on this server.', 404);
-			
+			$_flag = empty($_module);
+			$_module = WindUtility::mergeArray($this->_config['modules']['default'], $_module);
 			$_module_str = implode('#', $_module);
 			if (strpos($_module_str, '{') !== false) {
 				preg_match_all('/{(\w+)}/i', $_module_str, $matches);
@@ -173,7 +167,8 @@ abstract class AbstractWindApplication extends WindModule {
 					$_module_str = strtr($_module_str, $_replace);
 					$_module = array_combine(array_keys($_module), explode('#', $_module_str));
 				}
-			}
+			} elseif ($_flag)
+				throw new WindException('Your request was not found on this server.', 404);
 			
 			$_module['_verified'] = true;
 			$this->_config['modules'][$name] = $_module;
@@ -234,11 +229,8 @@ abstract class AbstractWindApplication extends WindModule {
 		foreach ($_filters[$_token] as $value) {
 			$proxy->registerEventListener(
 				$this->factory->createInstance(Wind::import($value['class']), 
-					array(
-						$handler->getForward(), 
-						$handler->getErrorMessage(), 
-						$this->handlerAdapter, 
-						$value)), 'doAction');
+					array($handler->getForward(), $handler->getErrorMessage(), $this->handlerAdapter, $value)), 
+				'doAction');
 		}
 		$handler = $proxy;
 	}

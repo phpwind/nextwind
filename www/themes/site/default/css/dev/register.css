@@ -3,7 +3,7 @@
 @explain: 注册流程
 @copyright: Copyright 2011,phpwind.com
 @author: longwenid@gmail.com
-$Id: register.css 20608 2012-11-01 02:09:57Z yanchixia $
+$Id: register.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 */
 
@@ -13,7 +13,7 @@ $Id: register.css 20608 2012-11-01 02:09:57Z yanchixia $
 ===================
 */
 .register{
-	margin-top:40px;
+	margin-top:20px;
 }
 
 /*

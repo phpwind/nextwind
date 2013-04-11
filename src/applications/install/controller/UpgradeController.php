@@ -8,7 +8,7 @@ define('NEXT_VERSION', '9.0');
  * @author xiaoxia.xu<xiaoxia.xuxx@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: UpgradeController.php 22952 2013-01-04 02:39:27Z gao.wanggao $
+ * @version $Id: UpgradeController.php 24779 2013-02-21 06:24:27Z xiaoxia.xuxx $
  * @package applications.install.controller
  */
 class UpgradeController extends WindController {
@@ -68,7 +68,7 @@ class UpgradeController extends WindController {
 		Wekit::load('nav.srv.PwNavService')->updateConfig();
 		
 		//风格默认数据
-		Wekit::load('APPS:appcenter.service.srv.PwStyleInit')->init();
+		Wekit::load('APPCENTER:service.srv.PwStyleInit')->init();
 		
 		//计划任务默认数据
 		Wekit::load('cron.srv.PwCronService')->updateSysCron();
@@ -173,7 +173,9 @@ class UpgradeController extends WindController {
 			));
 			$attachDir = $db_ftp['db_ftpweb'];
 		} else {
-			$attachDir = Wind::getRealDir('ATTACH:', true);
+			//头像放到www/windid/attachment下
+			$attachDir = rtrim(Wind::getRealDir('PUBLIC:', true), '/');
+			$attachDir .= '/windid/attachment';
 		}
 		$attachDir = rtrim($attachDir, '/');
 		return array($ftp, $attachDir);
@@ -189,11 +191,12 @@ class UpgradeController extends WindController {
 	 */
 	private function _getStartAndLimit($start_uid, $end_uid, $isFtp = true) {
 		$limit = 10;
-		if (!isFtp) {
-			$_lt = $this->_getConfig('limit');
+		if (!$isFtp) {
+			$limit = 200;
+			/* $_lt = $this->_getConfig('limit');
 			$_lt = is_numeric($_lt) ? abs($_lt) : 1;
 			$_lt == 0 && $_lt = 1;
-			$limit = 1000 * $_lt;
+			$limit = 1000 * $_lt; */
 		}
 		
 		if ($start_uid < 1) $start_uid = 1;
@@ -286,12 +289,20 @@ class UpgradeController extends WindController {
 	 * @return boolean
 	 */
 	private function _writeWindid() {
-		$baseUrl = Wind::getApp()->getRequest()->getBaseUrl(true);
+		$baseUrl = Wekit::url()->base;
 		$key = md5(WindUtility::generateRandStr(10));
-		$charset = Wind::getApp()->getResponse()->getCharset();
+		$charset = Wekit::V('charset');
 		$charset = str_replace('-', '', strtolower($charset));
 		if (!in_array($charset, array('gbk', 'utf8', 'big5'))) $charset = 'utf8';
 		
+		$config = new PwConfigSet('windid');
+		$config->set('windid', 'local')
+		->set('serverUrl', $baseUrl . '/windid')
+		->set('clientId', 1)
+		->set('clientKey', $key)
+		->set('connect', 'db')->flush();
+		Wekit::C()->reload('windid');
+
 		Wind::import('WINDID:service.app.dm.WindidAppDm');
 		$dm = new WindidAppDm();
 		$dm->setApiFile('windid.php')
@@ -302,17 +313,9 @@ class UpgradeController extends WindController {
 			->setAppUrl($baseUrl)
 			->setCharset($charset)
 			->setAppIp('');
-		$result = Windid::load('app.WindidApp')->addApp($dm);
+		$service = WindidApi::api('app');
+		$result = $service->addApp($dm);
 		if ($result instanceof WindidError) $this->showError('INSTALL:windid.init.fail');
-		$config = array(
-			'windid'  => 'local',
-			'serverUrl' => $baseUrl,
-			'clientId'  => (int)$result,
-			'clientKey'  => $key,
-			'clientDb'  => 'mysql',
-			'clientCharser'  => $charset,
-		);
-		WindFile::savePhpData(Wind::getRealPath('ROOT:conf.windidconfig.php', true), $config);
 		return true;
 	}
 	/**
@@ -411,21 +414,21 @@ class UpgradeController extends WindController {
 	\$wrapall = !\$portal['header'] ? 'custom_wrap' : 'wrap';
 	#-->
 	<div class="{\$wrapall}">
-	<!--# if(\$portal['header']): #-->
+	<!--# if(\$portal['header']){ #-->
 	<template source='TPL:common.header' load='true' />
-	<!--# endif; #-->
+	<!--# } #-->
 	<div class="main_wrap">
-	<!--# if(\$portal['navigate']): #-->
+	<!--# if(\$portal['navigate']){ #-->
 		<div class="bread_crumb">{@\$headguide|html}</div>
-	<!--# endif; #-->
+	<!--# } #-->
 		<div class="main cc">
 			<design role="tips" id="nodesign"/>
 			<design role="segment" id="segment1"/>
 		</div>
 	</div>
-	<!--# if(\$portal['footer']): #-->
+	<!--# if(\$portal['footer']){ #-->
 	<template source='TPL:common.footer' load='true' />
-	<!--# endif; #-->
+	<!--# } #-->
 	</div>
 <script>
 Wind.use('jquery', 'global');

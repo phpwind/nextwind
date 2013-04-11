@@ -9,7 +9,7 @@ Wind::import('SRV:attention.srv.dataSource.PwFetchAttentionFresh');
  *
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: FreshController.php 21196 2012-11-30 07:21:08Z jieyin $
+ * @version $Id: FreshController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package wind
  */
 class FreshController extends PwBaseController {
@@ -102,8 +102,10 @@ class FreshController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.fresh.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.fresh.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	public function replyAction() {

@@ -49,7 +49,7 @@
 								<dd>
 								<!--# foreach ($groups as $group) { #-->
 									<!--# if ($group['type'] == $type) { #-->
-									<label><input class="J_check" data-yid="J_check_timging_{$type}" type="checkbox" name="timing_groups[]" value="{$group['gid']}"{@Pw::ifcheck(in_array($group['gid'], $config['post.timing.groups']))} /><span>{$group['name']}</span></label>
+									<label><input class="J_check" data-yid="J_check_timging_{$type}" type="checkbox" name="timing_groups[]" value="{$group['gid']}"{@Pw::ifcheck(Pw::inArray($group['gid'], $config['post.timing.groups']))} /><span>{$group['name']}</span></label>
 									<!--# } #-->
 								<!--# } #-->
 								</dd>
@@ -81,7 +81,7 @@
 								<dd>
 								<!--# foreach ($groups as $group) { #-->
 									<!--# if ($group['type'] == $type) { #-->
-									<label><input class="J_check" data-yid="J_check_{$type}" type="checkbox" name="check_groups[]" value="{$group['gid']}"{@Pw::ifcheck(in_array($group['gid'], $config['post.check.groups']))} /><span>{$group['name']}</span></label>
+									<label><input class="J_check" data-yid="J_check_{$type}" type="checkbox" name="check_groups[]" value="{$group['gid']}"{@Pw::ifcheck(Pw::inArray($group['gid'], $config['post.check.groups']))} /><span>{$group['name']}</span></label>
 									<!--# } #-->
 								<!--# } #-->
 								</dd>

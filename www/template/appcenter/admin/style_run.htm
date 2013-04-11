@@ -13,9 +13,18 @@
 			<!--# } #-->
 			<li><a href="{@url:appcenter/style/install}">本地安装</a></li>
 			<li><a href="{@url:appcenter/style/manage}">界面管理</a></li>
-			<!--# if(Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->inDevMode1()){ #-->
+			<!--# if(Wekit::load('APPCENTER:service.srv.PwDebugApplication')->inDevMode1()){ #-->
 			<li><a href="{@url:appcenter/style/generate}">开发助手</a></li>
 			<!--# } #-->
+		</ul>
+	</div>
+	<div class="h_a">功能说明</div>
+	<div class="prompt_text">
+		<ul>
+			<li>整站模板：只能默认选择一套。</li>
+			<li>个人空间：安装后前台全部展示，具体显示靠用户选择。</li>
+			<li>版块模板：安装后，需要到 <span class="org">论坛->版块管理->编辑->版块风格</span> 选择性展示。</li>
+			<li>门户模板：需要到 <span class="org">门户->页面管理->创建自定义页面</span>，然后通过页面模块管理，设置模板</li>
 		</ul>
 	</div>
 	<div id="J_style_tip" style="display:none;" class="tips_light">发现新风格，<a id="J_scan" href="">安装</a></div>
@@ -30,7 +39,7 @@
 			<!--#
 			$logo = $v['logo'];
 			if($logo && (strpos($logo,'http://')===false)) {
-				$args = array(Wekit::app()->themes, $addons[$type][1], $v['alias'], $logo);
+				$args = array(Wekit::url()->themes, $addons[$type][1], $v['alias'], $logo);
 				$logo = implode('/', $args);
 			}
 			#-->

@@ -1,3 +1,99 @@
+<style>
+/*
+===================
+管理操作
+===================
+*/
+.pop_operat_reason{
+	border-top:1px dotted #ccc;
+}
+.pop_operat_reason dt,
+.pop_operat_management dt{
+	float:left;
+	width:85px;
+	line-height:26px;
+}
+.pop_operat_reason dd,
+.pop_operat_management dd{
+	overflow:hidden;
+	line-height:26px;
+}
+.pop_operat_management dl{
+	padding:0 0 10px 0;
+}
+.pop_operat_management ul{
+	padding-bottom:5px;
+}
+.pop_operat_management li{
+	margin-bottom:3px;
+	float:left;
+	width:100%;
+	border:0 none;
+	background:#f7f7f7;
+	padding:3px 0;
+	border-radius: 3px;
+}
+.pop_operat_management li .ct{
+	display:none;
+	padding:5px 10px 10px;
+}
+.pop_operat_management li .hd{
+	padding:0 5px;
+}
+.pop_operat_management li .hd label{
+	display:inline-block;
+	background:url({@G:url.images}/management/arrow_down.png) right center no-repeat;
+	padding:0 5px;
+	width:365px;
+}
+.pop_operat_management li.current .hd label{
+	background:url({@G:url.images}/management/arrow_up.png) right center no-repeat;
+}
+.pop_operat_management li.current{
+	background:#f1f1f1;
+}
+.pop_operat_management li.current .ct{
+	display:block;
+}
+.pop_operat_management .title{
+	padding:0 0 15px 15px;
+}
+.pop_operat_management .merger{
+	padding:0 0 10px 15px;
+}
+.pop_operat_del{
+	font-size:14px;
+	padding:10px 15px 20px;
+}
+
+/*
+===================
+高亮
+===================
+*/
+.sub_high_light{
+}
+.sub_high_light a{
+	display:inline-block;
+	padding:3px 5px;
+	border:1px solid #ccc;
+	background:#fff;
+	margin-right:4px;
+	vertical-align:middle;
+}
+.sub_high_light a:hover{
+	text-decoration:none;
+	border-color:#1377a9;
+}
+.sub_high_light a.current{
+	background-color:#2298d3;
+	border-color:#1377a9 #2298d3 #2298d3;
+	color:#fff;
+}
+.sub_high_light .color_pick{
+	margin-right:15px;
+}
+</style>
 <div style="width:440px;">
 	<form action="{@WindUrlHelper::createUrl('bbs/manage/' . $doaction)|url}" method="post" id="J_post_manage_ajaxForm">
 	<div class="pop_top J_drag_handle"><a href="#" class="pop_close J_close">关闭</a><strong>{$title}</strong>(&nbsp;<span id="J_manage_checked_count" class="red">{$count}</span>&nbsp;<!--#if ($action == 'ban'){#-->个<!--#}else{#-->篇<!--#}#-->)</div>
@@ -6,7 +102,7 @@
 $combined1 = array('topped','digest','highlight','up');
 $combined2 = array('down','lock');
 #-->
-		<!--# if (in_array($action, $combined1)) { #-->
+		<!--# if (Pw::inArray($action, $combined1)) { #-->
 		<div class="pop_operat_management">
 			<ul class="cc">
 				<!--# if ($operateThread['topped']) { #-->
@@ -73,7 +169,7 @@ $combined2 = array('down','lock');
 				<!--# } #-->
 			</ul>
 		</div>
-		<!--# } elseif (in_array($action, $combined2)) { #-->
+		<!--# } elseif (Pw::inArray($action, $combined2)) { #-->
 		<!--#
 		if ($defaultValues['lock']['locked'] == 1){
 			$_checked_locked1 = ' checked';
@@ -107,7 +203,7 @@ $combined2 = array('down','lock');
 			</ul>
 		</div>
 		<!--# } elseif ($action == 'delete') { #-->	
-		<div class="not_content_mini">确定要删除选中的主题？</div>
+		<div class="not_content_mini"><i></i>确定要删除选中的主题？</div>
 		<!--# } elseif ($action == 'move') { #-->
 		<div class="pop_operat_management">
 			<dl class="cc">
@@ -179,10 +275,6 @@ $combined2 = array('down','lock');
 			</dl>
 			<dl class="cc">
 				<dt>有效期至：</dt><dd><input type="text" value="" name="end_time" class="input J_datetime date"></dd>
-			</dl>
-			<dl class="cc" style="display:none">
-				<dt>禁止多帐号：</dt>
-				<dd><label class="mr20"><input name="ban_others" type="radio" value="1"/>禁止</label><label><input name="ban_others" type="radio" value="0" checked/>不禁止</label></dd>
 			</dl>
 		</div>
 		<!--#}#-->

@@ -1,12 +1,12 @@
 <?php
-Wind::import('SRV:upload.PwUpload');
+Wind::import('LIB:upload.PwUpload');
 /**
  * 應用上傳工具類
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwApplicationUpload.php 14396 2012-07-20 05:46:40Z long.shi $
+ * @version $Id: PwApplicationUpload.php 23975 2013-01-17 10:20:11Z jieyin $
  * @package appcenter.service.srv.helper
  */
 class PwApplicationUpload {

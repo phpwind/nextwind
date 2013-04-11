@@ -5,7 +5,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignDefaultService.php 23206 2013-01-07 05:06:41Z gao.wanggao $ 
+ * @version $Id: PwDesignDefaultService.php 25611 2013-03-20 02:20:51Z gao.wanggao $ 
  * @package 
  */
 class PwDesignDefaultService {
@@ -47,7 +47,7 @@ class PwDesignDefaultService {
  		$comp = array_shift($comp);
 		$tpl = $comp['comp_tpl'];
 		$property = array("ispic"=>1, "desnum"=>144, "order"=>5,"limit"=>100,"timefmt"=>"m-d");
-		$cache = array('expired'=>15, 'start_hour'=>0,'start_minute'=>0,'end_hour'=>0,'end_minute'=>0);
+		$cache = array('expired'=>0, 'start_hour'=>0,'start_minute'=>0,'end_hour'=>0,'end_minute'=>0);
  		Wind::import('SRV:design.dm.PwDesignModuleDm');
  		$moduleDm = new PwDesignModuleDm();
  		$moduleDm->setFlag('thread')

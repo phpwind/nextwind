@@ -10,7 +10,7 @@ Wind::import('SRV:user.PwUser');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwRegisterService.php 23331 2013-01-08 10:04:34Z xiaoxia.xuxx $
+ * @version $Id: PwRegisterService.php 25182 2013-03-06 07:54:07Z long.shi $
  * @package src.service.user.srv
  */
 class PwRegisterService extends PwBaseHookService {
@@ -24,6 +24,7 @@ class PwRegisterService extends PwBaseHookService {
 	public $isOpenMobileCheck = 0;
 
 	public function __construct() {
+		parent::__construct();
 		$this->config = Wekit::C('register');
 		$this->isOpenInvite = (2 == $this->config['type'] ? 1 : 0);
 		$this->isOpenMobileCheck = (1 == $this->config['active.phone'] ? 1 : 0);
@@ -44,48 +45,16 @@ class PwRegisterService extends PwBaseHookService {
 		if (!$data || Pw::getTime() - $data['last_regdate'] > $space) return true;
 		return new PwError('USER:register.error.security.ip', array('{ipSpace}' => $ipSpace));
 	}
-	
+
 	/** 
 	 * 设置用户信息
 	 *
 	 * @param PwUserInfoDm $userForm
 	 */
 	public function setUserDm(PwUserInfoDm $userDm) {
-		$this->userDm = null;
-		//如果开启邮箱激活，则设置该状态为0，否则设置该状态为1
-		$_uncheckGid = false;
-		if ($this->config['active.mail']) {
-			$userDm->setUnactive(true);
-			$_uncheckGid = true;
-		}
-		//如果开启审核，则设置该状态为0，否则设置该状态为1
-		if ($this->config['active.check']) {
-			$userDm->setUncheck(true);
-			$_uncheckGid = true;
-		}
-		//【用户注册】未验证用户组
-		if ($_uncheckGid) {
-			$userDm->setGroupid(7);
-		}
-		//【用户注册】计算memberid
-		/* @var $groupService PwUserGroupsService */
-		$groupService = Wekit::load('usergroup.srv.PwUserGroupsService');
-		
-		//【用户注册】注册成功初始积分---积分策略中获取
-		/* @var $creditBo PwCreditBo */
-		$creditBo = PwCreditBo::getInstance();
-		$creditStrategy = $creditBo->getStrategy('register');
-		!$creditStrategy['credit'] && $creditStrategy['credit'] = array();
-		$_credit = array();
-		foreach ($creditStrategy['credit'] as $id => $_v) {
-			$_credit['credit' . $id] = $_v;
-		}
-		$credit = $groupService->calculateCredit(Wekit::C('site', 'upgradestrategy'), $_credit);
-		$memberid = $groupService->calculateLevel($credit);
-		$userDm->setMemberid($memberid);
-		$this->userDm = $userDm;
+		$this->userDm = $this->filterUserDm($userDm);
 	}
-	
+
 	/** 
 	 * 返回用户信息的DM
 	 *
@@ -113,22 +82,36 @@ class PwRegisterService extends PwBaseHookService {
 			return $uid;
 		}
 		$this->userDm->setUid($uid);
-		//Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($uid); windid处理
-		
-		//获得注册积分
-		/* @var $creditBo PwCreditBo */
-		$creditBo = PwCreditBo::getInstance();
-		$creditBo->operate('register', new PwUserBo($uid));
-		
-		$this->updateRegisterIp($this->userDm->getField('regip'), Pw::getTime());
-		$this->updateRegisterCheck($uid);
-		$this->updateBbsinfo($this->userDm->getField('username'));
-		
-		$this->sendWelcomeMsg($uid, $this->userDm->getField('username'), $this->userDm->getField('email'));
-		
-		//[c_register]:调用插件中用户注册操作的后置方法afterRegister
-		if (($result = $this->runWithVerified('afterRegister', $this->userDm)) instanceof PwError) return $result;
-		return $this->_getUserDs()->getUserByUid($uid, PwUser::FETCH_MAIN);
+		return $this->afterRegister($this->userDm);
+	}
+
+	/**
+	 * 同步用户数据
+	 * 
+	 * 如果本地有用户数据
+	 * 如果本地没有用户数据，则将用户数据从windid同步过来
+	 *
+	 * @param int $uid
+	 * @return array
+	 */
+	public function sysUser($uid) {
+		$info = $this->_getUserDs()->getUserByUid($uid, PwUser::FETCH_MAIN);
+		if (!$info) {
+			//从windid这边将数据同步到论坛
+			if (!$this->_getUserDs()->activeUser($uid)) return false;
+			//更新用户信息
+			$pwUserInfoDm = new PwUserInfoDm($uid);
+			$_userinfo = $this->_getUserDs()->getUserByUid($uid, PwUser::FETCH_MAIN | PwUser::FETCH_DATA);
+			$this->_getUserDs()->editUser($this->filterUserDm($pwUserInfoDm, $_userinfo));
+			Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($info['uid']);
+
+			$pwUserInfoDm->setUsername($_userinfo['username']);
+			$pwUserInfoDm->setEmail($_userinfo['email']);
+			$pwUserInfoDm->setRegip(Wind::getComponent('request')->getClientIp());
+			$info = $this->afterRegister($pwUserInfoDm);
+			$this->sendEmailActive($_userinfo['username'], $_userinfo['email']);
+		}
+		return $info;
 	}
 
 	/** 
@@ -148,9 +131,12 @@ class PwRegisterService extends PwBaseHookService {
 			$uid = $info['uid'];
 			$statu = self::createRegistIdentify($uid, $info['password']);
 		}
-		
+		if (!Wind::getComponent('router')->getRoute('pw')) {
+			Wind::getComponent('router')->addRoute('pw', WindFactory::createInstance(Wind::import('LIB:route.PwRoute'), array('bbs')));
+		}
+
 		$code = substr(md5(Pw::getTime()), mt_rand(1, 8), 8);
-		$url = WindUrlHelper::createUrl('u/register/activeEmail', array('code' => $code, '_statu' => $statu));
+		$url = WindUrlHelper::createUrl('u/register/activeEmail', array('code' => $code, '_statu' => $statu), '', 'pw');
 		list($title, $content) = $this->_buildTitleAndContent('active.mail.title', 'active.mail.content', $username, $url);
 		/* @var $activeCodeDs PwUserActiveCode */
 		$activeCodeDs = Wekit::load('user.PwUserActiveCode');
@@ -255,6 +241,85 @@ class PwRegisterService extends PwBaseHookService {
 	public static function parserRegistIdentify($identify) {
 		return explode("\t", Pw::decrypt(rawurldecode($identify)));
 	}
+
+	/**
+	 *  完成注册的后期执行
+	 *
+	 * @param PwUserInfoDm $userDm
+	 * @return array
+	 */
+	protected function afterRegister(PwUserInfoDm $userDm) {
+		//Wekit::load('user.srv.PwUserService')->restoreDefualtAvatar($uid); windid处理
+		//获得注册积分
+		/* @var $creditBo PwCreditBo */
+		$creditBo = PwCreditBo::getInstance();
+		$creditBo->operate('register', new PwUserBo($userDm->uid));
+		
+		$this->updateRegisterIp($userDm->getField('regip'), Pw::getTime());
+		$this->updateRegisterCheck($userDm->uid);
+		$this->sendWelcomeMsg($userDm->uid, $userDm->getField('username'), $userDm->getField('email'));
+		
+		//[c_register]:调用插件中用户注册操作的后置方法afterRegister
+		if (($result = $this->runWithVerified('afterRegister', $userDm)) instanceof PwError) return $result;
+		return $this->_getUserDs()->getUserByUid($userDm->uid, PwUser::FETCH_MAIN);
+	}
+	
+	/**
+	 * 过滤用户DM同时设置用户的相关信息
+	 * 
+	 * @param PwUserInfoDm $userDm
+	 * @param array $hasCredit
+	 * @return PwUserInfoDm
+	 */
+	protected function filterUserDm(PwUserInfoDm $userDm, $hasCredit = array()) {
+		//如果开启邮箱激活，则设置该状态为0，否则设置该状态为1
+		$_uncheckGid = false;
+		if ($this->config['active.mail']) {
+			$userDm->setUnactive(true);
+			$_uncheckGid = true;
+		}
+		//如果开启审核，则设置该状态为0，否则设置该状态为1
+		if ($this->config['active.check']) {
+			$userDm->setUncheck(true);
+			$_uncheckGid = true;
+		}
+		//【用户注册】未验证用户组
+		if ($_uncheckGid) {
+			$userDm->setGroupid(7);
+			$userDm->setGroups(array());
+		}
+		$_credit = $this->_getRegisterAddCredit($hasCredit);
+		//【用户注册】计算memberid
+		/* @var $groupService PwUserGroupsService */
+		$groupService = Wekit::load('usergroup.srv.PwUserGroupsService');
+		$credit = $groupService->calculateCredit(Wekit::C('site', 'upgradestrategy'), $_credit);
+		$memberid = $groupService->calculateLevel($credit);
+		$userDm->setMemberid($memberid);
+		return $userDm;
+	}
+	
+	/**
+	 * 获取注册可以添加的积分
+	 *
+	 * @param array $_credit  已有的积分
+	 * @return array
+	 */
+	private function _getRegisterAddCredit($_credit = array()) {
+		//【用户注册】注册成功初始积分---积分策略中获取
+		/* @var $creditBo PwCreditBo */
+		$creditBo = PwCreditBo::getInstance();
+		$creditStrategy = $creditBo->getStrategy('register');
+		!$creditStrategy['credit'] && $creditStrategy['credit'] = array();
+		foreach ($creditStrategy['credit'] as $id => $_v) {
+			$_id = 'credit' . $id;
+			if (isset($_credit[$_id])) {
+				$_credit[$_id] += $_v;
+			} else {
+				$_credit[$_id] = $_v;
+			}
+		}
+		return $_credit;
+	}
 	
 	/** 
 	 * 获得信息的标题和内容
@@ -307,18 +372,6 @@ class PwRegisterService extends PwBaseHookService {
 		return true;
 	}
 
-	/**
-	 * 更新论坛信息
-	 *
-	 * @param stirng $username
-	 */
-	private function updateBbsinfo($username) {
-		Wind::import('SRV:site.dm.PwBbsinfoDm');
-		$dm = new PwBbsinfoDm();
-		$dm->setNewmember($username)->addTotalmember(1);
-		Wekit::load('site.PwBbsinfo')->updateInfo($dm);
-	}
-	
 	/** 
 	 * 获得用户DS
 	 *

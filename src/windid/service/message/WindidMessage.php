@@ -6,7 +6,7 @@
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: WindidMessage.php 23072 2013-01-06 02:12:11Z gao.wanggao $
+ * @version $Id: WindidMessage.php 24705 2013-02-16 05:18:04Z jieyin $
  */
 
 class WindidMessage {
@@ -185,7 +185,7 @@ class WindidMessage {
 	 * @param int $toUid
 	 * @param int $fromUid
 	 */
-	public function getDialogByUid($toUid,$fromUid){
+	public function getDialogByUid($toUid, $fromUid) {
 		$toUid = intval($toUid);
 		$fromUid = intval($fromUid);
 		if ($toUid < 1 || $fromUid < 1) return array();
@@ -198,7 +198,7 @@ class WindidMessage {
 	 * @param int $uid
 	 * @param int $from_uids
 	 */
-	public function getDialogByUids($uid,$from_uids){
+	public function getDialogByUids($uid, $from_uids) {
 		$uid = intval($uid);
 		if (!$uid || !$from_uids) return array();
 		$dialogs = $this->_getDialogDao()->getDialogByUids($uid,$from_uids);
@@ -235,8 +235,8 @@ class WindidMessage {
 	}
 	
 	/**
-	 * 
 	 * 获取一条对话信息
+	 * 
 	 * @param int $dialogId
 	 */
 	public function getDialog($dialogId){
@@ -255,10 +255,10 @@ class WindidMessage {
 	 * @param int $limit
 	 * @return array 
 	 */
-	public function getDialogs($uid,$start,$limit){
+	public function getDialogs($uid, $start, $limit) {
 		$uid = intval($uid);
 		if ($uid < 1) return array();
-		$dialogs = $this->_getDialogDao()->getDialogs($uid,$start,$limit);
+		$dialogs = $this->_getDialogDao()->getDialogs($uid, $start, $limit);
 		foreach ($dialogs as $k=>$v) {
 			$v['last_message'] && $v['last_message'] = unserialize($v['last_message']);
 			$dialogs[$k] = $v;
@@ -305,7 +305,7 @@ class WindidMessage {
 	 * @param int $limit
 	 * @return array
 	 */
-	public function getDialogMessages($dialogId,$limit = 10,$start = 0) {
+	public function getDialogMessages($dialogId, $limit = 10, $start = 0) {
 		$dialogId = intval($dialogId);
 		$mesages = array();
 		if ($dialogId < 1) $mesages;
@@ -415,20 +415,20 @@ class WindidMessage {
 	 * @return WindidMessageDao
 	 */
 	protected function _getDao() {
-		return Windid::loadDao('message.dao.WindidMessageDao');
+		return Wekit::loadDao('WSRV:message.dao.WindidMessageDao');
 	}
 	
 	/**
 	 * @return WindidMessageRelationDao
 	 */
 	protected function _getRelationDao() {
-		return Windid::loadDao('message.dao.WindidMessageRelationDao');
+		return Wekit::loadDao('WSRV:message.dao.WindidMessageRelationDao');
 	}
 	
 	/**
 	 * @return WindidMessageDialogDao
 	 */
 	protected function _getDialogDao() {
-		return Windid::loadDao('message.dao.WindidMessageDialogDao');
+		return Wekit::loadDao('WSRV:message.dao.WindidMessageDialogDao');
 	}
 }

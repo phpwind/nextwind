@@ -3,7 +3,7 @@ Wind::import('APPS:space.controller.SpaceBaseController');
 /**
  * 新鲜事
  * 
- * @version $Id: IndexController.php 19209 2012-10-11 11:01:31Z jieyin $
+ * @version $Id: IndexController.php 25054 2013-03-01 03:14:54Z jieyin $
  * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
@@ -23,11 +23,17 @@ class IndexController extends SpaceBaseController {
 		$this->setOutput($page, 'page');
 		
 		// seo设置
+
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
 		$des = Pw::substrs($this->space->space['space_descrip'], 100, 0, false);
-		if ($page == 1) PwSeoBo::setCustomSeo($lang->getMessage('SEO:space.index.run.title', array($this->space->space['space_name'])), '', $des);
-		else PwSeoBo::setCustomSeo($lang->getMessage('SEO:space.index.run.page.title', array($page, $this->space->space['space_name'])), '', $des);
+		if ($page == 1) {
+			$seoBo->setCustomSeo($lang->getMessage('SEO:space.index.run.title', array($this->space->space['space_name'])), '', $des);
+		} else {
+			$seoBo->setCustomSeo($lang->getMessage('SEO:space.index.run.page.title', array($page, $this->space->space['space_name'])), '', $des);
+		}
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -37,7 +43,7 @@ class IndexController extends SpaceBaseController {
 	public function demoAction() {
 		if ($this->loginUser->uid < 1)  $this->showError('SPACE:user.not.login');
 		$styleid = $this->getInput('id');
-		$style = Wekit::load('APPS:appcenter.service.PwStyle')->getStyle($styleid);
+		$style = Wekit::load('APPCENTER:service.PwStyle')->getStyle($styleid);
 		if (!$style) $this->showError('SPACE:fail');
 		$this->space->space['space_style'] = $style['alias'];
 		$this->setOutput(1, 'page');

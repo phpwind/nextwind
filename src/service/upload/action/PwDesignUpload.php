@@ -1,15 +1,15 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-Wind::import('SRV:upload.action.PwUploadAction');
+Wind::import('LIB:upload.PwUploadAction');
 Wind::import('COM:utility.WindUtility');
 
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
- * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignUpload.php 18058 2012-09-11 05:07:19Z xiaoxia.xuxx $ 
+ * @version $Id: PwDesignUpload.php 23975 2013-01-17 10:20:11Z jieyin $ 
  * @package 
  */
 

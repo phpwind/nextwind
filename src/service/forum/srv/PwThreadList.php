@@ -12,7 +12,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadList.php 22627 2012-12-26 03:54:26Z jieyin $
+ * @version $Id: PwThreadList.php 24045 2013-01-21 05:34:56Z jieyin $
  * @package forum
  */
 
@@ -86,7 +86,8 @@ class PwThreadList extends PwBaseHookService {
 	public function execute(PwThreadDataSource $ds) {
 		$this->_ds = $ds;
 		$this->total = $ds->getTotal();
-		$this->maxPage = min(ceil($this->total / $this->perpage), $this->_maxPage);
+		$this->maxPage = ceil($this->total / $this->perpage);
+		$this->_maxPage > 0 && $this->maxPage = min($this->maxPage, $this->_maxPage);
 		$this->page < 1 && $this->page = 1;
 		$this->page > $this->maxPage && $this->page = $this->maxPage;
 		list($start, $limit) = Pw::page2limit($this->page, $this->perpage);

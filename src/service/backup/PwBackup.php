@@ -73,14 +73,17 @@ class PwBackup {
 	 */
 	public function getTables() {
 		$tables = $this->_getBackupDao()->getTables();
+		$prefix = $this->getTablePrefix();
+		$prefixLen = strlen($prefix);
 		$tableArray = array();
 		foreach ($tables as $v) {
 			$name = array_values($v);
 			if (!$name[0]) continue;
+			if (substr($name[0], 0, $prefixLen) != $prefix) continue;
 			$tableStatus = $this->getTableStatus($name[0]);
 			$tmp['name'] = $name[0];
 			$tmp['Comment'] = $tableStatus['Comment'];
-			$tableArray[] = $tmp;
+			$tableArray[$name[0]] = $tmp;
 		}
 		return $tableArray;
 	}

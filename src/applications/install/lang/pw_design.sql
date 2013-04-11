@@ -54,5 +54,3 @@ INSERT INTO `pw_design_page` (`page_id`, `page_type`, `page_name`, `page_router`
 (3, 2, '版块列表页', 'bbs/thread/run', 1, 0, ',', '', '', ''),
 (4, 2, '帖子阅读页', 'bbs/read/run', 1, 0, ',', '', '', ''),
 (5, 2, '论坛分类页', 'bbs/cate/run', 1, 0, ',', '', '', ''),
-(6, 2, '版块精华', 'bbs/cate/digest', 0, 0, ',', '', '', ''),
-(7, 2, '我的关注', 'bbs/fresh/run', 0, 0, ',', '', '', '');

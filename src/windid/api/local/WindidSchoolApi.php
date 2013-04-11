@@ -1,10 +1,10 @@
 <?php
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidSchoolApi.php 21658 2012-12-12 07:00:12Z gao.wanggao $ 
+ * @version $Id: WindidSchoolApi.php 24834 2013-02-22 06:43:43Z jieyin $ 
  * @package 
  */
 class WindidSchoolApi {
@@ -21,21 +21,44 @@ class WindidSchoolApi {
 		return $this->_getSchoolDs()->getSchoolByAreaidAndTypeid($areaid, $typeid);
 	}
 	
-	public function searchSchool($search, $limit =10, $start = 0) {
-		if (!is_array($search)) return array();
-		$array = array('name', 'typeid', 'areaid', 'firstchar');
-		Wind::import('WINDID:service.school.vo.WindidSchoolSo');
-		$vo = new WindidSchoolSo();
-		foreach ($search AS $k=>$v) {
-			if (!in_array($k, $array)) continue;
-			$method = 'set'.ucfirst($k);
-			$vo->$method($v);
-		}
-		return $this->_getSchoolDs()->searchSchool($vo, $limit, $start);
+	public function searchSchool(WindidSchoolSo $schoolSo, $limit = 10, $start = 0) {
+		return $this->_getSchoolDs()->searchSchool($schoolSo, $limit, $start);
+	}
+
+	public function searchSchoolData(WindidSchoolSo $searchSo, $limit = 10, $start = 0) {
+		return $this->_getSchoolService()->searchSchool($searchSo, $limit, $start);
+	}
+
+	public function getFirstChar($name) {
+		return $this->_getSchoolService()->getFirstChar($name);
+	}
+	
+	public function addSchool(WindidSchoolDm $dm) {
+		$result = $this->_getSchoolDs()->addSchool($dm);
+		return WindidUtility::result($result);
+	}
+	
+	public function batchAddSchool($schoolDms) {
+		$result = $this->_getSchoolDs()->batchAddSchool($schoolDms);
+		return WindidUtility::result($result);
+	}
+
+	public function updateSchool(WindidSchoolDm $schooldm) {
+		$result = $this->_getSchoolDs()->updateSchool($schooldm);
+		return WindidUtility::result($result);
+	}
+
+	public function deleteSchool($schoolid) {
+		$result = $this->_getSchoolDs()->deleteSchool($schoolid);
+		return WindidUtility::result($result);
 	}
 	
 	private function _getSchoolDs() {
-		return Windid::load('school.WindidSchool');
+		return Wekit::load('WSRV:school.WindidSchool');
+	}
+
+	private function _getSchoolService() {
+		return Wekit::load('WSRV:school.srv.WindidSchoolService');
 	}
 }
 ?>

@@ -67,7 +67,7 @@ class ManageController extends AdminBaseController {
 		if (!$id) $this->showError('operate.select');
 		!is_array($id) && $id = array($id);
 		$dm = new PwReportDm();
-		$dm->setOperateUserid($this->adminUser->getUid())
+		$dm->setOperateUserid($this->loginUser->uid)
 			->setOperateTime(Pw::getTime())
 			->setIfcheck(1);
 		$this->_getReportDs()->batchUpdateReport($id,$dm);
@@ -79,14 +79,14 @@ class ManageController extends AdminBaseController {
 		$reports = $this->_getReportDs()->fetchReport($ids);
 		$notice = Wekit::load('message.srv.PwNoticeService');
 		$extendParams = array(
-			'operateUserId' => $this->adminUser->getUid(),
-			'operateUsername' => $this->adminUser->getUsername(),
+			'operateUserId' => $this->loginUser->uid,
+			'operateUsername' => $this->loginUser->username,
 			'operateTime' => Pw::getTime(),
 			'operateType' => $action,
 		); 
 		foreach ($reports as $v) {
 			$this->_getReportService()->sendNotice($v,$extendParams);
-			$content = $this->_buildNoticeTitle($this->adminUser->getUsername(),$action);
+			$content = $this->_buildNoticeTitle($this->loginUser->username,$action);
 			$action == '处理' && $this->_getPwNoticeService()->sendDefaultNotice($v['created_userid'],$content,$content);
 		}
 		return true;

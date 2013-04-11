@@ -25,67 +25,67 @@
 						</div>
 					<nav>
 						<div id="J_medal_card_wrap" class="medal_content">
-							<!--# if (!$alreadyAll):
+							<!--# if (!$alreadyAll){
 									$disable = $count < 4 ? 'next_disable' : '';
 							#-->
 							<div class="medal_unshow_list">
 								<div class="hd">
 									<h2>未展示的勋章</h2><span>（共{$count}枚）</span>
 								</div>
-							<!--# if (!$myList_w): #-->
+							<!--# if (!$myList_w){ #-->
 								<p>您还有勋章没有申请哦，赶紧去申请个吧！ <a href="{@url:medal/index/center}#medal_manual">点击申请</a><p>
-							<!--# else: #-->
+							<!--# }else{ #-->
 								<div id="J_medal_unshow" class="cc">
 									<div class="pre J_lazyslide_prev pre_disable">上一组</div>
 									<div class="ct" style="overflow:hidden;">
 									<ul class="J_lazyslide_list" style="width:9999px;">
-									<!--# foreach ($myList_w as $key=>$my): #-->
-									<!--# if($my['award_status'] <= 1): #-->
+									<!--# foreach ($myList_w as $key=>$my){ #-->
+									<!--# if($my['award_status'] <= 1){ #-->
 										<li class="doing">
-									<!--# else: #-->
+									<!--# }else{ #-->
 										<li>
-									<!--# endif; #-->
+									<!--# } #-->
 											<a data-role="show" data-id="{$my['medal_id']}" class="J_medal_card" href="{@url:medal/index/show?medalid=$my['medal_id']&pop=wei}"><img src="{$my['image']}" width="96" height="96" alt="{$my['name']}" /></a>
 											<p title="{$my['name']}">{$my['name']}</p>
-											<!--# if($my['award_status'] == 1): #-->
+											<!--# if($my['award_status'] == 1){ #-->
 											<button class="btn disabled" type="button" disabled>进行中</button>
-											<!--# elseif($my['award_status'] == 2): #-->
+											<!--# }elseif($my['award_status'] == 2){ #-->
 											<button class="btn disabled" type="button" disabled>等待审核</button>
-											<!--# elseif($my['award_status'] == 3): #-->
+											<!--# }elseif($my['award_status'] == 3){ #-->
 											<a data-role="receive" href="{@url:medal/index/show?medalid=$my['medal_id']&pop=wei}" data-logid="{$my['log_id']}" data-id="{$my['medal_id']}" class="btn btn_success J_medal_card">领取</a>
-											<!--# else: #-->
+											<!--# }else{ #-->
 											<button class="btn disabled" type="button" disabled>进行中</button>
-											<!--# endif; #-->
+											<!--# } #-->
 										</li>
-									<!--# endforeach; #-->
+									<!--# } #-->
 										
 									</ul>
 									</div>
 									<div class="next J_lazyslide_next {$disable}">下一组</div>
 								</div>
-								<!--# endif; #-->
+								<!--# } #-->
 							</div>
-							<!--# endif; #-->
+							<!--# } #-->
 					
 			
 							<!--设置排序时，样式变成 medal_show_sort -->
 							<!--# $count = count($myList_y);
-							if ($count > 0):#-->
+							if ($count > 0){#-->
 							<div id="J_medal_show_wrap" class="medal_show_list">
 								<form id="J_medal_order_form" action="{@url:medal/index/doOrder}" method="post">
 								<div class="hd">
-									<!--# if ($count > 1):#-->
+									<!--# if ($count > 1){#-->
 									<div class="fr" style="display:none;" id="J_order_wrap">
 										<button id="J_medal_order_sub" type="submit" class="btn btn_submit">保存</button>
 										<a id="J_order_cancl" href="#" class="btn">取消</a>
 									</div>
 									<div class="fr"><a id="J_show_order_btn" href="#" class="btn btn_submit">设置排序</a></div>
-									<!--# endif; #-->
+									<!--# } #-->
 									<h2>已展示的勋章</h2><span>（共{$count}枚）</span>
 								</div>
 								<div class="ct" style="">
 								<ul id="J_medal_show_list" class="cc" style="position:relative;">
-								<!--# foreach ($myList_y as $key=>$my): #-->
+								<!--# foreach ($myList_y as $key=>$my){ #-->
 									<li style="position:relative;z-index:1;">
 										<a data-role="show" data-id="{$my['medal_id']}" class="J_medal_card" href="{@url:medal/index/show?medalid=$my['medal_id']&pop=yi}">
 											<img src="{$my['image']}" width="96" height="96" alt="{$my['name']}" />
@@ -94,12 +94,12 @@
 										<input type="hidden" name="id[]" value="{$my['log_id']}" />
 										<input type="hidden" name="order[]" value="" class="J_medal_order" />
 									</li>
-								<!--# endforeach; #-->
+								<!--# } #-->
 								</ul>
 								</div>
 								</form>
 							</div>
-							<!--# endif; #-->
+							<!--# } #-->
 							<!-- <div class="not_content">啊哦，您还没有申请勋章哦，赶紧<a href="">去申请个</a>吧！</div> -->
 						</div>
 					</div>

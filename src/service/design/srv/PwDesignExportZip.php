@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignExportZip.php 22555 2012-12-25 08:37:31Z gao.wanggao $ 
+ * @version $Id: PwDesignExportZip.php 24989 2013-02-28 02:53:30Z gao.wanggao $ 
  * @package 
  */
 class PwDesignExportZip {
@@ -23,10 +23,11 @@ class PwDesignExportZip {
 		$this->dir = Wind::getRealDir('THEMES:portal.local.'). $pageBo->getTplPath() . '/';
 	}
 	
-	public function zip() {
+	public function zip($charset = 'utf-8') {
 		Wind::import('LIB:utility.PwZip');
 		$zip = new PwZip();
 		$files = $this->read($this->dir);
+		$fromCharset = Wekit::app()->charset;
 		foreach ($files AS &$v) {
 			$v['filename'] = str_replace($this->dir, '', $v['filename']);
 			$ext = strrchr($v['filename'], ".");
@@ -41,15 +42,20 @@ class PwDesignExportZip {
 			if ($file['filename'] == 'module/data.txt') continue;
 			if (strtolower($file['filename']) == 'manifest.xml') {
 				Wind::import("WIND:parser.WindXmlParser");
-				$xml = new WindXmlParser();
+				$xml = new WindXmlParser('1.0', $fromCharset);
 				$config = $xml->parseXmlStream($file['data'], 0);
 				unset($config['module']);
-				$file['data'] = $this->xmlFormat($config);
+				$file['data'] = $this->xmlFormat($config, $charset);
+			} else {
+				$ext = strtolower(substr(strrchr($file['filename'], '.'), 1));
+				if (in_array($ext, array('css', 'js', 'htm'))) {
+					$file['data'] = WindConvert::convert($file['data'], $charset, $fromCharset);
+				}
 			}
 			$file['filename'] = $this->folder.'/'.$file['filename'];
 			if (!$zip->addFile($file['data'], $file['filename'])) return new PwError("DESIGN:zlib.error");
 		}
-		$txt = $this->doTxt();
+		$txt = $this->doTxt($charset);
 		$txtfile = $this->folder.'/module/data.txt';
 		$zip->addFile($txt['content'], $txtfile);
 		return $zip->getCompressedFile();
@@ -106,9 +112,9 @@ class PwDesignExportZip {
 	protected function decompilePw($section) {
 		$in = array(
 			'<design role="start"/>',
-			'<!--# if($portal[\'header\']): #--><template source=\'TPL:common.header\' load=\'true\' /><!--# endif; #-->',
-			'<!--# if($portal[\'navigate\']): #--><div class="bread_crumb">{@$headguide|html}</div><!--# endif; #-->',
-			'<!--# if($portal[\'footer\']): #--><template source=\'TPL:common.footer\' load=\'true\' /><!--# endif; #-->',
+			'<!--# if($portal[\'header\']){ #--><template source=\'TPL:common.header\' load=\'true\' /><!--# } #-->',
+			'<!--# if($portal[\'navigate\']){ #--><div class="bread_crumb">{@$headguide|html}</div><!--# } #-->',
+			'<!--# if($portal[\'footer\']){ #--><template source=\'TPL:common.footer\' load=\'true\' /><!--# } #-->',
 			'<design role="end"/>',
 		);
 		$out = array(
@@ -179,15 +185,16 @@ class PwDesignExportZip {
 		return $this->_files;
 	}
 	
-	protected function doTxt() {
+	protected function doTxt($charset = 'utf-8') {
 		$pageInfo = $this->_getPageDs()->getPage($this->pageid);
 		Wind::import('SRV:design.srv.PwDesignExportTxt');
 		$srv = new PwDesignExportTxt($pageInfo);
-		return $srv->txt();
+		return $srv->txt($charset);
 	}
 	
-	protected function xmlFormat($array) {
-    	$dom = new DOMDocument('1.0', 'utf-8');
+	protected function xmlFormat($array, $charset = 'utf-8') {
+		$array['application']['charset'] = $charset;
+    	$dom = new DOMDocument('1.0', $charset);
         $root = $dom->createElement('manifest');
         $dom->appendChild($root);
         $this->_creatDom($root, $dom, $array);
@@ -195,8 +202,6 @@ class PwDesignExportZip {
 	}
 	
 	private function _creatDom($root, $dom, $array) {
-		$charset = strtolower(Wind::getApp()->getResponse()->getCharset());
-		$charset = ($charset == 'gbk') ? 'gb2312' : 'utf-8';
 		foreach ($array AS $k=>$v) {
 			if (is_numeric($k)) {
 				$child = $dom->createElement('item');
@@ -205,7 +210,6 @@ class PwDesignExportZip {
 			}
 			$root->appendChild($child);
 			if (!is_array($v)){
-				$v = WindConvert::convert($v, 'utf8', $charset);
 				$child->appendChild($dom->createTextNode($v));
 			} else {
 				$this->_creatDom($child, $dom, $v);

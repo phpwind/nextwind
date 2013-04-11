@@ -6,13 +6,13 @@
  * @author peihong.zhang
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidMessageDao.php 23072 2013-01-06 02:12:11Z gao.wanggao $
+ * @version $Id: WindidMessageDao.php 23820 2013-01-16 06:14:07Z jieyin $
  * @package forum
  */
 
 class WindidMessageDao extends WindidBaseDao {
 	protected $_pk = 'message_id';
-	protected $_table = 'windid_message';
+	protected $_table = 'message';
 	protected $_dataStruct = array('message_id', 'from_uid', 'to_uid','content', 'created_time');
 	
 	/**

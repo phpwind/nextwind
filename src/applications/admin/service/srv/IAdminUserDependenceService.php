@@ -48,7 +48,14 @@ interface IAdminUserDependenceService {
 	 * @return boolean PwError
 	 */
 	public function setUser($username, $password, $email, $groupid = 3, $uid = 0);
-
+	
+	/**
+	 * 获取用户信息列表
+	 *
+	 * @param array $userids
+	 */
+	public function getUserByUids($userids);
+	
 	/**
 	 * 根据用户ID获取用户信息
 	 *

@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: config.php 19953 2012-10-22 03:54:48Z gao.wanggao $ 
+ * @version $Id: config.php 23959 2013-01-17 08:36:09Z gao.wanggao $ 
  * @package 
  */
 return array(
@@ -44,7 +44,7 @@ return array(
 		//'titlenum'	=>array('text','名称长度','0为不限制','','short'),
 		'desnum'	=>array('text','简介长度','0为不限制','','short'),
 		'limit'		=>array('text','显示条数','默认10条','','short'),
-		'timefmt'	=>array('select','时间格式','',array('m-d'=>'04-26', 'Y-m-d'=>'2012-04-26', 'Y-m-d h:i:s'=>'2012-04-26 11:30', 'H:i:s'=>'11:30:59', 'auto'=>'几天前')),
+		'timefmt'	=>array('select','时间格式','',array('m-d'=>'04-26', 'Y-m-d'=>'2012-04-26', 'Y-m-d h:i:s'=>'2012-04-26 11:30', 'H:i:s'=>'11:30:59', 'n月j日'=>'4月26日', 'y年n月j日'=>'12年4月26日','auto'=>'几天前')),
 		'isblank'	=>array('radio','链接打开方式','',array('0'=>'当前窗口', '1'=>'新窗口'),''),
 	),
 	

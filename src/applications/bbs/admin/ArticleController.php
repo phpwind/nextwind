@@ -109,7 +109,7 @@ class ArticleController extends AdminBaseController {
 		if (!is_array($tids) || !count($tids)) {
 			$this->showError('operate.select');
 		}
-		$service = new PwDeleteTopic(new PwFetchTopicByTid($tids), new PwUserBo($this->adminUser->getUid()));
+		$service = new PwDeleteTopic(new PwFetchTopicByTid($tids), new PwUserBo($this->loginUser->uid));
 		$service->setRecycle(true)->setIsDeductCredit((bool)$isDeductCredit)->execute();
 				
 		$this->showMessage('operate.success');
@@ -197,7 +197,7 @@ class ArticleController extends AdminBaseController {
 		if (!is_array($pids) || !count($pids)) {
 			$this->showError('operate.select');
 		}
-		$service = new PwDeleteReply(new PwFetchReplyByPid($pids), new PwUserBo($this->adminUser->getUid()));
+		$service = new PwDeleteReply(new PwFetchReplyByPid($pids), new PwUserBo($this->loginUser->uid));
 		$service->setRecycle(true)->setIsDeductCredit((bool)$isDeductCredit)->execute();
 		$this->showMessage('operate.success');
 	}

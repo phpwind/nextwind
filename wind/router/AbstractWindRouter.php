@@ -6,19 +6,19 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-23
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AbstractWindRouter.php 3904 2013-01-08 07:01:26Z yishuo $
+ * @version $Id: AbstractWindRouter.php 3928 2013-01-29 10:21:53Z yishuo $
  * @package router
  */
 abstract class AbstractWindRouter extends WindHandlerInterceptorChain {
 	protected $moduleKey = 'm';
 	protected $controllerKey = 'c';
 	protected $actionKey = 'a';
-	protected $module = 'default';
-	protected $controller = 'index';
-	protected $action = 'run';
-	protected $_action;
-	protected $_controller;
-	protected $_module;
+	protected $module;
+	protected $controller;
+	protected $action;
+	protected $_action = 'run';
+	protected $_controller = 'index';
+	protected $_module = 'default';
 	protected $defaultRoute = '';
 
 	/**
@@ -45,9 +45,9 @@ abstract class AbstractWindRouter extends WindHandlerInterceptorChain {
 	public function setConfig($config) {
 		parent::setConfig($config);
 		if ($this->_config) {
-			$this->module = $this->getConfig('module', 'default-value', $this->module);
-			$this->controller = $this->getConfig('controller', 'default-value', $this->controller);
-			$this->action = $this->getConfig('action', 'default-value', $this->action);
+			$this->_module = $this->getConfig('module', 'default-value', $this->_module);
+			$this->_controller = $this->getConfig('controller', 'default-value', $this->_controller);
+			$this->_action = $this->getConfig('action', 'default-value', $this->_action);
 			$this->moduleKey = $this->getConfig('module', 'url-param', $this->moduleKey);
 			$this->controllerKey = $this->getConfig('controller', 'url-param', $this->controllerKey);
 			$this->actionKey = $this->getConfig('action', 'url-param', $this->actionKey);
@@ -208,6 +208,15 @@ abstract class AbstractWindRouter extends WindHandlerInterceptorChain {
 	}
 
 	/**
+	 * 设置默认module
+	 *
+	 * @param string $module
+	 */
+	public function setDefaultModule($module) {
+		$this->_module = $module;
+	}
+
+	/**
 	 * 返回默认的controller值
 	 * 
 	 * @return string
@@ -217,11 +226,29 @@ abstract class AbstractWindRouter extends WindHandlerInterceptorChain {
 	}
 
 	/**
+	 * 设置默认的controller
+	 *
+	 * @param string $controller
+	 */
+	public function setDefaultController($controller) {
+		$this->_controller = $controller;
+	}
+
+	/**
 	 * 返回默认的action值
 	 * 
 	 * @return string
 	 */
 	public function getDefaultAction() {
 		return $this->_action;
+	}
+
+	/**
+	 * 设置默认的action值
+	 *
+	 * @param string $action
+	 */
+	public function setDefaultAction($action) {
+		$this->_action = $action;
 	}
 }

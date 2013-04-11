@@ -1,11 +1,11 @@
 <?php
 Wind::import('LIB:base.PwBaseController');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: xiaoxia.xuxx $>
- * @author $Author: xiaoxia.xuxx $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: long.shi $>
+ * @author $Author: long.shi $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 20207 2012-10-24 09:49:47Z xiaoxia.xuxx $ 
+ * @version $Id: IndexController.php 23994 2013-01-18 03:51:46Z long.shi $ 
  * @package 
  */
 
@@ -26,7 +26,7 @@ class IndexController extends PwBaseController {
 		}
 		
 		Wind::import('SRV:seo.bo.PwSeoBo');
-		PwSeoBo::setCustomSeo($portal['title'],$portal['keywords'],$portal['description']);
+		$seoBo->setCustomSeo($portal['title'],$portal['keywords'],$portal['description']);
 
 		$this->setOutput($portal, 'portal');
 		if($portal['navigate']) {

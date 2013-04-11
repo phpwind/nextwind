@@ -16,7 +16,7 @@ class FindController extends AdminBaseController {
 		$keyword = $this->getInput('keyword');
 		/* @var $menuService AdminMenuService */
 		$menuService = Wekit::load('ADMIN:service.srv.AdminMenuService');
-		$menus = $menuService->getMyMenus($this->adminUser);
+		$menus = $menuService->getMyMenus($this->loginUser);
 		$searcher = new AdminSearchService($keyword, $menus);
 		$result = $searcher->search();
 		$this->setOutput($keyword, 'keyword');

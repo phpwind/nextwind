@@ -1,16 +1,16 @@
 <?php
 
-Wind::import("WINDID:service.user.validator.WindidUserValidator");
-Wind::import('WINDID:library.base.WindidBaseDm');
+Wind::import("WSRV:user.validator.WindidUserValidator");
+
 /**
  * 用户信息数据模型
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidCreditDm.php 22114 2012-12-19 08:18:05Z gao.wanggao $
+ * @version $Id: WindidCreditDm.php 24811 2013-02-21 10:37:46Z jieyin $
  * @package windid.service.user.dm
  */
-class WindidCreditDm extends WindidBaseDm {
+class WindidCreditDm extends PwBaseDm {
 	
 	public $uid;
 	private $_tmpData = array();
@@ -18,16 +18,10 @@ class WindidCreditDm extends WindidBaseDm {
 	public function __construct($uid) {
 		$this->uid = $uid;
 	}
-	
-	public function getTmp() {
-		return $this->_tmpData;
-	}
 
 	public function addCredit($cType, $value) {
 		if (!$this->_isLegal($cType) || $value == 0) return;
 		$this->_increaseData['credit' . $cType] = $value;
-		$this->_tmpData['field'] =  $cType;
-		$this->_tmpData['credit'] = $value;
 		return $this;
 	}
 
@@ -38,14 +32,14 @@ class WindidCreditDm extends WindidBaseDm {
 	}
 	
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::beforeAdd()
+	 * @see PwBaseDm::beforeAdd()
 	 */
 	protected function _beforeAdd() {
 		return true;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::beforeUpdate()
+	 * @see PwBaseDm::beforeUpdate()
 	 */
 	protected function _beforeUpdate() {
 		if (!$this->uid) {
@@ -59,6 +53,6 @@ class WindidCreditDm extends WindidBaseDm {
 
 	private function _isLegal(&$key) {
 		$key = intval($key);
-		return $key >= 1 && $key <= 8;
+		return $key >= 1;
 	}
 }

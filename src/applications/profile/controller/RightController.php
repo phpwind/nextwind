@@ -8,7 +8,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: RightController.php 22230 2012-12-19 21:45:20Z xiaoxia.xuxx $
+ * @version $Id: RightController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package src.products.u.controller.profile
  */
 class RightController extends BaseProfileController {
@@ -52,8 +52,10 @@ class RightController extends BaseProfileController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:profile.right.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:profile.right.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 
 	/**

@@ -13,18 +13,18 @@
 		<li><span class="red">开启伪静态功能后，需要开启服务器的rewrite模块</span></li>
 		<li>url格式尽量加些特殊前缀以及连接符(例如.*-等)作为唯一标识，否则url容易冲突造成混乱。</li>
 		<li>当格式中含有/时，需要把导航地址都设为绝对地址，否则会引起根目录混乱。</li>
-		<li>如果url格式中包含{fname}参数，则必须在<a href="{@url:bbs/setforum/run}">【版块编辑】</a>中设置版块的个性域名后才能正常访问。</li>
+		<li>如果url格式中包含{fname}参数，则必须在<a class="J_linkframe_trigger" href="{@url:bbs/setforum/run}">【版块编辑】</a>中设置版块的个性域名后才能正常访问。</li>
 	</ul>
 </div>
 <form method="post" class="J_ajaxForm" action="{@url:rewrite/rewrite/doModify}">
 <div class="h_a">URL伪静态设置</div>
 <div class="table_purview mb10">
-<table width="100%">
+<table width="100%" class="J_check_wrap">
 		<tr class="hd">
-			<th>页面</th>
-			<td>可用url参数</td>
-			<td>url格式</td>
-			<td>启用</td>
+			<th width="160">页面</th>
+			<td width="200">可用url参数</td>
+			<td width="260">url格式</td>
+			<td><label><input name="" class="J_check_all" data-checklist="J_check_rewrite" data-direction="y" type="checkbox" value="">全选</label></td>
 		</tr>
 		<!--# foreach($addons as $k => $v){ #-->
 		<tr>
@@ -39,7 +39,8 @@
 				<input name="format[{$k}]" type="text" value='{$format}' class="input length_4">
 			<!--# } #-->
 			</td>
-			<td><input name="isopen[{$k}]" type="checkbox" value="1" {@Pw::ifcheck($rewrite["isopen.$k"])}></td>
+			<td><input name="isopen[{$k}]" type="checkbox" value="1" class="J_check" data-yid="J_check_rewrite" {@Pw::ifcheck($rewrite["isopen.$k"])}>
+			</td>
 		</tr>
 		<!--# } #-->
 	</table>

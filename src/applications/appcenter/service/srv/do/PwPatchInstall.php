@@ -1,12 +1,12 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.iPwInstall');
+Wind::import('APPCENTER:service.srv.iPwInstall');
 /**
  * 安装补丁
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwPatchInstall.php 21505 2012-12-10 10:21:57Z long.shi $
+ * @version $Id: PwPatchInstall.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package appcenter
  */
 class PwPatchInstall implements iPwInstall {

@@ -12,7 +12,7 @@ Wind::import('SRV:education.srv.helper.PwEducationHelper');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwDesignUserDataService.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: PwDesignUserDataService.php 24726 2013-02-18 06:15:04Z gao.wanggao $
  * @package src.service.design.srv.model.user
  */
 class PwDesignUserDataService extends PwDesignModelBase {
@@ -43,7 +43,7 @@ class PwDesignUserDataService extends PwDesignModelBase {
 	 * (non-PHPdoc)
 	 * @see src/service/design/srv/model/PwDesignModelBase::decorateSaveProperty()
 	 */
-	public function decorateSaveProperty($property) {
+	public function decorateSaveProperty($property, $moduleid) {
 		//用户名
 		if (trim($property['usernames'])) {
 			$usernames = array_unique(explode(' ', trim($property['usernames'])));
@@ -177,13 +177,11 @@ class PwDesignUserDataService extends PwDesignModelBase {
 		}
 		
 		//家庭和居住地
-		/* @var $areaSrv PwAreaService */
-		$areaSrv = Wekit::load('area.srv.PwAreaService');
+		$areaSrv = WindidApi::api('area');
 		$areaList = $areaSrv->fetchAreaInfo(array_unique($_areaid));
 		
 		//学校列表
-		/* @var $schoolSrv PwSchoolService */
-		$schoolSrv = Wekit::load('school.srv.PwSchoolService');
+		$schoolSrv = WindidApi::api('school');
 		$schoolList = $schoolSrv->fetchSchool($schoolids);
 
 		foreach ($clear as $_uid => $_item) {
@@ -290,8 +288,7 @@ class PwDesignUserDataService extends PwDesignModelBase {
 	 * @return array
 	 */
 	private function _buildArea($areaid) {
-		/* @var $areaSrv PwAreaService */
-		$areaSrv = Wekit::load('area.srv.PwAreaService');
+		$areaSrv = WindidApi::api('area');
 		$_rout = $areaSrv->getAreaRout($areaid);
 		$_return = array('id' => '', 'rout' => array(array('', ''), array('', ''), array('', '')));
 		if (!$_rout) return $_return;

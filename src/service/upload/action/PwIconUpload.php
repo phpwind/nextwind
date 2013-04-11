@@ -1,5 +1,5 @@
 <?php
-Wind::import('SRV:upload.action.PwUploadAction');
+Wind::import('LIB:upload.PwUploadAction');
 class PwIconUpload extends PwUploadAction {
 	
 	public $key;

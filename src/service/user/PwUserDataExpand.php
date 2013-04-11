@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUserDataExpand.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: PwUserDataExpand.php 24718 2013-02-17 06:42:06Z jieyin $
  * @package wind
  */
 class PwUserDataExpand {
@@ -32,7 +32,6 @@ class PwUserDataExpand {
 	 * @return boolean
 	 */
 	public function alterAddCredit($num) {
-		$this->_getWindid()->alterCredit($num);
 		$num = intval($num);
 		return $num < 9 ? false : $this->_getDao()->alterAddCredit($num);
 	}
@@ -44,7 +43,6 @@ class PwUserDataExpand {
 	 * @return boolean
 	 */
 	public function alterDropCredit($num) {
-		$this->_getWindid()->dropCredit($num);
 		$num = intval($num);
 		return $num < 9 ? false : $this->_getDao()->alterDropCredit($num);
 	}
@@ -56,7 +54,6 @@ class PwUserDataExpand {
 	 * @return boolean
 	 */
 	public function clearCredit($num) {
-		$this->_getWindid()->clearCredit($num);
 		$num = intval($num);
 		return ($num > 8 || $num < 1) ? false : $this->_getDao()->clearCredit($num);
 	}

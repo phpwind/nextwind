@@ -5,11 +5,7 @@ Wind::import('SRV:forum.dm.PwTopicDm');
 Wind::import('SRV:forum.dm.PwForumDm');
 
 /**
- * 帖子发布流程
- *
- * -> 1.check 检查帖子发布运行环境
- * -> 2.appendDo(*) 增加帖子发布时的行为动作,例:投票、附件等(可选)
- * -> 3.execute 发布
+ * 帖子管理操作-复制
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
@@ -33,7 +29,8 @@ class PwThreadManageDoCopy extends PwThreadManageDo {
 	public function check($permission) {
 		if (!isset($permission['copy']) || !$permission['copy']) {
 			return false;
-		} else if (isset($this->fid)) {
+		}
+		if (isset($this->fid)) {
 			Wind::import('SRV:forum.bo.PwForumBo');
 			$forum = new PwForumBo($this->fid);
 			if (!$forum->isForum()) {

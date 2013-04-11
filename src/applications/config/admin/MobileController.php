@@ -16,9 +16,9 @@ class MobileController extends AdminBaseController {
 	 * @see WindController::run()
 	 */
 	public function setAction() {
-		$registerConfig = $this->_getConfig()->getValues('register');
-		$loginConfig = $this->_getConfig()->getValues('login');
-		$mobileConfig = $this->_getConfig()->getValues('mobile');
+		$registerConfig = Wekit::C()->getValues('register');
+		$loginConfig = Wekit::C()->getValues('login');
+		$mobileConfig = Wekit::C()->getValues('mobile');
 		if (!$mobileConfig['plat.type']) {
 			$this->showError('USER:mobile.plat.choose.error', 'config/mobile/run', true);
 		}
@@ -42,7 +42,7 @@ class MobileController extends AdminBaseController {
 		$config->set('active.phone', $this->getInput('activePhone', 'post'))
 				->set('mobile.message.content', $this->getInput('mobileMessageContent', 'post'))
 				->flush();
-		$loginConfig = $this->_getConfig()->getValues('login');
+		$loginConfig = Wekit::C()->getValues('login');
 		$ways = $this->getInput('ways', 'post');
 		$loginConfigWays = array_flip($loginConfig['ways']);
 		unset($loginConfigWays[4]);
@@ -64,7 +64,7 @@ class MobileController extends AdminBaseController {
 		$service = new PwMobileConfigService('PwMobileService_getPlats');
 		$plats = $service->getPlats();
 		
-		$config = $this->_getConfig()->getValues('mobile');
+		$config = Wekit::C()->getValues('mobile');
 		$platType = 'aliyun';
 		if (isset($config['plat.type']) && isset($plats[$config['plat.type']])) {
 			$paltType = $config['plat.type'];
@@ -74,10 +74,11 @@ class MobileController extends AdminBaseController {
 	}
 	
 	/**
-	 * 附件存储方式设置列表页
+	 * 方式设置列表页
 	 */
 	public function dorunAction() {
 		$mobile_plat = $this->getInput('mobile_plat', 'post');
+		if (!$mobile_plat) $this->showError('USER:mobile.plat.choose.empty');
 		/* @var $attService PwAttacmentService */
 		Wind::import('SRV:mobile.srv.PwMobileConfigService');
 		$service = new PwMobileConfigService('PwMobileService_getPlats');
@@ -86,14 +87,5 @@ class MobileController extends AdminBaseController {
 		if ($_r === true) $this->showMessage('ADMIN:success');
 		/* @var $_r PwError  */
 		$this->showError($_r->getError());
-	}
-	
-	/**
-	 * 加载Config DS 服务
-	 * 
-	 * @return PwConfig
-	 */
-	private function _getConfig() {
-		return Wekit::load('config.PwConfig');
 	}
 }

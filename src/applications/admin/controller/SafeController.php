@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: SafeController.php 22315 2012-12-21 08:05:38Z yishuo $
+ * @version $Id: SafeController.php 23697 2013-01-15 05:17:30Z jieyin $
  * @package admin.controller
  */
 class SafeController extends AdminBaseController {
@@ -18,7 +18,7 @@ class SafeController extends AdminBaseController {
 		$ips = $this->_loadSafeService()->getAllowIps();
 		$ips = implode(',', $ips);
 		$this->setOutput($ips, 'ips');
-		$this->setOutput(Wekit::app()->clientIp, 'clientIp');
+		$this->setOutput(Wind::getComponent('request')->getClientIp(), 'clientIp');
 	}
 
 	/**

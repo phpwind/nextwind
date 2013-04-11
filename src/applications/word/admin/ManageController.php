@@ -10,7 +10,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Mingqu Luo <luo.mingqu@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ManageController.php 22564 2012-12-25 09:00:06Z jinlong.panjl $
+ * @version $Id: ManageController.php 23975 2013-01-17 10:20:11Z jieyin $
  * @package wind
  */
 class ManageController extends AdminBaseController {
@@ -257,7 +257,7 @@ class ManageController extends AdminBaseController {
 	
 	public function doimportAction() {
 		Wind::import('SRV:upload.action.PwWordUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwWordUpload();
 		$upload = new PwUpload($bhv);
 

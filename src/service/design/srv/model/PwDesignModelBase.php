@@ -4,7 +4,8 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignModelBase.php 20578 2012-10-31 08:07:33Z gao.wanggao $ 
+ * @version $Id: PwDesignModelBase.php 25400 2013-03-14 08:35:54Z gao.wanggao $ 
+ * 
  * @package 
  */
 abstract class PwDesignModelBase {
@@ -44,7 +45,7 @@ abstract class PwDesignModelBase {
 	 * Enter description here ...
 	 * @param array $property
 	 */
-	public function decorateSaveProperty($property) {
+	public function decorateSaveProperty($property, $moduleid) {
 		return $property;
 	}
 	

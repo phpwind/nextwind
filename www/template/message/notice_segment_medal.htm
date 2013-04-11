@@ -15,19 +15,19 @@
 		</dt>
 		<dd class="notice_segment_cont">
 			<div class="summary">
-		<!--# if ($v['extend_params']['type'] == 1) :#-->
+		<!--# if ($v['extend_params']['type'] == 1){ #-->
 			恭喜！您已达到领取《{$v['extend_params']['name']}》勋章的要求，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-		<!--# elseif($v['extend_params']['type'] == 2): #-->
+		<!--# }elseif($v['extend_params']['type'] == 2){ #-->
 			恭喜！管理员颁发给您《{$v['extend_params']['name']}》勋章，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-		<!--# elseif($v['extend_params']['type'] == 3): #-->
+		<!--# }elseif($v['extend_params']['type'] == 3){ #-->
 			恭喜！您申请的《{$v['extend_params']['name']}》勋章已通过审核，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-		<!--# elseif($v['extend_params']['type'] == 4): #-->
+		<!--# }elseif($v['extend_params']['type'] == 4){ #-->
 			抱歉，您申请的《{$v['extend_params']['name']}》勋章因不符合要求，未通过管理员审核，请谅解。如有问题请联系管理员。
-		<!--# elseif($v['extend_params']['type'] == 5): #-->
+		<!--# }elseif($v['extend_params']['type'] == 5){ #-->
 			抱歉，您的《{$v['extend_params']['name']}》勋章被收回。
-		<!--# elseif($v['extend_params']['type'] == 7): #-->
+		<!--# }elseif($v['extend_params']['type'] == 7){ #-->
 			抱歉，您的《{$v['extend_params']['name']}》勋章被收回。
-		<!--# endif; #-->
+		<!--# } #-->
 			</div>
 			<div class="time">{@Pw::time2str($v['modified_time'],'auto')}</div>
 		</dd>
@@ -45,22 +45,22 @@
 			<dd class="notice_segment_cont">
 				<div class="summary">
 	<!--# 
-		if ($detailList['medalInfo'] ) :
+		if ($detailList['medalInfo'] ){
 	#-->
-			<!--# if ($detailList['extend_params']['type'] == 1) :#-->
+			<!--# if ($detailList['extend_params']['type'] == 1){ #-->
 				恭喜！您已达到领取《{$detailList['extend_params']['name']}》勋章的要求，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-			<!--# elseif($detailList['extend_params']['type'] == 2): #-->
+			<!--# }elseif($detailList['extend_params']['type'] == 2){ #-->
 				恭喜！管理员颁发给您《{$detailList['extend_params']['name']}》勋章，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-			<!--# elseif($detailList['extend_params']['type'] == 3): #-->
+			<!--# }elseif($detailList['extend_params']['type'] == 3){ #-->
 				恭喜！您申请的《{$detailList['extend_params']['name']}》勋章已通过审核，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-			<!--# elseif($detailList['extend_params']['type'] == 4): #-->
+			<!--# }elseif($detailList['extend_params']['type'] == 4){ #-->
 				抱歉，您申请的《{$detailList['extend_params']['name']}》勋章因不符合要求，未通过管理员审核，请谅解。如有问题请联系管理员。
-			<!--# elseif($detailList['extend_params']['type'] == 5): #-->
+			<!--# }elseif($detailList['extend_params']['type'] == 5){ #-->
 				抱歉，您的《{$detailList['extend_params']['name']}》勋章被收回。
-			<!--# elseif($detailList['extend_params']['type'] == 7): #-->
+			<!--# }elseif($detailList['extend_params']['type'] == 7){ #-->
 				抱歉，您的《{$detailList['extend_params']['name']}》勋章被收回。收回原因：管理员手动收回
-			<!--# endif; #-->
-	<!--# endif; #-->
+			<!--# } #-->
+	<!--# } #-->
 				</div>
 				<div class="time"><!--# echo Pw::time2str($notice['modified_time'],'auto');#--></div>
 			</dd>
@@ -91,19 +91,19 @@
 				<span class="icon_medal" title="已读"></span>
 				<!--# } #-->
 				</span>
-				<!--# if ($v['extend_params']['type'] == 1) :#-->
+				<!--# if ($v['extend_params']['type'] == 1){ #-->
 					恭喜！您已达到领取《<a href="{@url:medal/index/run}">{$v['extend_params']['name']}</a>》勋章的要求，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-				<!--# elseif($v['extend_params']['type'] == 2): #-->
+				<!--# }elseif($v['extend_params']['type'] == 2){ #-->
 					恭喜！管理员颁发给您《<a href="{@url:medal/index/run}">{$v['extend_params']['name']}</a>》勋章，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-				<!--# elseif($v['extend_params']['type'] == 3): #-->
+				<!--# }elseif($v['extend_params']['type'] == 3){ #-->
 					恭喜！您申请的《<a href="{@url:medal/index/run}">{$v['extend_params']['name']}</a>》勋章已通过审核，请到<a href="{@url:medal/index/run}">我的勋章</a>页面领取。
-				<!--# elseif($v['extend_params']['type'] == 4): #-->
+				<!--# }elseif($v['extend_params']['type'] == 4){ #-->
 					抱歉，您申请的《<a href="{@url:medal/index/run}">{$v['extend_params']['name']}</a>》勋章因不符合要求，未通过管理员审核，请谅解。如有问题请联系管理员。
-				<!--# elseif($v['extend_params']['type'] == 5): #-->
+				<!--# }elseif($v['extend_params']['type'] == 5){ #-->
 					抱歉，您的《<a href="{@url:medal/index/run}">{$v['extend_params']['name']}</a>》勋章被收回。
-				<!--# elseif($v['extend_params']['type'] == 7): #-->
+				<!--# }elseif($v['extend_params']['type'] == 7){ #-->
 					抱歉，您的《<a href="{@url:medal/index/run}">{$v['extend_params']['name']}</a>》勋章被收回。
-				<!--# endif; #-->
+				<!--# } #-->
 			</div>
 			<div class="info">
 				<span class="time">{@Pw::time2str($v['modified_time'],'auto')}</span>

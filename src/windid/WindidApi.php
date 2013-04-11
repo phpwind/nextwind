@@ -1,29 +1,23 @@
 <?php
-!defined('WINDID') && define('WINDID', dirname(__FILE__));
-!defined('WINDID_PATH') && define('WINDID_PATH', WINDID);
-!defined('WINDID_VERSION') && define('WINDID_VERSION', '0.0.2');
-if (!defined('WEKIT_VERSION')) {
-	require_once (WINDID.'/../../wind/Wind.php');
-	$database =  include WINDID.'/conf/database.php';
-	Wind::register(WINDID, 'WINDID');
-	Wind::application();
-	Wind::import('WINDID:library.Windid');
-	$component = array('path' => 'WIND:db.WindConnection', 'config'=>$database);
-	Wind::registeComponent($component, 'windiddb', 'singleton');
-}
+//!defined('WINDID') && define('WINDID', dirname(__FILE__));
+define('WINDID_BOOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+!defined('WINDID_VERSION') && define('WINDID_VERSION', '1.0.0');
+
+require WINDID_BOOT . 'bootstrap.php';
+
 class WindidApi {
 	
 	public static function api($api) {
 		static $cls = array();
-		$array = array('user', 'config', 'message', 'avatar', 'area', 'school');
+		$array = array('user', 'config', 'message', 'avatar', 'area', 'school', 'app', 'notify');
 		if (!in_array($api, $array)) return WindidError::FAIL;
-		$class = 'Windid'.ucfirst($api).'Api';
+		$class = 'Windid' . ucfirst($api) . 'Api';
 		if (!isset($cls[$class])) {
-			if (Windid::client()->clientDb == 'mysql') {
-				$class = Wind::import('WINDID:api.local.'.$class);
+			if (WINDID_CONNECT == 'db') {
+				$class = Wind::import('WINDID:api.local.' . $class);
 				$cls[$class] = new $class();
-			} elseif (Windid::client()->clientDb == 'http') {
-				$class = Wind::import('WINDID:api.web.'.$class);
+			} elseif (WINDID_CONNECT == 'http') {
+				$class = Wind::import('WINDID:api.web.' . $class);
 				$cls[$class] = new $class();
 			} else {
 				return WindidError::FAIL;
@@ -33,35 +27,42 @@ class WindidApi {
 	}
 	
 	public static function open($script, $getData = array(), $postData = array(), $method='post', $protocol='http') {
-		$client = Windid::client();
-		$time = time() + $client->timecv * 60;
+		$time = Pw::getTime();
 		list($c, $a) = explode('/', $script);
 		$query = array(
-			'm'=>'api',
-			'c'=>$c,
-			'a'=>$a,
-			'windidkey'=>WindidUtility::appKey($client->clientId, $time, $client->clientKey),
-			'clientid'=>$client->clientId,
-			'time'=>$time,
+			'm' => 'api',
+			'c' => $c,
+			'a' => $a,
+			'windidkey' => WindidUtility::appKey(WINDID_CLIENT_ID, $time, WINDID_CLIENT_KEY),
+			'clientid' => WINDID_CLIENT_ID,
+			'time' => $time,
 		);
-		$url = $client->serverUrl  . '/windid/index.php?' . http_build_query($query) .'&' . http_build_query($getData);
+		$url = WINDID_SERVER_URL  . '/index.php?' . http_build_query($query) .'&' . http_build_query($getData);
 		$result = WindidUtility::buildRequest($url, $postData);
 		if ($result === false) return WindidError::SERVER_ERROR;
-		return WindJson::decode($result, true, $client->clientCharser);
+		return Pw::jsonDecode($result);
 	}
 	
 	public static function getDm($api) {
-		$array = array('user', 'message', 'credit');
+		$array = array('user', 'message', 'credit', 'app');
 		if (!in_array($api, $array)) return WindidError::FAIL;
 		switch ($api) {
 			case 'user':
-				return Wind::import('WINDID:service.user.dm.WindidUserDm');
+				return Wind::import('WSRV:user.dm.WindidUserDm');
 			case 'message':
-				return Wind::import('WINDID:service.message.dm.WindidMessageDm');
+				return Wind::import('WSRV:message.dm.WindidMessageDm');
 			case 'credit':
-				return Wind::import('WINDID:service.user.dm.WindidCreditDm');
+				return Wind::import('WSRV:user.dm.WindidCreditDm');
+			case 'app':
+				return Wind::import('WSRV:app.dm.WindidAppDm');
 		}
-				
 	}
-	
+
+	public static function app() {
+		return Wekit::app('windid');
+	}
+
+	public static function C($namespace = '', $key = '') {
+		return Wekit::app('windid')->config->C($namespace, $key);
+	}
 }

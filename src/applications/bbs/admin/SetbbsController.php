@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: SetbbsController.php 22963 2013-01-04 05:17:05Z jieyin $
+ * @version $Id: SetbbsController.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package admin
  * @subpackage controller
  */
@@ -14,8 +14,7 @@ class SetbbsController extends AdminBaseController {
 
 	public function run() {
 		$this->forwardAction('bbs/setbbs/thread');
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('bbs');
+		$config = Wekit::C()->getValues('bbs');
 		$this->setOutput($config, 'config');
 	}
 
@@ -32,8 +31,7 @@ class SetbbsController extends AdminBaseController {
 	}
 
 	public function threadAction() {
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('bbs');
+		$config = Wekit::C()->getValues('bbs');
 		$this->setOutput($config, 'config');
 	}
 
@@ -51,8 +49,7 @@ class SetbbsController extends AdminBaseController {
 	}
 
 	public function readAction() {
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('bbs');
+		$config = Wekit::C()->getValues('bbs');
 		$order = $config['read.display_info_vieworder'];
 		is_array($order) || $order = array();
 		
@@ -124,10 +121,6 @@ class SetbbsController extends AdminBaseController {
 				->set('read.display_info', $display_info)
 				->flush();
 		$this->showMessage('success', 'bbs/setbbs/read');
-	}
-
-	protected function _loadConfigService() {
-		return Wekit::load('config.PwConfig');
 	}
 }
 ?>

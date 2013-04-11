@@ -1,12 +1,12 @@
 <?php
-Wind::import('WINDID:service.user.error.WindidUserError');
+Wind::import('WSRV:user.error.WindidUserError');
 
 /**
  * 用户信息的data service
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidUser.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidUser.php 24398 2013-01-30 02:45:05Z jieyin $
  * @package windid.service.user
  */
 class WindidUser {
@@ -220,16 +220,16 @@ class WindidUser {
 	 * @return WindidUserInterface
 	 */
 	private function _getDao($type = self::FETCH_MAIN) {
-		if (!($type & self::FETCH_ALL)) return Windid::loadDao('user.dao.WindidUserDefaultDao');
+		if (!($type & self::FETCH_ALL)) return Wekit::loadDao('WSRV:user.dao.WindidUserDefaultDao');
 		$maps = array(
-			self::FETCH_MAIN => 'user.dao.WindidUserDao',
-			self::FETCH_DATA => 'user.dao.WindidUserDataDao',
-			self::FETCH_INFO => 'user.dao.WindidUserInfoDao'
+			self::FETCH_MAIN => 'WSRV:user.dao.WindidUserDao',
+			self::FETCH_DATA => 'WSRV:user.dao.WindidUserDataDao',
+			self::FETCH_INFO => 'WSRV:user.dao.WindidUserInfoDao'
 		);
-		return Windid::loadDaoMap($type, $maps, 'user');
+		return Wekit::loadDaoFromMap($type, $maps, 'WindidUser');
 	}
 	
 	private function _getSearchDao() {
-		return Windid::loadDao('user.dao.WindidUserSearchDao');
+		return Wekit::loadDao('WSRV:user.dao.WindidUserSearchDao');
 	}
 }

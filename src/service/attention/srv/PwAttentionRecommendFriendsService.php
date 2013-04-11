@@ -99,25 +99,15 @@ class PwAttentionRecommendFriendsService {
 	}
 
 	/**
-	 * 根据规则获取推荐关注 | 先从在线用户取数据，大站20个在线用户总有的吧，20个在线用户都没有，那就慢查吧根据发帖数
+	 * 根据规则获取推荐关注 | 
+	 * 已取消
 	 * 
 	 * @param $uid 
 	 * @param $num 
 	 * @return array
 	 */
 	public function getRecommendAttention($uid,$num) {
-		$uids = $this->getOnlneUids(20);
-		$onlineCount = count($uids);
-		if ($onlineCount < $num) {
-			$num = $num - $onlineCount;
-			Wind::import('SRV:user.vo.PwUserSo');
-			$vo = new PwUserSo();
-			$vo->orderbyPostnum(true);
-			$searchDs = Wekit::load('SRV:user.PwUserSearch');
-			$result = $searchDs->searchUser($vo, $num);
-			$uids = array_merge($uids, array_keys($result));
-		}
-		return array_unique(array_diff($uids, array($uid)));
+		return $this->getOnlneUids($num);
 	}
 	
 	/** 

@@ -9,7 +9,7 @@ Wind::import('WIND:dao.WindDao');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwBaseDao.php 20973 2012-11-22 10:33:45Z jieyin $
+ * @version $Id: PwBaseDao.php 24810 2013-02-21 10:32:03Z jieyin $
  * @package lib
  * @subpackage base.dao
  */
@@ -54,13 +54,22 @@ class PwBaseDao extends WindDao {
 	}
 
 	/**
-	 * 获取当前dao表明称
+	 * 获取当前dao表名称
 	 *
 	 * @return string
 	 */
 	public function getTable($table = '') {
 		!$table && $table = $this->_table;
 		return $this->getConnection()->getTablePrefix() . $table;
+	}
+	
+	/**
+	 * 获取当前dao表字段结构
+	 *
+	 * @return array
+	 */
+	public function getDataStruct() {
+		return $this->_dataStruct;
 	}
 
 	/**
@@ -196,7 +205,7 @@ class PwBaseDao extends WindDao {
 	 */
 	protected function _filterStruct($array, $allow = array()) {
 		if (empty($array) || !is_array($array)) return array();
-		empty($allow) && $allow = $this->_dataStruct;
+		empty($allow) && $allow = $this->getDataStruct();
 		if (empty($allow) || !is_array($allow)) return $array;
 		$data = array();
 		foreach ($array as $key => $value) {

@@ -28,7 +28,7 @@
 						<div class="fans_list">
 							<!--# foreach ($userList as $key => $value) { #-->
 							<dl class="cc J_friends_items">
-								<dt><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['username']}" /></a><a href="{@url:message/message/pop?username=$value['username']}" class="called J_send_msg_pop">打招呼</a></dt>
+								<dt><a data-uid="{$value['uid']}" class="J_user_card_show" href="{@url:space/index/run?uid=$value['uid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['uid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['username']}" /></a><a href="{@url:message/message/pop?username=$value['username']}" class="called J_send_msg_pop" data-name="{$value['username']}">打招呼</a></dt>
 								<dd>
 									<div class="title">
 										<a href="{@url:space/index/run?uid=$value['uid']}" data-uid="{$value['uid']}" class="name J_user_card_show">{$value['username']}</a>
@@ -42,7 +42,7 @@
 									</div>
 									<div class="action">访问时间：<span class="time">{@Pw::time2str($visitors[$value['uid']], 'auto')}</span></div>
 									<!--# if ($loginUser->uid != $value['uid']) { 
-										$isfan = in_array($value['uid'],array_keys((array)$fans)) ? 'true' : 'false';
+										$isfan = Pw::inArray($value['uid'],array_keys((array)$fans)) ? 'true' : 'false';
 									#-->
 									<div class="attribute">
 										<!--# if (isset($friends[$value['uid']])) { #-->
@@ -50,9 +50,9 @@
 										<!--# } if (isset($follows[$value['uid']])) { #-->
 										<a href="{@url:my/follow/delete?uid=$value['uid']&csrf_token=$csrf_token}" class="core_unfollow J_fans_follow J_unfollow_btn" data-role="unfollow" data-uid="{$value['uid']}" data-role="unfollow" style="display:none;" data-followed="{$isfan}">取消关注</a>
 										<!--# } else { 
-											$isfan = in_array($value['uid'],array_keys((array)$fans)) ? 'true' : 'false';
+											$isfan = Pw::inArray($value['uid'],array_keys((array)$fans)) ? 'true' : 'false';
 										#-->
-										<a href="{@url:my/follow/add?uid=$value['uid']&csrf_token=$csrf_token}" class="core_follow J_fans_follow" data-role="follow" data-uid="{$value['uid']}" data-role="follow" data-followed="{$isfan}">加关注</a>
+										<a href="{@url:my/follow/add?csrf_token=$csrf_token}" class="core_follow J_fans_follow" data-role="follow" data-uid="{$value['uid']}" data-role="follow" data-followed="{$isfan}">加关注</a>
 										<!--# } #-->
 									</div>
 									<!--# } #-->
@@ -76,7 +76,7 @@
 <script>
 var URL_UNFOLLOW = "{@url:my/follow/delete/}",
 		URL_FOLLOW = "{@url:my/follow/add/}";
-Wind.use('jquery', 'global', GV.JS_ROOT +'pages/bbs/fansFollow_index.js?v='+ GV.JS_VERSION);
+Wind.use('jquery', 'global', GV.JS_ROOT +'pages/my/fansFollow.js?v='+ GV.JS_VERSION);
 </script>
 </body>
 </html>

@@ -8,7 +8,7 @@ Wind::import('SRV:user.PwUserBan');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: AvatarController.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: AvatarController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package src.products.u.controller.profile
  */
 class AvatarController extends BaseProfileController {
@@ -48,8 +48,10 @@ class AvatarController extends BaseProfileController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:profile.avatar.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:profile.avatar.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	private function _getWindid() {

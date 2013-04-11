@@ -7,7 +7,7 @@ Wind::import('SRV:user.PwUserBan');
  * @author xiaoxia.xu<xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwBanBp.php 20650 2012-11-01 09:10:44Z xiaoxia.xuxx $
+ * @version $Id: PwBanBp.php 23904 2013-01-17 05:27:48Z xiaoxia.xuxx $
  * @package src.service.user.srv
  */
 class PwBanBp {
@@ -27,6 +27,21 @@ class PwBanBp {
 		foreach ($this->banType as $_k => $_value) {
 			$this->banInfo[$_k] = array(false, array());
 		}
+	}
+	
+	/**
+	 * 初始化所有的禁止信息
+	 */
+	public function checkIfBan() {
+		$banInfo = $this->_getDs()->getBanInfo($this->uid);
+		if (!$banInfo) return false;
+		foreach ($this->banType as $_k => $_value) {
+			$this->banInfo[$_k][0] = true;
+		}
+		foreach ($banInfo as $key => $_one) {
+			$this->banInfo[$_one['typeid']][1][] = $_one;
+		}
+		return true;
 	}
 	
 	/**
@@ -171,7 +186,7 @@ class PwBanBp {
 	 * @return boolean|mixed
 	 */
 	private function _recoverBanError($type = PwUserBan::BAN_SPEAK) {
-		if ($this->_getBanInfo($type)) return false;
+// 		if ($this->_getBanInfo($type)) return false;
 		$class = Wekit::load($this->banType[$type]['class']);
 		return call_user_func_array(array($class, 'deleteBan'), array($this->uid));
 	}

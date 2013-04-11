@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUserBanInfoDm.php 19861 2012-10-19 02:43:12Z xiaoxia.xuxx $
+ * @version $Id: PwUserBanInfoDm.php 23904 2013-01-17 05:27:48Z xiaoxia.xuxx $
  * @package src.service.user.dm
  */
 class PwUserBanInfoDm extends PwBaseDm {
@@ -86,26 +86,6 @@ class PwUserBanInfoDm extends PwBaseDm {
 	public function setReason($reason) {
 		$this->_data['reason'] = trim($reason);
 		return $this;
-	}
-	
-	/**
-	 * 设置是否需要禁止多帐号
-	 *
-	 * @param boolean $isBan
-	 * @return PwUserbanInfoDm
-	 */
-	public function setBanAllAccount($isBan) {
-		$this->_data['ban_others'] = $isBan;
-		return $this;
-	}
-	
-	/**
-	 * 返回是否禁止多帐号
-	 *
-	 * @return boolean
-	 */
-	public function getBanAllAccount() {
-		return $this->_data['ban_others'];
 	}
 	
 	/**

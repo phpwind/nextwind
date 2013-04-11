@@ -1,13 +1,14 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
-Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
+Wind::import('APPCENTER:service.srv.helper.PwSystemHelper');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwFtpSave');
+Wind::import('APPCENTER:service.srv.helper.PwSftpSave');
 /**
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwPatchUpdate.php 23394 2013-01-09 07:43:46Z long.shi $
+ * @version $Id: PwPatchUpdate.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package wind
  */
 class PwPatchUpdate {
@@ -38,7 +39,7 @@ class PwPatchUpdate {
 		$temp = array();
 		foreach ($r['info'] as $v) {
 			$v['id'] = $v['name'];
-			$temp[$v['id']] = $v;
+			$temp[$v['id']] = WindConvert::convert($v, Wekit::V('charset'), 'utf8');
 		}
 		return $temp;
 	}

@@ -1,12 +1,12 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
 /**
  * 系统升级帮助类
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSystemHelper.php 23454 2013-01-09 12:39:58Z long.shi $
+ * @version $Id: PwSystemHelper.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package wind
  */
 class PwSystemHelper {
@@ -26,7 +26,7 @@ class PwSystemHelper {
 		$strSQL = str_replace(array("\r", "\n", "\r\n"), "\n", $strSQL);
 		$arrSQL = explode("\n", $strSQL);
 		$query = '';
-		$i = 0;
+		$i = $alter = 0;
 		foreach ($arrSQL as $value) {
 			$value = trim($value, " \t");
 			if (!$value || substr($value, 0, 2) === '--') continue;
@@ -36,20 +36,23 @@ class PwSystemHelper {
 			$query = preg_replace('/([ `]+)pw_/', '$1' . $dbprefix, $query);
 			if ($sql_key == 'CREATE') {
 				$query = preg_replace(
-					array('/CREATE\s+TABLE(\s+IF\s+NOT\s+EXISTS)?/i', '/\)([\w\s=]*);/i'), 
+					array('/CREATE\s+TABLE(\s+IF\s+NOT\s+EXISTS)?/i', '/\)([\w\s=\x7f-\xff\']*);/i'), 
 					array(
 						'CREATE TABLE IF NOT EXISTS', 
-						')ENGINE=' . $engine . ' DEFAULT CHARSET=' . $charset),
-						$query);
+						')ENGINE=' . $engine . ' DEFAULT CHARSET=' . $charset), $query);
 				$dataSQL[$i][] = trim($query, ';');
+				$alter = 0;
 			} else if ($sql_key == 'DROP') {
 				$dataSQL[$i][] = trim($query, ';');
+				$alter = 0;
 			} else if ($sql_key == 'ALTER') {
-				++$i;
+				$alter || ++$i;
 				$dataSQL[$i][] = trim($query, ';');
 				++$i;
+				$alter = 1;
 			} elseif (in_array($sql_key, array('INSERT', 'REPLACE', 'UPDATE', 'DELETE'))) {
 				$dataSQL[$i][] = trim($query, ';');
+				$alter = 0;
 			}
 			$query = '';
 		}
@@ -93,12 +96,12 @@ class PwSystemHelper {
 			$pdo->execute("ALTER TABLE $value[0] ADD $add ($value[2])");
 		}
 	}
-	
+
 	/**
 	 * 解析md5sum文件
 	 *
-	 * @param unknown_type $md5sum
-	 * @return multitype:multitype: 
+	 * @param unknown_type $md5sum        	
+	 * @return multitype:multitype:
 	 */
 	public static function resolveMd5($md5sum) {
 		$md5List = array();
@@ -110,16 +113,16 @@ class PwSystemHelper {
 		}
 		return $md5List;
 	}
-	
+
 	public static function md5content($md5, $file) {
-		return $md5 . "\t" . $file . "\n";
+		return $md5 . "\t" . trim(str_replace(DIRECTORY_SEPARATOR, '/', $file), '/') . "\n";
 	}
-	
+
 	/**
 	 * 计算sourcepath相对于targetpath的相对路径值
 	 *
-	 * @param unknown_type $sourcePath
-	 * @param unknown_type $targetPath
+	 * @param unknown_type $sourcePath        	
+	 * @param unknown_type $targetPath        	
 	 * @return string
 	 */
 	public static function resolveRelativePath($sourcePath, $targetPath) {
@@ -128,20 +131,20 @@ class PwSystemHelper {
 		$tgt_paths = explode(DIRECTORY_SEPARATOR, $targetPath);
 		$src_count = count($src_paths);
 		$tgt_count = count($tgt_paths);
-	
+		
 		$relative_path = '';
-		//默认把不同点设在最后一个
+		// 默认把不同点设在最后一个
 		$break_point = $src_count;
 		$i = 0;
-		//计算两个路径不相同的点，然后开始往上数..
+		// 计算两个路径不相同的点，然后开始往上数..
 		for ($i = 0; $i < $src_count; $i++) {
 			if ($src_paths[$i] == $tgt_paths[$i]) continue;
 			$relative_path .= '../';
 			$break_point == $src_count && $break_point = $i;
 		}
 		$relative_path || $relative_path = './';
-	
-		//往上..后，继续算目标路径的接下来的path
+		
+		// 往上..后，继续算目标路径的接下来的path
 		for ($i = $break_point; $i < $tgt_count; $i++) {
 			$relative_path .= $tgt_paths[$i] . '/';
 		}
@@ -160,15 +163,41 @@ class PwSystemHelper {
 		}
 	}
 
-	public static function download($url, $file) {
+	/**
+	 * 使用socket下载
+	 *
+	 * @param unknown_type $url
+	 * @param unknown_type $file
+	 * @return multitype:boolean unknown 
+	 */
+	public static function downloadUseSocket($url, $file) {
+		Wind::import('WIND:http.transfer.WindHttpSocket');
+		$http = new WindHttpSocket($url);
+		WindFolder::mkRecur(dirname($file));
+		$data = $http->send();
+		WindFile::write($file, $data);
+		$http->close();
+		return array(true, $file);
+	}
+
+	/**
+	 * 下载
+	 *
+	 * @param unknown_type $url
+	 * @param unknown_type $file
+	 * @param unknown_type $useSocket
+	 * @return Ambigous <multitype:boolean, multitype:boolean unknown_type >|multitype:boolean string |multitype:boolean unknown 
+	 */
+	public static function download($url, $file, $useSocket = false) {
+		if ($useSocket) return self::downloadUseSocket($url, $file);
 		Wind::import('WIND:http.transfer.WindHttpCurl');
 		$http = new WindHttpCurl($url);
 		WindFolder::mkRecur(dirname($file));
 		$fp = fopen($file, "w");
 		$opt = array(
-			CURLOPT_FILE => $fp, 
-			CURLOPT_HEADER => 0, 
-			CURLOPT_SSL_VERIFYPEER => false, 
+			CURLOPT_FILE => $fp,
+			CURLOPT_HEADER => 0,
+			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_SSL_VERIFYHOST => false);
 		$http->send('GET', $opt);
 		if ($e = $http->getError()) return array(false, $e);
@@ -207,7 +236,7 @@ class PwSystemHelper {
 	 * @return string
 	 */
 	static public function extract($source, $target) {
-		Wind::import('APPS:appcenter.service.srv.helper.PwExtractZip');
+		Wind::import('APPCENTER:service.srv.helper.PwExtractZip');
 		$zip = new PwExtractZip();
 		if (!$data = $zip->extract($source)) return false;
 		foreach ($data as $value) {
@@ -272,7 +301,8 @@ class PwSystemHelper {
 
 	public static function relative($relativePath) {
 		$pattern = '/\w+\/\.\.\/?/';
-		$pattern = '/\w+' . preg_quote(DIRECTORY_SEPARATOR) . '\.\.' . preg_quote(DIRECTORY_SEPARATOR) . '?/';
+		$pattern = '/\w+' . preg_quote(DIRECTORY_SEPARATOR, '/') . '\.\.' . preg_quote(
+			DIRECTORY_SEPARATOR, '/') . '?/';
 		while (preg_match($pattern, $relativePath)) {
 			$relativePath = preg_replace($pattern, '', $relativePath);
 		}

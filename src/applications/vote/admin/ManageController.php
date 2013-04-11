@@ -47,7 +47,7 @@ class ManageController extends AdminBaseController {
 		$this->setOutput($pollOpenForum, 'pollOpenForum');
 		$this->setOutput($this->_buildGroup($this->_getUserGroupsDs()->getAllGroups()), 'groups');
 		$this->setOutput($this->_getUserGroupsDs()->getTypeNames(), 'groupsTypeName');
-		$this->setOutput($this->_buildPermission($this->_getUserPermissionDs()->getPermissionsByRkey(array('allow_add_vote', 'allow_participate_vote', 'allow_view_vote'))), 'permission');
+		$this->setOutput($this->_buildPermission($this->_getUserPermissionDs()->fetchPermissionByRkey(array('allow_add_vote', 'allow_participate_vote', 'allow_view_vote'))), 'permission');
 	}
 	
 	public function dogroupAction(){

@@ -34,8 +34,7 @@ class PwEducationService {
 			$areaids[] = $schools[$education['schoolid']]['areaid'];
 		}
 		if ($buildArea) {
-			/* @var $areaSrv PwAreaService */
-			$areaSrv = Wekit::load('area.srv.PwAreaService');
+			$areaSrv = WindidApi::api('area');
 			$areas = $areaSrv->fetchAreaRout($areaids);
 			foreach ($educations as $key => $education) {
 				$educations[$key]['areaid'] = $areas[$educations[$key]['areaid']];

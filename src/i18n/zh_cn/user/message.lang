@@ -29,6 +29,7 @@ error.profile.length="个人简介只能输入{length}个字"
 verify.error.name="验证失败，用户不存在"
 verify.error.pwd="验证失败，用户密码错误"
 verify.error.question="验证失败，用户安全问题回答不正确"
+verify.question.empty="您设置了安全问题，请输入安全问题"
 
 login.exists=您已登录，请直接刷新页面
 login.success=欢迎回来...
@@ -41,6 +42,7 @@ login.error.ip.tryover="同一Ip地址尝试次数已达上限{num}次，请明�
 login.question.setting="请设置安全问题及答案"
 login.question.setting.success="安全问题设置成功"
 login.question.setting.answer.require=请设置安全问题的答案
+
 
 login.active.email="帐号邮件未激活，不能登录"
 login.active.check="网站已开通注册审核服务，您的账号通过审核后，即可正常发帖"
@@ -71,6 +73,8 @@ user.edit.contact.success="联系方式更新成功"
 user.edit.sign.length.over = "签名长度不能超过{max}个字"
 
 pwd.error=密码错误
+pwd.error.tryover="已经连续{totalTry}次密码错误,您将在{min}分钟内无法正常登录"
+pw.error.limit="密码错误,您还可以尝试{num}次"
 pwd.require=请填写密码
 pwd.change.success=密码修改成功
 pwd.change.oldpwd.require=原密码不能为空
@@ -141,3 +145,4 @@ user.forumadmin.delete.error = "取消版主操作请到版块管理"
 user.forumadmin.add.error = "添加版主操作请到版块管理"
 user.syn.error = "用户信息同步错误"
 founder.edit = "创始人只能通过后台来修改密码"
+empty.error = "带*的不能为空"

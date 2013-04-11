@@ -31,6 +31,7 @@
 	</form>
 
 	<form class="J_ajaxForm" data-role="list" action="#" method="post">
+			<!--# if ($threaddb) { #-->
 	<div class="table_list">
 		<table width="100%">
 			<colgroup>
@@ -54,7 +55,6 @@
 				</tr>
 			</thead>
 			<tbody>
-			<!--# if ($threaddb) { #-->
 				<!--# foreach ($threaddb as $key => $value) { #-->
 				<tr>
 					<td><input type="checkbox" class="J_check" name="tids[]" value="{$value[tid]}" data-xid="J_check_x" data-yid="J_check_y" /></td>
@@ -69,15 +69,16 @@
 					<td>{$value['reason']}</td>
 				</tr>
 				<!--# } #-->
-			<!--# } else { #-->
-				<tr><td colspan="7" class="tac">啊哦，没有符合条件的内容！</td></tr>
-			<!--# } #-->
 			</tbody>
 		</table>
 		<div class="p10">
 			<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='bbs/recycle/run' args='$url'/>
 		</div>
 	</div>
+			<!--# } else { #-->
+			<div class="not_content_mini"><i></i>啊哦，没有符合条件的内容！</div>
+			<!--# } #-->
+
 	<!--# if ($threaddb) { #-->
 	<div class="btn_wrap">
 		<div class="btn_wrap_pd" id="J_sub_wrap">

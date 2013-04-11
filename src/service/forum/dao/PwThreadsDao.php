@@ -6,7 +6,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadsDao.php 22309 2012-12-21 07:58:00Z jieyin $
+ * @version $Id: PwThreadsDao.php 24251 2013-01-23 09:07:13Z jinlong.panjl $
  * @package forum
  */
 
@@ -14,7 +14,7 @@ class PwThreadsDao extends PwBaseDao {
 	
 	protected $_table = 'bbs_threads';
 	protected $_pk = 'tid';
-	protected $_dataStruct = array('tid', 'fid', 'topic_type', 'subject', 'topped', 'digest','overtime', 'highlight', 'inspect', 'ifshield', 'disabled', 'ischeck', 'replies', 'hits','like_count', 'special', 'tpcstatus', 'ifupload', 'created_time', 'created_username', 'created_userid', 'created_ip', 'modified_time', 'modified_username', 'modified_userid', 'modified_ip', 'lastpost_time', 'lastpost_userid', 'lastpost_username', 'reply_notice', 'reply_topped', 'special_sort');
+	protected $_dataStruct = array('tid', 'fid', 'topic_type', 'subject', 'topped', 'digest','overtime', 'highlight', 'inspect', 'ifshield', 'disabled', 'ischeck', 'replies', 'hits','like_count', 'special', 'tpcstatus', 'ifupload', 'created_time', 'created_username', 'created_userid', 'created_ip', 'modified_time', 'modified_username', 'modified_userid', 'modified_ip', 'lastpost_time', 'lastpost_userid', 'lastpost_username', 'reply_notice', 'reply_topped', 'special_sort', 'app_mark');
 	
 	public function getThread($tid) {
 		return $this->_get($tid);

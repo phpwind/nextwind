@@ -64,7 +64,7 @@
 									<div class="action">{$profile} </div>
 									<div class="action"></div>
 									<div class="attribute">
-										<a href="{@url:my/follow/add?uid=$value['uid']}" class="core_follow J_fans_follow" data-role="follow" data-uid="{$value['uid']}" data-role="follow">加关注</a>
+										<a href="{@url:my/follow/add}" class="core_follow J_fans_follow" data-role="follow" data-uid="{$value['uid']}" data-role="follow">加关注</a>
 									</div>
 								</dd>
 							</dl>
@@ -86,7 +86,7 @@
 <script>
 var URL_UNFOLLOW = "{@url:my/follow/delete/}",
 		URL_FOLLOW = "{@url:my/follow/add/}";
-Wind.use('jquery', 'global', GV.JS_ROOT +'pages/bbs/fansFollow_index.js?v='+ GV.JS_VERSION);
+Wind.use('jquery', 'global', GV.JS_ROOT +'pages/my/fansFollow.js?v='+ GV.JS_VERSION);
 </script>
 </div>
 </body>

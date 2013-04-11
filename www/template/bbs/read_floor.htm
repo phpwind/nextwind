@@ -6,13 +6,13 @@
 			<div class="floor_info">
 				<!--头像-->
 				<div class="face">
-					<a href="{@url:space/index/run?uid=$read['created_userid']}" class="J_user_card_show" data-uid="{$read['created_userid']}" target="_blank"><img src="{@Pw::getAvatar($read['created_userid'])}" class="J_avatar" data-type="middle" width="100" height="100" alt="{$read['created_username']}"></a>
+					<a href="{@url:space/index/run?uid=$read['created_userid']}" class="J_user_card_show" data-uid="{$read['created_userid']}" target="_blank"><img src="{@Pw::getAvatar($read['created_userid'])}" class="J_avatar" data-type="middle" alt="{$read['created_username']}"></a>
 				</div>
 				<!--用户名-->
 				<div class="name">
 					<span class="{@$users[$read['created_userid']]['gender']==1 ? 'women' : 'man'}_{@($_isol = Pw::checkOnline($users[$read['created_userid']]['lastvisit'])) ? 'ol' : 'unol'}" title="{@$_isol ? '在线' : '离线'}"></span><a href="{@url:space/index/run?uid=$read['created_userid']}" class="J_user_card_show mr5" data-uid="{$read['created_userid']}">{$read['created_username']}</a>
 					<!--#if ($operateReply['ban']) {#-->
-					<span class="J_post_manage_col" data-role="readbar"><a href="{@url:bbs/manage/ban?tid=$tid&uid=$read['created_userid']}" data-uid="{$read['created_userid']}" class="J_dialog_post fn org">[禁止]</a></span>
+					<span class="J_post_manage_col" data-role="readbar"><a href="{@url:bbs/manage/ban?tid=$tid&uid=$read['created_userid']}" data-uid="{$read['created_userid']}" class="J_dialog_post fn org w">[禁止]</a></span>
 					<!--#}#-->
 				</div>
 				<!--等级-->
@@ -57,14 +57,14 @@
 				<!--# if ($read['created_userid']) { #-->
 				<!--发私信加关注-->
 				<div class="operate cc">
-					<a rel="nofollow" href="{@url:my/follow/add?uid=$read['created_userid']}" data-uid="{$read['created_userid']}" class="follow J_read_follow J_qlogin_trigger">加关注</a>
+					<a rel="nofollow" href="{@url:my/follow/add}" data-uid="{$read['created_userid']}" class="follow J_read_follow J_qlogin_trigger">加关注</a>
 					<a rel="nofollow" href="{@url:message/message/pop?username=$read['created_username']}" class="message J_send_msg_pop J_qlogin_trigger" data-name="{$read['created_username']}">写私信</a>
 					<hook class='$threadDisplay' name="createHtmlForUserButton" args="array($users[$read['created_userid']], $read)" />
 				</div>
 				<!--# } #-->
 				<hook class='$threadDisplay' name="createHtmlAfterUserInfo" args="array($users[$read['created_userid']], $read)" />
 				<!--# if ($read['lou'] == 0) { #-->
-				<design role="segment" id="readSide_segment"/>
+				<pw-drag id="readSide_segment"/>
 				<!--# } #-->
 				<!--广告位-->
 				<advertisement id='Read.Layer.User' sys='1'/>
@@ -76,10 +76,7 @@
 			<!--# if ($read['lou'] == 0) { #-->
 			<div class="floor_title cc">
 				<div class="post_num">
-					<ul class="cc">
-						<li>阅读：<em>{$threadInfo['hits']}</em></li>
-						<li>回复：<em id="topicRepliesNum">{$threadInfo['replies']}</em></li>
-					</ul>
+					<span class="hits">阅读：<em>{$threadInfo['hits']}</em></span><span class="replies">回复：<em id="topicRepliesNum">{$threadInfo['replies']}</em></span>
 				</div>
 				<h1 id="J_post_title"><!--# if ($threadInfo['topic_type'] && ($topicTypename = $threadDisplay->getTopicTypeName($threadInfo['topic_type']))) { #--><a href="{@url:bbs/thread/run?fid=$pwforum->fid&type=$threadInfo['topic_type']}">[{@$topicTypename|html}]</a><!--# } #-->{$threadInfo['subject']}</h1>
 				<span class="floor_honor posts_icon">
@@ -145,7 +142,7 @@
 				</div>
 				<!--# } #-->
 				<!--# if ($read['lou'] == 0) { #-->
-				<design role="segment" id="readFloorTop_segment"/>
+				<pw-drag id="readFloorTop_segment"/>
 				<!--# } #-->
 				<hook class='$threadDisplay' name='createHtmlBeforeContent' args="array($read)" />
 				<div class="fr">
@@ -162,7 +159,6 @@
 				<!--# if ($read['modified_time']) { #-->
 				<div class="edit_log">[{$read['modified_username']}于{@Pw::time2str($read['modified_time'])}编辑了帖子]</div>
 				<!--# } #-->
-				<hook class='$threadDisplay' name='createHtmlAfterContent' args="array($read)" />
 			</div>
 		</td>
 	</tr>
@@ -179,9 +175,9 @@
 				</div>
 				<!--# } #-->
 				<div class="ct">
-					<ul class="cc big_img" style="display:{@$_isShowSmall ? 'none' : ''}">
+					<ul class="cc big_img J_gallery_list" style="display:{@$_isShowSmall ? 'none' : ''}">
 						<!--# foreach ($attach['pic'] as $key => $value) { #-->
-						<li><span class="J_attach_img_wrap"><div class="img_info J_img_info"><!--# if ($value['descrip']) { #--><p>描述：{$value['descrip']}</p><!--# } #--><p>图片：{$value['name']}<!--# if ($threadPermission['deleteatt']) { #--><a class="J_read_img_del" href="{@url:bbs/attach/delete?aid=$value['aid']}">[删除]</a><!--# } #--></p></div>{$value['img']|html}</span></li>
+						<li class="J_gallery_items"><span class="J_attach_img_wrap"><div class="img_info J_img_info"><!--# if ($value['descrip']) { #--><p>描述：{$value['descrip']}</p><!--# } #--><p>图片：{$value['name']}<!--# if ($threadPermission['deleteatt']) { #--><a class="J_read_img_del w" href="{@url:bbs/attach/delete?aid=$value['aid']}">[删除]</a><!--# } #--></p></div><a data-big="{$value['url']}" href="javascript:;">{$value['img']|html}</a></span></li>
 						<!--# } #-->
 					</ul>
 					<!--# if ($_isShowSmall) { #-->
@@ -220,10 +216,16 @@
 			</div>
 			<!--# } #-->
 		<!--# } #-->
-			<!--# if (!$read['pid']) { #-->
-			<a role="button" rel="nofollow" href="{@url:like/mylike/doLike?typeid=1&fromid=$read['tid']}" data-tid="{$tid}" data-pid="{$read['pid']}" data-fid="{$fid}" class="icon_read_like J_like_btn J_qlogin_trigger" data-role="main">
-				<span>喜欢</span><em class="J_like_count">{$read['like_count']}</em>
-			</a>
+			<hook class='$threadDisplay' name='createHtmlAfterContent' args="array($read)" />
+			<!--# if ($read['lou'] == 0) { #-->
+			<div class="read_appbtn_wrap">
+				<!--# if (!$read['pid']) { #-->
+				<a role="button" rel="nofollow" href="{@url:like/mylike/doLike}" data-tid="{$tid}" data-pid="{$read['pid']}" data-fid="{$fid}" class="icon_read_like J_like_btn J_qlogin_trigger" data-role="main" data-typeid="1" data-fromid="{$read['tid']}">
+					<span>喜欢</span><em class="J_like_count">{$read['like_count']}</em>
+				</a>
+				<!--# } #-->
+				<hook class='$threadDisplay' name='createHtmlContentBottom' args="array($read)" />
+			</div>
 			<!--# } #-->
 			<!--# if (!$read['pid']) { #-->
 			<div style="{@empty($read['lastLikeUsers']) ? 'display:none' : ''}" id="J_read_like_list" class="read_like_list cc">
@@ -239,7 +241,6 @@
 			<!--# if ($read['lou'] == 0) { #-->
 			<div id="cloudwind_read_content"></div>
 			<!--# } #-->
-			<hook class='$threadDisplay' name='createHtmlContentBottom' args="array($read)" />
 
 			<!--# if ($users[$read['created_userid']]['bbs_sign']) { #-->
 				<!--#
@@ -249,29 +250,9 @@
 			<!--# } #-->
 			<advertisement id='Read.Layer.TidDown' sys='1'/>
 			<!--# if ($read['lou'] == 0) { #-->
-			<design role="segment" id="readFloorbot_segment"/>
+			<pw-drag id="readFloorbot_segment"/>
 			<!--# } #-->
-			<!--# if ($read['lou'] == 0 && $showReply) { #-->
-			<!--快速回复-->
-			<div class="reply_quick cc">
-				<dl class="ct cc">
-					<dt><img class="J_avatar" data-type="small" src="{@Pw::getAvatar($loginUser->uid,'small')}" width="50" height="50" alt="{$loginUser->username}" /></dt>
-					<dd>
-						<div class="arrow"><em></em><span></span></div>
-						<textarea name="atc_content" aria-label="快速回复" id="J_reply_quick_ta" class="J_at_user_textarea" placeholder="我也说两句"></textarea>
-					</dd>
-				</dl>
-				<div class="ft cc" id="J_reply_ft" style="display:none;">
-					<div class="operate">
-						<a href="" tabindex="-1" rel="nofollow" class="a_face J_insert_emotions" data-emotiontarget="#J_reply_quick_ta">表情</a>
-					</div>
-					<button type="submit" data-tid="{$tid}" data-action="{@url:bbs/post/doreply?_getHtml=1}" class="btn btn_submit disabled" disabled="disabled" id="J_reply_quick_btn">回复</button>
-					<a href="{@url:bbs/post/reply?tid=$tid}">进入高级模式&gt;&gt;</a>
-				</div>
-			</div>
-			<!--快速回复结束-->
-			<!--# } #-->
-			
+	
 			<div class="floor_bottom_tips cc">
 				<!--# $type =  !$read['pid'] ? 'thread' : 'post'; $type_id = !$read['pid'] ? $read['tid'] : $read['pid']; #-->
 				<span class="fr">
@@ -297,9 +278,11 @@
 				</span>
 				<!--# if ($read['lou'] != 0 && (!$pwforum->forumset['locktime'] || ($read['created_time'] + $pwforum->forumset['locktime'] * 86400) > Pw::getTime())) { #-->
 				<a rel="nofollow" href="{@url:bbs/post/fastreply?tid=$tid&pid=$read['pid']}" data-pid="{$read['pid']}" class="a_reply J_read_reply" data-topped="{@empty($read['istopped']) ? 'false' : 'true'}">回复<span style="{@$read['replies'] > 0 ? '' : 'display:none'}">({$read['replies']})</span></a>
+				<!--# } else { #-->
+				<a rel="nofollow" href="#floor_reply" data-hash="floor_reply" class="a_reply" id="J_readreply_main">回复</a>
 				<!--# } #-->
 				<!--# if ($read['pid']) { #-->
-				<a rel="nofollow" href="{@url:like/mylike/doLike?typeid=2&fromid=$read['pid']}" data-tid="{$tid}" data-pid="{$read['pid']}" data-fid="{$fid}" class="a_like J_like_btn J_qlogin_trigger">喜欢</a><span style="{@$read['like_count'] ? '' : 'display:none'}">(<a class="J_like_user_btn a_like_num" data-pid="{$read['pid']}" href="{@url:like/like/getLast?typeid=2&fromid=$read['pid']}">{$read['like_count']}</a>)</span>
+				<a rel="nofollow" href="{@url:like/mylike/doLike}" data-tid="{$tid}" data-pid="{$read['pid']}" data-fid="{$fid}" class="a_like J_like_btn J_qlogin_trigger" data-typeid="2" data-fromid="{$read['pid']}">喜欢</a><span style="{@$read['like_count'] ? '' : 'display:none'}">(<a class="J_like_user_btn a_like_num" data-pid="{$read['pid']}" href="{@url:like/like/getLast?typeid=2&fromid=$read['pid']}">{$read['like_count']}</a>)</span>
 				<!--# } #-->
 				<hook class='$threadDisplay' name='createHtmlForThreadButton' args="array($read)" />
 			</div>
@@ -309,5 +292,5 @@
 </table>
 </div>
 <!--# if ($read['lou'] == 0) { #-->
-<design role="segment" id="readFloor_segment"/>
+<pw-drag id="readFloor_segment"/>
 <!--# } #-->

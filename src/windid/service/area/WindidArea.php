@@ -5,7 +5,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidArea.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidArea.php 24398 2013-01-30 02:45:05Z jieyin $
  * @package windid.service.area
  */
 class WindidArea {
@@ -119,6 +119,6 @@ class WindidArea {
 	 * @return WindidAreaDao
 	 */
 	private function _getDao() {
-		return Windid::loadDao('area.dao.WindidAreaDao');
+		return Wekit::loadDao('WSRV:area.dao.WindidAreaDao');
 	}
 }

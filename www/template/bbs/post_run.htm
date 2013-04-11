@@ -11,79 +11,77 @@
 		<div class="bread_crumb">
 			{@$headguide|html}
 		</div>
-		<div class="main cc">
-			<form method="post" id="mainForm" name="FORM" action="{@WindUrlHelper::createUrl('bbs/post/' . $do . '/?_json=1&fid=' . $fid)|url}" enctype="multipart/form-data">
-			<div class="box_wrap post_page">
-				<nav>
-					<div class="content_nav">
-						<ul id="tabTypeHead">
-						<!--# if ($action == 'reply') { #-->
-							<li class="current"><a href="{@url:bbs/post/reply?tid=$tid}">发表回复</a></li>
-						<!--# } elseif ($action == 'modify') { #-->
-							<li class="current"><a href="{@url:bbs/post/modify?tid=$tid&pid=$pid}">编辑帖子</a></li>
-						<!--# } else { #-->
-							<!--# foreach ($pwforum->getThreadType($loginUser) as $key => $value) { #-->
-							<li class="{@Pw::isCurrent($special == $key)}"><a href="{@WindUrlHelper::createUrl('bbs/post/run/?fid=' . $fid . ($key != 'default' ? ('&special=' . $key) : ''))}">{$value[1]}</a></li>
-							<!--# } #-->
+		<form method="post" id="mainForm" name="FORM" action="{@WindUrlHelper::createUrl('bbs/post/' . $do . '/?_json=1&fid=' . $fid)|url}" enctype="multipart/form-data">
+		<div class="box_wrap post_page">
+			<nav>
+				<div class="content_nav">
+					<ul id="tabTypeHead">
+					<!--# if ($action == 'reply') { #-->
+						<li class="current"><a href="{@url:bbs/post/reply?tid=$tid}">发表回复</a></li>
+					<!--# } elseif ($action == 'modify') { #-->
+						<li class="current"><a href="{@url:bbs/post/modify?tid=$tid&pid=$pid}">编辑帖子</a></li>
+					<!--# } else { #-->
+						<!--# foreach ($pwforum->getThreadType($loginUser) as $key => $value) { #-->
+						<li class="{@Pw::isCurrent($special == $key)}"><a href="{@WindUrlHelper::createUrl('bbs/post/run/?fid=' . $fid . ($key != 'default' ? ('&special=' . $key) : ''))}">{$value[1]}</a></li>
 						<!--# } #-->
-						</ul>
-					</div>
-				<nav>
-				<!--# $draftCount = Wekit::load('draft.PwDraft')->countByUid($loginUser->uid); #-->
-				<div class="post_content">
-					<a id="J_draft_lis_btn" href="{@url:bbs/draft/myDrafts}" class="my_drafts">草稿箱<span class="red" style="<!--# if (!$draftCount) { #-->display:none;<!--# } #-->">(<em id="J_draft_count">{$draftCount}</em>)</span></a>
+					<!--# } #-->
+					</ul>
+				</div>
+			<nav>
+			<!--# $draftCount = Wekit::load('draft.PwDraft')->countByUid($loginUser->uid); #-->
+			<div class="post_content">
+				<a id="J_draft_lis_btn" href="{@url:bbs/draft/myDrafts}" class="my_drafts">草稿箱<span class="red" style="<!--# if (!$draftCount) { #-->display:none;<!--# } #-->">(<em id="J_draft_count">{$draftCount}</em>)</span></a>
 
-					<div id="J_draft_list" class="fr dn">
-						<div class="pop_draft" id="J_draft_wrap">
-							<div class="pop_loading"></div>
-							<!--span class="not_content_mini">暂无草稿</span-->
-						</div>
-					</div>
-					<hgroup class="title">
-						<!--# if ($topictypes['topic_types']) {//主题分类 #-->
-						<input type="hidden" name="topic_type_id" value="" id="J_topic_type_id" />
-						<select id="J_sort_1" class="mr10" name="topictype">
-							<option value="0">请选择分类</option>
-							<!--# foreach($topictypes['topic_types'] as $v) { #-->
-							<option value="{$v['id']}">{@strip_tags($v['name'])}</option>
-							<!--# } #-->
-						</select>
-						<select id="J_sort_2" class="mr10" style="display:none;" name="sub_topictype">
-							<option value="0">请选择分类</option>
-						</select>
-						<!--# }//主题分类结束 #-->
-						<input name="atc_title" id="J_atc_title" value="{$atc_title}" class="input length_6 mr15"{@!empty($isTopic) ? ' required' : ''} aria-required="true" placeholder="{@!empty($default_title) ? $default_title : '请输入标题'}" title="请输入标题" data-max="{@Wekit::C('bbs', 'title.length.max')}"/><span id="J_title_tip"></span>
-					</hgroup>
-					<hook class='$pwpost' name="createHtmlBeforeContent"/>
-					<div class="c"></div>
-					<div class="cc mb10">
-						<div class="cm">
-							<div class="cw">
-								<!--# //$pwpost->displayHtmlFromBeforeContent(); #-->
-								<template source='wind_editor' load='false' />
-							</div>
-						</div>
-						<div class="sd">
-							<div class="sidebar">
-								<!--# if ($action == 'run' || $action == 'modify') { #-->
-								<template source='TPL:tag.post_tag' load='true' />
-								<!--# } #-->
-								<hook class='$pwpost' name='createHtmlRightContent' />
-							</div>
-						</div>
-					</div>
-					<input type="hidden" value="{$pid}" name="pid" />
-					<input type="hidden" value="{$tid}" name="tid" />
-					<input type="hidden" value="{$special}" name="special" />
-					<div class="ft cc">
-						<button type="submit" name="Submit" class="btn btn_submit btn_big fl mr10" id="J_post_sub">发布</button>
-						<a href="{@url:bbs/draft/doAdd}" class="btn btn_big mr10" id="J_draftBtn">存为草稿</a>
-						<label for="reply_notice_label"><input name="reply_notice" id="reply_notice_label" type="checkbox" value="1" {$reply_notice} />有回复提醒我</label>
+				<div id="J_draft_list" class="fr dn">
+					<div class="pop_draft" id="J_draft_wrap">
+						<div class="pop_loading"></div>
+						<!--span class="not_content_mini">暂无草稿</span-->
 					</div>
 				</div>
+				<hgroup class="title">
+					<!--# if ($topictypes['topic_types']) {//主题分类 #-->
+					<input type="hidden" name="topic_type_id" value="" id="J_topic_type_id" />
+					<select id="J_sort_1" class="mr10" name="topictype">
+						<option value="0">请选择分类</option>
+						<!--# foreach($topictypes['topic_types'] as $v) { #-->
+						<option value="{$v['id']}">{@strip_tags($v['name'])}</option>
+						<!--# } #-->
+					</select>
+					<select id="J_sort_2" class="mr10" style="display:none;" name="sub_topictype">
+						<option value="0">请选择分类</option>
+					</select>
+					<!--# }//主题分类结束 #-->
+					<input name="atc_title" id="J_atc_title" value="{$atc_title}" class="input length_6 mr15"{@!empty($isTopic) ? ' required' : ''} aria-required="true" placeholder="{@!empty($default_title) ? $default_title : '请输入标题'}" title="请输入标题" data-max="{@Wekit::C('bbs', 'title.length.max')}"/><span id="J_title_tip"></span>
+				</hgroup>
+				<hook class='$pwpost' name="createHtmlBeforeContent"/>
+				<div class="c"></div>
+				<div class="cc mb10">
+					<div class="cm">
+						<div class="cw">
+							<!--# //$pwpost->displayHtmlFromBeforeContent(); #-->
+							<template source='wind_editor' load='false' />
+						</div>
+					</div>
+					<div class="sd">
+						<div class="sidebar">
+							<!--# if ($action == 'run' || $action == 'modify') { #-->
+							<template source='TPL:tag.post_tag' load='true' />
+							<!--# } #-->
+							<hook class='$pwpost' name='createHtmlRightContent' />
+						</div>
+					</div>
+				</div>
+				<input type="hidden" value="{$pid}" name="pid" />
+				<input type="hidden" value="{$tid}" name="tid" />
+				<input type="hidden" value="{$special}" name="special" />
+				<div class="ft cc">
+					<button type="submit" name="Submit" class="btn btn_submit btn_big fl mr10" id="J_post_sub">发布</button>
+					<a href="{@url:bbs/draft/doAdd}" class="btn btn_big mr10" id="J_draftBtn">存为草稿</a>
+					<label for="reply_notice_label"><input name="reply_notice" id="reply_notice_label" type="checkbox" value="1" {$reply_notice} />有回复提醒我</label>
+				</div>
 			</div>
-			</form>
 		</div>
+		</form>
 	</div>
 <template source='TPL:common.footer' load='true' />
 </div>
@@ -275,6 +273,11 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function() {
 				var li_arr= [];
 				$.getJSON($this.attr('href'), function(data){
 					if(data.state === 'success') {
+						if(!data.data.length) {
+							draft_wrap.html('<div class="not_content_mini"><i></i>啊哦，草稿箱暂没有任何内容哦！</div>');
+							return;
+						}
+
 						$.each(data.data, function(i, o){
 							li_arr.push('<li><a href="{@url:bbs/draft/doDelete?id=}'+o.id+'" class="pop_close J_draft_del" title="删除草稿">[删除]</a><a href="" data-id="'+ o.id +'" class="insert J_draft_insert" title="载入草稿">[载入]</a><span class="J_draft_title">'+ o.title +'</span><span>'+ o.created_time +'</span></li>');
 
@@ -282,7 +285,6 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function() {
 							content_cache[o.id] = o.content;
 							draft_list_btn.addClass('up_current');
 						});
-
 						draft_wrap.html('<ul>'+ li_arr.join('')+ '</ul>');
 
 					}else if(data.state === 'fail'){
@@ -327,13 +329,11 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function() {
 					$.getJSON($this.attr('href'), function(data){
 						if(data.state === 'success') {
 							$this.parent('li').remove();
-							//draft_loaded = false;		//数据重新加载
-
-							//-1
+							
 							var c = parseInt(draft_count.text());
 							draft_count.text(c-1);
 							if(c <= 1) {
-								draft_count.parent().hide();
+								draft_wrap.html('<div class="not_content_mini"><i></i>啊哦，草稿箱暂没有任何内容哦！</div>');
 							}
 						}else if(data.state === 'fail'){
 							//global.js

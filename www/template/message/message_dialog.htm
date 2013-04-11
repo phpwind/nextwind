@@ -24,7 +24,7 @@
 												$dialog['last_message']['to_uid'] : $dialog['last_message']['from_uid'];
 												$blackList = Wekit::load('user.PwUserBlack')->getBlacklist($loginUser->uid);
 												if ($blackList) {
-													$isBlack = in_array($dialogUserid,$blackList) ? true : false;
+													$isBlack = Pw::inArray($dialogUserid,$blackList) ? true : false;
 												}
 									 #-->
 									<span class="fr">

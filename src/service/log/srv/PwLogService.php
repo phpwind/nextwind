@@ -7,7 +7,7 @@ Wind::import('SRV:log.dm.PwLogDm');
  * @author xiaoxia.xu<xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwLogService.php 23027 2013-01-05 05:07:09Z xiaoxia.xuxx $
+ * @version $Id: PwLogService.php 23697 2013-01-15 05:17:30Z jieyin $
  * @package src.service.log.srv
  */
 class PwLogService {
@@ -24,7 +24,7 @@ class PwLogService {
 	public function addShieldTagLog(PwUserBo $user, PwLogDm $dm, $langArgs, $ifShield = true) {
 		$dm->setCreatedUser($user->uid, $user->username)
 			->setCreatedTime(Pw::getTime())
-			->setIp(Wekit::app()->clientIp)
+			->setIp(Wind::getComponent('request')->getClientIp())
 			->setTypeid($this->getOperatTypeid($ifShield ? 'shieldtag' : 'unshieldtag'));
 		$lang = 'LOG:shield.tag.message';
 		!$ifShield && $lang = 'LOG:unshield.tag.message';
@@ -69,7 +69,7 @@ class PwLogService {
 			->setCreatedTime(Pw::getTime())
 			->setCreatedUser($user->uid, $user->username)
 			->setOperatedUser($thread['created_userid'], $thread['created_username'])
-			->setIp(Wekit::app()->clientIp)
+			->setIp(Wind::getComponent('request')->getClientIp())
 			->setTypeid($this->getOperatTypeid('edit'));
 		$this->_getLogDs()->addLog($dm);
 		return true;
@@ -97,7 +97,7 @@ class PwLogService {
 			->setCreatedTime(Pw::getTime())
 			->setCreatedUser($user->uid, $user->username)
 			->setOperatedUser($attach['created_userid'], $_createdUser['username'])
-			->setIp(Wekit::app()->clientIp)
+			->setIp(Wind::getComponent('request')->getClientIp())
 			->setTypeid($this->getOperatTypeid('delatc'));
 		$this->_getLogDs()->addLog($dm);
 		return true;
@@ -129,7 +129,7 @@ class PwLogService {
 			$_dm->setCreatedTime(Pw::getTime())
 			->setCreatedUser($user->uid, $user->username)
 			->setOperatedUser($thread['created_userid'], $thread['created_username'])
-			->setIp(Wekit::app()->clientIp)
+			->setIp(Wind::getComponent('request')->getClientIp())
 			->setExtends($extends)
 			->setFid($thread['fid'])
 			->setTid($thread['tid'])
@@ -186,7 +186,7 @@ class PwLogService {
 				$_dm->setCreatedTime(Pw::getTime())
 					->setCreatedUser($user->uid, $user->username)
 					->setOperatedUser($_uid, $_user['username'])
-					->setIp(Wekit::app()->clientIp)
+					->setIp(Wind::getComponent('request')->getClientIp())
 					->setExtends($endTime)
 					->setTypeid($typeid)
 					->setContent($this->getLogMsg('LOG:operated.message', $langArgs));
@@ -215,7 +215,7 @@ class PwLogService {
 			$_dm->setCreatedTime(Pw::getTime())
 			->setCreatedUser($user->uid, $user->username)
 			->setOperatedUser($_item['created_userid'], $_item['created_username'])
-			->setIp(Wekit::app()->clientIp)
+			->setIp(Wind::getComponent('request')->getClientIp())
 			->setExtends($_item['weibo_id'])
 			->setTypeid($typeid)
 			->setContent($this->getLogMsg('LOG:delete.fresh.message', array('{title}' => "'" . $title . "'")));
@@ -285,7 +285,7 @@ class PwLogService {
 	protected function _buildSecurity($content) {
 		static $charset = '';
 		if ($charset) {
-			$charset = Wekit::app()->charset == 'GBK' ? 'ISO-8859-1' : Wekit::app()->charset;
+			$charset = Wekit::V('charset') == 'GBK' ? 'ISO-8859-1' : Wekit::V('charset');
 		}
 		return WindSecurity::escapeHTML($content, $charset);
 	}

@@ -2,17 +2,17 @@
 				<div class="space_user_info">
 					<div class="face"><img class="J_avatar" src="{@Pw::getAvatar($space->spaceUid,'big')}" data-type="big" width="180" height="180" /></div>
 					<h2 class="name">{$space->spaceUser['username']}</h2>
-					<!--# if($space->tome != 2): #-->
+					<!--# if($space->tome != 2){ #-->
 					<div class="operate cc">
-						<!--# if($space->tome == 4): #-->
+						<!--# if($space->tome >= 4){ #-->
 						<a class="follow unfollow J_space_follow J_qlogin_trigger" data-uid="{$space->spaceUid}" data-role="unfollow" href="{@url:my/follow/delete?uid=$space->spaceUid}" >取消关注</a>
-						<!--# else: #-->
-						<a rel="nofollow" class="J_space_follow follow J_qlogin_trigger" data-uid="{$space->spaceUid}" data-role="follow" href="{@url:my/follow/add?uid=$space->spaceUid}"><em></em>加关注</a>
-						<!--# endif; #-->		
+						<!--# }else{ #-->
+						<a rel="nofollow" class="J_space_follow follow J_qlogin_trigger" data-uid="{$space->spaceUid}" data-role="follow" href="{@url:my/follow/add}"><em></em>加关注</a>
+						<!--# } #-->		
 						<a rel="nofollow" href="{@url:message/message/pop?uid=$space->spaceUser['uid']}" class="message J_qlogin_trigger J_send_msg_pop" data-name="{$space->spaceUser['username']}"><em></em>写私信</a>
 						<hook name="space_user_info" args="array($space)" />
 					</div>
-					<!--# endif; #-->	
+					<!--# } #-->	
 					<div class="present">{$space->spaceUser['sign']}</div>
 					<div class="num">
 						<ul>
@@ -21,20 +21,20 @@
 							<li class="tail"><a href="{@url:space/thread/run?uid=$space->spaceUid}"><span>{$space->spaceUser['postnum']}</span><em>帖子</em></a></li>
 						</ul>
 					</div>
-					<!--# if (Wekit::C('site','medal.isopen')): #-->
+					<!--# if (Wekit::C('site','medal.isopen')){ #-->
 					<div class="medal">
 						<ul class="cc">
 							<!--# 
 								$medalIds = explode(',', $space->spaceUser['medal_ids']);
 								$medals = Wekit::load('medal.srv.PwMedalCache')->fetchMedal($medalIds);
-								foreach ($medals as $medal):
+								foreach ($medals as $medal){
 							#-->
 								<li><a rel="nofollow" href="{@url:medal/index/run}"><img src="{$medal['icon']}" title="{$medal['name']}" width="30" height="30" alt="{$medal['name']}"/></a>
 								</li>
-							<!--# endforeach; #-->	
+							<!--# } #-->	
 						</ul>
 					</div>
-					<!--# endif; #-->
+					<!--# } #-->
 					<!--# 
 					$punchService = Wekit::load('space.srv.PwPunchService');
 					list($punchOpen,$punchFriendOpen) = $punchService->getPunchConfig();

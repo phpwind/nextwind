@@ -77,10 +77,10 @@ class PwBackupService {
 		$tableid = intval($tableid) ? intval($tableid) : 0;
 		list($backupData, $totalRows, $tableSaveInfo) = array('', 0, array());
 		$method = (strtolower($insertmethod) == 'common') ? '_backupDataCommonMethod' : '_backupDataExtendMethod';
-		list($backupData, $tableid, $start, $totalRows, $tableSaveInfo) = $this->$method($tabledb, $tableid, $start, $sizelimit);
+		list($backupData, $tableid, $start, $tableSaveInfo) = $this->$method($tabledb, $tableid, $start, $sizelimit);
 		$this->_recordTableSaveInfo($tableSaveInfo, $filename);
 		
-		return array($backupData, $tableid, $start, $totalRows);
+		return array($backupData, $tableid, $start);
 	}
 	
 	/**
@@ -95,38 +95,34 @@ class PwBackupService {
 	protected function _backupDataCommonMethod($tabledb, $tableid = 0, $start = 0, $sizelimit = 0) {
 		list($writedRows, $backupData, $tableSaveInfo, $totalTableNum) = array(0, '', array(), count($tabledb));
 		// 循环每个表
-		for ($i = $tableid; $i < $totalTableNum; $i++) {
-			$tablestatus = $this->_getBackupDs()->getTableStatus($tabledb[$i]);
-			$totalRows = $tablestatus['Rows'];
-			$flag = true;
+		while ($tableid < $totalTableNum) {
+			if (!isset($tabledb[$tableid])) continue;
 			$tmpWritedRows = $writedRows;
-			
-			$selectNum = $totalRows < 20000 ? $totalRows : 20000;
-			$sizelimit = $sizelimit < 2048 ? $sizelimit : 2048;
-			$result = $this->_getBackupDs()->getData($tabledb[$i],$selectNum,$start);
-			$fieldNum = $this->_getBackupDs()->getColumnCount($tabledb[$i]);
+			$selectNum = 5000;
+			$result = $this->_getBackupDs()->getData($tabledb[$tableid],$selectNum,$start);
+			$fieldNum = $this->_getBackupDs()->getColumnCount($tabledb[$tableid]);
+			$count = 0;
 			// 循环组装$selectNum条数据
 			foreach ($result as $v) {
-				$tmpData = "INSERT INTO " . $tabledb[$i] . " VALUES(" . $v[0];
+				$tmpData = "INSERT INTO " . $tabledb[$tableid] . " VALUES(" . $v[0];
 				$tmpData .= $this->_buildFieldsData($fieldNum, $v) . ");\n";
-				
 				if ($sizelimit && (($this->_backupTipLength + strlen($backupData) + strlen($tmpData) + 2) > $sizelimit * 1000)) {
 					$tableSaveInfo[$tabledb[$tableid]] = array('start' => $tmpWritedRows, 'end' => -1);
-					$flag = false;
 					break 2;
 				}
 				$backupData .= $tmpData;
-				
 				$writedRows++;
 				$start++;	
+				$count++;
 			}
-			if ($start >= $totalRows) {
+			if ($count < $selectNum) {
 				$start = 0;
+				$tableid++;
 			}
 			$backupData .= "\n";
-			$tableSaveInfo[$tabledb[$tableid++]] = array('start' => $tmpWritedRows, 'end' => $writedRows++);
+			$tableSaveInfo[$tabledb[$tableid]] = array('start' => $tmpWritedRows, 'end' => $writedRows++);
 		}
-		return array($backupData, $tableid, $start, $totalRows, $tableSaveInfo);
+		return array($backupData, $tableid, $start, $tableSaveInfo);
 	}
 	
 	/**
@@ -139,19 +135,16 @@ class PwBackupService {
 	 * @return array
 	 */
 	protected function _backupDataExtendMethod($tabledb, $tableid = 0, $start = 0, $sizelimit = 0) {
-		list($totalRows, $writedRows, $backupData, $tableSaveInfo, $totalTableNum) = array(0, 0, '', array(), count($tabledb));
-		for ($i = $tableid; $i < $totalTableNum; $i++) {
-			$tablestatus = $this->_getBackupDs()->getTableStatus($tabledb[$i]);
-			$totalRows += $tablestatus['Rows'];
-			$flag = true;
+		list($writedRows, $backupData, $tableSaveInfo, $totalTableNum) = array(0, '', array(), count($tabledb));
+		while ($tableid < $totalTableNum) {
+			if (!isset($tabledb[$tableid])) continue;
 			$tmpWritedRows = $writedRows;
-			$outFrontData = 'INSERT INTO ' . $tabledb[$i] . ' VALUES ';
-
+			$selectNum = 5000;
+			$result = $this->_getBackupDs()->getData($tabledb[$tableid], $selectNum, $start);
+			$fieldNum = $this->_getBackupDs()->getColumnCount($tabledb[$tableid]);
+			$count = 0;
 			$outTmpData = '';
-			$selectNum = $totalRows < 20000 ? $totalRows : 20000;
-			$sizelimit = $sizelimit < 2048 ? $sizelimit : 2048;
-			$result = $this->_getBackupDs()->getData($tabledb[$i], $selectNum, $start);
-			$fieldNum = $this->_getBackupDs()->getColumnCount($tabledb[$i]);
+			$outFrontData = 'INSERT INTO ' . $tabledb[$tableid] . ' VALUES ';
 			foreach ($result as $v) {
 				$v = array_values($v);
 				$tmpData = "(" . $v[0];
@@ -159,26 +152,24 @@ class PwBackupService {
 				if ($sizelimit && (($this->_backupTipLength + strlen($backupData) + strlen($tmpData) + strlen($outTmpData) + strlen($outFrontData) + 2) > $sizelimit * 1000)) {
 					$outTmpData && $backupData .= $outFrontData . rtrim($outTmpData, ",\n") . ";\n";
 					$tableSaveInfo[$tabledb[$tableid]] = array('start' => $tmpWritedRows, 'end' => -1);
-					$flag = false;
 					break 2;
-				}
-				if (strlen($outFrontData) + strlen($outTmpData) + strlen($tmpData) > 768 * 1000) {
-					break;
 				}
 				$outTmpData .= $tmpData;
 				$start++;
+				$count++;
 			}
 			if ($outTmpData) {
 				$backupData .= $outFrontData . rtrim($outTmpData, ",\n") . ";\n";
 				$writedRows++;
 			}
-			if ($start >= $totalRows) {
+			if ($count < $selectNum) {
 				$start = 0;
+				$tableid++;
 			}
 			$backupData .= "\n";
-			$tableSaveInfo[$tabledb[$tableid++]] = array('start' => $tmpWritedRows, 'end' => $writedRows++);
+			$tableSaveInfo[$tabledb[$tableid]] = array('start' => $tmpWritedRows, 'end' => $writedRows++);
 		}
-		return array($backupData, $tableid, $start, $totalRows, $tableSaveInfo);
+		return array($backupData, $tableid, $start, $tableSaveInfo);
 	}
 	
 	/**
@@ -265,7 +256,6 @@ class PwBackupService {
 		if ($isCompress && $this->_checkZlib()) {
 			$zipService = $this->_getZipService();
 			$filename = basename($filePath);
-			//$zipName = substrs($filename, strpos($filename, '.'), 'N') . '.zip';
 			$zipName = substr($filename,0,strrpos($filename, '.')) . '.zip';
 			$filePath = dirname($filePath) . '/' . $zipName;
 			$zipService->init();
@@ -404,15 +394,19 @@ class PwBackupService {
 			$value = trim($value);
 			if (!$value || Pw::substrs($value, 2, '', false) === '--') continue;
 			if(preg_match("/;$/i", $value)){
-				
 				$query .= $value;
 				if(preg_match("/^CREATE/i", $query)){
 					$extra = substr(strrchr($query, ')'), 1);
 					$tabtype = substr(strchr($extra, '='), 1);
 					$tabtype = substr($tabtype, 0, strpos($tabtype, strpos($tabtype,' ') ? ' ' : ';'));
+					$comment = strchr($extra, 'COMMENT=');
+					if ($comment) {
+						$comment = substr(strchr($comment, '='), 1);
+						$comment = substr($comment, 0, strpos($comment, strpos($comment,';') ? ';' : ''));
+					}
 					$query = str_replace($extra, '', $query);
-					$extra = $charset ? "ENGINE=$tabtype DEFAULT CHARSET=$charset;" : "ENGINE=$tabtype;";
-
+					$extra = $charset ? "ENGINE=$tabtype DEFAULT CHARSET=$charset" : "ENGINE=$tabtype";
+					$extra = $comment ? "$extra COMMENT=$comment;" : "$extra;";
 					$query .= $extra;
 				} elseif (preg_match("/^INSERT/i", $query)){
 					$query = 'REPLACE ' . substr($query, 6);

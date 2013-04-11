@@ -6,7 +6,7 @@ Wind::import("Lib:utility.PwCacheService");
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwDomainService.php 23231 2013-01-07 06:50:51Z long.shi $
+ * @version $Id: PwDomainService.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package domain.srv
  */
 class PwDomainService {
@@ -124,8 +124,8 @@ class PwDomainService {
 				$app[$m] = $k;
 			}
 		}
-		Wekit::load('config.PwConfig')->setConfig('site', 'domain', $domain);
-		Wekit::load('config.PwConfig')->setConfig('site', 'domain.app', $app);
+		Wekit::C()->setConfig('site', 'domain', $domain);
+		Wekit::C()->setConfig('site', 'domain.app', $app);
 	}
 	
 	/**

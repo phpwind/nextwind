@@ -8,7 +8,7 @@
 	<div class="nav">
 		<div class="return"><a href="{@url:u/manage/run}">返回上一级</a></div>
 		<ul class="cc">
-			<li><a href="{@url:admin/u/manage/edit?uid=$uid}">编辑</a></li>
+			<li><a href="{@url:admin/u/manage/edit?uid=$uid}">用户信息</a></li>
 			<li><a href="{@url:admin/u/manage/editCredit?uid=$uid}">积分</a></li>
 			<li class="current"><a href="{@url:admin/u/manage/editGroup?uid=$uid}">用户组</a></li>
 		</ul>
@@ -38,7 +38,7 @@
 					<!--# foreach ($allGroups as $item) { #-->
 					<option value="{$item['gid']}"{@Pw::isSelected($info['groupid'] == $item['gid'])}>{$item['name']}</option>
 					<!--# } #-->
-					<option value="{$item['gid']}"{@Pw::isSelected($info['groupid'] == 0)}>普通组</option>
+					<option value="0"{@Pw::isSelected($info['groupid'] == 0)}>普通组</option>
 				</select>
 			</td>
 			<td><div class="fun_tips">用户默认的用户组，注意：如果拥有用户组中设置了附加组，默认用户组会根据系统默认用户组优先级重新计算当前的用户组。</div></td>
@@ -56,15 +56,15 @@
 						<!--#
 						$myGids = array_keys($userGroups);
 						foreach ($allGroups as $item) {
-								if (in_array($item['gid'], $defaultGroups)) continue;
+								if (Pw::inArray($item['gid'], $defaultGroups)) continue;
 								$check = $canCheck = '';;
 								$disabled = 'disabled=disabled';
 								$disableclass = 'disabled';
-								if (in_array($item['gid'], $myGids)) {
+								if (Pw::inArray($item['gid'], $myGids)) {
 									$check = 'checked=checked';
 									$disabled = $disableclass = '';
 								}
-								if (in_array($info['groupid'], $defaultGroups)) {
+								if (Pw::inArray($info['groupid'], $defaultGroups)) {
 									$canCheck = 'disabled=disabled';
 								}
 								$endtime = $userGroups[$item['gid']]['endtime'] ? Pw::time2Str($userGroups[$item['gid']]['endtime'], 'Y-m-d H:i') : '';

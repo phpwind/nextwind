@@ -9,11 +9,11 @@
 
 	<div class="nav">
 		<div class="return">
-		<!--# if ($type == 1): #-->
+		<!--# if ($type == 1){ #-->
 		<a href="{@url:design/page/run}">返回上一级</a>
-		<!--# else: #-->
+		<!--# }else{ #-->
 		<a href="{@url:design/portal/run}">返回上一级</a>	
-		<!--# endif; #-->
+		<!--# } #-->
 		</div>
 		<ul class="cc">
 			<li class="current"><a href="{@url:design/permissions/page?id=$designId}">页面权限管理</a></li>
@@ -61,7 +61,7 @@
 					<td>操作</td>
 				</tr>
 			</thead>
-			<!--# foreach ($list as $v): #-->
+			<!--# foreach ($list as $v){ #-->
 			<tr>
 				<td><input data-xid="J_check_x" data-yid="J_check_y" class="J_check" type="checkbox" name="del_ids[]" value="{$v['id']}"></td>
 				<td><a href="{@url:design/permissions/view?uid=$v['uid']}">{$users[$v['uid']]['username']}</a> <input type="hidden" name="ids[{$v['id']}]" value="{$v['id']}"></td>
@@ -70,7 +70,7 @@
 				<td><input class="J_radio_type_verify" type="radio" name="permissions[{$v['id']}]" value="1" {@Pw::ifcheck($v['permissions'] == 1)}></td>
 				<td><a class="J_ajax_del" href="{@url:design/permissions/delete?id=$v['id']}">[删除]</a></td>
 			</tr>
-			<!--# endforeach; #-->
+			<!--# } #-->
 			<tr>
 				<td></td>
 				<td><input type="text" class="input length_3" name="new_username[tmp_1]"></td>

@@ -4,9 +4,9 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 /**
  * 缩略水印
  *
- * the last known user to change this file in the repository  <$LastChangedBy: yanchixia $>
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
  * @author Jianmin Chen <sky_hold@163.com>
- * @version $Id: PwImageWatermark.php 21501 2012-12-10 09:16:19Z yanchixia $
+ * @version $Id: PwImageWatermark.php 24724 2013-02-17 10:05:52Z jieyin $
  * @package lib.image
  */
 
@@ -175,10 +175,14 @@ class PwImageWatermark {
 		list($offsetX, $offsetY) = $this->getPosition($water);
 
 		$source = $this->image->getSource();
-		
-		/*imagealphablending($source, true);
-		imagesavealpha($source, true);
 
+		if ($this->image->type == 'png') {
+			imagealphablending($source, false);
+			imagesavealpha($source, true);
+		} else {
+			imagealphablending($source, true);
+		}
+		/*
 		if ($this->image->type != 'png') {
 			$tmp = imagecreatetruecolor($this->image->width, $this->image->height);
 			imagecopy($tmp, $source, 0, 0, 0, 0, $this->image->width, $this->image->height);
@@ -199,12 +203,12 @@ class PwImageWatermark {
 	public function doImage($source, $water, $offsetX, $offsetY, $transparency) {
 		$ws = $water->getSource();
 		if ($water->type == 'png') {
-			imagealphablending($source, true);
+			//imagealphablending($source, true);
        	 	imagecolortransparent($source, imagecolorallocatealpha($source, 0, 0, 0, 0));
-        	imagecopyresampled($source, $ws, $offsetX, $offsetY, 0, 0,$water->width,$water->height,$water->width,$water->height);
+        	imagecopyresampled($source, $ws, $offsetX, $offsetY, 0, 0, $water->width, $water->height, $water->width, $water->height);
         	//imagecopy($source, $ws, $offsetX, $offsetY, 0, 0, $water->width, $water->height);
 		} else {
-			//imagealphablending($ws, true);
+			imagealphablending($ws, true);
 			imagecopymerge($source, $ws, $offsetX, $offsetY, 0, 0, $water->width, $water->height, $transparency);
 		}
 		imagedestroy($ws);
@@ -217,8 +221,8 @@ class PwImageWatermark {
 		$G = hexdec(substr($this->fontcolor, 3, 2));
 		$B = hexdec(substr($this->fontcolor, 5));
 		//imagestring($sourcedb['source'],$w_font,$wX,$wY,$w_text,imagecolorallocate($sourcedb['source'],$R,$G,$B));
-		if (strpos($this->fontfamily, 'ch') === 0 && strtoupper(Wekit::app()->charset) != 'UTF-8') {
-			$this->text = WindConvert::WindConvert($this->text, 'UTF-8', Wekit::app()->charset);
+		if (strpos($this->fontfamily, 'ch') === 0 && strtoupper(Wekit::V('charset')) != 'UTF-8') {
+			$this->text = WindConvert::WindConvert($this->text, 'UTF-8', Wekit::V('charset'));
 		}
 		imagettftext($source, $this->fontsize, 0, $offsetX, $offsetY + $water->height, imagecolorallocate($source, $R, $G, $B), $this->fontfile, $this->text);
 		unset($water);

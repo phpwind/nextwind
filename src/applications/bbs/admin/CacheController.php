@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: CacheController.php 22284 2012-12-21 03:47:30Z long.shi $
+ * @version $Id: CacheController.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package admin
  * @subpackage controller
  */
@@ -38,7 +38,7 @@ class CacheController extends AdminBaseController {
 			$debug = 1;
 		}
 		
-		Wekit::load('config.PwConfig')->setConfig('site', 'css.compress', $debug);
+		Wekit::C()->setConfig('site', 'css.compress', $debug);
 		$this->showMessage('success');
 	}
 

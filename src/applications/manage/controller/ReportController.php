@@ -8,7 +8,7 @@ Wind::import('SRV:report.dm.PwReportDm');
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: ReportController.php 22678 2012-12-26 09:22:23Z jieyin $
+ * @version $Id: ReportController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package wind
  */
 class ReportController extends BaseManageController {
@@ -50,8 +50,10 @@ class ReportController extends BaseManageController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:manage.report.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:manage.report.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 		
 	/**

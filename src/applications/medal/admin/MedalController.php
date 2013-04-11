@@ -2,11 +2,11 @@
 Wind::import('ADMIN:library.AdminBaseController');
 
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: MedalController.php 20461 2012-10-30 06:18:00Z gao.wanggao $ 
+ * @version $Id: MedalController.php 24341 2013-01-29 03:08:55Z jieyin $ 
  * @package 
  */
  class MedalController extends AdminBaseController{
@@ -187,7 +187,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  		if ($_FILES['icon']['size']) {
  			$icon = $this->_uploadImage('icon');
  		}
- 		
+ 		$info = $this->_getMedalDs()->getMedalInfo($medalid);
  		if ($receivetype == 1 ) $expired = 0;
  		if ($receivetype == 1 && in_array($awardtype, array(1,2,3))) $expired = 3;
  		if ($receivetype == 2){
@@ -204,10 +204,16 @@ Wind::import('ADMIN:library.AdminBaseController');
 			->setAwardType($awardtype)
 			->setExpiredDays($expired);
  		if ($image) {
+	 		if ($info['path']) {
+	 			Pw::deleteAttach($info['path'] . $info['image']);
+	 		}
 			$dm->setImage($image['filename'])
 				->setPath($image['path']);
 		}
 		if ($icon) {
+			if ($info['path']) {
+	 			Pw::deleteAttach($info['path'] . $info['icon']);
+	 		}
 			$dm->setIcon($icon['filename'])
 				->setPath($image['path']);
 		}
@@ -227,6 +233,10 @@ Wind::import('ADMIN:library.AdminBaseController');
  		$info = $this->_getMedalDs()->getMedalInfo($medalId);
  		if ($info['medal_type'] == 1) $this->showError('MEDAL:fail'); //系统勋章不能删除
  		$this->_getMedalDs()->deleteInfo($medalId);
+ 		if ($info['path']) {
+ 			Pw::deleteAttach($info['path'] . $info['image']);
+ 			Pw::deleteAttach($info['path'] . $info['icon']);
+ 		}
  		$this->_getMedalLogDs()->deleteInfoByMedalId($medalId);
  		$this->_getMedalService()->updateCache();
  		$this->showMessage("MEDAL:success");
@@ -379,6 +389,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  		$ds = $this->_getMedalLogDs();
  		$msg = '';
  		foreach ($users AS $user) {
+ 			if (!$user['uid']) continue;
  			/*$userGids = $userSrv->getGidsByUid($user['uid']);
  			if (!$medalSrv->allowAwardMedal($userGids, $info['medal_gids'])) {
  				$msg .= $user['username'] . '所在用户组不能颁发;';
@@ -522,9 +533,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  	}
  	
  	public function setAction() {
- 		$service = Wekit::load('config.PwConfig');
- 		$config = $service->getValues('site');
- 		
+ 		$config = Wekit::C()->getValues('site');
 		$this->setOutput($config, 'config');
  	}
  	
@@ -539,7 +548,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  	
  	private function _uploadImage($key = 'image') {
  		Wind::import('SRV:upload.action.PwMedalUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
  		if ($key == 'image') {
 			$bhv = new PwMedalUpload('image' , 80, 80);
  		} else {

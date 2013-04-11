@@ -5,12 +5,12 @@
  * 
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: WindidNotifyDao.php 21781 2012-12-13 08:13:03Z gao.wanggao $
+ * @version $Id: WindidNotifyDao.php 23820 2013-01-16 06:14:07Z jieyin $
  * @package windid.service.notify.dao
  */
 class WindidNotifyDao extends WindidBaseDao {
 	protected $_pk = 'nid';
-	protected $_table = 'windid_notify';
+	protected $_table = 'notify';
 	protected $_dataStruct = array('appid', 'operation', 'param', 'timestamp');
 	
 	/**

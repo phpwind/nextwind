@@ -24,7 +24,7 @@ class ACloudSysBenchServiceAdministor {
 	}
 	
 	public function getSiteInfo() {
-		return array (ACloudSysCoreCommon::getGlobal ( 'g_sitename', 'phpwind' ), ACloudSysCoreCommon::getGlobal ( 'g_siteurl', 'http://' . $_SERVER ['HTTP_HOST'] ), ACloudSysCoreCommon::getGlobal ( 'g_charset' ), ACloudSysCoreDefine::ACLOUD_V );
+		return array (ACloudSysCoreCommon::getGlobal ( 'g_sitename', Wekit::C('site','info.name') ), ACloudSysCoreCommon::getGlobal ( 'g_siteurl', 'http://' . $_SERVER ['HTTP_HOST'] ), ACloudSysCoreCommon::getGlobal ( 'g_charset' ), ACloudSysCoreDefine::ACLOUD_V );
 	}
 	
 	public function getEnvInfo() {

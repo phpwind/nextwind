@@ -12,7 +12,7 @@
 			<!--# } #-->
 			<li class="current"><a href="{@url:appcenter/style/install}">本地安装</a></li>
 			<li><a href="{@url:appcenter/style/manage}">界面管理</a></li>
-			<!--# if(Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->inDevMode1()){ #-->
+			<!--# if(Wekit::load('APPCENTER:service.srv.PwDebugApplication')->inDevMode1()){ #-->
 			<li><a href="{@url:appcenter/style/generate}">开发助手</a></li>
 			<!--# } #-->
 		</ul>
@@ -26,37 +26,29 @@
 	</div>
 	<div class="h_a">模板安装</div>
 	<template source='installForm' />
-	<div class="h_a">未安装模板</div>
 	<!--#if(empty($themes)) { #-->
-	<div class="prompt_text">
-	无
-	</div>
+	<!--div class="not_content_mini"><i></i>无未安装模板</div-->
 	<!--# } else { #-->
-	<form action="{@url:appcenter/style/doinstall}" method="post" >
+	<div class="h_a">未安装模板</div>
+	<!-- <form action="{@url:appcenter/style/doinstall}" method="post" > -->
 	<div class="table_full mb10">
 		<table width="100%">
-			<col class="th" />
-			<col width="300" />
-			<thead>
-				<tr>
-					<th>安装选择</th>
-					<td>风格名称</td>
-					<td>操作</td>
-				</tr>
-			</thead>
+			<col class="th">
+			<col width="100">
 <!--#foreach ($themes as $k => $v){ #-->
  	<!--# foreach($v as $theme){ #-->
 			<tr>
-				<th><input type="checkbox" name="themes[]" value="THEMES:{@str_replace('/','.',$addons[$k][1]).'.'.$theme}"></th>
-				<td><span class="mr10 b">{$theme}</span>({$addons[$k][0]})</td>
-				<td><a class="J_ajax_del" href="{@url:appcenter/style/delFolder}&folder={@str_replace('/','.',$addons[$k][1]).'.'.$theme}">[删除文件]</a></td>
+				<!-- <th><input type="checkbox" name="themes[]" value="THEMES:{@str_replace('/','.',$addons[$k][1]).'.'.$theme}"></th> -->
+				<th><span class="b mr10">{$theme}</span><a class="J_ajax_del w" href="{@url:appcenter/style/delFolder}&folder={@str_replace('/','.',$addons[$k][1]).'.'.$theme}">[删除]</a></th>
+				<td><span style="line-height:24px;">{$addons[$k][0]}</span></td>
+				<td><a class="J_ajax_refresh btn btn_submit" href="{@url:appcenter/style/doinstall}&themes[]=THEMES:{@str_replace('/','.',$addons[$k][1]).'.'.$theme}">安装</a></td>
 			</tr>
 	<!--# } #-->
 <!--# } #-->
 		</table>
 	</div>
-	<button type="submit" class="btn btn_submit">安装</button>
-	</form>
+	<!-- <button type="submit" class="btn btn_submit">安装</button>
+	</form> -->
 	<!--# } #-->
 </div>
 <template source='TPL:admin.common.footer' />
@@ -80,7 +72,7 @@ $(function(){
 			up_tip = $('#J_up_tip'),
 			up_file = $('#J_up_file'),
 			up_del = $('#J_up_del'),
-			up_btn = $('button.J_ajax_submit_btn'),
+			up_btn = $('#J_upload_btn'),
 			file_input = $('#J_file_input');
 	
 

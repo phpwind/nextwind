@@ -6,7 +6,7 @@
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidUserBlack.php 22061 2012-12-19 03:09:07Z gao.wanggao $
+ * @version $Id: WindidUserBlack.php 24398 2013-01-30 02:45:05Z jieyin $
  * @package wind
  */
 class WindidUserBlack {
@@ -96,6 +96,6 @@ class WindidUserBlack {
 	 * @return WindidUserBlackDao
 	 */
 	protected function _getBlacklistDao() {
-		return Windid::loadDao('user.dao.WindidUserBlackDao');
+		return Wekit::loadDao('WSRV:user.dao.WindidUserBlackDao');
 	}
 }

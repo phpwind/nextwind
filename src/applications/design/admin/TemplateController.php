@@ -5,7 +5,7 @@ Wind::import('APPS:design.admin.DesignBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: TemplateController.php 18301 2012-09-13 05:20:00Z gao.wanggao $ 
+ * @version $Id: TemplateController.php 23961 2013-01-17 08:40:02Z gao.wanggao $ 
  * @package 
  */
 class TemplateController extends DesignBaseController{
@@ -49,10 +49,14 @@ class TemplateController extends DesignBaseController{
 		$compid = (int)$this->getInput('compid','post');
 		$tpl = $this->_getDesignService()->filterTemplate($tpl);
 		if (!$this->_getDesignService()->checkTemplate($tpl)) $this->showError("DESIGN:template.error");
+		$property = $this->bo->getProperty();
+		$limit = $this->compileFor($tpl);
+		$property['limit'] = $limit ? $limit : $property['limit'];
 		Wind::import('SRV:design.dm.PwDesignModuleDm');
  		$dm = new PwDesignModuleDm($this->bo->moduleid);
  		$dm->setModuleTpl($tpl)
- 			->setCompid($compid);
+ 			->setCompid($compid)
+ 			->setProperty($property);
  		$resource = $this->_getModuleDs()->updateModule($dm);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
 		
@@ -77,6 +81,18 @@ class TemplateController extends DesignBaseController{
 		$return = $this->_getComponentDs()->addComponent($this->bo->getModel(), $tplname, $tpl);
 		if ($return) $this->showMessage("operate.success");
 		$this->showError("operate.fail");
+	}
+	
+	/**
+	 * 对<for:1>进行解析
+	 * Enter description here ...
+	 */
+	protected function compileFor($section) {
+		$limit = 0;
+		if(preg_match('/\<for:(\d+)>/isU', $section, $matches)) {
+			$limit = (int)$matches[1];
+		}
+		return $limit;
 	}
 	
 	private function _getDesignService() {

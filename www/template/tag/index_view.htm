@@ -41,19 +41,17 @@
 							<!--# } #-->
 						</div>
 					</div>
-					<div class="box_wrap">
-						<nav>
-							<div class="content_nav">
-								<ul class="cc">
-								<!--# $thread_current = !$args['type'] ?  "class='current'" : '';
-										$user_current = ($args['type'] == 'users') ?  "class='current'" : '';
-								#-->
-									<li {$thread_current|html}><a href="{@url:tag/index/view?name=$tag['tag_name']}">最新帖子</a></li>
-									<li {$user_current|html}><a href="{@url:tag/index/view?name=$tag['tag_name']&type=users}">会员</a></li>
-								</ul>
-							</div>
-						</nav>
-						<div class="tag_page">
+					<div class="box_wrap tag_page_view">
+						<div class="content_nav">
+							<ul class="cc">
+							<!--# $thread_current = !$args['type'] ?  "class='current'" : '';
+									$user_current = ($args['type'] == 'users') ?  "class='current'" : '';
+							#-->
+								<li {$thread_current|html}><a href="{@url:tag/index/view?name=$tag['tag_name']}">最新帖子</a></li>
+								<li {$user_current|html}><a href="{@url:tag/index/view?name=$tag['tag_name']&type=users}">会员</a></li>
+							</ul>
+						</div>
+						<div class="">
 					<!--# if ($args['type'] == 'users') { #-->
 						<!--# if ($users) { #-->
 						<div class="tag_uesr_list">
@@ -76,40 +74,38 @@
 						<!--# } #-->
 					<!--# } else { #-->
 						<!--# if ($contents) { #-->
-						<div class="tag_view_list">
-							<div class="feed_lists" id="J_tag_feed_lists">
-								<!--# foreach ($contents as $key => $value) { 
-									if (!$value['content']) continue;
-								#-->
-								<dl class="cc">
-									<dt class="feed_face"><a href="{@url:space/index/run?uid=$value['created_userid']}" class="J_user_card_show" data-uid="{$value['created_userid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['created_username']}" /></a></dt>
-									<dd class="feed_content">
-										<!--# if ($allowManage) { #-->
-											<!--# if ($value['tagifcheck']) { #-->
-										<a href="{@url:tag/index/doshield?id=$tag['tag_id']&type_id=$value['type_id']&param_id=$value['param_id']&ifcheck=0}" class="shield J_tag_shield" title="将该帖移出这个话题">屏蔽</a>
-											<!--# } else { #-->
-										<a href="{@url:tag/index/doshield?id=$tag['tag_id']&type_id=$value['type_id']&param_id=$value['param_id']&ifcheck=1}" class="shield J_tag_shield" title="取消屏蔽">取消屏蔽</a>
-											<!--# } #-->	
-										<!--# } #-->
-										<div class="content">
-											<a href="{@url:space/index/run?uid=$value['created_userid']}" class="name J_user_card_show" data-uid="{$value['created_userid']}">{$value['created_username']}</a>：
-											<em><a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="title">{$value['subject']}</a></em><br>
-											<div class="descrip">{@Pw::substrs(Pw::stripWindCode($value['content'],true),125)}</div>
-										</div>
-										<div class="info">
-											<span class="time">{$value['created_time_auto']}</span>&nbsp;来自版块&nbsp;-&nbsp;<a href="{@url:bbs/thread/run?fid=$value['fid']}">{$value['forum_name']|html}</a>
-											<!--# if($relatedTags[$value['tid']]){ #-->
-												<!--# foreach($relatedTags[$value['tid']] as $k=>$v){ if ($k==$key) continue; #-->
-												<a href="{@url:/tag/index/view?name=$v['tag_name']}">{$v['tag_name']}</a>
-												<!--# } #-->
+						<div class="tag_lists_wrap" id="J_tag_feed_lists">
+							<!--# foreach ($contents as $key => $value) { 
+								if (!$value['content']) continue;
+							#-->
+							<dl class="cc">
+								<dt class="face"><a href="{@url:space/index/run?uid=$value['created_userid']}" class="J_user_card_show" data-uid="{$value['created_userid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="50" height="50" alt="{$value['created_username']}" /></a></dt>
+								<dd class="text_content">
+									<!--# if ($allowManage) { #-->
+										<!--# if ($value['tagifcheck']) { #-->
+									<a href="{@url:tag/index/doshield?id=$tag['tag_id']&type_id=$value['type_id']&param_id=$value['param_id']&ifcheck=0}" class="shield J_tag_shield" title="将该帖移出这个话题">屏蔽</a>
+										<!--# } else { #-->
+									<a href="{@url:tag/index/doshield?id=$tag['tag_id']&type_id=$value['type_id']&param_id=$value['param_id']&ifcheck=1}" class="shield J_tag_shield" title="取消屏蔽">取消屏蔽</a>
+										<!--# } #-->	
+									<!--# } #-->
+									<div class="content">
+										<a href="{@url:space/index/run?uid=$value['created_userid']}" class="name J_user_card_show" data-uid="{$value['created_userid']}">{$value['created_username']}</a>：
+										<em><a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="title">{$value['subject']}</a></em><br>
+										<div class="descrip">{@Pw::substrs(Pw::stripWindCode($value['content'],true),125)}</div>
+									</div>
+									<div class="info">
+										<span class="time">{$value['created_time_auto']}</span>&nbsp;来自版块&nbsp;-&nbsp;<a href="{@url:bbs/thread/run?fid=$value['fid']}">{$value['forum_name']|html}</a>
+										<!--# if($relatedTags[$value['tid']]){ #-->
+											<!--# foreach($relatedTags[$value['tid']] as $k=>$v){ if ($k==$key) continue; #-->
+											<a href="{@url:/tag/index/view?name=$v['tag_name']}">{$v['tag_name']}</a>
 											<!--# } #-->
-										</div>
-									</dd>
-								</dl>
-								<!--# } #-->
-								<div class="tac">
-									<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='tag/index/view' args='$args'/>
-								</div>
+										<!--# } #-->
+									</div>
+								</dd>
+							</dl>
+							<!--# } #-->
+							<div class="tac">
+								<page tpl='TPL:common.page' page='$page' count='$count' per='$perpage' url='tag/index/view' args='$args'/>
 							</div>
 						</div>
 						<!--# } else { #-->

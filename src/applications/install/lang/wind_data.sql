@@ -49,23 +49,22 @@ INSERT INTO `pw_common_emotion` (`emotion_id`, `category_id`, `emotion_name`, `e
 INSERT INTO `pw_common_nav` (`navid`, `parentid`, `rootid`, `type`, `sign`, `name`, `style`, `link`, `alt`, `target`, `isshow`, `orderid`) VALUES
 (1, 0, 1, 'main', 'default|index|run|', '首页', '', 'index.php', '', 0, 0, 1),
 (2, 0, 2, 'main', 'bbs|index|run|', '论坛', '|||', 'index.php?m=bbs', '', 0, 1, 2),
-(3, 0, 3, 'main', 'like|like|run|', '喜欢', '|||', 'index.php?m=like&c=like', '', 0, 1, 3),
-(4, 0, 4, 'main', '', '云平台', '|||', 'http://open.phpwind.com', '', 1, 1, 6),
-(5, 0, 5, 'main', 'tag|index|run|', '话题', '|||', 'index.php?m=tag', '', 0, 1, 4),
-(6, 0, 6, 'main', 'appcenter|index|run|', '应用', '', 'index.php?m=appcenter', '', 0, 1, 5),
-(7, 0, 7, 'my', 'space', '我的空间', '', 'index.php?m=space', '', 0, 1, 1),
-(8, 0, 8, 'my', 'fresh', '我的关注', '', 'index.php?m=my&c=fresh', '', 0, 1, 2),
-(9, 0, 9, 'my', 'forum', '我的版块', '', 'index.php?m=bbs&c=forum&a=my', '', 0, 1, 3),
-(10, 0, 10, 'my', 'article', '我的帖子', '', 'index.php?m=my&c=article', '', 0, 1, 4),
-(11, 0, 11, 'my', 'vote', '我的投票', '', 'index.php?m=vote&c=my', '', 0, 1, 5),
-(12, 0, 12, 'my', 'task', '我的任务', '', 'index.php?m=task', '', 0, 1, 6),
-(13, 0, 13, 'my', 'medal', '我的勋章', '', 'index.php?m=medal', '', 0, 1, 7),
-(14, 0, 14, 'bottom', '', '关于phpwind', '', 'http://www.phpwind.com/index.php?m=aboutus&a=index&menuid=16', '', 0, 1, 1),
-(15, 0, 15, 'bottom', '', '联系我们', '|||', 'http://www.phpwind.com/index.php?m=aboutus&a=index&menuid=20', '', 0, 1, 2),
-(16, 0, 16, 'bottom', '', '程序建议', '', 'http://www.phpwind.net/thread-htm-fid-39.html', '', 0, 1, 3),
-(17, 0, 17, 'bottom', '', '问题反馈', '', 'http://www.phpwind.net/thread-htm-fid-54.html', '', 0, 1, 3),
-(18, 0, 18, 'main', 'bbs|forumlist|run|', '版块', '', 'index.php?m=bbs&c=forumlist', '', 0, 1, 2)
-;
+(3, 0, 3, 'main', 'bbs|forumlist|run|', '版块', '', 'index.php?m=bbs&c=forumlist', '', 0, 1, 3),
+(4, 0, 4, 'main', 'like|like|run|', '喜欢', '|||', 'index.php?m=like&c=like', '', 0, 1, 4),
+(5, 0, 5, 'main', '', '云平台', '|||', 'http://open.phpwind.com', '', 1, 1, 7),
+(6, 0, 6, 'main', 'tag|index|run|', '话题', '|||', 'index.php?m=tag', '', 0, 1, 5),
+(7, 0, 7, 'main', 'appcenter|index|run|', '应用', '', 'index.php?m=appcenter', '', 0, 1, 6),
+(8, 0, 8, 'my', 'space', '我的空间', '', 'index.php?m=space', '', 0, 1, 1),
+(9, 0, 9, 'my', 'fresh', '我的关注', '', 'index.php?m=my&c=fresh', '', 0, 1, 2),
+(10, 0, 10, 'my', 'forum', '我的版块', '', 'index.php?m=bbs&c=forum&a=my', '', 0, 1, 3),
+(11, 0, 11, 'my', 'article', '我的帖子', '', 'index.php?m=my&c=article', '', 0, 1, 4),
+(12, 0, 12, 'my', 'vote', '我的投票', '', 'index.php?m=vote&c=my', '', 0, 1, 5),
+(13, 0, 13, 'my', 'task', '我的任务', '', 'index.php?m=task', '', 0, 1, 6),
+(14, 0, 14, 'my', 'medal', '我的勋章', '', 'index.php?m=medal', '', 0, 1, 7),
+(15, 0, 15, 'bottom', '', '关于phpwind', '', 'http://www.phpwind.com/index.php?m=aboutus&a=index&menuid=16', '', 0, 1, 1),
+(16, 0, 16, 'bottom', '', '联系我们', '|||', 'http://www.phpwind.com/index.php?m=aboutus&a=index&menuid=20', '', 0, 1, 2),
+(17, 0, 17, 'bottom', '', '程序建议', '', 'http://www.phpwind.net/thread-htm-fid-39.html', '', 0, 1, 3),
+(18, 0, 18, 'bottom', '', '问题反馈', '', 'http://www.phpwind.net/thread-htm-fid-54.html', '', 0, 1, 4);
 
 INSERT INTO `pw_medal_info` (`medal_id`, `name`, `path`, `image`, `icon`, `descrip`, `medal_type`, `receive_type`, `medal_gids`, `award_type`, `award_condition`, `expired_days`, `isopen`, `vieworder`) VALUES
 (1, '社区居民', '', 'big/shequjumin.gif', 'icon/shequjumin.gif', '注册用户登录后即可获得此勋章', 1, 1, '', 10, 1, 0, 1, 0),
@@ -82,7 +81,7 @@ INSERT INTO `pw_medal_info` (`medal_id`, `name`, `path`, `image`, `icon`, `descr
 
 INSERT INTO `pw_task` (`taskid`, `pre_task`, `is_auto`, `is_display_all`, `view_order`, `is_open`, `start_time`, `end_time`, `period`, `title`, `description`, `icon`, `user_groups`, `reward`, `conditions`) VALUES
 (1, 0, 1, 1, 0, 1, 0, 4197024000, 0, '发布一个帖子', '去版块发布一个帖子', '', '8,9,10,11,12,13,14,3,4,5,15,16', 'a:5:{s:4:"type";s:6:"credit";s:3:"key";s:12:"id-name-unit";s:5:"value";s:12:"2-威望-点";s:3:"num";s:2:"10";s:8:"descript";s:11:"10点威望";}', 'a:5:{s:4:"type";s:3:"bbs";s:5:"child";s:10:"postThread";s:3:"fid";s:1:"2";s:3:"num";s:1:"1";s:3:"url";s:18:"bbs/post/run?fid=2";}'),
-(2, 0, 0, 0, 9, 1, 0, 4197024000, 0, '增加自己的3个粉丝', '增加自己的3个粉丝', '', '-1', 'a:5:{s:4:"type";s:6:"credit";s:3:"key";s:12:"id-name-unit";s:5:"value";s:12:"2-威望-点";s:3:"num";s:2:"10";s:8:"descript";s:11:"10点威望";}', 'a:4:{s:4:"type";s:6:"member";s:5:"child";s:4:"fans";s:3:"num";s:1:"3";s:3:"url";s:12:"my/fans/run";}'),
+(2, 0, 0, 0, 9, 1, 0, 4197024000, 0, '增加自己的3个粉丝', '增加自己的3个粉丝', '', '-1', 'a:5:{s:4:"type";s:6:"credit";s:3:"key";s:12:"id-name-unit";s:5:"value";s:12:"2-威望-点";s:3:"num";s:2:"10";s:8:"descript";s:11:"10点威望";}', 'a:4:{s:4:"type";s:6:"member";s:5:"child";s:4:"fans";s:3:"num";d:3;s:3:"url";s:11:"my/fans/run";}'),
 (3, 0, 0, 0, 5, 1, 0, 4197024000, 0, '回复二个帖子', '回复二个帖子', '', '-1', 'a:5:{s:4:"type";s:6:"credit";s:3:"key";s:12:"id-name-unit";s:5:"value";s:12:"2-威望-点";s:3:"num";s:2:"10";s:8:"descript";s:11:"10点威望";}', 'a:5:{s:4:"type";s:3:"bbs";s:5:"child";s:5:"reply";s:3:"tid";s:1:"1";s:3:"url";s:18:"bbs/read/run?tid=1";s:3:"num";s:1:"2";}'),
 (4, 0, 1, 0, 6, 1, 0, 4197024000, 0, '喜欢一个帖子', '去喜欢一个帖子', '', '-1', 'a:5:{s:4:"type";s:6:"credit";s:3:"key";s:12:"id-name-unit";s:5:"value";s:12:"2-威望-点";s:3:"num";s:2:"10";s:8:"descript";s:11:"10点威望";}', 'a:5:{s:4:"type";s:3:"bbs";s:5:"child";s:4:"like";s:3:"fid";s:1:"2";s:3:"num";s:1:"1";s:3:"url";s:20:"bbs/thread/run?fid=2";}');
 

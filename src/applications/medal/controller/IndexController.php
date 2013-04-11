@@ -6,7 +6,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 20698 2012-11-05 06:35:07Z gao.wanggao $ 
+ * @version $Id: IndexController.php 24214 2013-01-23 03:18:19Z gao.wanggao $ 
  * @package 
  */
  
@@ -37,7 +37,7 @@ class IndexController extends PwBaseController {
 			
 			//已领取和可领取的不过滤
 			if ($medal['award_status'] < 3 ) {
-				if ($gids && !$this->loginUser->inGroup($gids)) {
+				if ($gids && !$this->loginUser->inGroup($gids) && !in_array($this->loginUser->info['memberid'], $gids)) {
 					unset($myRelationList[$key]);
 					continue;
 				}
@@ -68,7 +68,7 @@ class IndexController extends PwBaseController {
 			$openMedals = $this->_getMedalDs()->getAllOpenMedal();
 			foreach ($openMedals AS $key=>$medal) {
 				$gids = $medal['medal_gids'] ? explode(',', $medal['medal_gids']) : array();
-				if ($gids && !$this->loginUser->inGroup($gids)) {
+				if ($gids && !$this->loginUser->inGroup($gids) && !in_array($this->loginUser->info['memberid'], $gids)) {
 					unset($openMedals[$key]);
 					continue;
 				}
@@ -86,8 +86,10 @@ class IndexController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:medal.index.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:medal.index.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	public function showAction() {
@@ -114,7 +116,9 @@ class IndexController extends PwBaseController {
 		}
 		$medal['expired'] = $medal['expired_days'] ? $medal['expired_days'] . $ext : '长期有效';
 		$gids = $medal['medal_gids'] ?  explode(',', $medal['medal_gids']) : array();
-		if ($gids && !$this->loginUser->inGroup($gids)) $isAward = false;
+		$userGids = array_merge($this->loginUser->groups, array($this->loginUser->info['memberid']));
+		if (!$this->_getMedalService()->allowAwardMedal($userGids, $medal['medal_gids'])) $isAward = false;;
+		
 		$groups = Wekit::load('usergroup.PwUserGroups')->fetchGroup($gids);
 		$groupName = '';
 		foreach ($groups AS $group) {
@@ -154,8 +158,10 @@ class IndexController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:medal.index.center.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:medal.index.center.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	public function orderAction() {
@@ -191,8 +197,10 @@ class IndexController extends PwBaseController {
  		
  		// seo设置
  		Wind::import('SRV:seo.bo.PwSeoBo');
+ 		$seoBo = PwSeoBo::getInstance();
  		$lang = Wind::getComponent('i18n');
- 		PwSeoBo::setCustomSeo($lang->getMessage('SEO:medal.index.order.title'), '', '');
+ 		$seoBo->setCustomSeo($lang->getMessage('SEO:medal.index.order.title'), '', '');
+ 		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -246,7 +254,8 @@ class IndexController extends PwBaseController {
 		$medalId = (int)$this->getInput('medalid','post');
 		$medal = $this->_getMedalDs()->getMedalInfo($medalId);
 		if (!$medal || $medal['receive_type'] == 1) $this->showError('MEDAL:fail');
-		if (!$this->_getMedalService()->allowAwardMedal($this->loginUser->gid, $medal['medal_gids'])) $this->showError('MEDAL:not.user.group');
+		$userGids = array_merge($this->loginUser->groups, array($this->loginUser->info['memberid']));
+		if (!$this->_getMedalService()->allowAwardMedal($userGids, $medal['medal_gids'])) $this->showError('MEDAL:not.user.group');
 		$log = $this->_getMedalLogDs()->getInfoByUidMedalId($this->loginUser->uid, $medalId);
 		if ($log) $this->showError('MEDAL:already.apply');
  		Wind::import('SRV:medal.dm.PwMedalLogDm');

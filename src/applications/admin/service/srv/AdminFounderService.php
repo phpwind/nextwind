@@ -9,7 +9,35 @@
  * @package wind
  */
 class AdminFounderService {
+
 	private $_founder = null;
+	
+	public function login($username, $password) {
+		$founder = $this->getFounders();
+		if (!$result = $this->checkPwd($founder[$username], $password)) {
+			return new PwError('ADMIN:login.fail.user.illegal');
+		}
+		return array(AdminUserService::FOUNDER, $username, Pw::getPwdCode($result));
+	}
+
+	public function isLogin($username, $password) {
+		if (!$this->isFounder($username)) {
+			return array();
+		}
+		$founder = $this->getFounders();
+		list($md5pwd) = explode('|', $founder[$username], 2);
+		if (Pw::getPwdCode($md5pwd) != $password) {
+			return array();
+		}
+		if (!$user = $this->loadUserService()->getUserByName($username)) {
+			$user = array(
+				'uid' => 0,
+				'username' => $username, 
+				'groupid' => 3
+			);
+		}
+		return $user;
+	}
 
 	/**
 	 * 添加创始人 
@@ -124,7 +152,7 @@ class AdminFounderService {
 	 */
 	public function getFounders() {
 		if ($this->_founder === null) {
-			$this->_founder = include Wind::getRealPath('CONF:founder.php', true);
+			$this->_founder = include($this->getFounderFilePath());
 			is_array($this->_founder) || $this->_founder = array();
 		}
 		return $this->_founder;
@@ -153,7 +181,7 @@ class AdminFounderService {
 	 * @return string
 	 */
 	private function getFounderFilePath() {
-		return Wind::getRealPath('CONF:founder.php', true);
+		return Wind::getRealPath(Wekit::app()->founderPath, true);
 	}
 
 	/**

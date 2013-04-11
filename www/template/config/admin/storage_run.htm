@@ -40,20 +40,20 @@
 				<th>头像存储</th>
 				<td>
 					<ul class="single_list cc">
-<!--# if(empty($storages)): #-->
+<!--# if(empty($storages)){ #-->
 					暂无任何附件存储方案可选～
-<!--# endif; #-->
+<!--# } #-->
 <!--# 
 	  $msg = '';
-	  foreach($storages as $var => $value): 
+	  foreach($storages as $var => $value){
 	  $storageType === $var && $msg = $value['description'];
 #-->
 						<li><span class="mr20"><label><input name="att_storage" data-msg="{$value['description']}" value="{$var}" type="radio" {@Pw::ifcheck($storageType==$var)|html}>{$value['name']}</label></span> 
-<!--# if($value['managelink']): #-->
+<!--# if($value['managelink']){ #-->
 							<a href="{@WindUrlHelper::createUrl($value['managelink'])|url}">[设置]</a>
-<!--# endif; #-->
+<!--# } #-->
 						</li>
-<!--# endforeach; #-->
+<!--# } #-->
 					</ul>
 				</td>
 				<td><div class="fun_tips">{$msg}</div></td>

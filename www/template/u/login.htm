@@ -8,66 +8,65 @@
 <div class="wrap">
 <template source='TPL:common.header' suffix='htm'/>
 	<div class="main_wrap">
-		<div class="main">
-			<div class="box_wrap register cc">
+		<div class="box_wrap register cc">
 <!--#
 $_errMsg = $url ? '登录' : '登录';
 //TODO 不一样的登录提示类型
 if ($_GET['_type'] == 2) {
-	$_errMsg = '为保证帐户安全，请重新登录';
+$_errMsg = '为保证帐户安全，请重新登录';
 }
 #-->
-				<h2 class="reg_head">{$_errMsg}</h2>
-				<div class="reg_cont_wrap">
-					<div class="reg_cont">
-						<form id="J_u_login_form" action="{@url:u/login/dorun}" method="post" >
-						<div class="reg_form">
-		<!--#if ($url) {#-->
-							<div class="tips"><span class="tips_icon">请登录后再继续浏览</span></div>
-		<!--#}#-->
-							<dl class="cc">
-								<dt><label for="J_u_login_username">帐号：</label></dt>
-								<dd><input id="J_u_login_username" data-id="username" name="username" type="text" class="input length_4" aria-required="true" value=""></dd>
-								<dd id="J_u_login_tip_username" role="tooltip" aria-hidden="true" class="dd_r"></dd>
-							</dl>
-							<dl class="cc">
-								<dt><label for="J_u_login_password">密码：</label></dt>
-								<dd><input id="J_u_login_password" data-id="password" name="password" type="password" aria-required="true" class="input length_4" value=""></dd>
-								<dd class="dd_r">
-									<span id="J_u_login_tip_password" role="tooltip" aria-hidden="true"></span>
-								</dd>
-							</dl>
-							<div id="J_login_qa" style="display:none;"></div>
-		<!--#if ($verify) {#-->
-							<dl class="cc dl_cd">
-								<dt><label for="J_login_code">验证码：</label></dt>
-								<dd>
-									<input data-id="code" id="J_login_code" name="code" type="text" class="input length_4 mb5">
-									<div id="J_verify_code"></div>
-								</dd>
-								<dd class="dd_r"><span id="J_u_login_tip_code"></span></dd>
-							</dl>
-		<!--#}#-->
-							<dl class="cc pick">
-								<dt>&nbsp;</dt>
-								<dd><a rel="nofollow" href="{@url:u/findPwd/run}" class="fr mr10">找回密码</a><input name="rememberme" type="checkbox" class="checkbox" id="cktime"><label for="cktime">自动登录</label></dd>
-							</dl>
-							<dl class="cc">
-								<dt>&nbsp;</dt>
-								<dd><button class="btn btn_big btn_submit mr20" type="submit">登录</button>
-								<input type="hidden" name="backurl" value="{$url}">
-								<input type="hidden" name="invite" value="{$invite}" />
-								</dd>
-							</dl>
-						</div>
-						</form>
+			<h2 class="reg_head">{$_errMsg}</h2>
+			<div class="reg_cont_wrap">
+				<div class="reg_cont">
+					<form id="J_u_login_form" action="{@url:u/login/dorun}" method="post" >
+					<div class="reg_form">
+						<!--#if ($url) {#-->
+						<div class="tips"><span class="tips_icon">请登录后再继续浏览</span></div>
+						<!--#}#-->
+						<dl class="cc">
+							<dt><label for="J_u_login_username">帐号：</label></dt>
+							<dd><input id="J_u_login_username" data-id="username" name="username" type="text" class="input length_4" aria-required="true" value=""></dd>
+							<dd id="J_u_login_tip_username" role="tooltip" aria-hidden="true" class="dd_r"></dd>
+						</dl>
+						<dl class="cc">
+							<dt><label for="J_u_login_password">密码：</label></dt>
+							<dd><input id="J_u_login_password" data-id="password" name="password" type="password" aria-required="true" class="input length_4" value=""></dd>
+							<dd class="dd_r">
+								<span id="J_u_login_tip_password" role="tooltip" aria-hidden="true"></span>
+							</dd>
+						</dl>
+						<div id="J_login_qa" style="display:none;"></div>
+						<!--#if ($verify) {#-->
+						<dl class="cc dl_cd">
+							<dt><label for="J_login_code">验证码：</label></dt>
+							<dd>
+								<input data-id="code" id="J_login_code" name="code" type="text" class="input length_4 mb5">
+								<div id="J_verify_code"></div>
+							</dd>
+							<dd class="dd_r"><span id="J_u_login_tip_code"></span></dd>
+						</dl>
+						<!--#}#-->
+						<dl class="cc pick">
+							<dt>&nbsp;</dt>
+							<dd><a rel="nofollow" href="{@url:u/findPwd/run}" class="fr mr10">找回密码</a><input name="rememberme" value="31536000" type="checkbox" class="checkbox" id="cktime"><label for="cktime">自动登录</label></dd>
+						</dl>
+						<dl class="cc">
+							<dt>&nbsp;</dt>
+							<dd><button class="btn btn_big btn_submit mr20" type="submit">登录</button>
+							<input type="hidden" name="backurl" value="{$url}">
+							<input type="hidden" name="invite" value="{$invite}" />
+							</dd>
+						</dl>
 					</div>
+					</form>
 				</div>
-				<div class="reg_side">
-					<div class="reg_side_cont">
-						<p class="mb10">还没有帐号？</p>
-						<p><a rel="nofollow" href="{@url:u/register/run}<!--#if ($invite) {#-->?invite={$invite}<!--#}#-->" class="btn btn_big">免费注册</a></p>
-					</div>
+			</div>
+			<div class="reg_side">
+				<div class="reg_side_cont">
+					<p class="mb10">还没有帐号？</p>
+					<p class="mb20"><a rel="nofollow" href="{@url:u/register/run}<!--#if ($invite) {#-->?invite={$invite}<!--#}#-->" class="btn btn_big">免费注册</a></p>
+					<hook name="login_sidebar"/>
 				</div>
 			</div>
 		</div>
@@ -260,11 +259,20 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 						if(data.message.check) {
 							$.post(data.message.check.url, function (data) {
 								//引入所需组件并显示弹窗
-								Wind.use('draggable', function (){
-									$('body').append(data);
-									var question_set_wrap = $('#J_login_question_set_wrap');
-									Wind.Util.popPos(question_set_wrap);
-									question_set_wrap.find('input:text:visible').focus();
+								Wind.use('dialog', function (){
+									Wind.Util.ajaxBtnEnable(btn);
+									Wind.dialog.html(data, {
+										id: 'J_login_question_wrap',
+										isDrag: true,
+										isMask: false,
+										onClose: function(){
+											u_login_username.focus();
+										},
+										callback: function(){
+											$('#J_login_question_wrap input:text:visible:first').focus();
+										}
+									});
+
 								});
 							}, 'html');
 						}else{
@@ -274,6 +282,12 @@ Wind.use('jquery', 'global', 'validate', 'ajaxForm', function(){
 					}else if(data.state === 'fail'){
 						//global.js
 						Wind.Util.ajaxBtnEnable(btn);
+
+						if(data.message.qaE) {
+							//回答安全问题
+							return;
+						}
+						
 						if(RegExp('答案').test(data.message)) {
 							//配合ignoreRepeat 处理问题答案不修改 再次验证
 							$('#J_u_login_tip_answer').html('<span for="J_login_answer" generated="true" class="tips_icon_error">'+ data.message +'</span>');

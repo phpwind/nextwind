@@ -87,7 +87,7 @@
 				</thead>
 				<tbody id="J_word_list">
 				<!--# foreach ($wordList as $key => $value) {
-					$value['word_type'] = in_array($value['word_type'], array_keys($typeList)) ? $typeList[$value['word_type']] : '';
+					$value['word_type'] = Pw::inArray($value['word_type'], array_keys($typeList)) ? $typeList[$value['word_type']] : '';
 				#-->
 				<tr>
 
@@ -101,7 +101,7 @@
 				</tbody>
 			</table>
 			<!--# if (!$total && $action == 'search') { #-->
-			<div class="tac">啊哦，没有符合条件的内容！</div>
+			<div class="not_content_mini"><i></i>啊哦，没有符合条件的内容！</div>
 			<!--# } #-->
 			<div class="p10" id="J_page_wrap">
 				<page tpl='TPL:common.page' page='$page' count='$total' per='$perpage' url='word/manage/search' args='$args'/>

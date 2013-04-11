@@ -16,7 +16,6 @@ class PwTemplateCompilerUrlCreater extends AbstractWindTemplateCompiler {
 	 */
 	public function compile($key, $content) {
 		$content = substr($content, 6, -1);
-		if (!$content) return '<?php echo Wekit::app()->baseUrl; ?>';
 		list($content, $route) = explode('|', $content . '|');
 		
 		$this->_variables = array();
@@ -103,7 +102,7 @@ class PwTemplateCompilerUrlCreater extends AbstractWindTemplateCompiler {
 	
 	private function _checkUrl($content) {
 		if (strpos($content, '://') === false) {
-			$content = 'Wekit::app()->baseUrl,\'/\',' . $content;
+			$content = 'Wind::getComponent(\'response\')->getData(\'G\', \'url\', \'base\'),\'/\',' . $content;
 		}
 		return $content;
 	}

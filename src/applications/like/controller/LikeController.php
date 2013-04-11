@@ -15,7 +15,9 @@ class LikeController extends PwBaseController {
 	public function run() {
 		//seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
-		PwSeoBo::init('like', 'hot');
+		$seoBo = PwSeoBo::getInstance();
+		$seoBo->init('like', 'hot');
+		Wekit::setV('seo', $seoBo);
 	}
 	public function dataAction() {
 		$cron = false;

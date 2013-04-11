@@ -6,11 +6,11 @@
 新创始人
 
 [admin_auth]
-[[后台用户:admin/auth/run]]
+[[后台用户:auth/run]]
 后台权限
 添加后台用户
 后台用户
-[[管理角色:admin/role/run]]
+[[管理角色:role/run]]
 管理角色
 添加角色
 编辑角色

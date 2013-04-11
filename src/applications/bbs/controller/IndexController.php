@@ -6,7 +6,7 @@ Wind::import('SRV:forum.srv.PwThreadList');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: IndexController.php 22775 2012-12-27 06:57:28Z jieyin $
+ * @version $Id: IndexController.php 24758 2013-02-20 06:55:42Z jieyin $
  * @package forum
  */
 
@@ -23,7 +23,7 @@ class IndexController extends PwBaseController {
 		$threadList->setPage($page)->setPerpage(Wekit::C('bbs', 'thread.perpage'));
 		
 		Wind::import('SRV:forum.srv.threadList.PwNewThread');
-		$forbidFids = Wekit::load('forum.srv.PwForumService')->getForbidVisitForum($this->loginUser);
+		$forbidFids = Wekit::load('forum.srv.PwForumService')->getForbidVisitForum($this->loginUser, null, true);
 		$dataSource = new PwNewThread($forbidFids);
 		if ($order == 'postdate') {
 			$dataSource->setOrderBy($order);
@@ -62,9 +62,11 @@ class IndexController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		$threadList->page <=1 && PwSeoBo::setDefaultSeo($lang->getMessage('SEO:bbs.forum.run.title'), '', $lang->getMessage('SEO:bbs.forum.run.description'));
-		PwSeoBo::init('bbs', 'new');
-		PwSeoBo::set('{page}', $threadList->page);
+		$threadList->page <=1 && $seoBo->setDefaultSeo($lang->getMessage('SEO:bbs.forum.run.title'), '', $lang->getMessage('SEO:bbs.forum.run.description'));
+		$seoBo->init('bbs', 'new');
+		$seoBo->set('{page}', $threadList->page);
+		Wekit::setV('seo', $seoBo);
 	}
 }

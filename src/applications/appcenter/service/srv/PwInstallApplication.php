@@ -1,18 +1,18 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
-Wind::import('APPS:appcenter.service.srv.helper.PwManifest');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwManifest');
 /**
  * pw 系统应用安装服务
  *
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwInstallApplication.php 23300 2013-01-08 05:22:09Z long.shi $
+ * @version $Id: PwInstallApplication.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package products
  * @subpackage appcenter.service.srv
  */
 class PwInstallApplication {
-	const CONF_PATH = 'APPS:appcenter.conf.install.php';
+	const CONF_PATH = 'APPCENTER:conf.install.php';
 	/**
 	 * 安装包临时存放位置
 	 *
@@ -496,7 +496,7 @@ class PwInstallApplication {
 	 * @return PwApplicationLog
 	 */
 	private function _loadInstallLog() {
-		return Wekit::load('APPS:appcenter.service.PwApplicationLog');
+		return Wekit::load('APPCENTER:service.PwApplicationLog');
 	}
 
 }

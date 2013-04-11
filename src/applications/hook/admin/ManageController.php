@@ -1,5 +1,5 @@
 <?php
-Wind::import('APPS:admin.library.AdminBaseController');
+Wind::import('ADMIN:library.AdminBaseController');
 Wind::import('SRV:hook.dm.PwHookDm');
 /**
  * hook管理
@@ -7,11 +7,11 @@ Wind::import('SRV:hook.dm.PwHookDm');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ManageController.php 16563 2012-08-24 10:28:51Z long.shi $
+ * @version $Id: ManageController.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package hook
  */
 class ManageController extends AdminBaseController {
-	private $perpage = 10;
+	private $perpage = 30;
 	private $sep = "\r\n";
 	/**
 	 * hook列表
@@ -37,7 +37,7 @@ class ManageController extends AdminBaseController {
 	 */
 	public function addAction() {
 		/* @var $appDs PwApplication */
-		$appDs = Wekit::load('APPS:appcenter.service.PwApplication');
+		$appDs = Wekit::load('APPCENTER:service.PwApplication');
 		$apps = $appDs->fetchByPage(0);
 		$this->setOutput($apps, 'apps');
 	}
@@ -70,7 +70,7 @@ class ManageController extends AdminBaseController {
 		$name = $this->getInput('name');
 		$hook = $this->_hookDs()->fetchByName($name);
 		/* @var $appDs PwApplication */
-		$appDs = Wekit::load('APPS:appcenter.service.PwApplication');
+		$appDs = Wekit::load('APPCENTER:service.PwApplication');
 		$apps = $appDs->fetchByPage(0);
 		$this->setOutput($apps, 'apps');
 		$this->setOutput($hook, 'hook');

@@ -134,7 +134,7 @@ class PwReport {
 	 * @return array
 	 */
 	public function getNoticeReceiver() {
-		$report = Wekit::load('config.PwConfig')->getValues('report');
+		$report = Wekit::C()->getValues('report');
 		return (array)$report['noticeReceiver'];
 	}
 	

@@ -9,7 +9,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUser.php 22491 2012-12-25 03:12:23Z xiaoxia.xuxx $
+ * @version $Id: PwUser.php 24770 2013-02-20 11:22:38Z jieyin $
  * @package src.service.user
  */
 class PwUser {
@@ -111,6 +111,7 @@ class PwUser {
 	 * @return bool
 	 */
 	public function updateCredit(PwCreditDm $dm) {
+		if (is_null($dm->dm)) return false;
 		$result = $this->_getWindid()->editDmCredit($dm->dm);
 		if ($result < 1) return new PwError('WINDID:code.' . $result);
 		return $this->_getDao(self::FETCH_DATA)->editUser($dm->uid, $this->_getWindid()->getUserCredit($dm->uid));
@@ -141,20 +142,18 @@ class PwUser {
 	 * @return bool
 	 */
 	public function activeUser($uid) {
-		if (!$data = $this->_getWindid()->getUserInfo($uid, 1)) {
+		if (!$data = $this->_getWindid()->getUser($uid, 1, PwUser::FETCH_ALL)) {
 			return false;
 		}
-		$credit = $this->_getWindid()->getUserCredit($uid);
-		$data = array_merge($data, $credit);
+		$data['password'] = md5(WindUtility::generateRandStr(16));
 		return $this->_getDao(self::FETCH_ALL)->addUser($data);
 	}
 	
-	public function synEditUser($uid) {
-		if (!$data = $this->_getWindid()->getUserInfo($uid, 1)) {
+	public function synEditUser($uid, $changepwd = 0) {
+		if (!$data = $this->_getWindid()->getUser($uid, 1, PwUser::FETCH_ALL)) {
 			return false;
 		}
-		$credit = $this->_getWindid()->getUserCredit($uid);
-		$data = array_merge($data, $credit);
+		$changepwd && $data['password'] = md5(WindUtility::generateRandStr(16));
 		return $this->_getDao(self::FETCH_ALL)->editUser($uid, $data);
 	}
 

@@ -38,7 +38,9 @@ class IndexController extends PwBaseController {
 		
 		//seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
-		PwSeoBo::init('topic', 'hot');
+		$seoBo = PwSeoBo::getInstance();
+		$seoBo->init('topic', 'hot');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -94,8 +96,10 @@ class IndexController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:tag.index.my.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:tag.index.my.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
@@ -189,17 +193,19 @@ class IndexController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		if ($type == 'users') {
 			$lang = Wind::getComponent('i18n');
-			PwSeoBo::setCustomSeo($lang->getMessage('SEO:tag.index.view.users.title', array($tag['tag_name'])), '', '');
+			$seoBo->setCustomSeo($lang->getMessage('SEO:tag.index.view.users.title', array($tag['tag_name'])), '', '');
 		} else {
 			if ($tag['seo_title'] || $tag['seo_keywords'] || $tag['seo_description']) {
-				PwSeoBo::setCustomSeo($tag['seo_title'],$tag['seo_keywords'],$tag['seo_description']);
+				$seoBo->setCustomSeo($tag['seo_title'],$tag['seo_keywords'],$tag['seo_description']);
 			} else {
 				$lang = Wind::getComponent('i18n');
-				PwSeoBo::setCustomSeo($lang->getMessage('SEO:tag.index.view.title', array($tag['tag_name'])), '', '');
+				$seoBo->setCustomSeo($lang->getMessage('SEO:tag.index.view.title', array($tag['tag_name'])), '', '');
 			}
 		}
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**

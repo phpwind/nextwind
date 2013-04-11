@@ -1,22 +1,22 @@
 <?php
 Wind::import('ADMIN:library.AdminBaseController');
-Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
-Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwFtpSave');
+Wind::import('APPCENTER:service.srv.helper.PwSftpSave');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
 /**
  * 安全补丁
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: FixupController.php 22648 2012-12-26 06:27:49Z long.shi $
+ * @version $Id: FixupController.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package appcenter.admin
  */
 class FixupController extends AdminBaseController {
 
 	public function beforeAction($handlerAdapter) {
 		parent::beforeAction($handlerAdapter);
-		if (!Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($this->adminUser->username)) {
+		if (!Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($this->loginUser->username)) {
 			$this->showError('APPCENTER:upgrade.founder');
 		}
 	}
@@ -78,7 +78,7 @@ class FixupController extends AdminBaseController {
 	 * @return PwPatchUpdate
 	 */
 	private function _service() {
-		return Wekit::load('APPS:appcenter.service.srv.PwPatchUpdate');
+		return Wekit::load('APPCENTER:service.srv.PwPatchUpdate');
 	}
 	
 	/**

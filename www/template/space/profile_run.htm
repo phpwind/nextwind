@@ -17,9 +17,9 @@
 				</div>
 				<div class="space_profile">
 					<h3>
-						<!--# if ($space->tome == 2): #-->
+						<!--# if ($space->tome == 2){ #-->
 						<a href="{@url:profile/index/run?_tab=profile}" class="edit">编辑</a>
-						<!--# endif; #-->
+						<!--# } #-->
 						<strong>基本资料</strong>
 					</h3>
 					<dl class="cc">
@@ -34,24 +34,24 @@
 						<dt>在线时长</dt>
 						<dd>{@floor($space->spaceUser['onlinetime']/3600)}&nbsp;小时</dd>
 					</dl>
-					<!--# if ($space->allowView('constellation')): #-->
+					<!--# if ($space->allowView('constellation')){ #-->
 					<dl class="cc">
 						<dt>星座</dt>
 						<dd>{$constellation}</dd>
 					</dl>
-					<!--# endif; #-->	
-					<!--# if ($space->allowView('local')): #-->
+					<!--# } #-->	
+					<!--# if ($space->allowView('local')){ #-->
 					<dl class="cc">
 						<dt>现居住地</dt>
 						<dd>{$space->spaceUser['location_text']}</dd>
 					</dl>
-					<!--# endif; #-->	
-					<!--# if ($space->allowView('nation')): #-->
+					<!--# } #-->	
+					<!--# if ($space->allowView('nation')){ #-->
 					<dl class="cc">
 						<dt>家乡</dt>
 						<dd>{$space->spaceUser['hometown_text']}</dd>
 					</dl>
-					<!--# endif; #-->	
+					<!--# } #-->	
 					<dl class="cc">
 						<dt>个人主页</dt>
 						<dd>{$space->spaceUser['homepage']}</dd>
@@ -65,41 +65,41 @@
 						<dd>{@Pw::time2str($space->spaceUser['lastvisit'], 'Y年m月d日')}</dd>
 					</dl>
 				</div>
-			<!--# if ($space->allowView('aliwangwang') || $space->allowView('qq') || $space->allowView('msn') || $space->allowView('mobile')): #-->
+			<!--# if ($space->allowView('aliwangwang') || $space->allowView('qq') || $space->allowView('msn') || $space->allowView('mobile')){ #-->
 				<div class="space_profile">
 					<h3>
-					<!--# if ($space->tome == 2): #-->
+					<!--# if ($space->tome == 2){#-->
 						<a href="{@url:profile/index/contact?_tab=contact}" class="edit">编辑</a>
-					<!--# endif; #-->
+					<!--# } #-->
 						<strong>联系方式</strong>
 					</h3>
 				
-					<!--# if ($space->allowView('aliwangwang')): #-->
+					<!--# if ($space->allowView('aliwangwang')){ #-->
 					<dl class="cc">
 						<dt>阿里旺旺</dt>
 						<dd>{$space->spaceUser['aliww']}</dd>
 					</dl>
-					<!--# endif; #-->	
-					<!--# if ($space->allowView('qq')): #-->
+					<!--# } #-->	
+					<!--# if ($space->allowView('qq')){ #-->
 					<dl class="cc">
 						<dt>QQ</dt>
 						<dd>{$space->spaceUser['qq']}</dd>
 					</dl>
-					<!--# endif; #-->	
-					<!--# if ($space->allowView('msn')): #-->
+					<!--# } #-->	
+					<!--# if ($space->allowView('msn')){ #-->
 					<dl class="cc">
 						<dt>MSN</dt>
 						<dd>{$space->spaceUser['msn']}</dd>
 					</dl>
-					<!--# endif; #-->	
-					<!--# if ($space->allowView('mobile')): #-->
+					<!--# } #-->	
+					<!--# if ($space->allowView('mobile')){ #-->
 					<dl class="cc">
 						<dt>手机号码</dt>
 						<dd>{$space->spaceUser['mobile']}</dd>
 					</dl>
-					<!--# endif; #-->	
+					<!--# } #-->	
 				</div>
-			<!--# endif; #-->	
+			<!--# } #-->	
 				<hook name="space_profile" args="array($space)" />
 			</div>
 			

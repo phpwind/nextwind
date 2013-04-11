@@ -4,7 +4,7 @@
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidUserInterface.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidUserInterface.php 23620 2013-01-14 02:44:14Z jieyin $
  * @package windid.service.user.dao
  */
 interface WindidUserInterface {

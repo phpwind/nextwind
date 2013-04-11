@@ -5,11 +5,10 @@
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindUrlHelper.php 3850 2012-12-04 07:30:02Z yishuo $
+ * @version $Id: WindUrlHelper.php 3928 2013-01-29 10:21:53Z yishuo $
  * @package web
  */
 class WindUrlHelper {
-	private static $_sep = '_array_';
 
 	/**
 	 * url检查
@@ -79,17 +78,22 @@ class WindUrlHelper {
 	 * @param string $separator url分隔符 支持双字符,前一个字符用于分割参数对,后一个字符用于分割键值对
 	 * @return string
 	 */
-	public static function argsToUrl($args, $encode = true, $separator = '&=') {
+	public static function argsToUrl($args, $encode = true, $separator = '&=', $key = null) {
 		if (strlen($separator) !== 2) return;
 		$_tmp = '';
-		foreach ((array) $args as $key => $value) {
-			$value = $encode ? rawurlencode($value) : $value;
-			if (is_int($key)) {
-				$value && $_tmp .= $value . $separator[0];
+		foreach ((array) $args as $_k => $_v) {
+			if ($key !== null) $_k = $key . '[' . $_k . ']';
+			if (is_array($_v)) {
+				$_tmp .= self::argsToUrl($_v, $encode, $separator, $_k) . $separator[0];
 				continue;
 			}
-			$key = ($encode ? rawurlencode($key) : $key);
-			$_tmp .= $key . $separator[1] . $value . $separator[0];
+			$_v = $encode ? rawurlencode($_v) : $_v;
+			if (is_int($_k)) {
+				$_v && $_tmp .= $_v . $separator[0];
+				continue;
+			}
+			$_k = ($encode ? rawurlencode($_k) : $_k);
+			$_tmp .= $_k . $separator[1] . $_v . $separator[0];
 		}
 		return trim($_tmp, $separator[0]);
 	}

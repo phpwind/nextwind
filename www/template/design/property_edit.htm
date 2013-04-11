@@ -6,18 +6,18 @@
 				<dt>数据模型：</dt>
 				<dd>
 					<select class="select_2 mr10" name="model_type" id="J_select_model_type">
-					<!--# foreach ($types as $k=>$v):#-->
+					<!--# foreach ($types as $k=>$v){ #-->
 						<option value="{$k}" {@Pw::isSelected($modelInfo['type'] == $k)}>{$v}</option>
-					<!--# endforeach; #-->
+					<!--# } #-->
 					</select>
 					<select class="select_2 mr10" name="model" id="J_select_model">
-					<!--# foreach ($models[$modelInfo['type']] as $v):	#-->
+					<!--# foreach ($models[$modelInfo['type']] as $v){	#-->
 						<option value="{$v['model']}" {@Pw::isSelected($model == $v['model'])}>{$v['name']}</option>
-					<!--# endforeach; #-->
+					<!--# } #-->
 					</select>
-					<!--# if ($isedit): #-->
+					<!--# if ($isedit){ #-->
 					<p class="s1">切换数据模型可能导致当前模板不可用，请重新设置模板</p>
-					<!--# endif; #-->
+					<!--# } #-->
 				</dd>
 			</dl>
 			<template source='TPL:design.segment.property' load='true' />

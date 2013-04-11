@@ -14,10 +14,10 @@
 				<span class="rel J_tag_rel" data-tag="{$tag['name']}"><em>{$tag['name']}</em><a class="del J_tag_del" href="{@url:profile/tag/doDelete?tagid=$tag['tag_id']}" data-tagid="{$tag['tag_id']}">×</a></span>
 <!--#}#-->
 			</p>
-			<p id="J_my_tags_none" class="not_content_mini" style="margin:20px 0 20px -40px;display:none;">您还没有添加个人标签！</p>
+			<p id="J_my_tags_none" class="not_content_mini" style="display:none;">您还没有添加个人标签！</p>
 <!--#} else {#-->
 			<p class="cool_has_tags" id="J_my_tags" style="display:none;"></p>
-			<p id="J_my_tags_none" class="not_content_mini" style="margin:20px 0 20px -40px;">您还没有添加个人标签！</p>
+			<p id="J_my_tags_none" class="not_content_mini"><i></i>您还没有添加个人标签！</p>
 <!--#}#-->
 <!--#if ($hotTags) {#-->
 			<h3><!--#if($total > 1){#--><a href="{@url:profile/tag/hot/}" class="more J_change_tags" data-rel="J_hot_tags" data-add="{@url:profile/tag/doAddByid}">换一组</a><!--#}#--><strong>热门标签：</strong></h3>

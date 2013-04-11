@@ -628,7 +628,7 @@ CREATE TABLE `pw_bbs_threads_hits` (
   `tid` int(10) unsigned NOT NULL DEFAULT '0',
   `hits` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`tid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8  COMMENT='帖子点击记录表';
 
 DROP TABLE IF EXISTS `pw_bbs_threads_index`;
 CREATE TABLE `pw_bbs_threads_index` (
@@ -649,7 +649,7 @@ CREATE TABLE `pw_bbs_threads_overtime` (
   `overtime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_tid_mtype` (`tid`,`m_type`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='帖子操作时间表';
 
 DROP TABLE IF EXISTS `pw_bbs_threads_sort`;
 CREATE TABLE `pw_bbs_threads_sort` (
@@ -753,6 +753,7 @@ CREATE TABLE `pw_common_nav` (
   `style` char(50) NOT NULL DEFAULT '' COMMENT '导航样式',
   `link` char(100) NOT NULL DEFAULT '' COMMENT '导航链接',
   `alt` char(50) NOT NULL DEFAULT '' COMMENT '链接ALT信息',
+  `image` varchar(100) NOT NULL DEFAULT '' COMMENT '导航小图标',
   `target` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否新窗口打开',
   `isshow` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否使用',
   `orderid` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
@@ -1592,7 +1593,7 @@ CREATE TABLE `pw_user_behavior` (
   `number` int(10) NOT NULL DEFAULT '0' COMMENT '行为统计',
   `expired_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
   `extend_info` varchar(255) NOT NULL DEFAULT '' COMMENT '额外信息',
-  PRIMARY KEY (`uid`,`behavior`(10))
+  PRIMARY KEY (`uid`,`behavior`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户行为统计表';
 
 DROP TABLE IF EXISTS `pw_user_belong`;
@@ -1810,6 +1811,106 @@ CREATE TABLE `pw_weibo_comment` (
   KEY `idx_weiboid_createdtime` (`weibo_id`,`created_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='微薄评论表';
 
+DROP TABLE IF EXISTS `pw_windid_application`;
+CREATE TABLE `pw_windid_application` (
+  `app_id` char(20) NOT NULL DEFAULT '' COMMENT '应用id',
+  `name` varchar(100) NOT NULL DEFAULT '' COMMENT '名称',
+  `alias` varchar(100) NOT NULL DEFAULT '' COMMENT '别名',
+  `logo` varchar(100) NOT NULL DEFAULT '' COMMENT '应用logo',
+  `author_name` varchar(30) NOT NULL DEFAULT '' COMMENT '作者名',
+  `author_icon` varchar(100) NOT NULL DEFAULT '' COMMENT '作者头像',
+  `author_email` varchar(200) NOT NULL DEFAULT '' COMMENT '作者email',
+  `website` varchar(200) NOT NULL DEFAULT '' COMMENT '开发者网站',
+  `version` varchar(50) NOT NULL DEFAULT '' COMMENT '应用版本',
+  `pwversion` varchar(50) NOT NULL DEFAULT '',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `modified_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
+  PRIMARY KEY (`app_id`),
+  UNIQUE KEY `alias` (`alias`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='本地应用信息表';
+
+DROP TABLE IF EXISTS `pw_windid_application_log`;
+CREATE TABLE `pw_windid_application_log` (
+  `app_id` char(20) NOT NULL DEFAULT '' COMMENT '应用id',
+  `log_type` char(10) NOT NULL DEFAULT '' COMMENT '日志类型',
+  `data` text COMMENT '日志内容',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `modified_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  UNIQUE KEY `app_id` (`app_id`,`log_type`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='应用安装日志表';
+
+DROP TABLE IF EXISTS `pw_windid_hook`;
+CREATE TABLE `pw_windid_hook` (
+  `name` varchar(50) NOT NULL DEFAULT '',
+  `app_id` char(20) NOT NULL DEFAULT '' COMMENT '应用id',
+  `app_name` varchar(100) NOT NULL DEFAULT '' COMMENT '应用名称',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `modified_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  `document` text COMMENT '钩子详细信息',
+  PRIMARY KEY (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='钩子基本信息表';
+
+DROP TABLE IF EXISTS `pw_windid_hook_inject`;
+CREATE TABLE `pw_windid_hook_inject` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `app_id` char(20) NOT NULL DEFAULT '',
+  `app_name` varchar(100) NOT NULL DEFAULT '',
+  `hook_name` varchar(100) NOT NULL DEFAULT '' COMMENT '钩子名',
+  `alias` varchar(100) NOT NULL DEFAULT '' COMMENT '挂载别名',
+  `class` varchar(100) NOT NULL DEFAULT '' COMMENT '挂载类',
+  `method` varchar(100) NOT NULL DEFAULT '' COMMENT '调用方法',
+  `loadway` varchar(20) NOT NULL DEFAULT '' COMMENT '导入方式',
+  `expression` varchar(100) NOT NULL DEFAULT '' COMMENT '条件表达式',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `modified_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
+  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_hook_name` (`hook_name`,`alias`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='钩子挂载方法表';
+
+DROP TABLE IF EXISTS `pw_windid_admin_auth`;
+CREATE TABLE `pw_windid_admin_auth` (
+  `id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `username` varchar(15) NOT NULL DEFAULT '' COMMENT '用户名',
+  `roles` varchar(255) NOT NULL DEFAULT '' COMMENT '角色',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `modified_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后修改时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_uid` (`uid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户权限角色表';
+
+DROP TABLE IF EXISTS `pw_windid_admin_config`;
+CREATE TABLE `pw_windid_admin_config` (
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '配置名称',
+  `namespace` varchar(15) NOT NULL DEFAULT 'global' COMMENT '配置命名空间',
+  `value` text COMMENT '缓存值',
+  `vtype` enum('string','array','object') NOT NULL DEFAULT 'string' COMMENT '配置值类型',
+  `description` text COMMENT '配置介绍',
+  PRIMARY KEY (`namespace`,`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='网站配置表';
+
+DROP TABLE IF EXISTS `pw_windid_admin_custom`;
+CREATE TABLE `pw_windid_admin_custom` (
+  `username` varchar(15) NOT NULL,
+  `custom` text COMMENT '常用菜单项',
+  PRIMARY KEY (`username`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='后台常用菜单表';
+
+DROP TABLE IF EXISTS `pw_windid_admin_role`;
+CREATE TABLE `pw_windid_admin_role` (
+  `id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `name` varchar(15) NOT NULL DEFAULT '' COMMENT '角色名',
+  `auths` text COMMENT '权限点',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `modified_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后修改时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_name` (`name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='后台用户角色表';
+
+
 DROP TABLE IF EXISTS `pw_windid_app`;
 CREATE TABLE `pw_windid_app` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -1891,7 +1992,7 @@ CREATE TABLE `pw_windid_notify` (
   `nid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `appid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `operation` varchar(50) NOT NULL DEFAULT '',
-  `param` int(10) unsigned NOT NULL DEFAULT '0',
+  `param` text COMMENT '消息参数',
   `timestamp` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`nid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='通知队列表';
@@ -1906,8 +2007,9 @@ CREATE TABLE `pw_windid_notify_log` (
   `reason` varchar(16) NOT NULL DEFAULT '',
   PRIMARY KEY (`logid`),
   KEY `idx_complete` (`complete`),
-  KEY `idx_appid` (`appid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  KEY `idx_appid` (`appid`),
+  KEY `idx_nid` (`nid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='通知发送记录表';
 
 DROP TABLE IF EXISTS `pw_windid_school`;
 CREATE TABLE `pw_windid_school` (

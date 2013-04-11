@@ -21,7 +21,6 @@
 				<col width="50" />
 				<col width="80" />
 				<col width="220" />
-				<col width="120" />
 				<col width="250" />
 				<col />
 			</colgroup>
@@ -31,11 +30,10 @@
 					<td>顺序</td>
 					<td>分类名称</td>
 					<td>文件夹名</td>
-					<td>支持应用</td>
 					<td>操作</td>
 				</tr>
 			</thead>
-		<!--# foreach ($catList as $cat):#-->
+		<!--# foreach ($catList as $cat){#-->
 			<tr>
 				<td><input type="checkbox" name="isopen[{$cat['category_id']}]"  {@Pw::ifcheck($cat['isopen'])} value="1"/>
 					<input type="hidden" name="catid[]" value="{$cat['category_id']}"/>
@@ -43,27 +41,13 @@
 				<td><input type="number" class="input length_1" name="category_orderid[{$cat['category_id']}]" value="{$cat['orderid']}" /></td>
 				<td><input type="text" class="input length_3" name="category_name[{$cat['category_id']}]" value="{$cat['category_name']}"/></td>
 				<td>{$cat['emotion_folder']}</td>
-				<td>
-					<div class="J_toggle_list dn" style="float:left;margin-top:18px;">
-						<div class="core_menu" tabindex="0">
-							<div class="core_menu_list">
-								<ul class="cc">
-							<!--# foreach ($appList as $key=>$app):#-->
-									<li><label><input type="checkbox" name="apps[{$cat['category_id']}][]" {@Pw::ifcheck(in_array($key, $cat['apps']))} value="{$key}"/>{$app}</label></li>
-							<!--# endforeach; #-->	
 
-								</ul>
-							</div>
-						</div>
-					</div>
-					<a href="" class="cate_link_down J_click_toggle"></a><span class="J_support_list">{$cat['appsname']}</span>
-				</td>
 				<td>
 					<a href="{@url:emotion/emotion/emotion?catid=$cat['category_id']}" class="mr5">[管理]</a>
 					<a href="{@url:emotion/emotion/deletecate?cateid=$cat['category_id']}" class="mr5 J_ajax_del">[删除]</a>
 				</td>
 			</tr>
-		<!--# endforeach; #-->
+		<!--# } #-->
 		</table>
 	</div>
 	<div class="btn_wrap_pd"><button class="btn btn_submit J_ajax_submit_btn" type="submit">提交</button></div>
@@ -78,14 +62,14 @@
 				<td width="120">文件夹名</td>
 				<td>操作</td>
 			</tr>
-		<!--# foreach ($folderList as $folder):#-->
+		<!--# foreach ($folderList as $folder){ #-->
 			<tr>
 				<td><input type="number" class="input length_1" name="orderid"/></td>
 				<td><input type="text" class="input length_3" name="catname"/></td>
 				<td>{$folder}<input type="hidden" name="folder" value="{$folder}"/></td>
 				<td><button class="btn J_ajax_submit_btn" type="submit">安装</button></td>
 			</tr>
-		<!--# endforeach; #-->
+		<!--# } #-->
 		</table>
 		</form>	
 	</div>

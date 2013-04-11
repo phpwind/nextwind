@@ -34,14 +34,14 @@
 
 			Wind.dialog.closeAll();
 			Wind.dialog.html(data, {
-				id : 'J_report_pop',
-				position	: 'fixed',			//固定定位
-				title : '举报',
-				isMask		: false,			//无遮罩
-				isDrag : true,
-				callback		: function(){
+				id: 'J_report_pop',
+				position: 'fixed',			//固定定位
+				title: '举报',
+				isMask: false,			//无遮罩
+				isDrag: true,
+				callback: function(){
 					var report_form = $('#J_report_form'),
-							textarea = report_form.find('textarea');
+						textarea = report_form.find('textarea');
 					//按钮状态 global.js
 					Wind.Util.buttonStatus(textarea, report_form.find('button:submit'));
 					textarea.focus();
@@ -59,31 +59,22 @@
 
 					Wind.use('ajaxForm', function(){
 						report_form.ajaxForm({
-							dataType : 'json',
-							beforeSubmit : function(){
+							dataType: 'json',
+							beforeSubmit: function(){
 								Wind.Util.ajaxBtnDisable(btn);
 							},
-							success : function(data){
+							success: function(data){
 								Wind.Util.ajaxBtnEnable(btn);
 
-								if(data.state === 'success') {
-									Wind.Util.formBtnTips({
-										wrap : btn.parent(),
-										msg : '举报成功',
-										callback : function(){
-											Wind.dialog.closeAll();
-										}
-									});
-								}else if(data.state === 'fail'){
-									Wind.Util.formBtnTips({
-										error : true,
-										wrap : btn.parent(),
-										msg : '举报成功',
-										callback : function(){
-											Wind.dialog.closeAll();
-										}
-									});
-								}
+								Wind.Util.formBtnTips({
+									error : (data.state=='success' ? false : true),
+									wrap : btn.parent(),
+									msg : data.message,
+									callback : function(){
+										if(data.state=='success')
+										Wind.dialog.closeAll();
+									}
+								});
 							}
 						});
 					});

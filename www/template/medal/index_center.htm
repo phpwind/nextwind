@@ -32,48 +32,48 @@
 								<div class="ct">
 									<ul class="cc">
 									<!--# $medals_c = $medals_zw = $medals_zy =array();
-									foreach ($medals as $key=>$medal): 
-										if ($medal['receive_type'] ==1): 
-											if ($myStatus[$key] > 0 && $myStatus[$key] < 4) :
+									foreach ($medals as $key=>$medal){ 
+										if ($medal['receive_type'] ==1){ 
+											if ($myStatus[$key] > 0 && $myStatus[$key] < 4) {
 												$medals_zw[$key] = $medal;
-											elseif($myStatus[$key] == 4):
+											}elseif($myStatus[$key] == 4){
 												$medals_zy[$key] = $medal;
-											else:
+											}else{
 											#-->
 											<li><a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 											</a></li>
-											<!--# endif; #-->
-										<!--# elseif($medal['receive_type'] ==2):
+											<!--# } #-->
+										<!--# }elseif($medal['receive_type'] ==2){
 												 $medals_c[$key] = $medal;
-												elseif($medal['receive_type'] ==3):
-												$medals_r[$key] = $medal;
-												 endif;
-										endforeach; #-->
+												}elseif($medal['receive_type'] ==3){
+												 $medals_r[$key] = $medal;
+												}
+										} #-->
 										<!-- 与我相关的勋章 -->
-										<!--# foreach ($medals_zw as $key=>$medal): #-->
+										<!--# foreach ($medals_zw as $key=>$medal){ #-->
 										<li><a class="J_medal_card" data-role="receive" data-subid="{$medal['medal_id']}" data-id="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
-											<!--# if ($myStatus[$key] == 1): #-->	
+											<!--# if ($myStatus[$key] == 1){ #-->	
 													<em class="status_in"></em>
-												<!--# elseif($myStatus[$key] == 2): #-->
+												<!--# }elseif($myStatus[$key] == 2){ #-->
 													<em class="status"></em>
-												<!--# elseif($myStatus[$key] == 3): #-->
+												<!--# }elseif($myStatus[$key] == 3){ #-->
 													<em class="status_can"></em>
-												<!--# elseif($myStatus[$key] == 4): #-->
+												<!--# }elseif($myStatus[$key] == 4){ #-->
 													<em class="status_do"></em>
-												<!--# endif; #-->	
+												<!--# } #-->	
 											</a></li>
-										<!--# endforeach; #-->	
+										<!--# } #-->	
 										<!-- 我已领取的勋章 -->
-										<!--# foreach ($medals_zy as $key=>$medal): #-->
+										<!--# foreach ($medals_zy as $key=>$medal){ #-->
 										<li><a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 													<em class="status_do"></em>
 											</a></li>
-										<!--# endforeach; #-->	
+										<!--# } #-->	
 									</ul>
 									<!-- <div class="not_content">啊哦，暂没有自动勋章！</div> -->
 								</div>
 							</div>
-							<!--# if ($medals_c): #-->
+							<!--# if ($medals_c){ #-->
 							<div id="medal_manual" class="medal_show_list medal_manual_list">
 								<div class="hd">
 									<h2>手动勋章</h2><span>（申请后由网站管理员人工审核颁发）</span>
@@ -81,55 +81,55 @@
 								<div class="ct">
 									<ul class="cc">
 									<!--# $medals_cw1 = $medals_cw2 = $medals_cw3 = $medals_cy =array();
-											foreach ($medals_c as $key=>$medal): 
-											if ($myStatus[$key] == 1) :
+											foreach ($medals_c as $key=>$medal){ 
+											if ($myStatus[$key] == 1) {
 												$medals_cw1[$key] = $medal;
-											elseif($myStatus[$key] == 2):
+											}elseif($myStatus[$key] == 2){
 												$medals_cw2[$key] = $medal;
-											elseif($myStatus[$key] == 3):
+											}elseif($myStatus[$key] == 3){
 												$medals_cw3[$key] = $medal;
-											elseif($myStatus[$key] == 4):
+											}elseif($myStatus[$key] == 4){
 												$medals_cy[$key] = $medal;
-											else: #-->
+											}else{ #-->
 											<li>
 												<a class="J_medal_card" data-role="apply" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 											</a>
 											</li>
-											<!--# endif; #-->
-										<!--# endforeach; #-->
+											<!--# } #-->
+										<!--# } #-->
 										<!-- 与我相关的勋章 -->
-										<!--# foreach ($medals_cw1 as $key=>$medal):  #-->
+										<!--# foreach ($medals_cw1 as $key=>$medal){  #-->
 											<li>
 												<a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 												<em class="status_in"></em></a>
 											</li>
-										<!--# endforeach; #-->
-										<!--# foreach ($medals_cw2 as $key=>$medal):  #-->
+										<!--# } #-->
+										<!--# foreach ($medals_cw2 as $key=>$medal){ #-->
 											<li>
 												<a class="J_medal_card" data-role="applied" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 												<em class="status"></em></a>
 											</li>
-										<!--# endforeach; #-->
-										<!--# foreach ($medals_cw3 as $key=>$medal):  #-->
+										<!--# } #-->
+										<!--# foreach ($medals_cw3 as $key=>$medal){  #-->
 											<li>
 												<a class="J_medal_card" data-role="receive" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 												<em class="status_can"></em></a>
 												
 											</li>
-										<!--# endforeach; #-->
+										<!--# } #-->
 									
-										<!--# foreach ($medals_cy as $key=>$medal):  #-->
+										<!--# foreach ($medals_cy as $key=>$medal){  #-->
 											<li>
 												<a class="J_medal_card" data-role="show" data-id="{$medal['medal_id']}" data-subid="{$medal['medal_id']}" href="{@url:medal/index/show?medalid=$medal['medal_id']}"><img src="{$medal['image']}" width="96" height="96" alt="{$medal['name']}" /><p title="{$medal['name']}">{$medal['name']}</p>
 												<em class="status_do"></em>
 												</a>
 											</li>
-										<!--# endforeach; #-->
+										<!--# } #-->
 									</ul>
 									<!-- <div class="not_content">啊哦，暂没有手动勋章！</div> -->
 								</div>
 							</div>
-							<!--# endif; #-->
+							<!--# } #-->
 						</div>
 					</div>
 			</div>

@@ -12,7 +12,7 @@
 			<!--# } #-->
 			<li><a href="{@url:appcenter/style/install}">本地安装</a></li>
 			<li class="current"><a href="{@url:appcenter/style/manage}">界面管理</a></li>
-			<!--# if(Wekit::load('APPS:appcenter.service.srv.PwDebugApplication')->inDevMode1()){ #-->
+			<!--# if(Wekit::load('APPCENTER:service.srv.PwDebugApplication')->inDevMode1()){ #-->
 			<li><a href="{@url:appcenter/style/generate}">开发助手</a></li>
 			<!--# } #-->
 		</ul>
@@ -66,7 +66,7 @@
 				<td>
 					<ul class="single_list cc">
 						<li><label><input name="bgtile" type="radio" value="no-repeat" {@Pw::ifcheck($bgtile == "no-repeat")}><span>正常</span></label></li>
-						<li><label><input name="bgtile" type="radio" value="fixed" {@Pw::ifcheck($bgtile == "fixed")}><span>锁定</span></label></li>
+						<li><label><input name="bgtile" type="radio" value=";background-attachment:fixed" {@Pw::ifcheck($bgtile == ";background-attachment:fixed")}><span>锁定</span></label></li>
 						<li><label><input name="bgtile" type="radio" value="repeat-x" {@Pw::ifcheck($bgtile == "repeat-x")}><span>横向平铺</span></label></li>
 						<li><label><input name="bgtile" type="radio" value="repeat-y" {@Pw::ifcheck($bgtile == "repeat-y")}><span>竖向平铺</span></label></li>
 						<li><label><input name="bgtile" type="radio" value="repeat" {@Pw::ifcheck($bgtile == "repeat")}><span>完全平铺</span></label></li>
@@ -223,7 +223,7 @@
 				<td>
 					<ul class="single_list cc">
 						<li><label><input name="headbgtile" type="radio" value="no-repeat" {@Pw::ifcheck($headbgtile == "no-repeat")}><span>正常</span></label></li>
-						<li><label><input name="headbgtile" type="radio" value="fixed" {@Pw::ifcheck($headbgtile == "fixed")}><span>锁定</span></label></li>
+						<li><label><input name="headbgtile" type="radio" value=";background-attachment:fixed" {@Pw::ifcheck($headbgtile == ";background-attachment:fixed")}><span>锁定</span></label></li>
 						<li><label><input name="headbgtile" type="radio" value="repeat-x" {@Pw::ifcheck($headbgtile == "repeat-x")}><span>横向平铺</span></label></li>
 						<li><label><input name="headbgtile" type="radio" value="repeat-y" {@Pw::ifcheck($headbgtile == "repeat-y")}><span>竖向平铺</span></label></li>
 						<li><label><input name="headbgtile" type="radio" value="repeat" {@Pw::ifcheck($headbgtile == "repeat")}><span>完全平铺</span></label></li>
@@ -311,7 +311,7 @@
 				<td>
 					<ul class="single_list cc">
 						<li><label><input name="boxbgtile" type="radio" value="no-repeat" {@Pw::ifcheck($boxbgtile == "no-repeat")}><span>正常</span></label></li>
-						<li><label><input name="boxbgtile" type="radio" value="fixed" {@Pw::ifcheck($boxbgtile == "fixed")}><span>锁定</span></label></li>
+						<li><label><input name="boxbgtile" type="radio" value=";background-attachment:fixed" {@Pw::ifcheck($boxbgtile == ";background-attachment:fixed")}><span>锁定</span></label></li>
 						<li><label><input name="boxbgtile" type="radio" value="repeat-x" {@Pw::ifcheck($boxbgtile == "repeat-x")}><span>横向平铺</span></label></li>
 						<li><label><input name="boxbgtile" type="radio" value="repeat-y" {@Pw::ifcheck($boxbgtile == "repeat-y")}><span>竖向平铺</span></label></li>
 						<li><label><input name="boxbgtile" type="radio" value="repeat" {@Pw::ifcheck($boxbgtile == "repeat")}><span>完全平铺</span></label></li>
@@ -390,7 +390,7 @@
 				<td>
 					<ul class="single_list cc">
 						<li><label><input name="boxhdbgtile" type="radio" value="no-repeat" {@Pw::ifcheck($boxhdbgtile == "no-repeat")}><span>正常</span></label></li>
-						<li><label><input name="boxhdbgtile" type="radio" value="fixed" {@Pw::ifcheck($boxhdbgtile == "fixed")}><span>锁定</span></label></li>
+						<li><label><input name="boxhdbgtile" type="radio" value=";background-attachment:fixed" {@Pw::ifcheck($boxhdbgtile == ";background-attachment:fixed")}><span>锁定</span></label></li>
 						<li><label><input name="boxhdbgtile" type="radio" value="repeat-x" {@Pw::ifcheck($boxhdbgtile == "repeat-x")}><span>横向平铺</span></label></li>
 						<li><label><input name="boxhdbgtile" type="radio" value="repeat-y" {@Pw::ifcheck($boxhdbgtile == "repeat-y")}><span>竖向平铺</span></label></li>
 						<li><label><input name="boxhdbgtile" type="radio" value="repeat" {@Pw::ifcheck($boxhdbgtile == "repeat")}><span>完全平铺</span></label></li>

@@ -27,21 +27,21 @@
 						<div class="medal_content">
 							<div class="medal_rank cc">
 							
-							<!--# if ($attentionMedals): #-->
+							<!--# if ($attentionMedals){ #-->
 							
 								<div class="medal_rank_follow">
 									<h2>
-									<!--# if ($info['counts']>0): #-->
+									<!--# if ($info['counts']>0){ #-->
 										<div class="my">我的勋章：{$info['counts']}枚，好友中排名：
-										<!--# if($info['sort']): #-->
+										<!--# if($info['sort']){ #-->
 											第{$info['sort']}名
-										<!--# else: #-->
+										<!--# }else{ #-->
 											10名以外
-										<!--# endif; #-->
+										<!--# } #-->
 										</div>
-									<!--# else: #-->
+									<!--# }else{ #-->
 										<div class="my">您还没有勋章，<a href="{@url:medal/index/center}">去领几个吧&gt;&gt;</a></div>
-									<!--# endif; #-->
+									<!--# } #-->
 										好友排名
 									</h2>
 									<ol class="cc">
@@ -63,26 +63,26 @@
 									</ol>
 									<!-- <div class="not_content">啊哦，关注的人暂没有内容，赶紧先关注些人！</div> -->
 								</div>
-							<!--# endif; #-->
+							<!--# } #-->
 								<div class="medal_rank_all">
 									<h2>
-									<!--# if ($info['counts']>0): #-->
+									<!--# if ($info['counts']>0){ #-->
 										<div class="my">
-										<!--# if($totalOrder > 0): #-->
+										<!--# if($totalOrder > 0){ #-->
 											全站排名：第{$totalOrder}名
-										<!--# else: #-->
+										<!--# }else{ #-->
 											未进入前十，继续努力！
-										<!--# endif; #-->
+										<!--# } #-->
 										</div>
-									<!--# else: #-->
+									<!--# }else{ #-->
 										<div class="my">您还没有勋章，<a href="{@url:medal/index/center}">去领几个吧&gt;&gt;</a></div>
-									<!--# endif; #-->
+									<!--# } #-->
 									全站排名
 									</h2>
 									<ol class="cc">
 									<!--# 
 										$k=1;
-										foreach ($totalMedals as $medal):
+										foreach ($totalMedals as $medal){
 										$uid = $userInfos[$medal['uid']]['uid'];
 									#-->
 										
@@ -91,7 +91,7 @@
 											<a class="J_user_card_show" data-uid="{$userInfos[$medal['uid']]['uid']}" href="{@url:space/index/run?uid=$uid}"  target="_blank"><img class="J_avatar" src="{@Pw::getAvatar($userInfos[$medal['uid']]['uid'], 'middle')}" data-type="middle" width="90" height="90" alt="{$userInfos[$medal['uid']]['username']}" /><span class="name">{@Pw::substrs($userInfos[$medal['uid']]['username'],7)}</span></a>
 										</li>
 										
-									<!--# $k++;endforeach; #-->
+									<!--# $k++; } #-->
 									</ol>
 									<!-- <div class="not_content">啊哦，全站排名暂没有内容！</div> -->
 								</div>

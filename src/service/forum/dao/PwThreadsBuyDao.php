@@ -6,7 +6,7 @@
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadsBuyDao.php 17767 2012-09-09 08:36:12Z jieyin $
+ * @version $Id: PwThreadsBuyDao.php 24066 2013-01-21 07:30:33Z jinlong.panjl $
  * @package forum
  */
 
@@ -27,6 +27,12 @@ class PwThreadsBuyDao extends PwBaseDao {
 		return $smt->getOne(array($tid, $pid, $uid));
 	}
 
+	public function countByTidAndPid($tid, $pid) {
+		$sql = $this->_bindTable('SELECT COUNT(*) FROM %s WHERE tid=? AND pid=? ');
+		$smt = $this->getConnection()->createStatement($sql);
+		return $smt->getValue(array($tid, $pid));
+	}
+	
 	public function getByTidAndPid($tid, $pid, $limit, $offset) {
 		$sql = $this->_bindSql('SELECT * FROM %s WHERE tid=? AND pid=? ORDER BY created_time DESC %s', $this->getTable(), $this->sqlLimit($limit, $offset));
 		$smt = $this->getConnection()->createStatement($sql);

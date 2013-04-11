@@ -45,18 +45,18 @@
 					<td>推送内容需审核</td>
 				</tr>
 			</thead>
-			<!--# foreach ($list as $v): #-->
+			<!--# foreach ($list as $v){ #-->
 			<tr>
 				<tr>
 					<td>{$v['type']}</td>
 					<td><a href="{$v['url']}">{$v['name']}</a></td>
-					<!--# if($v['permissions'] == 3): #--><td><span class="green">&radic;</span></td><!--# else: #--><td><span class="red">x</span></td><!--# endif; #-->
-					<!--# if($v['permissions'] == 2): #--><td><span class="green">&radic;</span></td><!--# else: #--><td><span class="red">x</span></td><!--# endif; #-->
-					<!--# if($v['permissions'] == 1): #--><td><span class="green">&radic;</span></td><!--# else: #--><td><span class="red">x</span></td><!--# endif; #-->
+					<!--# if($v['permissions'] == 3){ #--><td><span class="green">&radic;</span></td><!--# }else{ #--><td><span class="red">x</span></td><!--# } #-->
+					<!--# if($v['permissions'] == 2){ #--><td><span class="green">&radic;</span></td><!--# }else{ #--><td><span class="red">x</span></td><!--# } #-->
+					<!--# if($v['permissions'] == 1){ #--><td><span class="green">&radic;</span></td><!--# }else{ #--><td><span class="red">x</span></td><!--# } #-->
 					
 				</tr>
 			</tr>
-			<!--# endforeach; #-->
+			<!--# } #-->
 		</table>
 	</div>
 </div>

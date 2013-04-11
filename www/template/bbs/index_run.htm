@@ -3,9 +3,6 @@
 <head>
 <template source='TPL:common.head' load='true' />
 <link href="{@theme:css}/forum.css?v={@NEXT_RELEASE}" rel="stylesheet" />
-<!--# if ($operateThread) { #-->
-<link href="{@theme:css}/management.css?v={@NEXT_RELEASE}" rel="stylesheet" />
-<!--#}#-->
 </head>
 <body>
 <pw-start/>
@@ -21,15 +18,14 @@
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content cc">
-					<pw-tpl id="first_segment"/><design role="module" id="first_segment"/>
+					<pw-tpl id="first_segment"/>
 					<advertisement id='Thread.Top' sys='1'/>
 					<div class="box_wrap thread_page J_check_wrap">
 						<nav>
 							<div class="content_nav" id="hashpos_ttype">
-								<div class="content_filter">
-									<a href="{@url:bbs/forum/run?order=postdate}" class="{@Pw::isCurrent($order == 'postdate')}">最新发帖</a><span>|</span><a href="{@url:bbs/forum/run}" class="{@Pw::isCurrent($order != 'postdate')}">最后回复</a></div>
+								<div class="content_filter"><a href="{@url:bbs/index/run?order=postdate}" class="{@Pw::isCurrent($order == 'postdate')}">最新发帖</a><span>|</span><a href="{@url:bbs/index/run?order=lastpost}" class="{@Pw::isCurrent($order != 'postdate')}">最后回复</a></div>
 								<ul>
-									<li class="current"><a href="{@url:bbs/index/run}">本站新帖</a></li>
+									<li class="current"><a href="{@url:bbs/index/run?order=lastpost}">本站新帖</a></li>
 									<!--# if ($loginUser->isExists()) { #--><li><a rel="nofollow" href="{@url:bbs/forum/my}">我的版块</a></li><!--# } #-->
 								</ul>
 							</div>
@@ -48,7 +44,7 @@
 											<!--# if ($operateThread) { #-->
 											<input class="J_check" name="" type="checkbox" value="{$value['tid']}" />
 											<!--# } #-->
-											<span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}"></i></span>
+											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" target="_blank"><span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}  新窗口打开"></i></span></a>
 											<!--# if ($forums[$value['fid']]) { #-->
 											<a href="{@url:bbs/thread/run?fid=$value['fid']}" class="st">[{@$forums[$value['fid']]['name']|html}]</a>
 											<!--# } #-->
@@ -68,32 +64,30 @@
 								<!--# } #-->
 							</table>
 						</div>
-							<!--# if ($operateThread) { #-->
-							<div class="management J_post_manage_col" data-role="list">
-								<label class="mr10"><input class="J_check_all" type="checkbox">全选</label>
-								<!--# if ($operateThread['topped']){ #--><a href="{@url:bbs/manage/topped}">置顶</a><!--# } #-->
-								<!--# if ($operateThread['digest']){ #--><a href="{@url:bbs/manage/digest}">精华</a><!--# } #-->
-								<!--# if ($operateThread['highlight']){ #--><a href="{@url:bbs/manage/highlight}">加亮</a><!--# } #-->
-								<!--# if ($operateThread['up']){ #--><a href="{@url:bbs/manage/up}">提前</a><!--# } #-->
-								<!--# if ($operateThread['type']){ #--><a href="{@url:bbs/manage/type}">分类</a><!--# } #-->
-								<!--# if ($operateThread['move']){ #--><a href="{@url:bbs/manage/move}">移动</a><!--# } #-->
-								<!--# if ($operateThread['copy']){ #--><a href="{@url:bbs/manage/copy}">复制</a><!--# } #-->
-								<!--# if ($operateThread['unite']){ #--><a href="{@url:bbs/manage/unite}">合并</a><!--# } #-->
-								<!--# if ($operateThread['lock']){ #--><a href="{@url:bbs/manage/lock}">锁定</a><!--# } #-->
-								<!--# if ($operateThread['down']){ #--><a href="{@url:bbs/manage/down}">压帖</a><!--# } #-->
-								<!--# if ($operateThread['delete']){ #--><a href="{@url:bbs/manage/delete}">删除</a><!--# } #-->
-							</div>
-							<!--# } #-->
+						<!--# if ($operateThread) { #-->
+						<div class="management J_post_manage_col" data-role="list">
+							<label class="mr10"><input class="J_check_all" type="checkbox">全选</label>
+							<!--# if ($operateThread['topped']){ #--><a href="{@url:bbs/manage/topped}">置顶</a><!--# } #-->
+							<!--# if ($operateThread['digest']){ #--><a href="{@url:bbs/manage/digest}">精华</a><!--# } #-->
+							<!--# if ($operateThread['highlight']){ #--><a href="{@url:bbs/manage/highlight}">加亮</a><!--# } #-->
+							<!--# if ($operateThread['up']){ #--><a href="{@url:bbs/manage/up}">提前</a><!--# } #-->
+							<!--# if ($operateThread['type']){ #--><a href="{@url:bbs/manage/type}">分类</a><!--# } #-->
+							<!--# if ($operateThread['move']){ #--><a href="{@url:bbs/manage/move}">移动</a><!--# } #-->
+							<!--# if ($operateThread['copy']){ #--><a href="{@url:bbs/manage/copy}">复制</a><!--# } #-->
+							<!--# if ($operateThread['unite']){ #--><a href="{@url:bbs/manage/unite}">合并</a><!--# } #-->
+							<!--# if ($operateThread['lock']){ #--><a href="{@url:bbs/manage/lock}">锁定</a><!--# } #-->
+							<!--# if ($operateThread['down']){ #--><a href="{@url:bbs/manage/down}">压帖</a><!--# } #-->
+							<!--# if ($operateThread['delete']){ #--><a href="{@url:bbs/manage/delete}">删除</a><!--# } #-->
+						</div>
+						<!--# } #-->
 						<!--# } else { #-->
 						<div class="not_content">
 							啊哦，本站暂没有任何内容哦！
 						</div>
 						<!--# } #-->
 					</div>
-					<div class="cc mb20">
-						<div class="J_page_wrap" data-key="true">
-							<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/index/run" args="$urlargs"/>
-						</div>
+					<div class="J_page_wrap cc" data-key="true">
+						<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/index/run" args="$urlargs"/>
 					</div>
 					<pw-tpl id="forum_bottom"/>
 					<!--# if ($operateThread) { #-->
@@ -134,21 +128,22 @@
 	
 <template source='TPL:common.footer' load='true' />
 </div>
-<!--# if(!$is_design) { #-->
+
 <script>
 var FID = '{$pwforum->fid}';
 Wind.use('jquery', 'global', function(){
+<!--# if(!$is_design) { #-->
 <!--# if (!$threaddb) { #-->
 	//无内容 发帖引导
-	Wind.js(GV.JS_ROOT + 'pages/common/postGuide.js?v=' + GV.JS_VERSION);
+	Wind.js(GV.JS_ROOT + 'pages/bbs/postGuide.js?v=' + GV.JS_VERSION);
 <!--# } else { #-->
 	if(GV.U_ID) {
-		Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v=' + GV.JS_VERSION);
+		Wind.js(GV.JS_ROOT +'pages/bbs/threadManage.js?v=' + GV.JS_VERSION);
 	}
+<!--# } #-->
 <!--# } #-->
 });
 </script>
-<!--# } #-->
 <pw-end/>
 </body>
 </html>

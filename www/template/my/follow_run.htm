@@ -66,7 +66,7 @@
 									</div>
 									<div class="attribute">
 										<!--# if (isset($fans[$value['touid']])) { #--><span class="mnfollow" title="互相关注">互相关注</span><!--# } #-->
-										<a href="{@url:my/follow/delete?uid=$value['touid']}" class="core_unfollow J_unfollow_btn J_friends_unfollow" style="display:none;">取消关注</a>
+										<a href="{@url:my/follow/delete}" class="core_unfollow J_unfollow_btn J_friends_unfollow" style="display:none;" data-uid="{$value['touid']}">取消关注</a>
 									</div>
 								</dd>
 							</dl>
@@ -101,6 +101,7 @@
 			</div>
 			<div class="main_sidebar">
 				<template source='TPL:common.sidebar_1' load='true' />
+				<!--# if ($follows) { #-->
 				<div class="box_wrap">
 					<h2 class="box_title">我关注的人</h2>
 					<div class="side_cate_list">
@@ -121,6 +122,7 @@
 						<a href="" class="add" id="J_creat_group_side">创建新分组</a>
 					</div>
 				</div>
+				<!--# } #-->
 			</div>
 		</div>
 	</div>
@@ -137,7 +139,7 @@ var GRROUP_DATA = '{@FollowController::bulidUserType($userType)|json}';
 Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function(){
 <!--# if ($follows) { #-->
 	//有关注
-	Wind.js(GV.JS_ROOT +'pages/bbs/fansFollow_index.js?v='+ GV.JS_VERSION);
+	Wind.js(GV.JS_ROOT +'pages/my/fansFollow.js?v='+ GV.JS_VERSION);
 /*
  * 取消关注，删除行
 */
@@ -152,7 +154,9 @@ Wind.use('jquery', 'global', 'ajaxForm', 'dialog', function(){
 		}
 		f_lock = true;
 
-		$.post($this.attr('href'), function(data){
+		$.post(this.href, {
+			uid: $this.data('uid')
+		}, function(data){
 			f_lock = false;
 			if(data.state == 'success') {
 				$this.parents('dl').slideUp(function(){

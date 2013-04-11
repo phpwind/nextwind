@@ -7,8 +7,8 @@ class AcloudApiCustomizedCredit {
 		return $this->getVersionCustomizedCredit()->fetchCreditType();
 	}
 
-	public function setCredit($uid,$ctype,$point){
-		return $this->getVersionCustomizedCredit()->setCredit($uid,$ctype,$point);
+	public function setCredit($uid,$ctype,$point,$appName){
+		return $this->getVersionCustomizedCredit()->setCredit($uid,$ctype,$point,$appName);
 	}
 
 	private function getVersionCustomizedCredit() {

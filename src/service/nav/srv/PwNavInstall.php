@@ -1,5 +1,5 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.iPwInstall');
+Wind::import('APPCENTER:service.srv.iPwInstall');
 Wind::import('SRV:nav.dm.PwNavDm');
 /**
  * 应用 - 导航安装
@@ -7,7 +7,7 @@ Wind::import('SRV:nav.dm.PwNavDm');
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwNavInstall.php 22909 2012-12-28 09:01:30Z long.shi $
+ * @version $Id: PwNavInstall.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package nav
  */
 class PwNavInstall implements iPwInstall {

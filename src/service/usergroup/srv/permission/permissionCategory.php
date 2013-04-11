@@ -81,7 +81,7 @@ return array(
 			'bbs' => array(
 				'name' => '论坛管理权限',
 				'items' => array(
-					'force_operate_reason','operate_thread'
+					'manage_level', 'operate_thread', 'force_operate_reason'
 				)
 			),
 			'fresh' => array(

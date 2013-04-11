@@ -4,7 +4,7 @@ $models = array();
 $service = Wekit::load('design.srv.PwDesignService');
 $types = $service->getDesignModelType();
 $_models = $service->getModelList();
-$styles =  $service->getDesignAppStyle();
+$styles =  $service->getDesignAppStyle(1,100);
 foreach ($_models AS $k=>$model) {
 	$models[$model['type']][] = array('name'=>$model['name'], 'model'=>$k);
 }
@@ -146,19 +146,6 @@ foreach ($_models AS $k=>$model) {
 	overflow:hidden;
 	margin:10px 0;
 }
-/*箭头，展开收起
-.pop_design .arrow_up,
-.pop_design .arrow_down{
-	padding-left:14px;
-	color:#333;
-	margin-right:20px;
-}
-.pop_design .arrow_up{
-	background:url({@theme:site.images}/common/arrow_up_black.png) 0 center no-repeat;
-}
-.pop_design .arrow_down{
-	background:url({@theme:site.images}/common/arrow_down_black.png) 0 center no-repeat;
-}*/
 /*隐藏内容*/
 .pop_design .down_hidden{
 	background:#f7f7f7;
@@ -184,7 +171,7 @@ foreach ($_models AS $k=>$model) {
 	display:block;
 	line-height:20px;
 	text-indent:25px;
-	background:url({@theme:site.images}/common/thumb_up.png) no-repeat;
+	background:url({@G:url.images}/portal/thumb_up.png) no-repeat;
 	filter:alpha(opacity=80);
 	-moz-opacity:0.8;
 	opacity:0.8;
@@ -323,6 +310,10 @@ foreach ($_models AS $k=>$model) {
 空布局默认效果
 ===================
 */
+.J_mod_box{
+	min-height:20px;
+	_height:20px;
+}
 .tempplace{
 	width:100%;
 	min-height:20px;
@@ -446,7 +437,7 @@ body{
 	line-height:25px;
 	padding:0 10px;
 	margin:5px 20px 0 0;
-	width:250px;
+	width:260px;
 }
 .top_design .hd .mini_tips strong{
 	color:#fffde4;
@@ -814,9 +805,9 @@ body{
 				<ul class="" id="J_design_top_nav">
 					<li class="current"><a href="">设置结构</a></li>
 					<li><a href="">设置模块</a></li>
-					<!--# if($portal):#-->
+					<!--# if($portal){#-->
 					<li><a href="">设置模版</a></li>
-					<!--# endif; #-->
+					<!--# } #-->
 				</ul>
 				<div class="operate">
 					<a id="J_design_quit" href="{@url:design/design/doexit}" class="quit">退出</a>
@@ -832,7 +823,7 @@ body{
 				<div class="core_down" style="background:#fff;border:1px solid #ccc;border-bottom:0 none;width:10px;height:27px;position:absolute;right:-1px;top:-30px;padding:2px 5px 0 3px;"><em class="core_arrow" style="border-top:4px #bfbfbf solid;"></em></div>
 				<ul class="core_menu_list">
 					<li><a id="J_design_import" href="{@url:design/import/dorun}">导入模版</a></li>
-					<li><a id="J_design_export" href="{@url:design/export/dorun}" target="_blank">导出模版</a></li>
+					<li><a id="J_design_export" href="#"  target="_blank">导出模版</a></li>
 					<li><a id="J_design_cache" href="{@url:design/design/docache}">更新数据</a></li>
 					<li><a id="J_design_clear" href="{@url:design/design/doclear}">清空模块</a></li>
 					<li><a id="J_design_restore" href="{@url:design/design/dorestore}">恢复备份</a></li>
@@ -861,40 +852,40 @@ body{
 				<div class="ct" id="J_tab_type" style="display:none;">
 					<div class="tab_type">
 						<ul class="cc" id="J_tab_type_nav">
-							<!--# $i=0; foreach ($types as $k=>$v):	#-->
-							<!--# if($i == 0):  #-->
+							<!--# $i=0; foreach ($types as $k=>$v){	#-->
+							<!--# if($i == 0){  #-->
 							<li  class="current"><a href="#" id="{$k}">{$v}</a><span class="line">|</span></li>
-							<!--# else: #-->
+							<!--# }else{ #-->
 							<li><a href="#" id="{$k}">{$v}</a><span class="line">|</span></li>
-							<!--# endif; #-->
-							<!--# $i++; endforeach; #-->
+							<!--# } #-->
+							<!--# $i++; } #-->
 						</ul>
 					</div>
 					<div class="" id="J_tab_type_ct">
-						<!--# foreach ($types as $k=>$v):	#-->
+						<!--# foreach ($types as $k=>$v){ #-->
 						<div class="tab_type_ct">
 							<ul class="cc">
 								<!--# 
 								if (!is_array($models[$k])) $models[$k] = array();
-								foreach ($models[$k] as $v):	#-->
+								foreach ($models[$k] as $v){ #-->
 								<li><a href="{@url:design/property/add/}" id="{$v['model']}">{$v['name']}</a></li>
-								<!--# endforeach; #-->
+								<!--# } #-->
 							</ul>
 						</div>
-						<!--# endforeach; #-->
+						<!--# } #-->
 					</div>
 				</div>
-				<!--# if($portal):#-->
+				<!--# if($portal){ #-->
 				<div class="ct" style="display:none;">
 					<div class="design_sample_list">
 						<ul class="layout_sample cc">
-						<!--# foreach ($styles as $v): #-->
+						<!--# foreach ($styles as $v){ #-->
 							<li><a class="J_nav_import" href="{@url:design/import/editstyle?styleid=$v['app_id']&portalid=$portal['id']}"><img src="{$v['logo']}" width="80" height="60" /><em style="cursor:pointer;">{$v['name']}</em></a></li>
-						<!--# endforeach; #-->
+						<!--# } #-->
 						</ul>
 					</div>
 				</div>
-				<!--# endif; #-->
+				<!--# } #-->
 			</div>
 		</div>
 	</div>
@@ -988,6 +979,21 @@ body{
 				</div>
 	</div>
 
+<!-- 导出 -->
+	<div class="core_pop_wrap J_menu_pop" id="J_design_export_pop" style="z-index:99999;display:none;width:300px;">
+			<div class="core_pop">
+				<div class="pop_top J_drag_handle"><a href="" class="pop_close J_pop_close">关闭</a><strong id="J_design_name">导出模版</strong></div>
+				<div>
+					<div class="p20">
+							<p class="">编码格式：<label class="mr10"><input type="radio" value="gbk" {@Pw::ifcheck(Wekit::V('charset') == 'GBK')} name="charset">GBK</label><label><input type="radio" value="utf-8" {@Pw::ifcheck(Wekit::V('charset') == 'UTF-8')} name="charset">UTF-8</label></p>
+						</div>
+						<div class="pop_bottom">
+							<a class="btn btn_submit" href="{@url:design/export/dorun}" id="J_design_export_btn">导出</a>
+						</div>
+				</div>
+		</div>
+	</div>
+
 <!-- 导入 -->
 	<div class="core_pop_wrap J_menu_pop" id="J_design_import_pop" style="z-index:99999;display:none;width:300px;">
 			<div class="core_pop">
@@ -1033,8 +1039,8 @@ var LAYOUT_EDID_TITLE = '{@url:design/structure/title}',
 	DESIGN_LOCK = '{@url:design/design/lockdesign}', 										//编辑锁定轮循
 	DESIGN_MODELS = {@$models|json};
 
-Wind.ready(document, function(){
-	Wind.use('jquery', 'global', 'draggable', 'ajaxForm', function() {
+Wind.ready('global.js', function(){
+	Wind.use('ajaxForm', 'draggable', function() {
 		//scrollFixed
 		Wind.js(GV.JS_ROOT +'pages/design/design_index.js?v='+ GV.JS_VERSION);
 	});

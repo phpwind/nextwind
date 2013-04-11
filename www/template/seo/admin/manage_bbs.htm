@@ -27,8 +27,8 @@ SEO信息中可以直接输入文字，也可以使用代码。
 
 </div>
 <form action="{@url:/seo/manage/doRun?mod=bbs}" method="post" class="J_ajaxForm">
-<!--#foreach($pages as $alias => $title):#-->
-<div class="h_a"><!--#if($alias == 'thread'):#--><span class="away_icon mr5 J_toggle_row" title="展开全部版块"></span><!--#endif;#-->
+<!--#foreach($pages as $alias => $title){ #-->
+<div class="h_a"><!--#if($alias == 'thread'){ #--><span class="away_icon mr5 J_toggle_row" title="展开全部版块"></span><!--# } #-->
 {$title}
 </div>
 
@@ -128,7 +128,7 @@ SEO信息中可以直接输入文字，也可以使用代码。
 </div>
 	<!--展开后的具体版块页 end-->
 
-	<!--#endforeach;#-->
+	<!--# } #-->
 	
 <div class="btn_wrap">
 	<div class="btn_wrap_pd">

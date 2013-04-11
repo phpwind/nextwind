@@ -305,6 +305,12 @@ class PwTagService {
 	 * @return bool
 	 */
 	public function deleteByTagIds($tagIds) {
+		$result = $this->_getTagDs()->fetchTag($tagIds);
+		if (!$result) return false;
+		foreach ($result as $tag) {
+			$tag['tag_logo'] && Pw::deleteAttach($tag['tag_logo']);
+		}
+		$tagIds = array_keys($result);
 		// 删除热门话题排行
 		$this->_getTagDs()->deleteTagRecords($tagIds);
 		// 删除分类关系

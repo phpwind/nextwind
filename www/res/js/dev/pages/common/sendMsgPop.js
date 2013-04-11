@@ -149,7 +149,7 @@
 						list_follows.html('<ul class="">'+ li_arr.join('') +'</ul>');
 
 					}else if(data.state == 'fail'){
-						list_follows.html('<div style="padding:40px 0 20px 80px;"><div class="not_content_mini">我的关注为空</div></div>');
+						list_follows.html('<div class="not_content_mini"><i></i>我的关注为空</div>');
 					}
 
 					follows_load = true;		//关注已获取
@@ -177,12 +177,12 @@
 							if(li_arr.length) {
 								list_fans.html('<ul>'+ li_arr.join('') +'</ul>');
 							}else{
-								list_fans.html('<div style="padding:40px 0 20px 80px;"><div class="not_content_mini">我的粉丝为空</div></div>');
+								list_fans.html('<div class="not_content_mini"><i></i>我的粉丝为空</div>');
 							}
 							
 							fans_load = true;		//粉丝已获取
 						}else if(data.state == 'fail'){
-							list_fans.html('<div style="padding:40px 0 20px 80px;"><div class="not_content_mini">我的粉丝为空</div></div>');
+							list_fans.html('<div class="not_content_mini"><i></i>我的粉丝为空</div>');
 						}
 					}, 'json');
 				}

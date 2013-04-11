@@ -1,15 +1,15 @@
 <?php
-Wind::import('WIND:router.route.AbstractWindRoute');
+Wind::import('LIB:route.AbstractPwRoute');
 /**
  * 前台路由
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwRoute.php 23295 2013-01-08 03:54:25Z long.shi $
+ * @version $Id: PwRoute.php 25816 2013-03-25 06:10:30Z long.shi $
  * @package library
  */
-class PwRoute extends AbstractWindRoute {
+class PwRoute extends AbstractPwRoute {
 	
 	private $entrance = 'CONF:entrance';
 	/**
@@ -36,8 +36,8 @@ class PwRoute extends AbstractWindRoute {
 	protected $params = array('a' => 3, 'c' => 2, 'm' => 1);
 	protected $_init = false;
 	protected $base = null;
+	protected $origialBase = null;
 	protected $scheme = 'http://';
-	protected $default = array('m' => 'default', 'c' => 'index', 'a' => 'run');
 	
 	/*
 	 * (non-PHPdoc) @see WindRewriteRoute::match()
@@ -82,7 +82,7 @@ class PwRoute extends AbstractWindRoute {
 		
 		$args = $this->_matchDomain($host);
 		$_args = $this->_matchScript($script, $scriptUrl);
-		return array_merge($this->default, $args, $_args, $this->_matchPath($path, true));
+		return array_merge($this->_getDefault(), $args, $_args, $this->_matchPath($path, true));
 	}
 	
 	/*
@@ -109,7 +109,7 @@ class PwRoute extends AbstractWindRoute {
 	public function checkUrl($url) {
 		if (false === strpos($url, '://')) {
 			$appType = $this->_getAppType();
-			$base = Wekit::app()->baseUrl;
+			$base = Wekit::url()->base;
 			isset($appType['default']) && $base = $appType['default'] . $this->base;
 			$url = $base . '/' . trim($url, '/');
 		}
@@ -281,7 +281,7 @@ class PwRoute extends AbstractWindRoute {
 					if ($v['route'] == "$_m/$_c/$_a") {
 						$format = array();
 						preg_match_all('/\{(\w+)\}/', $v['format'], $matches);
-						if (empty($matches[1])) continue;
+						//if (empty($matches[1])) continue;
 						$is_fname = strpos($v['format'], '{fname}') !== false;
 						if (1 === count($matches[1]) && !$is_fname) {
 							if (!isset($_args[$matches[1][0]])) continue;
@@ -304,7 +304,7 @@ class PwRoute extends AbstractWindRoute {
 						}
 						foreach ($matches[1] as $code) {
 							if ($code != 'fname') {
-								$format['{' . $code . '}'] = isset($_args[$code]) ? $_args[$code] : '';
+								$format['{' . $code . '}'] = isset($_args[$code]) ? rawurlencode($_args[$code]) : '';
 								unset($_args[$code]);
 							}
 						}
@@ -370,14 +370,14 @@ class PwRoute extends AbstractWindRoute {
 										array('m' => $_m, 'c' => $_c, 'a' => $_a), $_args + $args);
 								}
 							} elseif (isset($matches['fid'])) {
-								$forums = Wekit::load('forum.PwForum')->getForumList();
+								$forum = Wekit::load('forum.PwForum')->getForum($matches['fid']);
 								$action = array(
 									'category' => array('m' => 'bbs', 'c' => 'cate', 'a' => 'run'),
 									'forum' => array('m' => 'bbs', 'c' => 'thread', 'a' => 'run'),
 									'sub' => array('m' => 'bbs', 'c' => 'thread', 'a' => 'run'),
 									'sub2' => array('m' => 'bbs', 'c' => 'thread', 'a' => 'run'),
 									);
-								$forum_type = isset($forums[$matches['fid']]['type']) ? $forums[$matches['fid']]['type'] : 'forum';
+								$forum_type = isset($forum['type']) ? $forum['type'] : 'forum';
 								return array_merge($matches, 
 										$action[$forum_type], $args);
 							}
@@ -398,7 +398,7 @@ class PwRoute extends AbstractWindRoute {
 		if ($rawDecode) return $r;
 		$return = array();
 		if (isset($r['m']) || isset($r['c']) || isset($r['a'])) {
-			$return['m'] = isset($r['m']) ? $r['m'] : 'default';
+			$return['m'] = isset($r['m']) ? $r['m'] : $this->default_m;
 			$return['c'] = isset($r['c']) ? $r['c'] : 'index';
 			$return['a'] = isset($r['a']) ? $r['a'] : 'run';
 		}
@@ -411,6 +411,11 @@ class PwRoute extends AbstractWindRoute {
 	 */
 	protected function init($build = false, $request = null) {
 		if (!$this->_init) {
+			$router = Wind::getComponent('router');
+			$this->default_m || $this->default_m = Wind::getApp()->getConfig('default-module', '', $router->getDefaultModule()); 
+			if ($this->getConfig('default')) {
+				$router->setDefaultModule($this->default_m);
+			}
 			$rule = $this->_getRule();
 			if (isset($rule['default'])) {
 				$this->rewrite_common = true;
@@ -418,7 +423,7 @@ class PwRoute extends AbstractWindRoute {
 			}
 			$rule && $this->rewrite_special = true;
 			if ($request) {
-				$this->base = $request->getBaseUrl();
+				$this->origialBase = $this->base = $request->getBaseUrl();
 				$this->scheme = $request->getScheme() . '://';
 			}
 			$this->_init = true;
@@ -547,8 +552,8 @@ class PwRoute extends AbstractWindRoute {
 	private function _getModuleDomain($_m) {
 		$appType = $this->_getAppType();
 		if (isset($appType[$_m])) return $appType[$_m] . $this->base;
-		isset($appType['default']) || $this->dynamicHost = Wekit::app()->baseUrl;
-		return isset($appType['default']) ? $appType['default'] . $this->base : '';
+		isset($appType['default']) || $this->dynamicHost = Wekit::url()->base;
+		return isset($appType['default']) ? $appType['default'] . $this->base : ($this->origialBase != $this->base ? Wekit::url()->base : '');
 	}
 
 	/**
@@ -628,6 +633,10 @@ class PwRoute extends AbstractWindRoute {
 		if ($rawpath) {
 			throw new WindException('Unable to resolve the request!', 404);
 		}
+	}
+	
+	private function _getDefault() {
+		return array('m' => $this->default_m, 'c' => 'index', 'a' => 'run');
 	}
 }
 

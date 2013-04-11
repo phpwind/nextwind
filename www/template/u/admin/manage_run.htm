@@ -24,9 +24,9 @@
 		<input type="hidden" name="page" value="{$page}">
 		<label>用户组：</label>
 		<select name="gid[]" size="5" class="mr10" multiple>
-			<option value="-1" {@Pw::isSelected(in_array(-1, $args['gid']))}>不限制</option>
+			<option value="-1" {@Pw::isSelected(Pw::inArray(-1, $args['gid']))}>不限制</option>
 			<!--#foreach($groups as $item) {#-->
-				<option value="{$item['gid']}" {@Pw::isSelected(in_array($item['gid'], $args['gid']))}>{$item['name']}</option>
+				<option value="{$item['gid']}" {@Pw::isSelected(Pw::inArray($item['gid'], $args['gid']))}>{$item['name']}</option>
 			<!--#}#-->
 		</select>
 		<label>用户名包含：</label><input name="username" type="text" class="input length_2 mr10" value="{$args['username']}">
@@ -35,6 +35,7 @@
 		<button type="submit" class="btn">搜索</button>
 		</form>
 	</div>
+		<!--# if ($list) { #-->
 	<div class="table_list">
 		<table width="100%">
 			<thead>
@@ -47,7 +48,6 @@
 					<td>操作</td>
 				</tr>
 			</thead>
-		<!--# if ($list) { #-->
 		<!--#foreach ($list as $key => $item) {#-->
 			<tr>
 				<td>{$item['uid']}</td>
@@ -60,14 +60,12 @@
 					<a href="{@url:u/forbidden/run?key=2&value=$item['username']}" title="禁止">[禁止]</a></td>
 			</tr>
 		<!--#}#-->
-		<!--# } else { #-->
-			<tbody>
-				<tr><td colspan="7" class="tac">啊哦，没有符合条件的用户！</td></tr>
-			</tbody>
-		<!--# } #-->
 		</table>
 	</div>
 	<page tpl='TPL:common.page' page='$page' count='$count' per='$perPage' url='u/manage/run' args='$args'/>
+		<!--# } else { #-->
+			<div class="not_content_mini"><i></i>啊哦，没有符合条件的用户！</div>
+		<!--# } #-->
 	
 </div>
 <template source='TPL:admin.common.footer' />

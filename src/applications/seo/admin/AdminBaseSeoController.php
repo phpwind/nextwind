@@ -1,5 +1,5 @@
 <?php
-Wind::import('APPS:admin.library.AdminBaseController');
+Wind::import('ADMIN:library.AdminBaseController');
 Wind::import('SRV:seo.dm.PwSeoDm');
 /**
  * seo模式的基础controller

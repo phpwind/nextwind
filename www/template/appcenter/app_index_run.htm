@@ -15,24 +15,20 @@
 			<div class="main_body">
 				<div class="main_content">
 					<div class="box_wrap app_page">
-						<div class="hd">
-							<h2>应用中心</h2>
-						</div>
+						<h2 class="box_title">应用中心</h2>
 						<div class="ct">
-							<!--无搜索动作的话search_num这组代码要隐藏掉-->
-							<div class="search_num" style="display:none;">有关"<span class="org">单词学院</span>"的应用共<span class="org">{$searchCount}</span>个</div>
 							<ul class="cc">
 							<!--# foreach ($apps as $k => $app) {
 							if(strpos($app['logo'], '://') === false){
-$app['logo'] = Wekit::app()->extres . '/' . $app['alias'] . '/' . $app['logo'];
+$app['logo'] = Wekit::url()->extres . '/' . $app['alias'] . '/' . $app['logo'];
 }
 							 #-->
  								<li>
-									<a href="{$app['url']}"><img src="{$app['logo']}" onerror="this.onerror=null;this.src='{@G:url.images}/admin/yy.png'" width="80" height="80" class="img" alt="{$app['name']}" /></a>
+									<a href="{$app['url']}" class="app_icon"><b></b><img src="{$app['logo']}" onerror="this.onerror=null;this.src='{@G:url.images}/admin/yy.png'" width="80" height="80" alt="{$app['name']}" /></a>
 									<div>
 										<h3 class="title"><a href="{$app['url']}">{$app['name']}</a></h3>
-										<p>{$app['desc']}</p>
-										<a href="{$app['url']}" class="in">进入<em>&gt;&gt;</em></a>
+										<p class="s6">{$app['desc']}</p>
+										<a href="{$app['url']}" class="in gray">进入<em>&gt;&gt;</em></a>
 									</div>
 								</li>
 								<!--# } #-->

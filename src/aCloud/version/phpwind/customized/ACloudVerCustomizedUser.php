@@ -24,7 +24,7 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	public function getByUid($uid) {
 		$uid = intval ( $uid );
 		if ($uid < 1)
-			return $this->buildResponse ( USER_INVALID_PARAMS );
+			return $this->buildResponse ( USER_INVALID_PARAMS,"参数错误");
 		$userInfo = $this->getUser ()->getUserByUid ( $uid, PwUser::FETCH_ALL );
 		$groupId = ($userInfo['groupid'] == 0) ? $userInfo['memberid'] : $userInfo['groupid'];
 		$group = $this->getUserGroup()->getGroupByGid($groupId);
@@ -43,7 +43,7 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	public function getByName($username) {
 		$username = trim ( $username );
 		if (! $username)
-			return $this->buildResponse ( USER_INVALID_USERNAME );
+			return $this->buildResponse ( USER_INVALID_USERNAME,"参数错误" );
 		$userInfo = $this->getUser ()->getUserByName ( trim ( $username ), PwUser::FETCH_ALL );
 		if ($userInfo instanceof PwError)
 			return $this->buildResponse ( - 1, $userInfo->getError () );
@@ -57,9 +57,9 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	
 	public function updateIcon($uid) {
 		$userBo = Wekit::getLoginUser();
-		if($userBo->uid != $uid) return $this->buildResponse ( USER_NOT_LOGIN );
+		if($userBo->uid != $uid) return $this->buildResponse ( USER_NOT_LOGIN,"用户未登录" );
 		Wind::import('SRV:upload.action.PwAvatarUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwAvatarUpload($userBo);
 		
 		$upload = new PwUpload($bhv);
@@ -68,7 +68,7 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 			$result = $upload->execute();
 		}
 		if ($result !== true) {
-			return $this->buildResponse ( - 1, USER_UPDATE_ERROR );
+			return $this->buildResponse ( USER_UPDATE_ERROR, "更新头像" );
 		} else {
 			return $this->buildResponse ( 0, '更新成功' );
 		}
@@ -83,10 +83,10 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	public function getFavoritesForumByUid($uid) {
 		$uid = intval ( $uid );
 		if ($uid < 1)
-			return $this->buildResponse ( USER_INVALID_USERNAME );
+			return $this->buildResponse ( USER_INVALID_USERNAME,"参数错误" );
 		$loginUser = Wekit::getLoginUser ();
 		if ($loginUser ['uid'] == 0)
-			return $this->buildResponse ( USER_NOT_LOGIN );
+			return $this->buildResponse ( USER_NOT_LOGIN,"用户未登录" );
 		$result = $this->getForumUser ()->getFroumByUid ( $uid );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );
@@ -113,12 +113,12 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	public function addFavoritesForumByUid($uid, $fid) {
 		list ( $uid, $fid ) = array (intval ( $uid ), intval ( $fid ) );
 		if ($fid < 1 || $uid < 1)
-			return $this->buildResponse ( USER_INVALID_PARAMS );
+			return $this->buildResponse ( USER_INVALID_PARAMS,"参数错误" );
 		$loginUser = Wekit::getLoginUser ();
 		if ($loginUser ['uid'] == 0)
-			return $this->buildResponse ( USER_NOT_LOGIN );
+			return $this->buildResponse ( USER_NOT_LOGIN ,"用户未登录");
 		if ($this->getForumUser ()->get ( $uid, $fid ))
-			return $this->buildResponse ( FORUM_FAVOR_ALREADY );
+			return $this->buildResponse ( FORUM_FAVOR_ALREADY,"该版块已经收藏" );
 		$result = $this->getForumUser ()->join ( $uid, $fid );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );
@@ -136,10 +136,10 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	public function deleteFavoritesForumByUid($uid, $fid) {
 		list ( $uid, $fid ) = array (intval ( $uid ), intval ( $fid ) );
 		if ($fid < 1 || $uid < 1)
-			return $this->buildResponse ( USER_INVALID_PARAMS );
+			return $this->buildResponse ( USER_INVALID_PARAMS,"参数错误" );
 		$loginUser = Wekit::getLoginUser ();
 		if ($loginUser ['uid'] == 0)
-			return $this->buildResponse ( USER_NOT_LOGIN );
+			return $this->buildResponse ( USER_NOT_LOGIN ,"用户未登录");
 		$result = $this->getForumUser ()->quit ( $uid, $fid );
 		if ($result instanceof PwError)
 			return $this->buildResponse ( - 1, $result->getError () );
@@ -157,7 +157,7 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	public function userLogin($username, $password) {
 		list ( $username, $password ) = array (trim ( $username ), trim ( $password ) );
 		if (empty ( $username ) || empty ( $password ))
-			return $this->buildResponse ( USER_INVALID_PARAMS );
+			return $this->buildResponse ( USER_INVALID_PARAMS ,"参数错误");
 		$ip = Wind::getApp ()->getRequest ()->getClientIp ();
 		$result = $this->getLoginService ()->login ( $username, $password, $ip );
 		if ($result instanceof PwError)
@@ -172,9 +172,9 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	 */
 	public function userRegister($username, $password, $email) {
 		if (! trim ( $username ))
-			return $this->buildResponse ( USER_INVALID_USERNAME );
+			return $this->buildResponse ( USER_INVALID_USERNAME,"参数错误" );
 		if (! $password || ! $email || WindValidator::isEmail ( $email ) !== true)
-			return $this->buildResponse ( USER_INVALID_PARAMS );
+			return $this->buildResponse ( USER_INVALID_PARAMS,"参数错误" );
 		Wind::import ( 'SRV:user.srv.PwRegisterService' );
 		Wind::import ( 'SRC:service.user.dm.PwUserInfoDm' );
 		
@@ -203,12 +203,12 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 	public function updateEmail($uid, $email) {
 		$uid = intval ( $uid );
 		if ($uid < 1)
-			return $this->buildResponse ( USER_INVALID_PARAMS );
+			return $this->buildResponse ( USER_INVALID_PARAMS ,"参数错误");
 		$loginUser = Wekit::getLoginUser ();
 		if ($loginUser ['uid'] == 0)
-			return $this->buildResponse ( USER_NOT_LOGIN );
+			return $this->buildResponse ( USER_NOT_LOGIN ,"用户未登录");
 		if (! $email || WindValidator::isEmail ( $email ) !== true)
-			return $this->buildResponse ( USER_INVALID_PARAMS );
+			return $this->buildResponse ( USER_INVALID_PARAMS,"参数错误" );
 		
 		Wind::import ( 'SRC:service.user.dm.PwUserInfoDm' );
 		$userDm = new PwUserInfoDm ($uid);
@@ -233,6 +233,8 @@ class ACloudVerCustomizedUser extends ACloudVerCustomizedBase {
 		$result ['isfollowed'] = ($isFollowed == true) ? 1 : 0;
 		$result ['replycount'] = $userInfo ['postnum'] - $subjectNum ;
 		$result ['favorcount'] = 0; //个人收藏数
+		$result ['messages'] = $userInfo['messages'];
+		$result ['notices'] = $userInfo['notices'];
 		$result ['weibo'] = $this->getWeiboInfo ( $userInfo ['uid'], $userInfo ['fans'], $userInfo ['follows'] );
 		return $result;
 	}

@@ -3,16 +3,15 @@
 <head>
 <template source='TPL:admin.common.head' />
 </head>
-<body style="width:500px" class="body_none">
-
+<body style="width:450px" class="body_none">
 	<form class="J_ajaxForm" action="{@url:tag/manage/doedit?_json=1}" method="post">
 	<input type="hidden" value="{$tag['tag_id']}" name="tag[tag_id]" />
-	<div class="pop_cont">
-		<div class="pop_table">
+	<div style="padding:0 0 15px 15px;">
+		<div class="pop_table" style="overflow-x:hidden;">
 		<table width="100%">
 			<tr>
 				<th>话题名称</th>
-				<td><input type="text" name="tag[name]" value="{$tag['tag_name']}" class="input length_5 input_hd"></td>
+				<td><span class="must_red">*</span><input type="text" name="tag[name]" value="{$tag['tag_name']}" class="input length_5 input_hd"></td>
 			</tr>
 			<tr>
 				<th>话题图片</th>

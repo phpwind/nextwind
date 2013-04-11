@@ -9,20 +9,18 @@ Wind::import('SRV:pay.srv.paymethod.PwPayAbstract');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwBill.php 18618 2012-09-24 09:31:00Z jieyin $
+ * @version $Id: PwBill.php 24975 2013-02-27 09:24:54Z jieyin $
  * @package forum
  */
 
 class PwBill extends PwPayAbstract {
-	
-	public $charset = 'utf-8';
-	public $baseurl;
-	
+		
 	public $bill;
 	public $bill_url = 'https://www.99bill.com/gateway/recvMerchantInfoAction.htm?';
 	public $bill_key;
 
 	public function __construct() {
+		parent::__construct();
 		$config = Wekit::C('pay');
 		$this->bill = $config['99bill'];
 		$this->bill_key = $config['99billkey'];

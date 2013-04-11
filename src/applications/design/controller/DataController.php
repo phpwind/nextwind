@@ -5,7 +5,7 @@ Wind::import('APPS:design.controller.DesignBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: DataController.php 21978 2012-12-17 12:34:07Z gao.wanggao $ 
+ * @version $Id: DataController.php 24487 2013-01-31 02:50:53Z gao.wanggao $ 
  * @package 
  */
 class DataController extends DesignBaseController{
@@ -136,10 +136,14 @@ class DataController extends DesignBaseController{
 		$underline = $this->getInput('underline', 'post');
 		$color = $this->getInput('color', 'post');
 		$standard = $this->_getDesignService()->getStandardSignkey($this->bo->getModel());
-		if (!$data[$standard['sTitle']]) $this->showError("operate.fail");	
+		if (!$data[$standard['sTitle']]) $this->showError("operate.fail");
+		$imageSrv = Wekit::load('design.srv.PwDesignImage');	
 		foreach ((array)$images AS $k=>$v) {
 			if ($_FILES[$k]['name'] && $image = $this->_uploadFile($k, $this->bo->moduleid)){
 				$data[$k] = $image;
+				$extend = unserialize($info['extend_info']);
+				$delImages = $extend['standard_image'];
+				$imageSrv->clearFiles($this->bo->moduleid,  explode('|||', $delImages));
 			} else {
 				$data[$k] = $v;
 			}
@@ -368,7 +372,7 @@ class DataController extends DesignBaseController{
 	
 	private function _uploadFile($key, $moduleid = 0) {
  		Wind::import('SRV:upload.action.PwDesignDataUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwDesignDataUpload($key, $moduleid);
 		$upload = new PwUpload($bhv);
 		if (($result = $upload->check()) === true) $result = $upload->execute();

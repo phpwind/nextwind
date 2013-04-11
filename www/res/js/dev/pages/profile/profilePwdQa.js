@@ -11,10 +11,12 @@
 	var new_pwd = $('#J_newPwd'),
 			old_pwd = $("#J_old_pwd"),
 			tip_new_pwd = $('#J_tip_newPwd'),
-			pw_edit = $("#J_pw_edit");
+			pw_edit = $("#J_pw_edit"),
+			btn = pw_edit.find('button:submit');
 		
 	//聚焦时默认提示
 	var focus_tips = {
+		passwd: '请输入原密码',
 		oldPwd : '请输入原密码',
 		newPwd : new_pwd.data('tips'),
 		rePwd : '请再输入一遍您上面填写的密码',
@@ -39,12 +41,35 @@
 			$('#J_tip_'+ element[0].name).html(error);
 		},
 		errorElement: 'span',
-		//onkeyup : true,
 		errorClass : 'tips_icon_error',
 		validClass		: 'tips_icon_success',
 		onkeyup : false,
 		focusInvalid : false,
 		rules: {
+			passwd: {
+				required	: true/*,
+				remote : {
+					url : old_pwd.data('checkurl'),
+					type : 'post',
+					dataType: "json",
+					data : {
+						pwd :  function(){
+							return old_pwd.val();
+						}
+					},
+					complete: function(jqXHR){
+						if(jqXHR.status == '200') {
+							var data = $.parseJSON(jqXHR.responseText);
+							if(data.state == 'fail' && data.referer) {
+								//尝试过多
+								setTimeout(function(){
+									location.href = data.referer;
+								}, 1000);
+							}
+						}
+					}
+				}*/
+			},
 			oldPwd: {
 				required	: true,
 				remote : {
@@ -54,6 +79,17 @@
 					data : {
 						pwd :  function(){
 							return old_pwd.val();
+						}
+					},
+					complete: function(jqXHR){
+						if(jqXHR.status == '200') {
+							var data = $.parseJSON(jqXHR.responseText);
+							if(data.state == 'fail' && data.referer) {
+								//尝试过多
+								setTimeout(function(){
+									location.href = data.referer;
+								}, 1000);
+							}
 						}
 					}
 				}
@@ -144,6 +180,9 @@
 			
 		},
 		messages: {
+			passwd: {
+				required	: '登录密码不能为空'
+			},
 			oldPwd : {
 				required	: '登录密码不能为空',
 				remote : '原密码错误' //ajax验证默认提示
@@ -171,17 +210,23 @@
 		submitHandler:function(form) {
 			$(form).ajaxSubmit({
 				dataType : 'json',
+				beforeSubmit: function(){
+					Wind.Util.ajaxBtnDisable(btn);
+				},
 				success : function(data){
+					Wind.Util.ajaxBtnEnable(btn);
 					if(data.state === 'success') {
-						Wind.Util.resultTip({
+						Wind.Util.formBtnTips({
 							msg : data.message,
+							wrap: btn.parent(),
 							callback : function(){
 								window.location.href = data.referer;
 							}
 						});
 					}else if(data.state === 'fail'){
-						Wind.Util.resultTip({
+						Wind.Util.formBtnTips({
 							error : true,
+							wrap: btn.parent(),
 							msg : data.message
 						});
 					}

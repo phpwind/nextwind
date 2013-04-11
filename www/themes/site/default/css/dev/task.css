@@ -3,7 +3,7 @@
 @explain: 任务
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: task.css 20377 2012-10-29 02:19:33Z yanchixia $
+$Id: task.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 #*/
 
@@ -18,7 +18,7 @@ $Id: task.css 20377 2012-10-29 02:19:33Z yanchixia $
 	padding:0 0 50px;
 }
 .task_list{
-	padding:0 15px 15px;
+	padding:0 0 15px;
 }
 .task_list dl{
 	border-bottom:1px dotted #e4e4e4;

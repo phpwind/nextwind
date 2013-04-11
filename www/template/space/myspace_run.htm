@@ -202,7 +202,7 @@
 	display:block;
 	line-height:20px;
 	text-indent:25px;
-	background:url({@theme:site.images}/common/thumb_up.png) no-repeat;
+	background:url({@G:url.images}/portal/thumb_up.png) no-repeat;
 	filter:alpha(opacity=80);
 	-moz-opacity:0.8;
 	opacity:0.8;
@@ -287,7 +287,7 @@
 						<ul class="cc" id="J_temp_list" style="position:relative;width:458px;">
 				<!--# 
 					$i = 0;
-					foreach($list AS $value):
+					foreach($list AS $value){
 				#-->
 					<!--# 
 						$class = ($space->space['space_style'] == $value['alias']) ? 'current' : '';
@@ -300,31 +300,33 @@
 						
 					#-->
 							<li class="{$class}">
-					<!--# if ($i < $perpage): #-->
+					<!--# if ($i < $perpage){ #-->
 							<a data-id="{$value['app_id']}" href="{@url:space/index/demo?id=$value['app_id']&uid=$space->spaceUid}"><img src="{$img}" alt="{$value['name']}" title="{$value['name']}" /></a>
-					<!--# else: #-->
+					<!--# }else{ #-->
 							<a data-id="{$value['app_id']}" href="{@url:space/index/demo?id=$value['app_id']&uid=$space->spaceUid}"><img data-src="{$img}" alt="{$value['name']}" title="{$value['name']}" /></a>
-					<!--# endif; #-->
+					<!--# } #-->
 							</li>
 				<!--#
 					$i++;
-					endforeach;
+					}
 				#-->
 						
 						</ul>
 					</div>
 				</div>
+				<!--# if ($totalpage > 1){ #-->
 				<div class="space_themes_pages">
 					<a href="" class="pre J_temp_pn" data-role="prev">上一页</a><span id="J_temp_page">
 					<!--# for($p = 1; $p <= $totalpage; $p ++){ #-->
-						<!--# if ($p == 1): #-->
+						<!--# if ($p == 1){ #-->
 							<a href="" class="current">{$p}</a>
-						<!--# else: #-->
+						<!--# }else{ #-->
 							<a href="">{$p}</a>
-						<!--# endif; #-->
+						<!--# } #-->
 					<!--# } #-->
 					</span><a href="" class="next J_temp_pn" data-role="next">下一页</a>
 				</div>
+				<!--# } #-->
 			</div>
 			<div class="pop_bottom">
 				<button type="submit" class="btn btn_submit">保存</button>
@@ -345,11 +347,11 @@
 						<dd>
 							<!--[if gt IE 9]><!-->
 							<div class="thumb_img" style="">
-								<!--# if ($image) :#-->
+								<!--# if ($image){ #-->
 								<img src="{@G:url.attach}/{$image}" id="J_space_bg_preview" width="160" height="100" alt="" class="J_previewImg" />
-								<!--# else: #-->
+								<!--# }else{ #-->
 								<img src="{@G:url.res}/images/blank.gif" id="J_space_bg_preview" width="160" height="100" alt="" class="J_previewImg" />
-								<!--# endif; #-->
+								<!--# } #-->
 								<input type="hidden" name="background" value="{$image}" id="J_space_bg_saved">
 							</div>
 							<div class="fl" style="width:200px;">

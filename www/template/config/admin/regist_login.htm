@@ -23,10 +23,10 @@
 				<th>用户登录方式</th>
 				<td>
 					<ul class="three_list cc">
-						<li><label><input type="checkbox" value="1" name="ways[]" {@Pw::ifcheck(in_array(1, $config['ways']))}>UID</label></li>
-						<li><label><input type="checkbox" value="2" name="ways[]" {@Pw::ifcheck(in_array(2, $config['ways']))}>电子邮箱</label></li>
-						<li><label><input type="checkbox" value="3" name="ways[]" {@Pw::ifcheck(in_array(3, $config['ways']))}>用户名</label></li>
-						<li><label><input type="checkbox" value="4" name="ways[]" {@Pw::ifcheck(in_array(4, $config['ways']))}>手机号码</label></li>
+						<li><label><input type="checkbox" value="1" name="ways[]" {@Pw::ifcheck(Pw::inArray(1, $config['ways']))}><span>UID</span></label></li>
+						<li><label><input type="checkbox" value="2" name="ways[]" {@Pw::ifcheck(Pw::inArray(2, $config['ways']))}><span>电子邮箱</span></label></li>
+						<li><label><input type="checkbox" value="3" name="ways[]" {@Pw::ifcheck(Pw::inArray(3, $config['ways']))}><span>用户名</span></label></li>
+						<li><label><input type="checkbox" value="4" name="ways[]" {@Pw::ifcheck(Pw::inArray(4, $config['ways']))}><span>手机号码</span></label></li>
 					</ul>
 				</td>
 				<td><div class="fun_tips">请至少选定一种用户登录方式。</div></td>
@@ -35,18 +35,19 @@
 				<th>强制使用安全问题</th>
 				<td>
 					<div class="user_group J_check_wrap">
-<!--#foreach($groupTypes as $type => $typeName): #-->
+<!--#foreach($groupTypes as $type => $typeName){ #-->
 						<dl>
 							<dt><label><input type="checkbox" data-direction="y" data-checklist="J_check_{$type}" class="checkbox J_check_all" />{$typeName}</label></dt>
 							<dd>
-<!--#foreach($groups as $group): 
-	if($group['type'] == $type):
-	$checked = in_array($group['gid'],$config['question.groups']);#-->
+<!--#foreach($groups as $group){ 
+	if($group['type'] == $type){
+	$checked = Pw::inArray($group['gid'],$config['question.groups']);#-->
 								<label><input class="J_check" data-yid="J_check_{$type}" type="checkbox" name="questionGroups[]" value="{$group['gid']}"{@Pw::ifcheck($checked)} /><span>{$group['name']}</span></label>
-<!--#endif;endforeach; #-->
+<!--# } #-->
+<!--# } #-->
 							</dd>
 						</dl>
-<!--#endforeach; #-->
+<!--# } #-->
 					</div>
 				</td>
 				<td><div class="fun_tips">可以强制管理权限较高的用户组(如:管理员,总版主,版主)使用安全问题，可提高密码安全性</div></td>

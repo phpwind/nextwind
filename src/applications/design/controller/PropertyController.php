@@ -5,7 +5,7 @@ Wind::import('LIB:base.PwBaseController');
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PropertyController.php 23193 2013-01-07 03:32:13Z gao.wanggao $ 
+ * @version $Id: PropertyController.php 24726 2013-02-18 06:15:04Z gao.wanggao $ 
  * @package 
  */
 class PropertyController extends PwBaseController{
@@ -67,10 +67,7 @@ class PropertyController extends PwBaseController{
 		$cls = sprintf('PwDesign%sDataService', ucwords($model));
 		Wind::import('SRV:design.srv.model.'.$model.'.'.$cls);
 		$service = new $cls();
-		if (method_exists($service, 'decorateSaveProperty')) {
-			$property = $service->decorateSaveProperty($property);
-			if ($property  instanceof PwError ) $this->showError($property->getError());
-		}
+		
 		
 		$ds = $this->_getModuleDs();
 		Wind::import('SRV:design.dm.PwDesignModuleDm');
@@ -79,13 +76,21 @@ class PropertyController extends PwBaseController{
  			->setStruct($struct)
  			->setFlag($model)
 			->setName($name)
-			->setProperty($property)
 			->setCache($cache)
 			->setModuleType(PwDesignModule::TYPE_DRAG)
 			->setIsused(1);
-		if ($property['html_tpl']) $dm->setModuleTpl($property['html_tpl']);
 		$resource = $ds->addModule($dm);
 		if ($resource instanceof PwError) $this->showError($resource->getError());
+		
+		$dm = new PwDesignModuleDm($resource);
+		if (method_exists($service, 'decorateSaveProperty')) {
+			$property = $service->decorateSaveProperty($property, $resource);
+			if ($property  instanceof PwError ) $this->showError($property->getError());
+		}
+		$dm->setProperty($property);
+		if ($property['html_tpl']) $dm->setModuleTpl($property['html_tpl']);
+		$r = $ds->updateModule($dm);
+		if ($r instanceof PwError) $this->showError($r->getError());
 		
 		Wind::import('SRV:design.srv.data.PwAutoData');
 		$srv = new PwAutoData($resource);
@@ -175,7 +180,7 @@ class PropertyController extends PwBaseController{
 		Wind::import('SRV:design.srv.model.'.$model.'.'.$cls);
 		$service = new $cls();
 		if (method_exists($service, 'decorateSaveProperty')) {
-			$property = $service->decorateSaveProperty($property);
+			$property = $service->decorateSaveProperty($property, $moduleid);
 			if ($property  instanceof PwError ) $this->showError($property->getError());
 		}
 		Wind::import('SRV:design.dm.PwDesignModuleDm');
@@ -229,6 +234,8 @@ class PropertyController extends PwBaseController{
 			$tmp = preg_replace('/\<pw-list\s*id=\"'.$moduleid.'\"\s*>(.+)<\/pw-list>/isU','', $content);
 			if ($tmp != $content) WindFile::write($filePath, $tmp);
 		}
+		$imageSrv = Wekit::load('design.srv.PwDesignImage');
+		$imageSrv->clearFolder($moduleid);
 		$this->showMessage("operate.success");
 	}
 	

@@ -40,8 +40,8 @@ class HomeController extends AdminBaseController {
 	 * 获取升级信息通知
 	 */
 	public function noticeAction() {
-		$notice = Wekit::load('APPS:appcenter.service.srv.PwSystemInstallation')->getNotice(
-			$this->adminUser);
+		$notice = Wekit::load('APPCENTER:service.srv.PwSystemInstallation')->getNotice(
+			$this->loginUser);
 		$this->setOutput($notice, 'data');
 		$this->showMessage('success');
 	}

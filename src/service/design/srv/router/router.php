@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: router.php 23207 2013-01-07 05:09:28Z gao.wanggao $ 
+ * @version $Id: router.php 23472 2013-01-10 04:08:29Z gao.wanggao $ 
  * @package 
  */
 return array(
@@ -13,10 +13,10 @@ return array(
 			'bbs/thread/run'	=>array('版块列表页', 'fid'),
 			'bbs/index/run'		=>array('论坛新贴'),
 			'bbs/cate/run'		=>array('论坛分类页', 'fid'),
-			'bbs/cate/digest'	=>array('版块精华', 'fid'),
+			//'bbs/thread/run/digest'	=>array('版块精华', 'fid'),
 			'bbs/forum/my'		=>array('我的版块页'),
 			'bbs/forum/list'	=>array('版块列表页'),
-			'bbs/fresh/run'		=>array('我的关注'),
+			'my/fresh/run'		=>array('我的关注'),
 			'bbs/forumlist/run' =>array('版块列表首页'),
 			'special/index/run'	=>array('', 'id'),
 			'like/like/run'		=>array('热门喜欢'),

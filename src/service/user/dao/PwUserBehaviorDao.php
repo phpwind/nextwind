@@ -3,7 +3,7 @@
  * @author Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwUserBehaviorDao.php 23205 2013-01-07 04:57:31Z jinlong.panjl $ 
+ * @version $Id: PwUserBehaviorDao.php 23501 2013-01-10 06:53:26Z jinlong.panjl $ 
  * @package 
  */
 class PwUserBehaviorDao extends PwBaseDao {
@@ -16,7 +16,7 @@ class PwUserBehaviorDao extends PwBaseDao {
 		return $smt->getOne(array($uid, $behavior));
 	}
 	
-	public function fecthInfo($uids) {
+	public function fetchInfo($uids) {
 		$sql = $this->_bindSql('SELECT * FROM %s WHERE uid IN  %s ', $this->getTable(), $this->sqlImplode($uids));
 		$smt = $this->getConnection()->createStatement($sql);
 		return $smt->queryAll(array());

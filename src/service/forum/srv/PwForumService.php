@@ -10,7 +10,7 @@ Wind::import('SRV:forum.PwForum');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: PwForumService.php 23312 2013-01-08 07:59:39Z jieyin $
+ * @version $Id: PwForumService.php 24758 2013-02-20 06:55:42Z jieyin $
  * @package forum
  */
 
@@ -50,13 +50,17 @@ class PwForumService {
 	 * 获取用户所有禁止访问的版块列表
 	 *
 	 * @param PwUserBo $user
+	 * @param array $forums 版块列表
+	 * @param bool $includeHide 是否包含隐藏版块
 	 * @return array
 	 */
-	public function getForbidVisitForum(PwUserBo $user, $forums = null) {
+	public function getForbidVisitForum(PwUserBo $user, $forums = null, $includeHide = false) {
 		$forums === null && $forums = $this->getForumList();
 		$fids = array();
 		foreach ($forums as $key => $value) {
 			if ($value['allow_visit'] && !$user->inGroup(explode(',', $value['allow_visit']))) {
+				$fids[] = $value['fid'];
+			} elseif ($includeHide && $value['isshow'] == 0) {
 				$fids[] = $value['fid'];
 			}
 		}

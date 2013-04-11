@@ -5,7 +5,7 @@
  * @author Qiong Wu <papa0924@gmail.com> 2011-11-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: AdminAuthService.php 22325 2012-12-21 08:36:29Z yishuo $
+ * @version $Id: AdminAuthService.php 24805 2013-02-21 09:14:12Z jieyin $
  * @package admin
  * @subpackage service.srv
  */
@@ -46,6 +46,49 @@ class AdminAuthService {
 		if ($result instanceof PwError) return $result;
 		$this->getAdminUserService()->loadUserService()->updateUserStatus($userInfo['uid'], true);
 		return $result;
+	}
+
+	/**
+	 * 编辑用户权限
+	 *
+	 * @param int $id
+	 * @param array $roles
+	 */
+	public function edit($id, $roles) {
+		if (!$id) return new PwError('ADMIN:auth.edit.fail.id.illegal');
+		if (!$roles) return new PwError('ADMIN:auth.add.fail.role.empty');
+		$auth = $this->_loadAuthService()->findById($id);
+		if (empty($auth)) return new PwError('ADMIN:auth.edit.fail');
+		$user = $this->getAdminUserService()->getUserByUids($auth['uid']);
+		if (empty($user)) return new PwError('ADMIN:auth.edit.fail.user.exist');
+		return $this->_loadAuthService()->edit($id, $user['username'], $roles);
+	}
+
+	/**
+	 * 获取用户权限列表
+	 *
+	 * @param int $page
+	 * @param int $perpage
+	 * @return array|PwError
+	 */
+	public function fetchByPage($page, $perpage) {
+		list($count, $list, $page) = $this->_loadAuthService()->findByPage($page, $perpage);
+		$uids = Pw::collectByKey($list, 'uid');
+		$users = $this->getAdminUserService()->getUserByUids($uids);
+		foreach ($list as $key => $value) {
+			if (isset($users[$value['uid']])) {
+				$value['username'] = $users[$value['uid']]['username'];
+			}
+			$list[$key] = $value;
+		}
+		return array($count, $list, $page);
+	}
+
+	/**
+	 * @return AdminAuth
+	 */
+	private function _loadAuthService() {
+		return Wekit::load('ADMIN:service.AdminAuth');
 	}
 
 	/**

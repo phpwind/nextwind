@@ -8,7 +8,7 @@ Wind::import('SRV:user.PwUserBan');
  * @author xiaoxia.xu <x_824@sina.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ForbiddenController.php 22264 2012-12-21 02:33:07Z xiaoxia.xuxx $
+ * @version $Id: ForbiddenController.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package src.products.u.admin
  */
 class ForbiddenController extends AdminBaseController {
@@ -30,13 +30,13 @@ class ForbiddenController extends AdminBaseController {
 		$key = $this->getInput('key', 'post');
 		if (!in_array($key, array('1', '2'))) $this->showError('USER:ban.error.data.format');
 		$array = array();
-		list($end_time, $reason, $ban_others, $types) = $this->getInput(array('end_time', 'reason', 'ban_others', 'type'), 'post');
+		list($end_time, $reason, $types) = $this->getInput(array('end_time', 'reason', 'type'), 'post');
 		$userInfos = $this->_getUids(explode(',', $this->getInput('value', 'post')), intval($key));
 		if (!$userInfos) $this->showError('USER:ban.user.illegal');
 
 		//如果是创始人  则自动设置为system
-		$_uid = $this->adminUser->getUid();
-		$_operator = $this->adminUser->getUsername();
+		$_uid = $this->loginUser->uid;
+		$_operator = $this->loginUser->username;
 		if ($this->isFounder($_operator)) {
 			$_operator = 'system';
 			$_uid = 0;
@@ -54,7 +54,6 @@ class ForbiddenController extends AdminBaseController {
 					->setEndTime(intval($end_time))
 					->setTypeid($type)
 					->setReason($reason)
-					->setBanAllAccount($ban_others)
 					->setOperator($_operator)
 					->setCreatedUid($_uid);
 				$array[] = $dm;
@@ -78,11 +77,9 @@ class ForbiddenController extends AdminBaseController {
 	 * 自动禁止设置
 	 */
 	public function autoAction() {
-		/* @var $service PwConfig  */
-		$service = Wekit::load('config.PwConfig');
-		$config = $service->getValues('site');
+		$config = Wekit::C()->getValues('site');
 		
-		$default = array('autoForbidden.open' => 0, 'autoForbidden.condition' => array('autoForbidden.credit' => 0, 'autoForbidden.num' => 0), 'autoForbidden.day' => 0, 'autoForbidden.type' => array(), 'autoForbidden.reason' => '', 'autoForbidden.ban_others' => '');
+		$default = array('autoForbidden.open' => 0, 'autoForbidden.condition' => array('autoForbidden.credit' => 0, 'autoForbidden.num' => 0), 'autoForbidden.day' => 0, 'autoForbidden.type' => array(), 'autoForbidden.reason' => '');
 		$this->setOutput(array_merge($default, $config), 'config');
 		
 		Wind::import('SRV:credit.bo.PwCreditBo');
@@ -110,7 +107,6 @@ class ForbiddenController extends AdminBaseController {
 			->set('autoForbidden.day', $this->getInput('day', 'post'))
 			->set('autoForbidden.type', $type)
 			->set('autoForbidden.reason', $reason)
-			->set('autoForbidden.ban_others', $this->getInput('ban_others'))
 			->flush();
 		$this->showMessage('USER:ban.auto.set.success', 'u/forbidden/auto');
 	}
@@ -160,7 +156,7 @@ class ForbiddenController extends AdminBaseController {
 		if ($r instanceof PwError) {
 			$this->showError($r->getError());
 		} else {
-			$_operator = $this->adminUser->getUsername();
+			$_operator = $this->loginUser->username;
 			if ($this->isFounder($_operator)) {
 				$_operator = 'system';
 			}

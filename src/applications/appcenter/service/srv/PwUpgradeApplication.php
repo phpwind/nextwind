@@ -1,12 +1,12 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.PwInstallApplication');
+Wind::import('APPCENTER:service.srv.PwInstallApplication');
 /**
  * 应用升级服务
  *
  * @author Qiong Wu <papa0924@gmail.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwUpgradeApplication.php 23309 2013-01-08 07:03:21Z long.shi $
+ * @version $Id: PwUpgradeApplication.php 25900 2013-03-26 10:35:44Z long.shi $
  * @package appcenter.service.srv
  */
 class PwUpgradeApplication extends PwInstallApplication {
@@ -74,16 +74,24 @@ class PwUpgradeApplication extends PwInstallApplication {
 	 */
 	public function doUpgrade() {
 		$this->backUp();
-		list($service) = $this->resolvedInstallation();
-		foreach ($service as $key => $var) {
-			if (!isset($var['class'])) continue;
-			$_install = Wekit::load($var['class']);
-			if (!$_install instanceof iPwInstall) return new PwError('APPCENTER:install.classtype');
-			$_m = empty($var['method']) ? 'install' : $var['method'];
-			$r = $_install->$_m($this);
-			if ($r instanceof PwError) return $r;
+		try {
+			list($service) = $this->resolvedInstallation();
+			foreach ($service as $key => $var) {
+				if (!isset($var['class'])) continue;
+				$_install = Wekit::load($var['class']);
+				if (!$_install instanceof iPwInstall) return new PwError('APPCENTER:install.classtype');
+				$_m = empty($var['method']) ? 'install' : $var['method'];
+				$r = $_install->$_m($this);
+				if ($r instanceof PwError) return $r;
+			}
+			$this->log();
+		} catch (Exception $e) {
+			$error = $e->getMessage();
+			is_array($error) || $error = array(
+				'APPCENTER:install.fail', 
+				array('{{error}}' => $e->getMessage()));
+			return new PwError($error[0], $error[1]);
 		}
-		$this->log();
 		return true;
 	}
 	
@@ -123,7 +131,7 @@ class PwUpgradeApplication extends PwInstallApplication {
 		$manifest = $this->getManifest()->getManifest();
 		if (isset($manifest['install']) && $manifest['install']) {
 			$_tmp = array('class' => $manifest['install']);
-			$service[] = $_tmp;
+			//$service[] = $_tmp;
 			$this->addInstallLog('service', $_tmp);
 		}
 		
@@ -246,7 +254,7 @@ class PwUpgradeApplication extends PwInstallApplication {
 	 * @return PwApplicationLog
 	 */
 	private function _loadInstallLog() {
-		return Wekit::load('APPS:appcenter.service.PwApplicationLog');
+		return Wekit::load('APPCENTER:service.PwApplicationLog');
 	}
 }
 

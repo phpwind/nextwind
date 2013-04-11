@@ -4,7 +4,7 @@
  * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwPortalCompile.php 23177 2013-01-07 02:33:11Z gao.wanggao $ 
+ * @version $Id: PwPortalCompile.php 24221 2013-01-23 04:05:43Z gao.wanggao $ 
  * @package 
  */
 class PwPortalCompile {
@@ -39,14 +39,13 @@ class PwPortalCompile {
 		$content = $this->compileDesign($content);
 		
 		if ($content === false) {
-			return true;
+			$compileStr;
 		}
-		
-		if (preg_match('/\<pw-start\/>(.+)<pw-end\/>/isU', $content, $matches)) {
+		/*if (preg_match('/\<pw-start\/>(.+)<pw-end\/>/isU', $content, $matches)) {
 			if ($matches[0]) {
 				$compileStr = $matches[0]; 
 			} 
-		}
+		}*/
 		//$content = preg_replace('/\<pw-start\/>(.+)<pw-end\/>/isU', $compileStr, $content);
 		if ($this->isCompile) $this->write($content, $file);
 		return $compileStr;
@@ -159,7 +158,7 @@ class PwPortalCompile {
 		if (preg_match_all('/\<pw-title\s*id=\"(\w+)\"\s*[>|\/>](.+)<\/pw-title>/isU',$content, $matches)) {
     		foreach ($matches[1] AS $k=>$v) {
     			if ($v != $name) continue;
-	    		$_html = '<pw-title id="'.$name.'">'.$repace.'</pw-list>';
+	    		$_html = '<pw-title id="'.$name.'">'.$repace.'</pw-title>';
 	    		$content = str_replace($matches[0][$k], $_html, $content);
     		}
     	}
@@ -232,8 +231,10 @@ class PwPortalCompile {
 			Wind::import('SRV:design.dm.PwDesignModuleDm');
 			$ds = Wekit::load('design.PwDesignModule');
 			foreach ($matches[1] AS $k=>$v) {
+				//$limit = $this->compileFor($matches[2][$k]);
 	    		$dm = new PwDesignModuleDm($v);
 	    		$dm->setModuleTpl($matches[2][$k]);
+	    		 // ->setProperty(array('limit' => $limit));
 	    		$ds->updateModule($dm);
     		}
 		}
@@ -248,6 +249,7 @@ class PwPortalCompile {
     	if (preg_match_all('/\<pw-list[>|\/>](.+)<\/pw-list>/isU',$section, $matches)) {
     		foreach ($matches[1] AS $k=>$v) {
     			$v = str_replace("	",'', trim($v));
+    			$limit = $this->compileFor($v);
 	    		$name = 'section_' . $this->getRand(6);
 	    		$dm = new PwDesignModuleDm();
 	    		$dm->setPageId($this->pageid)
@@ -256,7 +258,8 @@ class PwPortalCompile {
 	    			->setName($name)
 	    			->setModuleTpl($v)
 	    			->setModuleType(PwDesignModule::TYPE_IMPORT)
-	    			->setIsused(1);
+	    			->setIsused(1)
+	    			->setProperty(array('limit' => $limit));
 	    		$moduleId = $ds->addModule($dm);
 	    		if ($moduleId instanceof PwError)  continue;
 	    		$_html = '<pw-list id="'.$moduleId.'">\\1</pw-list>';
@@ -298,6 +301,18 @@ class PwPortalCompile {
     		$this->isCompile = true;
 		}
 		return $section;
+	}
+	
+	/**
+	 * 对<for:1>进行解析
+	 * Enter description here ...
+	 */
+	protected function compileFor($section) {
+		$limit = 0;
+		if(preg_match('/\<for:(\d+)>/isU', $section, $matches)) {
+			$limit = (int)$matches[1];
+		}
+		return $limit;
 	}
 	
 	protected function getRand($length) {

@@ -6,14 +6,14 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindidUserSearchDao.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidUserSearchDao.php 23820 2013-01-16 06:14:07Z jieyin $
  * @package service.user.dao
  */
 class WindidUserSearchDao extends WindidBaseDao {
 
-	protected $_table = 'windid_user';
-	protected $_dataTable = 'windid_user_data';
-	protected $_infoTable = 'windid_user_info';
+	protected $_table = 'user';
+	protected $_dataTable = 'user_data';
+	protected $_infoTable = 'user_info';
 	
 	/**
 	 * 根据查询条件查询用户数据

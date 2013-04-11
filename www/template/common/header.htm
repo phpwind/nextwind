@@ -4,7 +4,7 @@
 <header class="header_wrap">
 	<div id="J_header" class="header cc">
 		<div class="logo">
-			<a href="{@url:index/run}">
+			<a href="{@url:}">
 				<!--# if($__css = Wekit::C('site', 'css.logo')) { #-->
 				<!--后台logo上传-->
 				<img src="{@Pw::getPath($__css)}" alt="{@Wekit::C('site','info.name')}">
@@ -22,7 +22,7 @@
 		   $main = $child = array();
 		  if ($nav->isForum()) $nav->setForum($pwforum->foruminfo['parentid'], $fid, $tid);
 		  $main = $nav->getNavFromConfig('main', true);
-		  foreach($main as $key=>$value):
+		  foreach($main as $key=>$value){
 			if ($value['current']) {
 				$current = 'current';
 				$currentId = $key;
@@ -32,35 +32,35 @@
 			$value['child'] && $child[$key] = $value['child'];
 		  #-->
 					<li class="{$current}">{$value['name']|html}</li>
-	<!--# endforeach; #-->
+	<!--# } #-->
 				</ul>
 			</div>
 		</nav>
+		<hook name="header_nav"/>
 		<div class="header_search" role="search">
 			<form action="{@url:search/s/run}" method="post">
 				<input type="text" id="s" aria-label="搜索关键词" accesskey="s" placeholder="搜索其实很简单" x-webkit-speech speech name="keyword"/>
-				<button type="submit" aria-label="搜索"><img src="{@theme:site.images}/common/search.png" alt="search" /></button>
+				<button type="submit" aria-label="搜索"><span>搜索</span></button>
 			</form>
 		</div>
-		<hook name="header_nav"/>
 		<template source="TPL:common.header_login" load="true" />
 	</div>
 </header>
 <!--#
 if ($child) {
 foreach ($child as $ck => $cv) {
-	 if ($currentId == $ck):
+	 if ($currentId == $ck){
 #-->
 	<div class="nav_weak" id="{$ck}">
-<!--# else: #-->
+<!--# }else{ #-->
 	<div class="nav_weak" id="{$ck}" style="display:none">
-<!--# endif; #-->
+<!--# } #-->
 		<ul class="cc">
-			<!--# foreach($cv as $_v):
+			<!--# foreach($cv as $_v){
 				$current = $_v['current'] ? 'current' : '';
 			#-->
 			<li class="{$current}">{$_v['name']|html}</li>
-			<!--# endforeach; #-->
+			<!--# } #-->
 		</ul>
 	</div>
 <!--#}} #-->

@@ -9,22 +9,22 @@
 <!-- start -->
 <template source='nav_tab' />
 
-	<!--# if ($navType == 'main'): #-->
+	<!--# if ($navType == 'main'){ #-->
 	<div class="h_a">功能说明</div>
 	<div class="prompt_text">
 		<ul>
 			<li>“设为首页” 可以把当前页设为网站默认首页。</li>
 		</ul>
 	</div>
-	<!--# endif; #-->
-	<!--# if ($navType == 'my'): #-->
+	<!--# } #-->
+	<!--# if ($navType == 'my'){ #-->
 	<div class="h_a">功能说明</div>
 	<div class="prompt_text">
 		<ul>
-			<li>如果应用设置了开关功能，“应用标识” 设置相同的应用标识可以同时开启和关闭。</li>
+			<li>如果应用设置了开关功能， 设置相同的“应用标识”可以同时开启和关闭。</li>
 		</ul>
 	</div>
-	<!--# endif; #-->
+	<!--# } #-->
 
 <!--div class="mb10">
 	<a href="{@url:/nav/nav/add}&type={$navType}" class="btn J_dialog"><span class="add"></span>添加导航</a>
@@ -46,12 +46,12 @@
 				<td>[顺序] 导航名称</td>
 				<td>链接地址</td>
 				<td>
-				<!--# if ($navType == 'main'): #-->
+				<!--# if ($navType == 'main'){ #-->
 				设为首页
-				<!--# endif; #-->
-				<!--# if ($navType == 'my'): #-->
+				<!--# } #-->
+				<!--# if ($navType == 'my'){ #-->
 				应用标识
-				<!--# endif; #-->
+				<!--# } #-->
 				</td>
 				<td class="tac">启用</td>
 				<td>操作</td>
@@ -72,18 +72,18 @@
 				<input name="data[{$value['navid']}][navid]" type="hidden" value="{$value['navid']}" >
 				<input name="data[{$value['navid']}][orderid]" type="text" class="input length_0 mr10" value="{$value['orderid']}">
 				<input name="data[{$value['navid']}][name]" type="text" class="input length_3 mr5" value="{$value['name']}">
-				<!--# if ($navType == 'main'): #-->
+				<!--# if ($navType == 'main'){ #-->
 				<a style="display:none" href="{@url:nav/nav/add?parentid=$value['navid']&type=$navType}" class="link_add J_addChild add_nav" data-id="{$value['navid']}" data-html="tbody" data-type="nav_2">添加二级导航</a>
-				<!--# endif; #-->
+				<!--# } #-->
 			</td>
 			<td><input name="data[{$value['navid']}][link]" type="text" class="input length_4" value="{$value['link']}"></td>
 			<td>
-				<!--# if ($navType == 'main'): #-->
+				<!--# if ($navType == 'main'){ #-->
 				<input type="radio" name="home"  value="{$value['navid']}" {@Pw::ifcheck($homeUrl && $homeUrl == $value['link'] )}>
-				<!--# endif; #-->
-				<!--# if ($navType == 'my'): #-->
+				<!--# } #-->
+				<!--# if ($navType == 'my'){ #-->
 				<input type="text" name="data[{$value['navid']}][sign]"  value="{$value['sign']}" class="input length_2">
-				<!--# endif; #-->
+				<!--# } #-->
 			</td>
 			<td class="tac"><input name="data[{$value['navid']}][isshow]" type="checkbox" value="1" {@Pw::ifcheck($value['isshow'])}></td>
 			<td>
@@ -148,21 +148,21 @@ var root_tr_html = '<tr>\
                                         <td>\
                                             <input name="newdata[root_][orderid]" type="text" value="" class="input length_0 mr10">\
                                             <input name="newdata[root_][name]" type="text" class="input length_3 mr5" value="">\
-                                            <!--# if ($navType == 'main'): #-->
+                                            <!--# if ($navType == 'main'){ #-->
 											<a style="display: none; " href="#" class="link_add J_addChild add_nav" data-html="tbody" data-id="temp_root_" data-type="nav_2">添加二级导航</a>\
-											<!--# endif; #-->
+											<!--# } #-->
                                             <input type="hidden" name="newdata[root_][tempid]" value="temp_root_"/>\
                                         </td>\
                                         <td>\
                                             <input name="newdata[root_][link]" type="text" class="input length_4" value="">\
                                         </td>\
 																				<td>\
-                                        <!--# if ($navType == 'main'): #-->
+                                        <!--# if ($navType == 'main'){ #-->
 										<input type="radio" name="home" value="home_root_" ></td>\
-										<!--# endif; #-->
-										<!--# if ($navType == 'my'): #-->
+										<!--# } #-->
+										<!--# if ($navType == 'my'){ #-->
 										<input type="text" name="newdata[root_][sign]" class="input length_2" value="" >\
-										<!--# endif; #--></td>\
+										<!--# } #--></td>\
                                         <td class="tac"><input name="newdata[root_][isshow]" type="checkbox" value="1" checked="checked"></td>\
                                         <td>\
                                             <a href="" class="mr5 J_newRow_del">[删除]</a>\

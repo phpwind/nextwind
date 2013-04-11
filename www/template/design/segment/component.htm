@@ -1,16 +1,16 @@
 <div class="cc">
 <div class="pop_design_code">
-	<!--# if($components):#-->
+	<!--# if($components){ #-->
 	<div class="mb5">
 		模块模版：
 			<select id="J_comp_select" class="select_5" name="compid" data-url="{@url:design/template/getcomp}">
 				<option value="">自定义</option>
-				<!--# foreach ($components as $v):	#-->
+				<!--# foreach ($components as $v){	#-->
 				<option value="{$v['comp_id']}" {@Pw::isSelected($compid == $v['comp_id'])}>{$v['comp_name']}</option>
-				<!--# endforeach; #-->
+				<!--# } #-->
 			</select>
 	</div>
-	<!--# endif; #-->
+	<!--# } #-->
 	<textarea id="J_design_temp_tpl" name="tpl">{$tpl}</textarea>
 	<div>
 		<span class="mr5"><input id="J_design_temp_name" type="text" name="tplname" class="input mr5" style="width:90px;" placeholder="模块模板名称"><button type="button" id="J_design_temp_sub" class="btn mr5 btn_submit" data-action="{@url:design/template/dosave}">模板另存为</button></span>
@@ -19,7 +19,7 @@
 </div>
 <div class="pop_design_case">
 	<table class="pop_design_tablelist">
-		<!--# $i=0; foreach ($signkeys as $sign):
+		<!--# $i=0; foreach ($signkeys as $sign){
 					$cls =  is_int($i/2) ? 'thbg' : '';
 		#-->
 		<tr>
@@ -28,7 +28,8 @@
 				<div class="J_sign_items cp" style="color:#006699;">{$sign[0]}</div>
 			</th>
 		</tr>
-		<!--# $i++; endforeach; #-->
+		<!--# $i++;#-->
+		<!--# } #-->
 	</table>
 </div>
 </div>

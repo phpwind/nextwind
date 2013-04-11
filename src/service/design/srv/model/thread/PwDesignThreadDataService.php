@@ -1,16 +1,16 @@
 <?php
 Wind::import('SRV:design.srv.model.PwDesignModelBase');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
  * <note>
  *  decorateAddProperty 为插入表单值修饰
  *  decorateEditProperty 为修改表单值修饰
  *  _getData 获取数据
  * </note>
- * @author $Author: jieyin $ Foxsee@aliyun.com
+ * @author $Author: gao.wanggao $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwDesignThreadDataService.php 22678 2012-12-26 09:22:23Z jieyin $ 
+ * @version $Id: PwDesignThreadDataService.php 25436 2013-03-15 08:45:34Z gao.wanggao $ 
  * @package 
  */
 class PwDesignThreadDataService extends PwDesignModelBase{
@@ -49,7 +49,7 @@ class PwDesignThreadDataService extends PwDesignModelBase{
 	 * (non-PHPdoc)
 	 * @see src/service/design/srv/model/PwDesignModelBase::decorateSaveProperty()
 	 */
-	public function decorateSaveProperty($property) {
+	public function decorateSaveProperty($property, $moduleid) {
 		//直接调用版本
 		if (isset($property['fids'][0]) && !$property['fids'][0]) $property['fids'] = array();
 		$property['mapFid'] = $property['fids'];
@@ -176,6 +176,7 @@ class PwDesignThreadDataService extends PwDesignModelBase{
 			$list[$k]['forum_name'] = $this-> _filterForumHtml($forums[$v['fid']]['name']);
 			$list[$k]['forum_url'] = WindUrlHelper::createUrl('bbs/thread/run', array('fid' => $v['fid']), '', 'pw');
 			$list[$k]['tType'] = isset($tTypes[$v['topic_type']]['name']) ? $tTypes[$v['topic_type']]['name'] : '' ;
+			$list[$k]['tType_url'] = isset($tTypes[$v['topic_type']]['id']) ? WindUrlHelper::createUrl('bbs/thread/run', array('fid' => $v['fid'], 'type'=>$tTypes[$v['topic_type']]['id']), '', 'pw'): '' ;
 			$list[$k]['thumb_attach'] = $attachs[$v['tid']]['path'] ? $attachs[$v['tid']]['path']: '';
 		}
 		return $list;

@@ -7,7 +7,7 @@ Wind::import('APPS:.profile.controller.BaseProfileController');
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: SecretController.php 22271 2012-12-21 02:59:36Z xiaoxia.xuxx $
+ * @version $Id: SecretController.php 23994 2013-01-18 03:51:46Z long.shi $
  * @package src.products.u.controller.profile
  */
 class SecretController extends BaseProfileController {
@@ -31,8 +31,10 @@ class SecretController extends BaseProfileController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:profile.secret.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:profile.secret.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	public function dorunAction() {

@@ -1,21 +1,26 @@
 <?php
 
-Wind::import('WINDID:library.base.WindidBaseDm');
 /**
  * 应用的数据映射文件
  * 
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com> 2010-11-2
  * @license http://www.phpwind.com
- * @version $Id: WindidAppDm.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidAppDm.php 23935 2013-01-17 07:06:50Z jieyin $
  * @package windid.service.app.dm
  */
-class WindidAppDm extends WindidBaseDm {
+class WindidAppDm extends PwBaseDm {
 	
 	public $id;
 	
 	public function __construct($id=0) {
 		$this->id = (int)$id;
 	}
+
+	public function setId($id) {
+		$this->_data['id'] = intval($id);
+		return $this;
+	}
+
 	/**
 	 * 设置app名字
 	 * 
@@ -87,7 +92,7 @@ class WindidAppDm extends WindidBaseDm {
 	}
 
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::beforeAdd()
+	 * @see PwBaseDm::beforeAdd()
 	 */
 	protected function _beforeAdd() {
 		if (!isset($this->_data['name']) || !$this->_data['name']) return new WindidError(WindidError::FAIL);
@@ -97,10 +102,13 @@ class WindidAppDm extends WindidBaseDm {
 	}
 
 	/* (non-PHPdoc)
-	 * @see WindidBaseDm::beforeUpdate()
+	 * @see PwBaseDm::beforeUpdate()
 	 */
 	protected function _beforeUpdate() {
 		if (!$this->id) return new WindidError(WindidError::FAIL);
-		return $this->beforeAdd();
+		if (isset($this->_data['name']) && !$this->_data['name']) return new WindidError(WindidError::FAIL);
+		if (isset($this->_data['siteurl']) && !$this->_data['siteurl']) return new WindidError(WindidError::FAIL);
+		if (isset($this->_data['secretkey']) && !$this->_data['secretkey']) return new WindidError(WindidError::FAIL);
+		return true;
 	}
 }

@@ -2,13 +2,13 @@
 defined('WEKIT_VERSION') || exit('Forbidden');
 
 /**
- * Enter description here ...
+ * 用户权限基础服务
  * 
  * @author peihong.zhangph <peihong.zhangph@aliyun-inc.com> Nov 1, 2011
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: PwUserPermission.php 11842 2012-06-13 12:08:19Z jieyin $
+ * @version $Id: PwUserPermission.php 24736 2013-02-19 09:24:40Z jieyin $
  */
 
 class PwUserPermission {
@@ -40,14 +40,36 @@ class PwUserPermission {
 	}
 	
 	/**
+	 * 获取某个rkey的权限
+	 *
+	 * @param string $rkey
+	 * @return array
+	 */
+	public function getPermissionByRkey($rkey) {
+		return $this->_getGroupPermissionDao()->getPermissionByRkey($rkey);
+	}
+	
+	/**
+	 * 获取指定用户组某个rkey的权限
+	 *
+	 * @param string $rkey
+	 * @param array $gids
+	 * @return array
+	 */
+	public function getPermissionByRkeyAndGids($rkey, $gids) {
+		if (empty($gids) || !is_array($gids)) return array();
+		return $this->_getGroupPermissionDao()->getPermissionByRkeyAndGids($rkey, $gids);
+	}
+	
+	/**
 	 * 获取某类rkey的权限
 	 *
 	 * @param array $rkeys
 	 * @return array
 	 */
-	public function getPermissionsByRkey($rkeys = array()) {
+	public function fetchPermissionByRkey($rkeys = array()) {
 		if (!is_array($rkeys) || !$rkeys) return array();
-		return $this->_getGroupPermissionDao()->getPermissionsByRkey($rkeys);
+		return $this->_getGroupPermissionDao()->fetchPermissionByRkey($rkeys);
 	}
 
 	/**

@@ -1,14 +1,14 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.PwInstallApplication');
-Wind::import('APPS:appcenter.service.srv.helper.PwFtpSave');
-Wind::import('APPS:appcenter.service.srv.helper.PwSftpSave');
+Wind::import('APPCENTER:service.srv.PwInstallApplication');
+Wind::import('APPCENTER:service.srv.helper.PwFtpSave');
+Wind::import('APPCENTER:service.srv.helper.PwSftpSave');
 /**
  * 系统升级服务
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSystemInstallation.php 23458 2013-01-09 13:55:08Z long.shi $
+ * @version $Id: PwSystemInstallation.php 24976 2013-02-27 09:29:00Z long.shi $
  * @package wind
  */
 class PwSystemInstallation extends PwInstallApplication {
@@ -32,19 +32,21 @@ class PwSystemInstallation extends PwInstallApplication {
 			array('a' => 'forward', 'do' => 'getUpdateInfo', 'pwversion' => $this->local));
 		
 		$r = PwApplicationHelper::requestAcloudData($url);
+		$r = WindConvert::convert($r, Wekit::V('charset'), 'utf8');
 		return is_array($r) ? ($r['code'] === '0' ? $r['info'] : $r['msg']) : '无法连接云平台!';
 	}
 
-	public function getNotice($adminUser) {
+	public function getNotice($loginUser) {
 		$notice = 0;
 		$upgradeInfo = $patchInfo = array();
-		if (Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($adminUser->username)) {
+		if (Wekit::load('ADMIN:service.srv.AdminFounderService')->isFounder($loginUser->username)) {
 			$upgradeInfo = $this->checkUpgrade();
 			$upgradeInfo && is_array($upgradeInfo) && $notice |= 1;
-			$patchInfo = Wekit::load('APPS:appcenter.service.srv.PwPatchUpdate')->checkUpgrade();
+			$patchInfo = Wekit::load('APPCENTER:service.srv.PwPatchUpdate')->checkUpgrade();
 			$patchInfo && is_array($patchInfo) && $notice |= 2;
 		}
 		$url = '';
+		$f = '<a data-level="2" data-parent="%s" data-id="%s" href="%s" class="J_tabframe_trigger">立即升级</a>';
 		switch ($notice) {
 			case 1:
 				$notice = '您正在使用旧版本的phpwind，为了获得更好的体验，请升级至最新版。';
@@ -61,7 +63,7 @@ class PwSystemInstallation extends PwInstallApplication {
 			default:
 				$notice = '';
 		}
-		return array('notice' => $notice, 'url' => $url, 'info' => array($patchInfo, $upgradeInfo));
+		return array('notice' => $notice . ($url ? sprintf($f, 'platform', 'platform_upgrade', $url) : ''), 'info' => array($patchInfo, $upgradeInfo));
 	}
 
 	/**
@@ -164,7 +166,8 @@ class PwSystemInstallation extends PwInstallApplication {
 		$localDirectory = @include Wind::getRealPath('CONF:directory.php', true);
 		foreach ($sort as $v) {
 			if ($directory[$v] == $localDirectory[$v]) continue;
-			$search = PwSystemHelper::relative(WEKIT_PATH . str_replace('/', DIRECTORY_SEPARATOR, $directory[$v]));
+			$search = PwSystemHelper::relative(
+				WEKIT_PATH . str_replace('/', DIRECTORY_SEPARATOR, $directory[$v]));
 			$strtr[rtrim($search, '/\\')] = rtrim(Wind::getRootPath($v), '/\\');
 		}
 		return $strtr;
@@ -205,7 +208,8 @@ class PwSystemInstallation extends PwInstallApplication {
 		$localDirectory = @include Wind::getRealPath('CONF:directory.php', true);
 		foreach ($sort as $v) {
 			if ($directory[$v] == $localDirectory[$v]) continue;
-			$search = PwSystemHelper::relative(WEKIT_PATH . str_replace('/', DIRECTORY_SEPARATOR, $directory[$v]));
+			$search = PwSystemHelper::relative(
+				WEKIT_PATH . str_replace('/', DIRECTORY_SEPARATOR, $directory[$v]));
 			$strtr[rtrim($search, '/\\')] = rtrim(Wind::getRootPath($v), '/\\');
 		}
 		$this->_log('way of moving directory' . var_export($strtr, true));
@@ -214,7 +218,7 @@ class PwSystemInstallation extends PwInstallApplication {
 			return new PwError('APPCENTER:upgrade.target.hash.fail');
 		}
 		$sourceMd5 = PwSystemHelper::resolveMd5($sourceMd5);
-		//md5sum
+		// md5sum
 		$data = '';
 		foreach ($sourceMd5 as $v => $md5) {
 			$v = trim($v, '/');
@@ -230,15 +234,10 @@ class PwSystemInstallation extends PwInstallApplication {
 			}
 			$data .= PwSystemHelper::md5content($md5, $file);
 		}
-		WindFile::write($sourceDir . 'conf/md5sum', $data);
+		WindFile::write($sourceDir . DIRECTORY_SEPARATOR . 'conf/md5sum', $data);
 		
 		$moveList = $newFileList = array();
 		
-		$url = PwApplicationHelper::acloudUrl(
-			array('a' => 'forward', 'do' => 'getVersionHash', 'pwversion' => $this->local));
-		/* 从线上获取当前版本的所有文件md5 */
-		/* $result = PwApplicationHelper::requestAcloudData($url);
-		if ($result['code'] !== '0' || !$result['info']) return new PwError(array('APPCENTER:upgrade.version.hash.fail', array($result['msg']))); */
 		if (!$tmp = WindFile::read(CONF_PATH . 'md5sum')) {
 			return new PwError('APPCENTER:upgrade.hash.fail');
 		}
@@ -258,27 +257,24 @@ class PwSystemInstallation extends PwInstallApplication {
 					break;
 				}
 			}
-			$newFileList[$file] = $md5List[$file];
+			$newFileList[$file] = $md5List[str_replace(DIRECTORY_SEPARATOR, '/', $file)];
 		}
 		$this->_log('files need to move ' . var_export($moveList, true));
-		
+		$relativePath_1 = PwSystemHelper::resolveRelativePath(PUBLIC_PATH, 
+			Wind::getRealPath('SRC:wekit'));
+		$relativePath_2 = PwSystemHelper::resolveRelativePath(PUBLIC_PATH . 'aCloud', 
+			Wind::getRealPath('SRC:wekit'));
 		foreach ($moveList as $old => $new) {
 			WindFolder::mkRecur(dirname($sourceDir . DIRECTORY_SEPARATOR . $new));
 			copy($sourceDir . DIRECTORY_SEPARATOR . $old, $sourceDir . DIRECTORY_SEPARATOR . $new);
 			WindFile::del($sourceDir . DIRECTORY_SEPARATOR . $old);
-			if ('.php' === substr($old, -4) && !strncasecmp($old, 'www/', 4)) {
+			if ('.php' === substr($old, -4) && !strncasecmp($old, 'www' . DIRECTORY_SEPARATOR, 4)) {
 				$content = WindFile::read($sourceDir . DIRECTORY_SEPARATOR . $new);
-				$relativePath_1 = PwSystemHelper::resolveRelativePath(PUBLIC_PATH, 
-					Wind::getRealPath('SRC:wekit'));
-				$relativePath_2 = PwSystemHelper::resolveRelativePath(PUBLIC_PATH . 'aCloud', 
-					Wind::getRealPath('SRC:wekit'));
 				if (strpos($content, '../../src/wekit.php')) {
 					$content = str_replace('../../src/wekit.php', $relativePath_2, $content);
 				} else {
 					$content = str_replace('../src/wekit.php', $relativePath_1, $content);
 				}
-				// $content = str_replace('../src/wekit.php',
-				// Wind::getRealPath('SRC:wekit'), $content);
 				WindFile::write($sourceDir . DIRECTORY_SEPARATOR . $new, $content);
 			}
 		}
@@ -289,13 +285,73 @@ class PwSystemInstallation extends PwInstallApplication {
 			$temp .= WindString::varToString($directory) . ";\r\n?>";
 			WindFile::write($directoryFile, $temp);
 		}
+		Wekit::cache()->set('system_upgrade_replace', 1);
 		return $newFileList;
 	}
 
+	/**
+	 * 补救措施，临时解决方案，后续版本@deprecated
+	 * 
+	 * @param unknown_type $fileList
+	 * @param unknown_type $useFtp
+	 * @param unknown_type $oldList
+	 * @return boolean|PwError
+	 */
 	public function after($fileList, $useFtp, $oldList) {
-		$newList = $this->sortDirectory($oldList);
-		$r = $this->doUpgrade($newList, $useFtp);
+		if (Wekit::cache()->get('system_upgrade_replace')) return true;
+		$relativePath_1 = PwSystemHelper::resolveRelativePath(PUBLIC_PATH, 
+			Wind::getRealPath('SRC:wekit'));
+		$relativePath_2 = PwSystemHelper::resolveRelativePath(PUBLIC_PATH . 'aCloud', 
+			Wind::getRealPath('SRC:wekit'));
 		$strtr = $this->getMoveWay();
+		$move = array();
+		$entrance = array('index.php', 'read.php', 'install.php', 'windid.php', 'admin.php', 'alipay.php', 'pay99bill.php', 'paypal.php', 'tenpay.php');
+		
+		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+			foreach ($oldList as $v) {
+				$v = trim($v, '/');
+				$v = str_replace('/', DIRECTORY_SEPARATOR, $v);
+				$_v = ROOT_PATH . $v;
+				$file = $v;
+				foreach ($strtr as $search => $replace) {
+					if (0 === strpos($_v, $search)) {
+						$file = str_replace(ROOT_PATH, '', $replace . substr($_v, strlen($search)));
+						$file = str_replace('//', '/', $file);
+						$move[$file] = $_v;
+						break;
+					}
+				}
+				$baseFile = basename($_v);
+				if ('.php' === substr($baseFile, -4) && (in_array($baseFile, $entrance) || !strncasecmp($baseFile, 'update_' . DIRECTORY_SEPARATOR, 4))) {
+					$content = WindFile::read($_v);
+					if (strpos($content, '../../src/wekit.php')) {
+						$content = str_replace('../../src/wekit.php', $relativePath_2, $content);
+					} else {
+						$content = str_replace('../src/wekit.php', $relativePath_1, $content);
+					}
+					$tmp = tempnam($this->tmpPath, basename($_v) . WindUtility::generateRandStr(3));
+					WindFile::write($tmp, $content);
+					$move[$file] = $tmp;
+				}
+			}
+		} else {
+			foreach ($fileList as $f => $hash) {
+				$_v = ROOT_PATH . $f;
+				$baseFile = basename($_v);
+				if ('.php' === substr($baseFile, -4) && (in_array($baseFile, $entrance) || !strncasecmp($baseFile, 'update_' . DIRECTORY_SEPARATOR, 4))) {
+					$content = WindFile::read($_v);
+					if (strpos($content, '../../src/wekit.php')) {
+						$content = str_replace('../../src/wekit.php', $relativePath_2, $content);
+					} else {
+						$content = str_replace('../src/wekit.php', $relativePath_1, $content);
+					}
+					$tmp = tempnam($this->tmpPath, basename($_v) . WindUtility::generateRandStr(3));
+					WindFile::write($tmp, $content);
+					$move[$f] = $tmp;
+				}
+			}
+		}
+		
 		// MD5SUM
 		$md5File = WindFile::read(CONF_PATH . 'md5sum');
 		$sourceMd5 = PwSystemHelper::resolveMd5($md5File);
@@ -314,41 +370,10 @@ class PwSystemInstallation extends PwInstallApplication {
 			}
 			$data .= PwSystemHelper::md5content($md5, $file);
 		}
-		$move = array();
 		$tmp = tempnam($this->tmpPath, 'md5temp');
 		WindFile::write($tmp, $data);
 		$move[str_replace(ROOT_PATH, '', CONF_PATH . 'md5sum')] = $tmp;
-		
 		// 入口文件
-		$entrance = array(
-			'index.php', 
-			'alipay.php', 
-			'pay99bill.php', 
-			'paypal.php', 
-			'tenpay.php', 
-			'admin.php', 
-			'install.php', 
-			'read.php', 
-			'windid.php');
-		$relativePath_1 = PwSystemHelper::resolveRelativePath(PUBLIC_PATH,
-			Wind::getRealPath('SRC:wekit'));
-		$relativePath_2 = PwSystemHelper::resolveRelativePath(PUBLIC_PATH . 'aCloud',
-			Wind::getRealPath('SRC:wekit'));
-		foreach ($fileList as $f => $hash) {
-			$f = str_replace('/', DIRECTORY_SEPARATOR, $f);
-			$base = basename(ROOT_PATH . $f);
-			if (in_array($base, $entrance) || !strncasecmp($base, 'update_', 6)) {
-				$content = WindFile::read(ROOT_PATH . $f);
-				if (strpos($content, '../../src/wekit.php')) {
-					$content = str_replace('../../src/wekit.php', $relativePath_2, $content);
-				} else {
-					$content = str_replace('../src/wekit.php', $relativePath_1, $content);
-				}
-				$tmp = tempnam($this->tmpPath, basename(ROOT_PATH . $f));
-				WindFile::write($tmp, $content);
-				$move[$f] = $tmp;
-			}
-		}
 		if ($useFtp) {
 			try {
 				$ftp = $useFtp['sftp'] ? new PwSftpSave($useFtp) : new PwFtpSave($useFtp);
@@ -368,6 +393,7 @@ class PwSystemInstallation extends PwInstallApplication {
 					return new PwError(array('APPCENTER:upgrade.ftp.fail', array($e->getMessage())));
 				}
 			} else {
+				WindFolder::mkRecur(dirname(ROOT_PATH . $k));
 				copy($v, ROOT_PATH . $k);
 			}
 		}
@@ -454,7 +480,7 @@ class PwSystemInstallation extends PwInstallApplication {
 		if ($this->target) {
 			$logFile = Wind::getRealDir('DATA:upgrade.log', true) . '/' . $this->target . '.log';
 			if (file_exists($logFile) && $log = WindFile::read($logFile)) {
-				Wekit::load('patch.PwUpgradeLog')->addLog($this->target, $log);
+				Wekit::load('patch.PwUpgradeLog')->addLog($this->target, substr($log, 0, 60000));
 			}
 		}
 	}

@@ -1,15 +1,14 @@
 <?php
 
-Wind::import('WINDID:library.base.WindidBaseDm');
 /**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
+ * the last known user to change this file in the repository  <$LastChangedBy: jieyin $>
+ * @author $Author: jieyin $ Foxsee@aliyun.com
  * @copyright ?2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidNotifyLogDm.php 21452 2012-12-07 10:18:33Z gao.wanggao $ 
+ * @version $Id: WindidNotifyLogDm.php 23673 2013-01-14 09:11:23Z jieyin $ 
  * @package 
  */
-class WindidNotifyLogDm extends WindidBaseDm {
+class WindidNotifyLogDm extends PwBaseDm {
 	
 	public $logid;
 	

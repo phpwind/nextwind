@@ -25,6 +25,13 @@ class ACloudSysRouter {
 		return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_OK, 'config_addApp success' );
 	}
 	
+	private function config_deleteAllApp() {
+		$initService = ACloudSysCoreCommon::loadSystemClass ( 'apps', 'config.service' );
+		if (! ($result = $initService->deleteAllApp ()))
+			return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_FAIL, 'config_deleteAllApp fail' );
+		return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_OK, 'config_deleteAllApp success' );
+	}
+	
 	private function config_updateApp() {
 		list ( $app_id, $app_name, $app_token ) = ACloudSysCoreS::gp ( array ('app_id', 'app_name', 'app_token' ) );
 		$initService = ACloudSysCoreCommon::loadSystemClass ( 'apps', 'config.service' );
@@ -171,6 +178,13 @@ class ACloudSysRouter {
 		return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_OK, $extras );
 	}
 	
+	private function config_deleteAllExtras() {
+		$extrasService = ACloudSysCoreCommon::loadSystemClass ( 'extras', 'config.service' );
+		if (! ($result = $extrasService->deleteAllExtras ()))
+			return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_FAIL, 'config_deleteExtras fail' );
+		return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_OK, 'config_deleteExtras success' );
+	}
+	
 	private function config_addAppConfig() {
 		list ( $app_id, $app_key, $app_value, $app_type ) = ACloudSysCoreS::gp ( array ('app_id', 'app_key', 'app_value', 'app_type' ) );
 		$appConfigService = ACloudSysCoreCommon::loadSystemClass ( 'app.configs', 'config.service' );
@@ -209,6 +223,13 @@ class ACloudSysRouter {
 		if (! ($config = $appConfigService->deleteAppConfig ( $app_id, $app_key )))
 			return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_FAIL, 'config_deleteAppConfig fail' );
 		return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_OK, $config );
+	}
+	
+	private function config_deleteAllAppConfig() {
+		$appConfigService = ACloudSysCoreCommon::loadSystemClass ( 'app.configs', 'config.service' );
+		if (! ($result = $appConfigService->deleteAllAppConfig ()))
+			return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_FAIL, 'config_deleteAllAppConfig fail' );
+		return ACloudSysCoreCommon::simpleResponse ( ACloudSysCoreDefine::ACLOUD_HTTP_OK, 'config_deleteAllAppConfig success' );
 	}
 	
 	private function config_deleteAppConfigByAppId() {

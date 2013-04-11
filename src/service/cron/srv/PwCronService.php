@@ -129,7 +129,7 @@ class PwCronService {
 		switch ($loopType) {
 			case 'month':
 				$isLeapYear = date('L', $time);
-				$mouthDays = $this->_getMouthDays($_month, $isLeapYear);
+				$mouthDays = $this->_getMouthDays($_mouth, $isLeapYear);
 				if ($day == 99) $day = $mouthDays;
 				$nexttime += ($hour < $_hour ? -($_hour - $hour) : $hour - $_hour) * 3600;
 				if ($hour <= $_hour && $day == $_day) {

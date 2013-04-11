@@ -40,13 +40,13 @@ class PwTopicType {
 	
 	public function getTopicType($id) {
 		$id = intval($id);
-		if ($id < 1) return array();;
+		if ($id < 1) return array();
 		return $this->_getDao()->getTopicType($id);
 	}
 	
 	public function fetchTopicType($ids) {
 		if (!is_array($ids) || !count($ids)) {
-			return array();;
+			return array();
 		}
 		return $this->_getDao()->fetchTopicType($ids);
 	}

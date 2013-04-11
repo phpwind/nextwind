@@ -1,12 +1,12 @@
 <?php
-Wind::import('APPS:appcenter.service.srv.helper.PwApplicationHelper');
+Wind::import('APPCENTER:service.srv.helper.PwApplicationHelper');
 /**
  * 生成demo代码
  *
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwGenerateApplication.php 22563 2012-12-25 08:57:37Z long.shi $
+ * @version $Id: PwGenerateApplication.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package appcenter.service.srv
  */
 class PwGenerateApplication {
@@ -114,14 +114,14 @@ class PwGenerateApplication {
 	}
 
 	public function __construct() {
-		$this->defaultDir = Wind::getRealDir('APPS:appcenter.service.data.source');
+		$this->defaultDir = Wind::getRealDir('APPCENTER:service.data.source');
 	}
 
 	public function generate() {
 		$this->baseDir = Wind::getRealDir('EXT:' . $this->alias);
 		if (is_dir($this->baseDir)) return new PwError('APPCENTER:alias.exist');
 		WindFolder::mkRecur($this->baseDir);
-		Wind::import('APPS:appcenter.service.srv.helper.PwSystemHelper');
+		Wind::import('APPCENTER:service.srv.helper.PwSystemHelper');
 		$writable = PwSystemHelper::checkWriteAble($this->baseDir . '/');
 		if (!$writable) {
 			return new PwError('APPCENTER:generate.copy.fail');

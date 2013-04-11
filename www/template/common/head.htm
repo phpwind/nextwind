@@ -1,4 +1,4 @@
-<meta charset="{@Wekit::app()->charset}" />
+<meta charset="{@Wekit::V('charset')}" />
 <title>{@G:seo.title} - Powered by phpwind</title>
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta name="generator" content="phpwind v{@G:version}" />
@@ -42,8 +42,8 @@ if ($loginUser->isExists()) {
 		},
 		USER_CARD : '{@url:space/card/run}',								//小名片(参数 : uid)
 		LIKE_FORWARDING : '{@url:post/doreply/}',							//喜欢转发(参数 : fid)
-		REGION : '{@url:bbs/webData/area}',									//地区数据
-		SCHOOL : '{@url:bbs/webData/school}',								//学校数据
+		REGION : '{@url:misc/webData/area}',									//地区数据
+		SCHOOL : '{@url:misc/webData/school}',								//学校数据
 		EMOTIONS : "{@url:emotion/index/run?type=bbs}",					//表情数据
 		CRON_AJAX : '{$runCron}',											//计划任务 后端输出执行
 		FORUM_LIST : '{@url:bbs/forum/list}',								//版块列表数据
@@ -54,3 +54,4 @@ if ($loginUser->isExists()) {
 };
 </script>
 <script src="{@G:url.js}/wind.js?v={@NEXT_RELEASE}"></script>
+<hook name="head" display='false'/>

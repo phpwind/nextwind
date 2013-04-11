@@ -73,7 +73,7 @@ class PwFilterDfa extends PwFilterAction {
 	 * @return bool
 	 */
    public function check($s) {  //直接提示
-   		$charset = Wekit::app()->charset;
+   		$charset = Wekit::V('charset');
 		$charset = str_replace('-', '', strtolower($charset));
         $isUTF8 = ($charset == 'utf8') ? true : false;
         $ret = array();
@@ -109,7 +109,7 @@ class PwFilterDfa extends PwFilterAction {
 	 * @return array
 	 */
     public function match($s) {
-   		$charset = Wekit::app()->charset;
+   		$charset = Wekit::V('charset');
 		$charset = str_replace('-', '', strtolower($charset));
         $isUTF8 = ($charset == 'utf8') ? true : false;
         $ret = array();
@@ -150,7 +150,7 @@ class PwFilterDfa extends PwFilterAction {
      * @return string $s 替换后的文本
      */
  	public function replace($s) {
-   		$charset = Wekit::app()->charset;
+   		$charset = Wekit::V('charset');
 		$charset = str_replace('-', '', strtolower($charset));
         $isUTF8 = ($charset == 'utf8') ? true : false;
         $ret = array();

@@ -41,7 +41,7 @@
 					<div class="core_menu J_menu_drop" style="display:none;margin-top:18px;">
 						<ul class="core_menu_list cc">
 							<!--# foreach ($typesList as $k => $v) { #-->
-							<li><label><input class="J_cate_check" data-text="{$v['typename']}" type="checkbox" name="data[{$value['lid']}][typeid][]" value="{$v['typeid']}" {@Pw::ifcheck(in_array($v['typeid'], $value['typeids']))}>{$v['typename']}</label></li>
+							<li><label><input class="J_cate_check" data-text="{$v['typename']}" type="checkbox" name="data[{$value['lid']}][typeid][]" value="{$v['typeid']}" {@Pw::ifcheck(Pw::inArray($v['typeid'], $value['typeids']))}>{$v['typename']}</label></li>
 							<!--# } #-->
 						</ul>
 					</div>

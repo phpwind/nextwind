@@ -23,7 +23,13 @@ class BackupController extends AdminBaseController {
 	 * @see WindController::run()
 	 */
 	public function run() {
+		$system = $this->getInput('system', 'get');
 		$tables = $this->_getBackupDs()->getTables();
+		if ($system) {
+			$tables = $this->_buildTables($tables);
+		}
+		$tables && $count = count($tables);
+		$this->setOutput($count,'count');
 		$this->setOutput($tables,'tables');
 	}
 	
@@ -118,10 +124,14 @@ class BackupController extends AdminBaseController {
 	 * @return void
 	 */
 	public function dobackAction(){
+		$siteState = Wekit::C('site', 'visit.state');
+		if ($siteState != 2) {
+			$this->showError('BACKUP:site.isopen');
+		}
 		@set_time_limit(500);
 		list($sizelimit, $compress, $start, $tableid, $step, $dirname) = $this->getInput(array('sizelimit', 'compress', 'start', 'tableid', 'step', 'dirname'));
 		list($tabledb, $insertmethod, $tabledbname) = $this->getInput(array('tabledb', 'insertmethod', 'tabledbname'));
-		//关闭站点
+		
 		$backupService = $this->_getBackupService();
 		$tabledbTmpSaveDir = $backupService->getDataDir() . 'tmp/';
 		$backupService->createFolder($tabledbTmpSaveDir);
@@ -141,21 +151,19 @@ class BackupController extends AdminBaseController {
 		!$dirname && $dirname = $backupService->getDirectoryName();
 		// 第一次临时保存需要操作的表
 		if (!$step) {
-			$config = new PwConfigSet('site');
-			$siteState = Wekit::load('config.PwConfig')->getValues('site');
-			WindFile::savePhpData(WindSecurity::escapePath($tabledbTmpSaveDir.tempSite.'.php'), $siteState['visit.state']);
-			$config->set('visit.state', 2)->flush();
 			$specialTables = array_intersect($backupService->getSpecialTables(), $tabledb);
 			$tabledb = array_values(array_diff($tabledb, $backupService->getSpecialTables()));
-			// 备份数据表结构
-			// 备份特殊表结构和数据
-			if ($specialTables) {
-				$backupService->backupSpecialTable($specialTables, $dirname, $compress, $insertmethod);
-			}
 			if ($tabledb) {
 				$backupService->backupTable($tabledb, $dirname, $compress);
 				$tabledbname = 'cached_table_buckup';
 				WindFile::write(WindSecurity::escapePath($tabledbTmpSaveDir . $tabledbname . '.tmp'), implode("|", $tabledb), 'wb');
+			}
+			// 备份数据表结构
+			// 备份特殊表结构和数据
+			if ($specialTables) {
+				$backupService->backupSpecialTable($specialTables, $dirname, $compress, $insertmethod);
+				$referer = 'admin/backup/backup/doback?'."start=0&tableid=$tableid&sizelimit=$sizelimit&step=1&insertmethod=$insertmethod&compress=$compress&tabledbname=$tabledbname&dirname=$dirname";
+				$this->showMessage('正在备份',$referer,true);
 			}
 		}
 		if (!$tabledb) {
@@ -166,7 +174,7 @@ class BackupController extends AdminBaseController {
 		// 保存数据
 		$step = (!$step ? 1 : $step) + 1;
 		$filename = $dirname . '/' . $dirname . '_' . ($step - 1) . '.sql';
-		list($backupData, $tableid, $start, $totalRows)  = $backupService->backupData($tabledb, $tableid, $start, $sizelimit, $insertmethod, $filename);
+		list($backupData, $tableid, $start)  = $backupService->backupData($tabledb, $tableid, $start, $sizelimit, $insertmethod, $filename);
 		
 		$continue = $tableid < count($tabledb) ? true : false;
 		$backupService->saveData($filename, $backupData, $compress);
@@ -178,15 +186,10 @@ class BackupController extends AdminBaseController {
 			$referer = 'admin/backup/backup/doback?'."start=$start&tableid=$tableid&sizelimit=$sizelimit&step=$step&insertmethod=$insertmethod&compress=$compress&tabledbname=$tabledbname&dirname=$dirname";
 			$this->showMessage(array('BACKUP:bakup_step', array(
 				'{currentTableName}'=>$currentTableName,
-				'{totalRows}'=>$totalRows,
 				'{currentPos}'=>$currentPos,
 				'{createdFileNum}'=>$createdFileNum,
 			)),$referer,true);
 		} else {
-			//还原站点
-			$siteState = require_once(WindSecurity::escapePath($tabledbTmpSaveDir.tempSite.'.php'));
-			$config = new PwConfigSet('site');
-			$config->set('visit.state', $siteState)->flush();
 		
 			unlink(WindSecurity::escapePath($tabledbTmpSaveDir . $tabledbname . '.tmp'));
 			$this->showMessage(array('BACKUP:bakup_success', array(
@@ -205,7 +208,7 @@ class BackupController extends AdminBaseController {
 		!$tabledb && $this->showError('BACKUP:table.empty');
 		//关闭站点
 		$config = new PwConfigSet('site');
-		$siteState = Wekit::load('config.PwConfig')->getValues('site');
+		$siteState = Wekit::C()->getValues('site');
 		$config->set('visit.state', 2)->flush();
 		$this->_getBackupDs()->optimizeTables($tabledb);
 		//还原站点
@@ -224,7 +227,7 @@ class BackupController extends AdminBaseController {
 		!$tabledb && $this->showError('BACKUP:table.empty');
 		//关闭站点
 		$config = new PwConfigSet('site');
-		$siteState = Wekit::load('config.PwConfig')->getValues('site');
+		$siteState = Wekit::C()->getValues('site');
 		$config->set('visit.state', 2)->flush();
 		$this->_getBackupDs()->repairTables($tabledb);
 		//还原站点
@@ -241,12 +244,11 @@ class BackupController extends AdminBaseController {
 	public function importAction() {
 		list($file,$dir) = $this->getInput(array('file','dir'));
 		list($step,$count,$isdir) = $this->getInput(array('step','count','isdir'));
-		//关闭站点
-		$config = new PwConfigSet('site');
-		$siteState = Wekit::load('config.PwConfig')->getValues('site');
-		$config->set('visit.state', 2)->flush();
 		!$dir && $this->showError('BACKUP:name.empty');
-		
+		$siteState = Wekit::C('site', 'visit.state');
+		if ($siteState != 2) {
+			$this->showError('BACKUP:site.isopen');
+		}
 		if (!$count) {
 			$count = 1;
 			$files = WindFolder::read(WindSecurity::escapePath($this->_bakupDir.$dir));
@@ -265,10 +267,30 @@ class BackupController extends AdminBaseController {
 				'{i}'=>$i
 			)),$referer,true);
 		}
-		//还原站点
-		$config = new PwConfigSet('site');
-		$config->set('visit.state', $siteState['visit.state'])->flush();
+
 		$this->showMessage('success','admin/backup/backup/restore');
+	}
+	
+	/**
+	 * 组装系统表白名单wind_structure.sql获取
+	 * 
+	 * @return void
+	 */
+	protected function _buildTables($tables) {
+		if (!$tables) return array();
+		$structure = WindFile::read(Wind::getRealPath('APPS:install.lang.wind_structure.sql', true));
+		if (!$structure) return array();
+		$tablePrefix = $this->_getBackupDs()->getTablePrefix();
+		preg_match_all('/DROP TABLE IF EXISTS `pw_(\w+)`/', $structure, $matches);
+		$tableNames = array_keys($tables);
+		$whitleTables = array();
+		foreach ($matches[1] as $v) {
+			if (in_array($tablePrefix.$v, $tableNames)) {
+				$whitleTables[$tablePrefix.$v] = $tables[$tablePrefix.$v];
+			}
+		}
+		
+		return $whitleTables;
 	}
 	
 	/**

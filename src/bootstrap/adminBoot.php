@@ -1,13 +1,16 @@
 <?php
-Wind::import('SRC:bootstrap.phpwindBoot');
+Wind::import('SRC:bootstrap.bootstrap');
 Wind::import('ADMIN:service.srv.AdminUserService');
 
 /**
  * @author Jianmin Chen <sky_hold@163.com>
- * @version $Id: adminBoot.php 22579 2012-12-25 10:26:38Z xiaoxia.xuxx $
+ * @version $Id: adminBoot.php 26577 2013-04-11 08:05:09Z long.shi $
  * @package wekit
  */
-class adminBoot extends phpwindBoot {
+abstract class adminBoot extends bootstrap {
+
+	private $_loginUser = null;
+
 	/**
 	 * 后台菜单访问路径，
 	 * 默认菜单地址‘APP:admin.conf.mainmenu.php’
@@ -15,6 +18,13 @@ class adminBoot extends phpwindBoot {
 	 * @var string
 	 */
 	public $menuPath = 'ADMIN:conf.mainmenu.php';
+	
+	/**
+	 * 后台创始人配置地址，
+	 * 默认菜单地址‘CONF:founder.php’
+	 */
+	public $founderPath = 'CONF:founder.php';
+
 	/**
 	 * 后台home页管理链接地址，
 	 * 默认‘APP:admin.controller.HomeController’
@@ -22,6 +32,7 @@ class adminBoot extends phpwindBoot {
 	 * @var string
 	 */
 	public $homeLink = 'home/run';
+
 	/**
 	 * 搜索功能相关设置，
 	 * 后台搜索功能是依赖于搜索文件的
@@ -31,12 +42,14 @@ class adminBoot extends phpwindBoot {
 	 * @var string
 	 */
 	public $searchFile = 'search';
+
 	/**
 	 * 后台log记录
 	 *
 	 * @var string
 	 */
 	public $logFile = 'DATA:log.admin_log.php';
+
 	/**
 	 * 数据表标识，
 	 * 默认为空，为空时将不对数据表进行额外标识，所建立的数据表将为原始数据表
@@ -45,6 +58,7 @@ class adminBoot extends phpwindBoot {
 	 * @var string
 	 */
 	public $dbTableMark = '';
+
 	/**
 	 * db组建名称，
 	 * 默认为系统默认的db组建‘db’,如果需要启用其他的db组建，请设置改项
@@ -52,67 +66,68 @@ class adminBoot extends phpwindBoot {
 	 * @var string
 	 */
 	public $dbComponentName = 'db';
+
 	/**
 	 * 设置应用依赖服务配置
 	 *
 	 * @var array
 	 */
 	protected $dependenceServiceDefinitions = array(
-		'adminUserService' => array('path' => ''));
+		'adminUserService' => array('path' => '')
+	);
 	
-	public function __construct() {
-		parent::__construct();
+	public function __construct($re) {
+		if (!is_file(Wind::getRealPath('DATA:install.lock', true))) {
+			Wind::getComponent('response')->sendRedirect("install.php");
+		}
+		parent::__construct($re);
+	}
+
+	public function getConfigService() {
+		return Wekit::load('config.PwConfig');
+	}
+
+	/**
+	 * 获取全局配置
+	 *
+	 * @return array
+	 */
+	public function getConfig() {
+		return Wekit::cache()->get('config');
+	}
+
+	/**
+	 * 获取当前时间戳
+	 *
+	 * @return int
+	 */
+	public function getTime() {
+		$timestamp = time();
+		if ($cvtime = Wekit::C('site', 'time.cv')) $timestamp += $cvtime * 60;
+		return $timestamp;
+	}
+	
+	public function getLoginUser() {
+		if ($this->_loginUser === null) {
+			$this->_loginUser = $this->_getLoginUser();
+			$this->_loginUser->ip = Wind::getComponent('request')->getClientIp();
+		}
+		return $this->_loginUser;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see phpwindBoot::init()
+	 * @see bootstrap::beforeStart()
 	 */
-	public function init($front = null) {
-		parent::init($front);
+	public function beforeStart($front = null) {
+		parent::beforeStart($front);
 		foreach ($this->dependenceServiceDefinitions as $alias => $definition) {
 			if (!$definition) continue;
 			Wind::registeComponent($definition, $alias);
 		}
 	}
-	
-	/* (non-PHPdoc)
-	 * @see phpwindBoot::_getLoginUser()
-	 */
-	protected function _getLoginUser() {
-		$userCookie = Pw::getCookie('AdminUser');
-		/* @var $adminUserService AdminUserService */
-		$adminUserService = Wekit::load('ADMIN:service.srv.AdminUserService');
-		if ($userCookie) {
-			list($type, $uid, $password) = explode("\t", Pw::decrypt($userCookie));
-			/* @var $founderService AdminFounderService */
-			$founderService = Wekit::load('ADMIN:service.srv.AdminFounderService');
-			if ($founderService->isFounder($uid)) {
-				$founders = $founderService->getFounders();
-				list($md5pwd) = explode('|', $founders[$uid], 2);
-				$userinfo = $adminUserService->verifyUserByUsername($uid);
-				$userinfo['password'] = $md5pwd;
-			} else {
-				$userinfo = $adminUserService->loadUserService()->getUserByUid($uid);
-			}
-		} else {
-			$password = '';
-			$userinfo = array();
-		}
-		Wind::import('ADMIN:service.bo.AdminDefaultUserBo');
-		$user = new AdminDefaultUserBo($userinfo);
-		if (!$user->isExists() || Pw::getPwdCode($userinfo['password']) != $password) {
-			$user->reset();
-		}
-		return $user;
-	}
-	
-	/* (non-PHPdoc)
-	 * @see phpwind::runApps()
-	*/
-	public function runApps($front = null) {}
 
 	/* (non-PHPdoc)
-	 * @see phpwindBoot::beforeResponse()
+	 * @see bootstrap::beforeResponse()
 	 */
 	public function beforeResponse($front = null) {
 		//后台搜索，加亮搜索关键字
@@ -126,10 +141,10 @@ class adminBoot extends phpwindBoot {
 			echo $content;
 		}
 	}
-	
-	/* (non-PHPdoc)
-	 * @see phpwind::_initUser()
-	*/
-	protected function _initUser() {}
 
+	protected function _getLoginUser() {
+		Wind::import('ADMIN:service.bo.AdminUserBo');
+		$user = Wekit::load('ADMIN:service.srv.AdminUserService')->isLogin();
+		return new AdminUserBo($user);
+	}
 }

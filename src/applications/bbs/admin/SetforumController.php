@@ -6,7 +6,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: SetforumController.php 22644 2012-12-26 06:14:02Z liusanbian $
+ * @version $Id: SetforumController.php 24585 2013-02-01 04:02:37Z jieyin $
  * @package admin
  * @subpackage controller
  */
@@ -162,7 +162,7 @@ class SetforumController extends AdminBaseController {
 		$this->setOutput($forumdomain, 'forumdomain');
 		
 		//版块风格
-		$styles = Wekit::load('APPS:appcenter.service.PwStyle')->getStyleListByType('forum', 0);
+		$styles = Wekit::load('APPCENTER:service.PwStyle')->getStyleListByType('forum', 0);
 		$this->setOutput($styles, 'styles');
 		
 		$p = array();
@@ -197,7 +197,7 @@ class SetforumController extends AdminBaseController {
 
 		$fid = $this->getInput('fid');
 		list($copyFids,$copyItems) = $this->getInput(array('copy_fids','copyitems'));
-		
+		!$copyItems && $copyItems = array();
 		Wind::import('SRV:forum.bo.PwForumBo');
 		$forum = new PwForumBo($fid, true);
 		if (!$forum->isForum(true)) {
@@ -231,13 +231,12 @@ class SetforumController extends AdminBaseController {
 		$copyFids && $fids = array_merge($fids, $copyFids);
 
 		list($forumname, $vieworder, $parentid, $descrip, $isshow, $isshowsub, $jumpurl, $seotitle, $seokeywords, $seodescription, $numofthreadtitle, $threadperpage, $readperpage, $newtime, $threadorderby, $minlengthofcontent, $locktime, $edittime, $allowtype, $typeorder, $contentcheck, $ifthumb, $thumbwidth, $thumbheight, $anticopy, $copycontent, $water, $waterimg, $allowhide, $allowsell, $anonymous, $manager, $creditset, $password, $allowvisit, $allowread, $allowpost, $allowreply, $allowupload, $allowdownload, $style) = $this->getInput(array('forumname', 'vieworder', 'parentid', 'descrip', 'isshow', 'isshowsub', 'jumpurl', 'seotitle', 'seokeywords', 'seodescription', 'numofthreadtitle', 'threadperpage', 'readperpage', 'newtime', 'threadorderby', 'minlengthofcontent', 'locktime', 'edittime', 'allowtype', 'typeorder', 'contentcheck', 'ifthumb', 'thumbwidth', 'thumbheight', 'anticopy', 'copycontent', 'water', 'waterimg', 'allowhide', 'allowsell', 'anonymous', 'manager', 'creditset', 'password', 'allowvisit', 'allowread', 'allowpost', 'allowreply', 'allowupload', 'allowdownload', 'style'));
-
 		Wind::import('SRV:forum.bo.PwForumBo');
 		Wind::import('SRV:forum.dm.PwForumDm');
 		$pwforum = Wekit::load('forum.PwForum');
-		$copyItems = array_flip($copyItems);
+		$copyItems = $copyItems ? array_flip($copyItems) : array();
 		array_walk($copyItems, array($this,'_setCopyItems'));
-		
+		!$creditset && $creditset = array();
 		foreach ($creditset as $key => $value) {
 			!is_numeric($value['limit']) && $creditset[$key]['limit'] = '';
 			foreach ($value['credit'] as $k => $v) {
@@ -451,11 +450,13 @@ class SetforumController extends AdminBaseController {
 		$fid = $this->getInput('fid');
 
 		Wind::import('SRV:forum.srv.operation.PwDeleteForum');
-		$srv = new PwDeleteForum($fid, new PwUserBo($this->adminUser->getUid()));
+		$srv = new PwDeleteForum($fid, new PwUserBo($this->loginUser->uid));
 		if (($result = $srv->execute()) instanceof PwError) {
 			$this->showError($result->getError());
 		}
-
+		$foruminfo = $srv->forum->foruminfo;
+		$foruminfo['logo'] && Pw::deleteAttach($foruminfo['logo']);
+		$foruminfo['icon'] && Pw::deleteAttach($foruminfo['icon']);
 		$this->showMessage('success', 'bbs/setforum/run/', true);
 	}
 	
@@ -514,10 +515,14 @@ class SetforumController extends AdminBaseController {
 	 */
 	protected function doeditTopicType($fid){
 		//主题分类
-		list($t_vieworder,$t_name,$t_logo,$t_issys) = $this->getInput(array('t_vieworder','t_name','t_logo','t_issys'),'post');
-		list($t_new_vieworder,$t_new_name,$t_new_logo,$t_new_issys) = $this->getInput(array('t_new_vieworder','t_new_name','t_new_logo','t_new_issys'),'post');
-		list($t_new_sub_vieworder,$t_new_sub_name,$t_new_sub_logo,$t_new_sub_issys) = $this->getInput(array('t_new_sub_vieworder','t_new_sub_name','t_new_sub_logo','t_new_sub_issys'),'post');
+		list($t_vieworder, $t_name, $t_logo, $t_issys) = $this->getInput(array('t_vieworder', 't_name', 't_logo', 't_issys'), 'post');
+		list($t_new_vieworder, $t_new_name, $t_new_logo, $t_new_issys) = $this->getInput(array('t_new_vieworder', 't_new_name', 't_new_logo', 't_new_issys'), 'post');
+		list($t_new_sub_vieworder, $t_new_sub_name, $t_new_sub_logo, $t_new_sub_issys) = $this->getInput(array('t_new_sub_vieworder', 't_new_sub_name', 't_new_sub_logo', 't_new_sub_issys'),'post');
 		
+		is_array($t_name) || $t_name = array();
+		is_array($t_new_name) || $t_new_name = array();
+		is_array($t_new_sub_name) || $t_new_sub_name = array();
+
 		Wind::import('SRV:forum.dm.PwTopicTypeDm');
 		$topicTypeService = Wekit::load('forum.PwTopicType'); /* @var $topicTypeService PwTopicType */
 		
@@ -541,6 +546,7 @@ class SetforumController extends AdminBaseController {
 		
 		/* 新增主题分类 */
 		$newTopicTypes = array();
+		if (!$t_new_name) $t_new_name = array();
 		foreach ($t_new_name as $k=>$v) {
 			if (!$v) continue;
 			$dm = new PwTopicTypeDm();
@@ -558,6 +564,7 @@ class SetforumController extends AdminBaseController {
 		
 		/* 新增二级主题分类 */
 		$newSubTopicTypes = array();
+		if (!$t_new_sub_name) $t_new_sub_name = array();
 		foreach ($t_new_sub_name as $parentId=>$newSubs) {
 			if (!is_array($newSubs)) continue;
 			foreach ($newSubs as $k=>$v){
@@ -602,7 +609,7 @@ class SetforumController extends AdminBaseController {
 	
 	private function _uploadTopicTypeIcon(){
  		Wind::import('SRV:upload.action.PwTopictypeUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwTopictypeUpload(16, 16);
 		$upload = new PwUpload($bhv);
 		if (($result = $upload->check()) === true) {
@@ -616,7 +623,7 @@ class SetforumController extends AdminBaseController {
 	
 	private function _uploadImage($type, $fid) {
 		Wind::import('SRV:upload.action.PwForumUpload');
-		Wind::import('SRV:upload.PwUpload');
+		Wind::import('LIB:upload.PwUpload');
 		$bhv = new PwForumUpload($type, $fid);
 		$upload = new PwUpload($bhv);
 		

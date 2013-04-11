@@ -8,7 +8,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @link http://www.phpwind.com
  * @copyright 2011 phpwind.com
  * @license
- * @version $Id: UpgradeController.php 20860 2012-11-14 02:53:05Z xiaoxia.xuxx $
+ * @version $Id: UpgradeController.php 24341 2013-01-29 03:08:55Z jieyin $
  */
 
 class UpgradeController extends AdminBaseController {
@@ -17,9 +17,8 @@ class UpgradeController extends AdminBaseController {
 	 * @see WindController::run()
 	 */
 	public function run() {
-		/* @var $configService PwConfig */
-		$configService = Wekit::load('config.PwConfig');
-		$config = $configService->getValues('site');
+
+		$config = Wekit::C()->getValues('site');
 		$strategy = $config['upgradestrategy'];
 		
 		Wind::import('SRV:credit.bo.PwCreditBo');

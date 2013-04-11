@@ -19,7 +19,7 @@ Wind::import('LIB:ubb.config.PwUbbCodeConvertConfig');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwThreadDisplay.php 23306 2013-01-08 06:57:50Z jieyin $
+ * @version $Id: PwThreadDisplay.php 24307 2013-01-28 05:45:27Z jieyin $
  * @package forum
  */
 
@@ -133,23 +133,18 @@ class PwThreadDisplay extends PwBaseHookService {
 		if (!$read['usehtml']) {
 			$read['content'] = WindSecurity::escapeHTML($read['content']);
 		}
+		$tip = '';
 		$display = 1;
 		if ($read['ifshield']) {
-			$display = 0;
-			$read['content'] = '<div class="shield">此帖已被屏蔽</div>';
+			list($tip, $display) = $this->_bulidShieldContent();
 		} elseif ($this->users[$read['created_userid']]['groupid'] == '6') {
-			list($read['content'], $display) = $this->_bulidBanContent($read['content']);
-		} elseif ($read['useubb']) {
-			$ubb = new PwUbbCodeConvertThread($this->thread, $read, $this->user);
-			$ubb->setImgLazy($this->imgLazy);
-			$this->attach && $this->attach->has($read['pid']) && $ubb->setAttachParser($this->attach);
-			$read['reminds'] && $ubb->setRemindUser($read['reminds']);
-			$read['content'] = PwUbbCode::convert($read['content'], $ubb);
-		} else {
-			$read['content'] = self::escapeSpace($read['content']);
+			list($tip, $display) = $this->_bulidBanContent();
 		}
-		if (empty($display) && $this->attach) {
-			$this->attach->deleteList($read['pid']);
+		if ($display) {
+			$read['content'] = $tip . $this->_bulidContent($read);
+		} else {
+			$read['content'] = $tip;
+			$this->attach && $this->attach->deleteList($read['pid']);
 		}
 		return $this->runWithFilters('bulidRead', $read);
 	}
@@ -263,12 +258,32 @@ class PwThreadDisplay extends PwBaseHookService {
 		return $str;
 	}
 	
-	protected function _bulidBanContent($content) {
+
+	protected function _bulidContent($read) {
+		if (!$read['useubb']) {
+			return self::escapeSpace($read['content']);
+		}
+		$ubb = new PwUbbCodeConvertThread($this->thread, $read, $this->user);
+		$ubb->setImgLazy($this->imgLazy);
+		$this->attach && $this->attach->has($read['pid']) && $ubb->setAttachParser($this->attach);
+		$read['reminds'] && $ubb->setRemindUser($read['reminds']);
+		return PwUbbCode::convert($read['content'], $ubb);
+	}
+
+	protected function _bulidShieldContent() {
+		$tip = '<div class="shield">此帖已被屏蔽</div>';
+		if (!$this->user->getPermission('operate_thread.shield', $this->isBM)) {
+			return array($tip, 0);
+		}
+		return array($tip, 1);
+	}
+	
+	protected function _bulidBanContent() {
 		$tip = '<div class="shield">用户被禁言,该主题自动屏蔽!</div>';
 		if (!$this->user->getPermission('operate_thread.ban', $this->isBM)) {
 			return array($tip, 0);
 		}
-		return array($tip . $content, 1);
+		return array($tip, 1);
 	}
 
 	protected function _bulidBbsSign($sign, $groupRight, $userstatus) {

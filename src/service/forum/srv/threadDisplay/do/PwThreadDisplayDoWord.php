@@ -5,7 +5,7 @@ Wind::import('SRV:forum.srv.threadDisplay.do.PwThreadDisplayDoBase');
 
 class PwThreadDisplayDoWord extends PwThreadDisplayDoBase {
 	
-	public function bulidRead($read) { 
+	public function bulidRead($read) {
 		$wordFilter = Wekit::load('SRV:word.srv.PwWordFilter');
 		$content = $read['subject']. '<wind>' .$read['content'];
 		$content = $wordFilter->replaceWord($content, $read['word_version']);

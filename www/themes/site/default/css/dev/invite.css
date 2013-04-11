@@ -3,7 +3,7 @@
 @explain: 邀请注册
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: invite.css 20490 2012-10-30 08:12:28Z yanchixia $
+$Id: invite.css 24835 2013-02-22 06:44:21Z yanchixia $
 ===================
 #*/
 
@@ -17,7 +17,7 @@ $Id: invite.css 20490 2012-10-30 08:12:28Z yanchixia $
 }
 
 .invite_content{
-	padding:15px;
+	padding:15px 0;
 }
 
 /*
@@ -221,8 +221,7 @@ $Id: invite.css 20490 2012-10-30 08:12:28Z yanchixia $
 ===================
 */
 .invite_address_copy{
-	padding:20px 15px;
-	height:400px;
+	padding:20px 0;
 }
 
 

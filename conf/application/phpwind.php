@@ -8,38 +8,44 @@ return array(
 	/**=====配置开始于此=====**/
 	'web-apps' => array(
 		'phpwind' => array(
+			'default-module' => 'bbs',
 			'root-path' => 'APPS:bbs', 
 			'filters' => array(
-				'global' => array('class' => 'LIB:filter.PwFilter'), 
+				'global' => array('class' => 'APPS:bbs.controller.filter.PwGlobalFilter'), 
+				'develop' => array(
+					'class' => 'APPS:pwadmin.service.srv.filter.PwDebugFilter'
+				),
 				'csrf' => array(
 					'class' => 'LIB:filter.PwCsrfTokenFilter', 
-					'pattern' => '~(bbs/upload/*|windid/uploadAvatar/*|app/upload/run)'), 
+					'pattern' => '~(bbs/upload/*|windid/uploadAvatar/*|app/upload/run)'
+				), 
 				'register' => array(
 					'class' => 'APPS:u.controller.filter.UserRegisterFilter', 
-					'pattern' => 'u/register/*')),
+					'pattern' => 'u/register/*'
+				)
+			),
 			'modules' => array(
-				'pattern' => array(
-					'controller-path' => 'APPS:{m}.controller', 
-					'template-path' => 'TPL:{m}', 
-					'compile-path' => 'DATA:compile.template'), 
 				'default' => array(
-					'controller-path' => 'APPS:bbs.controller', 
+					'controller-path' => 'APPS:{m}.controller', 
 					'controller-suffix' => 'Controller', 
 					'error-handler' => 'LIB:base.PwErrorController', 
-					'template-path' => 'TPL:bbs', 
-					'compile-path' => 'DATA:compile.template.bbs', 
-					'theme-package' => 'THEMES:'), 
+					'template-path' => 'TPL:{m}', 
+					'compile-path' => 'DATA:compile.template', 
+					'theme-package' => 'THEMES:'
+				), 
 				'admin' => array(
 					'controller-path' => 'APPS:bbs.controller', 
 					'controller-suffix' => 'Controller', 
 					'error-handler' => 'LIB:base.PwErrorController', 
 					'template-path' => 'TPL:bbs', 
 					'compile-path' => 'DATA:compile.template.bbs', 
-					'theme-package' => 'THEMES:'), 
+					'theme-package' => 'THEMES:'
+				), 
 				'app' => array(
 					'controller-path' => 'SRC:extensions.{app}.controller', 
 					'template-path' => 'SRC:extensions.{app}.template', 
-					'compile-path' => 'DATA:compile.template.{app}')
+					'compile-path' => 'DATA:compile.template.{app}'
+				)
 			)
 		)
 	)

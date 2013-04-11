@@ -142,7 +142,7 @@
 					dialog.appendTo( _self.container );
 					//加载上传组件
 					var swfupload_root = window.GV.JS_ROOT + "util_libs/swfupload/";
-					Wind.js(swfupload_root + 'swfupload.js?v='+ GV.JS_VERSION, swfupload_root + 'plugins/swfupload.queue.js?v=' + GV.JS_VERSION, swfupload_root + '/plugins/swfupload.cookies.js?v=' +GV.JS_VERSION, swfupload_root + '/plugins/swfupload.swfobject.js?v=' +GV.JS_VERSION, function() {
+					Wind.js(swfupload_root + 'swfupload.js?v='+ GV.JS_VERSION, swfupload_root + 'plugins/swfupload.pluginMain.js?v=' + GV.JS_VERSION, function() {
 						SWFUpload.CURSOR = {//鼠标状态枚举
 							ARROW : -1,
 							HAND : -2

@@ -16,9 +16,9 @@
 			<div class="fl">
 				<h4>选择角色</h4>
 				<select id="J_roles" size="10" name="roles">
-<!--#foreach($roles as $role): #-->
+<!--#foreach($roles as $role){ #-->
 					<option value="{$role['name']}">{$role['name']}</option>
-<!--#endforeach; #-->
+<!--# } #-->
 				</select>
 			</div>
 			<div class="fl shift_operate">
@@ -28,9 +28,9 @@
 			<div class="fr">
 				<h4>拥有角色</h4>
 				<select id="J_user_roles" name="userRoles[]" size="10" multiple="multiple">
-<!--#foreach($user['roles'] as $role): #-->
+<!--# foreach($user['roles'] as $role){ #-->
 					<option value="{$role['name']}">{$role['name']}</option>
-<!--#endforeach; #-->
+<!--# } #-->
 				</select>
 			</div>
 		</div>

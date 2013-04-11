@@ -9,7 +9,7 @@ Wind::import('LIB:utility.PwDelayRun');
  * @author Jianmin Chen <sky_hold@163.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: PwConfigService.php 19844 2012-10-18 12:13:44Z jieyin $
+ * @version $Id: PwConfigService.php 23911 2013-01-17 05:54:43Z jieyin $
  * @package forum
  */
 
@@ -21,7 +21,7 @@ class PwConfigService {
 	 * @param string $namespace
 	 */
 	public function updateConfig($namespace) {
-		if (in_array($namespace, array('site', 'credit', 'bbs', 'attachment', 'components', 'seo', 'nav'))) {
+		if (in_array($namespace, array('site', 'credit', 'bbs', 'attachment', 'components', 'seo', 'nav', 'windid'))) {
 			PwDelayRun::getInstance()->call(array(
 				Wekit::load('cache.srv.PwCacheUpdateService'),
 				'updateConfig'

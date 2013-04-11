@@ -21,7 +21,7 @@ class PayController extends AdminBaseController {
 	public function run() {
 		
 // 		$config = Wekit::C('pay');
-		$config = Wekit::load('config.PwConfig')->getValues('pay');
+		$config = Wekit::C()->getValues('pay');
 		$this->setOutput($config, 'config');
 	}
 	
@@ -46,16 +46,5 @@ class PayController extends AdminBaseController {
 
 		$this->showMessage('success');
 	}
-
-	/**
-	 * 加载Config DS 服务
-	 * 
-	 * @return PwConfig
-	 */
-	private function _loadConfigService() {
-		return Wekit::load('config.PwConfig');
-	}
-
 }
-
 ?>

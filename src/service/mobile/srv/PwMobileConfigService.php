@@ -28,7 +28,7 @@ class PwMobileConfigService {
 	}
 
 	/**
-	 * 设置storage存储方案到系统
+	 * 设置方案到系统
 	 * 
 	 * @param string $storageType
 	 * @return true|pwError

@@ -15,7 +15,7 @@
 	<div class="h_a">功能说明</div>
 	<div class="prompt_text">
 		<ul>
-			<li>根域名设置完后，新增页面的二级域名的域名绑定才能生效。<a href="{@url:rewrite/domain/run}">设置新增页面的根域名</a></li>
+			<li>根域名设置完后，新增页面的二级域名的域名绑定才能生效。设置新增页面的<a href="{@url:rewrite/domain/run}" class="J_linkframe_trigger">二级域名</a></li>
 		</ul>
 	</div>
 	<div class="cc mb10">
@@ -39,7 +39,7 @@
 					<td>操作</td>
 				</tr>
 			</thead>
-			<!--# foreach ($list as $v): #-->
+			<!--# foreach ($list as $v){ #-->
 			<tr>
 				<td><input data-yid="J_check_y" data-xid="J_check_x" class="J_check" type="checkbox" name="isopen[{$v['id']}]" value="1" {@Pw::ifcheck($v['isopen'])}>
 				<input type="hidden" name="ids[]" value="{$v['id']}"></td>
@@ -55,7 +55,7 @@
 					<a href="{@url:design/page/doclear?id=$v['page_id']}" class="mr5 J_ajax_del" data-msg="您确定要清空页面上的所有模块？<br>清空后将不可恢复！">[清空模块]</a>
 				</td>
 			</tr>
-			<!--# endforeach; #-->
+			<!--# } #-->
 		</table>
 	</div>
 	<div style="padding:0 10px 15px;"><page tpl='TPL:common.page'  total="$totalpage" page="$page" per="$perpage" count="$count" url="design/portal/run" args="$args"/></div>

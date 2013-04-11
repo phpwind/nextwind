@@ -15,8 +15,7 @@ class WatermarkController extends AdminBaseController {
 	 * @see WindController::run()
 	 */
 	public function run() {
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('attachment');
+		$config = Wekit::C()->getValues('attachment');
 		$this->setOutput($config, 'config');
 		$this->setOutput($this->getFontList(), 'fontList');
 		$this->setOutput($this->getWaterMarkList(), 'markList');
@@ -85,7 +84,7 @@ class WatermarkController extends AdminBaseController {
 		}
 		$watermark->execute();
 
-		$this->setOutput(Wekit::app()->attach . '/demo.jpg?' . time(), 'data');
+		$this->setOutput(Wekit::url()->attach . '/demo.jpg?' . time(), 'data');
 		$this->showMessage('ADMIN:success');
 	}
 
@@ -93,9 +92,12 @@ class WatermarkController extends AdminBaseController {
 	 * 后台设置-水印策略设置
 	 */
 	public function setAction() {
-		$service = $this->_loadConfigService();
-		$config = $service->getValues('attachment');
+		$config = Wekit::C()->getValues('attachment');
 		$this->setOutput($config, 'config');
+		//扩展：key => title
+		$watermarkExt = array('bbs' => '论坛图片上传');
+		$watermarkExt = PwSimpleHook::getInstance('attachment_watermark')->runWithFilters($watermarkExt);
+		$this->setOutput($watermarkExt, 'watermarkExt');
 	}
 	
 
@@ -103,18 +105,16 @@ class WatermarkController extends AdminBaseController {
 	 * 后台设置-水印策略设置
 	 */
 	public function dosetAction() {
+		$ext = $this->getInput('ext', 'post');
+		$extConfig = array();
+		foreach ($ext as $key => $value) {
+			if ($value == 1) {
+				$extConfig[] = $key;
+			}
+		}
 		$config = new PwConfigSet('attachment');
-		$config->set('mark.markset', $this->getInput('markset', 'post'))->flush();
+		$config->set('mark.markset', $extConfig)->flush();
 		$this->showMessage('ADMIN:success');
-	}
-
-	/**
-	 * 加载Config DS 服务
-	 * 
-	 * @return PwConfig
-	 */
-	private function _loadConfigService() {
-		return Wekit::load('config.PwConfig');
 	}
 
 	/**

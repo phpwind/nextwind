@@ -7,7 +7,7 @@ Wind::import('SRV:attention.PwAttentionType');
  *
  * @author Jianmin Chen <sky_hold@163.com>
  * @license http://www.phpwind.com
- * @version $Id: FollowController.php 22068 2012-12-19 03:45:50Z jinlong.panjl $
+ * @version $Id: FollowController.php 26493 2013-04-10 03:54:14Z jieyin $
  * @package forum
  */
 
@@ -66,7 +66,7 @@ class FollowController extends PwBaseController {
 		$follows = WindUtility::mergeArray($follows, $userList);
 		if (!$type && !$follows) {
 			$num = 30;
-			$uids = $this->_getRecommendService()->getRecommendAttention($this->loginUser->uid,$num);
+			$uids = $this->_getRecommendService()->getOnlneUids($num);
 			$uids = array_slice($uids, 0, 24);
 			$this->setOutput($this->_getRecommendService()->buildUserInfo($this->loginUser->uid, $uids, $num), 'recommend');
 		}
@@ -86,15 +86,20 @@ class FollowController extends PwBaseController {
 		
 		// seo设置
 		Wind::import('SRV:seo.bo.PwSeoBo');
+		$seoBo = PwSeoBo::getInstance();
 		$lang = Wind::getComponent('i18n');
-		PwSeoBo::setCustomSeo($lang->getMessage('SEO:bbs.follow.run.title'), '', '');
+		$seoBo->setCustomSeo($lang->getMessage('SEO:bbs.follow.run.title'), '', '');
+		Wekit::setV('seo', $seoBo);
 	}
 	
 	/**
 	 * 关注用户
 	 */
 	public function addAction() {
-		$uid = $this->getInput('uid');
+		$uid = $this->getInput('uid', 'post');
+		if (!$uid) {
+			$this->showError('operate.select');
+		}
 		$private = Wekit::load('user.PwUserBlack')->checkUserBlack($this->loginUser->uid, $uid);
 		if ($private) {
 			$this->showError('USER:attention.private.black');
@@ -131,6 +136,9 @@ class FollowController extends PwBaseController {
 	 */
 	public function deleteAction() {
 		$uid = $this->getInput('uid');
+		if (!$uid) {
+			$this->showError('operate.select');
+		}
 		$result = $this->_getService()->deleteFollow($this->loginUser->uid, $uid);
 		if ($result instanceof PwError) {
 			$this->showError($result->getError());

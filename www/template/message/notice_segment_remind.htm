@@ -24,7 +24,7 @@
 	<!--# 
 		$loginUser = Wekit::getLoginUser(); 
 		$blacklist = Wekit::load('user.PwUserBlack')->getBlacklist($loginUser->uid);
-		if (in_array($notice['extend_params']['remindUid'],$blacklist)) { 
+		if (Pw::inArray($notice['extend_params']['remindUid'],$blacklist)) { 
 		#-->
 	<div class="tips" style="border-left:0;border-right:0;border-top:0;">已把{$notice['extend_params']['remindUsername']}列入黑名单，您不会再收到Ta的通知。</div>
 	<!--# } #-->

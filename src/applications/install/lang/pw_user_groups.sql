@@ -119,6 +119,7 @@ INSERT INTO `pw_user_permission_groups` (`gid`, `rkey`, `rtype`, `rvalue`, `vtyp
 (3, 'message_max_send', 'basic', '500', 'string');
 INSERT INTO `pw_user_permission_groups` (`gid`, `rkey`, `rtype`, `rvalue`, `vtype`) VALUES
 (3, 'multimedia_auto_open', 'basic', 'a:4:{s:5:"flash";s:1:"1";s:3:"wmv";s:1:"1";s:2:"rm";s:1:"1";s:3:"mp3";s:1:"1";}', 'array'),
+(3, 'manage_level', 'system', '100', 'string'),
 (3, 'operate_thread', 'systemforum', 'a:18:{s:6:"digest";s:1:"1";s:9:"highlight";s:1:"1";s:4:"type";s:1:"1";s:4:"move";s:1:"1";s:4:"read";s:1:"1";s:4:"edit";s:1:"1";s:4:"copy";s:1:"1";s:6:"delete";s:1:"1";s:4:"lock";s:1:"1";s:4:"down";s:1:"1";s:6:"shield";s:1:"1";s:9:"deleteatt";s:1:"1";s:11:"toppedreply";s:1:"1";s:3:"ban";s:1:"1";s:2:"up";s:1:"1";s:7:"up_time";s:2:"72";s:6:"topped";s:1:"1";s:11:"topped_type";s:1:"3";}', 'array'),
 (3, 'fresh_delete', 'system', '1', 'string'),
 (3, 'panel_bbs_manage', 'system', 'a:1:{s:12:"thread_check";s:1:"1";}', 'array'),
@@ -185,6 +186,7 @@ INSERT INTO `pw_user_permission_groups` (`gid`, `rkey`, `rtype`, `rvalue`, `vtyp
 (4, 'message_allow_send', 'basic', '1', 'string'),
 (4, 'message_max_send', 'basic', '300', 'string'),
 (4, 'multimedia_auto_open', 'basic', '0', 'string'),
+(4, 'manage_level', 'system', '99', 'string'),
 (4, 'operate_thread', 'systemforum', 'a:18:{s:6:"digest";s:1:"1";s:9:"highlight";s:1:"1";s:4:"type";s:1:"1";s:4:"move";s:1:"1";s:4:"read";s:1:"1";s:4:"edit";s:1:"1";s:4:"copy";s:1:"1";s:6:"delete";s:1:"1";s:4:"lock";s:1:"1";s:4:"down";s:1:"1";s:6:"shield";s:1:"1";s:9:"deleteatt";s:1:"1";s:11:"toppedreply";s:1:"1";s:3:"ban";s:1:"1";s:2:"up";s:1:"1";s:7:"up_time";s:2:"24";s:6:"topped";s:1:"1";s:11:"topped_type";s:1:"2";}', 'array'),
 (4, 'password_limit_time', 'basic', '0', 'string'),
 (4, 'post_check', 'basic', '1', 'string'),
@@ -218,6 +220,7 @@ INSERT INTO `pw_user_permission_groups` (`gid`, `rkey`, `rtype`, `rvalue`, `vtyp
 (4, 'panel_report_manage', 'system', 'a:1:{s:13:"report_manage";s:1:"1";}', 'array'),
 (4, 'panel_recycle_manage', 'system', 'a:1:{s:7:"recycle";s:1:"1";}', 'array'),
 (4, 'panel_log_manage', 'system', 'a:1:{s:10:"log_manage";s:1:"1";}', 'array'),
+(5, 'manage_level', 'system', '98', 'string'),
 (5, 'operate_thread', 'systemforum', 'a:18:{s:6:"digest";s:1:"1";s:9:"highlight";s:1:"1";s:4:"type";s:1:"1";s:4:"move";s:1:"1";s:4:"read";s:1:"1";s:4:"edit";s:1:"1";s:4:"copy";s:1:"1";s:6:"delete";s:1:"1";s:4:"lock";s:1:"1";s:4:"down";s:1:"1";s:6:"shield";s:1:"1";s:9:"deleteatt";s:1:"1";s:11:"toppedreply";s:1:"1";s:3:"ban";s:1:"1";s:2:"up";s:1:"1";s:7:"up_time";s:2:"12";s:6:"topped";s:1:"1";s:11:"topped_type";s:1:"1";}', 'array'),
 (5, 'allow_add_vote', 'basic', '1', 'string'),
 (5, 'allow_download', 'basic', '1', 'string'),
@@ -757,4 +760,5 @@ INSERT INTO `pw_user_permission_groups` (`gid`, `rkey`, `rtype`, `rvalue`, `vtyp
 (16, 'allow_sign', 'basic', '1', 'string'),
 (16, 'allow_add_vote', 'basic', '1', 'string'),
 (16, 'allow_participate_vote', 'basic', '1', 'string'),
-(16, 'allow_view_vote', 'basic', '0', 'string');
+(16, 'allow_view_vote', 'basic', '0', 'string'),
+(16, 'manage_level', 'system', '50', 'string');

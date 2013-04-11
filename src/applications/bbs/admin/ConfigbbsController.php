@@ -8,7 +8,7 @@ Wind::import('ADMIN:library.AdminBaseController');
  * @author Qiong Wu <papa0924@gmail.com> 2011-10-21
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: ConfigbbsController.php 20877 2012-11-15 02:52:16Z xiaoxia.xuxx $
+ * @version $Id: ConfigbbsController.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package admin
  * @subpackage controller
  */
@@ -26,7 +26,7 @@ class ConfigbbsController extends AdminBaseController {
 		$this->setOutput($groups, 'groups');
 		$this->setOutput($groupTypes, 'groupTypes');
 		
-		$config = Wekit::load('config.PwConfig')->getValues('bbs');
+		$config = Wekit::C()->getValues('bbs');
 		$this->setOutput($config, 'config');
 // 		$this->setOutput(Wekit::C('bbs'), 'config');
 	}

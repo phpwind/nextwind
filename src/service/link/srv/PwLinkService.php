@@ -6,7 +6,7 @@
  * @author xiaoxia.xu <xiaoxia.xuxx@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwLinkService.php 20088 2012-10-23 07:49:58Z xiaoxia.xuxx $
+ * @version $Id: PwLinkService.php 24310 2013-01-28 07:41:43Z jinlong.panjl $
  * @package src.service.link.srv
  */
 class PwLinkService {
@@ -43,8 +43,8 @@ class PwLinkService {
 	 * @param int $typeId
 	 * @return array
 	 */
-	public function getLinksList($typeId) {
-		$links = $typeIds = array();
+	public function getLinksList($typeId = 0) {
+		$links = $typeIds = $linksList = array();
 		if (!$typeId) {
 			$links = $this->_getDs()->getLinks(0, 100);
 			$_typeIds = $this->_getDs()->fetchRelationsByLinkid(array_keys($links));
@@ -57,9 +57,8 @@ class PwLinkService {
 		}
 		
 		if (!$links) return array();
-		$linksList = array();
 		foreach ($links as $key => $value) {
-			$value['typeid'] = $typeIds[$value['lid']];
+			$value['typeid'] = (array)$typeIds[$value['lid']];
 			$linksList[$key] = $value;
 		}
 		

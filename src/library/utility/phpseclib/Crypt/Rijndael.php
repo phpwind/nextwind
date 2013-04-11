@@ -64,7 +64,7 @@
  * @author     Jim Wigginton <terrafrost@php.net>
  * @copyright  MMVIII Jim Wigginton
  * @license    http://www.gnu.org/licenses/lgpl.txt
- * @version    $Id: Rijndael.php 21939 2012-12-17 07:13:16Z long.shi $
+ * @version    $Id: Rijndael.php 24136 2013-01-22 06:20:20Z xiaoxia.xuxx $
  * @link       http://phpseclib.sourceforge.net
  */
 
@@ -502,7 +502,7 @@ class Crypt_Rijndael {
      */
     function setIV($iv)
     {
-        $this->encryptIV = $this->decryptIV = $this->iv = str_pad(substr($iv, 0, $this->block_size), $this->block_size, chr(0));;
+        $this->encryptIV = $this->decryptIV = $this->iv = str_pad(substr($iv, 0, $this->block_size), $this->block_size, chr(0));
     }
 
     /**

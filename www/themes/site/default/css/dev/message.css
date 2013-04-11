@@ -3,7 +3,7 @@
 @explain: 私信与通知
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: message.css 20411 2012-10-29 07:25:04Z yanchixia $
+$Id: message.css 24448 2013-01-30 09:31:12Z yanchixia $
 ===================
 #*/
 .notice_page,
@@ -20,7 +20,7 @@ $Id: message.css 20411 2012-10-29 07:25:04Z yanchixia $
 */
 .message_list,
 .notice_list{
-	padding:0 15px 15px;
+	padding:0 0 15px;
 }
 /*头尾操作*/
 .message_list .hd,
@@ -294,7 +294,7 @@ $Id: message.css 20411 2012-10-29 07:25:04Z yanchixia $
 	background:none;
 }
 .message_reply{
-	padding:0 15px 15px;
+	padding:0 0 15px;
 	overflow:hidden;
 }
 .message_reply dt{
@@ -328,7 +328,7 @@ $Id: message.css 20411 2012-10-29 07:25:04Z yanchixia $
 ===================
 */
 .message_dialogue dl{
-	padding:0 15px 20px;
+	padding:0 0 20px;
 }
 .message_dialogue dt{
 	float:left;
@@ -462,6 +462,19 @@ $Id: message.css 20411 2012-10-29 07:25:04Z yanchixia $
 }
 .message_search button img{
 	vertical-align:middle;
+}
+.message_search button span{
+	width:15px;
+	height:15px;
+	display:inline;
+	font:0/0 Arial;
+	overflow:hidden;
+	padding:0;
+	margin:0 0 0;
+	background:url(../../images/message/search.png) no-repeat;
+	float:left;
+	text-indent:-2000em;
+	cursor:pointer;
 }
 
 /*

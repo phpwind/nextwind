@@ -12,7 +12,7 @@ Wind::import('SRV:user.dm.PwUserInfoDm');
  * @author Qiong Wu <papa0924@gmail.com> 2011-11-10
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: FounderController.php 22109 2012-12-19 08:07:09Z long.shi $
+ * @version $Id: FounderController.php 23742 2013-01-15 09:22:58Z jieyin $
  * @package admin
  * @subpackage library
  */
@@ -92,7 +92,7 @@ class FounderController extends AdminBaseController {
 	 */
 	public function delAction() {
 		$username = $this->getInput('username', 'get');
-		if ($this->adminUser->username == $username) $this->showError('ADMIN:founder.del.fail.self');
+		if ($this->loginUser->username == $username) $this->showError('ADMIN:founder.del.fail.self');
 		$result = $this->loadFounderService()->del($username);
 		if ($result instanceof PwError) $this->showError($result->getError());
 		$this->showMessage('success');

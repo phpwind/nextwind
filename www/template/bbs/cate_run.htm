@@ -3,9 +3,6 @@
 <head>
 <template source='TPL:common.head' load='true' />
 <link href="{@theme:css}/forum.css?v={@NEXT_RELEASE}" rel="stylesheet" />
-<!--# if ($operateThread) { #-->
-<link href="{@theme:css}/management.css?v={@NEXT_RELEASE}" rel="stylesheet" />
-<!--#}#-->
 </head>
 <body>
 <pw-start/>
@@ -37,7 +34,13 @@
 						<!--# if ($threaddb) { #-->
 						<div class="thread_posts_list">
 							<table width="100%" id="J_posts_list" summary="帖子列表">
+								<!--# $tpc_topped = 0; #-->
 								<!--# foreach ($threaddb as $key => $value) { #-->
+								<!--# if ($tpc_topped && !isset($value['issort'])) { #-->
+								<tr>
+									<td colspan="3" class="tac ordinary">普通主题</td>
+								</tr>
+								<!--# } #-->
 								<tr>
 									<td class="author"><a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run?uid=$value['created_userid']}"><img class="J_avatar" src="{@Pw::getAvatar($value['created_userid'], 'small')}" data-type="small" width="45" height="45" alt="{$value['created_username']}的头像" /></a></td>
 									<td class="subject">
@@ -45,7 +48,7 @@
 											<!--# if ($operateThread) { #-->
 											<input class="J_check" name="" type="checkbox" value="{$value['tid']}" />
 											<!--# } #-->
-											<span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}"></i></span>
+											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" target="_blank"><span class="posts_icon"><i class="icon_{$value['icon']}" title="{$icon[$value['icon']]}  新窗口打开"></i></span></a>
 											<a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}">{@Pw::substrs($value['subject'],$numofthreadtitle)}</a>
 											<hook class='$threadList' name='createHtmlAfterSubject' args="array($value)" /><!--# if ($value['ifupload']) { #--><span class="posts_icon"><i class="icon_{$uploadIcon[$value['ifupload']]}" title="{$icon[$uploadIcon[$value['ifupload']]]}"></i></span><!--# } #-->
 										</p>
@@ -59,25 +62,29 @@
 										<span><em>{$value['hits']}</em>浏览</span>
 									</td>
 								</tr>
+								<!--# $tpc_topped = isset($value['issort']); #-->
 								<!--# } #-->
 							</table>
 						</div>
-						<!--# if ($operateThread) { #-->
-						<div class="management mb10 J_post_manage_col" data-role="list">
-							<label class="mr10"><input class="J_check_all" type="checkbox">全选</label>
-							<!--# if ($operateThread['topped']) { #--><a href="{@url:bbs/manage/topped}" class="btn">置顶</a><!--# } #-->
-							<!--# if ($operateThread['digest']) { #--><a href="{@url:bbs/manage/digest}" class="btn">精华</a><!--# } #-->
-							<!--# if ($operateThread['highlight']) { #--><a href="{@url:bbs/manage/highlight}" class="btn">加亮</a><!--# } #-->
-							<!--# if ($operateThread['up']) { #--><a href="{@url:bbs/manage/up}" class="btn">提前</a><!--# } #-->
-							<!--# if ($operateThread['type']) { #--><a href="{@url:bbs/manage/type}" class="btn">分类</a><!--# } #-->
-							<!--# if ($operateThread['move']) { #--><a href="{@url:bbs/manage/move}" class="btn">移动</a><!--# } #-->
-							<!--# if ($operateThread['copy']) { #--><a href="{@url:bbs/manage/copy}" class="btn">复制</a><!--# } #-->
-							<!--# if ($operateThread['unite']) { #--><a href="{@url:bbs/manage/unite}" class="btn">合并</a><!--# } #-->
-							<!--# if ($operateThread['lock']) { #--><a href="{@url:bbs/manage/lock}" class="btn">锁定</a><!--# } #-->
-							<!--# if ($operateThread['down']) { #--><a href="{@url:bbs/manage/down}" class="btn">压帖</a><!--# } #-->
-							<!--# if ($operateThread['delete']) { #--><a href="{@url:bbs/manage/delete}" class="btn">删除</a><!--# } #-->
+							<!--# if ($operateThread) { #-->
+							<div class="management mb10 J_post_manage_col" data-role="list">
+								<label class="mr10"><input class="J_check_all" type="checkbox">全选</label>
+								<!--# if ($operateThread['topped']) { #--><a href="{@url:bbs/manage/topped}">置顶</a><!--# } #-->
+								<!--# if ($operateThread['digest']) { #--><a href="{@url:bbs/manage/digest}">精华</a><!--# } #-->
+								<!--# if ($operateThread['highlight']) { #--><a href="{@url:bbs/manage/highlight}">加亮</a><!--# } #-->
+								<!--# if ($operateThread['up']) { #--><a href="{@url:bbs/manage/up}">提前</a><!--# } #-->
+								<!--# if ($operateThread['type']) { #--><a href="{@url:bbs/manage/type}">分类</a><!--# } #-->
+								<!--# if ($operateThread['move']) { #--><a href="{@url:bbs/manage/move}">移动</a><!--# } #-->
+								<!--# if ($operateThread['copy']) { #--><a href="{@url:bbs/manage/copy}">复制</a><!--# } #-->
+								<!--# if ($operateThread['unite']) { #--><a href="{@url:bbs/manage/unite}">合并</a><!--# } #-->
+								<!--# if ($operateThread['lock']) { #--><a href="{@url:bbs/manage/lock}">锁定</a><!--# } #-->
+								<!--# if ($operateThread['down']) { #--><a href="{@url:bbs/manage/down}">压帖</a><!--# } #-->
+								<!--# if ($operateThread['delete']) { #--><a href="{@url:bbs/manage/delete}">删除</a><!--# } #-->
+							</div>
+							<!--# } #-->
+						<div class="pages_wrap cc">
+							<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/cate/run?fid=$fid" args="$urlargs"/>
 						</div>
-						<!--# } #-->
 						<!--# } else { #-->
 						<div class="not_content">
 							<!--# if ($tab == 'digest') { #-->
@@ -90,9 +97,6 @@
 						</div>
 						<!--# } #-->
 					</div>
-					<div class="mb20 cc">
-					<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" total="$totalpage" url="bbs/cate/run?fid=$fid" args="$urlargs"/>
-					</div>
 					<pw-tpl id="cate_bottom"/>
 					<section class="face_list" style="display:none;">
 						<h2 class="hd"><a href="#" class="fr fn">查看更多&gt;&gt;</a>当前在线</h2>
@@ -100,9 +104,9 @@
 							<ul class="cc">
 								<!--#$online = Wekit::load('SRV:online.srv.PwOnlineCountService');#-->
 								<!--#$list = $online->getLastVisitor($pwforum->fid);#-->
-								<!--#foreach ($list as $value) :#-->
+								<!--#foreach ($list as $value){ #-->
 								<li><a href="#"><img src="{@G:url.images}/face/face_small.jpg" width="48" height="48" alt="{$value['username']}"><br />{$value['username']}</a></li>
-								<!--#endforeach#-->
+								<!--# } #-->
 							</ul>
 						</article>
 					</section>
@@ -142,15 +146,15 @@
 	</div>
 <template source='TPL:common.footer' load='true' />
 </div>
-<!--# if(!$is_design) { #-->
 <script>
 Wind.use('jquery', 'global', function(){
-	<!--# if ($operateThread) { #-->
-		Wind.js(GV.JS_ROOT +'pages/bbs/threadForumManage.js?v=' + GV.JS_VERSION);
+	<!--# if(!$is_design) { #-->
+		<!--# if ($operateThread) { #-->
+		Wind.js(GV.JS_ROOT +'pages/bbs/threadManage.js?v=' + GV.JS_VERSION);
+		<!--# } #-->
 	<!--# } #-->
 });
 </script>
-<!--# } #-->
 <pw-end/>
 </body>
 </html>

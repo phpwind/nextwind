@@ -38,18 +38,9 @@ return array(
 	'admin_auth' => array('后台权限', 'auth,role/*', '', '', 'admin'),
 	'admin_safe' => array('后台安全', 'safe/*', '', '', 'admin'),
 	
-	'windid_windid' => array('WindID设置', 'windid/windid/*', '', '', 'admin'),
-	'windid_client' => array('客户端管理', 'windid/client/*', '', '', 'admin'),
-
-	'windid_notify' => array('通知队列', 'windid/notify/*', '', '', 'admin'),
-	//'windid_regist' => array('注册设置', 'windid/regist/*', '', '', 'admin'),
-	//'windid_storage' => array('头像存储设置', 'windid/storage/*', '', '', 'admin'),
-	//'windid_credit' => array('积分设置', 'windid/credit/*', '', '', 'admin'),
-	//'windid_time' => array('时区设置', 'windid/time/*', '', '', 'admin'),
-	//'windid_user' => array('用户管理', 'windid/user/*', '', '', 'admin'),
-	//'windid_messages' => array('私信管理', 'windid/messages/*', '', '', 'admin'),
-	//'windid_area' => array('地区库', 'windid/areadata/*', '', '', 'admin'),
-	//'windid_school' => array('学校库', 'windid/schooldata/*', '', '', 'admin'),
+	'windid_windid' => array('WindID设置', 'windidclient/windid/*', '', '', 'admin'),
+	'windid_client' => array('客户端管理', 'windidclient/client/*', '', '', 'admin'),
+	'windid_notify' => array('通知队列', 'windidclient/notify/*', '', '', 'admin'),
 
 	'config_site' => array('站点设置', 'config/config/*', '', '', 'config'),
 	'config_nav' => array('导航设置', 'nav/nav/*', '', '', 'config'),
@@ -66,8 +57,8 @@ return array(
 	'config_domain' => array('二级域名', 'rewrite/domain/*', '', '', 'config'),
 	'config_email' => array('电子邮件', 'config/email/*', '', '', 'config'),
 	'config_pay' => array('网上支付', 'config/pay/*', '', '', 'config'),
-	'config_area' => array('地区库', 'windid/areadata/*', '', '', 'config'),
-	'config_school' => array('学校库', 'windid/schooldata/*', '', '', 'config'),
+	'config_area' => array('地区库', 'windidclient/areadata/*', '', '', 'config'),
+	'config_school' => array('学校库', 'windidclient/schooldata/*', '', '', 'config'),
 
 	'u_groups' => array('用户组权限', 'u/groups/*', '', '', 'u'),
 	'u_upgrade'=> array('用户组提升','u/upgrade/*','','','u'),
@@ -140,7 +131,7 @@ return array(
 
 		//'link' => array('resource' => 'APPS:link.conf.linkmenu.php'),//运营
 		//'punch' => array('resource' => 'APPS:u.conf.punchmenu.php'),
-		//'appcenter' => array('resource' => 'APPS:appcenter.conf.appcentermenu.php'),//应用
+		//'appcenter' => array('resource' => 'APPCENTER:conf.appcentermenu.php'),//应用
 		//'medal'	=> array('resource' => 'APPS:medal.conf.medalmenu.php'),
 		//'task'	=> array('resource' => 'APPS:task.conf.taskmenu.php'),
 		//'vote'	=> array('resource' => 'APPS:vote.conf.votemenu.php'),

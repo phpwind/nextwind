@@ -31,7 +31,7 @@ Wind::import('WIND:router.AbstractWindRouter');
  * @author Qiong Wu <papa0924@gmail.com> 2011-9-23
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: WindRouter.php 3714 2012-07-16 06:01:50Z yishuo $
+ * @version $Id: WindRouter.php 3928 2013-01-29 10:21:53Z yishuo $
  * @package router
  */
 class WindRouter extends AbstractWindRouter {
@@ -44,18 +44,25 @@ class WindRouter extends AbstractWindRouter {
 	 * @see IWindRouter::route()
 	 */
 	public function route($request) {
-		$this->_action = $this->action;
-		$this->_controller = $this->controller;
-		$this->_module = $this->module;
 		$this->request = $request;
 		if (!empty($this->_config['routes'])) {
+			$this->setCallBack(array($this, 'defaultRoute'));
 			$params = $this->getHandler()->handle($request);
 			$params && $this->setParams($params, $request);
-		} else {
-			$this->action = $request->getRequest($this->actionKey, $this->_action);
-			$this->controller = $request->getRequest($this->controllerKey, $this->_controller);
-			$this->module = $request->getRequest($this->moduleKey, $this->_module);
-		}
+			$this->action || $this->action = $this->_action;
+			$this->controller || $this->controller = $this->_controller;
+			$this->module || $this->module = $this->_module;
+		} else
+			$this->defaultRoute();
+	}
+
+	/**
+	 * 默认路由处理
+	 */
+	public function defaultRoute() {
+		$this->action = $this->request->getRequest($this->actionKey, $this->_action);
+		$this->controller = $this->request->getRequest($this->controllerKey, $this->_controller);
+		$this->module = $this->request->getRequest($this->moduleKey, $this->_module);
 	}
 	
 	/* (non-PHPdoc)

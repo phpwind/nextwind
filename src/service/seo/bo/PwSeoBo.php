@@ -41,13 +41,27 @@ class PwSeoBo {
 	 *
 	 * @var array
 	 */
-	protected static $defaultSeo = array(
+	protected  $defaultSeo = array(
 		'title' => '{sitename}', 
 		'description' => '{sitename}', 
 		'keywords' => '{sitename}');
-	protected static $seo = array();
-	protected static $codeData = array();
-	protected static $default = array();
+	protected  $seo = array();
+	protected  $codeData = array();
+	protected  $default = array();
+	private static $_instance = null;
+	
+	public function __construct() {
+		$sitename = Wekit::C('site', 'info.name');
+		$this->set('{sitename}', $sitename);
+	}
+	
+	/**
+	 * @return PwSeoBo
+	 */
+	public static function getInstance() {
+		isset(self::$_instance) || self::$_instance = new self();
+		return self::$_instance;
+	}
 
 	/**
 	 * 初始化页面的seo格式
@@ -61,8 +75,8 @@ class PwSeoBo {
 	 * @param string $page        	
 	 * @param string $param        	
 	 */
-	public static function init($mod, $page, $param = '0') {
-		self::$default || self::$default = Wekit::load('APPS:seo.service.PwSeoExtends')->getDefaultSeoByPage(
+	public function init($mod, $page, $param = '0') {
+		$this->default || $this->default = Wekit::load('APPS:seo.service.PwSeoExtends')->getDefaultSeoByPage(
 			$page, $mod);
 		/*
 		 * 显示逻辑： 参数为0表示页面，参数不为0表示子页面。例如版块列表页参数为0，具体某个版块的页面参数为fid
@@ -70,12 +84,12 @@ class PwSeoBo {
 		 */
 		if ($param != '0') {
 			list($seo, $seo_0) = array(
-				self::_seoService()->getByModAndPageAndParamWithCache($mod, $page, $param), 
-				self::_seoService()->getByModAndPageAndParamWithCache($mod, $page, 0));
-			self::$seo = self::_choose($seo, $seo_0, self::$default);
+				$this->_seoService()->getByModAndPageAndParamWithCache($mod, $page, $param), 
+				$this->_seoService()->getByModAndPageAndParamWithCache($mod, $page, 0));
+			$this->seo = self::_choose($seo, $seo_0, $this->default);
 		} else {
-			$result = self::_seoService()->getByModAndPageAndParamWithCache($mod, $page, '0');
-			self::$seo = self::_choose($result, false, self::$default);
+			$result = $this->_seoService()->getByModAndPageAndParamWithCache($mod, $page, '0');
+			$this->seo = $this->_choose($result, false, $this->default);
 		}
 	}
 
@@ -85,11 +99,11 @@ class PwSeoBo {
 	 * @param string $code        	
 	 * @param string $value        	
 	 */
-	public static function set($code, $value = '') {
+	public function set($code, $value = '') {
 		if (is_array($code))
-			self::$codeData = array_merge(self::$codeData, $code);
+			$this->codeData = array_merge($this->codeData, $code);
 		else
-			self::$codeData[$code] = $value;
+			$this->codeData[$code] = $value;
 	}
 
 	/**
@@ -97,11 +111,11 @@ class PwSeoBo {
 	 *
 	 * @return array
 	 */
-	public static function getData() {
-		empty(self::$seo) && self::$seo = self::$defaultSeo;
-		foreach (self::$seo as $k => &$v)
-			$v = strip_tags(trim(strtr($v, self::$codeData), '-_ '));
-		return self::$seo;
+	public function getData() {
+		empty($this->seo) && $this->seo = $this->defaultSeo;
+		foreach ($this->seo as $k => &$v)
+			$v = strip_tags(trim(strtr($v, $this->codeData), '-_ '));
+		return $this->seo;
 	}
 
 	/**
@@ -111,17 +125,17 @@ class PwSeoBo {
 	 * @param string $keywords        	
 	 * @param string $description        	
 	 */
-	public static function setCustomSeo($title, $keywords, $description) {
+	public function setCustomSeo($title, $keywords, $description) {
 		if ($title || $keywords || $description) {
-			self::$seo = array(
+			$this->seo = array(
 				'title' => $title, 
 				'keywords' => $keywords, 
 				'description' => $description);
 		}
 	}
 
-	public static function setDefaultSeo($title, $keywords, $description) {
-		self::$default = array(
+	public function setDefaultSeo($title, $keywords, $description) {
+		$this->default = array(
 			'title' => $title, 
 			'keywords' => $keywords, 
 			'description' => $description);
@@ -131,11 +145,11 @@ class PwSeoBo {
 	 *
 	 * @return PwSeoService
 	 */
-	private static function _seoService() {
+	private function _seoService() {
 		return Wekit::load('seo.srv.PwSeoService');
 	}
 
-	private static function _choose($option1, $option2 = false, $default) {
+	private function _choose($option1, $option2 = false, $default) {
 		$tmp = array();
 		if ($option2 !== false) {
 			$tmp['title'] = $option1['title'] ? $option1['title'] : ($option2['title'] ? $option2['title'] : $default['title']);

@@ -3,14 +3,11 @@
 	width:75px;
 }
 </style>
-<!--# $_s = (1 == $s) ? 'top: 223px; left: 485.5px;' : '';#-->
-	<div id="J_login_question_wrap" class="core_pop_wrap" style="{$_s}">
-		<div class="core_pop">
-			<div class="pop_login">
-				<div class="pop_top">
-					<a id="J_login_question_close" href="" class="pop_close">关闭</a>
-					<strong>登录保护</strong>
-				</div>
+<div class="pop_login">
+	<div class="pop_top">
+		<a href="" class="pop_close J_close">关闭</a>
+		<strong>登录保护</strong>
+	</div>
 				<form id="J_head_question_form" action="{@url:u/login/doshowquestion}" method="post" >
 				<input type="hidden" name="_statu" value="{$_statu}">
 				<input type="hidden" name="v" value="{$v}" />
@@ -50,23 +47,12 @@
 				</div>
 				</form>
 			</div>
-		</div>
-	</div>
+
 <script type="text/javascript">
 $(function(){
 	
 	var login_question_wrap = $('#J_login_question_wrap'),
 		login_question_tips = $('#J_login_question_tips');
-	
-	//拖动组件
-	login_question_wrap.draggable( { handle : '.pop_top'} );
-	
-	//关闭
-	$('#J_login_question_close').on('click', function(e){
-		e.preventDefault();
-		login_question_wrap.remove();
-		$('#J_sidebar_login').focus();
-	});
 
 	//自定义问题
 	var myqustion_dl = $('#J_myqustion_dl');
@@ -79,13 +65,18 @@ $(function(){
 	});
 	
 	//提交
-	$('#J_head_question_form').ajaxForm({
+	var form = $('#J_head_question_form'),
+		btn = form.find('button:submit');
+	form.ajaxForm({
 		dataType : 'json',
-		//beforeSubmit : function (arr, $form, options) {},
+		beforeSubmit : function (arr, $form, options) {
+			Wind.Util.ajaxBtnDisable(btn);
+		},
 		success : function (data, statusText, xhr, $form) {
 			if(data.state === 'success') {
 				window.location.href = data.referer;
 			}else{
+				Wind.Util.ajaxBtnEnable(btn);
 				login_question_tips.html('<div class="tips_icon_error">'+ data.message +'</div>').show();
 			}
 		}

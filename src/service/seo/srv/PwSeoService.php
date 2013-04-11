@@ -5,7 +5,7 @@
  * @author Shi Long <long.shi@alibaba-inc.com>
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.windframework.com
- * @version $Id: PwSeoService.php 20657 2012-11-02 01:35:33Z long.shi $
+ * @version $Id: PwSeoService.php 24341 2013-01-29 03:08:55Z jieyin $
  * @package wind
  */
 class PwSeoService {
@@ -23,7 +23,7 @@ class PwSeoService {
 		return Wekit::C()->seo->get($key, array());
 		/* if (!$result) {
 			$result = $this->_seoDs()->getByModAndPageAndParam($mod, $page, $param);
-			Wekit::load('config.PwConfig')->setConfig('seo', $key, $result);
+			Wekit::C()->setConfig('seo', $key, $result);
 		}
 		return $result; */
 	}

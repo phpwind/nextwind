@@ -1,12 +1,12 @@
 <?php
-defined('WINDID_VERSION') || exit('Forbidden');
+defined('WEKIT_VERSION') || exit('Forbidden');
 /**
  * 配置管理
  *
  * @author Qiong Wu <papa0924@gmail.com> 2011-12-6
  * @copyright ©2003-2103 phpwind.com
  * @license http://www.phpwind.com
- * @version $Id: WindidConfigSet.php 21452 2012-12-07 10:18:33Z gao.wanggao $
+ * @version $Id: WindidConfigSet.php 24443 2013-01-30 08:08:06Z jieyin $
  * @package src
  * @subpackage service.config.bo
  */
@@ -48,7 +48,7 @@ class WindidConfigSet {
 	 * 将数据持久化到数据库
 	 */
 	public function flush() {
-		$service = Windid::load('config.WindidConfig');
+		$service = Wekit::load('WSRV:config.WindidConfig');
 		$service->setConfigs($this->namespace, $this->config);
 	}
 

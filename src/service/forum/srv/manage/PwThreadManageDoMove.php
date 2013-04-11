@@ -4,7 +4,7 @@ Wind::import('SRV:forum.srv.manage.PwThreadManageDo');
 Wind::import('SRV:forum.dm.PwTopicDm');
 
 /**
- * 帖子管理 - 移动
+ * 帖子管理操作 - 移动
  *
  * @author jinlong.panjl <jinlong.panjl@aliyun-inc.com>
  * @copyright ©2003-2103 phpwind.com
@@ -27,7 +27,11 @@ class PwThreadManageDoMove extends PwThreadManageDo {
 	public function check($permission) {
 		if (!isset($permission['move']) || !$permission['move']) {
 			return false;
-		} else if (isset($this->fid)) {
+		}
+		if (!$this->srv->user->comparePermission(Pw::collectByKey($this->srv->data, 'created_userid'))) {
+			return new PwError('permission.level.move', array('{grouptitle}' => $this->srv->user->getGroupInfo('name')));
+		}
+		if (isset($this->fid)) {
 			Wind::import('SRV:forum.bo.PwForumBo');
 			$this->forum = new PwForumBo($this->fid);
 			if (!$this->forum->isForum()) {
@@ -39,7 +43,9 @@ class PwThreadManageDoMove extends PwThreadManageDo {
 			if ($this->forum->forumset['topic_type'] && $this->forum->forumset['force_topic_type'] && !$this->topictype) {
 				$topicTypes = Wekit::load('SRV:forum.PwTopicType')->getTypesByFid($this->forum->fid);
 				if ($topicTypes) {
+
 					return new PwError('BBS:post.topictype.empty');
+
 				}
 			}
 		}
@@ -84,6 +90,8 @@ class PwThreadManageDoMove extends PwThreadManageDo {
 		$topicDm->setTopictype($this->topictype)
 				->setFid($this->fid);
 		$this->_getThreadDs()->batchUpdateThread(array_keys($threads), $topicDm, PwThread::FETCH_MAIN);
+		$this->_getAttachDs()->batchUpdateFidByTid($this->tids, $this->fid);
+
 		$fids = array();
 		foreach ($threads as $t) {
 			if ($t['fid'] == $this->fid) continue;
@@ -114,7 +122,11 @@ class PwThreadManageDoMove extends PwThreadManageDo {
 	 *
 	 * @return PwThread
 	 */
-	public function _getThreadDs() {
+	private function _getThreadDs() {
 		return Wekit::load('forum.PwThread');
+	}
+
+	private function _getAttachDs() {
+		return Wekit::load('attach.PwThreadAttach');
 	}
 }

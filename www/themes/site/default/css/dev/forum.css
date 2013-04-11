@@ -3,7 +3,7 @@
 @explain: 版块页面（包含列表和阅读页）
 @copyright: Copyright 2012,phpwind.com
 @author: longwenid@gmail.com
-$Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
+$Id: forum.css 24715 2013-02-17 03:13:14Z yanchixia $
 ===================
 #*/
 
@@ -69,9 +69,9 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 ===================
 */
 .bbs_info_box{
-	padding:10px 0;
 	color:#666;
 	color:rgba(0,0,0,0.6);
+	margin-bottom:10px;
 }
 .bbs_info_box span{
 	display:inline-block;
@@ -175,16 +175,21 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 ===================
 */
 .forum_child{
+	margin-top:20px;
+	padding:0 10px 10px;
 	background:#fbfbfb;
-	border-top:1px solid #e9e9e9;
-	border-bottom:1px solid #fff;
+	border-bottom:1px solid #e9e9e9;
 }
-.forum_child .box_title{
+.forum_child .hd{
 	border-bottom:1px solid #fbfbfb;
-	background:#fbfbfb;
 	overflow:hidden;
+	padding:7px 10px;
 	position:relative;
 	padding-bottom:0;
+	color:#666;
+}
+.forum_child .ct{
+	padding:0 10px;
 }
 
 /*
@@ -205,7 +210,6 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 }
 .btn_post{
 	background-position:0 0;
-	margin-right:10px;
 }
 .btn_post:hover{
 	background-position:0 -30px;
@@ -223,13 +227,32 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 	background-position:0 -150px;
 }
 
-/*阅读页分页和发帖*/
-.J_page_wrap{
-	float:right;
+/*列表页分页和发帖*/
+.pages_wrap{
+	padding:0 0 20px 0;
 }
-.J_page_wrap .pages{
+.pages_wrap .btn_post{
 	float:left;
 }
+.pages_wrap .pages{
+	float:right;
+}
+/*阅读页分页和发帖回复*/
+.read_pages_wrap{
+	padding:0 0 10px 0;
+}
+.read_pages_wrap .btn_post{
+	float:right;
+	margin-left:10px;
+	display:inline;
+}
+.read_pages_wrap .btn_replay{
+	float:right;
+}
+.read_pages_wrap .pages{
+	float:left;
+}
+
 
 /*下拉菜单*/
 .btn_post_menu{
@@ -257,7 +280,6 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 ===================
 */
 .forum_info_box{
-	padding:10px 15px 13px;
 }
 /*logo*/
 .forum_info_box .banner{
@@ -323,13 +345,6 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 	margin-right:15px;
 	white-space:nowrap;
 }
-/*加入退出版块*/
-.forum_info_box .core_unfollow span{
-	display:none;
-}
-.forum_info_box .core_unfollow:hover span{
-	display:inline;
-}
 
 /*
 ===================
@@ -337,8 +352,9 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 ===================
 */
 .thread_page{
-	padding:0 0 15px;
 	position:relative;
+	padding:0;
+	margin:0;
 }
 /*
 ===================
@@ -346,8 +362,7 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 ===================
 */
 .thread_posts_list{
-	padding:0 15px 15px;
-	min-height:400px;
+	padding:0 0 10px;
 }
 .thread_posts_list table{
 	table-layout:fixed;
@@ -489,7 +504,7 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 */
 .thread_uesr_list{
 	overflow:hidden;
-	padding:15px;
+	padding:15px 0;
 }
 .thread_uesr_list h2{
 	font-size:12px;
@@ -549,33 +564,36 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 ===================
 */
 .floor{
-	margin-top:10px;
-	padding-bottom:10px;
+	border-left:1px solid #efefef;
+	border-right:1px solid #efefef;
+	border-bottom:1px solid #d3d3d3;
+	box-shadow:0 1px 1px rgba(0,0,0,0.02);
+	background:#fff;
+	margin-bottom:10px;
+}
+.floor .box_wrap{
+	border:0 none;
+	box-shadow:0 0 0;
+	background:none;
+	border-radius:0;
+	margin:0;
 }
 #read_0{
 	margin-top:0;
 }
-.floor_left{
+.floor .floor_left{
 	vertical-align:top;
-	width:140px;
+	width:160px;
+	background:#fbfbfb;
+	border-right:1px solid #e9e9e9;
 }
-/*用于返回与楼层同宽*/
-.floor_left_none{
-	width:140px;
-}
-.floor_right{
+.floor .floor_right{
 	vertical-align:top;
 	padding:10px 20px;
-	border-bottom:0 none;
 }
 .floor_bottom{
-	border-top:0 none;
 	vertical-align:bottom;
 	padding:0 20px;
-}
-
-.editor_content{
-	min-height:100px;
 }
 
 /*
@@ -584,6 +602,7 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 ===================
 */
 .floor_arrow{
+	display:none;
 	position:absolute;
 	margin-left:-42px;
 	margin-top:25px;
@@ -641,18 +660,14 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 .post_num{
 	float:right;
 	margin-top:5px;
-	border-left:1px solid #fff;
+	color:#999;
 }
-.post_num ul{
-	margin-left:-1px;
-	float:right;
+.post_num .replies{
+	padding-left:10px;
 }
-.post_num li{
-	float:left;
+.post_num .hits{
+	border-right:1px solid #ccc;
 	padding:0 10px;
-	border-left:1px solid #ccc;
-	line-height:14px;
-	color:#999999;
 }
 
 /*
@@ -661,7 +676,7 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 ===================
 */
 .floor_info{
-	padding:0 0 30px;
+	padding:20px 0 20px 20px;
 }
 /*用户名*/
 .floor_info .name{
@@ -673,8 +688,8 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 }
 /*头像*/
 .floor_info .face{
-	width:100px;
-	height:100px;
+	width:120px;
+	height:120px;
 	position:relative;
 	margin-bottom:5px;
 }
@@ -683,6 +698,8 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 }
 .floor_info .face a img{
 	display:block;
+	width:120px;
+	height:120px;
 }
 /*
 .floor_info .face .edit{
@@ -1266,6 +1283,56 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 
 /*
 ===================
+楼主快速回复
+===================
+*/
+.floor_reply{
+	padding:20px 20px;
+	vertical-align:top;
+}
+.reply_toolbar_wrap{
+	border:1px solid #e4e4e4;
+	margin-bottom:10px;
+	width:598px;
+}
+.reply_toolbar{
+	background:#f7f7f7;
+	border-bottom:1px solid #e4e4e4;
+	padding:5px 10px;
+	line-height:20px;
+	height:20px;
+}
+.floor_reply textarea{
+	width:590px;
+	height:90px;
+	border:0 none;
+	box-shadow:0 0 0;
+}
+.floor_reply textarea:focus{
+	outline:0 none;
+}
+.floor_reply .btn{
+	padding-left:15px;
+	padding-right:15px;
+}
+/*进入高级模式*/
+.reply_high{
+	float:right;
+	color:#666;
+}
+/*未登录提示*/
+.reply_login_tips{
+	border:1px solid #e4e4e4;
+	background:#fbfbfb;
+	padding:50px 0;
+	height:18px;
+	line-height:18px;
+	text-align:center;
+	color:#666;
+}
+
+/*
+===================
 楼层用户签名
 ===================
 */
@@ -1324,7 +1391,7 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 */
 .core_announce_wrap{
 	padding:0;
-	margin:10px 15px 0;
+	margin:10px 0 0;
 	border-bottom:1px dashed #e8e8e8;
 	height:28px;
 	overflow:hidden;
@@ -1347,11 +1414,78 @@ $Id: forum.css 23405 2013-01-09 08:43:28Z hao.lin $
 	white-space:nowrap;
 }
 
+/*
+===================
+弹窗-管理操作选项
+===================
+*/
+.pop_operat_list{
+	overflow:hidden;
+}
+.pop_operat_list ul{
+	margin-left:-10px;
+	_padding-bottom:10px;
+}
+.pop_operat_list li{
+	float:left;
+	margin:0 0 10px 10px;
+}
+.pop_operat_list a{
+	display:inline;
+	border:1px solid #ccc;
+	background:#fff;
+	padding:3px 10px;
+	float:left;
+	color:#333;
+	white-space:nowrap;
+}
+.pop_operat_list a:hover{
+	text-decoration:none;
+	border-color:#1377a9;
+}
+/*
+===================
+列表管理
+===================
+*/
+.management{
+	background:#ffffee;
+	border:1px solid #e4e4e4;
+	padding:10px 15px;
+	color:#666;
+	margin-bottom:10px;
+}
+.management a{
+	margin:0 5px;
+	color:#333;
+}
+.management i{
+	color:#ccc;
+	font-style:normal;
+	margin:0 5px;
+}
 
-
-
-
-
+/*
+===================
+帖子管理
+===================
+*/
+.read_management{
+	background:#ffffee;
+	border:1px solid #e4e4e4;
+	margin:0 0 10px;
+	padding:10px 15px;
+	color:#666;
+}
+.read_management a{
+	margin:0 5px;
+	color:#666;
+}
+.read_management i{
+	color:#ccc;
+	font-style:normal;
+	margin:0 5px;
+}
 
 
 

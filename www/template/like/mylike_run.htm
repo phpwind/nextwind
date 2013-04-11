@@ -13,90 +13,90 @@
 		<div class="bread_crumb">
 			<a href="{@url:}" class="home" title="{@C:site.info.name}">首页</a><em>&gt;</em><a href="{@url:like/like/run}">喜欢</a><em>&gt;</em><a href="{@url:like/mylike/run}">我的喜欢</a>
 		</div>
+		<div class="like_nav">
+			<ul class="cc">
+				<li><a href="{@url:like/like/run}">热门喜欢</a></li>
+				<li><a href="{@url:like/mylike/ta}" data-referer="true" class="J_qlogin_trigger">Ta的喜欢</a></li>
+				<li class="current"><a href="{@url:like/mylike/run}" data-referer="true" class="J_qlogin_trigger">我的喜欢</a></li>
+			</ul>
+		</div>
 		<div class="main cc">
 			<div class="main_body">
 				<div class="main_content">
 					<pw-tpl id="first_segment"/>
-					<div class="like_nav">
-						<ul class="cc">
-							<li><a href="{@url:like/like/run}">热门喜欢</a></li>
-							<li><a href="{@url:like/mylike/ta}" data-referer="true" class="J_qlogin_trigger">Ta的喜欢</a></li>
-							<li class="current"><a href="{@url:like/mylike/run}" data-referer="true" class="J_qlogin_trigger">我的喜欢</a></li>
-						</ul>
-					</div>
 					<div class="box_wrap like_page">
-					<!--# if ($logLists):#-->
+					<!--# if ($logLists){ #-->
 						<div class="like_content">
-							<div id="J_like_ul" class="feed_lists">
-							<!--# foreach ($logLists as $logList):
+							<div id="J_like_ul" class="like_lists">
+							<!--# foreach ($logLists as $logList){
 								$uid = $likeInfos[$logList['likeid']]['uid'];
 								if (!isset($likeInfos[$logList['likeid']])) {
 							#-->
 								<dl class="cc">
-								 <dt class="feed_face"><img class="J_avatar" src="{@Pw::getAvatar(0, 'small')}" data-type="small" width="50" height="50" alt="游客" /></dt>
-									<dd class="feed_content">
+								 <dt class="face"><img class="J_avatar" src="{@Pw::getAvatar(0, 'small')}" data-type="small" width="50" height="50" alt="游客" /></dt>
+									<dd class="text_content">
 										<div class="content">原文不存在</div>
 										<div class="info">
 											<span class="time">喜欢于{@Pw::time2str($logList['created_time'])}</span><a href="{@url:like/mylike/doDelLike?logid=$logList['logid']}" class="a_unlike J_unlike">取消喜欢</a>
 										</div>
 									</dd>
 								</dl>
-							 <!--# continue;}#-->
+							 <!--# continue; } #-->
 								<dl class="cc">
-								 <dt class="feed_face"><a class="J_user_card_show" data-uid="{$uid}" href="{@url:space/index/run?uid=$uid}"><img  class="J_avatar" src="{@Pw::getAvatar($likeInfos[$logList['likeid']]['uid'], 'small')}" data-type="small" width="50" height="50" alt="{$likeInfos[$logList['likeid']]['username']}" /></a></dt>
-									<dd class="feed_content">
-									<!--# if (empty($likeInfos[$logList['likeid']]['subject'])):#-->
+								 <dt class="face"><a class="J_user_card_show" data-uid="{$uid}" href="{@url:space/index/run?uid=$uid}"><img  class="J_avatar" src="{@Pw::getAvatar($likeInfos[$logList['likeid']]['uid'], 'small')}" data-type="small" width="50" height="50" alt="{$likeInfos[$logList['likeid']]['username']}" /></a></dt>
+									<dd class="text_content">
+									<!--# if (empty($likeInfos[$logList['likeid']]['subject'])){#-->
 										<div class="content"><a href="{@url:space/index/run?uid=$uid}" class="name J_user_card_show" data-uid="{$likeInfos[$logList['likeid']]['uid']}">{$likeInfos[$logList['likeid']]['username']}</a>：<em class="f14">{@$likeInfos[$logList['likeid']]['content']|html}</em></div>
 										<div class="info">
 											<div class="sort">
 												<a class="J_group_trigger" id="J_group_trigger_{$logList['logid']}" data-id="{$logList['logid']}" href="">
-													<!--# if (empty($logList['tags'])):#-->
+													<!--# if (empty($logList['tags'])){#-->
 													<span class="J_group_names">未分组</span>
-													<!--# else: #-->
+													<!--# }else{ #-->
 														<!--#
 															$_sbtagname = '';
-															foreach((array)$logList['tags'] as $tag):
+															foreach((array)$logList['tags'] as $tag){
 																if (!$tagLists[$tag]['tagname']) continue;
 																$_sbtagname .= $_sbtagname ? ','. $tagLists[$tag]['tagname'] : $tagLists[$tag]['tagname'] ;
-															endforeach;
+															}
 														#-->
 														<span class="J_group_names" title="{@Pw::substrs($_sbtagname,100)}">
 														{@Pw::substrs($_sbtagname, 5)}
 														</span>
-													<!--# endif; #-->
+													<!--# } #-->
 													<em class="core_arrow"></em>
 												</a>
 											</div>
 											<span class="time">喜欢于{@Pw::time2str($logList['created_time'])}</span><a href="{@url:like/mylike/doDelLike?logid=$logList['logid']}" class="a_unlike J_unlike">取消喜欢</a>
 										</div>
-									<!--# else: #-->
+									<!--# }else{ #-->
 										<div class="content"><a href="{@url:space/index/run?uid=$uid}" class="name J_user_card_show" data-uid="{$likeInfos[$logList['likeid']]['uid']}">{$likeInfos[$logList['likeid']]['username']}</a>：<em><a href="{$likeInfos[$logList['likeid']]['url']}" class="title">{$likeInfos[$logList['likeid']]['subject']}</a></em></div>
 										<div class="descrip">{@$likeInfos[$logList['likeid']]['content']|html}</div>
 										<div class="info">
 											<div class="sort">
 												<a class="J_group_trigger" id="J_group_trigger_{$logList['logid']}" data-id="{$logList['logid']}" href="">
-													<!--# if (empty($logList['tags'])):#-->
+													<!--# if (empty($logList['tags'])){ #-->
 													<span class="J_group_names">未分组</span>
-													<!--# else: #-->
+													<!--# }else{ #-->
 
 														<!--#
 															$_sbtagname = '';
-															foreach((array)$logList['tags'] as $tag):
+															foreach((array)$logList['tags'] as $tag){
 																if (!$tagLists[$tag]['tagname']) continue;
 																$_sbtagname .= $_sbtagname ? ','. $tagLists[$tag]['tagname'] : $tagLists[$tag]['tagname'] ;
-															endforeach;
+															}
 														#-->
 														
 														<span class="J_group_names" title="{@Pw::substrs($_sbtagname,100)}">
 														{@Pw::substrs($_sbtagname, 5)}
 														</span>
-													<!--# endif; #-->
+													<!--# } #-->
 													<em class="core_arrow"></em>
 												</a>
 											</div>
 											<span class="time">喜欢于 {@Pw::time2str($logList['created_time'])}</span>&nbsp;&nbsp;<a href="{@url:like/mylike/doDelLike?logid=$logList['logid']}" class="a_unlike J_unlike">取消喜欢</a>
 										</div>
-									<!--# endif; #-->
+									<!--# } #-->
 										<div class="fr">
 											<div id="J_group_check_list_{$logList['logid']}" data-id="{$logList['logid']}" class="sort_down J_group_check_list" style="display:none;">
 												<ul></ul>
@@ -105,38 +105,38 @@
 										</div>
 									</dd>
 								</dl>
-							<!--# endforeach; #-->
+							<!--# } #-->
 								<page tpl="TPL:common.page" page="$page" per="$perpage" count="$count" url="like/mylike/run" args="$args"/>
 							</div>
 						</div>
-					<!--# else: #-->
+					<!--# }else{ #-->
 						<div class="like_not_tips">没有喜欢的帖子</div>
-					<!--# endif; #-->
+					<!--# } #-->
 					</div>
 				</div>
 			</div>
 			<div class="main_sidebar">
 				<template source='TPL:common.sidebar_1' load='true' />
-			<!--# if ($tagLists):#-->
+			<!--# if ($tagLists){ #-->
 				<div class="box_wrap">
 					<h2 class="box_title">我的喜欢分类</h2>
 					<div class="side_cate_list">
 						<ul id="J_side_group_list" class="cc">
-						<!--# foreach ($tagLists as $tag):#-->
+						<!--# foreach ($tagLists as $tag){ #-->
 							<li id="J_side_group_{$tag['tagid']}"><a href="{@url:like/mylike/doDelTag?tag=$tag['tagid']}" class="icon_del J_group_del" data-id="{$tag['tagid']}">删除</a><a href="{@url:like/mylike/doEditTag?tag=$tag['tagid']}" data-name="{$tag['tagname']}" data-id="{$tag['tagid']}" class="icon_edit J_group_edit">编辑</a><a href="{@url:like/mylike/run?tag=$tag['tagid']}" class="title"><span class="J_name">{$tag['tagname']}</span><em>({$tag['number']})</em></a></li>
-						<!--# endforeach; #-->
+						<!--# } #-->
 						</ul>
 						<a href="" class="add" id="J_creat_group_side">创建新分类</a>
 					</div>
 				</div>
-			<!--# endif; #-->
+			<!--# } #-->
 				<div class="box_wrap">
 					<h2 class="box_title">热门喜欢</h2>
 					<div class="like_hot_list">
 						<ul>
-						<!--# foreach ($hotBrand as $list):#-->
+						<!--# foreach ($hotBrand as $list){ #-->
 							<li><a href="{@url:bbs/read/run?tid=$list['fromid']}">{$list['subject']}</a><span class="num">{$list['counts']}</span></li>         
-						<!--# endforeach; #-->
+						<!--# } #-->
 						</ul>
 					</div>
 				</div>
@@ -177,16 +177,15 @@
 		</div>
 	</div>
 <ul style="display:none;" id="J_group_check_ul">
-	<!--# foreach ($tagLists as $tag):#-->
+	<!--# foreach ($tagLists as $tag){ #-->
 	<li><label><input class="J_group_name" type="checkbox" data-id="{$tag['tagid']}" data-value="{$tag['tagname']}">{$tag['tagname']}</label></li>
-	<!--# endforeach; #-->
+	<!--# } #-->
 </ul>
 <template source='TPL:common.footer' load='true' />
 </div>
 <script>
 var  GRROUP_DATA = '{@$likeJson|json}';
-//var GRROUP_DATA = '[{"id":652,"items":[{"id":9,"value":"我喜欢的分类"},{"id":19,"value":"好东西"}]},{"id":640,"items":[{"id":19,"value":"好东西"}]}]';
-Wind.use('jquery', 'global', 'dialog', 'draggable', 'ajaxForm', function(){
+Wind.use('jquery', 'global', function(){
 	
 	var my_like = $('#J_my_like_list');
 	$('#J_group_check_ul').data({
@@ -200,12 +199,7 @@ Wind.use('jquery', 'global', 'dialog', 'draggable', 'ajaxForm', function(){
 			}, function(data){
 				Wind.Util.ajaxMaskRemove();
 				if(data.state === 'success') {
-					/*Wind.Util.resultTip({
-						msg : '操作成功',
-						follow : elem,
-						callback : function(){
-						}
-					});*/
+					
 				}else if(data.state === 'fail') {
 					Wind.Util.resultTip({
 						error : true,

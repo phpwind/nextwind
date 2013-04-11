@@ -1,6 +1,6 @@
 <?php
 Wind::import('ADMIN:service.srv.IAdminUserDependenceService');
-Wind::import('WINDID:library.WindidError');
+
 /**
  * 后台用户服务
  * 
@@ -11,6 +11,13 @@ Wind::import('WINDID:library.WindidError');
  * @package wind
  */
 class AdminUserDependenceService implements IAdminUserDependenceService {
+	
+	/* (non-PHPdoc)
+	 * @see IAdminUserDependenceService::getUserByUids()
+	 */
+	public function getUserByUids($userids) {
+		return $this->loadUser()->fetchUserByUid($userids);
+	}
 	
 	/* (non-PHPdoc)
 	 * @see IAdminUserDependenceService::updateUserStatus()
@@ -56,15 +63,12 @@ class AdminUserDependenceService implements IAdminUserDependenceService {
 		if (!$email) return new PwError('ADMIN:founder.edit.fail.email.empty');
 		Wind::import('SRV:user.dm.PwUserInfoDm');
 		$userDm = new PwUserInfoDm($uid);
-		$userDm->setUsername($username);
 		$userDm->setEmail($email);
 		$userDm->setGroupid($groupid);
 		$password && $userDm->setPassword($password);
 		if (!$uid) {
-			$uid = $this->loadUser()->addUser($userDm);
-			//默认头像处理 windid处理
-			//Wekit::load('SRV:user.srv.PwUserService')->restoreDefualtAvatar($uid);
-			return $uid;
+			$userDm->setUsername($username);
+			return $this->loadUser()->addUser($userDm);
 		} else {
 			return $this->loadUser()->editUser($userDm);
 		}
