@@ -28,6 +28,7 @@ class IndexController extends PwBaseController {
 		define('WINDID_CLIENT_KEY', $windidConfig['clientKey']);
 
 		if (WindidUtility::appKey(WINDID_CLIENT_ID, $_time, WINDID_CLIENT_KEY) != $_windidkey) $this->showError('fail');
+		//20130702此处代码有所更改
 		$time = Pw::getTime();
 		if ($time - $_time > 120) $this->showError('timeout');
 	}
